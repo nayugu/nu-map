@@ -112,7 +112,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "General Chemistry",
+        "Chemistry for Science Majors",
+        "Engineering students may substitute the following course:"
+      ]
     },
     {
       "type": "SECTION",
@@ -204,7 +209,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Engineering students may substitute the following course:"
+      ]
     },
     {
       "type": "SECTION",

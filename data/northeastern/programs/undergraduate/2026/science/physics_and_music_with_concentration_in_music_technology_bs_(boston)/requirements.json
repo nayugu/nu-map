@@ -205,7 +205,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Physics 1",
+        "Physics 2"
+      ]
     },
     {
       "type": "SECTION",
@@ -303,7 +307,10 @@
           "classId": 1119
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "All students can take a music theory placement exam to place out of MUSC 1119. Students who place out of MUSC 1119 will substitute it with a general elective course."
+      ]
     },
     {
       "type": "SECTION",
@@ -467,7 +474,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Contemporary/Popular Music"
+      ]
     },
     {
       "type": "SECTION",

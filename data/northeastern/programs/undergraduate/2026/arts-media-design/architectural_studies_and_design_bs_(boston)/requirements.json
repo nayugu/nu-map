@@ -177,7 +177,10 @@
       "title": "Architecture History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Students must complete at least one ARCH 2300-level history course."
+      ]
     },
     {
       "type": "SECTION",
@@ -230,7 +233,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Any second ARCH 2300-level history course"
+      ]
     },
     {
       "type": "SECTION",
@@ -369,21 +375,31 @@
       "title": "Design Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete any one ARTG course as long as prerequisites have been met and course has not been used to fulfill other requirements of the program."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Art + Design History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete any one ARTH course. ARTH 1001 Visual Intelligence and ARTH 1002 Seminar in Visual Intelligence is recommended to fulfill this requirement."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Art + Design Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete any one ARTD, ARTE, ARTG, ARTH, ARTS, or GAME course as long as prerequisites have been met.",
+        "If ARTG 5000 Topics in Design (or any other topics course in the subjects listed above) is completed more than once, the additional completions may be allowed toward the electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -510,7 +526,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following options:"
+      ]
     },
     {
       "type": "SECTION",
@@ -523,6 +542,9 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "The following course is already required in the major:"
+      ],
       "shared": true
     }
   ],

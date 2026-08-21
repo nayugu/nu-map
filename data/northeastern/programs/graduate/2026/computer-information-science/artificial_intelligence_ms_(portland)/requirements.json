@@ -389,14 +389,21 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two courses from one of the following specializations:",
+        "Complete one course from the electives list below or an additional course chosen from the specialization area above, outside of the student's selected specialization area."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Coursework Option",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete 12 semester hours from the electives or specialization course lists. Students can take up to one course from any Khoury College 5000–6000-level course."
+      ]
     },
     {
       "type": "SECTION",
@@ -413,7 +420,10 @@
           "classId": 8674
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete 4 semester hours from the electives or specialization course lists."
+      ]
     },
     {
       "type": "SECTION",

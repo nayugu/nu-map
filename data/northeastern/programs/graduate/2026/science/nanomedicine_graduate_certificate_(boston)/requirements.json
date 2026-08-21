@@ -326,7 +326,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Laboratory Research",
+        "Nanomaterials Design and Application",
+        "Drug Delivery",
+        "Commercialization and Regulatory Affairs"
+      ]
     }
   ],
   "gpaRequirements": [

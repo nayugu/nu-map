@@ -375,7 +375,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete two additional ITC or ALY courses that have not been taken to fulfill major or concentration requirements."
+        ]
       },
       {
         "type": "SECTION",
@@ -464,7 +467,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete two additional ITC or ALY courses that have not been taken to fulfill major requirements."
+        ]
       },
       {
         "type": "SECTION",
@@ -678,7 +684,10 @@
             ]
           }
         ],
-        "minRequirementCount": 7
+        "minRequirementCount": 7,
+        "notes": [
+          "Complete two CS or CY courses from required MSCS breadth areas."
+        ]
       },
       {
         "type": "SECTION",
@@ -742,7 +751,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete two additional ITC or ALY courses that have not been taken to fulfill major requirements."
+        ]
       }
     ]
   }

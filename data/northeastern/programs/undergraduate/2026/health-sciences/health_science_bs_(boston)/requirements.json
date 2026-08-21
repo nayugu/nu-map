@@ -869,7 +869,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least three courses from the groups listed below with at least two in one category. At least one of the courses must be at the 2000 level or higher. Students may complete additional courses to fulfill a minor, such as global health, nutrition, and exercise science."
+      ]
     },
     {
       "type": "SECTION",

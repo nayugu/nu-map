@@ -269,7 +269,10 @@
       "title": "Psychology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two PSYC courses not used to fulfill requirements above."
+      ]
     },
     {
       "type": "SECTION",
@@ -281,7 +284,10 @@
           "classId": 1119
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "All students can take a music theory placement exam to place out of MUSC 1119. Students who place out of MUSC 1119 will substitute it with a general elective course."
+      ]
     },
     {
       "type": "SECTION",
@@ -482,7 +488,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Coursework Option",
+        "Ensembles and Lessons Option"
+      ]
     },
     {
       "type": "SECTION",
@@ -640,7 +650,10 @@
       "title": "Music Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses from MUSC, MUSI, or MUST not used to fulfill the requirements above."
+      ]
     },
     {
       "type": "SECTION",
@@ -720,6 +733,9 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "Note: MUSC 3300 is already required above."
+      ],
       "shared": true
     }
   ],

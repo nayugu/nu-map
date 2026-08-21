@@ -145,7 +145,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Designing Data Stories",
+        "Narrating Data Stories",
+        "Visualizing Data Stories"
+      ]
     }
   ],
   "gpaRequirements": [

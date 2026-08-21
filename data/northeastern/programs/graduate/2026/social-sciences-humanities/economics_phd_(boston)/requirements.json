@@ -116,7 +116,12 @@
           "classId": 7772
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "To maintain satisfactory standing in the PhD program, students must earn a grade of B or higher in at least four field courses.",
+        "Labor Economics Field",
+        "Industrial Organization Field"
+      ]
     },
     {
       "type": "SECTION",
@@ -185,7 +190,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Following completion of ECON 9990 and ECON 9991, registration in the following class is required in each semester (including the summer if the dissertation is submitted in summer) until the dissertation is completed:"
+      ]
     }
   ]
 }

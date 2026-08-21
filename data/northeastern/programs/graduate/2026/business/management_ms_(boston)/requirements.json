@@ -525,7 +525,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "ACCT, BUSN, ENTR, FINA, HRMG, INNO, INTB, MECN, MGMT, MISM, MKTG, SCHM, STRT",
+        "In consultation with advisor, students may also select an interdisciplinary elective, for which prerequisites have been met, offered in partnership with other Northeastern University colleges. Choose from the following:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -906,7 +910,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Note: Electives are not required; the following course(s) are suggested beyond the concentration:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1108,7 +1115,10 @@
             ]
           }
         ],
-        "minRequirementCount": 6
+        "minRequirementCount": 6,
+        "notes": [
+          "To earn the Concentration in Digital Transformation in Healthcare, students must complete the following four core courses of the core curriculum of this program:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1306,7 +1316,10 @@
             ]
           }
         ],
-        "minRequirementCount": 6
+        "minRequirementCount": 6,
+        "notes": [
+          "To earn the Concentration in Healthcare Administration, students must complete the following four core courses of the core curriculum of this program:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1711,7 +1724,14 @@
             "classId": 6254
           }
         ],
-        "minRequirementCount": 6
+        "minRequirementCount": 6,
+        "notes": [
+          "To earn the Concentration in Strategic Technology Leadership, students must complete the following four core courses of the core curriculum of this program:",
+          "Complete the following:",
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met. Choose from the following:",
+          "ACCT, BUSN, ENTR, FINA, HRMG, INNO, INTB, MECN, MGMT, MKTG, MISM, SCHM, or STRT",
+          "Students may also select preapproved interdisciplinary electives, for which prerequisites have been met, offered in partnership with other Northeastern University colleges."
+        ]
       },
       {
         "type": "SECTION",

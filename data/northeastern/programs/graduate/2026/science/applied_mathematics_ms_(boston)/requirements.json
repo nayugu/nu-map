@@ -196,7 +196,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students may complete other MATH courses not listed below and courses outside of MATH in consultation with their faculty advisor:"
+      ]
     },
     {
       "type": "SECTION",
@@ -263,7 +266,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The following are some theoretical MATH courses usually taken in the PhD program (these may not be offered every academic year):"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -336,7 +342,11 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 8 semester hours of courses at the 5000 level or above in the following subject area. See suggested elective course list.",
+          "MATH"
+        ]
       },
       {
         "type": "SECTION",
@@ -405,7 +415,11 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 8 semester hours of courses at the 5000 level or above in the following subject area. See suggested elective course list.",
+          "MATH"
+        ]
       }
     ]
   }

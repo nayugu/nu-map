@@ -559,7 +559,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Any course from the BIO, BTC, HSC, or PHY subject codes in the 1000-4999 course number range."
+        ]
       }
     ]
   }

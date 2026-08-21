@@ -101,7 +101,10 @@
       "title": "Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Take one JRNL course."
+      ]
     }
   ],
   "gpaRequirements": [

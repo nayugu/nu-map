@@ -271,7 +271,10 @@
       "title": "Human Services Elective Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three additional HUSV courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -367,7 +370,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one additional HUSV elective."
+      ]
     },
     {
       "type": "SECTION",
@@ -379,7 +385,10 @@
           "classId": 4700
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one additional ECON elective at the 3000 level or above."
+      ]
     },
     {
       "type": "SECTION",

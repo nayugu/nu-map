@@ -78,14 +78,20 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Semester hours can be counted toward coursework component with advisor approval."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Approved Coursework",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 40
+      "creditsRequired": 40,
+      "notes": [
+        "Requires 40 semester hours of coursework. Students who apply to earn an MS degree along the way to a PhD must complete a total of 52 semester hours (32 semester hours toward the sought MS degree and 20 semester hours beyond the earned MS degree). The 32 semester hours applied toward the master's degree may include up to 8 semester hours of MS Thesis or 4 semester hours of MS Project or approved independent study coursework. Please consult your faculty advisor for acceptable courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -107,7 +113,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following two courses (must register in two consecutive semesters, which may include full summer term):"
+      ]
     }
   ],
   "gpaRequirements": [

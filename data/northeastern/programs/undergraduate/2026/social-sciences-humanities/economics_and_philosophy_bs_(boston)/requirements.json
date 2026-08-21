@@ -131,7 +131,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -292,7 +295,10 @@
       "title": "Advanced Philosophy Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one PHIL course with a designation of 3000 or above not used to satisfy another requirement."
+      ]
     },
     {
       "type": "SECTION",
@@ -361,7 +367,10 @@
       "title": "Additional Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two additional electives in philosophy or religion. At least one must be numbered 2000 or above."
+      ]
     },
     {
       "type": "SECTION",
@@ -423,7 +432,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one additional integrative course not used to satisfy other requirements:"
+      ]
     }
   ],
   "gpaRequirements": [

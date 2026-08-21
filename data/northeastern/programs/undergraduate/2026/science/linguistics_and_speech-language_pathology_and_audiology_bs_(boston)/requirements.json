@@ -334,6 +334,9 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "The following course is taken in another area of the major:"
+      ],
       "shared": true
     },
     {

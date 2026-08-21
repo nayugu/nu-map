@@ -103,35 +103,74 @@
       "title": "Focus Area",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 32
+      "creditsRequired": 32,
+      "notes": [
+        "Complete all courses in one of the following focus areas:",
+        "Biology",
+        "Business Administration",
+        "Computer Science",
+        "Health Science",
+        "Psychology",
+        "Public Health"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Restricted Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 24
+      "creditsRequired": 24,
+      "notes": [
+        "Complete 12 semester hours of coursework from one or more subject codes in the focus area chosen above.",
+        "Complete 12 semester hours of coursework from subject codes outside of the subject codes of courses in the focus area chosen above."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Minor Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete one of the following minors outside of the chosen focus area above. Other minors not listed here may be selected upon approval by the program advisor.",
+        "Behavioral Neuroscience",
+        "Biology",
+        "Business Administration",
+        "Communication Studies",
+        "Computer Science",
+        "Corporate Innovation",
+        "Design",
+        "Digital Communication",
+        "Economics",
+        "Entrepreneurial Startups",
+        "Ethics",
+        "Philosophy",
+        "Political Science",
+        "Public Health",
+        "Psychology"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Supporting Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete a course that fulfills the NUpath First-Year Writing requirement.",
+        "Complete two courses that fulfill the NUpath Writing-Intensive requirement.",
+        "Complete the Nupath Advanced Writing in the Disciplines requirement."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Biology Focus Area",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 32
+      "creditsRequired": 32,
+      "notes": [
+        "Complete 32 semester hours of coursework preapproved by the program advisor."
+      ]
     },
     {
       "type": "SECTION",
@@ -306,7 +345,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "CY 2000 of higher, except CY 4930"
+      ]
     },
     {
       "type": "SECTION",
@@ -573,21 +615,32 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Option 1",
+        "Option 2"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Social Science Selectives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 7
+      "creditsRequired": 7,
+      "notes": [
+        "Complete one introductory course as preapproved by the program advisor.",
+        "Complete one upper-level course as preapproved by the program advisor."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Psychology Focus Area",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 32
+      "creditsRequired": 32,
+      "notes": [
+        "Complete 32 semester hours of coursework preapproved by the program advisor."
+      ]
     }
   ],
   "gpaRequirements": [

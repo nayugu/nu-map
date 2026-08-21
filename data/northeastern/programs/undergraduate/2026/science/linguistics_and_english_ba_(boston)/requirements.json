@@ -556,7 +556,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one additional ENGL elective at the 2000 level or higher."
+      ]
     },
     {
       "type": "SECTION",
@@ -629,6 +632,10 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "Study Abroad (not a Dialogue)",
+        "International Co-op"
+      ],
       "shared": true
     }
   ],

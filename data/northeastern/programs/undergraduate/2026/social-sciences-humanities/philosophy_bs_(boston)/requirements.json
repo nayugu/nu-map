@@ -160,7 +160,11 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete three PHIL courses with a designation of 3000 or above, and at least one at 4000 or 5000 level, except PHIL 5110.",
+          "Complete two additional PHIL courses."
+        ]
       },
       {
         "type": "SECTION",
@@ -509,7 +513,10 @@
             ]
           }
         ],
-        "minRequirementCount": 7
+        "minRequirementCount": 7,
+        "notes": [
+          "Complete two PHIL courses with a designation of 3000 or above, and at least one at 4000 or 5000 level except PHIL 5110, not used to satisfy another requirement."
+        ]
       },
       {
         "type": "SECTION",
@@ -988,7 +995,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete two PHIL courses at level 3000 or above not used to satisfy another requirement. At least one course at the 4000/5000 level except PHIL 5110."
+        ]
       },
       {
         "type": "SECTION",
@@ -1182,7 +1192,10 @@
             ]
           }
         ],
-        "minRequirementCount": 6
+        "minRequirementCount": 6,
+        "notes": [
+          "Complete two other PHIL courses (not used to fulfill another requirement), at least one of which must be at the 4000/ 5000 level, except PHIL 5110."
+        ]
       }
     ]
   }

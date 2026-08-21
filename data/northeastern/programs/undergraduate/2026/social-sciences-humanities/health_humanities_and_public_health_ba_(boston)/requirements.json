@@ -380,7 +380,13 @@
           "classId": 1101
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Biology",
+        "Option 1",
+        "Option 2",
+        "Psychology"
+      ]
     },
     {
       "type": "SECTION",
@@ -629,7 +635,16 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Introductory Course",
+        "Upper-Level Course",
+        "Society and Behavior",
+        "Globalization and Global Health",
+        "Environmental Health and Climate Change",
+        "Law, Policy, and Human Rights",
+        "Healthcare Administration and Management"
+      ]
     },
     {
       "type": "SECTION",
@@ -720,7 +735,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Advanced Writing Course",
+        "Courses listed below are preferred but other advanced writing courses will be accepted:"
+      ]
     },
     {
       "type": "SECTION",

@@ -120,7 +120,10 @@
           "classId": 1119
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "All students can take a music theory placement exam to place out of MUSC 1119. Students who place out of MUSC 1119 will substitute it with a general elective course."
+      ]
     },
     {
       "type": "SECTION",
@@ -509,7 +512,16 @@
           ]
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Complete one from each of the following. Of the courses from Western tradition, ethnomusicology, and contemporary, at least two must be at the 2000 level or higher. Courses may not double count across these areas. Many, but not all, music in context courses at the 2000 level or higher fulfill the Writing-Intensive in the Discipline requirement. Please check writing-intensive status of courses as needed. Students may use MUSC 2150, MUSC 2208, MUSC 2210, MUSC 3342, MUSI 2232, MUSI 5220, or MUST 1220 to fulfill both creating and producing and music in context creative but will also need to take one additional music industry elective.",
+        "Western Art Music",
+        "Global Music/Ethnomusicology",
+        "Contemporary/Popular Music",
+        "Creative",
+        "Music Ensemble",
+        "May substitute four 1-semester-hour applied courses (ensembles and/or lessons) for one 4-semester-hour creative course."
+      ]
     },
     {
       "type": "SECTION",
@@ -709,7 +721,16 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Creating and Producing",
+        "Students who choose to double count MUSC 2210, MUSC 2211, MUSI 2331, MUSI 3341, or MUST 1220 as one of three Creating and Producing classes will need to take an additional Music Industry elective beyond the seven required in any Music Industry elective category.",
+        "Note: MUSI 1230 is not a prerequisite for the following courses:",
+        "Legal Aspects",
+        "Note: MUSI 1230 is a prerequisite for the following courses:",
+        "Music Business and Management",
+        "Music Industry Studies"
+      ]
     },
     {
       "type": "SECTION",
@@ -752,7 +773,11 @@
       "title": "Business Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one business course from the following subject areas:",
+        "ACCT, BUSN, ENTR, FINA, HRMG, INTB, MGMT, ORGB, MGSC, MISM, MKTG, SCHM, or STRT"
+      ]
     }
   ]
 }

@@ -154,7 +154,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Recommended Electives",
+        "Other Elective Options"
+      ]
     }
   ],
   "gpaRequirements": [

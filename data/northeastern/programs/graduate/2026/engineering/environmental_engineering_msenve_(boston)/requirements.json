@@ -111,7 +111,11 @@
       "title": "Coursework Option",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete 12 semester hours from the restricted electives list below.",
+        "Complete 8 semester hours from the other electives list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -123,7 +127,11 @@
           "classId": 7945
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the restricted electives list below.",
+        "Complete 8 semester hours from the other electives list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -141,6 +149,11 @@
         }
       ],
       "minRequirementCount": 2,
+      "notes": [
+        "Complete 8 semester hours from the restricted electives list below.",
+        "Complete 4 semester hours from the other electives list below.",
+        "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+      ],
       "shared": true
     },
     {
@@ -218,7 +231,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Any required core course not used to meet the required core course requirement can be taken as a restricted elective."
+      ]
     },
     {
       "type": "SECTION",
@@ -315,7 +331,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Any required core course not used to meet the required core course requirement can be taken as another elective. Any restricted elective not used to meet the restricted elective requirement can be taken as another elective."
+      ]
     },
     {
       "type": "SECTION",
@@ -352,7 +371,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"
+      ]
     }
   ],
   "gpaRequirements": [

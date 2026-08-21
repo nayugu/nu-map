@@ -95,7 +95,10 @@
           "classId": 8504
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "At least one seminar must be taken for a letter grade."
+      ]
     },
     {
       "type": "SECTION",
@@ -114,7 +117,11 @@
       "title": "Chemistry",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 18
+      "creditsRequired": 18,
+      "notes": [
+        "Complete 18 semester hours from the following:",
+        "CHEM 5550 or within the range of CHEM 5610 to CHEM 7320"
+      ]
     },
     {
       "type": "SECTION",
@@ -141,7 +148,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following courses:",
+        "Registration in the following course is required for any additional terms taken to complete the dissertation."
+      ]
     }
   ],
   "gpaRequirements": [

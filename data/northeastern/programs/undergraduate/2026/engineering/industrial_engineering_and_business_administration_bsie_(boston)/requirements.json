@@ -407,7 +407,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the following experiences:"
+      ]
     },
     {
       "type": "SECTION",
@@ -614,14 +617,20 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required in each course."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Required General Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of academic, nonremedial, nonrepetitive courses. It is recommended to select a course that fulfills the NUpath DD requirement."
+      ]
     },
     {
       "type": "SECTION",
@@ -872,7 +881,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "A maximum of one course may be applied to requirements of a second concentration."
+        ]
       },
       {
         "type": "SECTION",
@@ -1044,7 +1056,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward a concentration elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -1168,7 +1184,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -1729,7 +1749,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Note: Only one non-MGMT course may be used as an elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -2149,7 +2172,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       },
       {
         "type": "SECTION",

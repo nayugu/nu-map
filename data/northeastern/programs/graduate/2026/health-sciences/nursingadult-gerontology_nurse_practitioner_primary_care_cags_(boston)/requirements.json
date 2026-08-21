@@ -105,7 +105,10 @@
           "classId": 6451
         }
       ],
-      "minRequirementCount": 7
+      "minRequirementCount": 7,
+      "notes": [
+        "Elective"
+      ]
     }
   ],
   "gpaRequirements": [

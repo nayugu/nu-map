@@ -122,7 +122,10 @@
       "title": "Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 3
+      "creditsRequired": 3,
+      "notes": [
+        "Complete 3 semester hours, selected in consultation with faculty program advisor."
+      ]
     }
   ],
   "gpaRequirements": [

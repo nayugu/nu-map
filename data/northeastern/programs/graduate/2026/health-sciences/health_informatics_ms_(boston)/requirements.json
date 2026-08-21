@@ -67,7 +67,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Choose one of the following courses in consultation with your advisor:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -318,7 +321,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "One course from the following may count toward the technical core requirement:"
+        ]
       },
       {
         "type": "SECTION",
@@ -483,7 +489,13 @@
             ]
           }
         ],
-        "minRequirementCount": 6
+        "minRequirementCount": 6,
+        "notes": [
+          "Business Management",
+          "Health Informatics",
+          "Technical",
+          "Capstone"
+        ]
       },
       {
         "type": "SECTION",
@@ -576,7 +588,16 @@
             ]
           }
         ],
-        "minRequirementCount": 7
+        "minRequirementCount": 7,
+        "notes": [
+          "Health Informatics",
+          "Technical",
+          "Theory and Evaluation",
+          "Thesis Option",
+          "Students must enroll in HINF 7990 for two semesters for a total of 6 semester hours with director approval only and under supervision of Personal Health Informatics faculty:",
+          "Capstone Option",
+          "Complete any course for a minimum of 3 semester from the Health Informatics (without concentration) curriculum, that has not been used in previous requirements."
+        ]
       }
     ]
   }

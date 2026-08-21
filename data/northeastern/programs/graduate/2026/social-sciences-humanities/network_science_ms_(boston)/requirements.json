@@ -88,14 +88,20 @@
           "classId": 7334
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "A grade of B or higher is required in each foundational course:"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "20 SH of elective coursework required."
+      ]
     }
   ],
   "gpaRequirements": [

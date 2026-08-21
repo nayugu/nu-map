@@ -230,7 +230,11 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete one AFAM, AFRS, or AFCS course at the 2000 level or above.",
+        "Complete one AFAM, AFRS, or AFCS course at the 3000 level or above."
+      ]
     },
     {
       "type": "SECTION",
@@ -274,7 +278,10 @@
           "classId": 2201
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "C or better in JRNL 1101, JRNL 1102, and JRNL 2201 is required."
+      ]
     },
     {
       "type": "SECTION",
@@ -371,7 +378,10 @@
       "title": "Journalism Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete four JRNL electives. Two must be 3000 level or above."
+      ]
     },
     {
       "type": "SECTION",
@@ -474,7 +484,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "The following course is already required in the major:"
+      ]
     }
   ]
 }

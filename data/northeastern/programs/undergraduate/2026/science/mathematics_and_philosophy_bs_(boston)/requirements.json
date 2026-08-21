@@ -134,7 +134,10 @@
       "title": "Mathematics Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses in the following range: MATH 3001 to MATH 4999"
+      ]
     },
     {
       "type": "SECTION",
@@ -215,7 +218,10 @@
       "title": "Open Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three additional PHIL courses."
+      ]
     },
     {
       "type": "SECTION",

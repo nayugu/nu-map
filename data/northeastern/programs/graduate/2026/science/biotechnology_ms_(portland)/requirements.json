@@ -104,7 +104,13 @@
           "classId": 5145
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Option A (Student exempted from basic lab skills instruction due to placement test results)",
+        "Complete 3 semester hours from the Electives list.",
+        "Option B (Student requires lab skills instruction)",
+        "Complete 2 semester hours from the Electives list."
+      ]
     },
     {
       "type": "SECTION",
@@ -428,7 +434,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Electives not on this list may be taken with academic advisor approval.",
+        "Any 1 SH course from BUSN 5000 to BUSN 7999"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -648,7 +658,13 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Enterprise Focus",
+          "Manufacturing Quality Operations Focus",
+          "Process Sciences Focus",
+          "Regulatory Science Focus"
+        ]
       }
     ]
   }

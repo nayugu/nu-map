@@ -161,7 +161,10 @@
           "classId": 3200
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -223,7 +226,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Computer Science Option",
+        "Data Science Option"
+      ]
     },
     {
       "type": "SECTION",
@@ -307,7 +314,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -329,7 +339,10 @@
           "classId": 1120
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "What do we know about crime and justice? In these three courses, students have an opportunity to develop a foundational understanding of three related phenomena: why crime exists, how our criminal justice system responds to crime, and the constitutional and legal oversight of this process."
+      ]
     },
     {
       "type": "SECTION",
@@ -361,7 +374,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "These courses introduce students to topical issues related to crime and justice."
+      ]
     },
     {
       "type": "SECTION",
@@ -453,7 +469,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The 2000-level courses in this list ask how does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions. The 3000-level courses in this list provide students with a deeper look at a range of crime problems."
+      ]
     },
     {
       "type": "SECTION",
@@ -475,7 +494,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "These courses consider systemic issues facing the criminal justice system."
+      ]
     },
     {
       "type": "SECTION",
@@ -487,7 +509,10 @@
           "classId": 3600
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "How do we know what we know about crime and justice—and how do we develop new knowledge? This course covers how to harness data to learn about issues, identify solutions, and advocate for change."
+      ]
     },
     {
       "type": "SECTION",
@@ -506,7 +531,11 @@
       "title": "Criminal Justice Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "These courses round out our knowledge of crime and justice.",
+        "Complete two additional criminal justice electives from the 3000, 4000, or 5000 level."
+      ]
     },
     {
       "type": "SECTION",

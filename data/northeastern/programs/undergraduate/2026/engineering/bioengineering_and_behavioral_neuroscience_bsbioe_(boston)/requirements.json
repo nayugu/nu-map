@@ -562,7 +562,10 @@
           "classId": 3302
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
     },
     {
       "type": "SECTION",
@@ -585,6 +588,9 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "These courses are already required above and also fulfill the integrative requirement:"
+      ],
       "shared": true
     }
   ],

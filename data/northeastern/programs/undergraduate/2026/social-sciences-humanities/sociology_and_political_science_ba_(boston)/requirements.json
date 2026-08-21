@@ -222,7 +222,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: You may use four courses from the elective area to fulfill a concentration"
+      ]
     },
     {
       "type": "SECTION",

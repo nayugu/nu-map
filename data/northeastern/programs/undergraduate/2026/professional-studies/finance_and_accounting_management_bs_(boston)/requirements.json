@@ -353,7 +353,11 @@
       "title": "Major Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 9
+      "creditsRequired": 9,
+      "notes": [
+        "Complete 9 semester hours from the following:",
+        "ACC, FIN (4000 level)"
+      ]
     },
     {
       "type": "SECTION",
@@ -451,7 +455,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete the following four courses:"
+        ]
       }
     ]
   }

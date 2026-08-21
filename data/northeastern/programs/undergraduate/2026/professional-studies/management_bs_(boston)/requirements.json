@@ -362,7 +362,11 @@
       "title": "Professional Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete 12 semester hours from the following:",
+        "ENG 3300, CMN, ITC, LDR, MGT, MKT, HRM"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -120,6 +120,9 @@
         }
       ],
       "minRequirementCount": 5,
+      "notes": [
+        "Complete three of the following:"
+      ],
       "shared": true
     },
     {
@@ -243,7 +246,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Venture Creation",
+        "Design",
+        "Manufacturing"
+      ]
     }
   ],
   "gpaRequirements": [

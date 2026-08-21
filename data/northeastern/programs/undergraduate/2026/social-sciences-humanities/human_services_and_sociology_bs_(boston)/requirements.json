@@ -142,7 +142,10 @@
       "title": "Human Services Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete five additional HUSV courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -166,14 +169,20 @@
       "title": "Introductory Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses between SOCL 1000 and SOCL 2999 not used to satsify another requirement"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Intermediate-Level Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses between SOCL 3000 and SOCL 4999 not used to satisfy another requirement"
+      ]
     },
     {
       "type": "SECTION",

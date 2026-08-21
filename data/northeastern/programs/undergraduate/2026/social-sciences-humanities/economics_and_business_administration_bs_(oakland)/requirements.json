@@ -198,7 +198,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "ECON 4692 or ECON 4997 (Capstone may be taken as an elective.)"
+      ]
     },
     {
       "type": "SECTION",
@@ -315,7 +318,10 @@
           "classId": 2948
         }
       ],
-      "minRequirementCount": 7
+      "minRequirementCount": 7,
+      "notes": [
+        "Complete at least one of the following experiences:"
+      ]
     },
     {
       "type": "SECTION",
@@ -600,7 +606,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -1157,7 +1167,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       }
     ]
   }

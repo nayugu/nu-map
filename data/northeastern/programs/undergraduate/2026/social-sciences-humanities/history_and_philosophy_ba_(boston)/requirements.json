@@ -222,28 +222,40 @@
       "title": "History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses at any level in any field."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Introductory Level Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one course from the 1000 level (excluding HIST 1200 and HIST 1201)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Intermediate/Advanced History Cluster",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum of one history course numbered 2000 to 2999 (excluding HIST 2301 and HIST 2302)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum of one history course numbered 3000 to 4999 (excluding HIST 4701)."
+      ]
     },
     {
       "type": "SECTION",
@@ -294,7 +306,10 @@
       "title": "Advanced Philosophy Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two PHIL courses with a designation of 3000 or above not used to satisfy another requirement, with at least one at 4000 or 5000 level, excluding PHIL 5110."
+      ]
     },
     {
       "type": "SECTION",
@@ -363,7 +378,10 @@
       "title": "Philosophy Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three additional PHIL courses not used to satisfy other requirements."
+      ]
     },
     {
       "type": "SECTION",

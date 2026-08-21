@@ -73,7 +73,10 @@
           "classId": 5151
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Courses to be taken concurrently in the first semester. A grade of C or higher is required."
+      ]
     },
     {
       "type": "SECTION",
@@ -90,7 +93,10 @@
           "classId": 6100
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required."
+      ]
     },
     {
       "type": "SECTION",
@@ -109,7 +115,10 @@
       "title": "Coursework Option",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete 16 semester hours of courses from the electives course list."
+      ]
     },
     {
       "type": "SECTION",
@@ -121,7 +130,10 @@
           "classId": 7945
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours of courses from the electives course list."
+      ]
     },
     {
       "type": "SECTION",
@@ -139,6 +151,10 @@
         }
       ],
       "minRequirementCount": 2,
+      "notes": [
+        "Complete 8 semester hours of courses from the electives course list.",
+        "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+      ],
       "shared": true
     },
     {
@@ -176,7 +192,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"
+      ]
     },
     {
       "type": "SECTION",
@@ -325,7 +344,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "A grade of C or higher is required."
+        ]
       }
     ]
   }

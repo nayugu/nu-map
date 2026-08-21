@@ -826,7 +826,16 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a total of six courses. Courses must cover at least four of the five areas, and a maximum of two courses may be at the 5000 level.",
+        "At least two courses must be 7000-level seminar courses.",
+        "At least two courses must be 7000-level nonseminar courses.",
+        "Seminar Courses",
+        "Nonseminar Courses",
+        "Other Courses",
+        "NonSeminar Courses"
+      ]
     },
     {
       "type": "SECTION",
@@ -874,7 +883,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Consult faculty advisor for the other acceptable courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -901,7 +913,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Upon achieving PhD candidacy, complete the following courses for two consecutive semesters:",
+        "For remaining semester(s), complete the following (repeatable) course until graduation:"
+      ]
     }
   ],
   "gpaRequirements": [

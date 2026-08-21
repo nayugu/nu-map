@@ -109,7 +109,11 @@
           ]
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "CDV 0220 The College Experience 1 (noncredit course)",
+        "CDV 0225 The College Experience 2 (noncredit course)"
+      ]
     },
     {
       "type": "SECTION",

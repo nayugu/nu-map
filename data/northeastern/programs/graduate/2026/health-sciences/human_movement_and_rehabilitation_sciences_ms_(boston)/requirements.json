@@ -104,7 +104,10 @@
           "classId": 7020
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "Complete the following:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -152,7 +155,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete a total of 12 semester hours for this concentration."
+        ]
       },
       {
         "type": "SECTION",
@@ -360,7 +366,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Some courses may require prerequisite coursework."
+        ]
       }
     ]
   }

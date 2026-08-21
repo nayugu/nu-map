@@ -400,7 +400,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "CRIM elective"
+        ]
       }
     ]
   }

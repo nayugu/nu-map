@@ -135,28 +135,40 @@
       "title": "Introductory Level Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one other course from HIST 1001 to HIST 1999 (excluding HIST 1100, HIST 1200, and HIST 1201)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Intermediate/Advanced Level Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two HIST courses numbered 2000 or above (excluding HIST 2301 and HIST 2302)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced Level Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one HIST course numbered 3000 or above."
+      ]
     },
     {
       "type": "SECTION",
       "title": "History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses in any field at any level."
+      ]
     },
     {
       "type": "SECTION",
@@ -250,7 +262,10 @@
           "classId": 1120
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "What do we know about crime and justice? In these three courses successful students will develop a foundational understanding of three related phenomena: why crime exists, how our criminal justice system responds to crime, and the constitutional and legal oversight of this process."
+      ]
     },
     {
       "type": "SECTION",
@@ -282,7 +297,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "These courses introduce students to topical issues related to crime and justice."
+      ]
     },
     {
       "type": "SECTION",
@@ -374,7 +392,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The 2000-level courses in this list ask how does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions. The 3000-level courses in this list provide students a deeper look at a range of crime problems."
+      ]
     },
     {
       "type": "SECTION",
@@ -386,7 +407,10 @@
           "classId": 3700
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "How do we know what we know about crime and justice—and how do we develop new knowledge? Harnessing data to learn about issues, identify solutions, and advocate for change."
+      ]
     },
     {
       "type": "SECTION",
@@ -408,14 +432,21 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "A consideration of systemic issues facing the criminal justice system."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Criminal Justice Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Rounding out knowledge of crime and justice.",
+        "Complete two additional criminal justice electives from the 3000, 4000 or 5000-level."
+      ]
     },
     {
       "type": "SECTION",

@@ -148,7 +148,12 @@
           "classId": 4522
         }
       ],
-      "minRequirementCount": 8
+      "minRequirementCount": 8,
+      "notes": [
+        "Introductory Courses",
+        "Scientific Foundations of Environmental Systems",
+        "Human Dimensions of Environmental Systems"
+      ]
     },
     {
       "type": "SECTION",

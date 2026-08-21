@@ -122,7 +122,12 @@
           "classId": 6866
         }
       ],
-      "minRequirementCount": 13
+      "minRequirementCount": 13,
+      "notes": [
+        "Complete one of the following:",
+        "For students pursuing emergency elementary teaching licenses or ESL+ licensure in Massachusetts",
+        "For students not pursuing emergency elementary licenses and ESL+ licensure in Massachusetts"
+      ]
     },
     {
       "type": "SECTION",

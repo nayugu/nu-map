@@ -173,7 +173,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: You may use these four courses from the elective area to fulfill a concentration"
+      ]
     },
     {
       "type": "SECTION",
@@ -354,7 +357,10 @@
       "title": "Communication Studies Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three Communication Studies courses that have not been used to satisfy other requirements."
+      ]
     },
     {
       "type": "SECTION",

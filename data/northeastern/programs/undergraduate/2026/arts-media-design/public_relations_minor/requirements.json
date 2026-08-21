@@ -121,7 +121,10 @@
       "title": "Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 SH of additional JRNL or PREL coursework."
+      ]
     }
   ],
   "gpaRequirements": [

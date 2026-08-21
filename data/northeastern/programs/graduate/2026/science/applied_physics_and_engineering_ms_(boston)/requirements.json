@@ -63,7 +63,10 @@
       "title": "Optional Thesis",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Select one of the following options based on the college affiliation of the thesis advisor. Thesis coursework will not be applied to other requirements of this degree program. Completion of this thesis option requires a total of 40 semester hours to earn the degree:"
+      ]
     },
     {
       "type": "SECTION",

@@ -109,7 +109,10 @@
           "classId": 1120
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "What do we know about crime and justice? In these three courses, students have an opportunity to develop a foundational understanding of three related phenomena: why crime exists, how our criminal justice system responds to crime, and the constitutional and legal oversight of this process."
+      ]
     },
     {
       "type": "SECTION",
@@ -136,7 +139,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "These courses introduce students to topical issues related to crime and justice."
+      ]
     },
     {
       "type": "SECTION",
@@ -228,7 +234,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The 2000-level courses in this list ask how does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions. The 3000-level courses in this list provide students with a deeper look at a range of crime problems."
+      ]
     },
     {
       "type": "SECTION",
@@ -250,7 +259,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "These courses consider systemic issues facing the criminal justice system."
+      ]
     },
     {
       "type": "SECTION",
@@ -267,7 +279,10 @@
           "classId": 3700
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "How do we know what we know about crime and justice—and how do we develop new knowledge? These courses study harnessing data to learn about issues, identify solutions, and advocate for change."
+      ]
     },
     {
       "type": "SECTION",
@@ -279,14 +294,21 @@
           "classId": 4949
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "How do we reinvent criminal justice institutions and their practice? The capstone experience is project-based and solution-oriented, drawing on knowledge gained in the classroom and through co-op and other experiences."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Criminal Justice Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "These courses round out our knowledge of crime and justice.",
+        "Complete one additional criminal justice elective from the 3000, 4000, or 5000 level."
+      ]
     },
     {
       "type": "SECTION",
@@ -335,7 +357,10 @@
           "classId": 3610
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "A grade of C or better is required."
+      ]
     },
     {
       "type": "SECTION",
@@ -354,7 +379,10 @@
       "title": "Journalism Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three additional journalism courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -445,7 +473,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete before the first co-op:",
+        "Complete after a criminal justice co-op:"
+      ]
     },
     {
       "type": "SECTION",

@@ -76,7 +76,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Alternative statistics course as approved by graduate committee"
+      ]
     },
     {
       "type": "SECTION",

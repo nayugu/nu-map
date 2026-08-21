@@ -194,7 +194,10 @@
           "classId": 2220
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "A grade of C or higher is required for all BIOL courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -308,7 +311,12 @@
           "classId": 3466
         }
       ],
-      "minRequirementCount": 10
+      "minRequirementCount": 10,
+      "notes": [
+        "A grade of C or higher is required for all MATH courses, PHTH 2210, and ENGW 1111.",
+        "NUpath Interpreting Cultures elective",
+        "Complete one PSYC course (1000–5999)"
+      ]
     }
   ]
 }

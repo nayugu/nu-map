@@ -140,7 +140,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Elective courses may also fulfill requirements of an optional concentration of this program."
+      ]
     },
     {
       "type": "SECTION",
@@ -207,7 +210,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Computer Science",
+        "Calculus"
+      ]
     },
     {
       "type": "SECTION",
@@ -402,7 +409,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the statistics and departmental elective combinations listed below:",
+        "Statistics",
+        "Economics",
+        "Complete one course from the following ranges. This course may not also be used as an Economics elective:",
+        "Political Science",
+        "Complete one course in the following range:"
+      ]
     },
     {
       "type": "SECTION",

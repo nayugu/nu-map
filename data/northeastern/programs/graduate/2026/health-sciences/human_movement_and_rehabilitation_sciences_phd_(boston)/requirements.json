@@ -252,7 +252,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Some courses may require prerequisite coursework."
+      ]
     },
     {
       "type": "SECTION",

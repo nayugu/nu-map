@@ -499,7 +499,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Physics 1"
+      ]
     },
     {
       "type": "SECTION",
@@ -631,7 +634,11 @@
           ]
         }
       ],
-      "minRequirementCount": 13
+      "minRequirementCount": 13,
+      "notes": [
+        "Complete the following at the Northeastern Nahant campus:",
+        "Courses completed at locations other than the Northeastern Nahant campus:"
+      ]
     },
     {
       "type": "SECTION",
@@ -685,7 +692,10 @@
           "classId": 2000
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students who want to participate in co-op will need to complete EESC 2000 Professional Development for Co-op."
+      ]
     }
   ]
 }

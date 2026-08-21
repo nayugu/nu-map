@@ -218,7 +218,11 @@
       "title": "Open Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 3
+      "creditsRequired": 3,
+      "notes": [
+        "In consultation with advisor, complete 3 graduate-level semester hours for which prerequisites are met. Choose from the following subject codes:",
+        "ACCT, BUSN, ENTR, FINA, HRMG, INTB, MECN, MGMT, MKTG, SCHM, STRT, and TECE"
+      ]
     },
     {
       "type": "SECTION",

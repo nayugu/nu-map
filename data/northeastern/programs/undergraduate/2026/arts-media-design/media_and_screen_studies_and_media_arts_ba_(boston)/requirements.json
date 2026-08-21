@@ -267,7 +267,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Media and Screen Studies courses, from the range MSCR 1200 - MSCR 4999."
+      ]
     },
     {
       "type": "SECTION",
@@ -478,7 +481,11 @@
       "title": "Art + Design Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete any 8-9 semester hours of courses not previously completed in ARTG, ARTE, ARTD, ARTH, or ARTS courses as long as prerequisites or corequisites have been met.",
+        "If ARTD 3000 Topics in Media Arts (or any other topics course in the subjects listed above) is completed more than once, the additional completions may be allowed toward the electives."
+      ]
     },
     {
       "type": "SECTION",

@@ -168,7 +168,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Fundamentals not taken to satisfy the above requirement may be used as a technical elective."
+      ]
     }
   ],
   "gpaRequirements": [

@@ -100,7 +100,10 @@
       "title": "Elective Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three political science courses."
+      ]
     }
   ],
   "gpaRequirements": [

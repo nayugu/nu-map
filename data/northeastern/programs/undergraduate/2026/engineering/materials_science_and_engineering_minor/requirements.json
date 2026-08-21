@@ -312,7 +312,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three courses from the following disciplines:",
+        "Or any advisor-approved course or directed study"
+      ]
     },
     {
       "type": "SECTION",

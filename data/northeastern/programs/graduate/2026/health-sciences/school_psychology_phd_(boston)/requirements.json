@@ -109,7 +109,11 @@
           "classId": 7756
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "Elective Course",
+        "Complete a total of 3 semester hours with faculty advisor's prior approval."
+      ]
     },
     {
       "type": "SECTION",
@@ -223,7 +227,14 @@
           "classId": 7798
         }
       ],
-      "minRequirementCount": 18
+      "minRequirementCount": 18,
+      "notes": [
+        "Coursework",
+        "Practicum",
+        "Fieldwork",
+        "Complete a minimum of 2 semester hours required per course, for a total of 8 semester hours:",
+        "Internship"
+      ]
     },
     {
       "type": "SECTION",

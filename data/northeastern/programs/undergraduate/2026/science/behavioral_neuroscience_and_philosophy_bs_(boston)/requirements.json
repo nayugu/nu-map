@@ -562,7 +562,10 @@
       "title": "Additional Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two additional PHIL courses not taken to fulfill other requirements."
+      ]
     },
     {
       "type": "SECTION",

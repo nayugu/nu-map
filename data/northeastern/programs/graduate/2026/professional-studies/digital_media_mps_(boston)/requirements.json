@@ -107,7 +107,12 @@
           ]
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "Thesis Option",
+        "Capstone Option",
+        "Choose one technical course from the workshops list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -353,7 +358,12 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Interactive Design",
+        "Design Track",
+        "Usability and Development Track"
+      ]
     },
     {
       "type": "SECTION",
@@ -406,6 +416,12 @@
         }
       ],
       "minRequirementCount": 2,
+      "notes": [
+        "Complete the following:",
+        "Required",
+        "Electives",
+        "Complete 15–17 quarter hours from the following:"
+      ],
       "shared": true
     }
   ],

@@ -182,7 +182,10 @@
       "title": "Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one additional JRNL course."
+      ]
     }
   ],
   "gpaRequirements": [

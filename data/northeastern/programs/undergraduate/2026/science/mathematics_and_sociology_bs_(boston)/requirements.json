@@ -240,7 +240,15 @@
       "title": "Sociology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Introductory Elective",
+        "Complete one course between SOCL 1101 and SOCL 1999 not used to satisfy other requirements.",
+        "Intermediate Elective",
+        "Complete two courses between SOCL 2000 and SOCL 2999 not used to satisfy other requirements.",
+        "Advanced Elective",
+        "Complete one course between SOCL 4000 and SOCL 4999 not used to satisfy other requirements."
+      ]
     },
     {
       "type": "SECTION",

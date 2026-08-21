@@ -140,7 +140,10 @@
           "classId": 2201
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "C or better required in JRNL 1101, JRNL 1102, and JRNL 2201:"
+      ]
     },
     {
       "type": "SECTION",
@@ -216,7 +219,10 @@
       "title": "Journalism Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete four JRNL electives (two must be 3000 level or above)."
+      ]
     },
     {
       "type": "SECTION",
@@ -280,7 +286,10 @@
       "title": "International Affairs Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -364,7 +373,10 @@
       "title": "Global Dynamics",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one of the following (courses are divided into thematic groups to aid students in deciding which courses to take and have no bearing on major requirements):"
+      ]
     },
     {
       "type": "SECTION",
@@ -956,14 +968,27 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Environment",
+        "Law, Diplomacy, and Global Governance",
+        "Human Rights and Social Justice",
+        "Conflict and Security",
+        "Globalization",
+        "Population, Migration, and Diaspora",
+        "Development",
+        "Communication and Media"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Regional Analysis",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two of the following courses, both of which must be in one region. Select courses taken during a semester study abroad or specific Dialogue of Civilizations courses may count as regional analysis courses pending approval of the international affairs head faculty advisor. See department for additional courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -1275,7 +1300,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "Latin America",
+        "Middle East"
+      ]
     },
     {
       "type": "SECTION",

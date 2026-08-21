@@ -128,7 +128,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Must be taken in alignment with your home college:"
+      ]
     },
     {
       "type": "SECTION",
@@ -180,7 +183,10 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute with 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -458,7 +464,10 @@
           "classId": 1341
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following course:"
+      ]
     },
     {
       "type": "SECTION",
@@ -534,7 +543,10 @@
           "classId": 1120
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "What do we know about crime and justice? In these three courses, students have an opportunity to develop a foundational understanding of three related phenomena: why crime exists, how our criminal justice system responds to crime, and the constitutional and legal oversight of this process."
+      ]
     },
     {
       "type": "SECTION",
@@ -566,7 +578,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "These courses introduce students to topical issues related to crime and justice."
+      ]
     },
     {
       "type": "SECTION",
@@ -643,7 +658,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The 2000-level courses in this list ask how does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions. The 3000-level courses in this list provide students a deeper look at a range of crime problems."
+      ]
     },
     {
       "type": "SECTION",
@@ -660,7 +678,10 @@
           "classId": 3700
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "How do we know what we know about crime and justice—and how do we develop new knowledge? Harnessing data to learn about issues, identify solutions, and advocate for change."
+      ]
     },
     {
       "type": "SECTION",
@@ -682,14 +703,21 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "A consideration of systemic issues facing the criminal justice system."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Criminal Justice Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Rounding out knowledge of crime and justice.",
+        "Complete one additional criminal justice elective from the 3000, 4000 or 5000-level:"
+      ]
     },
     {
       "type": "SECTION",
@@ -728,7 +756,10 @@
           "classId": 4000
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Co-op students should complete at least one of the following courses. CRIM 3000 is required for the first co-op. CRIM 4000 is required if a second co-op is taken:"
+      ]
     },
     {
       "type": "SECTION",

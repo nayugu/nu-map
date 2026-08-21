@@ -208,7 +208,10 @@
           "classId": 4792
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "If taking EECE 4791 in first-half summer, EECE 4792 must be taken in spring. If taking EECE 4791 in summer second-half, EECE 4792 must be taken in fall."
+      ]
     },
     {
       "type": "SECTION",
@@ -265,7 +268,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students can register for EECE 4991/EECE 4992 more than once. For these courses combined, a maximum of 8 semester hours will be allowed to satisfy the requirement of technical electives. An additional 4 semester hours will be allowed as a general elective. At most, one of these courses (4 semester hours) can be taken in a semester.",
+        "Though students may register for EECE 2750 more than once, only 4 semester hours will be allowed to satisfy the requirements of technical electives. An additional 4 semester hours will be allowed as a general elective.",
+        "EECE 2310 is not an approved course option for ECE majors to select for a technical elective. It is only for Khoury students.",
+        "If more than one electrical engineering fundamentals course is taken, it can count as a technical elective.",
+        "If CS 4530 is taken, EECE 4520 is not an acceptable technical elective."
+      ]
     },
     {
       "type": "SECTION",
@@ -322,7 +332,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "With ECE department approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -405,6 +418,9 @@
         }
       ],
       "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ],
       "shared": true
     },
     {
@@ -647,7 +663,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required."
+      ]
     },
     {
       "type": "SECTION",
@@ -705,6 +724,9 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "The following courses are already required above and also fulfill the integrative requirement:"
+      ],
       "shared": true
     }
   ],

@@ -153,7 +153,10 @@
       "title": "Human Services Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete four additional HUSV courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -175,7 +178,10 @@
           "classId": 1120
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "What do we know about crime and justice? In these three courses, students have an opportunity to develop a foundational understanding of three related phenomena: why crime exists, how our criminal justice system responds to crime, and the constitutional and legal oversight of this process."
+      ]
     },
     {
       "type": "SECTION",
@@ -207,7 +213,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "These courses introduce students to topical issues related to crime and justice."
+      ]
     },
     {
       "type": "SECTION",
@@ -254,7 +263,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "How does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions."
+      ]
     },
     {
       "type": "SECTION",
@@ -311,7 +323,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The following courses offer students a deeper look at a range of crime problems."
+      ]
     },
     {
       "type": "SECTION",
@@ -323,7 +338,10 @@
           "classId": 3700
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "How do we know what we know about crime and justice—and how do we develop new knowledge? Harnessing data to learn about issues, identify solutions, and advocate for change."
+      ]
     },
     {
       "type": "SECTION",
@@ -345,7 +363,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "A consideration of systemic issues facing the criminal justice system."
+      ]
     },
     {
       "type": "SECTION",
@@ -387,14 +408,21 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Successful students develop digital skills and master digital tools useful for careers related to crime and justice. Students choose one of two courses (each has a required lab). The computer science course introduces students to spreadsheets and databases. The data science course introduces students to programming with data."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Criminal Justice Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Rounding out knowledge of crime and justice.",
+        "Complete two additional criminal justice electives. One must be from the 3000, 4000 or 5000-level."
+      ]
     },
     {
       "type": "SECTION",
@@ -460,14 +488,21 @@
           "classId": 4000
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Students going on co-op should take:",
+        "Students returning from co-op should take:"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Additional Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one additional course in either CRIM or HUSV."
+      ]
     },
     {
       "type": "SECTION",

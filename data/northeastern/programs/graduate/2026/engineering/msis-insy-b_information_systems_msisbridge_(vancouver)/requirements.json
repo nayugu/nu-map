@@ -103,7 +103,10 @@
           "classId": 7990
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing Committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS Thesis to ProQuest."
+      ]
     },
     {
       "type": "SECTION",
@@ -290,7 +293,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the remaining semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -302,7 +308,10 @@
           "classId": 6000
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following. Students must complete ENCP 6000 to qualify for co-op experience:"
+      ]
     }
   ],
   "gpaRequirements": [

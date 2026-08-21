@@ -220,7 +220,11 @@
       "title": "Technical Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours of technical electives in the following subject areas:",
+        "BIOE, CHME, CIVE, EECE, EMGT, ENSY, IE, ME, and MEIE"
+      ]
     },
     {
       "type": "SECTION",
@@ -572,7 +576,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
     }
   ],
   "gpaRequirements": [

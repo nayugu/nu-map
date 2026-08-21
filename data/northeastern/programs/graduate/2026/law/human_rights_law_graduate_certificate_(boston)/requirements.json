@@ -160,7 +160,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Another 2-4 semester hour human rights law-related course from subject codes other than LAW, LW, or LS, with pre-approval of the certificate advisor."
+      ]
     }
   ]
 }

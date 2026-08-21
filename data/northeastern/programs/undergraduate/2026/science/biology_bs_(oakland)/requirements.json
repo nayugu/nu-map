@@ -328,7 +328,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "One of the three intermediate/advanced electives can be a research course:"
+      ]
     },
     {
       "type": "SECTION",

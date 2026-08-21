@@ -270,7 +270,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Media and Screen Studies courses, from the range MSCR 1200 - MSCR 4999."
+      ]
     },
     {
       "type": "SECTION",
@@ -336,7 +339,11 @@
       "title": "Elective Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Note: Elective courses may also fulfill requirements of an optional concentration of this program.",
+        "Complete four POLS courses or complete a concentration."
+      ]
     },
     {
       "type": "SECTION",

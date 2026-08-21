@@ -77,7 +77,10 @@
           "classId": 6402
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "Elective course (with faculty advisement)"
+      ]
     },
     {
       "type": "SECTION",
@@ -182,7 +185,10 @@
           "classId": 8421
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "An intensive practicum is optional in this concentration. Consult your faculty advisor."
+      ]
     }
   ],
   "gpaRequirements": [

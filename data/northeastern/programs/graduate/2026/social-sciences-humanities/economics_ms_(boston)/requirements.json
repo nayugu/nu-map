@@ -114,7 +114,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "The Department of Economics recommends that undergraduate PlusOne students enrolled in graduate courses notify the instructor that they are in the PlusOne program at the start of the semester."
+      ]
     },
     {
       "type": "SECTION",

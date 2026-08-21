@@ -125,7 +125,11 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 17
+      "creditsRequired": 17,
+      "notes": [
+        "Complete 17–19 semester hours in the following subject areas:",
+        "PHSC, PMCL, PMST, BIOL, CHEM, NNMD, BIOT"
+      ]
     },
     {
       "type": "SECTION",
@@ -147,7 +151,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following (repeatable) course twice:",
+        "The following course may be taken if additional time is needed to complete the thesis:"
+      ]
     }
   ],
   "gpaRequirements": [

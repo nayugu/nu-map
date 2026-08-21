@@ -272,7 +272,10 @@
       "title": "Communication Studies Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three additional COMM courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -484,7 +487,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 28
+      "creditsRequired": 28,
+      "notes": [
+        "Complete 28 semester hours of electives."
+      ]
     },
     {
       "type": "SECTION",

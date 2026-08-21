@@ -126,7 +126,10 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute 4–5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -215,7 +218,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "With advisor approval, a directed study, research, project study, or appropriate graduate-level course may also be taken as a computer science elective."
+      ]
     },
     {
       "type": "SECTION",
@@ -501,7 +507,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Option 1",
+        "Option 2"
+      ]
     },
     {
       "type": "SECTION",
@@ -770,7 +780,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Society and Behavior",
+        "Globalization and Global Health",
+        "Environmental Health and Climate Change",
+        "Law, Policy, and Human Rights",
+        "Healthcare Administration and Management"
+      ]
     },
     {
       "type": "SECTION",

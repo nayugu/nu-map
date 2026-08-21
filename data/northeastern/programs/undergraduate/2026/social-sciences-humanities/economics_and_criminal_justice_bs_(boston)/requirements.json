@@ -187,7 +187,10 @@
           "classId": 1120
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "What do we know about crime and justice? In these three courses, successful students will develop a foundational understanding of three related phenomena: why crime exists, how our criminal justice system responds to crime, and the constitutional and legal oversight of this process."
+      ]
     },
     {
       "type": "SECTION",
@@ -365,7 +368,10 @@
       "title": "Additional Criminal Justice Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one course in the CRIM 3001–5999 range not used to fulfill other requirements of this program."
+      ]
     },
     {
       "type": "SECTION",
@@ -596,7 +602,14 @@
       "title": "Experiential Learning",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 1
+      "creditsRequired": 1,
+      "notes": [
+        "Complete one of the following options:",
+        "Option 1: Co-op",
+        "Students may choose to complete one or multiple six-month co-op experiences during their course of study. Students must consult with their advisor.",
+        "Option 2: Course Approved for NUpath Integrating Knowledge and Skills Through Experience",
+        "Any course(s) designated with NUpath attribute EX, including courses used to fulfill other requirements of this program."
+      ]
     }
   ],
   "gpaRequirements": [

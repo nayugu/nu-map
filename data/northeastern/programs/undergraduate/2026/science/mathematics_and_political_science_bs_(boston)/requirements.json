@@ -242,7 +242,11 @@
       "title": "Political Science Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Note: Elective courses may also fulfill requirements of an optional concentration of this program.",
+        "Complete three POLS courses numbered 2000 and above."
+      ]
     },
     {
       "type": "SECTION",

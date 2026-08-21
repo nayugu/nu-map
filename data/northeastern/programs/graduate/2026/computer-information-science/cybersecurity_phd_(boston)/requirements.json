@@ -331,14 +331,26 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Hardware Security",
+        "Machine Learning",
+        "Network Security",
+        "Systems Security",
+        "Theory",
+        "Usable Security and Privacy",
+        "Cybersecurity Policy"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 28
+      "creditsRequired": 28,
+      "notes": [
+        "Selected in consultation with advisor from graduate-level CS and ECE courses and graduate-level courses offered by the College of Social Sciences and Humanities, including CRIM, CS, CY, DS, EECE, INSH, MATH and POLS."
+      ]
     },
     {
       "type": "SECTION",
@@ -365,7 +377,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (repeatable) course until graduation:"
+      ]
     }
   ],
   "gpaRequirements": [

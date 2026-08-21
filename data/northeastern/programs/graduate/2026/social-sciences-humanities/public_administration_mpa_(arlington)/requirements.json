@@ -166,7 +166,18 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete 12 semester hours from the following:",
+        "CRIM 5000 to CRIM 7999 (by advisement only)",
+        "ECON 5000 to ECON 7999 (by advisement only)",
+        "ENGL 5000 to ENGL 7999 (by advisement only)",
+        "HIST 5000 to HIST 7999 (by advisement only)",
+        "LPSC 5000 to LPSC 7999",
+        "POLS 5000 to POLS 7999 (by advisement only)",
+        "PPUA 5000 to PPUA 7999",
+        "SOCL 5000 to SOCL 7999 (by advisement only)"
+      ]
     }
   ]
 }

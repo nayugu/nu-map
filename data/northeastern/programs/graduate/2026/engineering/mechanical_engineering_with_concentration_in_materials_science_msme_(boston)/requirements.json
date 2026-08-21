@@ -122,7 +122,11 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete 16 semester hours in the following subject areas:",
+        "ME, MATL"
+      ]
     },
     {
       "type": "SECTION",
@@ -141,7 +145,11 @@
       "title": "Electives (2)",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete 12 semester hours in the following subject areas:",
+        "ME, MATL"
+      ]
     },
     {
       "type": "SECTION",
@@ -165,7 +173,12 @@
       "title": "Electives (3)",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours in the following subject areas:",
+        "ME, MATL",
+        "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+      ]
     },
     {
       "type": "SECTION",
@@ -202,7 +215,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -120,7 +120,11 @@
       "title": "Business Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete any business class for which the pre-req is met in the following subject areas:",
+        "ACCT, ENTR, FINA, INNO, INTB, MGMT, MISM, MKTG, MGSC, SCHM or STRT"
+      ]
     }
   ],
   "gpaRequirements": [

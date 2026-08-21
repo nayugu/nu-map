@@ -100,7 +100,11 @@
           "classId": 7772
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Labor Economics Field",
+        "Industrial Organization Field"
+      ]
     },
     {
       "type": "SECTION",
@@ -169,7 +173,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Registration in the following class is required in the fall and spring semesters following achievement of doctoral candidacy:",
+        "Following completion of ECON 9990 and ECON 9991, registration in the following class is required in each semester (including the summer if the dissertation is submitted in summer) until the dissertation is completed:"
+      ]
     }
   ]
 }

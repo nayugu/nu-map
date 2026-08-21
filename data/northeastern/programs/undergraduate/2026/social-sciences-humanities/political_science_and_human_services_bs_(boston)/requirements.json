@@ -247,7 +247,10 @@
       "title": "Human Services Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three HUSV courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -332,7 +335,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Option A",
+        "Complete POLS 4701 or POLS 4703 and complete one additional HUSV course that has not been used in previous requirements:",
+        "Option B",
+        "Complete HUSV 4700 and complete one additional POLS course numbered 2000 or higher that has not been used in previous requirements:"
+      ]
     }
   ],
   "concentrations": {

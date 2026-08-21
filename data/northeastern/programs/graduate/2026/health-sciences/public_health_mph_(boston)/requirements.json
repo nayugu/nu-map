@@ -259,7 +259,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Public Health Technologies",
+        "Public Mental Health"
+      ]
     }
   ],
   "gpaRequirements": [

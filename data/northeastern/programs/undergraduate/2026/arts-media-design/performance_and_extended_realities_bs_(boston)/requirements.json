@@ -676,7 +676,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Music Cluster",
+        "Theatre Cluster",
+        "Design/Animation Cluster",
+        "Game Design Cluster"
+      ]
     }
   ]
 }

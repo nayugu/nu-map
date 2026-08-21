@@ -360,7 +360,11 @@
       "title": "Psychology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete any two PSYC courses:",
+        "Recommended: PSYC 1208 Psychology and Law and PSYC 2370 Cross-Cultural Psychology"
+      ]
     },
     {
       "type": "SECTION",

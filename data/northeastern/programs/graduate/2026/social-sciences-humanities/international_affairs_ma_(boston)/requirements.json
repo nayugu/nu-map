@@ -270,7 +270,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 8 semester hours of elective courses from the list below:"
+        ]
       },
       {
         "type": "SECTION",

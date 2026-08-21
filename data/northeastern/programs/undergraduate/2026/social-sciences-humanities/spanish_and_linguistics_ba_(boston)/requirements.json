@@ -253,7 +253,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "International co-op in a Spanish-speaking country",
+        "Study abroad in a Spanish-speaking country",
+        "Dialogue of Civilizations in a Spanish-speaking country"
+      ]
     },
     {
       "type": "SECTION",
@@ -373,7 +378,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "With prior linguistics program approval, one of the following experiences can be used to fulfill the research experience:"
+      ]
     },
     {
       "type": "SECTION",
@@ -398,7 +406,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students may repeat LING 4654 from the seminar requirement above if each iteration is a different seminar topic."
+      ]
     },
     {
       "type": "SECTION",

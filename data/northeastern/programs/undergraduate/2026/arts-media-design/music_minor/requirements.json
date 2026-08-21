@@ -402,7 +402,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "All lessons and ensembles are 1 credit:"
+      ]
     }
   ],
   "gpaRequirements": [

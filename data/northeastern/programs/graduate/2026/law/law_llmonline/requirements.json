@@ -84,7 +84,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 21
+      "creditsRequired": 21,
+      "notes": [
+        "Students must take at least 21 credits of LAW electives if they took the foundational course; they must take at least 24 credits of LAW electives if not required to take the foundational course."
+      ]
     }
   ],
   "gpaRequirements": [

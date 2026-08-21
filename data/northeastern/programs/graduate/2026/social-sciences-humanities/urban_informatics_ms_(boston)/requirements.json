@@ -232,7 +232,10 @@
             "classId": 6410
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "CIVE 7000-level Special Topics in Engineering—approved by program director"
+        ]
       },
       {
         "type": "SECTION",
@@ -418,7 +421,10 @@
             "classId": 6410
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "CIVE 7000-level Special Topics in Engineering—approved by program director"
+        ]
       },
       {
         "type": "SECTION",

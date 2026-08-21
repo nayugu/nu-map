@@ -240,7 +240,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Option 1",
+        "Option 2"
+      ]
     },
     {
       "type": "SECTION",
@@ -476,7 +480,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Society and Behavior",
+        "Globalization and Global Health",
+        "Environmental Health and Climate Change",
+        "Law, Policy, and Human Rights",
+        "Healthcare Administration and Management"
+      ]
     },
     {
       "type": "SECTION",
@@ -510,14 +521,20 @@
       "title": "Area Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two area courses in the range from ANTH 4101-ANTH 4520 not used to satisfy other requirements; one study abroad course may be substituted as an area studies course with prior permission from the department; additional area courses taken may count as anthropology electives."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Cultural Anthropology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three additional courses between ANTH 2000-4999 not used to satisfy other requirements."
+      ]
     },
     {
       "type": "SECTION",
@@ -566,7 +583,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Advanced Writing in the Disciplines"
+      ]
     },
     {
       "type": "SECTION",

@@ -241,7 +241,10 @@
       "title": "Coursework Option",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours from the electives course list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -290,7 +293,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following. Students must complete ENCP 6100 to qualify for co-op experience:"
+      ]
     },
     {
       "type": "SECTION",
@@ -612,7 +618,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Bioengineering",
+        "Civil and Environmental Engineering",
+        "Electrical and Computer Engineering"
+      ]
     },
     {
       "type": "SECTION",
@@ -679,7 +690,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Computer Science",
+        "Cybersecurity"
+      ]
     },
     {
       "type": "SECTION",
@@ -726,7 +741,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Entrepreneurship and Innovation",
+        "Entrepreneurship Technological",
+        "Human Resources Management"
+      ]
     },
     {
       "type": "SECTION",
@@ -768,7 +788,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Health Informatics",
+        "Nursing"
+      ]
     },
     {
       "type": "SECTION",
@@ -785,7 +809,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Communication Studies"
+      ]
     },
     {
       "type": "SECTION",
@@ -874,7 +901,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Law and Public Policy",
+        "Philosophy",
+        "Political Science",
+        "Public Policy and Urban Affairs"
+      ]
     },
     {
       "type": "SECTION",
@@ -891,7 +924,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Physics"
+      ]
     }
   ],
   "gpaRequirements": [

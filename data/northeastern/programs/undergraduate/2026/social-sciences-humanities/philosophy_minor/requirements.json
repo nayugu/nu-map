@@ -99,7 +99,10 @@
       "title": "Elective Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three courses in philosophy and religion."
+      ]
     }
   ],
   "gpaRequirements": [

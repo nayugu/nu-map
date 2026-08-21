@@ -165,7 +165,10 @@
           ]
         }
       ],
-      "minRequirementCount": 13
+      "minRequirementCount": 13,
+      "notes": [
+        "Electives from the list below"
+      ]
     },
     {
       "type": "SECTION",
@@ -240,7 +243,12 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 3
+      "creditsRequired": 3,
+      "notes": [
+        "Complete 3 semester hours of coursework from the options below.",
+        "Students who have previously completed SLPA 5107 (or equivalent, as determined by the faculty advisor) should complete Option B below.",
+        "All other students must complete Option A below."
+      ]
     },
     {
       "type": "SECTION",
@@ -294,7 +302,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Other courses may be chosen with preapproval of the student's faculty advisor."
+      ]
     },
     {
       "type": "SECTION",

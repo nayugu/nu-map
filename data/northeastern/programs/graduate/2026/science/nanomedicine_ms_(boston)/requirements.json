@@ -187,7 +187,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete at least one of the following (credit-bearing courses chosen to fulfill this requirement will also be applied to the elective requirements of this program):"
+      ]
     },
     {
       "type": "SECTION",
@@ -495,7 +498,10 @@
             "classId": 6370
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 3 semester hours from the electives list."
+        ]
       },
       {
         "type": "SECTION",
@@ -543,7 +549,10 @@
             "classId": 5470
           }
         ],
-        "minRequirementCount": 6
+        "minRequirementCount": 6,
+        "notes": [
+          "Complete 3 semester hours from the electives list."
+        ]
       },
       {
         "type": "SECTION",
@@ -581,7 +590,10 @@
             "classId": 6310
           }
         ],
-        "minRequirementCount": 6
+        "minRequirementCount": 6,
+        "notes": [
+          "Complete 3 semester hours from the electives list."
+        ]
       },
       {
         "type": "SECTION",
@@ -604,7 +616,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 15 semester hours from the electives list."
+        ]
       }
     ]
   }

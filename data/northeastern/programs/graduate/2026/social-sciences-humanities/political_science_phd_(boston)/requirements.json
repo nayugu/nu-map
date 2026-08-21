@@ -102,7 +102,10 @@
           "classId": 7400
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Advanced methods courses from other disciplines may be chosen in consultation with your faculty advisor."
+      ]
     },
     {
       "type": "SECTION",
@@ -195,7 +198,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Following completion of POLS 9990 and POLS 9991, registration in the following class is required in each semester (including the summer if the dissertation is submitted in the summer) until the dissertation is completed:"
+      ]
     }
   ],
   "gpaRequirements": [

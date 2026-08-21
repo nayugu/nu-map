@@ -93,7 +93,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "For students with prior knowledge of German, a placement test will determine the appropriate first course. Note: Students who place at or above GRMN 2102 must complete the sequence through GRMN 3102 and take additional courses from the list of electives to fulfill the total credit requirements. For guidance on course selection, students should consult the German academic coordinator."
+      ]
     },
     {
       "type": "SECTION",

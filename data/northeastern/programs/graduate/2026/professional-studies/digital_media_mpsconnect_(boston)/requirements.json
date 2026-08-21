@@ -114,7 +114,10 @@
           ]
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Complete one of the following options:"
+      ]
     },
     {
       "type": "SECTION",
@@ -153,7 +156,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one technical course from the workshops list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -353,7 +359,10 @@
           "classId": 6461
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four courses from one of the following tracks:"
+      ]
     },
     {
       "type": "SECTION",
@@ -477,7 +486,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 15–17 quarter hours from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

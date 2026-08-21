@@ -132,7 +132,10 @@
           "classId": 3200
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -194,7 +197,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Computer Science Option",
+        "Data Science Option"
+      ]
     },
     {
       "type": "SECTION",
@@ -502,7 +509,13 @@
           "classId": 1101
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Biology",
+        "Option 1",
+        "Option 2",
+        "Psychology"
+      ]
     },
     {
       "type": "SECTION",
@@ -774,7 +787,16 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Introductory Course",
+        "Upper-Level Course",
+        "Society and Behavior",
+        "Globalization and Global Health",
+        "Environmental Health and Climate Change",
+        "Law, Policy, and Human Rights",
+        "Healthcare Administration and Management"
+      ]
     },
     {
       "type": "SECTION",
@@ -842,7 +864,10 @@
       "title": "General Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete 20 semester hours of general electives"
+      ]
     }
   ],
   "gpaRequirements": [

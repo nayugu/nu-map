@@ -199,7 +199,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following. Students must complete ENCP 6100 to qualify for co-op experience:"
+      ]
     },
     {
       "type": "SECTION",
@@ -725,7 +728,14 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete one of the following options for 12 semester hours:",
+          "Coursework Option",
+          "Project Option",
+          "Thesis Option",
+          "Complete 4 semester hours from the restricted electives course list."
+        ]
       },
       {
         "type": "SECTION",
@@ -846,7 +856,14 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete one of the following options for 12 semester hours:",
+          "Coursework Option",
+          "Project Option",
+          "Thesis Option",
+          "Complete 4 semester hours from the restricted electives course list."
+        ]
       }
     ]
   }

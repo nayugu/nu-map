@@ -355,21 +355,30 @@
       "title": "General History Elective Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three HIST courses at any level in any field."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Intermediate/Advanced Course Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete a minimum of one HIST course numbered 2000 to 2999 (excluding HIST 2301 and HIST 2302)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced Course Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete a minimum of two HIST courses numbered 3000 to 4999 (excluding HIST 4701)."
+      ]
     }
   ]
 }

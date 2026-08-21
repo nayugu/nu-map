@@ -77,7 +77,10 @@
           "classId": 7350
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "A cumulative 3.250 GPA, with no individual class lower than a B–, is required for the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -143,7 +146,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (repeatable) course each semester:",
+        "Recommended but optional:"
+      ]
     },
     {
       "type": "SECTION",

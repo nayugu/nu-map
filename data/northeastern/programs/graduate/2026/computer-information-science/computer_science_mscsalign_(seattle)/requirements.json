@@ -410,7 +410,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three courses from two of the following breath areas:"
+      ]
     },
     {
       "type": "SECTION",

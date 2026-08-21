@@ -165,7 +165,10 @@
       "title": "Human Services Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete five HUSV courses."
+      ]
     }
   ]
 }

@@ -127,6 +127,10 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete 24 graduate-level semester hours for which prerequisites have been met. Choose from the following subject codes:",
+        "ACCT, BUSN, ENTR, FINA, HRMG, INTB, MECN, MGMT, MKTG, SCHM, STRT, and TECE"
+      ],
       "shared": true
     }
   ],

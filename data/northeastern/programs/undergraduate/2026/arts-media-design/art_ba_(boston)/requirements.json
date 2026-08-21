@@ -214,7 +214,11 @@
       "title": "Art History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours of ARTH courses not taken for the concentration.",
+        "If ARTH 3000 or ARTH 4000 (or any other topics course in the subject listed above) is completed more than once, the additional completions may be allowed toward the electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -314,7 +318,11 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Courses in architectural history and media and screen studies may also be used upon approval by the program coordinator.",
+          "If ARTH 3000 or ARTH 4000 (or any other topics course in the options listed below) is completed more than once, the additional completions may be allowed toward the electives."
+        ]
       },
       {
         "type": "SECTION",
@@ -648,7 +656,20 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Art + Design",
+          "If a topics course is completed more than once, the additional completions may be allowed toward the arts, media and design electives.",
+          "Architecture",
+          "Communication Studies",
+          "Game Design",
+          "Journalism",
+          "Media and Screen Studies",
+          "Music",
+          "Theatre",
+          "University of the Arts London",
+          "Optional London study abroad for sound management at Central Saint Martins, University of the Arts London. Specific courses at University of the Arts London are preapproved for transfer to a student's Northeastern University record to apply toward requirements. Students can consult with a CAMD academic advisor for approval prior to registration."
+        ]
       }
     ]
   }

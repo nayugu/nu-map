@@ -84,7 +84,10 @@
       "title": "Anthropology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three ANTH electives, one of which must be at the 3000 level or above."
+      ]
     }
   ],
   "gpaRequirements": [

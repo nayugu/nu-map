@@ -641,7 +641,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Electives outside this list may be chosen in consultation with faculty advisor:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -678,7 +681,11 @@
             "classId": 5750
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 5 semester hours of coursework from the Restricted Electives list below.",
+          "Complete 4 semester hours of coursework from the Restricted Electives or Additional Electives lists below."
+        ]
       },
       {
         "type": "SECTION",
@@ -711,7 +718,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 3 semester hours of coursework from the Restricted Electives list below.",
+          "Complete 3 semester hours of coursework from the Restricted Electives or Additional Electives lists below."
+        ]
       },
       {
         "type": "SECTION",
@@ -734,7 +745,10 @@
             "classId": 6430
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 6 semester hours of coursework from the Restricted Electives or Additional Electives lists below."
+        ]
       }
     ]
   }

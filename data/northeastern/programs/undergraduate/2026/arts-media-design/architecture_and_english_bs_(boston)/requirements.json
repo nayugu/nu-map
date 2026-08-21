@@ -141,7 +141,10 @@
       "title": "Architecure History Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete any two courses in the range of ARCH 2300–ARCH 2399."
+      ]
     },
     {
       "type": "SECTION",
@@ -382,7 +385,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Pre-1850",
+        "Post-1850"
+      ]
     },
     {
       "type": "SECTION",
@@ -570,7 +577,10 @@
       "title": "English Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete any two ENGL courses that have not already been used to fulfill another requirement."
+      ]
     },
     {
       "type": "SECTION",

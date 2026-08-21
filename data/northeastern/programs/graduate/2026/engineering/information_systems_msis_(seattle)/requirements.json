@@ -85,7 +85,10 @@
       "title": "Coursework",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 28
+      "creditsRequired": 28,
+      "notes": [
+        "Complete 28 semester hours from the electives course list below."
+      ]
     },
     {
       "type": "SECTION",

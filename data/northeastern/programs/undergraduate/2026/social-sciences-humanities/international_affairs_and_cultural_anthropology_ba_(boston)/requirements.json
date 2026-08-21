@@ -154,7 +154,10 @@
       "title": "International Affairs Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Please complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -238,7 +241,10 @@
       "title": "Global Dynamics",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one of the following (courses are divided into thematic groups to aid students in deciding which courses to take and have no bearing on major requirements):"
+      ]
     },
     {
       "type": "SECTION",
@@ -830,14 +836,27 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Environment",
+        "Law, Diplomacy, and Global Governance",
+        "Human Rights and Social Justice",
+        "Conflict and Security",
+        "Globalization",
+        "Population, Migration, and Diaspora",
+        "Development",
+        "Communication and Media"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Regional Analysis Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two regional analysis courses, both of which must be in one region, from the following lists. Select courses taken during a semester study abroad or specific Dialogue of Civilizations courses may count as regional analysis courses pending approval of the international affairs head faculty advisor. See department for additional courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -1149,7 +1168,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "Latin America",
+        "Middle East"
+      ]
     },
     {
       "type": "SECTION",
@@ -1173,7 +1199,10 @@
       "title": "Anthropology Area Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two area courses in the range from ANTH 4101-ANTH 4520 not used to satisfy other requirements; one study abroad course may be substituted as an area studies course with prior permission from the department; additional area courses taken may count as anthropology electives."
+      ]
     },
     {
       "type": "SECTION",

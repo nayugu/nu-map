@@ -394,7 +394,10 @@
           "classId": 3200
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute 4-5 SH of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -456,7 +459,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Computer Science Option",
+        "Data Science Option"
+      ]
     },
     {
       "type": "SECTION",
@@ -704,7 +711,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
     },
     {
       "type": "SECTION",
@@ -729,7 +739,10 @@
       "title": "General Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours of academic, nonremedial courses not used toward other requirements."
+      ]
     }
   ],
   "gpaRequirements": [

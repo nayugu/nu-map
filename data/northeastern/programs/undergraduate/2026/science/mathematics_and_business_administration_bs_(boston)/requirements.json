@@ -145,7 +145,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Option 1 (Recommended)",
+        "Option 2"
+      ]
     },
     {
       "type": "SECTION",
@@ -423,7 +427,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the following experiences:"
+      ]
     }
   ],
   "gpaRequirements": [

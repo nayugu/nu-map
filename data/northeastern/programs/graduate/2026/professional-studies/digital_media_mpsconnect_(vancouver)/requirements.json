@@ -109,7 +109,10 @@
           "classId": 6521
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Complete one of the following options:"
+      ]
     },
     {
       "type": "SECTION",

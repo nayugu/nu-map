@@ -247,7 +247,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "With prior linguistics program approval, one of the following experiences can be used to fulfill the research experience:"
+      ]
     },
     {
       "type": "SECTION",
@@ -259,7 +262,10 @@
           "classId": 4654
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one seminar (LING 4654 may be repeated with different topics):"
+      ]
     },
     {
       "type": "SECTION",
@@ -307,14 +313,21 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "LING 3000 to LING 4999",
+        "Up to two electives may come from the following list:"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Language Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses in the same language with a grade of C or higher. Proficiency at elementary level 2 or higher is required."
+      ]
     },
     {
       "type": "SECTION",

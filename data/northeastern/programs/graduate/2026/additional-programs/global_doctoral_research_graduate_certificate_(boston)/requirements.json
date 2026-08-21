@@ -85,7 +85,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Any PhD-level course with an international component may be applied to fulfillment of this requirement with prior approval from the program advisor."
+      ]
     }
   ],
   "gpaRequirements": [

@@ -226,7 +226,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Required for students who must maintain full-time status while completing comprehensive exam. Must take twice:"
+      ]
     },
     {
       "type": "SECTION",
@@ -282,7 +285,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Following completion of two semesters of dissertation, registration in the following class is required in each semester (including the summer if the dissertation is submitted in summer) until the dissertation is completed:"
+      ]
     }
   ],
   "gpaRequirements": [

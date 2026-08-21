@@ -336,7 +336,10 @@
           "classId": 4903
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following course that is not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",

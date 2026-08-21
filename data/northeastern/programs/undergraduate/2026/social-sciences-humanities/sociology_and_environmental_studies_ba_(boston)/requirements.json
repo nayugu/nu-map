@@ -118,7 +118,11 @@
       "title": "Sociology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete two courses between SOCL 1200–SOCL 2999 not used to satisfy other requirements.",
+        "Complete three courses between SOCL 3000–SOCL 4999 not used to satisfy other requirements."
+      ]
     },
     {
       "type": "SECTION",
@@ -571,7 +575,10 @@
           "classId": 2000
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students who want to participate in co-op will need to complete EESC 2000 Professional Development for Co-op."
+      ]
     }
   ],
   "gpaRequirements": [

@@ -156,7 +156,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Requires a background in computer science."
+        ]
       },
       {
         "type": "SECTION",

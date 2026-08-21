@@ -172,7 +172,11 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours from the following subject areas:",
+        "SUEN, ARCH, LARC, PPUA, LPSC, SBSY"
+      ]
     }
   ],
   "gpaRequirements": [

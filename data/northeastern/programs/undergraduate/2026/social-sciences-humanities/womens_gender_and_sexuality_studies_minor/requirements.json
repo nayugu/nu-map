@@ -650,7 +650,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "At least one elective must be taken at the 2000 level or above and electives must be drawn from at least two different departments:"
+      ]
     }
   ],
   "gpaRequirements": [

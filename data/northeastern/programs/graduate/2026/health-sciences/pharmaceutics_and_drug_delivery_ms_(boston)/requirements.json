@@ -128,7 +128,10 @@
           "classId": 6216
         }
       ],
-      "minRequirementCount": 7
+      "minRequirementCount": 7,
+      "notes": [
+        "Complete the following courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -157,7 +160,11 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 9
+      "creditsRequired": 9,
+      "notes": [
+        "Complete 9–11 semester hours from the following subject areas:",
+        "BIOL, BIOT, CHEM, NNMD, PHSC, PMCL, PMST"
+      ]
     },
     {
       "type": "SECTION",
@@ -179,7 +186,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Thesis research should be taken twice.",
+        "Thesis continuation may be taken if additional time is needed to complete the thesis."
+      ]
     }
   ],
   "gpaRequirements": [

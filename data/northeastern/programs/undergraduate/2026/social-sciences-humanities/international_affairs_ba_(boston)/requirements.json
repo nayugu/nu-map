@@ -174,7 +174,12 @@
       "title": "Global Dynamics Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours from the global dynamics course list:",
+        "Courses are divided into thematic groups to aid students in deciding which courses to take and have no bearing on major requirements.",
+        "Courses used to fulfill major core requirements may not be used to satisfy the global dynamics requirement. See the department for additional courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -766,14 +771,27 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Environment",
+        "Law, Diplomacy, and Global Governance",
+        "Human Rights and Social Justice",
+        "Conflict and Security",
+        "Globalization",
+        "Population, Migration, and Diaspora",
+        "Development",
+        "Communication and Media"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Regional Analysis Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three courses from the regional analysis list, two of which must be in one region. Select courses taken during a semester study abroad or specific Dialogue of Civilizations courses may count as regional analysis courses pending approval of the international affairs head faculty advisor. See department for additional courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -1085,14 +1103,24 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "Latin America",
+        "Middle East"
+      ]
     },
     {
       "type": "SECTION",
       "title": "International Affairs Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours from the international affairs elective list:"
+      ]
     },
     {
       "type": "SECTION",
@@ -1191,7 +1219,12 @@
             "classId": 1101
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 4 additional semester hours from the global dynamics course list.",
+          "Complete 16 additional semester hours from the Africa category of the regional analysis course list.",
+          "Two courses must be 2000 or above."
+        ]
       },
       {
         "type": "SECTION",
@@ -1219,7 +1252,12 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 4 additional semester hours from the global dynamics course list.",
+          "Complete 16 additional semester hours from the Asia category of the regional analysis course list.",
+          "Two courses must be 2000 or above."
+        ]
       },
       {
         "type": "SECTION",
@@ -1237,7 +1275,12 @@
             "classId": 3435
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 4 additional semester hours from the global dynamics course list.",
+          "Complete 16 additional semester hours from the Europe category of the regional analysis course list.",
+          "Two courses must be 2000 or above."
+        ]
       },
       {
         "type": "SECTION",
@@ -1255,7 +1298,11 @@
             "classId": 1220
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 4 additional semester hours from the global dynamics course list.",
+          "Complete 16 additional semester hours from the Latin America category of the regional analysis course list."
+        ]
       },
       {
         "type": "SECTION",
@@ -1283,7 +1330,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 4 additional semester hours from the global dynamics course list.",
+          "Complete 16 additional semester hours from the Middle East category of the regional analysis course list."
+        ]
       }
     ]
   }

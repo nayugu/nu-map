@@ -122,7 +122,10 @@
             "classId": 6360
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Any 5000- or 6000-level course approved by advisor"
+        ]
       },
       {
         "type": "SECTION",

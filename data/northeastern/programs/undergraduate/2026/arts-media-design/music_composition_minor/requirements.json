@@ -69,7 +69,10 @@
           "classId": 1119
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "All students can take a music theory placement exam. Students who do not place into MUSC 1201 must first take the following:"
+      ]
     },
     {
       "type": "SECTION",

@@ -94,7 +94,10 @@
           "classId": 6910
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The following course should be taken last:"
+      ]
     },
     {
       "type": "SECTION",
@@ -251,7 +254,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete courses from the 6000 level. Below is a list of courses regularly offered as electives within the program:"
+      ]
     }
   ],
   "gpaRequirements": [

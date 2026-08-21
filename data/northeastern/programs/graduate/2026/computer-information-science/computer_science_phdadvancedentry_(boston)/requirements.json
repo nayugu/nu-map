@@ -67,7 +67,10 @@
       "title": "Core Requirements",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Consult your faculty advisor for acceptable courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -94,7 +97,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Upon achieving PhD candidacy, complete the following courses for two consecutive semesters:",
+        "For remaining semester(s), complete the following (repeatable) course until graduation:"
+      ]
     }
   ],
   "gpaRequirements": [

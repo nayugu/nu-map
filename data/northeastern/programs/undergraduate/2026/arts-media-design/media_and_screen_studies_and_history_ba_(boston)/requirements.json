@@ -277,7 +277,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Media and Screen Studies courses, from the range MSCR 1200 - MSCR 4999"
+      ]
     },
     {
       "type": "SECTION",
@@ -391,7 +394,10 @@
       "title": "History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two HIST courses at any level in any field."
+      ]
     },
     {
       "type": "SECTION",
@@ -418,14 +424,20 @@
       "title": "Intermediate/Advanced History",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum of one history course numbered 2000 to 2999 (Excluding HIST 2301 and HIST 2302)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced History",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum of one history course numbered 3000 to 4999 (Excluding HIST 4701)."
+      ]
     },
     {
       "type": "SECTION",

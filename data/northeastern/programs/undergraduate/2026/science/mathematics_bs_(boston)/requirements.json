@@ -123,7 +123,10 @@
           "classId": 2321
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
     },
     {
       "type": "SECTION",
@@ -294,7 +297,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Physics 1",
+        "Physics 2"
+      ]
     },
     {
       "type": "SECTION",
@@ -328,7 +335,10 @@
       "title": "Upper-Division Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three general electives numbered 3000 or above."
+      ]
     },
     {
       "type": "SECTION",

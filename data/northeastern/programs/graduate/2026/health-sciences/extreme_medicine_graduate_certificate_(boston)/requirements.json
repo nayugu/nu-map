@@ -158,6 +158,9 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "The following experiential courses are optional , but each requires one additional SH of MSCI 5400."
+      ],
       "shared": true
     }
   ],

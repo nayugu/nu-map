@@ -232,7 +232,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Pre-1850",
+        "Post-1850"
+      ]
     },
     {
       "type": "SECTION",
@@ -697,7 +701,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one Dialogues of Civilization experience including, but not limited to, those offered by the department (other study-abroad programs may not be used):"
+      ]
     }
   ]
 }

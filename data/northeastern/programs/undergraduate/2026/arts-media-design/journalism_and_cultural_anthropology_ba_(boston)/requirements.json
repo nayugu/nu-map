@@ -122,7 +122,10 @@
           "classId": 2201
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "A grade of C or better is required in JRNL 1101, JRNL 1102, and JRNL 2201."
+      ]
     },
     {
       "type": "SECTION",
@@ -209,7 +212,10 @@
       "title": "Journalism Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete four JRNL courses (two must be 3000 level or above)."
+      ]
     },
     {
       "type": "SECTION",
@@ -243,14 +249,21 @@
       "title": "Anthropology Area Requirements",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two area courses in the range from ANTH 4101–ANTH 4520 not used to satisfy other requirements; one study-abroad course may be substituted as an area studies course with prior permission from the department; additional area courses taken may count as anthropology electives."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Anthropology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two ANTH courses in addition to the above requirements. One course from study abroad may also count toward this requirement, with permission from the department.",
+        "ANTH 2000 to ANTH 4999"
+      ]
     },
     {
       "type": "SECTION",
@@ -316,7 +329,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following if electing to do a co-op:"
+      ]
     },
     {
       "type": "SECTION",
@@ -353,7 +369,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "If ANTH 4100 was used as capstone option, choose ANTH 3418 as the integrative course:"
+      ]
     },
     {
       "type": "SECTION",

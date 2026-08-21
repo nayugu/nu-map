@@ -198,7 +198,10 @@
           "classId": 4000
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Complete 4 additional semester hours of ARTH courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -284,7 +287,10 @@
       "title": "Art and Design Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours of ARTD, ARTE, ARTF, ARTS, EXRE, or GAME courses not already required and as long as prerequisites have been met and not used to fulfill other requirements of the program. If ARTG 5000 (or any other topics course in the subjects listed) is completed more than once, the additional completions may be applied toward the electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -354,7 +360,10 @@
       "title": "Design Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete 16 semester hours of ARTG courses as long as prerequisites have been met. If ARTG 5000 (or any other topics course in the subject listed) is completed more than once, the additional completions may be allowed toward the electives."
+      ]
     }
   ],
   "concentrations": {
@@ -586,7 +595,10 @@
             "classId": 5000
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 12 semester hours of any of required concentration courses above. At least one course needs to be at the 3000 level or higher."
+        ]
       }
     ]
   }

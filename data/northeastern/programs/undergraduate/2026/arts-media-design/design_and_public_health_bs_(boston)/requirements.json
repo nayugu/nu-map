@@ -306,7 +306,12 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Biology",
+        "Option 1",
+        "Option 2"
+      ]
     },
     {
       "type": "SECTION",
@@ -540,7 +545,16 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Introductory Course",
+        "Upper-Level Course",
+        "Society and Behavior",
+        "Globalization and Global Health",
+        "Environmental Health and Climate Change",
+        "Law, Policy, and Human Rights",
+        "Healthcare Administration and Management"
+      ]
     },
     {
       "type": "SECTION",
@@ -619,7 +633,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Advanced Writing in the Disciplines"
+      ]
     },
     {
       "type": "SECTION",
@@ -958,7 +975,15 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours of ARTH courses.",
+          "Creative Fabrication",
+          "Experience Design",
+          "Graphic Design",
+          "Information Design",
+          "Interaction Design"
+        ]
       }
     ]
   }

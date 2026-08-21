@@ -149,6 +149,9 @@
         }
       ],
       "minRequirementCount": 4,
+      "notes": [
+        "A grade of C or higher is required:"
+      ],
       "shared": true
     },
     {
@@ -188,7 +191,10 @@
       "title": "Journalism Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three journalism electives."
+      ]
     }
   ]
 }

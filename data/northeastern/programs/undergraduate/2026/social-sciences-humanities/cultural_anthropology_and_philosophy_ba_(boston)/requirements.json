@@ -126,7 +126,10 @@
       "title": "Area Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two area courses in the range from ANTH 4101–ANTH 4520 not used to satisfy other requirements. One study-abroad course may be substituted as an area studies course with prior permission from the department. Additional area courses taken may count as anthropology electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -155,7 +158,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three 4-semester-hour courses not used to satisfy another requirement in addition to the above requirements. One study-abroad course may also count toward this requirement with prior permission from the department."
+      ]
     },
     {
       "type": "SECTION",
@@ -226,7 +232,10 @@
       "title": "Advanced Philosophy Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two PHIL courses with a designation of 3000 or above not used to satisfy another requirement and at least one at the 4000 or 5000 level, except 5110."
+      ]
     },
     {
       "type": "SECTION",
@@ -295,7 +304,10 @@
       "title": "Philosophy Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two additional courses from the philosophy department."
+      ]
     },
     {
       "type": "SECTION",
@@ -352,7 +364,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "One integrative course is required from each discipline. Courses taken as electives above may not be used as integrative courses."
+      ]
     }
   ],
   "gpaRequirements": [

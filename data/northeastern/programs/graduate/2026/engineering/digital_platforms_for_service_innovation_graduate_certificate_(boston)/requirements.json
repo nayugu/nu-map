@@ -82,7 +82,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a cross-disciplinary training course from the appropriate course 1 option list.",
+        "Course 1 for Learners with Background in Engineering or Computer Science",
+        "Course 1 for Learners with Background in the Social Sciences or Business"
+      ]
     },
     {
       "type": "SECTION",
@@ -286,7 +291,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Modeling and Algorithms Electives",
+        "Urban Affairs Electives",
+        "Policy and Regulation Electives",
+        "Energy and Environment Electives",
+        "Product Management and Platform-Based Business Model Innovations Electives"
+      ]
     }
   ],
   "gpaRequirements": [

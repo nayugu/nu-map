@@ -404,7 +404,10 @@
       "title": "Open Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "A minimum of 8 semester hours of open electives is required."
+      ]
     },
     {
       "type": "SECTION",

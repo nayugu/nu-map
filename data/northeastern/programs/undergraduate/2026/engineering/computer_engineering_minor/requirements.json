@@ -119,7 +119,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students from Khoury are highly encouraged to complete EECE 2322 and EECE 3324."
+      ]
     },
     {
       "type": "SECTION",
@@ -158,7 +161,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Fundamentals not taken to satisfy the above requirement may be used as a technical elective. EECE 3324 is recommended for Khoury College students."
+      ]
     }
   ],
   "gpaRequirements": [

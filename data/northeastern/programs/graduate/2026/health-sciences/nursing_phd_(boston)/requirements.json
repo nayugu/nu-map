@@ -156,14 +156,20 @@
       "title": "Cognate Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 6
+      "creditsRequired": 6,
+      "notes": [
+        "Complete two cognate courses in consultation with your faculty advisor. Cognates are graduate-level courses that are taken outside of nursing. These courses should provide depth and breadth to the student's dissertation research."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 6
+      "creditsRequired": 6,
+      "notes": [
+        "Complete two elective courses in consultation with your faculty advisor. Electives may be taken in nursing or in an area related to the student's dissertation research, including appropriate methodology and statistics courses."
+      ]
     },
     {
       "type": "SECTION",

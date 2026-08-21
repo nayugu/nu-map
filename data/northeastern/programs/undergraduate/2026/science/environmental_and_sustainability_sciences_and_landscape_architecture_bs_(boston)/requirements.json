@@ -303,7 +303,11 @@
           ]
         }
       ],
-      "minRequirementCount": 9
+      "minRequirementCount": 9,
+      "notes": [
+        "Core Courses",
+        "Complete one course from each category:"
+      ]
     },
     {
       "type": "SECTION",

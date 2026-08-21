@@ -92,7 +92,10 @@
       "title": "Coursework Option",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete 12 semester hours from the electives course list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -104,7 +107,10 @@
           "classId": 7945
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the electives course list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -122,6 +128,10 @@
         }
       ],
       "minRequirementCount": 2,
+      "notes": [
+        "Complete 4 semester hours from the electives course list below.",
+        "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing Committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS Thesis to ProQuest."
+      ],
       "shared": true
     },
     {
@@ -129,7 +139,14 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete 16 semester hours from the following subject codes:",
+        "CSYE (except CSYE 6220)",
+        "DAMG",
+        "INFO",
+        "TELE"
+      ]
     }
   ],
   "gpaRequirements": [

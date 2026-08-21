@@ -432,7 +432,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete an additional four courses from the following lists. A maximum of two courses may be taken from the Affiliated Courses list below:"
+      ]
     }
   ],
   "gpaRequirements": [

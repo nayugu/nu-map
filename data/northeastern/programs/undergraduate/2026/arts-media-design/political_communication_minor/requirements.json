@@ -168,7 +168,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four courses from the following lists (at least one course must be taken from each department):"
+      ]
     }
   ],
   "gpaRequirements": [

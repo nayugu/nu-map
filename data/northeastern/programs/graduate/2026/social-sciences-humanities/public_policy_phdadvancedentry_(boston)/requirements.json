@@ -150,7 +150,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Only required for students who have completed PhD coursework but have yet to complete the comprehensive exam/proposal defense. Repeatable:"
+      ]
     },
     {
       "type": "SECTION",
@@ -189,7 +192,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Following completion of PPUA 9990 and PPUA 9991, registration in the following class is required in each semester (including summer if the dissertation is submitted in summer) until the dissertation is completed:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -443,7 +449,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Consult an advisor when selecting courses from the following:",
+          "LW 6000 to LW 9999"
+        ]
       }
     ]
   }

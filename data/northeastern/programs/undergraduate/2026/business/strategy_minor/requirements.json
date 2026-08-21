@@ -77,7 +77,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Nonbusiness students must complete STRT 4509."
+      ]
     },
     {
       "type": "SECTION",

@@ -111,7 +111,10 @@
           "classId": 2201
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "C or better in JRNL 1101, JRNL 1102, and JRNL 2201 is required."
+      ]
     },
     {
       "type": "SECTION",
@@ -192,7 +195,10 @@
       "title": "Journalism Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete four JRNL electives. Two must be 3000 level or above."
+      ]
     },
     {
       "type": "SECTION",
@@ -219,7 +225,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -359,7 +368,10 @@
       "title": "Communication Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three COMM courses."
+      ]
     },
     {
       "type": "SECTION",

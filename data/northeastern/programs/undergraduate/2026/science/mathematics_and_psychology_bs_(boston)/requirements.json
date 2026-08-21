@@ -380,7 +380,10 @@
       "title": "Psychology Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Any PSYC course in the 3000 range and up"
+      ]
     },
     {
       "type": "SECTION",

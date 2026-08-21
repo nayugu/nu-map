@@ -475,7 +475,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete the following:"
+        ]
       }
     ]
   }

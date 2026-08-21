@@ -130,7 +130,10 @@
           "classId": 6214
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "Complete the following courses:"
+      ]
     },
     {
       "type": "SECTION",

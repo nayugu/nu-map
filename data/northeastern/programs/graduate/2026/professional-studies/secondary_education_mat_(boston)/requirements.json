@@ -142,7 +142,12 @@
           ]
         }
       ],
-      "minRequirementCount": 11
+      "minRequirementCount": 11,
+      "notes": [
+        "For students pursuing emergency secondary teaching licenses or ESL+ licensure in Massachusetts",
+        "For students not pursuing emergency secondary licenses and ESL+ licensure in Massachusetts",
+        "Complete the following:"
+      ]
     },
     {
       "type": "SECTION",

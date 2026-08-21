@@ -117,7 +117,10 @@
           "classId": 6166
         }
       ],
-      "minRequirementCount": 10
+      "minRequirementCount": 10,
+      "notes": [
+        "Students will take the following courses during their first four semesters:"
+      ]
     },
     {
       "type": "SECTION",
@@ -179,7 +182,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 38
+      "creditsRequired": 38,
+      "notes": [
+        "Complete 38 credits of LAW courses not already taken to fulfill another requirement."
+      ]
     }
   ],
   "footnotes": [

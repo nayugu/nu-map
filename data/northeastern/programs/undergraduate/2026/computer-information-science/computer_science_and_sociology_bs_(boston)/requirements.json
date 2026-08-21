@@ -123,7 +123,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Must be taken in alignment with your home college:"
+      ]
     },
     {
       "type": "SECTION",
@@ -175,7 +178,10 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -279,7 +285,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -333,7 +342,12 @@
       "title": "Sociology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete one introductory elective (not used to satisfy other requirements) in the range 1000-1999 in each of the following ranges:",
+        "Complete two intermediate electives (not used to satisfy other requirements) in the range 2000-3999.",
+        "Complete two advanced electives (not used to satisfy other requirements) in the range 4000-4999."
+      ]
     },
     {
       "type": "SECTION",

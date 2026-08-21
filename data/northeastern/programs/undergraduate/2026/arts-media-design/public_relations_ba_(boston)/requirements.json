@@ -129,7 +129,10 @@
           "classId": 1425
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "A grade of C or better is required for the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -297,7 +300,10 @@
       "title": "Subject Expertise",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three electives in the subject of your interest (e.g., public health, computer science, biology) in consultation with your advisor."
+      ]
     },
     {
       "type": "SECTION",

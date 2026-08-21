@@ -125,14 +125,21 @@
       "title": "Concentration Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete 16 semester hours from the concentration course list below.",
+        "Any fundamental course not used to meet the fundamental course requirement can be used toward the concentration course requirement."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours from either concentration courses or from other concentrations."
+      ]
     },
     {
       "type": "SECTION",
@@ -149,21 +156,30 @@
           "classId": 7990
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Concentration Courses (2)",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours from the concentration course list below. Any fundamental course not used to meet the fundamental course requirement can be used toward the concentration course requirement."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Electives (2)",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours from either concentration courses or from other concentrations."
+      ]
     },
     {
       "type": "SECTION",
@@ -200,7 +216,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"
+      ]
     },
     {
       "type": "SECTION",
@@ -394,7 +413,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Courses from the following subject areas may not count toward any concentration within the MSECE program:",
+        "CSYE, DAMG, INFO, TELE",
+        "The following CS courses may not count toward any concentration within the MSECE program:"
+      ]
     }
   ],
   "gpaRequirements": [

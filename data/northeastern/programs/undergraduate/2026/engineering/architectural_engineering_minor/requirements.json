@@ -262,7 +262,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "If only one course was taken above, complete one course from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

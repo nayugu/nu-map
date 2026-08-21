@@ -63,7 +63,10 @@
       "title": "Core Requirements",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 10
+      "creditsRequired": 10,
+      "notes": [
+        "Complete 10 semester hours of coursework. The courses required will be determined by the graduate program director based on the student's transcripts."
+      ]
     },
     {
       "type": "SECTION",
@@ -90,7 +93,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (repeatable) course until graduation:"
+      ]
     }
   ],
   "gpaRequirements": [

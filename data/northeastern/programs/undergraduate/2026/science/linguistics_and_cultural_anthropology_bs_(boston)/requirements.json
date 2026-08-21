@@ -264,14 +264,20 @@
       "title": "Anthropology Area Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two area courses in the range from ANTH 4101-ANTH 4520 not used to satisfy other requirements; one study abroad course may be substituted as an area studies course with prior permission from the department; additional area courses taken may count as anthropology electives."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Anthropology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two ANTH courses not used to satisfy other requirements."
+      ]
     },
     {
       "type": "SECTION",

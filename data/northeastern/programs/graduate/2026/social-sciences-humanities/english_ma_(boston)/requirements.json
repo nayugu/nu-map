@@ -161,7 +161,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Literature Pre-1700",
+        "Literature 1700–1900",
+        "Literature Post-1900"
+      ]
     },
     {
       "type": "SECTION",

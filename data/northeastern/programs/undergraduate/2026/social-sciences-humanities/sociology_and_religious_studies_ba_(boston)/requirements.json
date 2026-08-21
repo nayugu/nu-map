@@ -128,7 +128,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Two courses can be taken at the 2000 level and three other courses at the 3000 level or higher."
+      ]
     },
     {
       "type": "SECTION",
@@ -140,7 +143,10 @@
           "classId": 4600
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students are expected to complete the following course in spring of their senior year."
+      ]
     },
     {
       "type": "SECTION",
@@ -411,7 +417,10 @@
           "classId": 4903
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following course that is not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -428,7 +437,10 @@
           "classId": 3100
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "One integrative course is required for each discipline. Courses taken as electives above may not be used as integrative courses."
+      ]
     }
   ]
 }

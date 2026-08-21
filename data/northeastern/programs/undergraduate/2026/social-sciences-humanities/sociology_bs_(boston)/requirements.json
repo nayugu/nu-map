@@ -226,7 +226,10 @@
       "title": "Required Sociology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 28
+      "creditsRequired": 28,
+      "notes": [
+        "Students must complete seven elective courses in the SOCL major not used to satisfy other requirements, at least four of which must be at the 3000-level or higher."
+      ]
     }
   ]
 }

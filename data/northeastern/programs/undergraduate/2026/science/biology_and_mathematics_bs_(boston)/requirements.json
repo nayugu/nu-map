@@ -394,7 +394,11 @@
           ]
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "Chemistry",
+        "Writing"
+      ]
     },
     {
       "type": "SECTION",

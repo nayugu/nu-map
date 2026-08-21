@@ -350,7 +350,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Western Art Music",
+        "Global Music/Ethnomusicology",
+        "Contemporary/Popular Music"
+      ]
     },
     {
       "type": "SECTION",
@@ -741,7 +746,10 @@
       "title": "Communication Studies Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three COMM courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -838,7 +846,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the integrative options below:",
+        "If a COMM course is taken, an additional music industry course is required. Choose from the list of music industry electives above."
+      ]
     }
   ]
 }

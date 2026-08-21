@@ -174,14 +174,20 @@
           "classId": 1160
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "A grade of C or higher is required for ECON courses."
+      ]
     },
     {
       "type": "SECTION",
       "title": "International Affairs Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -265,7 +271,10 @@
       "title": "Regional Analysis Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three of the following, two of which must be in one region. Select courses taken during a semester study abroad or specific Dialogue of Civilizations courses may count as regional analysis courses pending approval of the international affairs head faculty advisor. See department for additional courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -577,7 +586,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "Latin America",
+        "Middle East"
+      ]
     },
     {
       "type": "SECTION",
@@ -781,7 +797,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the following experiences:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -1060,7 +1079,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "A maximum of one course may be applied to requirements of a second concentration."
+        ]
       },
       {
         "type": "SECTION",
@@ -1232,7 +1254,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward a concentration elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -1356,7 +1382,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -1917,7 +1947,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Note: Only one non-MGMT course may be used as an elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -2337,7 +2370,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       },
       {
         "type": "SECTION",

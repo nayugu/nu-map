@@ -231,14 +231,20 @@
       "title": "Co-op or Study Abroad",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one cooperative education experience or one study-abroad experience."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Political Science Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 24
+      "creditsRequired": 24,
+      "notes": [
+        "Complete six political science electives with a minimum of four numbered 2000 or above."
+      ]
     }
   ],
   "concentrations": {

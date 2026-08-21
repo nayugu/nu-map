@@ -209,7 +209,10 @@
           "classId": 6219
         }
       ],
-      "minRequirementCount": 11
+      "minRequirementCount": 11,
+      "notes": [
+        "All courses in this section must be completed with a C or better."
+      ]
     },
     {
       "type": "SECTION",
@@ -426,7 +429,12 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Psychology Elective",
+        "Behavioral Neuroscience Electives",
+        "Upper-Level Elective"
+      ]
     },
     {
       "type": "SECTION",
@@ -532,7 +540,11 @@
       "title": "Electives (2)",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Elective",
+        "Elective (NU Path IC)"
+      ]
     }
   ]
 }

@@ -447,7 +447,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 13 SH from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

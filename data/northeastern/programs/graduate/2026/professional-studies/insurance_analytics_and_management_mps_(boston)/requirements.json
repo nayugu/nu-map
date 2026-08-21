@@ -311,7 +311,10 @@
             "classId": 6100
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "EAI 6000 is for students who score 85% or more on the Python placement exam upon declaring this concentration. Students who score less than 85% on the placement exam complete a noncredit Python workshop before completing EAI 6000."
+        ]
       }
     ]
   }

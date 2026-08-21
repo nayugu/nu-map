@@ -288,7 +288,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Pre-1850",
+        "Post-1850"
+      ]
     },
     {
       "type": "SECTION",
@@ -476,7 +480,10 @@
       "title": "English Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete any two ENGL courses that have not already been used to fulfill another requirement."
+      ]
     },
     {
       "type": "SECTION",
@@ -560,7 +567,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Elective courses may also be used toward fulfilling an optional Political Science concentration"
+      ]
     },
     {
       "type": "SECTION",

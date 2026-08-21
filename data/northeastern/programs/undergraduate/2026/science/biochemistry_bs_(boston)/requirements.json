@@ -167,7 +167,12 @@
           "classId": 2309
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Foundations",
+        "Inquiries",
+        "Techniques"
+      ]
     },
     {
       "type": "SECTION",
@@ -398,14 +403,22 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "One-semester research options:",
+        "Two-semester research option (Honors in the Discipline). Second semester will be:",
+        "Non-research option:"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Biology and Chemistry Advanced Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 10
+      "creditsRequired": 10,
+      "notes": [
+        "Complete 3 courses for a total of at least 10 semester hours. One must be a lecture-based BIOL course and one must be a lecture-based CHEM course. The third may be BIOL, CHEM, or Research:"
+      ]
     },
     {
       "type": "SECTION",
@@ -637,7 +650,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Physics 1",
+        "Physics 2"
+      ]
     },
     {
       "type": "SECTION",

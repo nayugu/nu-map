@@ -484,7 +484,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Physics 1"
+      ]
     },
     {
       "type": "SECTION",
@@ -602,7 +605,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Elective courses available at Nahant campus to students approved for PlusOne admission to the MS Marine Biology program:"
+      ]
     },
     {
       "type": "SECTION",
@@ -656,7 +662,10 @@
           "classId": 2000
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students who want to participate in co-op will need to complete EESC 2000 Professional Development for Co-op."
+      ]
     }
   ]
 }

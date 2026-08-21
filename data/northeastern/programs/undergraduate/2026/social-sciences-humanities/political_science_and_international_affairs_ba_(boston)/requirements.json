@@ -166,7 +166,11 @@
       "title": "Political Science Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Note: Elective courses may also fulfill requirements of an optional concentration of this program.",
+        "Complete four political science courses at or above POLS 2000"
+      ]
     },
     {
       "type": "SECTION",
@@ -267,7 +271,10 @@
       "title": "International Affairs Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one of the following courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -351,7 +358,10 @@
       "title": "Global Dynamics Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one of the following. Courses are divided into thematic groups to aid students in deciding which courses to take and have no bearing on major requirements."
+      ]
     },
     {
       "type": "SECTION",
@@ -943,14 +953,27 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Environment",
+        "Law, Diplomacy, and Global Governance",
+        "Human Rights and Social Justice",
+        "Conflict and Security",
+        "Globalization",
+        "Population, Migration, and Diaspora",
+        "Development",
+        "Communication and Media"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Regional Analysis Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three of the following, two of which must be in one region. Select courses taken during a semester study abroad or specific Dialogue of Civilizations courses may count as regional analysis courses pending approval of the international affairs head faculty adviser. See department for additional courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -1262,7 +1285,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "Latin America",
+        "Middle East"
+      ]
     },
     {
       "type": "SECTION",

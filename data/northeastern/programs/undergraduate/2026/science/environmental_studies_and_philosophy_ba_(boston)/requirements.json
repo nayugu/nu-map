@@ -169,7 +169,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Science",
+        "Social Science"
+      ]
     },
     {
       "type": "SECTION",
@@ -489,7 +493,10 @@
       "title": "Advanced Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two PHIL courses with a designation of 3000 or above not used to satisfy another requirement, with at least one at 4000 or 5000 level."
+      ]
     },
     {
       "type": "SECTION",
@@ -553,7 +560,10 @@
       "title": "Additional Philosophy Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one additional PHIL course, not used to satisfy another requirement."
+      ]
     },
     {
       "type": "SECTION",

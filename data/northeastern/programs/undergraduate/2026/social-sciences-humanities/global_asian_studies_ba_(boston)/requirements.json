@@ -408,7 +408,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "History Focus Area",
+        "Society and Politics Focus Area",
+        "Language, Literature, and Culture Focus Area",
+        "Religious Studies Focus Area"
+      ]
     }
   ]
 }

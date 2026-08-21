@@ -97,7 +97,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students in the urban analytics focus area are encouraged to take INSH 5301."
+      ]
     },
     {
       "type": "SECTION",
@@ -481,7 +484,12 @@
             "classId": 6120
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Urban Design and Real Estate",
+          "Physical Planning and Design for Sustainable Urbanism",
+          "Urban Experience Track"
+        ]
       },
       {
         "type": "SECTION",

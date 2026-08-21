@@ -307,7 +307,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four courses from the lists below. At least one course needs to come from each list:"
+      ]
     }
   ],
   "gpaRequirements": [

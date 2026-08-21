@@ -52,7 +52,10 @@
           "classId": 6201
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hour course:"
+      ]
     },
     {
       "type": "SECTION",

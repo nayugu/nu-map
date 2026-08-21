@@ -56,7 +56,10 @@
           "classId": 5102
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "A grade of B or higher is required:"
+      ]
     },
     {
       "type": "SECTION",
@@ -157,7 +160,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Only needed for PhD students who have completed all coursework but have yet to pass the comprehensive exam. Not repeatable."
+      ]
     },
     {
       "type": "SECTION",
@@ -196,7 +202,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Following completion of two semesters of HIST 9990, registration in the following is required in each semester (excluding summers) until the dissertation is completed:"
+      ]
     }
   ],
   "gpaRequirements": [

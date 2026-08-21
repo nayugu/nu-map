@@ -109,7 +109,11 @@
       "title": "Field Study",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Field study as preapproved by the director of the emerging markets minor and/or D’Amore-McKim undergraduate dean’s office. Please contact the D’Amore-McKim academic advising office to confirm option(s).",
+        "Students may undertake 4 semester hours of independent research with approval."
+      ]
     },
     {
       "type": "SECTION",

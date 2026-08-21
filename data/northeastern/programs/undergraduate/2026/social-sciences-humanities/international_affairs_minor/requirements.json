@@ -98,7 +98,10 @@
       "title": "Regional Analysis Elective Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two of the following. Select courses taken during a semester study abroad or specific Dialogue of Civilizations courses may apply toward the Regional Analysis Elective Course requirement, pending approval of the International Affairs head faculty advisor:"
+      ]
     },
     {
       "type": "SECTION",
@@ -410,14 +413,24 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "Latin America",
+        "Middle East"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Global Dynamics Elective Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two of the following. Courses are divided into thematic groups to aid students in deciding which courses to take and have no bearing on minor requirements:"
+      ]
     },
     {
       "type": "SECTION",
@@ -1009,7 +1022,17 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Environment",
+        "Law, Diplomacy, and Global Governance",
+        "Human Rights and Social Justice",
+        "Conflict and Security",
+        "Globalization",
+        "Population, Migration, and Diaspora",
+        "Development",
+        "Communication and Media"
+      ]
     }
   ],
   "gpaRequirements": [

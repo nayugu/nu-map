@@ -206,7 +206,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Physics 1",
+        "Physics 2"
+      ]
     },
     {
       "type": "SECTION",
@@ -589,7 +593,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "The following courses may be counted toward major electives, if they are listed as applicable options in the approved curriculum:"
+        ]
       }
     ]
   }

@@ -63,7 +63,10 @@
       "title": "Core Requirements",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 48
+      "creditsRequired": 48,
+      "notes": [
+        "Complete 32 semester hours of approved coursework—equivalent of MSECE degree. Then complete 16 semester hours, of which 8 must be graduate-level EECE courses. Consult faculty research advisor for acceptable courses."
+      ]
     },
     {
       "type": "SECTION",

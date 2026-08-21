@@ -138,7 +138,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Must be taken in alignment with your home college:"
+      ]
     },
     {
       "type": "SECTION",
@@ -190,7 +193,10 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute with 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -294,7 +300,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be be taken for upper-division electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -403,7 +412,13 @@
           "classId": 3000
         }
       ],
-      "minRequirementCount": 8
+      "minRequirementCount": 8,
+      "notes": [
+        "Philosophy",
+        "Political Science",
+        "Economics",
+        "Methods Course"
+      ]
     },
     {
       "type": "SECTION",
@@ -452,7 +467,16 @@
       "title": "PPE Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one course from the following ranges:",
+        "ECON 1200 to ECON 1999",
+        "ECON 3000 to ECON 4689",
+        "ECON 4900 to ECON 4999",
+        "ECON 5200 to ECON 5999",
+        "PHIL 2000 to PHIL 5999",
+        "POLS 2000 to POLS 5999"
+      ]
     },
     {
       "type": "SECTION",

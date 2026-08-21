@@ -293,7 +293,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Pre-1850",
+        "Post-1850"
+      ]
     },
     {
       "type": "SECTION",
@@ -481,7 +485,10 @@
       "title": "English Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete any two ENGL courses that have not already been used to fulfill another requirement."
+      ]
     },
     {
       "type": "SECTION",
@@ -532,7 +539,10 @@
       "title": "Advanced Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two PHIL courses with a designation of 3000 or above not used to satisfy another requirement, with at least one at 4000 or 5000 level."
+      ]
     },
     {
       "type": "SECTION",
@@ -591,7 +601,10 @@
       "title": "Philosophy Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two additional PHIL electives, not used to satisfy another requirement."
+      ]
     },
     {
       "type": "SECTION",

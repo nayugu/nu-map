@@ -133,7 +133,10 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Complete the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -435,7 +438,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Healthcare",
+        "Management",
+        "Finance",
+        "Information Technology (Database)"
+      ]
     },
     {
       "type": "SECTION",
@@ -489,7 +498,10 @@
           "classId": 2230
         }
       ],
-      "minRequirementCount": 7
+      "minRequirementCount": 7,
+      "notes": [
+        "Suggested Electives"
+      ]
     }
   ],
   "gpaRequirements": [

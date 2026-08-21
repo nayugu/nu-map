@@ -464,7 +464,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three courses from the following areas. Only two courses from any one area may count toward the minor electives. No more than two required courses in the student's major may count toward the minor electives. At least one of the minor electives must be at the 3000-level or above."
+      ]
     }
   ],
   "gpaRequirements": [

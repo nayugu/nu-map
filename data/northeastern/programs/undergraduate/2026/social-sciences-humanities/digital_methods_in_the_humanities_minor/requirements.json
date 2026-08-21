@@ -225,7 +225,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two courses from each group and an additional course from either group."
+      ]
     }
   ],
   "gpaRequirements": [

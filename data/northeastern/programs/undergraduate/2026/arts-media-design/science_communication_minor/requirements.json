@@ -165,7 +165,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Some courses may have prerequisites not listed in the curriculum.",
+        "Data Visualization",
+        "Health Communication",
+        "Science and Media Production",
+        "Science Writing"
+      ]
     }
   ],
   "gpaRequirements": [

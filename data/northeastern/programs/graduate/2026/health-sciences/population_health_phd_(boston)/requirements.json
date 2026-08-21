@@ -157,7 +157,10 @@
           "classId": 6800
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Electives"
+      ]
     },
     {
       "type": "SECTION",
@@ -174,7 +177,10 @@
           "classId": 5234
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Electives"
+      ]
     },
     {
       "type": "SECTION",

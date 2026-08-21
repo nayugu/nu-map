@@ -353,7 +353,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"
+      ]
     }
   ],
   "gpaRequirements": [

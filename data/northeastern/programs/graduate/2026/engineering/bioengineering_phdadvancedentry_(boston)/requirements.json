@@ -101,7 +101,10 @@
       "title": "Approved Coursework",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours from the electives listed below."
+      ]
     },
     {
       "type": "SECTION",

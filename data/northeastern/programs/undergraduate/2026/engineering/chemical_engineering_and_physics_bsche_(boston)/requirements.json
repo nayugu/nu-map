@@ -532,7 +532,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required in all following ENGW courses."
+      ]
     }
   ],
   "footnotes": [

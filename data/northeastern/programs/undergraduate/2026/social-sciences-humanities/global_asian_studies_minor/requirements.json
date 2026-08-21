@@ -411,7 +411,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Nonlanguage Courses",
+        "Language Courses"
+      ]
     }
   ],
   "gpaRequirements": [

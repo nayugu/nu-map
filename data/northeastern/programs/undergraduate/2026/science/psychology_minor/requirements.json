@@ -109,7 +109,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Transfer courses are not permitted to fulfill the Area A requirement."
+      ]
     },
     {
       "type": "SECTION",
@@ -146,14 +149,20 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Transfer courses are not permitted to fulfill the Area B requirement."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Elective Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two PSYC courses."
+      ]
     }
   ],
   "gpaRequirements": [

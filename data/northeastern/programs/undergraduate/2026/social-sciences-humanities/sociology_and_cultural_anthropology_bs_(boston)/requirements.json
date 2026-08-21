@@ -211,7 +211,14 @@
       "title": "Sociology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Introductory electives",
+        "Complete two courses from the following range not used to fulfill another requirement:",
+        "SOCL 1101 to SOCL 2999",
+        "Intermediate Electives",
+        "SOCL 3000 to SOCL 4999"
+      ]
     },
     {
       "type": "SECTION",
@@ -235,14 +242,20 @@
       "title": "Anthropology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete five ANTH electives between ANTH 1101 and ANTH 4999 not used to fulfill other requirements. One study-abroad course may count toward this requirement with prior permission from the department."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced Area Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two area courses between ANTH 4101 and ANTH 4520 not used to fulfill another requirement. Area courses taken in addition to these two classes may count as electives."
+      ]
     },
     {
       "type": "SECTION",

@@ -67,7 +67,10 @@
           "classId": 3100
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following course after all required and elective courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -263,7 +266,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Content Creation",
+        "Narrative Development",
+        "Business and Innovation",
+        "Only one course may be taken from this area:"
+      ]
     }
   ],
   "gpaRequirements": [

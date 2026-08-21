@@ -72,7 +72,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Alternative statistics course as approved by graduate committee"
+      ]
     },
     {
       "type": "SECTION",
@@ -204,7 +207,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Substitutions may be made with approval of graduate committee."
+        ]
       },
       {
         "type": "SECTION",
@@ -303,7 +309,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Substitutions may be made with approval of graduate committee."
+        ]
       },
       {
         "type": "SECTION",
@@ -372,7 +381,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Substitutions may be made with approval of graduate committee."
+        ]
       },
       {
         "type": "SECTION",
@@ -451,7 +463,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Substitutions may be made with approval of graduate committee."
+        ]
       }
     ]
   }

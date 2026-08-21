@@ -113,7 +113,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Must be taken in alignment with your home college."
+      ]
     },
     {
       "type": "SECTION",
@@ -165,7 +168,10 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self assessment to place out of CS 2000. Students who place out of CS 2000 will substitute it with a course offered by Khoury College 3000 level or higher during the course of the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -302,7 +308,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -583,7 +592,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the following experiences:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -808,7 +820,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "A maximum of one course may be applied to requirements of a second concentration."
+        ]
       },
       {
         "type": "SECTION",
@@ -927,7 +942,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward a concentration elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -1051,7 +1070,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -1578,7 +1601,13 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Note: One course can also count toward a different business concentration.",
+          "Managing Internationally",
+          "International Functional Knowledge",
+          "Electives not listed may be approved via the undergraduate dean’s office."
+        ]
       },
       {
         "type": "SECTION",
@@ -1702,7 +1731,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Note: Only one non-MGMT course may be used as an elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -2018,7 +2050,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       },
       {
         "type": "SECTION",

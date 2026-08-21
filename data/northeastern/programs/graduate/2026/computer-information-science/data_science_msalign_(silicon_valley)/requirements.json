@@ -185,7 +185,10 @@
       "title": "Electives1",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete 12 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",

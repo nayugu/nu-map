@@ -63,7 +63,10 @@
       "title": "Requirements",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 48
+      "creditsRequired": 48,
+      "notes": [
+        "A minimum of 48 semester hours of academic coursework is required. Consult your faculty advisors for acceptable courses."
+      ]
     },
     {
       "type": "SECTION",

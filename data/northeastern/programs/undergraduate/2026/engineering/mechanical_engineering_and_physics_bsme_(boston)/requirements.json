@@ -473,7 +473,11 @@
       "title": "Advanced Physics Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one 4-semester-hours course from the following:",
+        "PHYS 3600 to PHYS 7999"
+      ]
     },
     {
       "type": "SECTION",
@@ -584,7 +588,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required."
+      ]
     },
     {
       "type": "SECTION",

@@ -87,7 +87,10 @@
           "classId": 6910
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "The following course should be taken last:"
+      ]
     },
     {
       "type": "SECTION",
@@ -260,7 +263,10 @@
             "classId": 6060
           }
         ],
-        "minRequirementCount": 6
+        "minRequirementCount": 6,
+        "notes": [
+          "Students who take this concentration will have only one required 3 QH elective course."
+        ]
       },
       {
         "type": "SECTION",

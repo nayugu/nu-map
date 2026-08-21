@@ -221,7 +221,10 @@
       "title": "Organismal and Evolutionary Biology Course List (2)",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "The remaining courses can be selected from either the organismal and evolutionary biology list or from the list of intermediate/advanced biology electives."
+      ]
     },
     {
       "type": "SECTION",

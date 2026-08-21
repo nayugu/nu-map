@@ -85,7 +85,10 @@
       "title": "Coursework Option",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 22
+      "creditsRequired": 22,
+      "notes": [
+        "Complete 22 semester hours from the course list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -97,7 +100,10 @@
           "classId": 7945
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 18 semester hours from the course list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -115,6 +121,10 @@
         }
       ],
       "minRequirementCount": 2,
+      "notes": [
+        "Complete 14 semester hours from the course list below.",
+        "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+      ],
       "shared": true
     },
     {
@@ -289,7 +299,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"
+      ]
     }
   ],
   "gpaRequirements": [

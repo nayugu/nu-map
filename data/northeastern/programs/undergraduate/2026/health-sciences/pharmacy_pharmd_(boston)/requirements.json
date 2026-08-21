@@ -221,7 +221,10 @@
           "classId": 5181
         }
       ],
-      "minRequirementCount": 9
+      "minRequirementCount": 9,
+      "notes": [
+        "Co-op/Introductory Pharmacy Practice Experience"
+      ]
     },
     {
       "type": "SECTION",
@@ -293,7 +296,10 @@
           "classId": 5230
         }
       ],
-      "minRequirementCount": 13
+      "minRequirementCount": 13,
+      "notes": [
+        "Co-op/Introductory Pharmacy Practice Experience"
+      ]
     },
     {
       "type": "SECTION",
@@ -325,14 +331,21 @@
           "classId": 5396
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "Co-op/Introductory Pharmacy Practice Experience"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 30
+      "creditsRequired": 30,
+      "notes": [
+        "A minimum of 30 semester hours of electives is required.",
+        "Students must use electives to fulfill the professional elective requirement and any NUpath requirements not already fulfilled through prior coursework."
+      ]
     },
     {
       "type": "SECTION",

@@ -405,7 +405,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Select three courses from two of the three following breadth areas:",
+        "Theory and Security"
+      ]
     },
     {
       "type": "SECTION",

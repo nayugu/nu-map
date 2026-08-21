@@ -168,7 +168,10 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self assessment to place out of CS 2000. Students who place out of CS 2000 will substitute it with a course offered by Khoury College 3000 level or higher during the course of the degree."
+      ]
     },
     {
       "type": "SECTION",

@@ -253,7 +253,10 @@
           "classId": 3601
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "See department for further details."
+      ]
     },
     {
       "type": "SECTION",

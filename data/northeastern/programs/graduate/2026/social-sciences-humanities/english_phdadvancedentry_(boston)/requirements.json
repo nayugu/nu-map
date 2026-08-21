@@ -79,7 +79,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete 20 semester hours of ENGL courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -152,7 +155,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Following completion of ENGL 9990 and ENGL 9991, registration in the following class is required in each fall and spring semester for all students and each summer semester for those within funding until the dissertation is completed (students outside of funding must also register in the summer semester if it is their terminal term):"
+      ]
     }
   ],
   "gpaRequirements": [

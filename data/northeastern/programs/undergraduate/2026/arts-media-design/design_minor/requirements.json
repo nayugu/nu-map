@@ -188,7 +188,10 @@
       "title": "Design Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two additional ARTG courses as long as prerequisites are met. ARTG 5000 can only be applied once toward elective requirements."
+      ]
     }
   ]
 }

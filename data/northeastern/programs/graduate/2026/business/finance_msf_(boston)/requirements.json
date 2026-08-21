@@ -150,7 +150,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "A maximum of one graduate-level business course may be taken from the following subject codes:",
+        "ACCT, BUSN, ENTR, FINA, HRMG, INNO, INTB, MECN, MGMT, MKTG, SCHM, and STRT"
+      ]
     }
   ],
   "gpaRequirements": [

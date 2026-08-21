@@ -227,7 +227,12 @@
           "classId": 4792
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "If more than one computer engineering fundamentals course is taken, it can count as a technical elective.",
+        "If taking EECE 4791 in First Half Summer, EECE 4792 must be taken in Spring. If taking EECE 4791 in Summer EECE 4792 must be taken in Fall.",
+        "If taking EECE 4791 in First Half Summer, EECE 4792 must be taken in Spring. If taking EECE 4791 in Second Half Summer EECE 4792 must be taken in Fall."
+      ]
     },
     {
       "type": "SECTION",
@@ -298,7 +303,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students can register for EECE 4991/EECE 4992 more than once. For these courses combined, a maximum of 8 semester hours will be allowed to satisfy the requirement of technical electives. An additional 4 semester hours will be allowed as a general elective. At most, one of these courses (4 semester hours) can be taken in a semester.",
+        "Though students may register for EECE 2750 more than once, only 4 semester hours will be allowed to satisfy the requirements of technical electives. An additional 4 semester hours will be allowed as a general elective.",
+        "EECE 2310 is not an approved course option for ECE majors to select for a Technical Elective. Only for Khoury students."
+      ]
     },
     {
       "type": "SECTION",
@@ -636,7 +646,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
     }
   ],
   "gpaRequirements": [

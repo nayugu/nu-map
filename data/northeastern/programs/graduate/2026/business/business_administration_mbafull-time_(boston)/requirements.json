@@ -163,7 +163,10 @@
           "classId": 6970
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Three-month, six-month, or up to two six-month corporate residency options"
+      ]
     },
     {
       "type": "SECTION",
@@ -223,7 +226,11 @@
       "title": "Open Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 6
+      "creditsRequired": 6,
+      "notes": [
+        "In consultation with advisor, complete 6 graduate-level semester hours from the following for which prerequisites have been met:",
+        "ACCT, BUSN, ENTR, FINA, HRMG, INNO, INTB, MECN, MGMT, MISM, MKTG, SCHM, and STRT"
+      ]
     },
     {
       "type": "SECTION",
@@ -1250,7 +1257,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Note: Only one course outside HRMG and MGMT may be taken to fulfill the concentration."
+        ]
       },
       {
         "type": "SECTION",

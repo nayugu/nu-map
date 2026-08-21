@@ -375,7 +375,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two electives in HUSV not used to fulfill other requirements for the degree."
+      ]
     },
     {
       "type": "SECTION",

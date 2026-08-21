@@ -153,7 +153,14 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete 16 semester hours from the following subject codes:",
+        "CSYE (except CSYE 6220)",
+        "DAMG",
+        "INFO",
+        "TELE"
+      ]
     },
     {
       "type": "SECTION",
@@ -190,7 +197,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following (students must complete ENCP 6000 to qualify for co-op experience):"
+      ]
     }
   ],
   "gpaRequirements": [

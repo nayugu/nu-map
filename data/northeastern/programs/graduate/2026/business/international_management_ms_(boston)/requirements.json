@@ -134,7 +134,11 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 15
+      "creditsRequired": 15,
+      "notes": [
+        "In consultation with advisor, complete 15 graduate-level semester hours from the following for which prerequisites have been met:",
+        "ACCT, BUSN, ENTR, FINA, HRMG, INNO, INTB, MECN, MGMT, MISM, MKTG, SCHM, and STRT"
+      ]
     }
   ],
   "gpaRequirements": [

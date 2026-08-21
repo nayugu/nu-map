@@ -110,7 +110,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Based on your experience, complete one of the two options below:"
+      ]
     },
     {
       "type": "SECTION",

@@ -62,7 +62,10 @@
           "classId": 1111
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following sequences:"
+      ]
     },
     {
       "type": "SECTION",

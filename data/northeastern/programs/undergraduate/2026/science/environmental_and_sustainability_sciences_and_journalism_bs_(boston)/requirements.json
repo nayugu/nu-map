@@ -390,7 +390,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Earth Oceans and Environmental Change",
+        "Conservation, Restoration, and Management",
+        "Sustainable Planning and Development",
+        "Environment and Society"
+      ]
     },
     {
       "type": "SECTION",
@@ -483,7 +489,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete any four journalism electives with two at the 3000-level or above."
+      ]
     },
     {
       "type": "SECTION",
@@ -569,7 +578,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Courses used as electives may not overlap with the following:"
+      ]
     },
     {
       "type": "SECTION",

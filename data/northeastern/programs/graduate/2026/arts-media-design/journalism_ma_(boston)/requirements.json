@@ -95,7 +95,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Courses from other disciplines may be taken in consultation with your faculty advisor.",
+        "No more than two courses outside of CAMD may be taken."
+      ]
     }
   ],
   "gpaRequirements": [

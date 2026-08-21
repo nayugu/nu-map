@@ -195,7 +195,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students register for CRIM 8960 when they have completed required coursework but are still taking qualifying exams, and for CRIM 8986 when they have passed qualifying exams and are working on proposals."
+      ]
     },
     {
       "type": "SECTION",
@@ -234,7 +237,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Following completion of CRIM 9990 and CRIM 9991, registration in the following class is required in each subsequent semester (including the summer if the dissertation is submitted in summer) until the dissertation is completed:"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -285,7 +285,11 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Health Elective",
+          "General Elective"
+        ]
       },
       {
         "type": "SECTION",

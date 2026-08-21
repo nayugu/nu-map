@@ -107,7 +107,10 @@
           "classId": 6500
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "If pursuing a co-op, regardless of concentration or option, the following must be completed:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -182,7 +185,11 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete at least one of the following:",
+          "Complete remaining coursework from the following range:"
+        ]
       },
       {
         "type": "SECTION",
@@ -263,7 +270,12 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete one of the following:",
+          "Complete at least two of the following:",
+          "Complete remaining coursework from the following range:"
+        ]
       },
       {
         "type": "SECTION",
@@ -412,7 +424,12 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete at least one of the following:",
+          "Complete one of the following:",
+          "Complete remaining coursework from the range CHEM 5550 to CHEM 7750 or up to 6 semester hours from the following restricted electives:"
+        ]
       },
       {
         "type": "SECTION",
@@ -487,7 +504,11 @@
             "classId": 7990
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 18 semester hours from the following:",
+          "CHEM 5550 or any course within the range of CHEM 5610 to CHEM 7320"
+        ]
       }
     ]
   }

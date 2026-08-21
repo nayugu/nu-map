@@ -189,7 +189,15 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete 12–17 semester hours in the following subject areas to fulfill the minimum program hours (see faculty advisor for other acceptable elective courses):",
+        "CAEP",
+        "CS",
+        "HINF",
+        "HLTH",
+        "PHTH"
+      ]
     },
     {
       "type": "SECTION",

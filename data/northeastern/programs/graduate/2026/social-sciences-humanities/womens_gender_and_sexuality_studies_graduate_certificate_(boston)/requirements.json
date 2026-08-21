@@ -108,14 +108,20 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses according to the instructions from the electives list (below the MPH option). At least one should come from outside the student's home department."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Electives (2)",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours according to the instructions from the electives list. One course may be the capstone, if the topic selected focuses on gender and/or sexuality in connection to the selected urban health issue and the student enrolls in a 1-semester-hour directed study with the WGSS faculty member who will sit on the capstone committee."
+      ]
     },
     {
       "type": "SECTION",
@@ -202,7 +208,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "At least one course must come from outside the student's home discipline. Any foundational course not taken to complete the required foundational coursework may be taken as an elective but may not count as both the foundational requirement and an elective. Electives outside this list, particularly special topics courses not listed here, may be chosen in consultation with program director. Students may also consider courses at the Graduate Consortium for Studies of Gender, Culture, Women, and Sexuality (located at MIT). MPH students, in conversation with their advisors, may substitute PHTH 6910 for one elective."
+      ]
     }
   ],
   "gpaRequirements": [

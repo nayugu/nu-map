@@ -88,7 +88,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four language courses in sequence from the following list:"
+      ]
     },
     {
       "type": "SECTION",

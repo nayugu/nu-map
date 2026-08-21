@@ -278,7 +278,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Urban landscape majors are required to complete one six-month co-op."
+      ]
     }
   ],
   "gpaRequirements": [

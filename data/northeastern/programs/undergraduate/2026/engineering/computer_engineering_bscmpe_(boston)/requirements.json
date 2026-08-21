@@ -177,7 +177,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "If more than one electrical engineering fundamentals course is taken, it can count as a technical elective."
+      ]
     },
     {
       "type": "SECTION",
@@ -194,7 +197,10 @@
           "classId": 4792
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "If taking EECE 4791 in First-Half Summer, EECE 4792 must be taken in Spring. If taking EECE 4791 in Second-Half Summer, EECE 4792 must be taken in Fall."
+      ]
     },
     {
       "type": "SECTION",
@@ -327,7 +333,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students can register for EECE 4991/EECE 4992 more than once. For these courses combined, a maximum of 8 semester hours will be allowed to satisfy the requirement of technical electives. An additional 4 semester hours will be allowed as a general elective. At most, one of these courses (4 semester hours) can be taken in a semester.",
+        "Though students may register for EECE 2750 more than once, only 4 semester hours will be allowed to satisfy the requirements of technical electives. An additional 4 semester hours will be allowed as a general elective.",
+        "EECE 2310 is not an approved course option for ECE majors to select for a Technical Elective, it is only for Khoury students.",
+        "Two CS/CY/IS courses from the following approved list may be taken toward the technical elective requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -566,7 +578,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
     }
   ],
   "gpaRequirements": [

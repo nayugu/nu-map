@@ -87,7 +87,10 @@
           "classId": 6910
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "The following course should be taken last:"
+      ]
     },
     {
       "type": "SECTION",
@@ -211,7 +214,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete courses from the 6000 level. Below is a list of courses regularly offered as electives within the project management program:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -267,7 +273,10 @@
             "classId": 6825
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Students in this concentration are only required to complete one project management required elective."
+        ]
       },
       {
         "type": "SECTION",

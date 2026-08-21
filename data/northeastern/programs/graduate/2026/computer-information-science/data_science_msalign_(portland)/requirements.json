@@ -93,7 +93,13 @@
           "classId": 5020
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Fundamentals",
+        "Discrete Structures",
+        "Programming for Data Science",
+        "Additional Align Coursework"
+      ]
     },
     {
       "type": "SECTION",
@@ -164,7 +170,10 @@
       "title": "Electives1",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete 12 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",

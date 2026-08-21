@@ -329,7 +329,10 @@
           "classId": 1100
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Participate in a theatre department production:"
+      ]
     }
   ],
   "gpaRequirements": [

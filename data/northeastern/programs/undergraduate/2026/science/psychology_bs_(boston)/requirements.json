@@ -359,14 +359,21 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Lab",
+        "Directed Study Research or Honors Thesis"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Psychology Required Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete five PSYC courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -1936,7 +1943,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following courses. Choose from one group only. Students may petition to create their own interdisciplinary cluster:",
+        "1Additional Art Course",
+        "Complete one of the following courses or course combinations concurrently with ARTF 1210:",
+        "In addition to the following courses, any math skill course may be used with advisor approval:",
+        "or any PHYS course"
+      ]
     },
     {
       "type": "SECTION",

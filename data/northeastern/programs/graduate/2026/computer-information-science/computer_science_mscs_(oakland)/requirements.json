@@ -212,7 +212,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Artificial Intelligence and Data Science",
+        "Systems and Software",
+        "Theory and Security"
+      ]
     },
     {
       "type": "SECTION",

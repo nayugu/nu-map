@@ -254,21 +254,31 @@
       "title": "Design Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTG courses as long as prerequisites have been met and it has not used to fulfill other requirements of the program. ARTG 2262 and ARTG 2263 are recommended."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Art + Design History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTH courses. ARTH 1001 Visual Intelligence and ARTH 1002 Seminar in Visual Intelligence are recommended."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Art + Design Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTD, ARTE, ARTF, ARTG, ARTH, ARTS, EXRE, or GAME course for which prerequisites have been met and it has not used to fulfill other requirements of the program.",
+        "If ARTG 5000 Topics in Design (or any other topics course in the subjects listed above) is completed more than once, the additional completions may be allowed toward the electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -420,7 +430,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following options:"
+      ]
     },
     {
       "type": "SECTION",
@@ -522,6 +535,9 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "The following course is already required in the major:"
+      ],
       "shared": true
     },
     {

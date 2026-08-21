@@ -334,7 +334,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the options below. Categories are provided to assist with selection:"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -142,7 +142,11 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 6
+      "creditsRequired": 6,
+      "notes": [
+        "Complete 6 semester hours in the following subject areas:",
+        "BIOL, BIOT, CHEM, NNMD, PHSC, PMCL, PMST"
+      ]
     },
     {
       "type": "SECTION",
@@ -164,7 +168,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Thesis research should be taken twice.",
+        "Thesis continuation may be taken if additional time is needed to complete the thesis."
+      ]
     }
   ],
   "gpaRequirements": [

@@ -390,7 +390,10 @@
           ]
         }
       ],
-      "minRequirementCount": 7
+      "minRequirementCount": 7,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -447,7 +450,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Excluding any course required for major"
+      ]
     },
     {
       "type": "SECTION",
@@ -643,7 +649,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
     },
     {
       "type": "SECTION",

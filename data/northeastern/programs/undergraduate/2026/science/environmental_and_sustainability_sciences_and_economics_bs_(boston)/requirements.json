@@ -411,7 +411,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Earth Oceans and Environmental Change",
+        "Conservation, Restoration, and Management",
+        "Sustainable Planning and Development",
+        "Environment and Society"
+      ]
     },
     {
       "type": "SECTION",
@@ -520,7 +526,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Calculus",
+        "Computer Science"
+      ]
     },
     {
       "type": "SECTION",

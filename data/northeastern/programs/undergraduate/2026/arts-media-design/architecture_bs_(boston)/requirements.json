@@ -171,7 +171,11 @@
           "classId": 2240
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Architecture History Elective 1",
+        "Complete any course in the range of ARCH 2300 to ARCH 2399."
+      ]
     },
     {
       "type": "SECTION",
@@ -188,7 +192,11 @@
           "classId": 3450
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Architecture History Elective 2",
+        "Complete any course in the range of ARCH 2300 to ARCH 2399."
+      ]
     },
     {
       "type": "SECTION",
@@ -237,7 +245,11 @@
       "title": "SEMESTER 5",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Travel Study",
+        "Students work with the department and their advisor to choose the approved off-campus study experience that best aligns with their ambitions."
+      ]
     },
     {
       "type": "SECTION",
@@ -376,7 +388,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Architecture majors are required to complete one or two six-month co-ops, depending on their plan of study."
+      ]
     }
   ],
   "gpaRequirements": [

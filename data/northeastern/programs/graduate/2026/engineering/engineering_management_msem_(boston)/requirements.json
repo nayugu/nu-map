@@ -97,7 +97,10 @@
       "title": "Coursework Option",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours from the course list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -109,7 +112,10 @@
           "classId": 7945
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the course list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -127,6 +133,9 @@
         }
       ],
       "minRequirementCount": 2,
+      "notes": [
+        "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+      ],
       "shared": true
     },
     {
@@ -134,7 +143,11 @@
       "title": "Online Option",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours from the course list below.",
+        "Courses offered online can be found on the online course list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -171,7 +184,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following. Students must complete ENCP 6100 to qualify for co-op experience:"
+      ]
     },
     {
       "type": "SECTION",
@@ -428,7 +444,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "or any EMGT, IE, or OR courses"
+      ]
     },
     {
       "type": "SECTION",

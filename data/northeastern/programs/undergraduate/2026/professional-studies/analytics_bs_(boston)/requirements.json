@@ -331,7 +331,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "ALY, AVM, BTC, CET, FIN, GET, HMG, ITC, LDR, MGT, MKT, PJM",
+        "Suggested Electives:"
+      ]
     },
     {
       "type": "SECTION",
@@ -385,7 +389,11 @@
             "classId": 4570
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete the following courses:",
+          "Complete one ALY or ITC course that has not been taken to fulfill major or concentration requirements."
+        ]
       }
     ]
   }

@@ -215,7 +215,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Option 1",
+        "Option 2"
+      ]
     },
     {
       "type": "SECTION",
@@ -467,7 +471,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Society and Behavior",
+        "Globalization and Global Health",
+        "Environmental Health and Climate Change",
+        "Law, Policy, and Human Rights",
+        "Healthcare Administration and Management"
+      ]
     },
     {
       "type": "SECTION",
@@ -566,7 +577,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "First-Year Writing",
+        "Advanced Writing in the Disciplines"
+      ]
     },
     {
       "type": "SECTION",
@@ -619,7 +634,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Bouvé Courses",
+        "CSSH Courses"
+      ]
     },
     {
       "type": "SECTION",

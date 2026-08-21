@@ -296,7 +296,10 @@
             "classId": 6580
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Students without a chemical engineering degree are advised to choose the 510X courses, which serve as a bridge from other degrees."
+        ]
       },
       {
         "type": "SECTION",

@@ -320,7 +320,10 @@
       "title": "Communication Studies Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three COMM courses that have not been used to satisfy other requirements"
+      ]
     },
     {
       "type": "SECTION",
@@ -392,7 +395,10 @@
           "classId": 6219
         }
       ],
-      "minRequirementCount": 11
+      "minRequirementCount": 11,
+      "notes": [
+        "All courses in these sections must be completed with a C or better."
+      ]
     },
     {
       "type": "SECTION",
@@ -496,7 +502,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: The selected integrative course counts toward the COMM writing-intensive (COMM 3201) or COMM elective (COMM 4102) as appropriate."
+      ]
     }
   ]
 }

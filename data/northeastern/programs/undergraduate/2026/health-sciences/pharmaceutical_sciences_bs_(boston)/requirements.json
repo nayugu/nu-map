@@ -201,7 +201,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Elective"
+      ]
     },
     {
       "type": "SECTION",
@@ -240,7 +243,10 @@
       "title": "SEMESTER 7",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Elective"
+      ]
     },
     {
       "type": "SECTION",
@@ -279,7 +285,10 @@
           "classId": 4998
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Elective"
+      ]
     },
     {
       "type": "SECTION",

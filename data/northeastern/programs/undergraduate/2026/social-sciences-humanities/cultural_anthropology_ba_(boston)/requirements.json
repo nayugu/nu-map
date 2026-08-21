@@ -145,14 +145,20 @@
       "title": "Advanced Area Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two area courses in the range ANTH 4101 and ANTH 4520 not used to satisfy another requirement"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Anthropology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 24
+      "creditsRequired": 24,
+      "notes": [
+        "Complete six ANTH courses not used to fulfill other requirements. Two study-abroad courses may count toward this requirement with prior permission from the department."
+      ]
     }
   ]
 }

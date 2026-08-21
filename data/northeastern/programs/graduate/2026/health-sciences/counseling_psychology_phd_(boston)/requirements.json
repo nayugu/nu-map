@@ -165,7 +165,10 @@
       "title": "Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 3
+      "creditsRequired": 3,
+      "notes": [
+        "Three semester hours can be chosen from any graduate level CAEP course or combination of graduate level CAEP courses outside of the PhD in Counseling Psychology program of study. Other electives may be chosen upon approval of the program director and faculty adviser:"
+      ]
     },
     {
       "type": "SECTION",

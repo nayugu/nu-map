@@ -215,7 +215,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "International co-op in a Spanish-speaking country",
+        "Study-abroad in a Spanish-speaking country",
+        "Dialogue of Civilizations in a Spanish-speaking country"
+      ]
     },
     {
       "type": "SECTION",
@@ -359,7 +364,12 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Biology",
+        "Option 1",
+        "Option 2"
+      ]
     },
     {
       "type": "SECTION",
@@ -616,7 +626,16 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Introductory Course",
+        "Upper-Level Course",
+        "Society and Behavior",
+        "Globalization and Global Health",
+        "Environmental Health and Climate Change",
+        "Law, Policy, and Human Rights",
+        "Healthcare Administration and Management"
+      ]
     },
     {
       "type": "SECTION",
@@ -748,7 +767,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Bouvé",
+        "CSSH"
+      ]
     }
   ],
   "footnotes": [

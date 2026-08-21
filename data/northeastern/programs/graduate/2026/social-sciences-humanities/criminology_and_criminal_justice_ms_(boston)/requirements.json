@@ -162,7 +162,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The following courses may also count as electives toward the program:"
+      ]
     },
     {
       "type": "SECTION",

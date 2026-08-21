@@ -203,7 +203,12 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Biology",
+        "Option 1",
+        "Option 2"
+      ]
     },
     {
       "type": "SECTION",
@@ -450,7 +455,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Introductory",
+        "Upper Level"
+      ]
     },
     {
       "type": "SECTION",
@@ -548,7 +557,10 @@
       "title": "Journalism Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete any four JRNL electives (two must be at the 3000 level or above)."
+      ]
     },
     {
       "type": "SECTION",

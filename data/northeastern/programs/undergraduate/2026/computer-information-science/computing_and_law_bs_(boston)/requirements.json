@@ -130,7 +130,10 @@
           ]
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute 4-5 SH of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -197,7 +200,11 @@
           "classId": 3235
         }
       ],
-      "minRequirementCount": 10
+      "minRequirementCount": 10,
+      "notes": [
+        "Technology",
+        "Law"
+      ]
     },
     {
       "type": "SECTION",
@@ -367,7 +374,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "If choosing a 3-semester-hour course, register for a 1-semester-hour course concurrently. No more than four 1-semester-hour courses may be applied to this requirement."
+      ]
     },
     {
       "type": "SECTION",

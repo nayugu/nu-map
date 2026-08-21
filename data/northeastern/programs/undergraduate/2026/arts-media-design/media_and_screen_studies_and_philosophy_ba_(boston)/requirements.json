@@ -275,7 +275,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Media and Screen Studies courses, from the range MSCR 1200 - MSCR 4999."
+      ]
     },
     {
       "type": "SECTION",
@@ -314,7 +317,10 @@
       "title": "Advanced Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three PHIL courses with a designation of 3000 or above not used to satisfy another requirement, and at least one at 4000 or 5000 level. Except PHIL 5110."
+      ]
     },
     {
       "type": "SECTION",
@@ -378,7 +384,10 @@
       "title": "Philosophy Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two additional PHIL electives, not used to satisfy another requirement."
+      ]
     },
     {
       "type": "SECTION",

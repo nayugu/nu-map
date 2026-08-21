@@ -343,7 +343,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "A directed study on a topic related to psycholinguistics or cognition may be taken with prior approval."
+      ]
     },
     {
       "type": "SECTION",
@@ -412,7 +415,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Study Abroad (not a Dialogue)",
+        "International Co-op"
+      ]
     },
     {
       "type": "SECTION",
@@ -443,7 +450,10 @@
       "title": "Language Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses in the same language with a grade of C or higher. Proficiency at elementary level 2 or higher is required."
+      ]
     },
     {
       "type": "SECTION",

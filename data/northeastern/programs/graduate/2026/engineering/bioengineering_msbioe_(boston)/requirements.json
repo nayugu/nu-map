@@ -69,7 +69,10 @@
           "classId": 6100
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required in each course:"
+      ]
     },
     {
       "type": "SECTION",
@@ -106,7 +109,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -310,7 +316,17 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "A grade of C or higher is required.",
+          "Coursework Option",
+          "Complete 20 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+          "Project Option",
+          "Complete 16 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+          "Thesis Option",
+          "Complete 12 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+        ]
       },
       {
         "type": "SECTION",
@@ -484,7 +500,14 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "A grade of C or higher is required:",
+          "Complete one of the following options:",
+          "Complete 12 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+          "Complete 8 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+        ]
       },
       {
         "type": "SECTION",
@@ -652,7 +675,17 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "A grade of C or higher is required:",
+          "Coursework Option",
+          "Complete 19–20 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+          "Project Option",
+          "Complete 15–16 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+          "Thesis Option",
+          "Complete 11–12 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+        ]
       },
       {
         "type": "SECTION",
@@ -816,7 +849,17 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "A grade of C or higher is required.",
+          "Coursework Option",
+          "Complete 15-16 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+          "Project Option",
+          "Complete 11-12 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+          "Thesis Option",
+          "Complete 7-8 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+        ]
       }
     ]
   }

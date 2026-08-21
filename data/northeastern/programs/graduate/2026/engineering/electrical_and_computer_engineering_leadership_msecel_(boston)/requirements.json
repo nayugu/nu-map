@@ -114,7 +114,10 @@
       "title": "Concentration Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete 16 semester hours from concentration courses in any of the seven EECE concentrations. Students are encouraged to take at least three courses within the same concentration."
+      ]
     },
     {
       "type": "SECTION",
@@ -156,7 +159,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following. Students must complete ENCP 6100 to qualify for co-op experience:"
+      ]
     }
   ],
   "gpaRequirements": [

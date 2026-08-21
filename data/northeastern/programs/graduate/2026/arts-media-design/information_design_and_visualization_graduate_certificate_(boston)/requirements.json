@@ -145,7 +145,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "ARTG 5000 or 6000 level course"
+      ]
     }
   ],
   "gpaRequirements": [

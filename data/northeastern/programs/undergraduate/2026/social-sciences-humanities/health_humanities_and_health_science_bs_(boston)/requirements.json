@@ -482,7 +482,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Advanced Writing Course",
+        "Courses listed below are preferred but other advanced writing courses will be accepted:"
+      ]
     },
     {
       "type": "SECTION",

@@ -137,7 +137,10 @@
           ]
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "Complete the following two courses based on the discipline of your master's program:"
+      ]
     }
   ],
   "gpaRequirements": [

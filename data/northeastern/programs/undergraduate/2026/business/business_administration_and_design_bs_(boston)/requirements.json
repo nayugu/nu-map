@@ -506,14 +506,21 @@
       "title": "Art + Design History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTH courses. ARTH 1001 Visual Intelligence and ARTH 1002 Seminar in Visual Intelligence is recommended to fulfill this requirement."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Art + Design Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTD, ARTE, ARTF, ARTG, ARTH, ARTS, or GAME courses for which prerequisites have been met.",
+        "If any topics course is completed more than once, the additional completions may be allowed toward the electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -665,7 +672,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following options:"
+      ]
     },
     {
       "type": "SECTION",
@@ -683,6 +693,9 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "Note: Integrative course is required above."
+      ],
       "shared": true
     },
     {
@@ -730,7 +743,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the following experiences:"
+      ]
     }
   ],
   "footnotes": [
@@ -949,7 +965,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "A maximum of one course may be applied to requirements of a second concentration."
+        ]
       },
       {
         "type": "SECTION",
@@ -1121,7 +1140,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward a concentration elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -1245,7 +1268,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -1772,7 +1799,13 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Note: One course can also count toward a different business concentration.",
+          "Managing Internationally",
+          "International Functional Knowledge",
+          "Electives not listed may be approved via the undergraduate dean’s office."
+        ]
       },
       {
         "type": "SECTION",
@@ -1896,7 +1929,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Note: Only one non-MGMT course may be used as an elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -2316,7 +2352,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       },
       {
         "type": "SECTION",

@@ -841,7 +841,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete six of the following (at least one course must be taken from each list):"
+      ]
     },
     {
       "type": "SECTION",
@@ -895,7 +898,10 @@
           "classId": 2000
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students who want to participate in co-op will need to complete EESC 2000 Professional Development for Co-op."
+      ]
     }
   ]
 }

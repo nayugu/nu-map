@@ -84,7 +84,11 @@
           "classId": 7945
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a minimum of 12 semester hours from the Restricted Electives course list below.",
+        "Complete the remaining 12 semester hours from the Restricted Electives or the Electives course list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -102,6 +106,11 @@
         }
       ],
       "minRequirementCount": 2,
+      "notes": [
+        "Complete a minimum of 12 semester hours from the Restricted Electives course list below.",
+        "Complete the remaining 8 semester hours from the Restricted Electives or the Electives course list below.",
+        "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+      ],
       "shared": true
     },
     {
@@ -558,7 +567,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following. Students must complete ENCP 6000 to qualify for co-op experience:"
+      ]
     }
   ],
   "gpaRequirements": [

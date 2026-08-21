@@ -223,7 +223,10 @@
       "title": "Advanced Philosophy Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two PHIL courses with a designation of 3000 or above not used to satisfy another requirement, at least one of which must be at the 4000 or 5000 level, not including PHIL 5110."
+      ]
     },
     {
       "type": "SECTION",
@@ -292,7 +295,10 @@
       "title": "Additional Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one additional PHIL course not used to satisfy other requirements."
+      ]
     },
     {
       "type": "SECTION",
@@ -319,7 +325,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "concentrations": {

@@ -139,7 +139,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 46
+      "creditsRequired": 46,
+      "notes": [
+        "Complete 46 credits of elective coursework."
+      ]
     }
   ],
   "footnotes": [

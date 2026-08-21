@@ -345,7 +345,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a total of five courses per the requirements below.",
+        "Complete four language courses in sequence from the following list.",
+        "For students with prior knowledge of Spanish, a placement test will determine the appropriate first course. Students who place above SPNS 2102 are required to complete the sequence up to SPNS 3102 and select additional electives to reach a total of five courses. Students who place out of SPNS 3102 must complete five electives. In all cases, at least four of the five courses must be taught in Spanish; one course may be taught in English.",
+        "Complete one or more of the following courses to meet the five total courses required for the minor.",
+        "Electives Taught in Spanish",
+        "Electives Taught in English"
+      ]
     }
   ],
   "gpaRequirements": [

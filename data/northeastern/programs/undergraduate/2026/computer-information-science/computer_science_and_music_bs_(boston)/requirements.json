@@ -138,7 +138,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Must be taken in alignment with your home college:"
+      ]
     },
     {
       "type": "SECTION",
@@ -190,7 +193,10 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -294,7 +300,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -306,7 +315,10 @@
           "classId": 1119
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "All students can take a music theory placement exam to place out of MUSC 1119. Students who place out of MUSC 1119 will substitute it with a general elective course."
+      ]
     },
     {
       "type": "SECTION",
@@ -353,7 +365,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Music Theory Elective"
+      ]
     },
     {
       "type": "SECTION",
@@ -725,14 +740,24 @@
           ]
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "Complete one course each from three of the four distinct Music in Context categories. No more than one may be at the 1000 level. At least one course must be at the 3000 level or higher.",
+        "Contemporary/Popular Music",
+        "Creative",
+        "Global Music/Ethnomusicology",
+        "Western Art Music"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Music Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two additional courses in music (MUSC, MUSI, or MUST). At least one must be at the 2000 level or higher."
+      ]
     },
     {
       "type": "SECTION",
@@ -759,7 +784,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "If a computer science capstone is taken, complete one additional course in music (MUSC, MUSI, or MUST) at the 2000 level or higher."
+      ]
     },
     {
       "type": "SECTION",

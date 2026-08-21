@@ -389,14 +389,20 @@
       "title": "Introductory History",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one course from HIST 1001 to HIST 1999 (excluding HIST 1200 and HIST 1201)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two HIST courses at any level in any field."
+      ]
     },
     {
       "type": "SECTION",
@@ -485,14 +491,20 @@
       "title": "Intermediate History",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum of one HIST course numbered 2000 to 2999 (Excluding HIST 2301 and HIST 2302)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced History",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum one HIST course numbered 3000 to 4999 (Excluding HIST 4701)."
+      ]
     },
     {
       "type": "SECTION",
@@ -670,7 +682,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required in each course:"
+      ]
     },
     {
       "type": "SECTION",
@@ -695,7 +710,10 @@
       "title": "Required General Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of academic, nonremedial, nonrepetitive courses."
+      ]
     }
   ],
   "gpaRequirements": [

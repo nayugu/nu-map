@@ -207,7 +207,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following course:"
+      ]
     },
     {
       "type": "SECTION",
@@ -595,7 +598,10 @@
       "title": "Hebrew Language Introduction",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses in Hebrew. These courses also count toward the BA language requirement."
+      ]
     }
   ]
 }

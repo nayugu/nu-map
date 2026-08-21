@@ -89,7 +89,10 @@
       "title": "Elective Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 SH of GAME course not already required and as long as prerequisites have been met. At least one must be at the 3000 level. ARTG 2262 and 2263 may count toward this requirement."
+      ]
     }
   ],
   "gpaRequirements": [

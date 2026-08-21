@@ -130,7 +130,10 @@
       "title": "Introductory Level",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one history course from the 1000 level (except HIST 1200 and HIST 1201)."
+      ]
     },
     {
       "type": "SECTION",
@@ -154,7 +157,10 @@
       "title": "History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two HIST courses at any level in any field."
+      ]
     },
     {
       "type": "SECTION",
@@ -228,14 +234,20 @@
       "title": "Intermediate/Advanced History Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum of one history course numbered 2000 to 2999 (except HIST 2301 and HIST 2302)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced History",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum of one history course numbered 3000 to 4999 (except HIST 4701)."
+      ]
     },
     {
       "type": "SECTION",
@@ -385,7 +397,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Unless otherwise noted in specific combined majors, required core economics courses cannot be counted as electives by students completing Department of Economics programs."
+      ]
     },
     {
       "type": "SECTION",
@@ -457,7 +472,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Computer Science",
+        "Calculus"
+      ]
     },
     {
       "type": "SECTION",

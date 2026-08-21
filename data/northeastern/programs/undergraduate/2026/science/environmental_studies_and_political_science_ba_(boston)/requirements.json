@@ -189,7 +189,13 @@
           ]
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Introduction to College",
+        "Experiential Learning Introduction",
+        "Introductory Science",
+        "Introductory Social Science"
+      ]
     },
     {
       "type": "SECTION",
@@ -509,7 +515,11 @@
       "title": "Political Science Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Note: Elective courses may also be used to fulfill requirements of an optional concentration of this program",
+        "Choose four POLS Electives 2000 level or above."
+      ]
     },
     {
       "type": "SECTION",

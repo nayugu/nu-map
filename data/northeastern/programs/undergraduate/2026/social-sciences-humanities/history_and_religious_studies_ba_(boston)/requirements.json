@@ -191,14 +191,20 @@
       "title": "Introductory Level Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one course from the 1000 level (excluding HIST 1200 and HIST 1201)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "History Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete five further history courses not used to fulfill a previous requirement, of which at least one must be numbered 2000-2999 (excluding HIST 2301 and HIST 2302) and at least one must be numbered 3000-4999 (excluding HIST 4701)."
+      ]
     },
     {
       "type": "SECTION",

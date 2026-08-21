@@ -106,7 +106,10 @@
       "title": "Cognate Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 6
+      "creditsRequired": 6,
+      "notes": [
+        "Complete two cognate courses in consultation with your faculty adviser."
+      ]
     },
     {
       "type": "SECTION",

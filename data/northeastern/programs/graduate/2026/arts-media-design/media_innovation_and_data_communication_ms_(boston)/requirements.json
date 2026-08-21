@@ -103,7 +103,11 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Students must complete 16 semester hours.",
+        "Note: Courses in other disciplines may be taken in consultation with your faculty advisor. No more than two courses outside of CAMD may be taken."
+      ]
     }
   ],
   "gpaRequirements": [

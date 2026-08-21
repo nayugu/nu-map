@@ -115,7 +115,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: For English majors, only one course from the major may also count toward this elective section of the minor."
+      ]
     }
   ],
   "gpaRequirements": [

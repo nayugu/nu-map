@@ -67,7 +67,10 @@
           "classId": 2301
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of B or higher is required in the following two courses:"
+      ]
     },
     {
       "type": "SECTION",

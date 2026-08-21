@@ -245,7 +245,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four courses from the following, two of which must be numbered 3000 or higher (no more than one course can also be used to fulfill a major requirement):"
+      ]
     }
   ],
   "gpaRequirements": [

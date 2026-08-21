@@ -125,7 +125,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Only one course may be taken from each department/program.",
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -185,7 +189,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following:"
+      ]
     },
     {
       "type": "SECTION",

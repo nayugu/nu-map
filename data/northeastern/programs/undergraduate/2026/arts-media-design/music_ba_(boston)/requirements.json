@@ -92,7 +92,10 @@
           "classId": 1119
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "All students can take a music theory placement exam to place out of MUSC 1119. Students who place out of MUSC 1119 will substitute it with a general elective course."
+      ]
     },
     {
       "type": "SECTION",
@@ -145,7 +148,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required in each course."
+      ]
     },
     {
       "type": "SECTION",
@@ -571,7 +577,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Ensembles and Lessons"
+      ]
     },
     {
       "type": "SECTION",
@@ -605,7 +614,10 @@
       "title": "Music Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three additional courses in music (MUSC, MUSI, or MUST). At least two must be at the 2000 level or higher."
+      ]
     }
   ]
 }

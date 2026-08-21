@@ -122,7 +122,10 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Complete the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -247,7 +250,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Proseminars not taken to fulfill core requirements and courses outside the department may be taken if approved by faculty adviser and Director of Graduate Studies."
+      ]
     },
     {
       "type": "SECTION",
@@ -274,7 +280,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (repeatable) course until graduation:"
+      ]
     }
   ],
   "gpaRequirements": [

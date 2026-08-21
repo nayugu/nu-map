@@ -98,7 +98,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The following courses are recommended to be taken by the end of the fourth semester (third semester for transfer students):"
+      ]
     },
     {
       "type": "SECTION",
@@ -294,7 +297,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students concentrating in performance should complete THTR 5300, THTR 5450, or THTR 3550.",
+        "Students concentrating in design & production should complete THTR 3550, THTR 3670, or THTR 5700."
+      ]
     }
   ],
   "concentrations": {

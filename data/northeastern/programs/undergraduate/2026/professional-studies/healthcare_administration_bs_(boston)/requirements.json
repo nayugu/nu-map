@@ -325,7 +325,11 @@
       "title": "Professional Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 15
+      "creditsRequired": 15,
+      "notes": [
+        "Complete 15 semester hours from the following:",
+        "HSC, HMG, HRM, MGT, MKT, PSY, PJM 1100, PJM 1400"
+      ]
     }
   ],
   "gpaRequirements": [

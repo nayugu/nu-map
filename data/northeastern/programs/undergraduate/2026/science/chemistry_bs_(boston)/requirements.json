@@ -727,7 +727,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Students can submit a request to the director of undergraduate studies to replace one advanced chemistry elective with a course from the following:"
+        ]
       }
     ]
   }

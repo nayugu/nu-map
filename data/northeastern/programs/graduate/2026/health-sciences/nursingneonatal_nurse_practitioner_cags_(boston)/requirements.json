@@ -135,7 +135,11 @@
       "title": "Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 3
+      "creditsRequired": 3,
+      "notes": [
+        "Select courses in consultation with faculty advisor.",
+        "NRSG"
+      ]
     }
   ],
   "gpaRequirements": [

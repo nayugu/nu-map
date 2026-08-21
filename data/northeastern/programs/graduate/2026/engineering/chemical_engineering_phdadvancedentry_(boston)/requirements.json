@@ -146,7 +146,11 @@
           ]
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "Complete the following repeatable course each semester:",
+        "Recommended but optional:"
+      ]
     },
     {
       "type": "SECTION",
@@ -311,7 +315,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following two courses:"
+      ]
     }
   ],
   "footnotes": [

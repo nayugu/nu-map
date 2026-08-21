@@ -610,7 +610,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from approved NUpath DD options.",
+        "Complete one course from approved NUpath ER options.",
+        "Complete first-year writing course.",
+        "Complete NUpath Integrating Knowledge Through Experience co-op experience.",
+        "Complete open electives to fulfill the total program hours."
+      ]
     }
   ],
   "footnotes": [

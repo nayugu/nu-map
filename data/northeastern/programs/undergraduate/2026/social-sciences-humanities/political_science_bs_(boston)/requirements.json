@@ -218,28 +218,41 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Up to two credit-bearing courses count toward political science electives."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Co-op or Study Abroad",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one cooperative education experience or one study-abroad experience."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Political Science Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 32
+      "creditsRequired": 32,
+      "notes": [
+        "Complete eight political science electives with a minimum of six numbered 2000 or above."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Upper-Division Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Note: Courses used as upper-division electives do not count toward the major or the NU Core.",
+        "Complete three general electives numbered 3000 or above."
+      ]
     }
   ],
   "concentrations": {

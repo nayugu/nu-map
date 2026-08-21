@@ -97,7 +97,12 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 17
+      "creditsRequired": 17,
+      "notes": [
+        "A minimum of 17 credits of electives is required. No more than 8 semester hours can be taken outside of the College of Arts, Media, and Design or the School of Law.",
+        "Complete a minimum of 4 semester hours of coursework from the College of Arts, Media, and Design. Choose from recommended focus areas of JRNL, ARTD, ARTG, COMM, and INAM (additional areas may be chosen in consultation with your adviser).",
+        "Complete a minimum of 5 semester hours of coursework from the School of Law."
+      ]
     }
   ],
   "gpaRequirements": [

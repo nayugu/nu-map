@@ -89,7 +89,10 @@
       "title": "Approved Course Work",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Requires 20 semester hours of coursework. Please consult your faculty advisor for acceptable courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -111,7 +114,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following two courses. Must register in two consecutive semesters (may include full summer term):"
+      ]
     }
   ],
   "gpaRequirements": [

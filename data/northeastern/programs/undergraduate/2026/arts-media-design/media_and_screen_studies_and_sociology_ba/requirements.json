@@ -272,7 +272,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Media and Screen Studies courses, from the range MSCR 1200 - MSCR 4999."
+      ]
     },
     {
       "type": "SECTION",
@@ -326,14 +329,20 @@
       "title": "Introductory Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two electives between SOCL 1200 and SOCL 2999."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three electives between SOCL 3000 and SOCL 4999."
+      ]
     },
     {
       "type": "SECTION",

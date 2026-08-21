@@ -484,7 +484,10 @@
       "title": "Courses Met by Transfer Prerequisites",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 14
+      "creditsRequired": 14,
+      "notes": [
+        "At least 14 semester hours outside the School of Nursing or NRSG courses not used to fulfill requirements above."
+      ]
     }
   ],
   "gpaRequirements": [

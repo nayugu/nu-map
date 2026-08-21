@@ -150,7 +150,11 @@
       "title": "Political Science Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Note: You may use these four courses in the elective area to fulfill a concentration",
+        "Complete four courses POLS 2000 to POLS 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -217,7 +221,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Calculus",
+        "Computer Science"
+      ]
     },
     {
       "type": "SECTION",

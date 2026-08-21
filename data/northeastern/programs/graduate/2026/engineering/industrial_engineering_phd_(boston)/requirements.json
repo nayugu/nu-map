@@ -78,14 +78,20 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Semester hours can be counted toward coursework component with advisor approval."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Approved Coursework",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 40
+      "creditsRequired": 40,
+      "notes": [
+        "Requires 40 semester hours of coursework."
+      ]
     },
     {
       "type": "SECTION",
@@ -107,7 +113,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (must register in two consecutive semesters, which may include full summer term):"
+      ]
     }
   ],
   "gpaRequirements": [

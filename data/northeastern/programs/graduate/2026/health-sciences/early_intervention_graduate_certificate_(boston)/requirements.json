@@ -67,7 +67,10 @@
           "classId": 5152
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Completing the courses below provides eligibility to pursue provisional certification in the state of Massachusetts upon employment in an early intervention setting. Consult with your program director to determine the availability of and recommended/required enrollment sequence for your respective program."
+      ]
     },
     {
       "type": "SECTION",
@@ -89,7 +92,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Completing the courses below provides eligibility to pursue provisional certification with advanced standing in the state of Massachusetts upon employment in an early intervention setting. Consult with your program director to determine eligibility for and availability of these course options."
+      ]
     }
   ],
   "gpaRequirements": [

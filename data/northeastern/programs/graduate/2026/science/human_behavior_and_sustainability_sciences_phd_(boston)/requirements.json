@@ -138,7 +138,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -453,7 +456,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Please enroll in either EEMB 9990 or PSYC 9990 for one semester after achieving candidacy. In the following semester, please enroll in either EEMB 9991 or PSYC 9991."
+      ]
     }
   ],
   "gpaRequirements": [

@@ -204,7 +204,10 @@
       "title": "Discipline-Specific Coursework",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours of discipline-specific coursework in consultation with your domain-specific advisor and committee members."
+      ]
     }
   ]
 }

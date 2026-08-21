@@ -67,7 +67,10 @@
       "title": "Core Requirements",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete 12 semester hours of coursework in consultation with your dissertation committee."
+      ]
     }
   ],
   "gpaRequirements": [

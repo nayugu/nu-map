@@ -328,7 +328,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "One course may be an experiential course:"
+      ]
     },
     {
       "type": "SECTION",
@@ -390,7 +393,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "An additional behavioral neuroscience core course may be used to fulfill this requirement."
+      ]
     },
     {
       "type": "SECTION",

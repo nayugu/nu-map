@@ -225,28 +225,40 @@
       "title": "History Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two HIST courses at any level in any field."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Introductory Level Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one course from HIST 1000 levels (excluding HIST 1200 and HIST 1201)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Intermediate/Advanced History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum of one HIST course numbered 2000 or above (excluding HIST 2301 and HIST 2302)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum of one HIST course numbered 3000 to 4999 (excluding HIST 4701)."
+      ]
     },
     {
       "type": "SECTION",
@@ -317,7 +329,11 @@
       "title": "Political Science Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three POLS courses numbered 2000 or above.",
+        "Note: Elective courses may also fulfill requirements of an optional concentration of this program."
+      ]
     },
     {
       "type": "SECTION",

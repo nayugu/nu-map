@@ -278,7 +278,10 @@
       "title": "Communication Studies Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three courses that have not been used to satisfy other requirements"
+      ]
     },
     {
       "type": "SECTION",
@@ -417,21 +420,31 @@
       "title": "Design Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTG courses, as long as prerequisites have been met and courses have not been used to fulfill other requirements of the program."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Art + Design History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTH courses."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Art + Design Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTD, ARTE, ARTF, ARTG, ARTH, ARTS, or GAME courses as long as prerequisites have been met.",
+        "If ARTG 5000 Topics in Design (or any other topics course in the subjects listed above) is completed more than once, the additional completions may be allowed toward the electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -593,7 +606,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following options:"
+      ]
     },
     {
       "type": "SECTION",

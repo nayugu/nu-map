@@ -97,7 +97,10 @@
           "classId": 2321
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
     },
     {
       "type": "SECTION",

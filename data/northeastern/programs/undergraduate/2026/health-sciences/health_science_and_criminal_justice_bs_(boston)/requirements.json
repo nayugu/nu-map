@@ -383,14 +383,23 @@
           ]
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Current Criminal Justice System Issues",
+        "Crime Problems and Criminal Justice Institutions",
+        "Crime Problems",
+        "Systemic Issues"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Additional Criminal Justice Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses from the CRIM 3001 to 5999 range that are not used to fulfill other requirements of this program."
+      ]
     },
     {
       "type": "SECTION",
@@ -691,7 +700,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following, based on home college:"
+      ]
     }
   ],
   "footnotes": [

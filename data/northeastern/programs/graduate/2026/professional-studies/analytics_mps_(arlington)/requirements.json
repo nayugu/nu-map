@@ -87,7 +87,10 @@
           "classId": 6000
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "Note: ITC 6000 is for students without prior educational or professional experience with data and database structures. Students who do not complete ITC 6000 must complete additional elective coursework to meet the program's required 45 quarter hours."
+      ]
     },
     {
       "type": "SECTION",

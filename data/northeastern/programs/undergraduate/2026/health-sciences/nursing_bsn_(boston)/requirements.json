@@ -540,7 +540,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three courses (for at least 12 semester hours) outside the School of Nursing or NRSG courses not used to fulfill requirements above."
+      ]
     }
   ],
   "footnotes": [

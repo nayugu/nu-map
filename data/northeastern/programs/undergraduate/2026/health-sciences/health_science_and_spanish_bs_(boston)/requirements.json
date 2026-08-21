@@ -365,7 +365,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Dialogue of Civilizations in a Spanish-speaking country",
+        "International co-op in a Spanish-speaking country",
+        "Study-abroad in a Spanish-speaking country"
+      ]
     },
     {
       "type": "SECTION",
@@ -509,7 +514,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Bouvé",
+        "CSSH"
+      ]
     }
   ],
   "footnotes": [

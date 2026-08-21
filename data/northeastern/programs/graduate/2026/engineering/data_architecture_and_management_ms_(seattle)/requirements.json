@@ -67,7 +67,10 @@
           "classId": 7370
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Complete 16 semester hours from the electives course list below."
+      ]
     },
     {
       "type": "SECTION",
@@ -104,7 +107,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following (students must complete ENCP 6000 to qualify for co-op experience):"
+      ]
     },
     {
       "type": "SECTION",

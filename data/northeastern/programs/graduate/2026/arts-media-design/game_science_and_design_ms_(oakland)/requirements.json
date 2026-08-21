@@ -125,7 +125,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Students complete Games Project, then select either Thesis or a second completion of Games Project, in consultation with the program coordinator.",
+        "Thesis Conclusion"
+      ]
     },
     {
       "type": "SECTION",
@@ -196,7 +200,12 @@
       "title": "Other Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete any two (8 Credit Hours) of the following courses listed.",
+        "If ARTG 5000 or GSND 6000 or GSND 6001 is completed more than once, the additional completions may be allowed toward the electives.",
+        "Elective courses outside of CAMD are subject to availability and registration policy of the home college."
+      ]
     },
     {
       "type": "SECTION",

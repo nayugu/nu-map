@@ -139,7 +139,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following (if completing 12 semester hours of Literary Period requirements)."
+      ]
     },
     {
       "type": "SECTION",
@@ -172,14 +175,22 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Literature Pre-1700",
+        "Literature 1700–1900",
+        "Literature Post-1900"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 24
+      "creditsRequired": 24,
+      "notes": [
+        "Complete 24 semester hours of ENGL courses, or non-ENGL courses through successful petition."
+      ]
     },
     {
       "type": "SECTION",
@@ -252,7 +263,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Following completion of ENGL 9990 and ENGL 9991, registration in the following class is required in each fall and spring semester for all students and each summer semester for those within funding until the dissertation is completed (students outside of funding must also register in the summer semester if it is their terminal term):"
+      ]
     }
   ]
 }

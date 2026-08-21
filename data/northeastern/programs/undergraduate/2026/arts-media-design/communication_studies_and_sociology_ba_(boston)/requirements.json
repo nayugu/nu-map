@@ -284,7 +284,10 @@
       "title": "Communication Studies Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three COMM courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -338,21 +341,30 @@
       "title": "Introductory Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses between SOCL 1000 and SOCL 1999 not used to satisfy another requirement."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Intermediate-Level Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses between SOCL 2000 and SOCL 2999 not used to satisfy another requirement."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced-Level Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one course above SOCL 3000 not used to satisfy another requirement."
+      ]
     },
     {
       "type": "SECTION",
@@ -441,7 +453,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Option 1:",
+        "Complete 4 SH of coursework between SOCL 3000 and SOCL 4999",
+        "Option 2:",
+        "Complete 4 SH of coursework between COMM 3000 and COMM 4999"
+      ]
     }
   ]
 }

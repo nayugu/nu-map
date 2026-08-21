@@ -514,7 +514,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Any 5000-level or above PPUA course"
+        ]
       }
     ]
   }

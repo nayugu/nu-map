@@ -137,7 +137,10 @@
           "classId": 1210
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Must be taken in alignment with your home college:"
+      ]
     },
     {
       "type": "SECTION",
@@ -179,7 +182,10 @@
           "classId": 3200
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
     },
     {
       "type": "SECTION",
@@ -241,7 +247,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Computer Science Option",
+        "Data Science Option"
+      ]
     },
     {
       "type": "SECTION",
@@ -280,7 +290,14 @@
           "classId": 4606
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives.",
+        "Complete 4 semester hours from within the following options:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
+      ]
     },
     {
       "type": "SECTION",
@@ -334,7 +351,10 @@
       "title": "Global Dynamics Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two of the following with one course numbered 2000 or above. Courses are divided into thematic groups to aid students in deciding which courses to take and have no bearing on major requirements:"
+      ]
     },
     {
       "type": "SECTION",
@@ -926,14 +946,27 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Environment",
+        "Law, Diplomacy, and Global Governance",
+        "Human Rights and Social Justice",
+        "Conflict and Security",
+        "Globalization",
+        "Population, Migration, and Diaspora",
+        "Development",
+        "Communication and Media"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Regional Analysis Requirement",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two of the following, both of which must be in one region. Select courses taken during a semester study abroad or specific Dialogue of Civilizations courses may count as regional analysis courses pending approval of the international affairs head faculty advisor. See department for additional courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -1245,14 +1278,24 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "Latin America",
+        "Middle East"
+      ]
     },
     {
       "type": "SECTION",
       "title": "International Affairs Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -1407,7 +1450,10 @@
           "classId": 4700
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete with a thesis or project that integrates both international affairs and data science."
+      ]
     },
     {
       "type": "SECTION",

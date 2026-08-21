@@ -202,7 +202,10 @@
             "classId": 7990
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with your faculty advisor, any remaining semester hours may be completed with electives."
+        ]
       },
       {
         "type": "SECTION",
@@ -215,7 +218,10 @@
             "classId": 7990
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete a minimum of 8 semester hours of specialization coursework in consultation with your faculty advisor."
+        ]
       }
     ]
   }

@@ -290,7 +290,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The following courses have prerequisites but may be taken with permission of the instructor:"
+      ]
     }
   ]
 }

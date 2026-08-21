@@ -397,7 +397,10 @@
           "classId": 2201
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete each of the following with a grade of C or better:"
+      ]
     },
     {
       "type": "SECTION",
@@ -474,7 +477,10 @@
       "title": "Electives (2)",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete four electives in JRNL; two must be at the 3000-level or above."
+      ]
     },
     {
       "type": "SECTION",
@@ -565,7 +571,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "If considering co-op, complete the following:"
+      ]
     }
   ],
   "footnotes": [

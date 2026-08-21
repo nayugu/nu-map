@@ -291,7 +291,10 @@
           "classId": 3610
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
     },
     {
       "type": "SECTION",
@@ -313,14 +316,20 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Taking either course fulfills both the capstone requirement and the journalism law and ethics requirement:"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Journalism Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three JRNL electives."
+      ]
     },
     {
       "type": "SECTION",

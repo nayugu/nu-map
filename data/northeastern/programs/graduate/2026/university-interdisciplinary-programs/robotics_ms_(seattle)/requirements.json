@@ -381,7 +381,15 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Coursework Option",
+          "Complete 16 semester hours of courses from the elective course list.",
+          "Project Option",
+          "Complete 12 semester hours of courses from the elective course list.",
+          "Thesis Option",
+          "Complete 8 semester hours of courses from the elective course list."
+        ]
       },
       {
         "type": "SECTION",
@@ -460,7 +468,17 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Coursework Option",
+          "Complete 16 semester hours of courses from the elective course list.",
+          "Project Option",
+          "Complete 12 semester hours of courses from the elective course list.",
+          "Thesis Option",
+          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest.",
+          "Complete 8 semester hours of courses from the elective course list.",
+          "Complete the following (students in EECE and MIE concentrations must complete ENCP 6100 to qualify for co-op experience):"
+        ]
       },
       {
         "type": "SECTION",
@@ -534,7 +552,17 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Coursework Option",
+          "Complete 16 semester hours of courses from the elective course list.",
+          "Project Option",
+          "Complete 12 semester hours of courses from the elective course list.",
+          "Thesis Option",
+          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest.",
+          "Complete 8 semester hours of courses from the elective course list.",
+          "Complete the following (students in EECE and MIE concentrations must complete ENCP 6100 to qualify for co-op experience):"
+        ]
       }
     ]
   }

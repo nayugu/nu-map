@@ -155,7 +155,10 @@
           "classId": 6340
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -444,7 +447,10 @@
             "classId": 6340
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Any 5000-level or higher PPUA course"
+        ]
       }
     ]
   }

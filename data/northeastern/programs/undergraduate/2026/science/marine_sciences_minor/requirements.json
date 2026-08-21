@@ -212,7 +212,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Courses offered in Nahant, MA:"
+      ]
     }
   ],
   "gpaRequirements": [

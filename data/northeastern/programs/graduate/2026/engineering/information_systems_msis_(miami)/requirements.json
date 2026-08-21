@@ -62,7 +62,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 28 semester hours from the Electives course list below. A minimum of 16 semester hours must be INFO courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -99,7 +102,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete the following. Students must complete ENCP 6000 to qualify for co-op experience:"
+      ]
     },
     {
       "type": "SECTION",

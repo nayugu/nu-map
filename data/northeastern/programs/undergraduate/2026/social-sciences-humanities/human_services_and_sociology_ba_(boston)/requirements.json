@@ -147,7 +147,10 @@
       "title": "Human Services Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete five additional HUSV courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -171,14 +174,20 @@
       "title": "Introductory Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two electives between SOCL 1200 and SOCL 2999 not used to satisfy other requirements"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Intermediate Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three courses between SOCL 3000 and SOCL 4999 not used to satisfy other requirements."
+      ]
     },
     {
       "type": "SECTION",
@@ -230,7 +239,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one research methods course and one statistics course from the following options"
+      ]
     },
     {
       "type": "SECTION",

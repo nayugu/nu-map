@@ -480,7 +480,10 @@
       "title": "History-Area Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete four HIST courses, approved by a faculty advisor, focused on an idea or geographic area. A minimum of one course must be numbered 2000 to 2999 (Excluding HIST 2301 and HIST 2032). A minimum of one course must be numbered 3000 to 4999 (Excluding HIST 4701)."
+      ]
     },
     {
       "type": "SECTION",

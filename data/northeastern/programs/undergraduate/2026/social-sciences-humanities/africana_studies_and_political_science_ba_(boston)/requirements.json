@@ -371,7 +371,10 @@
       "title": "Political Science Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three POLS courses at the 2000 level and above."
+      ]
     },
     {
       "type": "SECTION",
@@ -445,7 +448,12 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one course from each discipline.",
+        "Africana Studies",
+        "Political Science"
+      ]
     },
     {
       "type": "SECTION",

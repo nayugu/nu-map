@@ -130,7 +130,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Only one non-MISM course may be used as an elective."
+      ]
     }
   ],
   "gpaRequirements": [

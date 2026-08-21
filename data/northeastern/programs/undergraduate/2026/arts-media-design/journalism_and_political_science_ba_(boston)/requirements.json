@@ -129,7 +129,10 @@
           "classId": 3610
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Must receive a C or better in the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -148,7 +151,10 @@
       "title": "Journalism Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Take three JRNL courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -254,7 +260,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Elective courses may also fulfill requirements of an optional concentration of this program."
+      ]
     },
     {
       "type": "SECTION",

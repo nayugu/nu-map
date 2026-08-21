@@ -127,7 +127,10 @@
           ]
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Students enrolled in Northeastern University colleges other than the School of Law should contact a School of Law advisor at lawstudentaffairs@northeastern.edu for guidance on registering for courses from the School of Law."
+      ]
     }
   ],
   "gpaRequirements": [

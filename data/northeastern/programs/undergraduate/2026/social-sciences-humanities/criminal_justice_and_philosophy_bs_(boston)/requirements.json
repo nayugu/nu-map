@@ -114,7 +114,10 @@
           "classId": 1120
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "What do we know about crime and justice? In these three courses, students have an opportunity to develop a foundational understanding of three related phenomena: why crime exists, how our criminal justice system responds to crime, and the constitutional and legal oversight of this process."
+      ]
     },
     {
       "type": "SECTION",
@@ -141,7 +144,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "These courses introduce students to topical issues related to crime and justice."
+      ]
     },
     {
       "type": "SECTION",
@@ -233,7 +239,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The 2000-level courses below ask how justice works and for whom and introduce students to the systems and institutions tasked with providing justice. Each one includes experiential learning components in cooperation with local criminal justice institutions. The 3000-level courses below offer students a deeper look at a range of crime problems."
+      ]
     },
     {
       "type": "SECTION",
@@ -255,7 +264,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "These courses consider systemic issues facing the criminal justice system."
+      ]
     },
     {
       "type": "SECTION",
@@ -272,7 +284,10 @@
           "classId": 3700
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "How do we know what we know about crime and justice—and how do we develop new knowledge? These courses study how to harness data to learn about issues, identify solutions, and advocate for change."
+      ]
     },
     {
       "type": "SECTION",
@@ -300,7 +315,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Co-op students should complete the seminars below. Non–co-op students should complete a 4-semester-hour CRIM elective."
+      ]
     },
     {
       "type": "SECTION",
@@ -312,14 +330,21 @@
           "classId": 4949
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "How do we reinvent criminal justice institutions and their practice? The capstone experience is project based and solution oriented, drawing on knowledge gained in the classroom and through co-op and other experiences."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Criminal Justice Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "These courses round out our knowledge of crime and justice.",
+        "Complete one additional CRIM elective from the 3000, 4000, or 5000 level."
+      ]
     },
     {
       "type": "SECTION",
@@ -363,7 +388,10 @@
       "title": "Advanced Philosophy Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two PHIL courses with a designation of 3000 or above, at least one of which is at the 4000 or 5000 level."
+      ]
     },
     {
       "type": "SECTION",
@@ -427,7 +455,10 @@
       "title": "Philosophy Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one additional PHIL course not used to fulfill other requirements."
+      ]
     },
     {
       "type": "SECTION",

@@ -197,7 +197,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: ECON 5200 is the primary elective offered on the Seattle campus. Consult program for current elective details."
+      ]
     },
     {
       "type": "SECTION",

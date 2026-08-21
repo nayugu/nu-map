@@ -183,7 +183,12 @@
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Introductory Electives",
+        "Intermediate Electives",
+        "Advanced Electives"
+      ]
     },
     {
       "type": "SECTION",
@@ -207,14 +212,20 @@
       "title": "Anthropology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete five ANTH courses not used to satisfy other requirements. One study-abroad course may also count toward this requirement with prior permission from the department."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced Area Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two area courses in the range ANTH 4101 to ANTH 4520 not used to fulfill another requirement. Additional area courses taken beyond these two may be counted as electives."
+      ]
     },
     {
       "type": "SECTION",

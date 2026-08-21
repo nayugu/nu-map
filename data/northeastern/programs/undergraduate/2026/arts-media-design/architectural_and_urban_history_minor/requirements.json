@@ -110,7 +110,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Any course from the ARCH 2300 series, including:"
+      ]
     }
   ],
   "gpaRequirements": [

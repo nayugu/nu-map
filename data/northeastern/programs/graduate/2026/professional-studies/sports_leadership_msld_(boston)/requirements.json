@@ -216,7 +216,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete courses from the 6000 level. Below is a list of courses regularly offered as electives within the Sports Leadership program:"
+      ]
     },
     {
       "type": "SECTION",

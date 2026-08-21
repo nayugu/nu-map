@@ -138,7 +138,11 @@
       "title": "Art + Design Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete 16 Semester Hours of ARTD, ARTE, ARTF, ARTG, ARTH, and GAME courses as long as prerequisites have been met.",
+        "If GAME 4000 Topics in Game Design or ARTD 3000 Topics in Media Arts (or any other topics course in the subjects listed above) is completed more than once, multiple completions may be allowed toward the electives."
+      ]
     },
     {
       "type": "SECTION",
@@ -150,7 +154,10 @@
           "classId": 1119
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "All students can take a music theory placement exam to place out of MUSC 1119. Students who place out of MUSC 1119 will substitute it with a general elective course."
+      ]
     },
     {
       "type": "SECTION",
@@ -425,6 +432,9 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "Note: MUST 1220 is already required in the Music Technology Requirements section."
+      ],
       "shared": true
     },
     {

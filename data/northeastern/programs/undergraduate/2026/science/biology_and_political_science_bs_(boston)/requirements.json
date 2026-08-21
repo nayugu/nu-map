@@ -408,7 +408,13 @@
           ]
         }
       ],
-      "minRequirementCount": 7
+      "minRequirementCount": 7,
+      "notes": [
+        "Mathematics",
+        "Chemistry",
+        "Physics",
+        "Writing"
+      ]
     },
     {
       "type": "SECTION",
@@ -506,7 +512,11 @@
       "title": "Political Science Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Note: You may use four courses from the elective areas to fulfill a concentration.",
+        "Complete five POLS courses at the 2000 level and above."
+      ]
     },
     {
       "type": "SECTION",

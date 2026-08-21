@@ -311,7 +311,11 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete one AFCS course at the 2000 level or above.",
+        "Complete one AFCS course at the 3000 level or above."
+      ]
     },
     {
       "type": "SECTION",

@@ -468,7 +468,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -626,7 +629,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Students may petition for additional science and/or engineering courses to be counted toward the electives if the course content falls within the concentration focus. Students should be aware of any prerequisites for courses and plan appropriately. Students may also petition for independent research to be counted toward the non-CHME engineering elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -730,7 +736,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Students may petition for additional science and/or engineering courses to be counted toward the electives if the course content falls within the concentration focus. Students should be aware of any prerequisites for courses and plan appropriately. Students may also petition for independent research to be counted toward the non-CHME engineering elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -824,7 +833,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Students may petition for additional science and/or engineering courses to be counted toward the electives if the course content falls within the concentration focus. Students should be aware of any prerequisites for courses and plan appropriately. Students may also petition for independent research to be counted toward the non-CHME engineering elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -903,7 +915,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Students may petition for additional science and/or engineering courses to be counted toward the electives if the course content falls within the concentration focus. Students should be aware of any prerequisites for courses and plan appropriately. Students may also petition for independent research to be counted toward the non-CHME engineering elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -1111,7 +1126,12 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 4 semester hours of CHME courses (level 2000+). Coursework may include multiple 1–4-semester-hour courses adding up to a minimum of 4 semester hours.",
+          "Complete one course numbered between 4000 and 5999 in any of the following subject areas:",
+          "BIOE, CHME, CIVE, EECE, ENGR, IE, ME, and MEIE. GE5100 also specifically accepted."
+        ]
       }
     ]
   },

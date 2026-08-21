@@ -238,7 +238,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The following courses are recommended:"
+      ]
     },
     {
       "type": "SECTION",

@@ -87,7 +87,10 @@
           "classId": 6910
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "The following should be the final course:"
+      ]
     },
     {
       "type": "SECTION",

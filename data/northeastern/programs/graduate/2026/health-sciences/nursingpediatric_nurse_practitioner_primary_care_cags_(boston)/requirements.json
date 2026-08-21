@@ -128,7 +128,10 @@
       "title": "Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 2
+      "creditsRequired": 2,
+      "notes": [
+        "Complete 2 semester hours of graduate NRSG coursework."
+      ]
     }
   ],
   "gpaRequirements": [

@@ -136,7 +136,10 @@
           "classId": 6214
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "Complete the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -246,7 +249,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students must complete one course from each of the following specialization areas for a total of three courses:"
+      ]
     },
     {
       "type": "SECTION",

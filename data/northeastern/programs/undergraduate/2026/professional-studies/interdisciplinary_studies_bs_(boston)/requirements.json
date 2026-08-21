@@ -265,7 +265,12 @@
       "title": "Interdisciplinary",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 30
+      "creditsRequired": 30,
+      "notes": [
+        "Self-designed interdisciplinary program created by the student with advisor and faculty, approved by associate dean.",
+        "Include two or three areas of study.",
+        "Complete no more than four 1000-level classes."
+      ]
     },
     {
       "type": "SECTION",
@@ -284,7 +289,10 @@
       "title": "Major Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 18
+      "creditsRequired": 18,
+      "notes": [
+        "Complete 18 semester hours of coursework at or above the 3000 level."
+      ]
     }
   ],
   "gpaRequirements": [

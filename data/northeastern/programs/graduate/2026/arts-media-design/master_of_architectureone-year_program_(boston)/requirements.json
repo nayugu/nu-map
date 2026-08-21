@@ -123,7 +123,10 @@
       "title": "Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Students must complete a 4-semester-hour graduate elective."
+      ]
     }
   ],
   "gpaRequirements": [

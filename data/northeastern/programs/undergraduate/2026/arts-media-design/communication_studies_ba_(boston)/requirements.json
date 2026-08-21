@@ -285,7 +285,10 @@
       "title": "Communication Studies Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete five Communication Studies courses not used to satisfy other requirements."
+      ]
     }
   ]
 }

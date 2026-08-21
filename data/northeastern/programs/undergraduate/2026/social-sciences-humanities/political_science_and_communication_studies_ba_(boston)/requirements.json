@@ -173,7 +173,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Elective courses may also fulfill requirements of an optional concentration of this program."
+      ]
     },
     {
       "type": "SECTION",
@@ -354,7 +357,10 @@
       "title": "Communication Studies Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three courses that have not been used to satisfy other requirements."
+      ]
     },
     {
       "type": "SECTION",

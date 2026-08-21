@@ -89,7 +89,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Students must take at least 20 credits of LAW electives if they took the foundational courses; they must take at least 24 credits of LAW electives if not required to take foundational courses. Courses taken to fulfill concentration requirements count toward the elective requirement."
+      ]
     }
   ],
   "concentrations": {
@@ -222,7 +225,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Students must also complete a paper related to business and/or commercial law. To fulfill this requirement, a paper must satisfy the criteria of the JD rigorous writing requirement."
+        ]
       },
       {
         "type": "SECTION",
@@ -276,7 +282,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Students must also complete a paper related to health law. To fulfill this requirement, a paper must satisfy the criteria of the JD rigorous writing requirement."
+        ]
       },
       {
         "type": "SECTION",
@@ -425,7 +434,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Students must also complete a paper related to human rights and/or economic development. To fulfill this requirement, a paper must satisfy the criteria of the JD rigorous writing requirement."
+        ]
       },
       {
         "type": "SECTION",
@@ -544,7 +556,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Students must also complete a clinic or paper related to intellectual property and innovation. To fulfill this requirement, a paper must satisfy the criteria of the JD rigorous writing requirement. A clinic that counts toward the four-course requirement may not be used to also satisfy this requirement."
+        ]
       }
     ]
   }

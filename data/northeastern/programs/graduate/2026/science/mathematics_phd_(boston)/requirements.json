@@ -86,7 +86,10 @@
       "title": "Advanced Coursework",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 32
+      "creditsRequired": 32,
+      "notes": [
+        "Complete 32 semester hours from the advanced coursework list. Only two readings and three topics courses are allowed."
+      ]
     },
     {
       "type": "SECTION",
@@ -261,7 +264,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Only three topics courses are allowed."
+      ]
     },
     {
       "type": "SECTION",
@@ -303,7 +309,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Only two readings courses are allowed."
+      ]
     }
   ],
   "gpaRequirements": [

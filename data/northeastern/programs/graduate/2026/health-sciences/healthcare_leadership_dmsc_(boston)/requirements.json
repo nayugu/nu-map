@@ -114,7 +114,10 @@
           ]
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "Registration in the following course is required if the thesis is not completed by the conclusion of the term of registration for MSCI 7990:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -918,7 +921,12 @@
             ]
           }
         ],
-        "minRequirementCount": 9
+        "minRequirementCount": 9,
+        "notes": [
+          "Complete a minimum of 12 semester hours from the following:",
+          "LW 6102 is a prerequisite for the following LW courses:",
+          "HLTH 5600 is a concurrent prerequisite for the following HLTH courses:"
+        ]
       },
       {
         "type": "SECTION",

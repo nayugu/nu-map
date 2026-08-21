@@ -144,7 +144,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "If preapproved to specialize in nanomedicine or network science, consult program director."
+      ]
     },
     {
       "type": "SECTION",
@@ -285,7 +288,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Taken third year and beyond.",
+        "Complete the following (repeatable) course until graduation:"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -84,7 +84,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three SOCL courses, at least one course must be from the 3000 level or above."
+      ]
     }
   ],
   "gpaRequirements": [

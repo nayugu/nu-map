@@ -92,7 +92,10 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three ENGL courses, two of which must be in the range ENGL 2000 to ENGL 4999."
+      ]
     }
   ],
   "gpaRequirements": [

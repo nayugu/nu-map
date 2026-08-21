@@ -230,7 +230,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students register for this course while writing each of their two field statements. Must take twice:"
+      ]
     },
     {
       "type": "SECTION",
@@ -286,7 +289,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Following completion of two semesters of dissertation, registration in the following class is required in each semester (including the summer if the dissertation is submitted in summer) until the dissertation is completed:"
+      ]
     }
   ],
   "gpaRequirements": [

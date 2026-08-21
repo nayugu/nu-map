@@ -189,7 +189,10 @@
       "title": "Architecture History Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Choose any course in the range of ARCH 2300 to ARCH 2399."
+      ]
     },
     {
       "type": "SECTION",
@@ -381,7 +384,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete six of the following elective courses. At least four courses must be taken in the School of Architecture. At least two must be above the 2000 level:",
+        "Any ARCH or LARC course"
+      ]
     },
     {
       "type": "SECTION",
@@ -413,7 +420,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "If students wish to be eligible for the two-year Master of Architecture program at Northeastern, they should take the four courses listed here. ARCH 2240 and 5230 may count as electives toward the major:"
+      ]
     }
   ]
 }

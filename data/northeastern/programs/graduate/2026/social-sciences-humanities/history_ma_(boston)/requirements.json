@@ -52,7 +52,10 @@
           "classId": 5101
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "A grade of B or higher is required."
+      ]
     },
     {
       "type": "SECTION",
@@ -92,7 +95,10 @@
           "classId": 5102
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "A grade of B or higher is required."
+      ]
     },
     {
       "type": "SECTION",

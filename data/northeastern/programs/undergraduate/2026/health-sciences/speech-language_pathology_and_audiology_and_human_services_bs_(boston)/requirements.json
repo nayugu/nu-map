@@ -177,7 +177,10 @@
           "classId": 6219
         }
       ],
-      "minRequirementCount": 10
+      "minRequirementCount": 10,
+      "notes": [
+        "All courses in this section must be completed with a C or better."
+      ]
     },
     {
       "type": "SECTION",
@@ -236,7 +239,10 @@
       "title": "Human Services Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours in the HUSV subject code."
+      ]
     },
     {
       "type": "SECTION",
@@ -331,7 +337,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete Option 1 or Option 2 in consultation with advisor:",
+        "In addition to the two courses selected above, complete a minimum of 4 semester hours of additional elective coursework from the HUSV subject code."
+      ]
     },
     {
       "type": "SECTION",

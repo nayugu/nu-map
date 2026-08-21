@@ -129,7 +129,10 @@
           "classId": 1290
         }
       ],
-      "minRequirementCount": 8
+      "minRequirementCount": 8,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ]
 }

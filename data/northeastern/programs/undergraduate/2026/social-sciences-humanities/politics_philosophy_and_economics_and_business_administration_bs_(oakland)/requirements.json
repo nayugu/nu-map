@@ -384,7 +384,14 @@
           ]
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "Co-op Preparation Requirement",
+        "Economics Requirement",
+        "First-Year Seminar",
+        "Mathematics Requirement",
+        "Statistics Requirement"
+      ]
     },
     {
       "type": "SECTION",
@@ -485,7 +492,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one cooperative education experience:"
+      ]
     }
   ],
   "concentrations": {
@@ -613,7 +623,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       },
       {
         "type": "SECTION",
@@ -1170,7 +1184,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Additional Electives",
+          "One course from an approved Dialogue may count toward an elective."
+        ]
       }
     ]
   }

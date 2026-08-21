@@ -133,7 +133,12 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 36
+      "creditsRequired": 36,
+      "notes": [
+        "In consultation with advisor, complete 36 graduate-level semester hours for which prerequisites have been met. Choose from the following subject codes:",
+        "ACCT, BUSN, ENTR, FINA, HRMG, INNO, INTB, MECN, MGMT, MISM, MKTG, SCHM, and STRT",
+        "No more than 4 semester hours can be drawn from 1-semester-hour courses."
+      ]
     }
   ],
   "gpaRequirements": [

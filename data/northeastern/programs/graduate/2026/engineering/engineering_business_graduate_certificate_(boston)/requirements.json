@@ -515,7 +515,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four courses from at least three of the following categories. A maximum of one course offered by a college outside the College of Engineering may be applied to this requirement:"
+      ]
     }
   ],
   "gpaRequirements": [

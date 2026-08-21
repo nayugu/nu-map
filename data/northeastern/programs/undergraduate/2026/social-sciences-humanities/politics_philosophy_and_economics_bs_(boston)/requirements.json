@@ -168,7 +168,12 @@
           ]
         }
       ],
-      "minRequirementCount": 9
+      "minRequirementCount": 9,
+      "notes": [
+        "Philosophy",
+        "Political Science",
+        "Economics"
+      ]
     },
     {
       "type": "SECTION",
@@ -1203,7 +1208,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "*Students may take courses from the required list as an elective if not taken as a required course."
+        ]
       }
     ]
   }

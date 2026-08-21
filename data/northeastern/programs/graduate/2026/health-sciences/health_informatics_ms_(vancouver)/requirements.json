@@ -261,7 +261,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "One course from the following may count toward the technical core requirement:"
+      ]
     },
     {
       "type": "SECTION",

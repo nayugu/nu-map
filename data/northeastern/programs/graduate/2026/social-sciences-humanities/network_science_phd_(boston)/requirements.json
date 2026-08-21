@@ -114,14 +114,21 @@
           "classId": 7335
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "Students must complete all 20 semester hours of the core courses listed below, unless the program director approves changes to the student's course plan:"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete 20 semester hours from the following elective course options.",
+        "The student's elective course plan should be discussed with, and approved by, their advisor. Students who seek to apply courses not on this list to fulfill program requirements must obtain written approval from their advisor and the program director. Elective options below are organized by domain areas. Students may take courses from one or more domain areas."
+      ]
     },
     {
       "type": "SECTION",
@@ -451,7 +458,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students should register for NETS 8986 after passing the qualifying exam and before completing the comprehensive exam (proposal defense):"
+      ]
     },
     {
       "type": "SECTION",
@@ -473,7 +483,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "After passing the comprehensive exam (reaching candidacy), students should register for NETS 9990 and NETS 9991, successively:"
+      ]
     },
     {
       "type": "SECTION",
@@ -490,7 +503,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "After completing both NETS 9990 and NETS 9991, students should register for NETS 9996 each semester until graduation:"
+      ]
     }
   ],
   "gpaRequirements": [

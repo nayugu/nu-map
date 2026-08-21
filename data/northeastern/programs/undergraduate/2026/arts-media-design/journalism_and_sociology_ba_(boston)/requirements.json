@@ -124,7 +124,10 @@
           "classId": 2201
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "C or better required in JRNL 1101, JRNL 1102, and JRNL 2201:"
+      ]
     },
     {
       "type": "SECTION",
@@ -200,7 +203,10 @@
       "title": "Journalism Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Complete four JRNL courses (two must be 3000-level or above)."
+      ]
     },
     {
       "type": "SECTION",
@@ -254,14 +260,22 @@
       "title": "Sociology Elective A",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses from the following range not used to satisfy other requirements:",
+        "SOCL 1100 to SOCL 2999"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Sociology Elective B",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses from the following range not used to satisfy other requirements:",
+        "SOCL 3000 to SOCL 5999"
+      ]
     },
     {
       "type": "SECTION",

@@ -72,7 +72,10 @@
       "title": "Required Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "Complete five HIST courses, of which two must be completed at Northeastern and must be within the HIST 2000-5999 range."
+      ]
     }
   ],
   "gpaRequirements": [

@@ -156,7 +156,10 @@
       "title": "Introductory Level",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Choose one course from the 1000 level except HIST 1215, which is required by Asian studies."
+      ]
     },
     {
       "type": "SECTION",
@@ -218,7 +221,10 @@
       "title": "Advanced History",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one history course 3000 level or above."
+      ]
     },
     {
       "type": "SECTION",
@@ -257,7 +263,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a professional or academic experience abroad in consultation with your advisor."
+      ]
     },
     {
       "type": "SECTION",
@@ -330,7 +339,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Chinese",
+        "Japanese"
+      ]
     },
     {
       "type": "SECTION",
@@ -408,7 +421,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Society and Politics Focus Area",
+        "Language, Literature, and Culture Focus Area",
+        "Religious Studies Focus Area"
+      ]
     },
     {
       "type": "SECTION",

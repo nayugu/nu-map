@@ -132,7 +132,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Elementary-level-two courses have prerequisites. Click on the course number below for details."
+        ]
       },
       {
         "type": "SECTION",

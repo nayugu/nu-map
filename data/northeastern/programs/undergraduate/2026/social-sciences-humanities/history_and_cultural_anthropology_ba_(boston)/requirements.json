@@ -225,28 +225,40 @@
       "title": "History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two HIST courses at any level in any field."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Introductory Level Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one history course from the 1000 level."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Intermediate/Advanced History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum of one HIST course numbered 2000 to 2999 (excluding HIST 2301 and HIST 2302)."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Advanced History Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete minimum of one HIST course numbered 3000 to 4999 (excluding HIST 4701)."
+      ]
     },
     {
       "type": "SECTION",
@@ -280,14 +292,20 @@
       "title": "Area Courses",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two area courses in the range ANTH 4101-ANTH 4520 not used to fulfill other requirements. One study abroad course may be substituted for an area studies course with prior permission from the department."
+      ]
     },
     {
       "type": "SECTION",
       "title": "Anthropology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three courses in the following range not used to satisfy other requirements (ANTH 2000-ANTH 4999). One study-abroad course may count toward this requirement."
+      ]
     },
     {
       "type": "SECTION",
@@ -331,7 +349,10 @@
           "classId": 2360
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Anthropology area studies courses: choose any area studies course between ANTH 4101-ANTH 4520 not used to fulfill other requirements."
+      ]
     }
   ]
 }

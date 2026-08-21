@@ -238,7 +238,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Physics 1",
+        "Physics 2"
+      ]
     },
     {
       "type": "SECTION",
@@ -356,7 +360,10 @@
           "classId": 4996
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: The experiential learning requirement is waived following a student presentation connected with a co-op and/or research experience. The requirement is often fulfilled by a talk at a Society of Physics Students meeting but can be fulfilled by an adequately documented presentation at a professional meeting or at an appropriate campus event. Contact your faculty advisor for additional information."
+      ]
     },
     {
       "type": "SECTION",

@@ -154,7 +154,10 @@
           "classId": 7100
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete this repeatable course each semester of the program:"
+      ]
     },
     {
       "type": "SECTION",
@@ -166,14 +169,20 @@
           "classId": 9984
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following variable-credit course twice (register at 3 semester hours for the first lab rotation and at 2 semester hours for the second lab rotation):"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete 12 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -330,7 +339,10 @@
       "title": "Electives (2)",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",

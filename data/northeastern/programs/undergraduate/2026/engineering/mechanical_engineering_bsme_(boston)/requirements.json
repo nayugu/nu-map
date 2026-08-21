@@ -277,7 +277,11 @@
       "title": "Mechanical and Industrial Engineering Technical Elective",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 4
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one technical elective in one of the following subject areas:",
+        "EMGT, ENGR, ENSY, IE, ME, or MEIE"
+      ]
     },
     {
       "type": "SECTION",
@@ -561,7 +565,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required in each course:"
+      ]
     }
   ],
   "gpaRequirements": [

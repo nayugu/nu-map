@@ -67,7 +67,10 @@
       "title": "Core Requirements",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 50
+      "creditsRequired": 50,
+      "notes": [
+        "Complete 50 semester hours of approved coursework. Consult your faculty adviser for acceptable courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -89,7 +92,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (repeatable) course twice:"
+      ]
     }
   ],
   "gpaRequirements": [

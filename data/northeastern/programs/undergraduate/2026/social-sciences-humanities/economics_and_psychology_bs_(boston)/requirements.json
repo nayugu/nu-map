@@ -205,7 +205,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "ECON 4692 or ECON 4997 (Capstone may be taken as an elective.)",
+        "Unless otherwise noted in specific combined majors, required core economics courses cannot be counted as electives by students completing Department of Economics programs."
+      ]
     },
     {
       "type": "SECTION",
@@ -380,7 +384,10 @@
       "title": "Psychology Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three PSYC courses not used to fulfill requirements above."
+      ]
     },
     {
       "type": "SECTION",
@@ -565,14 +572,24 @@
       "title": "NUpath Not Fulfilled by Major",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 20
+      "creditsRequired": 20,
+      "notes": [
+        "NUPath EI—Expression and Innovation",
+        "NUPath IC—Interpreting Culture",
+        "NUPath DD—Difference and Diversity",
+        "NUPath ER— Ethical Reasoning",
+        "NUPath WD—Advanced Writing in the Discipline"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Open Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three open electives."
+      ]
     }
   ],
   "gpaRequirements": [

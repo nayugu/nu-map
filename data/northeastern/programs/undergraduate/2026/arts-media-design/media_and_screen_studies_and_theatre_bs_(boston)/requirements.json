@@ -250,7 +250,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Any course from the MSCR 1200 to MSCR 4999 range"
+      ]
     },
     {
       "type": "SECTION",
@@ -282,7 +285,10 @@
           "classId": 1270
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "The following courses are recommended to be taken by the end of the fourth semester (third semester for transfer students):"
+      ]
     },
     {
       "type": "SECTION",
@@ -585,7 +591,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Required:"
+      ]
     }
   ]
 }

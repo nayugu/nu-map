@@ -82,7 +82,10 @@
           "classId": 1119
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "All students can take a music theory placement exam to place out of MUSC 1119. Students who place out of MUSC 1119 will substitute it with a general elective course."
+      ]
     },
     {
       "type": "SECTION",
@@ -402,7 +405,15 @@
           ]
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "Complete one from each of these categories: western art music, global music/ethnomusicology, contemporary/popular music, and creative. Of the courses from western art music, global music/ethnomusicology, contemporary/popular music, at least two must be at the 2000 level or higher. Courses may not double count across these areas. Many, but not all, music in context courses at the 2000 level or higher fulfill the writing-intensive in the discipline requirement. Please check writing-intensive status of courses as needed.",
+        "Introductory Class",
+        "Western Art Music",
+        "Global Music/Ethnomusicology",
+        "Contemporary/Popular Music",
+        "Music Industry"
+      ]
     },
     {
       "type": "SECTION",

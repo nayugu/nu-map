@@ -175,7 +175,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "College of Science Skills Course List",
+        "College of Social Sciences and Humanities Skills Course List"
+      ]
     },
     {
       "type": "SECTION",

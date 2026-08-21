@@ -838,6 +838,9 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "Students who want to participate in co-op will need to complete EESC 2000 Professional Development for Co-op."
+      ],
       "shared": true
     }
   ]

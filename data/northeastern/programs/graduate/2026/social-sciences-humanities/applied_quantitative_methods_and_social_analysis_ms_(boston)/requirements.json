@@ -80,7 +80,12 @@
       "title": "Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete 12 semester hours from the following:",
+        "Concentration courses may not be double counted as elective courses.",
+        "CRIM, ECON, INSH, POLS, PPUA, and/or SOCL at the 5000 level or higher"
+      ]
     },
     {
       "type": "SECTION",

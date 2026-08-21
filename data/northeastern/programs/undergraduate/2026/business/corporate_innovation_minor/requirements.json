@@ -275,7 +275,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Additional Electives",
+        "One course from an approved Dialogue may count toward an elective."
+      ]
     }
   ],
   "gpaRequirements": [

@@ -152,7 +152,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: Elective courses may also fulfill requirements of an optional concentration of this program."
+      ]
     },
     {
       "type": "SECTION",
@@ -245,7 +248,10 @@
       "title": "Human Services Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three HUSV courses."
+      ]
     },
     {
       "type": "SECTION",
@@ -335,7 +341,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Option A",
+        "Complete POLS 4701 or POLS 4703 and complete one additional human services course that has not been used in previous requirements:",
+        "Option B",
+        "Complete HUSV 4700 and complete one additional political science course numbered 2300 or higher that has not been used in previous requirements:"
+      ]
     }
   ],
   "concentrations": {

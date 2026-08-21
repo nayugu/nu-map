@@ -290,7 +290,11 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Pre-1850",
+        "Post-1850"
+      ]
     },
     {
       "type": "SECTION",
@@ -478,7 +482,10 @@
       "title": "English Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 8
+      "creditsRequired": 8,
+      "notes": [
+        "Complete any two ENGL courses that have not already been used to fulfill another requirement."
+      ]
     },
     {
       "type": "SECTION",
@@ -671,7 +678,10 @@
       "title": "Communication Studies Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 12
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three COMM courses that have not been used to satisfy other requirements ."
+      ]
     },
     {
       "type": "SECTION",

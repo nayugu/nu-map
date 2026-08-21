@@ -109,7 +109,10 @@
           "classId": 1120
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "What do we know about crime and justice? In these three courses successful students will develop a foundational understanding of three related phenomena: why crime exists, how our criminal justice system responds to crime, and the constitutional and legal oversight of this process."
+      ]
     },
     {
       "type": "SECTION",
@@ -141,7 +144,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "These courses introduce students to topical issues related to crime and justice."
+      ]
     },
     {
       "type": "SECTION",
@@ -183,7 +189,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Successful students develop digital skills and master digital tools useful for careers related to crime and justice. Students choose one of two courses (each has a required lab). The computer science course introduces students to spreadsheets and databases. The data science course introduces students to programming with data."
+      ]
     },
     {
       "type": "SECTION",
@@ -231,7 +240,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "How does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions."
+      ]
     },
     {
       "type": "SECTION",
@@ -243,7 +255,10 @@
           "classId": 2000
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The following course is designed to prepare students to apply for and embark on their first co-op. Students who do not take a co-op may replace EESH 2000, CRIM 3000, and CRIM 4000 with an additional CRIM elective."
+      ]
     },
     {
       "type": "SECTION",
@@ -260,7 +275,10 @@
           "classId": 3700
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "How do we know what we know about crime and justice—and how do we develop new knowledge? Harnessing data to learn about issues, identify solutions, and advocate for change."
+      ]
     },
     {
       "type": "SECTION",
@@ -317,7 +335,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The following courses offer students a deeper look at a range of crime problems."
+      ]
     },
     {
       "type": "SECTION",
@@ -344,7 +365,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "A consideration of systemic issues facing the criminal justice system."
+      ]
     },
     {
       "type": "SECTION",
@@ -356,7 +380,10 @@
           "classId": 3000
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Allows students the opportunity to reflect on their co-op experience and its connection to their ongoing coursework and future plans:"
+      ]
     },
     {
       "type": "SECTION",
@@ -368,7 +395,10 @@
           "classId": 4949
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "How do we reinvent criminal justice institutions and their practice? The capstone experience is project based and solution oriented, drawing on knowledge gained in the classroom and through co-op and other experiences."
+      ]
     },
     {
       "type": "SECTION",
@@ -395,7 +425,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Opportunities for student research (optional):"
+      ]
     },
     {
       "type": "SECTION",
@@ -407,14 +440,21 @@
           "classId": 4000
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Allows students the opportunity to reflect on their co-op experience and its connection to their ongoing coursework and future plans:"
+      ]
     },
     {
       "type": "SECTION",
       "title": "Criminal Justice Electives",
       "requirements": [],
       "minRequirementCount": 1,
-      "creditsRequired": 16
+      "creditsRequired": 16,
+      "notes": [
+        "Rounding out knowledge of crime and justice.",
+        "Complete four additional CRIM electives. Three must be from the 3000, 4000, or 5000-level."
+      ]
     }
   ]
 }

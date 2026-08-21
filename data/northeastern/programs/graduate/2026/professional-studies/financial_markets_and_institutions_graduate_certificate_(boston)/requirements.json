@@ -82,7 +82,10 @@
           "classId": 6995
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "Complete four quarter hours of the course below:"
+      ]
     }
   ],
   "gpaRequirements": [
