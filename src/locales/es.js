@@ -569,6 +569,7 @@ export const strings = {
   "grad.fromPool": "{sat}/{req} SH de un grupo de optativas",
   "grad.oneOf": "Uno de ({count}/{total})",
   "grad.requiresOutOf": "Requiere {count} de {total}",
+  "grad.fromCatalog": "Del catálogo",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "Sin título",

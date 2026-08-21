@@ -234,6 +234,7 @@ export function checkSection(section, placedSet, courseMap) {
     type: 'SECTION',
     title: section.title ?? '',
     warnings: section.warnings ?? [],
+    notes: section.notes ?? [],
     sat: satCount >= section.minRequirementCount,
     satCount,
     minRequired: section.minRequirementCount,
@@ -347,6 +348,11 @@ function mergeDuplicateSections(sections) {
         existing.minRequirementCount ?? 0,
         section.minRequirementCount ?? 0
       );
+      // Notes are unioned, not replaced: the two tables being merged are two
+      // halves of one requirement and each half may carry its own condition.
+      for (const n of section.notes ?? []) {
+        if (!(existing.notes ?? []).includes(n)) existing.notes = [...(existing.notes ?? []), n];
+      }
     } else {
       if (title) seen.set(title, result.length);
       result.push({ ...section, requirements: [...(section.requirements ?? [])] });
@@ -834,6 +840,13 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
     type: 'SECTION',
     title: normalized.title ?? '',
     warnings: normalized.warnings ?? [],
+    // The catalog's own sentences that the parse could not express as nodes.
+    // Carried through the allocation untouched: a note states a condition
+    // (`Research courses may not be used…`), and this layer must never act on
+    // one — it cannot check it, so acting would mean guessing. It travels so
+    // that whoever renders the section can show the student what the registrar
+    // actually wrote next to the boxes we can tick.
+    notes: normalized.notes ?? [],
     sat,
     satCount,
     minRequired: normalized.minRequirementCount,

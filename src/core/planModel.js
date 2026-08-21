@@ -331,6 +331,14 @@ function sectionHtml(sec, doneKeys) {
 
   const warnHtml = (sec.warnings ?? []).map(w =>
     `<div class="sec-warn">⚠ ${esc(w)}</div>`).join("");
+  // Catalog prose the parse could not express. English literal like the rest of
+  // the export (PDF export is English-only by design), and here that is not even
+  // a compromise: the sentence itself is the catalog's English.
+  const catalogHtml = (sec.notes ?? []).length
+    ? `<div class="sec-cat"><div class="sec-cat-h">From the catalog</div>`
+      + sec.notes.map(n => `<div class="sec-cat-n">${esc(n)}</div>`).join("")
+      + `</div>`
+    : "";
   const noteHtml = isPoolStructure && sec.minRequired > 0
     ? `<div class="sec-note">Requires ${esc(sec.minRequired)} of ${esc(sec.total)}</div>` : "";
   const secStatus = sec.sat ? (() => {
@@ -348,6 +356,7 @@ function sectionHtml(sec, doneKeys) {
     </div>
     ${barHtml}
     ${warnHtml}
+    ${catalogHtml}
     <div class="sec-body">
       ${sec.children.map(r => reqNodeHtml(r, doneKeys, 0, isPoolStructure && !r.sat && sec.satCount >= sec.minRequired)).join("")}
       ${noteHtml}
@@ -800,6 +809,10 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
                  border-left: 2px solid #f59e0b; margin: 2px 0; }
   .sec-body    { padding: 5px 4px 4px; }
   .sec-note    { font-size: 9px; color: #999; font-style: italic; padding: 2px 4px; }
+  .sec-cat     { padding: 3px 8px; border-left: 2px solid #d4d4d4; margin: 2px 0; }
+  .sec-cat-h   { font-size: 7px; font-weight: 700; letter-spacing: .4px;
+                 text-transform: uppercase; color: #a3a3a3; }
+  .sec-cat-n   { font-size: 9px; color: #525252; line-height: 1.35; }
 
   /* Req course rows */
   .rc        { display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }

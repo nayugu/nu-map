@@ -154,7 +154,43 @@ if (argv.includes('--parse')) {
 const files = readdirSync(CACHE_DIR).filter(f => f.endsWith('.html'));
 const records = [];
 
-for (const file of files) {
+/**
+ * --sections: the unit of analysis becomes the SECTION the parser PRODUCES
+ * rather than the markup group it reads. Same four modes, same `g` binding.
+ *
+ * The markup view answers "what does the catalog say"; this one answers "what
+ * did we make of it", which is the other half of every parser question and the
+ * half that used to need a full scraper run to see. `g.notes` here is the
+ * section's residual prose — the sentences the parse did not express — so
+ *
+ *   node scripts/catalog-probe.js --sections --tally 'g.notes.length'
+ *
+ * is the coverage measurement for change 2.
+ */
+const SECTIONS = argv.includes('--sections');
+if (SECTIONS) {
+  for (const file of files) {
+    if (file.includes('archive_')) continue;
+    const html = readFileSync(`${CACHE_DIR}/${file}`, 'utf8');
+    if (!html.includes('sc_courselist')) continue;
+    let root;
+    try { root = parseHTML(html); } catch { continue; }
+    const page = norm(root.querySelector('h1')?.text) || file;
+    const profile = file.includes('_graduate_') ? GRAD_PROFILE : UNDERGRAD_PROFILE;
+    let out;
+    try { out = parseRequirements(root, profile, {}); } catch { continue; }
+    const push = (s, conc) => records.push({
+      page, file, pane: conc ? 'concentration' : 'section', table: 0,
+      section: s.title ?? '', hours: s.creditsRequired ?? 0,
+      reqs: (s.requirements ?? []).length, min: s.minRequirementCount ?? 0,
+      notes: s.notes ?? [], conc: !!conc, rows: [],
+    });
+    for (const s of out.requirementSections ?? []) push(s, false);
+    for (const c of out.concentrations?.concentrationOptions ?? []) push(c, true);
+  }
+}
+
+if (!SECTIONS) for (const file of files) {
   const html = readFileSync(`${CACHE_DIR}/${file}`, 'utf8');
   if (!html.includes('sc_courselist')) continue;
   let root;
@@ -204,7 +240,12 @@ if (MODE === 'count') {
 } else {
   for (const g of matched.slice(0, LIMIT)) {
     console.log(`\n── ${g.page}  [${g.pane} #${g.table}]\n   § ${g.section}${g.hours ? `  (${g.hours} SH)` : ''}`);
-    for (const r of g.rows) console.log(`     ${r.cls.padEnd(24)} | ${r.code.padEnd(22)} | ${r.title}${r.hours ? `  [${r.hours}]` : ''}`);
+    if (SECTIONS) {
+      console.log(`     ${g.reqs} requirement${g.reqs === 1 ? '' : 's'}, min ${g.min}`);
+      for (const n of g.notes) console.log(`     note: ${n}`);
+    } else {
+      for (const r of g.rows) console.log(`     ${r.cls.padEnd(24)} | ${r.code.padEnd(22)} | ${r.title}${r.hours ? `  [${r.hours}]` : ''}`);
+    }
   }
-  console.log(`\n${matched.length} groups matched${matched.length > LIMIT ? ` (showing ${LIMIT}; --limit N for more)` : ''}`);
+  console.log(`\n${matched.length} ${SECTIONS ? 'sections' : 'groups'} matched${matched.length > LIMIT ? ` (showing ${LIMIT}; --limit N for more)` : ''}`);
 }

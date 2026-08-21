@@ -568,6 +568,7 @@ export const strings = {
   "grad.fromPool": "{sat}/{req} SH من مجموعة اختيارية",
   "grad.oneOf": "واحد من ({count}/{total})",
   "grad.requiresOutOf": "يتطلب {count} من {total}",
+  "grad.fromCatalog": "من دليل المقررات",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "بدون عنوان",

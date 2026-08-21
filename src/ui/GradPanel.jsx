@@ -850,6 +850,25 @@ function SectionBlock({ sec, defaultOpen = true }) {
               ⚠ {w}
             </div>
           ))}
+          {/* The catalog's own sentences that no box below expresses — quoted,
+              never paraphrased or translated, and visibly attributed so they
+              cannot be mistaken for one of our own claims. Some sections state
+              their whole requirement this way ("Complete one of the following
+              minors…" and the list of them), so this is the only description
+              of the requirement the student gets. */}
+          {sec.notes?.length > 0 && (
+            <div style={{ marginBottom: ph ? 3 : 5, paddingLeft: 4, borderLeft: "2px solid var(--border-2)" }}>
+              <div style={{ fontSize: ph ? 7 : 8, fontWeight: 700, letterSpacing: 0.4,
+                            color: "var(--text-5)", textTransform: "uppercase" }}>
+                {t("grad.fromCatalog")}
+              </div>
+              {sec.notes.map((n, i) => (
+                <div key={i} style={{ fontSize: ph ? 8 : 9, color: "var(--text-3)", lineHeight: 1.35 }}>
+                  {n}
+                </div>
+              ))}
+            </div>
+          )}
           {sec.children.map((r, i) => (
             <ReqNode key={i} r={r} dimmed={isPoolStructure && !r.sat && sec.satCount >= sec.minRequired} />
           ))}

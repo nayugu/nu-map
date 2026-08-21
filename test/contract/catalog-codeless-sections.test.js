@@ -258,7 +258,18 @@ test('a NEGATED subject list is never turned into a pool', () => {
 
   assert.ok(s, 'the section must still be visible');
   assert.deepEqual(s.requirements, [], 'but it must name no courses');
-  assert.equal(JSON.stringify(s).includes('ARCH'), false, 'ARCH must not appear as a requirement');
+  // The subject must not appear as a REQUIREMENT. It does now appear in the
+  // section's notes, and that is the point of them: the negated sentence is
+  // quoted whole, so the reader learns ARCH is excluded — the opposite of what
+  // a RANGE ARCH node would have said. This assertion used to be
+  // `JSON.stringify(s).includes('ARCH') === false`, a proxy that could not tell
+  // "required" from "mentioned" and would have failed on the correct output.
+  assert.equal(JSON.stringify(s.requirements).includes('ARCH'), false,
+    'ARCH must not appear as a requirement');
+  assert.deepEqual(s.notes, [
+    'Complete 8–16 semester hours (5000 level or above) from outside the following subject area:',
+    'ARCH',
+  ], 'and the sentence that excludes it must be quoted verbatim');
 });
 
 test('an exclusion list is never turned into a pool', () => {

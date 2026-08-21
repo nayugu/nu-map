@@ -569,6 +569,7 @@ export const strings = {
   "grad.fromPool":          "선택 과목 풀에서 {sat}/{req} SH",
   "grad.oneOf":             "하나 선택 ({count}/{total})",
   "grad.requiresOutOf":     "{total} 중 {count} 필요",
+  "grad.fromCatalog":       "요람 원문",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "제목 없음",

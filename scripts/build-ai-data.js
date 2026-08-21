@@ -161,6 +161,14 @@ for (const src of allSrcs) {
     app: ORIGIN,
     generatedAt,
     disclaimer: DISCLAIMER,
+    // Two fields of the tree carry a meaning a reader cannot guess from the
+    // name, and guessing either one wrong produces a confidently wrong answer
+    // about somebody's degree — so they are documented here rather than left to
+    // inference, the same reason the course payloads carry a legend.
+    legend: {
+      notes: "Sentences quoted verbatim from the catalog page that state a condition we could NOT express as structure — exclusions (\"Research courses may not be used\"), eligibility lists, per-course grade minimums. A section can consist of nothing but these. Quote them; never infer from them that a particular course does or does not satisfy the section.",
+      creditsRequired: "Semester hours the catalog states for a section whose courses it does not list. Do not add these into a program total: some restate credit that another section already counts.",
+    },
     requirements,
   };
   writeJSON(rel, payload);
@@ -695,6 +703,11 @@ const PAGE_CSS =
   + "th{text-align:left;background:#f8fafc}th,td{padding:6px 10px;border-bottom:1px solid #e2e8f0;vertical-align:top}"
   + ".chips{margin:.4em 0}.chips span{display:inline-block;background:#f1f5f9;border-radius:999px;padding:2px 12px;margin:2px 4px 2px 0;font-size:.85rem;color:#334155}"
   + ".muted{color:#64748b;font-size:.88rem}"
+  // Quoted catalog prose: indented rule, not a colour, so it reads as a
+  // quotation rather than a warning. The words are the registrar's, not ours.
+  + "blockquote.cat{margin:.5em 0;padding:.1em 0 .1em 12px;border-left:3px solid #e2e8f0}"
+  + "blockquote.cat p{margin:.25em 0}"
+  + "blockquote.cat p.muted{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}"
   // The disclaimer's link inherits the paragraph's colour instead of taking the
   // site red. It exists to give 13,000 internal links some anchor text; a red
   // word mid-sentence would pull the eye to a link nobody needs to click, and
@@ -946,7 +959,23 @@ const sectionInner = (s) => {
   const reqs = s.requirements ?? [];
   const note = s.minRequirementCount != null && s.minRequirementCount < reqs.length
     ? `<p class="muted">Complete ${s.minRequirementCount} of the following:</p>` : "";
-  return `${note}<ul class="req">${reqs.map(renderNode).join("")}</ul>`;
+  // A section can state a credit demand and name no course at all (ME BSME's
+  // technical elective). The number is the registrar's, so it prints even with
+  // an empty tree — otherwise the section renders as a bare heading and reads
+  // like a requirement with nothing in it.
+  const sh = s.creditsRequired && !reqs.length
+    ? `<p>${s.creditsRequired} semester hours.</p>` : "";
+  // The catalog's own sentences that the parse could not express as nodes,
+  // verbatim and attributed. This is a data surface for models as much as
+  // people, so the exclusions and eligibility lists that live only in prose
+  // ("Research courses may not be used…") have to be readable here too — a
+  // model answering from the tree alone would confidently omit them.
+  const cat = (s.notes ?? []).length
+    ? `<blockquote class="cat"><p class="muted">From the catalog</p>`
+      + s.notes.map((n) => `<p>${escapeHtml(n)}</p>`).join("")
+      + `</blockquote>`
+    : "";
+  return `${sh}${cat}${note}<ul class="req">${reqs.map(renderNode).join("")}</ul>`;
 };
 const prettyWords = (s) => String(s ?? "").replace(/[-_]+/g, " ").replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
 const renderProgram = (p) => {

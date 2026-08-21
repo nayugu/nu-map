@@ -570,6 +570,7 @@ export const strings = {
   "grad.fromPool": "選択科目プールから {sat}/{req} SH",
   "grad.oneOf": "いずれか一つ ({count}/{total})",
   "grad.requiresOutOf": "{total} のうち {count} 必須",
+  "grad.fromCatalog": "カタログより",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "タイトルなし",

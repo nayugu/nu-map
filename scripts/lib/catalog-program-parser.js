@@ -231,6 +231,7 @@ function parseSubjectPool(rows, profile) {
     // follows immediately, but "(Note: see faculty advisor …)" sits between
     // them on the Personal Health Informatics PhD page.
     let subjects = null;
+    let subjectRow = null;
     for (let j = i + 1; j < rows.length; j++) {
       const cell = rows[j].querySelector('td[colspan="2"] span.courselistcomment');
       const t = cell?.text?.replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
@@ -244,6 +245,7 @@ function parseSubjectPool(rows, profile) {
         // excluded explicitly rather than by luck.
         subjects = [...new Set((t.match(/\b[A-Z]{2,5}\b/g) ?? []))]
           .filter(s => s !== 'OR' && s !== 'AND');
+        subjectRow = rows[j];
         break;
       }
     }
@@ -289,6 +291,10 @@ function parseSubjectPool(rows, profile) {
       courses: subjects.map(subject => ({
         type: 'RANGE', subject, idRangeStart: start, idRangeEnd: end, exceptions: [],
       })),
+      // The two rows this pool is BUILT from. A successful pool says everything
+      // both sentences said, so they are consumed; on any refusal above they
+      // stay residue and print verbatim.
+      rows: [rows[i], subjectRow],
     };
   }
   return null;
@@ -330,9 +336,24 @@ function flattenCourseNodes(reqs) {
  * Convert a flat list of <tr> elements into a requirements array.
  * Handles: COURSE, AND (lab pairs), OR (orclass rows), RANGE (commentindent),
  *          XOM/OR groups introduced by "choose N" comment rows.
+ *
+ * `consumed` (optional Set) collects the <tr>s whose prose this parse actually
+ * EXPRESSED as structure. Every comment row left out of it is residue, and
+ * parseTable prints it verbatim as a section note — so the marking is the
+ * mechanism behind change 2 and has to be exact in one direction: a row marked
+ * consumed that was not really expressed makes a real requirement disappear
+ * silently, which is the failure mode this whole area was built to end.
+ *
+ * Hence marking happens at the point the OUTPUT is pushed, never at the point
+ * the row is READ. The distinction is not academic: ME BSME's "Complete one
+ * technical elective in one of the following subject areas:" is read here, and
+ * it does open a choose block (its 4 lands in the hourscol) — but no course row
+ * follows, so the block commits nothing and the sentence stays a note. Marking
+ * on read would have swallowed the only statement of that requirement.
  */
-function parseRowGroup(rows) {
+function parseRowGroup(rows, consumed = null) {
   const requirements = [];
+  const consume = (tr) => { if (consumed && tr) consumed.add(tr); };
 
   // Pending state
   let pending       = null;   // last node awaiting possible OR alternatives
@@ -342,6 +363,8 @@ function parseRowGroup(rows) {
   let chooseCount   = 0;      // pick-N count (OR / minRequirementCount)
   let chooseExplicit = false; // true when a "Complete N"/credit comment opened the group
   let splitPendingCredit = null; // split/supplemental credit (SH) awaiting its single course
+  let chooseRow     = null;   // the comment <tr> that opened the current choose block
+  let splitPendingRow = null; // the comment <tr> holding that split-credit annotation
 
   function commitPending() {
     if (!pending) return;
@@ -352,7 +375,11 @@ function parseRowGroup(rows) {
   function commitChooseGroup() {
     if (!inChoose) return;
     inChoose = false;
-    if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; return; }
+    // Nothing accumulated → the instruction expressed nothing, so its row is
+    // deliberately NOT consumed and survives as a verbatim note.
+    if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; chooseRow = null; return; }
+    consume(chooseRow);
+    chooseRow = null;
 
     if (chooseCreds > 0) {
       // A credit-hour annotation followed by exactly one course is normally just a
@@ -450,10 +477,13 @@ function parseRowGroup(rows) {
       // this section while also counting toward the others it appears in.
       if (splitPendingCredit !== null && node.type === 'COURSE') {
         requirements.push({ type: 'XOM', numCreditsMin: splitPendingCredit, courses: [node] });
+        consume(splitPendingRow);
         splitPendingCredit = null;
+        splitPendingRow = null;
         continue;
       }
       splitPendingCredit = null;
+      splitPendingRow = null;
 
       if (isIndented) {
         // Options inside a "choose N" block
@@ -479,7 +509,10 @@ function parseRowGroup(rows) {
       if (node) {
         commitPending();
         (inChoose ? chooseItems : requirements).push(node);
+        consume(tr);
       }
+      // A range sentence parseRangeText cannot read is left unconsumed on
+      // purpose — it prints verbatim instead of vanishing.
       continue;
     }
 
@@ -499,6 +532,7 @@ function parseRowGroup(rows) {
       if (/(?:counts? toward|fulfills) the .+? requirement/i.test(text)) {
         commitPending();
         splitPendingCredit = parseCreditInstruction(text) ?? 0;
+        splitPendingRow = tr;
         continue;
       }
 
@@ -518,6 +552,7 @@ function parseRowGroup(rows) {
         chooseCreds  = effectiveCredits ?? 0;
         chooseCount  = count  ?? 0;
         chooseExplicit = true;
+        chooseRow    = tr;   // consumed only if the block it opens commits something
       }
       continue;
     }
@@ -532,6 +567,42 @@ function parseRowGroup(rows) {
     if (r.courses.length <= 2 || r.minCount === 1) return { type: 'OR', courses: r.courses };
     return { type: 'XOM', numCreditsMin: r.minCount * 4, courses: r.courses };
   });
+}
+
+/**
+ * The prose rows of a group that this parse did NOT express as structure.
+ *
+ * The catalog states real conditions in sentences with no course code in them —
+ * "Research courses may not be used to satisfy this requirement", "one
+ * technical elective in one of the following subject areas", "must be taken at
+ * the Boston campus". Every one of those used to be read, found unparseable,
+ * and dropped, so the requirement shipped without the condition attached to it:
+ * silence that reads exactly like "there is no condition".
+ *
+ * So the fallback is to print the sentence. It interprets nothing and blocks
+ * nothing — a note cannot refuse a plan — and it is complete by construction:
+ * whatever the grammars above fail to express, the reader still gets, in the
+ * registrar's own words and in document order.
+ *
+ * Two exclusions, both because the sentence IS already said elsewhere:
+ *   · rows consumed by parseRowGroup / parseSubjectPool, and
+ *   · GPA prose, which parseRequirements turns into a gpaConstraint carrying
+ *     the same text verbatim.
+ */
+function residualNotes(rows, consumedRows) {
+  const seen = new Set();
+  const out = [];
+  for (const tr of rows) {
+    if (consumedRows.has(tr)) continue;
+    const sp = tr.querySelector('td[colspan="2"] span.courselistcomment');
+    if (!sp || (sp.getAttribute('class') ?? '').includes('areaheader')) continue;
+    const text = sp.text.replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
+    if (!text || seen.has(text)) continue;
+    if (parseGpaRule(text)) continue;
+    seen.add(text);
+    out.push(text);
+  }
+  return out;
 }
 
 /**
@@ -595,17 +666,25 @@ function parseTable(table, h2Title, profile) {
           }
         }
         if (poolCredit > 0 && parseRowGroup(initial.rows).length === 0) {
+          const poolConsumed = new Set();
           const groups2 = areaGroups.map(g => ({
             title: g.title,
-            courses: flattenCourseNodes(parseRowGroup(g.rows)),
+            courses: flattenCourseNodes(parseRowGroup(g.rows, poolConsumed)),
           })).filter(g => g.courses.length > 0);
           const allCourses = groups2.flatMap(g => g.courses);
           if (allCourses.length > 0) {
+            // The instruction row is residue here even though its NUMBER was
+            // read: merging the areas into one pool drops "from two of the
+            // following breadth areas", so the sentence still carries a
+            // condition the tree does not. It prints.
+            const notes = residualNotes(
+              [...initial.rows, ...areaGroups.flatMap(g => g.rows)], poolConsumed);
             return [{
               type: 'SECTION',
               title: h2Title,
               requirements: [{ type: 'XOM', numCreditsMin: poolCredit, courses: allCourses, groups: groups2 }],
               minRequirementCount: 1,
+              ...(notes.length ? { notes } : {}),
             }];
           }
         }
@@ -614,7 +693,8 @@ function parseTable(table, h2Title, profile) {
   }
 
   return groups.map(g => {
-    const requirements = parseRowGroup(g.rows);
+    const consumedRows = new Set();
+    const requirements = parseRowGroup(g.rows, consumedRows);
 
     // Comment texts survive on the section (transient — parseRequirements
     // strips them) so a GPA-titled group can be re-read as a constraint:
@@ -666,12 +746,16 @@ function parseTable(table, h2Title, profile) {
       // them is a membership rule the page never spells out.
       const pool = parseSubjectPool(g.rows, profile);
       if (pool) {
+        const { rows: poolRows, ...xom } = pool;
+        poolRows.forEach(tr => consumedRows.add(tr));
+        const notes = residualNotes(g.rows, consumedRows);
         return {
           type: 'SECTION',
           title: g.title,
-          requirements: [{ type: 'XOM', ...pool }],
+          requirements: [{ type: 'XOM', ...xom }],
           minRequirementCount: 1,
           creditsRequired: pool.numCreditsMin,
+          ...(notes.length ? { notes } : {}),
           ...(comments.length ? { _comments: comments } : {}),
         };
       }
@@ -680,17 +764,24 @@ function parseTable(table, h2Title, profile) {
         ? g.creditHint
         : g.rows.reduce((sum, tr) => sum + parseHoursCell(tr), 0);
       if (stated > 0) {
+        // The section that names no course is where notes matter most: with no
+        // children, the prose is the ONLY description of the requirement the
+        // reader gets. ME BSME's two sentences both land here.
+        const notes = residualNotes(g.rows, consumedRows);
         return {
           type: 'SECTION',
           title: g.title,
           requirements: [],
           minRequirementCount: 1,
           creditsRequired: stated,
+          ...(notes.length ? { notes } : {}),
           ...(comments.length ? { _comments: comments } : {}),
         };
       }
       return null;
     }
+
+    const notes = residualNotes(g.rows, consumedRows);
 
     if (g.creditHint > 0) {
       // The section header specifies a credit total → wrap in XOM
@@ -699,6 +790,7 @@ function parseTable(table, h2Title, profile) {
         title: g.title,
         requirements: [{ type: 'XOM', numCreditsMin: g.creditHint, courses: requirements }],
         minRequirementCount: 1,
+        ...(notes.length ? { notes } : {}),
         ...(comments.length ? { _comments: comments } : {}),
       };
     }
@@ -708,6 +800,7 @@ function parseTable(table, h2Title, profile) {
       title: g.title,
       requirements,
       minRequirementCount: requirements.length,
+      ...(notes.length ? { notes } : {}),
       ...(comments.length ? { _comments: comments } : {}),
     };
   }).filter(Boolean);
@@ -1650,9 +1743,16 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
     }
 
     if (concHeadings.has(headingIdx)) {
+      // A concentration flattens its tables' sections into one requirement
+      // list, so a note attached to a discarded section wrapper would be lost
+      // with it. Hoisted to the concentration, which is itself a SECTION.
+      const concNotes = [];
       const reqs = tableBlocks.flatMap(tb => {
         consumed.add(tb);
-        return parseTable(tb.el, title, profile).flatMap(s => s.requirements ?? []);
+        return parseTable(tb.el, title, profile).flatMap(s => {
+          for (const n of s.notes ?? []) if (!concNotes.includes(n)) concNotes.push(n);
+          return s.requirements ?? [];
+        });
       });
       if (reqs.length) {
         concentrationOptions.push({
@@ -1663,6 +1763,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
           label: concHeadings.get(headingIdx) || undefined,
           requirements: reqs,
           minRequirementCount: reqs.length,
+          ...(concNotes.length ? { notes: concNotes } : {}),
         });
       }
       continue;
@@ -1706,8 +1807,12 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
       const extContainer = requirementsRoot(extRoot);
       const heading = extContainer.querySelector('h2, h1');
       const title = (heading?.text ?? link.label).replace(/\s+/g, ' ').trim();
+      const extNotes = [];
       const reqs = extContainer.querySelectorAll('table.sc_courselist')
-        .flatMap(t => parseTable(t, title, profile).flatMap(s => s.requirements ?? []));
+        .flatMap(t => parseTable(t, title, profile).flatMap(s => {
+          for (const n of s.notes ?? []) if (!extNotes.includes(n)) extNotes.push(n);
+          return s.requirements ?? [];
+        }));
       if (!reqs.length) continue;
       concentrationOptions.push({
         type: 'SECTION',
@@ -1715,6 +1820,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
         label: link.label || undefined,
         requirements: reqs,
         minRequirementCount: reqs.length,
+        ...(extNotes.length ? { notes: extNotes } : {}),
       });
     }
   }

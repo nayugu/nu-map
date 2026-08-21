@@ -178,6 +178,38 @@ Facts that follow from this:
   path, so it can prove we dropped requirements and can never prove we have
   them all. Never assert parsed ⊆ plan — the plan takes one branch of every
   choice. Its total legitimately exceeds the minimum, so it is info only.
+- **A section can state its requirement in prose, and prose is COPIED, never
+  interpreted.** Two shapes, both formerly silent:
+  1. a group that names no course still emits a SECTION with the registrar's
+     `creditsRequired` (580 of 7,983 sections; see the codeless-sections
+     contract test). `minRequirementCount: 1` so nothing draws a checked box,
+     `requirements: []` so nothing is enumerated wrongly, and
+     **`creditsRequired` must never be summed into a total** — 90 of the 580
+     restate credit another section already counts;
+  2. every prose row the parse could not express survives verbatim as
+     `section.notes`, in document order (2,068 sections / 3,384 notes, median 1;
+     **all 580** of the codeless ones, which is what makes them legible rather
+     than merely visible). It reaches the panel, the PDF, the MCP tree and the
+     static `/northeastern/ai/**` pages, always attributed ("From the catalog")
+     and never translated — the words are the registrar's.
+  Rules that must not be weakened:
+  - **Consumption is marked where the OUTPUT is pushed, never where the row is
+    read** (`parseRowGroup`'s `consume`). ME BSME's instruction row IS read and
+    does open a choose block; the block commits nothing, so the sentence stays.
+    Re-testing the instruction patterns from outside was the cheaper design and
+    is wrong: it drifts the moment a grammar changes, and a row wrongly marked
+    consumed deletes a real requirement in silence.
+  - **Do not filter notes by shape.** Short label-like lines look like noise
+    until you check: Interdisciplinary Studies BS (Oakland) § Minor Requirement
+    is 16 SH with zero parsed requirements, and the fifteen bare minor names
+    ARE the requirement. A short-line filter deletes the best case in the corpus.
+  - **A note never blocks and never resolves.** It states a condition this code
+    cannot check ("Research courses may not be used"), so allocation must be
+    byte-identical with and without it. Computing the excluded set was measured
+    and refused: title matching calls a "synthesis" course research, and
+    Banner's `scheduleType` files BIOL 4991 Research as a Lecture.
+  - The only sentence suppressed as "already said" is GPA prose, because
+    `gpaConstraints` carries the same string verbatim.
 - Concentrations are found through the page's **anchor graph**, not heading
   text — wording varies far too much. A concentration's title is its only
   identity across saved plans, share links and MCP `SET_CONCENTRATION`, so

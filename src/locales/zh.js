@@ -567,6 +567,7 @@ export const strings = {
   "grad.fromPool": "选修池：{sat}/{req} SH",
   "grad.oneOf": "任选其一 ({count}/{total})",
   "grad.requiresOutOf": "需满足 {count} 项，共 {total} 项",
+  "grad.fromCatalog": "课程目录原文",
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":          "{n} \u95e8\u8bfe\u7a0b",

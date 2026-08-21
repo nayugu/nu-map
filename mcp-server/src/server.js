@@ -352,7 +352,7 @@ export function createServer({ query, sessionId, state, channel }) {
 
   server.tool(
     "get_program",
-    "One program with its full requirement tree and concentration options. Stale ids resolve to the newest catalog year automatically.",
+    "One program with its full requirement tree and concentration options. Stale ids resolve to the newest catalog year automatically. A section's `notes` are sentences quoted verbatim from the catalog stating conditions the tree does not express — exclusions, eligibility lists, grade minimums; a section may consist of nothing but these plus a `creditsRequired`. Repeat them to the user when the section is relevant, and never infer from them that a specific course does or does not count.",
     {
       programId: z.string().describe("Program id from list_programs, e.g. '2026/computer-information-science/computer_science_bscs_(boston)'"),
       include:   z.array(z.enum(["tree", "concentrations"])).optional(),

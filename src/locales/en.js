@@ -682,6 +682,10 @@ export const strings = {
   "grad.allOf": "All of ({count}/{total})",
   "grad.oneOf": "One of ({count}/{total})",
   "grad.requiresOutOf": "Requires {count} out of {total}",
+  // Attribution for prose quoted straight from the catalog. The label is
+  // translated; the sentence under it never is — it is the registrar's wording
+  // and paraphrasing it would make us the author of a rule we only copied.
+  "grad.fromCatalog": "From the catalog",
   "grad.fromPool": "{sat}/{req} SH from elective pool",
 
   // ── Course card / info panel ───────────────────────────────────

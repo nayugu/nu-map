@@ -569,6 +569,7 @@ export const strings = {
   "grad.fromPool": "वैकल्पिक समूह से {sat}/{req} SH",
   "grad.oneOf": "इनमें से एक ({count}/{total})",
   "grad.requiresOutOf": "{total} में से {count} आवश्यक",
+  "grad.fromCatalog": "कैटलॉग से",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "कोई शीर्षक नहीं",
