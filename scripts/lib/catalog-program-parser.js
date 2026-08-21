@@ -148,6 +148,153 @@ function parseRangeText(raw) {
 }
 
 /**
+ * A row that is nothing but subject codes. Both conjunctions occur —
+ * "EMGT, ENGR, ENSY, IE, ME, or MEIE" (ME BSME) and
+ * "SUEN, ARCH, LARC, PPUA, LPSC, and SBSY" (Sustainable Urban Environments) —
+ * and accepting only "or" silently dropped the second, which is why this is
+ * written to accept either rather than the one example in front of me.
+ */
+const SUBJECT_LIST_ROW =
+  /^[A-Z]{2,5}(?:\s*,\s*(?:(?:or|and)\s+)?[A-Z]{2,5})*(?:\s*,?\s+(?:or|and)\s+[A-Z]{2,5})?\s*$/;
+
+/**
+ * A pool the catalog defines by SUBJECT rather than by course:
+ *
+ *   Complete 8 semester hours from the following subject areas:              8
+ *   SUEN, ARCH, LARC, PPUA, LPSC, and SBSY
+ *
+ * The subject list is certain — the registrar named it. What is NOT certain is
+ * which of those subjects' courses belong to the pool, and that is decided by
+ * the rest of the sentence. So the instruction must reduce ENTIRELY to a
+ * credit demand + an optional level window + "the following subject area(s)".
+ * The match is anchored, and that anchoring is the whole guard: residue means
+ * the page said something we are not modelling, so the pool is not built.
+ *
+ * Measured over the 24 distinct wordings that name subjects, 15 reduce to this
+ * shape and 9 do not. The refusals, and why each would be a claim we cannot
+ * support:
+ *
+ *   "Complete one TECHNICAL ELECTIVE in one of the following subject areas:"
+ *       — the subjects are named; which of their courses is a "technical
+ *         elective" is not. RANGE ME 1000–9999 would admit ME 2350 Statics,
+ *         required elsewhere on the same page, and 1000-level intros. This is
+ *         ME BSME, the page that prompted the whole change.
+ *   "…to fulfill the minimum program hours (SEE FACULTY ADVISOR for other
+ *    acceptable elective courses)"          — the real pool is BROADER.
+ *   "…SEE SUGGESTED ELECTIVE COURSE LIST."  — and here NARROWER.
+ *   "Complete any business class FOR WHICH THE PRE-REQ IS MET in…"
+ *   "THOSE WHO DO NOT CHOOSE A CONCENTRATION should take 27 additional…"
+ *       — a condition on the student, not a course set.
+ *   "Complete 4 semester hours AT THE GRADUATE LEVEL from…"
+ *       — a level with no numbers; 1000–9999 would admit undergraduate
+ *         courses to a graduate requirement.
+ *   "Courses from the following subject areas MAY NOT COUNT toward any
+ *    concentration"                          — the inverse of a requirement.
+ *
+ * All nine keep their section and their stated credit, and their sentence is
+ * printed verbatim instead. Same rule as the notes layer: a sentence is
+ * consumed only when the pattern accounts for all of it. Degrade to less
+ * information, never to wrong information.
+ *
+ * @returns {{numCreditsMin:number, courses:object[]}|null}
+ */
+const SUBJECT_POOL_INSTRUCTION = new RegExp(
+  '^(?:complete|choose|select|take)\\s+' +
+  // "8 semester hours", "9–11 credit hours", "one", "three", "12"
+  '(?:\\d+(?:[–-]\\d+)?\\s+(?:semester|credit)\\s+hours?' +
+    '|one|two|three|four|five|six|seven|eight|nine|ten|\\d+)' +
+  '(?:\\s+of)?' +
+  // The noun may sit on either side of the level phrase — "4 SH of 5000- to
+  // 6000-level COURSE WORK" and "8 SH of COURSES at the 5000 level or above"
+  // are the same shape with the words swapped.
+  '(?:\\s+(?:course\\s*work|courses))?' +
+  // optional level window: "5000- to 6000-level", "at the 5000 level or above"
+  '(?:\\s+(?:at\\s+the\\s+)?\\d{4}(?:\\s*[–-]?\\s*(?:to|through|[–-])\\s*\\d{4})?' +
+    '[\\s-]*level(?:\\s+(?:or|and)\\s+(?:above|higher))?)?' +
+  '(?:\\s+(?:course\\s*work|courses))?' +
+  '\\s+(?:from|in|within)\\s+(?:one\\s+of\\s+)?the\\s+following\\s+subject\\s+areas?' +
+  '(?:\\s+below)?\\s*[:.]?\\s*$',
+  'i');
+
+function parseSubjectPool(rows, profile) {
+  for (let i = 0; i < rows.length; i++) {
+    const instruction = rows[i].querySelector('td[colspan="2"] span.courselistcomment');
+    if (!instruction) continue;
+    const text = instruction.text.replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
+    if (!/following\s+subject\s+areas?\b/i.test(text)) continue;
+    // The anchored grammar IS the guard — no negation test, no keyword
+    // blacklist, no level test. Anything the pattern does not account for in
+    // full is residue, and residue refuses.
+    if (!SUBJECT_POOL_INSTRUCTION.test(text)) return null;
+
+    // The subject row is the next row that is only subject codes. It normally
+    // follows immediately, but "(Note: see faculty advisor …)" sits between
+    // them on the Personal Health Informatics PhD page.
+    let subjects = null;
+    for (let j = i + 1; j < rows.length; j++) {
+      const cell = rows[j].querySelector('td[colspan="2"] span.courselistcomment');
+      const t = cell?.text?.replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
+      if (!t) continue;
+      if (SUBJECT_LIST_ROW.test(t)) {
+        // Tokens are MATCHED, not split. Splitting on /,|\s+or\s+/ over
+        // "ME, or MEIE" leaves "or MEIE" as a subject, because the comma
+        // consumes the space the `or` branch needed — a RANGE over subject
+        // "or MEIE" matches nothing and looks like a real requirement.
+        // Conjunctions are uppercase nowhere in this row shape, but they are
+        // excluded explicitly rather than by luck.
+        subjects = [...new Set((t.match(/\b[A-Z]{2,5}\b/g) ?? []))]
+          .filter(s => s !== 'OR' && s !== 'AND');
+        break;
+      }
+    }
+    if (!subjects?.length) continue;
+
+    // Credit: the hourscol is the registrar's own number and outranks the
+    // prose, which counts courses ("one technical elective") as often as hours.
+    // A range ("9–11 semester hours") takes its minimum — parseHoursCell does.
+    const credits = parseHoursCell(rows[i]) || parseCreditInstruction(text);
+    if (!credits) continue;
+
+    // Level window, when stated: "5000 level or above", "5000- to 6000-level".
+    let start = 1000, end = 9999;
+    // "5000- to 6000-level" (Experience Design) as well as "5000-6000 level"
+    // and "5000 to 6000 level": the dash and the word both appear, sometimes
+    // together, so the dash is optional AHEAD of the connective as well as
+    // being a connective itself.
+    const span = text.match(/(\d{4})\s*(?:[-–]\s*)?(?:to|through|[-–])\s*(\d{4})[\s-]*level/i);
+    const floor = text.match(/(\d{4})[\s-]*level\s+(?:or|and)\s+(?:above|higher)/i);
+    if (span)       { start = parseInt(span[1], 10); end = parseInt(span[2], 10) + 999; }
+    else if (floor) { start = parseInt(floor[1], 10); }
+    // No unparseable-level branch is needed: a level phrase the grammar above
+    // cannot read ("at the graduate level") fails the anchored match and has
+    // already refused.
+    //
+    // A GRADUATE page with no level stated is refused outright, because neither
+    // available window is knowable from the page and both are wrong:
+    //   · 1000–9999 lets a 1000-level undergraduate course satisfy a master's
+    //     elective — "Nursing, MS § Elective → NRSG" would admit NRSG 1000s;
+    //   · a 5000 floor looks like a corpus fact (99.7% of the 12,870 courses
+    //     named in graduate requirements are 5000+) and still is not one: the
+    //     44 exceptions include ARCH 2340, ARCH 2240 and ARCH 3450, named in
+    //     graduate requirements of the very architecture programs these pools
+    //     belong to. So the floor would exclude courses NEU itself requires.
+    // Measured: this refuses 15 of the 19 pools. All four survivors are
+    // undergraduate, where an intro course in the named subject genuinely can
+    // answer an elective. The 15 keep their section, their credit and their
+    // sentence, which is the same trade every other refusal here makes.
+    else if (profile?.level === 'grad') return null;
+
+    return {
+      numCreditsMin: credits,
+      courses: subjects.map(subject => ({
+        type: 'RANGE', subject, idRangeStart: start, idRangeEnd: end, exceptions: [],
+      })),
+    };
+  }
+  return null;
+}
+
+/**
  * Parse "choose N" count from a comment string.
  * "Complete one of the following" → 1
  * "Select two of the following"   → 2
@@ -394,7 +541,7 @@ function parseRowGroup(rows) {
  * Each sub-section becomes its own SECTION node.  If there are no areaheaders
  * the whole table becomes one SECTION using h2Title.
  */
-function parseTable(table, h2Title) {
+function parseTable(table, h2Title, profile) {
   const rows = table.querySelectorAll('tr');
 
   // Split rows on areaheader boundaries
@@ -487,6 +634,60 @@ function parseTable(table, h2Title) {
       if (comments.some(c => parseGpaRule(c))) {
         return { type: 'SECTION', title: g.title, requirements: [],
                  minRequirementCount: 0, _comments: comments };
+      }
+
+      // A group can state a credit demand and still name no course. ME's
+      // "Mechanical and Industrial Engineering Technical Elective" is two
+      // comment rows — "Complete one technical elective in one of the
+      // following subject areas:" (4 SH) and "EMGT, ENGR, ENSY, IE, ME, or
+      // MEIE" — so parseRowGroup finds nothing and the whole requirement used
+      // to vanish: 4 SH missing from a 140 SH degree and no sign on the page
+      // that a technical elective is required at all. 360 groups on 187
+      // program pages are shaped this way.
+      //
+      // Emitting it keeps the requirement VISIBLE without claiming to know
+      // which courses satisfy it:
+      //   · requirements: []          — no pool, so nothing is enumerated wrongly
+      //   · minRequirementCount: 1    — the student must do something here.
+      //     0 would report sat:true and draw a CHECKED box in the panel, i.e.
+      //     credit for work nobody has done — worse than the old silence.
+      //     With no children the section renders "0/0" and adds nothing to
+      //     program progress either way, so 1 costs nothing and asserts
+      //     nothing false.
+      //   · creditsRequired           — the registrar's own hours, so the
+      //     section can be reconciled against the program total.
+      // It generates no demand and no plan can be refused by it (checkSection
+      // is the only reader of minRequirementCount, and nothing gates a plan on
+      // all sections being satisfied).
+      // First: can the pool be READ? Only when the instruction reduces
+      // entirely to hours-from-these-subjects, which is a narrower test than
+      // "the subjects are named" — see parseSubjectPool. ME BSME names its six
+      // subjects and still refuses, because "one TECHNICAL ELECTIVE in one of"
+      // them is a membership rule the page never spells out.
+      const pool = parseSubjectPool(g.rows, profile);
+      if (pool) {
+        return {
+          type: 'SECTION',
+          title: g.title,
+          requirements: [{ type: 'XOM', ...pool }],
+          minRequirementCount: 1,
+          creditsRequired: pool.numCreditsMin,
+          ...(comments.length ? { _comments: comments } : {}),
+        };
+      }
+
+      const stated = g.creditHint > 0
+        ? g.creditHint
+        : g.rows.reduce((sum, tr) => sum + parseHoursCell(tr), 0);
+      if (stated > 0) {
+        return {
+          type: 'SECTION',
+          title: g.title,
+          requirements: [],
+          minRequirementCount: 1,
+          creditsRequired: stated,
+          ...(comments.length ? { _comments: comments } : {}),
+        };
       }
       return null;
     }
@@ -1424,7 +1625,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
   };
 
   for (const tb of orphanTables) {
-    for (const sec of parseTable(tb.el, 'Requirements')) {
+    for (const sec of parseTable(tb.el, 'Requirements', profile)) {
       if (extractGpa(sec)) continue;
       sec.title = uniquify(sec.title, usedSectionTitles, sectionCollisions);
       requirementSections.push(sec);
@@ -1451,7 +1652,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
     if (concHeadings.has(headingIdx)) {
       const reqs = tableBlocks.flatMap(tb => {
         consumed.add(tb);
-        return parseTable(tb.el, title).flatMap(s => s.requirements ?? []);
+        return parseTable(tb.el, title, profile).flatMap(s => s.requirements ?? []);
       });
       if (reqs.length) {
         concentrationOptions.push({
@@ -1468,7 +1669,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
     }
 
     for (const tb of tableBlocks) {
-      const sections = parseTable(tb.el, title);
+      const sections = parseTable(tb.el, title, profile);
       consumed.add(tb);
       for (const s of sections) {
         if (extractGpa(s, GPA_HEADING.test(title) ? adjacentParas(headingIdx) : [])) continue;
@@ -1506,7 +1707,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
       const heading = extContainer.querySelector('h2, h1');
       const title = (heading?.text ?? link.label).replace(/\s+/g, ' ').trim();
       const reqs = extContainer.querySelectorAll('table.sc_courselist')
-        .flatMap(t => parseTable(t, title).flatMap(s => s.requirements ?? []));
+        .flatMap(t => parseTable(t, title, profile).flatMap(s => s.requirements ?? []));
       if (!reqs.length) continue;
       concentrationOptions.push({
         type: 'SECTION',

@@ -544,6 +544,8 @@ export const strings = {
   "verify.detail.planLikelyElective": "{course} — चार-वर्षीय योजना में है, पर इस प्रोग्राम के विषयों से बाहर; संभवतः एक वैकल्पिक कोर्स",
   "verify.detail.unknownCourse": "{course} — हमारी कोर्स सूची में नहीं है, इसलिए यह आवश्यकता यहाँ चिह्नित नहीं की जा सकती",
   "verify.detail.unreadSection": "“{section}” — यह भाग कैटलॉग पेज पर है पर यहाँ नहीं दिखाया गया",
+  "verify.pop.check.unenumerated-sections": "कुछ आवश्यकताओं में कोई कोर्स सूचीबद्ध नहीं है",
+  "verify.detail.unenumeratedSection": "“{title}” ({sh} SH) — कैटलॉग क्रेडिट बताता है पर यह कभी नहीं बताता कि कौन-से कोर्स गिने जाएँगे, इसलिए इसे यहाँ पूरा नहीं दिखाया जा सकता",
   "verify.detail.duplicateSection": "“{title}” एक से अधिक बार आता है",
   "verify.detail.duplicateConc": "“{title}” दो बार सूचीबद्ध है — केवल पहला चुना जा सकता है",
   "verify.detail.impossibleSection": "“{title}” — यह जिन कोर्सों को स्वीकारता है वे सब पहले ही किसी और आवश्यकता में गिने जा चुके हैं",

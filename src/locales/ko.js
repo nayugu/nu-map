@@ -544,6 +544,8 @@ export const strings = {
   "verify.detail.planLikelyElective": "{course} — 4년 계획에는 있으나 이 프로그램의 교과 영역 밖이라 선택과목으로 보입니다",
   "verify.detail.unknownCourse": "{course} — 저희 과목 목록에 없어 이 요건은 여기서 체크할 수 없습니다",
   "verify.detail.unreadSection": "“{section}” — 카탈로그 페이지에는 있으나 여기에는 표시되지 않았습니다",
+  "verify.pop.check.unenumerated-sections": "과목이 명시되지 않은 요건이 있습니다",
+  "verify.detail.unenumeratedSection": "“{title}” ({sh} SH) — 카탈로그가 학점만 밝히고 어떤 과목이 인정되는지는 나열하지 않아, 여기서는 충족 여부를 확인할 수 없습니다",
   "verify.detail.duplicateSection": "“{title}” 이(가) 두 번 이상 나타납니다",
   "verify.detail.duplicateConc": "“{title}” 이(가) 두 번 등록되어 첫 번째만 선택할 수 있습니다",
   "verify.detail.impossibleSection": "“{title}” — 허용하는 과목이 모두 다른 요건에 이미 배정되었습니다",

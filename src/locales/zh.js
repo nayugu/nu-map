@@ -544,6 +544,8 @@ export const strings = {
   "verify.detail.planLikelyElective": "{course} — 出现在四年修读计划中，但不属于本专业的学科范围，很可能是选修课",
   "verify.detail.unknownCourse": "{course} — 不在我们的课程列表中，因此此项要求无法在此勾选",
   "verify.detail.unreadSection": "“{section}” — 该部分在目录页面上，但未显示在此处",
+  "verify.pop.check.unenumerated-sections": "有些要求没有列出课程",
+  "verify.detail.unenumeratedSection": "“{title}”（{sh} SH）— 课程目录只给出学分，并未列出哪些课程可以计入，因此这一项无法在此自动勾选",
   "verify.detail.duplicateSection": "“{title}” 出现了不止一次",
   "verify.detail.duplicateConc": "“{title}” 列出了两次 — 只能选择第一个",
   "verify.detail.impossibleSection": "“{title}” — 它接受的每门课程都已被其他要求占用",

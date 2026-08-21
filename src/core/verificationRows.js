@@ -35,6 +35,9 @@ export const DETAIL_EN = {
   planLikelyElective: p => `${p.course} — in the four-year plan, but outside this program's subjects, so likely an elective`,
   unknownCourse:     p => `${p.course} — missing from our course list, so this requirement can't be ticked off`,
   unreadSection:     p => `"${p.section}" — this section is on the catalog page but not shown here`,
+  unenumeratedSection: p =>
+    `"${p.title}" (${p.sh} SH) — the catalog gives the credit but never lists which courses count, `
+    + `so this one can't be ticked off here`,
   duplicateSection:  p => `"${p.title}" appears more than once`,
   duplicateConc:     p => `"${p.title}" is listed twice — only the first can be chosen`,
   impossibleSection: p => `"${p.title}" — every course it accepts is already claimed by another requirement`,

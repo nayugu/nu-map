@@ -655,6 +655,8 @@ export const strings = {
   "verify.detail.planLikelyElective": "{course} — in the four-year plan, but outside this program's subjects, so likely an elective",
   "verify.detail.unknownCourse": "{course} — missing from our course list, so this requirement can't be ticked off here",
   "verify.detail.unreadSection": "\"{section}\" — this section is on the catalog page but not shown here",
+  "verify.pop.check.unenumerated-sections": "Some requirements list no courses",
+  "verify.detail.unenumeratedSection": "\"{title}\" ({sh} SH) — the catalog gives the credit but never lists which courses count, so this one can't be ticked off here",
   "verify.detail.duplicateSection": "\"{title}\" appears more than once",
   "verify.detail.duplicateConc": "\"{title}\" is listed twice — only the first can be chosen",
   "verify.detail.impossibleSection": "\"{title}\" — every course it accepts is already claimed by another requirement",

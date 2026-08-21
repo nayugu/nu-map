@@ -191,6 +191,8 @@ for (const p of PROGRAMS) {
 // worth nothing without knowing how many plans it had the chance to move — and `gained` is the
 // evidence the propagator does something at all.
 const comparable = same.length + moved.length + improved.length + degraded.length;
+/** Labels this run compared. A pinned exception outside it was never observed. */
+const comparedLabels = new Set([...same, ...moved, ...improved, ...degraded]);
 console.log(`  [propagator] compared ${comparable} plans · identical ${same.length} · `
   + `moved ${moved.length} · better rung ${improved.length} · worse rung ${degraded.length} · `
   + `gained ${gained.length} · lost ${lost.length}`);
@@ -245,6 +247,18 @@ const KNOWN_DEGRADED = new Set([
   "ug/environmental_engineering_and_health_science_bsenve_(boston)#2",
 ]);
 
+// A pinned exception the sample never reached is not a pass — it is an
+// unobserved claim, and it must say so rather than sit quiet behind a green
+// test. Printed, not asserted: whether the shuffle deals BSEnvE is not
+// something a change to the catalog should be able to fail on.
+{
+  const unobserved = [...KNOWN_DEGRADED].filter(l => !comparedLabels.has(l));
+  if (unobserved.length) {
+    console.log(`  [propagator] NOT OBSERVED this run (outside the sampled ${N}): `
+      + `${unobserved.join(", ")} — run CHART_CORPUS=all to check them`);
+  }
+}
+
 test("propagator › chain propagation never makes a plan spend MORE concessions", () => {
   // The other direction, and the one that would mean the propagator is actively harmful: pruning
   // should never force the ladder further down. Coverage tests would not catch it — the program
@@ -259,7 +273,18 @@ test("propagator › the known degradation is still the only one, and still degr
   // A named exception that has silently stopped happening is a stale claim in a
   // comment, and this file's whole value is that its claims are measured. If the
   // ordering sensitivity is ever fixed, this fails and the entry comes out.
-  const stale = [...KNOWN_DEGRADED].filter(l => !degraded.includes(l));
+  //
+  // Judged only over labels this run actually COMPARED. `sample()` is a seeded
+  // shuffle of the whole corpus and then a slice, so its 30 depend on the
+  // corpus LENGTH: any change to the number of eligible programs deals a
+  // different hand. Four Interdisciplinary PhD programs became visible in Aug
+  // 2026 (they state 30 SH of committee-directed coursework and no course list,
+  // so parseTable used to drop every section and the whole program vanished),
+  // 795 eligible → 799, and BSEnvE fell out of the sample. It reported as
+  // "no longer degrades" while nothing about it had changed — a false alarm
+  // that, followed literally, would have deleted a measured fact about the
+  // search. An entry can only be falsified by a run that looked at it.
+  const stale = [...KNOWN_DEGRADED].filter(l => comparedLabels.has(l) && !degraded.includes(l));
   assert.deepEqual(stale, [],
     `${stale.length} entries in KNOWN_DEGRADED no longer degrade — delete them and `
     + `tighten the assertion above.`);

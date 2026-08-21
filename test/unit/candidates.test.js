@@ -140,17 +140,30 @@ test("~general never resolves, however hard a caller tries", () => {
   assert.equal(preferredCourseIds(c, ctx).size, 0);
 });
 
-test("CORPUS FACT: no requirement section is open-ended", () => {
-  // Measured: 0 of 4,234 sections across 532 programs have an empty spec. Every
-  // real section names courses, and open-endedness reaches us only through the
-  // `~general` sentinel.
+test("CORPUS FACT: an open-ended section is always a stated credit demand", () => {
+  // This test used to assert ZERO open-ended sections — measured 0 of 4,234,
+  // with open-endedness reaching the binder only through `~general`. That
+  // stopped being true deliberately: the catalog states requirements it never
+  // enumerates ("Complete one technical elective in one of the following
+  // subject areas: EMGT, ENGR, …", "Complete 30 semester hours of coursework in
+  // consultation with your dissertation committee"), and those sections used to
+  // be DROPPED — 4 SH missing from a 140 SH degree, with no sign on the page
+  // that a technical elective was required at all.
   //
-  // Pinned because the next test's branch is DEFENSIVE, not load-bearing, and
-  // that is worth knowing. If this ever fails, the scraper started emitting a
-  // shape the binder has never seen, and `~general`'s derived allowance (which
-  // is sized from what the other sections demand) is the first thing to check.
+  // So the fact is now the narrower one that actually protects the binder: an
+  // open-ended section must be a deliberate, credit-bearing one. A section with
+  // no courses AND no stated credit is a parse failure, not a catalog fact, and
+  // that is what this catches.
+  //
+  // Two properties verified when this changed, both still worth re-checking if
+  // it fails: cellsForSection emits NO cell for such a section (min=1 with zero
+  // children makes isChoiceSection false and the child loop empty), so the
+  // chart cannot place an arbitrary course into it; and its shortfall does
+  // count toward demand, which correctly shrinks `~general`'s derived
+  // allowance by credit the student must spend elsewhere.
   const base = join(ROOT, "data/northeastern/programs/undergraduate/2026");
   let sections = 0, openEnded = 0;
+  const uncredited = [];
   for (const college of readdirSync(base)) {
     let progs = [];
     try { progs = readdirSync(join(base, college)); } catch { continue; }
@@ -160,12 +173,19 @@ test("CORPUS FACT: no requirement section is open-ended", () => {
       for (const s of JSON.parse(readFileSync(f, "utf8")).requirementSections ?? []) {
         sections += 1;
         const sp = specForNode(s);
-        if (!sp.keys.size && !sp.ranges.length) openEnded += 1;
+        if (sp.keys.size || sp.ranges.length) continue;
+        openEnded += 1;
+        if (!(s.creditsRequired > 0)) uncredited.push(`${prog} § ${s.title}`);
       }
     }
   }
   assert.ok(sections > 4000, `only ${sections} sections scanned — corpus missing`);
-  assert.equal(openEnded, 0, `${openEnded} open-ended sections appeared; see the comment above`);
+  assert.ok(openEnded > 0,
+    "no open-ended sections at all — the catalog publishes unenumerated requirements, " +
+    "so zero means parseTable is dropping them again");
+  assert.deepEqual(uncredited, [],
+    `${uncredited.length} open-ended section(s) carry no stated credit, so they name ` +
+    `neither a course nor an amount: ${uncredited.slice(0, 5).join("; ")}`);
 });
 
 test("an open-ended SECTION would be unbounded, not impossible", () => {

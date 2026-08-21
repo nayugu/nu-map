@@ -545,6 +545,8 @@ export const strings = {
   "verify.detail.planLikelyElective": "{course} — 履修モデルにはありますが本プログラムの科目領域外で、選択科目と思われます",
   "verify.detail.unknownCourse": "{course} — 当方の科目一覧に無いため、この要件はここでチェックできません",
   "verify.detail.unreadSection": "「{section}」— カタログのページにはありますが、ここには表示されていません",
+  "verify.pop.check.unenumerated-sections": "科目が列挙されていない要件があります",
+  "verify.detail.unenumeratedSection": "「{title}」（{sh} SH）— カタログは単位数のみを示し、どの科目が該当するかを列挙していないため、ここでは達成を判定できません",
   "verify.detail.duplicateSection": "「{title}」が複数回出現しています",
   "verify.detail.duplicateConc": "「{title}」が二重に掲載されています — 選択できるのは最初の一つだけです",
   "verify.detail.impossibleSection": "「{title}」— 受け付ける科目がすべて他の要件で使われています",

@@ -233,6 +233,33 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
       'no requirements could be read from this program at all',
       [{ key: 'emptyProgram' }]);
   }
+  // A section whose courses the catalog never lists. These are real
+  // requirements — "Complete one technical elective in one of the following
+  // subject areas: EMGT, ENGR, …" (ME BSME, 4 SH), "Complete 30 semester hours
+  // of coursework in consultation with your dissertation committee" — and until
+  // Aug 2026 they were DROPPED, so the verdict was computed over a page we had
+  // silently read incompletely.
+  //
+  // Recorded because the verdict must not overstate what we know. Without this
+  // counter a program carrying an unenumerable requirement reports
+  // `{"level":"verified","issues":0}` and reads as "fully parsed" — the exact
+  // shape of the Public Policy PhD failure noted below, where a real gap sat
+  // behind a clean verdict. Severity is `info`, not a defect: the gap is in the
+  // catalog, not in the parser, and the honest response is to say so and print
+  // the registrar's own sentence rather than to guess the course list.
+  const unenumerated = sections.filter(s =>
+    s?.creditsRequired > 0 && !(s.requirements ?? []).length);
+  counters.unenumeratedSections = unenumerated.length;
+  if (unenumerated.length) {
+    add('unenumerated-sections', 'info',
+      `${unenumerated.length} section(s) state a credit requirement whose courses the catalog does not list, `
+      + 'so completion of those cannot be checked automatically',
+      unenumerated.slice(0, 12).map(s => ({
+        key: 'unenumeratedSection',
+        params: { title: s.title, sh: s.creditsRequired },
+      })));
+  }
+
   const dupSections = duplicates(sections.map(s => s.title));
   counters.duplicateSectionTitles = dupSections.length;
   if (dupSections.length) {

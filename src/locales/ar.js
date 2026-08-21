@@ -544,6 +544,8 @@ export const strings = {
   "verify.detail.planLikelyElective": "{course} — موجود في خطة السنوات الأربع لكنه خارج مواد هذا البرنامج، فالأرجح أنه مقرر اختياري",
   "verify.detail.unknownCourse": "{course} — غير موجود في قائمة المقررات لدينا، لذا لا يمكن تحديد هذا المتطلب هنا",
   "verify.detail.unreadSection": "«{section}» — هذا القسم موجود في صفحة الدليل لكنه غير معروض هنا",
+  "verify.pop.check.unenumerated-sections": "بعض المتطلبات لا تُدرج أي مقررات",
+  "verify.detail.unenumeratedSection": "«{title}» ({sh} SH) — يذكر الدليل عدد الساعات لكنه لا يُدرج المقررات المحتسبة، لذا لا يمكن التحقق من إنجاز هذا المتطلب هنا",
   "verify.detail.duplicateSection": "«{title}» يظهر أكثر من مرة",
   "verify.detail.duplicateConc": "«{title}» مُدرج مرتين — يمكن اختيار الأول فقط",
   "verify.detail.impossibleSection": "«{title}» — كل مقرر يقبله مُخصَّص بالفعل لمتطلب آخر",

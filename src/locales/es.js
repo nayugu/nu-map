@@ -544,6 +544,8 @@ export const strings = {
   "verify.detail.planLikelyElective": "{course} — está en el plan de cuatro años, pero fuera de las materias de este programa; probablemente una optativa",
   "verify.detail.unknownCourse": "{course} — falta en nuestra lista de cursos, así que este requisito no se puede marcar aquí",
   "verify.detail.unreadSection": "«{section}» — esta sección está en la página del catálogo pero no aparece aquí",
+  "verify.pop.check.unenumerated-sections": "Algunos requisitos no enumeran cursos",
+  "verify.detail.unenumeratedSection": "«{title}» ({sh} SH): el catálogo indica los créditos pero nunca enumera qué cursos cuentan, así que este no se puede marcar aquí",
   "verify.detail.duplicateSection": "«{title}» aparece más de una vez",
   "verify.detail.duplicateConc": "«{title}» está listada dos veces — solo se puede elegir la primera",
   "verify.detail.impossibleSection": "«{title}» — todos los cursos que acepta ya están asignados a otro requisito",
