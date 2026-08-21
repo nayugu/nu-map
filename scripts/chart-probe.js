@@ -65,6 +65,10 @@ const jsonOut = flag("--json");
 const concentration = flag("--concentration");
 // Per-term detail for one plan, so "why is this term short" does not need a fresh script.
 const showTerms = argv.includes("--terms");
+// `--terms` truncated at a fixed 56 characters, which is fine for scanning shapes
+// and actively misleading for a before/after: a cell whose TITLE changed beyond
+// the cut made two different plans print identically.
+const TERM_WIDTH = parseInt(flag("--width") ?? "56", 10);
 // A/B the `shared`-section witness without touching the tree. `deriveCells` reads the plan
 // of study from `metadata.planOfStudyCourses`, and an EMPTY witness is exactly the engine's
 // pre-Aug-2026 behaviour of skipping every shared section — so dropping the field
@@ -574,7 +578,7 @@ for (const lvl of ["undergraduate", "graduate"]) {
           const flagStr = (!half && !coop && minCoursesFor(chartCalibration, studentType) > 0
             && big < minCoursesFor(chartCalibration, studentType)) ? "SHORT" : "     ";
           console.log(`  ${`${y.label} ${t.term}`.padEnd(17)}${flagStr} big=${big} ${String(sh).padStart(2)}SH  `
-            + es.map(e => e.text).join(" | ").slice(0, 56));
+            + es.map(e => e.text).join(" | ").slice(0, TERM_WIDTH));
         }
       }
     });

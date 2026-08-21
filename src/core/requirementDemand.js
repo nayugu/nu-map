@@ -161,6 +161,19 @@ function plainRequired(allocSection, pools, plain) {
 export function demandOf(allocSection, unitSH = DEFAULT_UNIT_SH) {
   const { pools, plain } = splitChildren(allocSection);
   if (!pools.length) {
+    // ── A section with NO children states its demand in PROSE ──────
+    //
+    // The catalog can print a credit figure and never name a course to satisfy
+    // it (580 sections, 343 programs). There is nothing to count, so
+    // `minRequired * unitSH` is arithmetic over children that do not exist: it
+    // answered a flat 4 SH for every one of them, including a 16 SH minor
+    // requirement and a 32 SH focus area. Corpus-wide it under-claimed 4,305
+    // of 6,625 SH, and `obligationsOf` derives the free-elective allowance as
+    // `total − Σ demandOf`, so every credit missed here was handed to general
+    // electives — the planner told the student to fill it with anything.
+    //
+    // The registrar's own number is the better claim, so it wins when present.
+    if (!plain.length && allocSection?.statedSH > 0) return allocSection.statedSH;
     return (allocSection?.minRequired ?? allocSection?.total ?? 0) * unitSH;
   }
   const poolSH = pools.reduce((n, c) => n + c.reqSh, 0);

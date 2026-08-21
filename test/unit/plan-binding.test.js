@@ -25,9 +25,24 @@ const SECTION = (title, requirements, min) => ({
   type: "SECTION", title, requirements, minRequirementCount: min ?? requirements.length,
 });
 
-/** Cut to the real shape of Computer Science and Mathematics, BS. */
+/**
+ * Cut to the real shape of Computer Science and Mathematics, BS.
+ *
+ * The total is 60 rather than the degree's real 132 because the CUT keeps only
+ * four of its sections: 32 SH of requirements plus 28 SH of free electives is
+ * 60, and this fixture has to be arithmetically self-consistent now that the
+ * free-elective allowance is the RESIDUAL everywhere (see
+ * core/requirementBinding.generalElectiveAllowance).
+ *
+ * It was 132 with `generalElectiveSH: 28`, which only worked because the stated
+ * figure was taken at face value — the fixture was quietly 100 SH short of its
+ * own total, and "the credit closes" below closed on a number nothing derived.
+ * Stated and residual now agree here, so these tests hold under either rule;
+ * that the residual WINS where they disagree is pinned in
+ * test/unit/engine-stated-cells.test.js instead.
+ */
 const PROGRAM = {
-  totalCreditsRequired: 132,
+  totalCreditsRequired: 60,
   generalElectiveSH: 28,
   requirementSections: [
     SECTION("Computer Science Required Courses", [COURSE("CS", 3000), COURSE("CS", 3800)]),

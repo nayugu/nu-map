@@ -2657,6 +2657,35 @@ function byConstraint(a, b, termCount, rankOf = () => 0, fillerOf = isFiller) {
   const fa = fillerOf(a) ? 1 : 0, fb = fillerOf(b) ? 1 : 0;
   if (fa !== fb) return fa - fb;
 
+  // ── Among fillers, a requirement we cannot READ chooses first ─────
+  //
+  // A cell for a section the catalog states only in prose (`stated`) looks exactly
+  // like a general elective to every key below this one: no candidates, no groups,
+  // domain the whole plan, depth 0. So the two tied all the way down to the
+  // deterministic-but-arbitrary last key, and ME BSME's technical elective landed in
+  // YEAR 2 FALL — taking an early slot from a general elective, which is the one cell
+  // in the plan that could genuinely have sat anywhere.
+  //
+  // They are not equivalent, and the difference is what we know:
+  //
+  //   general elective   unconstrained by fact. Any subject, any level, no chain. It
+  //                      is safe early because there is nothing it could depend on.
+  //   stated             unconstrained by IGNORANCE. The registrar restricts it — ME's
+  //                      to six subjects — and names no course, so we have no
+  //                      prerequisite chain, no level and no floor for it.
+  //
+  // Late is the safe end of that ignorance, and the asymmetry is the same one
+  // `hasPositionalClaim` states about foundationality: a slot filled later than it
+  // needed to be costs nothing, while one scheduled before its unrecorded prerequisites
+  // pushes the degree out. Choosing FIRST is what secures a late term — by the time the
+  // electives pick, the end of the plan is already full — and it restricts no domain, so
+  // it cannot make a plan infeasible. `termPreference` supplies the direction: a cell
+  // with no positional claim wants position 1, and these carry `levelTarget: 1` besides.
+  if (fa === 1) {
+    const sa = a.cell?.stated ? 0 : 1, sb = b.cell?.stated ? 0 : 1;
+    if (sa !== sb) return sa - sb;
+  }
+
   // ── Who claims a scarce early term, among the non-fillers ─────────
   //
   // Ordering by domain width alone decided this badly, and it is the reason a term

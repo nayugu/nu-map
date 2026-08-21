@@ -39,6 +39,7 @@ import {
   collectCandidateKeys,
   calculateGeneralElectives,
 } from "../core/gradRequirements.js";
+import { generalElectiveSHOf } from "../core/requirementBinding.js";
 import { findNewerMajorVersion, findNewerGradMajorVersion } from "../data/majorLoader.js";
 import { rankOptions } from "../core/searchRank.js";
 
@@ -1775,6 +1776,17 @@ export default function GradPanel({ wideCatalog = false }) {
   // fell off the end and silently rendered as nothing. The parser now
   // guarantees unique titles, but relying on that from here couples the UI to
   // a scraper invariant for no reason.
+  // The free-elective allowance, from the audit's own arithmetic rather than
+  // from `generalElectiveSH` — which only 95 of 1,071 programs state, so this
+  // section used to read "12/0 SH" on the other 976: a requirement reporting
+  // more credit than it required. See generalElectiveAllowance for why the
+  // residual is the rule and the stated figure is only a signal.
+  //
+  // Memoised on the PROGRAM, not the plan: the allowance is a property of the
+  // degree, so it must not be recomputed on every placement.
+  const geAllowance  = useMemo(() => generalElectiveSHOf(major, courseMap), [major, courseMap]);
+  const geAllowance2 = useMemo(() => generalElectiveSHOf(major2Data, courseMap), [major2Data, courseMap]);
+
   const { majorSections, concSection } = useMemo(() => {
     if (!major) return { majorSections: [], concSection: null };
 
@@ -1801,12 +1813,12 @@ export default function GradPanel({ wideCatalog = false }) {
       concAllocated ? [...majorResults, concAllocated] : majorResults, realPlacedSet ?? placedSet
     );
     const generalElectives = calculateGeneralElectives(
-      placedSet, allocatedSet, courseMap, major.generalElectiveSH ?? 0, doneSet, candidateKeys, realPlacedSet
+      placedSet, allocatedSet, courseMap, geAllowance, doneSet, candidateKeys, realPlacedSet
     );
     const majorWithElectives = [...majorResults, generalElectives];
 
     return { majorSections: majorWithElectives, concSection: concAllocated };
-  }, [allSections, placedSet, doneSet, realPlacedSet, courseMap, major, selConc]);
+  }, [allSections, placedSet, doneSet, realPlacedSet, courseMap, major, selConc, geAllowance]);
 
   const allocatedSections = concSection ? [...majorSections, concSection] : majorSections;
   const majorSectionsCount = major?.requirementSections?.length ?? 0;
@@ -1858,10 +1870,10 @@ export default function GradPanel({ wideCatalog = false }) {
     // concentration then claims isn't also double-counted as a general elective.
     const candidateKeys = collectCandidateKeys([...sections, ...concResults], realPlacedSet ?? placedSet);
     const generalElectives = calculateGeneralElectives(
-      placedSet, allocatedSet, courseMap, major2Data.generalElectiveSH ?? 0, doneSet, candidateKeys, realPlacedSet
+      placedSet, allocatedSet, courseMap, geAllowance2, doneSet, candidateKeys, realPlacedSet
     );
     return [...sections, generalElectives, ...concResults];
-  }, [major2Data, placedSet, courseMap, doneSet, realPlacedSet, selConc2]);
+  }, [major2Data, placedSet, courseMap, doneSet, realPlacedSet, selConc2, geAllowance2]);
 
   const major2DoneSections = useMemo(() => {
     if (!major2Data) return [];

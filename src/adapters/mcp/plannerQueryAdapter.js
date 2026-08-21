@@ -25,6 +25,7 @@ import {
   collectCandidateKeys,
   calculateGeneralElectives,
 } from "../../core/gradRequirements.js";
+import { generalElectiveSHOf } from "../../core/requirementBinding.js";
 import { baseId } from "../../core/repeatInstances.js";
 import { STANDING_NAMES } from "../../core/classStanding.js";
 import { buildCohortSemesters, deriveSemMaps } from "../../core/semGrid.js";
@@ -538,7 +539,11 @@ export function createPlannerQuery(deps) {
 
     const candidateKeys = collectCandidateKeys([...sections, ...concResults], realPlacedSet ?? placedSet);
     const generalElectives = calculateGeneralElectives(
-      placedSet, allocatedSet, courseMapWithRepeats, majorJson.generalElectiveSH ?? 0, doneSet, candidateKeys, realPlacedSet
+      // The audit's own residual, not the catalog's stated figure — which only
+      // 95 of 1,071 programs give, so this reported a 0 SH requirement to the
+      // model for the rest. See core/requirementBinding.generalElectiveAllowance.
+      placedSet, allocatedSet, courseMapWithRepeats,
+      generalElectiveSHOf(majorJson, courseMapWithRepeats), doneSet, candidateKeys, realPlacedSet
     );
     results = [...results, generalElectives];
 

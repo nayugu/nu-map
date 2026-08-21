@@ -79,6 +79,46 @@ import {
 
 export { GENERAL_ELECTIVE, CONCENTRATION };
 
+/**
+ * The degree's free-elective allowance: what the total leaves over.
+ *
+ * ── One rule, because there used to be three ──────────────────────
+ *
+ * The same quantity was computed three different ways, and two of them were
+ * wrong for the same reason — they trusted `generalElectiveSH`, which only 95
+ * of 1,071 programs state at all:
+ *
+ *   the panel      `major.generalElectiveSH ?? 0` — so for the other 976 the
+ *                  General Electives section read "12/0 SH", a section
+ *                  reporting more credit than it required;
+ *   obligationsOf  `stated ?? residual` — the stated figure won where present,
+ *                  disagreeing with CHART on exactly those 95;
+ *   deriveCells    the residual, always, having measured that the stated figure
+ *                  is wrong in BOTH directions (a program stating 8 SH with 23
+ *                  unaccounted for; sections 120 + stated 20 against a 133 SH
+ *                  degree).
+ *
+ * The residual is right because it makes "the plan totals the degree" true by
+ * construction instead of usually true, and `totalCreditsRequired` is the
+ * degree's own headline claim. So the residual is the rule everywhere, and the
+ * stated figure survives as a SIGNAL: where the two disagree, one of the
+ * catalog's own numbers is wrong, and `deriveCells` says which two.
+ *
+ * CHART still takes its residual against its own cell total rather than calling
+ * this — deliberately, and it is not a fourth rule: a co-requisite pair is one
+ * cell and two courses, so cells and `demandOf` legitimately count differently.
+ * Mixing the two accountings in one plan is what left Industrial Engineering
+ * eight credits short of its own degree. Same rule, measured in each layer's
+ * own unit, with `reconciliation` reporting where the units diverge.
+ *
+ * @param demand  Σ demandOf over the program's sections, plus any concentration
+ *                floor — the caller has it already, and re-deriving it here is
+ *                how the two copies drift.
+ */
+export function generalElectiveAllowance(programData, demand) {
+  return Math.max(0, (programData?.totalCreditsRequired ?? 0) - demand);
+}
+
 // ── Obligations ────────────────────────────────────────────────────
 
 /**
@@ -144,7 +184,7 @@ export function obligationsOf(programData, { placedSet = new Set(), courseMap = 
   // Elective" cells with nowhere to go stay candidates for every real
   // requirement and block elimination everywhere.
   const stated = programData?.generalElectiveSH;
-  const geSH = stated ?? Math.max(0, (programData?.totalCreditsRequired ?? 0) - demand);
+  const geSH = generalElectiveAllowance(programData, demand);
   if (geSH > 0) {
     const allocated = new Set();
     for (const r of alloc) r?.allocatedCourses?.forEach(k => allocated.add(k));
@@ -158,6 +198,23 @@ export function obligationsOf(programData, { placedSet = new Set(), courseMap = 
     }
   }
   return out;
+}
+
+/**
+ * The free-elective allowance a renderer should show as REQUIRED.
+ *
+ * Deliberately routed through `obligationsOf` rather than re-deriving Σ demand:
+ * at zero placements nothing is used yet, so the general-elective obligation's
+ * shortfall IS the allowance, and the panel then shows the audit's own number
+ * instead of a second opinion about it. That second opinion is what this exists
+ * to delete — see `generalElectiveAllowance`.
+ *
+ * Placement-independent, so a caller may memoise it on the program alone.
+ */
+export function generalElectiveSHOf(programData, courseMap = {}) {
+  const ge = obligationsOf(programData, { courseMap })
+    .find(o => o.target === GENERAL_ELECTIVE);
+  return ge?.shortfallSH ?? 0;
 }
 
 // ── Max flow ───────────────────────────────────────────────────────

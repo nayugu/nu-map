@@ -210,6 +210,39 @@ Facts that follow from this:
     Banner's `scheduleType` files BIOL 4991 Research as a Lecture.
   - The only sentence suppressed as "already said" is GPA prose, because
     `gpaConstraints` carries the same string verbatim.
+- **A prose section's credit is free credit RENAMED, never credit added.**
+  CHART gives these sections a cell (titled after the section, `spec: null` so
+  nothing auto-fills it, `levelTarget: 1` so it defers — with no course named
+  there is no prerequisite chain, and a slot filled later than it needed to be
+  costs nothing while one scheduled before its unrecorded prereqs pushes the
+  degree out). The cell is taken **out of the general-elective residual**
+  (`proseLabels` in `demand.js`), capped by it. Emitting cells from
+  `cellsForSection` instead was built and measured wrong twice: Data Science
+  MSAlign prints "Electives1: 12 SH" and then six sections named after
+  *colleges* which ARE that elective's menu, so the extra 12 SH tripped
+  `poolExcess` and collapsed a legible menu into one anonymous slot — the change
+  destroyed information; and Interdisciplinary Studies BS (Oakland) prints
+  159 SH of prose sections against a 128 SH degree because its focus areas are
+  alternatives nothing marks as such. Spending from the residual makes both
+  harmless by arithmetic: `structuralSH` never moves, a program whose prose
+  figures are pure restatement gets no labels at all (the correct reading of a
+  page that counted the same credit twice), and `prose-credit-restated` reports
+  how much. Measured on the sampled sweep: refusals 33 → 22, `mostly-unlabelled`
+  13 → 3, terms with 3+ general electives 3.4% → 1.7%, and one course moved
+  (a plan-of-study witness lost its anonymous slot in PharmD).
+- **The free-elective allowance is the RESIDUAL, in one place.** It was computed
+  three ways: the panel used `generalElectiveSH ?? 0`, so the 976 of 1,071
+  programs that state no figure showed a General Electives section requiring
+  0 SH; `obligationsOf` used `stated ?? residual`; `deriveCells` used the
+  residual always, having measured the stated figure wrong in both directions.
+  All callers now go through `generalElectiveSHOf` / `generalElectiveAllowance`
+  in `core/requirementBinding.js`, and the stated figure survives only as a
+  signal (`general-elective-disagreement`). CHART still takes its residual
+  against its own CELL total — not a fourth rule: a co-requisite pair is one
+  cell and two courses, and mixing the two accountings is what left Industrial
+  Engineering 8 credits short. `demandOf` reads a childless section's
+  `statedSH`; before that it answered a flat 4 SH for all 580 of them, so
+  4,305 of 6,625 SH leaked into free electives.
 - Concentrations are found through the page's **anchor graph**, not heading
   text — wording varies far too much. A concentration's title is its only
   identity across saved plans, share links and MCP `SET_CONCENTRATION`, so

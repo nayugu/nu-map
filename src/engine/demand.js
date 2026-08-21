@@ -304,6 +304,12 @@ function cellsForSection(section, target, courseMap) {
     }
   };
 
+  // A section the catalog states only in PROSE emits nothing HERE, on purpose.
+  // Its credit is not a new obligation — it is free credit the plan already
+  // carries and can now put a name to — so it is spent against the
+  // general-elective residual in `deriveCells` rather than added to the section
+  // walk. Emitting it here instead was tried and measured: see `proseLabels`.
+
   // "Choose min of M" at section level, after normalisation.
   const min = norm.minRequirementCount;
   const isChoiceSection = typeof min === "number" && min > 0 && min < reqs.length;
@@ -941,7 +947,72 @@ export function deriveCells(programData, {
   const geOb = byTarget.get(GENERAL_ELECTIVE);
   const geUnit = geOb?.unitSH || DEFAULT_UNIT_SH;
   const geCells = geSH > 0 ? Math.max(1, Math.ceil(geSH / geUnit)) : 0;
-  const split = breadthSplit({ cells: geCells, remaining: breadth.length });
+
+  // ── Sections the catalog states only in PROSE get NAMED free credit ──
+  //
+  // 580 sections in 343 programs print a credit figure and never name a course:
+  // ME BSME's "Mechanical and Industrial Engineering Technical Elective" is 4 SH
+  // and two sentences. They emit no cells, so they add nothing to `structuralSH`
+  // — and the residual above therefore hands their credit to general electives.
+  // The plan totalled the degree and told the student to put ANYTHING in a slot
+  // the registrar restricts to six subjects. Six of ME's cells read "General
+  // Elective" and one of them was really this.
+  //
+  // So the fix is a RELABELLING of the residual, not an addition to it. Emitting
+  // real cells from `cellsForSection` was built first and measured wrong twice
+  // over, both times because a prose figure is so often credit the page has
+  // already counted somewhere else:
+  //
+  //   Data Science MSAlign  40 SH, printing "Electives1: 12 SH" and then six
+  //                         sections named after COLLEGES which ARE that
+  //                         elective's menu. The extra 12 SH pushed structural
+  //                         past 40, `poolExcess` fired, and a legible six-college
+  //                         menu collapsed into one anonymous slot — the change
+  //                         destroyed information instead of adding it.
+  //   Interdisciplinary BS  128 SH, printing 159 SH of prose sections, because
+  //     (Oakland)           its focus areas are alternatives nothing marks as
+  //                         such. 159 SH of cells in a 128 SH plan.
+  //
+  // Taking from the residual makes both harmless by arithmetic: a label can only
+  // be applied to credit the plan already has spare, so `structuralSH` never
+  // moves, `poolExcess` can never be triggered by this, and a program whose prose
+  // figures are pure restatement has a residual of 0 and gets no labels at all —
+  // which is the correct reading of a page that counted the same credit twice.
+  //
+  // Capped, ordered by the page, and never more than the residual holds.
+  const proseLabels = [];
+  let proseWantedSH = 0, proseUnnamedSH = 0;
+  for (const [i, section] of sections.entries()) {
+    if ((section?.requirements ?? []).length) continue;
+    const sh = section?.creditsRequired ?? 0;
+    if (sh <= 0) continue;
+    proseWantedSH += sh;
+    const want = Math.max(1, Math.ceil(sh / geUnit));
+    let took = 0;
+    while (took < want && proseLabels.length < geCells) {
+      proseLabels.push({ target: i, title: section.title ?? "", notes: section.notes ?? [] });
+      took++;
+    }
+    proseUnnamedSH += (want - took) * geUnit;
+  }
+  // Reported only when credit went UNNAMED, which means the page states more
+  // prose credit than the degree has unaccounted for — so some of it is being
+  // counted twice, and this says how much. Hitting the cap exactly is the
+  // ordinary case and not worth a note.
+  if (proseUnnamedSH > 0) {
+    notes.push({ kind: "prose-credit-restated", residualSH: geSH,
+                 statedSH: proseWantedSH, unnamedSH: proseUnnamedSH,
+                 detail: `sections state ${proseWantedSH} SH of prose requirements against a ` +
+                         `${geSH} SH residual; ${proseUnnamedSH} SH of it is credit the page ` +
+                         `already counts elsewhere` });
+  }
+
+  // Breadth is spread over what is left genuinely FREE. A named elective is not
+  // free credit a competency can be hung on: the registrar already said what it
+  // is for, and labelling it twice would tell a student their technical elective
+  // must also be an interpreting-culture course.
+  const freeCells = geCells - proseLabels.length;
+  const split = breadthSplit({ cells: freeCells, remaining: breadth.length });
   // ── Rule 3: breadth binds to the LATER cells ──────────────────────
   //
   // `breadthAt` used to walk from 0, so the shallowest electives in the degree were also the
@@ -949,7 +1020,7 @@ export function deriveCells(programData, {
   // to defer, so it leans late — spread by an even stride rather than clustered at the very
   // end, because a wall of placeholders in the last two terms is the defect this whole rule set
   // exists to remove.
-  const breadthCells = breadthIndices(geCells, split.breadth);
+  const breadthCells = breadthIndices(freeCells, split.breadth);
   let breadthAt = 0;
 
   for (const target of [CONCENTRATION, GENERAL_ELECTIVE]) {
@@ -970,6 +1041,42 @@ export function deriveCells(programData, {
                    unit, emitting: n * unit });
     }
     for (let i = 0; i < n; i++) {
+      // A prose-labelled elective takes one of these slots and leaves the loop
+      // early: it is the same credit, spent on a name the registrar gave it. It
+      // carries `target` of the SECTION rather than the sentinel, so the audit
+      // binds it to the requirement it answers, and it takes no breadth code —
+      // see `freeCells`.
+      const label = target === GENERAL_ELECTIVE ? proseLabels[i] : null;
+      if (label) {
+        merged.push({
+          id: `${GENERAL_ELECTIVE}#${i}`,
+          target: label.target,
+          title: label.title,
+          sh: unit,
+          kind: "open",
+          groups: null,
+          // No spec, and that is the point: the catalog names six subjects and
+          // says "technical elective", which is not a set anyone can enumerate.
+          // Inventing one would let ME 2350 Statics — required elsewhere in the
+          // same degree — answer the technical elective.
+          spec: null,
+          // Nothing can verify this cell, so a renderer says so rather than
+          // drawing it as an ordinary open slot.
+          stated: true,
+          // Placed as LATE as the plan allows. With no course named there is no
+          // prerequisite chain, no level and no floor, so late is the safe end
+          // of that ignorance: a slot filled later than it needed to be costs
+          // nothing, while one scheduled before its unrecorded prerequisites
+          // pushes the degree out. `byConstraint` lets these choose their term
+          // before the free electives, which is what actually secures a late one.
+          levelTarget: 1,
+          ...(label.notes.length ? { notes: label.notes } : {}),
+        });
+        continue;
+      }
+      // Breadth indices are counted over the FREE cells, so the label block
+      // above must be subtracted before asking whether this one carries a code.
+      const freeIndex = target === GENERAL_ELECTIVE ? i - proseLabels.length : i;
       // ── The breadth tier ────────────────────────────────────────
       //
       // The first general-elective cells take an unmet competency each, while there are
@@ -982,7 +1089,7 @@ export function deriveCells(programData, {
       // is bound to. Fewer cells than codes is the point of rule 1, not a shortfall: at ~1.5
       // codes per course, four well-chosen electives cover six competencies, and labelling six
       // cells would reserve two slots the student never needed to spend.
-      const bind = target === GENERAL_ELECTIVE && breadthCells.has(i) && breadthAt < breadth.length
+      const bind = target === GENERAL_ELECTIVE && breadthCells.has(freeIndex) && breadthAt < breadth.length
         ? breadth[breadthAt++]
         : null;
       merged.push({
@@ -1063,7 +1170,7 @@ export function deriveCells(programData, {
         // Derived from the breadth binding rather than stored twice. `nupath` is the label and
         // this is the role; they agree by construction because both come from `breadthCells`.
         ...(target === GENERAL_ELECTIVE
-          ? { geRole: breadthCells.has(i) ? "breadth" : "depth" }
+          ? { geRole: breadthCells.has(freeIndex) ? "breadth" : "depth" }
           : {}),
         // ── No POSITIONAL depth curve. It could only fight the ordering ──
         //
