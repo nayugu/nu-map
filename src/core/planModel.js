@@ -301,6 +301,10 @@ function sectionHtml(sec, doneKeys) {
   const displayTotal      = isPoolStructure ? sec.minRequired : sec.total;
   const isGeneralElectives = sec.title === 'General Electives' && sec.placedSH !== undefined;
   const hasSplit           = isGeneralElectives && sec.completedSH !== undefined;
+  // A section the catalog states in prose only — credit demanded, no course to
+  // tick. Same treatment as the panel: the registrar's number, and no bar,
+  // because an empty bar claims no progress where none is measurable.
+  const isStatedOnly       = (sec.children ?? []).length === 0 && sec.statedSH > 0;
 
   // Progress text
   // Numbers, but escaped anyway: `sh` reaches these totals from scraped
@@ -310,7 +314,9 @@ function sectionHtml(sec, doneKeys) {
     ? `<span style="color:#16a34a">${esc(sec.completedSH)}</span>${sec.plannedSH > 0 ? `<span style="color:#2563eb">+${esc(sec.plannedSH)}</span>` : ""}/${esc(sec.requiredSH)} SH`
     : isGeneralElectives
       ? `${esc(sec.placedSH)}/${esc(sec.requiredSH)} SH`
-      : `${esc(displaySatCount)}/${esc(displayTotal)}`;
+      : isStatedOnly
+        ? `${esc(sec.statedSH)} SH`
+        : `${esc(displaySatCount)}/${esc(displayTotal)}`;
 
   // Progress bar
   const printColor = `-webkit-print-color-adjust:exact;print-color-adjust:exact`;
@@ -347,14 +353,18 @@ function sectionHtml(sec, doneKeys) {
     return satReqs.map(r => nodeMinStatus(r, doneKeys))
       .reduce((min, s) => STATUS_RANK[s] < STATUS_RANK[min] ? s : min, "done");
   })() : "missing";
-  const secIcon = secStatus === "done" ? "✓" : secStatus === "planned" ? "○" : "";
+  // "–" for a prose-only section: the print equivalent of the panel's dashed
+  // box. An advisor reading this export has to be able to tell "we checked and
+  // it is outstanding" from "we could not check this at all".
+  const secIcon = isStatedOnly ? "–"
+    : secStatus === "done" ? "✓" : secStatus === "planned" ? "○" : "";
   return `<div class="sec${secStatus === "done" ? " sec-sat" : secStatus === "planned" ? " sec-planned" : ""}">
     <div class="sec-head">
       <span class="sec-icon">${secIcon}</span>
       <span class="sec-title">${esc(sec.title)}</span>
       <span class="sec-prog">${progHtml}</span>
     </div>
-    ${barHtml}
+    ${isStatedOnly ? "" : barHtml}
     ${warnHtml}
     ${catalogHtml}
     <div class="sec-body">
@@ -363,6 +373,11 @@ function sectionHtml(sec, doneKeys) {
     </div>
   </div>`;
 }
+
+/** Test seam: the export is what an ADVISOR reads, so its section states —
+    verified, planned, outstanding, and not-evaluable — are testable without
+    standing up a whole report. */
+export const _sectionHtml = sectionHtml;
 
 /**
  * The grade-scoped course sets a degree audit runs on.

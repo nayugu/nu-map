@@ -570,6 +570,7 @@ export const strings = {
   "grad.oneOf": "Un sur ({count}/{total})",
   "grad.requiresOutOf": "Nécessite {count} sur {total}",
   "grad.fromCatalog": "Extrait du catalogue",
+  "grad.notCheckable": "Le catalogue n'indique jamais quels cours comptent ici ; cette exigence ne peut donc pas être validée automatiquement. Votre conseiller fait autorité.",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "Sans titre",

@@ -568,6 +568,7 @@ export const strings = {
   "grad.oneOf": "任选其一 ({count}/{total})",
   "grad.requiresOutOf": "需满足 {count} 项，共 {total} 项",
   "grad.fromCatalog": "课程目录原文",
+  "grad.notCheckable": "课程目录没有列出哪些课程可以满足此项要求，因此无法自动勾选。请以导师的说明为准。",
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":          "{n} \u95e8\u8bfe\u7a0b",

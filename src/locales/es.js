@@ -570,6 +570,7 @@ export const strings = {
   "grad.oneOf": "Uno de ({count}/{total})",
   "grad.requiresOutOf": "Requiere {count} de {total}",
   "grad.fromCatalog": "Del catálogo",
+  "grad.notCheckable": "El catálogo nunca indica qué cursos cuentan aquí, así que esto no puede marcarse automáticamente. Tu asesor es la autoridad.",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "Sin título",

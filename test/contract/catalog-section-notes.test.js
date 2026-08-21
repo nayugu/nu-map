@@ -342,6 +342,35 @@ test('notes reach the allocation result, so the panel and MCP can print them', (
   assert.deepEqual(plain.notes, []);
 });
 
+test('a prose-only section carries its stated credit to the renderers', () => {
+  // `creditsRequired` sat in the JSON and was read by nothing in src/, so the
+  // panel fell back to satCount/total and printed "0/0" over an empty bar for
+  // a 4 SH requirement — which reads as a bug rather than as "the catalog did
+  // not enumerate this". checkSection now carries it as `statedSH`.
+  //
+  // It is a DISPLAY value and must stay one: 90 of the 580 prose-only sections
+  // restate credit another parsed section already counts, so summing these
+  // would double-count a degree.
+  const root = page([
+    areaheader('Mechanical and Industrial Engineering Technical Elective', '4'),
+    comment('Complete one technical elective in one of the following subject areas:'),
+    comment('EMGT, ENGR, ENSY, IE, ME, or MEIE'),
+  ].join(''));
+  const s = byTitle(root, 'Mechanical and Industrial Engineering Technical Elective');
+  const res = checkSection(s, new Set(), {});
+  assert.equal(res.statedSH, 4);
+  assert.equal(res.children.length, 0, 'nothing to tick, hence nothing to count');
+  assert.equal(res.sat, false, 'and never satisfied by default');
+
+  // A section with children must NOT gain the field, or the panel would start
+  // showing credit in place of the counts it can actually verify.
+  const normal = checkSection(
+    byTitle(page([areaheader('Required Courses'), course('ME 2350', 'Statics')].join(''),
+                 'Requirements'), 'Required Courses'),
+    new Set(), {});
+  assert.equal('statedSH' in normal, false);
+});
+
 test('a concentration keeps the notes of the sections it flattens', () => {
   // A concentration discards its sections' wrappers and keeps only their
   // requirement lists, so a note attached to a wrapper would be lost with it.

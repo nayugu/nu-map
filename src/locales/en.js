@@ -686,6 +686,9 @@ export const strings = {
   // translated; the sentence under it never is — it is the registrar's wording
   // and paraphrasing it would make us the author of a rule we only copied.
   "grad.fromCatalog": "From the catalog",
+  // Hover text on the dashed box. It must say we cannot CHECK this — not that
+  // it is done, and not that it is failed — and point at who actually knows.
+  "grad.notCheckable": "The catalog never lists which courses count here, so this cannot be ticked off automatically. Your advisor is the authority.",
   "grad.fromPool": "{sat}/{req} SH from elective pool",
 
   // ── Course card / info panel ───────────────────────────────────

@@ -86,13 +86,35 @@ function CreditBar({ completedSH, plannedSH, requiredSH, showLabel = true, style
   );
 }
 
-function CheckBox({ sat, dimmedCheck = false }) {
+function CheckBox({ sat, dimmedCheck = false, unknown = false, title }) {
   const ctx = useContext(GradCtx);
   const ph  = ctx?.isPhone;
   const sz  = ph ? 12 : 14;
   const base = { display: "inline-flex", alignItems: "center", justifyContent: "center",
     width: sz, height: sz, borderRadius: ph ? 2 : 3, flexShrink: 0,
     fontSize: ph ? 7 : 9, fontWeight: 900 };
+  // NOT EVALUATED — the catalog states this requirement in prose and never
+  // lists the courses, so no placement can satisfy it here. A DASHED rim and a
+  // dash: the third state after "todo" (full rim, empty) and "done" (check).
+  //
+  // Deliberately not a strikethrough. A struck box means VOID, and the two
+  // things it could be confused with are both wrong: `dimmedCheck` already
+  // uses a slash for "an alternative was picked, this row is moot", and this
+  // requirement is neither moot nor failed. It is real, outstanding work whose
+  // completion lives with the student and their advisor — so the mark must say
+  // "not ours to fill", not "cancelled" and not "not done".
+  if (unknown) return (
+    <span title={title} style={{ ...base,
+      background: "transparent",
+      border: "1px dashed var(--border-2)",
+      color: "var(--text-5)",
+    }}>
+      <svg width={sz - 4} height={sz - 4} viewBox="0 0 12 12" style={{ display: "block" }}>
+        <line x1="2.5" y1="6" x2="9.5" y2="6" stroke="var(--text-5)"
+          strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    </span>
+  );
   if (dimmedCheck) return (
     <span style={{ ...base, background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", color: "var(--text-5)", overflow: "hidden", position: "relative" }}>
       <svg width={sz} height={sz} viewBox={`0 0 ${sz} ${sz}`} style={{ position: "absolute", top: 0, left: 0 }}>
@@ -803,6 +825,13 @@ function SectionBlock({ sec, defaultOpen = true }) {
   // General electives section uses SH display instead of course count
   const isGeneralElectives = sec.title === 'General Electives' && sec.placedSH !== undefined;
   const hasSplit = isGeneralElectives && sec.completedSH !== undefined;
+
+  // A section the catalog states in prose only: it has a credit demand and no
+  // course to tick, so there is nothing to count. "0/0" over a full-width empty
+  // bar reads as a bug; the registrar's own number reads as what it is. The
+  // stated hours are shown and the bar is dropped rather than drawn at 0% —
+  // an empty bar is a claim of no progress, and no progress is measurable here.
+  const isStatedOnly = sec.children?.length === 0 && sec.statedSH > 0;
   const frac = isGeneralElectives
     ? (sec.requiredSH > 0 ? Math.min(sec.placedSH / sec.requiredSH, 1) : 1)
     : (displayTotal > 0 ? displaySatCount / displayTotal : 0);
@@ -816,7 +845,8 @@ function SectionBlock({ sec, defaultOpen = true }) {
         display: "flex", alignItems: "center", gap: ph ? 4 : 6,
         cursor: "pointer", userSelect: "none",
       }}>
-        <CheckBox sat={sec.sat} />
+        <CheckBox sat={sec.sat} unknown={isStatedOnly}
+                  title={isStatedOnly ? t("grad.notCheckable") : undefined} />
         {ph
           ? <span style={{ flex: 1 }} />
           : <span style={{ flex: 1, fontSize: 10, fontWeight: 700, color: sec.sat ? "var(--text-2)" : "var(--text-3)",
@@ -831,17 +861,20 @@ function SectionBlock({ sec, defaultOpen = true }) {
               <span>/{sec.requiredSH} SH</span>
             </>
           ) : isGeneralElectives ? `${sec.placedSH}/${sec.requiredSH} SH`
+            : isStatedOnly ? `${sec.statedSH} SH`
             : `${displaySatCount}/${displayTotal}`}
         </span>
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
       </div>
       {/* Progress sliver */}
-      <div style={{ marginTop: 3 }}>
-        {hasSplit
-          ? <CreditBar completedSH={sec.completedSH} plannedSH={sec.plannedSH} requiredSH={sec.requiredSH} showLabel={false} style={{ margin: 0 }} />
-          : <ProgressBar frac={frac} color={sec.sat ? "var(--success-bar)" : "var(--success-bar-partial)"} />
-        }
-      </div>
+      {!isStatedOnly && (
+        <div style={{ marginTop: 3 }}>
+          {hasSplit
+            ? <CreditBar completedSH={sec.completedSH} plannedSH={sec.plannedSH} requiredSH={sec.requiredSH} showLabel={false} style={{ margin: 0 }} />
+            : <ProgressBar frac={frac} color={sec.sat ? "var(--success-bar)" : "var(--success-bar-partial)"} />
+          }
+        </div>
+      )}
       {/* Requirements */}
       {open && (
         <div style={{ paddingTop: ph ? 4 : 5 }}>

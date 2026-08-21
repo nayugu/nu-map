@@ -571,6 +571,7 @@ export const strings = {
   "grad.oneOf": "いずれか一つ ({count}/{total})",
   "grad.requiresOutOf": "{total} のうち {count} 必須",
   "grad.fromCatalog": "カタログより",
+  "grad.notCheckable": "どの科目が該当するかはカタログに記載がないため、自動では判定できません。アドバイザーにご確認ください。",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "タイトルなし",

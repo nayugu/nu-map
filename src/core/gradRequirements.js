@@ -235,6 +235,7 @@ export function checkSection(section, placedSet, courseMap) {
     title: section.title ?? '',
     warnings: section.warnings ?? [],
     notes: section.notes ?? [],
+    ...(section.creditsRequired ? { statedSH: section.creditsRequired } : {}),
     sat: satCount >= section.minRequirementCount,
     satCount,
     minRequired: section.minRequirementCount,
@@ -847,6 +848,12 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
     // that whoever renders the section can show the student what the registrar
     // actually wrote next to the boxes we can tick.
     notes: normalized.notes ?? [],
+    // The credit the catalog states for a section whose courses it never
+    // lists. Carried for DISPLAY only: with no children there is nothing to
+    // count, and "0/0" over an empty bar reads as broken rather than as "the
+    // catalog did not enumerate this". Deliberately NOT fed into any total —
+    // 90 of the 580 such sections restate credit another section counts.
+    ...(normalized.creditsRequired ? { statedSH: normalized.creditsRequired } : {}),
     sat,
     satCount,
     minRequired: normalized.minRequirementCount,
