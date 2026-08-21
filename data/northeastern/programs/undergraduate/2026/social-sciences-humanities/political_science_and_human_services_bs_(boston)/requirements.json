@@ -321,16 +321,16 @@
               ]
             },
             {
-              "type": "COURSE",
-              "subject": "HUSV",
-              "classId": 4700
-            },
-            {
               "type": "RANGE",
               "subject": "POLS",
               "idRangeStart": 2000,
               "idRangeEnd": 5999,
               "exceptions": []
+            },
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 4700
             }
           ]
         }

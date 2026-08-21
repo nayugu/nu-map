@@ -351,6 +351,18 @@ function flattenCourseNodes(reqs) {
  * follows, so the block commits nothing and the sentence stays a note. Marking
  * on read would have swallowed the only statement of that requirement.
  */
+/**
+ * A CourseLeaf sub-run header: `<span class="courselistcomment areasubheader">`.
+ *
+ * Matched by class token, never by the `tr`'s class string — `"even
+ * areasubheader undefined subheader".includes("areaheader")` is false, which is
+ * exactly why parseTable's boundary test never saw one of these.
+ */
+function isSubheaderRow(tr) {
+  if (!tr) return false;          // called on rows[i + 1] at the end of a group
+  return !!tr.querySelector('td[colspan="2"] span.areasubheader, td[colspan="2"] span.courselistcomment.areasubheader');
+}
+
 function parseRowGroup(rows, consumed = null) {
   const requirements = [];
   const consume = (tr) => { if (consumed && tr) consumed.add(tr); };
@@ -365,6 +377,10 @@ function parseRowGroup(rows, consumed = null) {
   let splitPendingCredit = null; // split/supplemental credit (SH) awaiting its single course
   let chooseRow     = null;   // the comment <tr> that opened the current choose block
   let splitPendingRow = null; // the comment <tr> holding that split-credit annotation
+  let subheaderSeen = false;  // an areasubheader has opened a sub-run in this group
+  let flushOptions  = false;  // the open block's options are UNINDENTED (see below)
+  let runOptions    = false;  // each SUBHEADERED RUN is one option of the block
+  let optionNodes   = [];     // courses of the run currently open
 
   function commitPending() {
     if (!pending) return;
@@ -372,12 +388,33 @@ function parseRowGroup(rows, consumed = null) {
     pending = null;
   }
 
+  /**
+   * Close the subheadered run currently open, as ONE option of the block.
+   *
+   * A run of several courses is an AND: taking that branch means taking all of
+   * them. This is the whole point of `runOptions` — see the indented codecol
+   * branch below for what it fixes.
+   */
+  function closeOption() {
+    if (!optionNodes.length) return;
+    chooseItems.push(optionNodes.length === 1
+      ? optionNodes[0]
+      : { type: 'AND', courses: optionNodes });
+    optionNodes = [];
+  }
+
+  function endRunOptions() {
+    closeOption();
+    runOptions = false;
+    commitChooseGroup();
+  }
+
   function commitChooseGroup() {
     if (!inChoose) return;
     inChoose = false;
     // Nothing accumulated → the instruction expressed nothing, so its row is
     // deliberately NOT consumed and survives as a verbatim note.
-    if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; chooseRow = null; return; }
+    if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; chooseRow = null; flushOptions = false; return; }
     consume(chooseRow);
     chooseRow = null;
 
@@ -420,11 +457,48 @@ function parseRowGroup(rows, consumed = null) {
       });
     }
 
-    chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false;
+    chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; flushOptions = false;
   }
 
-  for (const tr of rows) {
+  // Indexed, because arming `runOptions` needs to know whether the row AFTER an
+  // instruction is a subheader — that adjacency is what says the instruction's
+  // options are the runs rather than the rows.
+  for (let i = 0; i < rows.length; i++) {
+    const tr = rows[i];
     const cls = tr.getAttribute('class') ?? '';
+
+    // ── An areasubheader marks a sub-run, and ends a FLUSH block ──────────────
+    //
+    // CourseLeaf marks a sub-run inside one areaheader group with
+    // `<span class="courselistcomment areasubheader">` — 1,663 groups on 466
+    // pages. Neither of parseTable's boundary tests matches it (`areasubheader`
+    // is a distinct class token, and `"even areasubheader undefined
+    // subheader".includes("areaheader")` is false), so it arrives here as an
+    // ordinary comment row and used to do nothing whatever.
+    //
+    // It closes a flush block only. Measured: 862 groups put a subheader BETWEEN
+    // two indented option rows, where it is a category label inside ONE pool
+    // ("choose 12 SH from: [Category A] … [Category B] …") — closing there would
+    // split a single pool in two, so an indented pool runs straight through, and
+    // `flushOptions` is set nowhere but the branch below. Zero effect on any
+    // block that parsed before this change.
+    //
+    // Never consumed: "For students pursuing emergency elementary teaching
+    // licenses" is a condition on the option beneath it that no node expresses,
+    // so it survives as a verbatim note.
+    if (isSubheaderRow(tr)) {
+      subheaderSeen = true;
+      if (runOptions) closeOption();
+      else if (flushOptions) { commitPending(); commitChooseGroup(); }
+      // Deliberately NOT a `continue`. A subheader can carry credit in its own
+      // hourscol — Environmental and Sustainability Sciences says "Complete one
+      // course from each category:" over "Skills 4", "Earth, Oceans, and
+      // Environmental Change 4", "Conservation, Restoration, and Management 4" —
+      // and the comment branch below reads that as a per-category pool. Swallowing
+      // the row collapsed four separate 4 SH requirements into one OR: pick one
+      // pair instead of all four, 12 SH of the degree gone. So the boundary work
+      // happens here and the row still goes on to be read as an instruction.
+    }
 
     // ── OR-alternative row (class="orclass …") ────────────────────────────────
     if (cls.includes('orclass')) {
@@ -438,6 +512,12 @@ function parseRowGroup(rows, consumed = null) {
         pending = { type: 'OR', courses: [pending, node] };
       } else if (pending?.type === 'OR') {
         pending.courses.push(node);
+      } else if (runOptions && optionNodes.length) {
+        // An alternative to the last course of the run currently open.
+        const last = optionNodes[optionNodes.length - 1];
+        optionNodes[optionNodes.length - 1] = last.type === 'OR'
+          ? { ...last, courses: [...last.courses, node] }
+          : { type: 'OR', courses: [last, node] };
       } else {
         // No pending — append to last item in the current accumulator
         const arr = inChoose ? chooseItems : requirements;
@@ -485,14 +565,58 @@ function parseRowGroup(rows, consumed = null) {
       splitPendingCredit = null;
       splitPendingRow = null;
 
+      if (runOptions && isIndented) {
+        // ── One option is a RUN, not a course ─────────────────────────────
+        //
+        // "Complete one of the following:" over subheadered runs of indented
+        // courses is the commonest shape in this family: `ISiiiSiii` alone is 71
+        // groups, `ISiiSii` 51, and the family runs to 583 groups on 232 pages.
+        // The subheader used to do nothing, so the block absorbed every indented
+        // row across every run and the section read "pick 1 of 6" where the page
+        // offers a choice between two THREE-course tracks.
+        //
+        // That is under-requiring, and under-requiring is the failure a student
+        // does not recover from: they satisfy the section with one course, the
+        // audit agrees, and they are two courses short at graduation. Grouping
+        // each run into an AND states what the page states — take one branch,
+        // and a branch is all of its courses.
+        //
+        // Bounded entirely by markup, with nothing inferred: the subheader ends
+        // an option and the first UNINDENTED row ends the block, because an
+        // unindented row was never an option in the first place.
+        optionNodes.push(node);
+        continue;
+      }
+
       if (isIndented) {
         // Options inside a "choose N" block
         commitPending();
         if (!inChoose) inChoose = true;
         pending = node;
       } else {
+        if (runOptions) endRunOptions();
         commitPending();
-        if (inChoose) commitChooseGroup();
+        // ── An UNINDENTED option, inside a subheadered run ────────────────
+        //
+        // Indentation is the only signal that a course is an option rather than
+        // an obligation, and CourseLeaf drops it once a subheader intervenes.
+        // Elementary Education MAT prints "Complete one of the following:", a
+        // subheader, a flush course, another subheader, another flush course —
+        // so the first flush course closed a choose block holding nothing, the
+        // instruction was discarded, and BOTH alternatives shipped as required.
+        // The student was told to take two courses where the page says one.
+        // Measured: 511 groups on 184 pages put the instruction inside a
+        // subheadered run like this, and 94 sections in 81 programs currently
+        // demand every child while a note quotes "one of the following".
+        //
+        // So a flush course joins the open block instead of closing it — but
+        // ONLY when a subheader has already opened a sub-run, because that is
+        // what bounds the block. Without that bound the block would run to the
+        // end of the group and swallow genuinely required courses, which is
+        // under-requiring: a student who follows it does not graduate. Over is
+        // recoverable, under is not, so the unbounded case is deliberately left
+        // as it is and its instruction stays a verbatim note.
+        if (inChoose && !flushOptions) commitChooseGroup();
         pending = node;
       }
       continue;
@@ -553,11 +677,38 @@ function parseRowGroup(rows, consumed = null) {
         chooseCount  = count  ?? 0;
         chooseExplicit = true;
         chooseRow    = tr;   // consumed only if the block it opens commits something
+        // Options may be flush rather than indented, but only inside a sub-run
+        // that bounds them — see the codecol branch above.
+        flushOptions = subheaderSeen;
+        // ── Each subheadered run below is one option ──────────────────────
+        //
+        // Armed only for "complete ONE of the following" immediately above the
+        // first subheader. Two exclusions, both measured rather than reasoned:
+        //
+        //   a credit instruction  "Complete 12 credit hours from the following:"
+        //     over three subheadered areas is one 12 SH pool. Turning its areas
+        //     into alternatives would demand a whole area's worth of credit.
+        //   a count above one     the subheaders are thematic CATEGORIES, not
+        //     branches. Public Health BA says "Complete three of the following
+        //     (two must be at the 3000 level or above and from the same area)"
+        //     over "Society and Behavior", "Globalization and Global Health",
+        //     "Law, Policy, and Human Rights" …; Project Management BS says
+        //     "Complete four of the following" over industry areas. Reading a
+        //     run as a conjunction there demanded all ~25 courses of a theme.
+        //     `check-major-integrity` caught all four such sections as newly
+        //     over-consuming pools, which is exactly what that guard is for.
+        //
+        // The line is not arbitrary: you do not complete FOUR of two tracks. A
+        // count above one is a count of courses, so its options are the rows and
+        // the subheaders are labels; a count of one over several runs is the
+        // either/or that this reading exists to express.
+        runOptions = !subheaderSeen && count === 1 && isSubheaderRow(rows[i + 1] ?? null);
       }
       continue;
     }
   }
 
+  if (runOptions) endRunOptions();
   commitPending();
   commitChooseGroup();
 

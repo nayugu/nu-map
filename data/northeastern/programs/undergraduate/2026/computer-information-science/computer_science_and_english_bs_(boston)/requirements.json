@@ -235,34 +235,49 @@
           "type": "OR",
           "courses": [
             {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 3800
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 3800
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4120
+                }
+              ]
             },
             {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 4120
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 3800
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4400
+                }
+              ]
             },
             {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 3800
-            },
-            {
-              "type": "COURSE",
-              "subject": "CS",
-              "classId": 4400
-            },
-            {
-              "type": "COURSE",
-              "subject": "DS",
-              "classId": 3000
-            },
-            {
-              "type": "COURSE",
-              "subject": "DS",
-              "classId": 4200
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 3000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 4200
+                }
+              ]
             }
           ]
         }

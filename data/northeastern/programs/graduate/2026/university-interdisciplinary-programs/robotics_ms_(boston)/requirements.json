@@ -433,32 +433,37 @@
                 ]
               },
               {
-                "type": "OR",
+                "type": "AND",
                 "courses": [
                   {
-                    "type": "COURSE",
-                    "subject": "BIOE",
-                    "classId": 7945
+                    "type": "OR",
+                    "courses": [
+                      {
+                        "type": "COURSE",
+                        "subject": "BIOE",
+                        "classId": 7945
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "PT",
+                        "classId": 7995
+                      }
+                    ]
                   },
                   {
-                    "type": "COURSE",
-                    "subject": "PT",
-                    "classId": 7995
-                  }
-                ]
-              },
-              {
-                "type": "OR",
-                "courses": [
-                  {
-                    "type": "COURSE",
-                    "subject": "BIOE",
-                    "classId": 7990
-                  },
-                  {
-                    "type": "COURSE",
-                    "subject": "PT",
-                    "classId": 7990
+                    "type": "OR",
+                    "courses": [
+                      {
+                        "type": "COURSE",
+                        "subject": "BIOE",
+                        "classId": 7990
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "PT",
+                        "classId": 7990
+                      }
+                    ]
                   }
                 ]
               }
@@ -537,14 +542,19 @@
                 "classId": 8674
               },
               {
-                "type": "COURSE",
-                "subject": "CS",
-                "classId": 7990
-              },
-              {
-                "type": "COURSE",
-                "subject": "CS",
-                "classId": 8674
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 7990
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 8674
+                  }
+                ]
               }
             ]
           }
@@ -594,14 +604,19 @@
                 "classId": 7945
               },
               {
-                "type": "COURSE",
-                "subject": "EECE",
-                "classId": 7945
-              },
-              {
-                "type": "COURSE",
-                "subject": "EECE",
-                "classId": 7990
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "EECE",
+                    "classId": 7945
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EECE",
+                    "classId": 7990
+                  }
+                ]
               }
             ]
           },
@@ -678,14 +693,19 @@
                 "classId": 7945
               },
               {
-                "type": "COURSE",
-                "subject": "ME",
-                "classId": 7945
-              },
-              {
-                "type": "COURSE",
-                "subject": "ME",
-                "classId": 7990
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ME",
+                    "classId": 7945
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ME",
+                    "classId": 7990
+                  }
+                ]
               }
             ]
           },

@@ -428,7 +428,12 @@
               "type": "COURSE",
               "subject": "MUST",
               "classId": 2320
-            },
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
             {
               "type": "COURSE",
               "subject": "MUSC",
@@ -512,7 +517,7 @@
           ]
         }
       ],
-      "minRequirementCount": 4,
+      "minRequirementCount": 5,
       "notes": [
         "Complete one from each of the following. Of the courses from Western tradition, ethnomusicology, and contemporary, at least two must be at the 2000 level or higher. Courses may not double count across these areas. Many, but not all, music in context courses at the 2000 level or higher fulfill the Writing-Intensive in the Discipline requirement. Please check writing-intensive status of courses as needed. Students may use MUSC 2150, MUSC 2208, MUSC 2210, MUSC 3342, MUSI 2232, MUSI 5220, or MUST 1220 to fulfill both creating and producing and music in context creative but will also need to take one additional music industry elective.",
         "Western Art Music",

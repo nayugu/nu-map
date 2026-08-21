@@ -913,44 +913,19 @@
             "type": "OR",
             "courses": [
               {
-                "type": "COURSE",
-                "subject": "ARTG",
-                "classId": 2810
-              },
-              {
-                "type": "COURSE",
-                "subject": "ARTG",
-                "classId": 3810
-              },
-              {
-                "type": "COURSE",
-                "subject": "ARTG",
-                "classId": 3462
-              },
-              {
-                "type": "COURSE",
-                "subject": "ARTG",
-                "classId": 3464
-              },
-              {
-                "type": "COURSE",
-                "subject": "ARTG",
-                "classId": 2252
-              },
-              {
-                "type": "COURSE",
-                "subject": "ARTG",
-                "classId": 3452
-              },
-              {
-                "type": "COURSE",
-                "subject": "ARTG",
-                "classId": 2242
-              },
-              {
-                "type": "COURSE",
-                "subject": "ARTG",
-                "classId": 3444
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 2810
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 3810
+                  }
+                ]
               },
               {
                 "type": "AND",
@@ -958,19 +933,69 @@
                   {
                     "type": "COURSE",
                     "subject": "ARTG",
-                    "classId": 2400
+                    "classId": 3462
                   },
                   {
                     "type": "COURSE",
                     "subject": "ARTG",
-                    "classId": 2401
+                    "classId": 3464
                   }
                 ]
               },
               {
-                "type": "COURSE",
-                "subject": "ARTG",
-                "classId": 3400
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 2252
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 3452
+                  }
+                ]
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 2242
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 3444
+                  }
+                ]
+              },
+              {
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "AND",
+                    "courses": [
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTG",
+                        "classId": 2400
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTG",
+                        "classId": 2401
+                      }
+                    ]
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 3400
+                  }
+                ]
               }
             ]
           }

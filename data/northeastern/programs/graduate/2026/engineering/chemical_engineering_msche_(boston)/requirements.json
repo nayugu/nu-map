@@ -437,39 +437,49 @@
             "type": "OR",
             "courses": [
               {
-                "type": "COURSE",
-                "subject": "CHME",
-                "classId": 7945
-              },
-              {
-                "type": "COURSE",
-                "subject": "CHME",
-                "classId": 7990
-              },
-              {
-                "type": "OR",
+                "type": "AND",
                 "courses": [
                   {
                     "type": "COURSE",
                     "subject": "CHME",
-                    "classId": 7330
+                    "classId": 7945
                   },
                   {
                     "type": "COURSE",
                     "subject": "CHME",
-                    "classId": 7340
-                  },
-                  {
-                    "type": "COURSE",
-                    "subject": "CHME",
-                    "classId": 7350
+                    "classId": 7990
                   }
                 ]
               },
               {
-                "type": "COURSE",
-                "subject": "CHME",
-                "classId": 7945
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "OR",
+                    "courses": [
+                      {
+                        "type": "COURSE",
+                        "subject": "CHME",
+                        "classId": 7330
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "CHME",
+                        "classId": 7340
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "CHME",
+                        "classId": 7350
+                      }
+                    ]
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CHME",
+                    "classId": 7945
+                  }
+                ]
               }
             ]
           },

@@ -243,6 +243,44 @@ Facts that follow from this:
   Engineering 8 credits short. `demandOf` reads a childless section's
   `statedSH`; before that it answered a flat 4 SH for all 580 of them, so
   4,305 of 6,625 SH leaked into free electives.
+- **`areasubheader` is a sub-run boundary, and it does THREE jobs.** CourseLeaf
+  marks a sub-run inside an areaheader group with
+  `<span class="courselistcomment areasubheader">` — 1,663 groups on 466 cached
+  pages. Neither of `parseTable`'s boundary tests matches it (distinct class
+  token; `"even areasubheader undefined subheader".includes("areaheader")` is
+  false), so it used to do nothing and a choose block ran straight through it.
+  Data Science BS's choice between two three-course pathways shipped as "pick
+  one of six", so one course satisfied a 12 SH requirement. Before changing
+  anything here, know that such a row:
+  1. **may open a credit pool from its own hourscol** — Environmental and
+     Sustainability Sciences says "Complete one course from each category:" over
+     `Skills 4` / `Earth, Oceans… 4` / `Conservation… 4`. It must fall THROUGH
+     to the instruction branch; swallowing it collapsed four separate 4 SH
+     requirements into one OR (12 SH of a degree gone);
+  2. **is prose no node expresses** → a verbatim note ("For students pursuing
+     emergency elementary teaching licenses");
+  3. **bounds a run**, which is what makes a run readable as one option.
+  A run of indented options becomes an `AND`; armed only for "complete ONE of
+  the following" adjacent to the first subheader. A **credit** instruction is
+  excluded (a 12 SH pool legitimately spans areas) and so is **any count above
+  one** — there the subheaders are thematic categories, and reading a run as a
+  conjunction demanded all ~25 courses of a theme in 4 programs, which
+  `check-major-integrity` caught as newly over-consuming pools.
+  Left alone on purpose: an instruction BEFORE the first subheader whose options
+  are flush (Elementary Education MAT), because the run holding the last
+  alternative also holds two genuinely required courses and nothing separates
+  them. Over-requiring is recoverable; under-requiring is not.
+- **`AND` is a conjunction; a GROUP is an `AND` with no `AND` children.** A group
+  is one registration slot, so it cannot hold a prerequisite chain — Public
+  Health BA's Biology option is two co-requisite pairs and General Biology 2
+  needs General Biology 1, so `andGroup` flattening them into one group forced
+  all four into one term and refused the plan with `named-prereq`. Zero nested
+  `AND`s existed in the corpus before subheadered branches began parsing, so
+  this distinction is new; every consumer was audited against it (`checkAnd`,
+  `allocateNode`, `normalizePooledSection`, `programEligibility` all recurse and
+  are indifferent to nesting; `witnessedSharedNodes` degrades to "not
+  witnessable"). **Enumerate the consumers of a node shape before introducing a
+  new one** — not doing that cost three iterations and two sweeps here.
 - Concentrations are found through the page's **anchor graph**, not heading
   text — wording varies far too much. A concentration's title is its only
   identity across saved plans, share links and MCP `SET_CONCENTRATION`, so

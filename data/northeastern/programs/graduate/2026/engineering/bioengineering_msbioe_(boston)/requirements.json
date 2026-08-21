@@ -184,14 +184,19 @@
                 "classId": 7945
               },
               {
-                "type": "COURSE",
-                "subject": "BIOE",
-                "classId": 7945
-              },
-              {
-                "type": "COURSE",
-                "subject": "BIOE",
-                "classId": 7990
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 7945
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 7990
+                  }
+                ]
               }
             ]
           },
@@ -543,14 +548,19 @@
                 "classId": 7945
               },
               {
-                "type": "COURSE",
-                "subject": "BIOE",
-                "classId": 7945
-              },
-              {
-                "type": "COURSE",
-                "subject": "BIOE",
-                "classId": 7990
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 7945
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 7990
+                  }
+                ]
               }
             ]
           },
@@ -727,14 +737,19 @@
                 "classId": 7945
               },
               {
-                "type": "COURSE",
-                "subject": "BIOE",
-                "classId": 7945
-              },
-              {
-                "type": "COURSE",
-                "subject": "BIOE",
-                "classId": 7990
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 7945
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOE",
+                    "classId": 7990
+                  }
+                ]
               }
             ]
           },

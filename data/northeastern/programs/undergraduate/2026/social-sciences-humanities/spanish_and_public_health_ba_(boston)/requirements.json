@@ -750,14 +750,19 @@
           "type": "OR",
           "courses": [
             {
-              "type": "COURSE",
-              "subject": "HSCI",
-              "classId": 4720
-            },
-            {
-              "type": "COURSE",
-              "subject": "HSCI",
-              "classId": 4730
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 4720
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 4730
+                }
+              ]
             },
             {
               "type": "COURSE",

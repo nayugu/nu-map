@@ -155,37 +155,27 @@
           "type": "OR",
           "courses": [
             {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 1143
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 1141
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "BIOL",
-              "classId": 1147
-            },
-            {
               "type": "AND",
               "courses": [
                 {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 1111
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1143
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1141
+                    }
+                  ]
                 },
                 {
                   "type": "COURSE",
                   "subject": "BIOL",
-                  "classId": 1112
+                  "classId": 1147
                 }
               ]
             },
@@ -193,14 +183,34 @@
               "type": "AND",
               "courses": [
                 {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 1113
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1111
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1112
+                    }
+                  ]
                 },
                 {
-                  "type": "COURSE",
-                  "subject": "BIOL",
-                  "classId": 1114
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1113
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1114
+                    }
+                  ]
                 }
               ]
             }

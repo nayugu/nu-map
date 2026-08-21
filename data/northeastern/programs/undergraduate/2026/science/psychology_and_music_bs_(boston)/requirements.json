@@ -346,144 +346,154 @@
           "type": "OR",
           "courses": [
             {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1301
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1301
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2150
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2208
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2209
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2210
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2420
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2425
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 3342
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSI",
+                  "classId": 2232
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSI",
+                  "classId": 5220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUST",
+                  "classId": 1220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUST",
+                  "classId": 2320
+                }
+              ]
             },
             {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 2150
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 2208
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 2209
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 2210
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 2420
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 2425
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 3342
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSI",
-              "classId": 2232
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSI",
-              "classId": 5220
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUST",
-              "classId": 1220
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUST",
-              "classId": 2320
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1901
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1902
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1904
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1905
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1906
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1907
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1911
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1912
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1913
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1914
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1915
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1917
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1918
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1919
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1920
-            },
-            {
-              "type": "COURSE",
-              "subject": "MUSC",
-              "classId": 1922
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1901
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1902
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1904
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1905
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1906
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1907
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1911
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1912
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1913
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1914
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1915
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1917
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1918
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1919
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1920
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 1922
+                }
+              ]
             }
           ]
         }

@@ -170,14 +170,34 @@
               "type": "AND",
               "courses": [
                 {
-                  "type": "COURSE",
-                  "subject": "CS",
-                  "classId": 2100
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CS",
+                      "classId": 2100
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CS",
+                      "classId": 2101
+                    }
+                  ]
                 },
                 {
-                  "type": "COURSE",
-                  "subject": "CS",
-                  "classId": 2101
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CS",
+                      "classId": 3100
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CS",
+                      "classId": 3101
+                    }
+                  ]
                 }
               ]
             },
@@ -185,36 +205,26 @@
               "type": "AND",
               "courses": [
                 {
-                  "type": "COURSE",
-                  "subject": "CS",
-                  "classId": 3100
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "CS",
-                  "classId": 3101
-                }
-              ]
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "DS",
-                  "classId": 2500
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "DS",
+                      "classId": 2500
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "DS",
+                      "classId": 2501
+                    }
+                  ]
                 },
                 {
                   "type": "COURSE",
                   "subject": "DS",
-                  "classId": 2501
+                  "classId": 3500
                 }
               ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "DS",
-              "classId": 3500
             }
           ]
         }

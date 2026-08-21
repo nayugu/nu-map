@@ -437,44 +437,59 @@
             "type": "OR",
             "courses": [
               {
-                "type": "COURSE",
-                "subject": "ARCH",
-                "classId": 5310
-              },
-              {
-                "type": "COURSE",
-                "subject": "ARCH",
-                "classId": 5530
-              },
-              {
-                "type": "COURSE",
-                "subject": "SUEN",
-                "classId": 7230
-              },
-              {
-                "type": "COURSE",
-                "subject": "SUEN",
-                "classId": 7240
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARCH",
+                    "classId": 5310
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARCH",
+                    "classId": 5530
+                  }
+                ]
               },
               {
                 "type": "AND",
                 "courses": [
                   {
                     "type": "COURSE",
-                    "subject": "ARTG",
-                    "classId": 5150
+                    "subject": "SUEN",
+                    "classId": 7230
                   },
                   {
                     "type": "COURSE",
-                    "subject": "ARTG",
-                    "classId": 5151
+                    "subject": "SUEN",
+                    "classId": 7240
                   }
                 ]
               },
               {
-                "type": "COURSE",
-                "subject": "ARTG",
-                "classId": 6310
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "AND",
+                    "courses": [
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTG",
+                        "classId": 5150
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTG",
+                        "classId": 5151
+                      }
+                    ]
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 6310
+                  }
+                ]
               }
             ]
           },

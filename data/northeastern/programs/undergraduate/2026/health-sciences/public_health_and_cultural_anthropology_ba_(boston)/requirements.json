@@ -338,144 +338,169 @@
           "type": "OR",
           "courses": [
             {
-              "type": "COURSE",
-              "subject": "COMM",
-              "classId": 3201
-            },
-            {
-              "type": "COURSE",
-              "subject": "COMM",
-              "classId": 4102
-            },
-            {
-              "type": "COURSE",
-              "subject": "CRIM",
-              "classId": 3040
-            },
-            {
-              "type": "COURSE",
-              "subject": "HLTH",
-              "classId": 5280
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 5222
-            },
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 3402
-            },
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 3404
-            },
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 3450
-            },
-            {
-              "type": "COURSE",
-              "subject": "AFCS",
-              "classId": 3424
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 3404
-            },
-            {
-              "type": "OR",
+              "type": "AND",
               "courses": [
                 {
                   "type": "COURSE",
-                  "subject": "INTL",
-                  "classId": 3200
+                  "subject": "COMM",
+                  "classId": 3201
                 },
                 {
                   "type": "COURSE",
-                  "subject": "INTL",
-                  "classId": 3201
+                  "subject": "COMM",
+                  "classId": 4102
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 3040
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HLTH",
+                  "classId": 5280
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5222
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 3402
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 3404
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 3450
                 }
               ]
             },
             {
-              "type": "COURSE",
-              "subject": "INTL",
-              "classId": 3400
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "AFCS",
+                  "classId": 3424
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3404
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "INTL",
+                      "classId": 3200
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "INTL",
+                      "classId": 3201
+                    }
+                  ]
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INTL",
+                  "classId": 3400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 3487
+                }
+              ]
             },
             {
-              "type": "COURSE",
-              "subject": "POLS",
-              "classId": 3487
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3423
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5238
+                }
+              ]
             },
             {
-              "type": "COURSE",
-              "subject": "COMM",
-              "classId": 3500
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3424
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 5001
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 5002
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 3307
+                }
+              ]
             },
             {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 3423
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5238
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 3424
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHIL",
-              "classId": 5001
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHIL",
-              "classId": 5002
-            },
-            {
-              "type": "COURSE",
-              "subject": "POLS",
-              "classId": 3307
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 3413
-            },
-            {
-              "type": "COURSE",
-              "subject": "MGMT",
-              "classId": 3340
-            },
-            {
-              "type": "COURSE",
-              "subject": "ORGB",
-              "classId": 3201
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 4511
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 5232
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 5234
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3413
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MGMT",
+                  "classId": 3340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ORGB",
+                  "classId": 3201
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4511
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5232
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5234
+                }
+              ]
             }
           ]
         }

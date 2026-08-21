@@ -199,11 +199,24 @@ function orGroups(node) {
 
 /** The single group an AND names, or null when a branch is not a plain course. */
 function andGroup(node) {
+  // ── A group SHARES A TERM, so it cannot contain a sequence ─────────
+  //
+  // This walked nested ANDs and flattened them, which was harmless while no
+  // nested AND existed — 0 sections in the corpus until the catalog's
+  // subheadered branches started parsing as one. Now Public Health BA's Biology
+  // requirement offers "BIOL 1111 and 1112, BIOL 1113 and 1114" as ONE option:
+  // two co-requisite pairs, and General Biology 2 has General Biology 1 as a
+  // prerequisite. Flattened into a single group, all four had to be taken in the
+  // same term, which is impossible — the plan was refused with `named-prereq`.
+  //
+  // A group is what a student registers for TOGETHER. An inner AND is its own
+  // group, so the caller recurses and emits a cell per pair, which the ordinary
+  // prerequisite ordering then sequences.
+  if ((node.courses ?? []).some(c => c?.type === "AND")) return null;
   const out = [];
   const walk = (n) => {
     if (!n) return false;
     if (n.type === "COURSE") { out.push(courseKey(n.subject, n.classId)); return true; }
-    if (n.type === "AND") return (n.courses ?? []).every(walk);
     return false;
   };
   return (node.courses ?? []).every(walk) && out.length ? out : null;

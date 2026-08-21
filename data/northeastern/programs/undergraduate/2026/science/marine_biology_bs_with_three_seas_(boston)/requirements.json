@@ -425,74 +425,79 @@
               "type": "AND",
               "courses": [
                 {
-                  "type": "COURSE",
-                  "subject": "PHYS",
-                  "classId": 1145
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1145
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1146
+                    }
+                  ]
                 },
                 {
-                  "type": "COURSE",
-                  "subject": "PHYS",
-                  "classId": 1146
-                }
-              ]
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "PHYS",
-                  "classId": 1151
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1151
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1152
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1153
+                    }
+                  ]
                 },
                 {
-                  "type": "COURSE",
-                  "subject": "PHYS",
-                  "classId": 1152
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1161
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1162
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1163
+                    }
+                  ]
                 },
                 {
-                  "type": "COURSE",
-                  "subject": "PHYS",
-                  "classId": 1153
-                }
-              ]
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "PHYS",
-                  "classId": 1161
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "PHYS",
-                  "classId": 1162
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "PHYS",
-                  "classId": 1163
-                }
-              ]
-            },
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "PHYS",
-                  "classId": 1171
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "PHYS",
-                  "classId": 1172
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "PHYS",
-                  "classId": 1173
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1171
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1172
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1173
+                    }
+                  ]
                 }
               ]
             }

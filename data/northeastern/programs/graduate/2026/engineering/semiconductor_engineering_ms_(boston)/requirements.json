@@ -707,13 +707,17 @@
             ]
           },
           {
-            "type": "COURSE",
-            "subject": "EECE",
-            "classId": 7945
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EECE",
+                "classId": 7945
+              }
+            ]
           },
           {
-            "type": "XOM",
-            "numCreditsMin": 8,
+            "type": "OR",
             "courses": [
               {
                 "type": "COURSE",
@@ -732,7 +736,9 @@
         "notes": [
           "Complete one of the following options for 12 semester hours:",
           "Coursework Option",
+          "Complete 12 semester hours from the restricted electives course list.",
           "Project Option",
+          "Complete 8 semester hours from the restricted electives course list.",
           "Thesis Option",
           "Complete 4 semester hours from the restricted electives course list."
         ]
@@ -784,8 +790,7 @@
             ]
           },
           {
-            "type": "XOM",
-            "numCreditsMin": 12,
+            "type": "OR",
             "courses": [
               {
                 "type": "OR",
@@ -810,8 +815,7 @@
             ]
           },
           {
-            "type": "XOM",
-            "numCreditsMin": 8,
+            "type": "OR",
             "courses": [
               {
                 "type": "OR",
@@ -860,7 +864,9 @@
         "notes": [
           "Complete one of the following options for 12 semester hours:",
           "Coursework Option",
+          "Complete 12 semester hours from the restricted electives course list.",
           "Project Option",
+          "Complete 8 semester hours from the restricted electives course list.",
           "Thesis Option",
           "Complete 4 semester hours from the restricted electives course list."
         ]

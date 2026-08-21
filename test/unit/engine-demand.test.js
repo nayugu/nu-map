@@ -45,6 +45,21 @@ test("demand › an all-required section yields one cell per obligation", () => 
   assert.deepEqual(groups(real), [[["CS1800"]], [["CS2800"]]]);
 });
 
+test("demand › a NESTED and is a sequence, not one co-requisite group", () => {
+  // A group is what a student registers for together, so it cannot contain a
+  // prerequisite chain. `andGroup` used to flatten nested ANDs, which was
+  // harmless while no nested AND existed — 0 sections in the corpus — until the
+  // catalog's subheadered branches began parsing as one. Public Health BA offers
+  // "BIOL 1111 and 1112, BIOL 1113 and 1114" as ONE option, and General Biology
+  // 2 requires General Biology 1: flattened, all four had to share a term and
+  // the plan was refused with `named-prereq`.
+  const { cells } = cellsOf([SECTION("Biology", 1,
+    AND(AND(C("CS", "1800"), C("CS", "1802")), AND(C("CS", "2500"), C("CS", "2501"))))]);
+  const real = cells.filter(c => typeof c.target === "number");
+  assert.deepEqual(groups(real), [[["CS1800", "CS1802"]], [["CS2500", "CS2501"]]],
+    "one cell per pair, so the ordinary prerequisite ordering can sequence them");
+});
+
 test("demand › co-required courses share ONE cell and their credit sums", () => {
   const { cells } = cellsOf([SECTION("Core", 1, AND(C("CS", "1800"), C("CS", "1802")))]);
   const cell = cells.find(c => typeof c.target === "number");

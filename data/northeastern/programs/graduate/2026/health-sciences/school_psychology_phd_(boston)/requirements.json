@@ -202,24 +202,30 @@
           "classId": 8416
         },
         {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 7741
-        },
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 7742
-        },
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 7743
-        },
-        {
-          "type": "COURSE",
-          "subject": "CAEP",
-          "classId": 7744
+          "type": "XOM",
+          "numCreditsMin": 2,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 7741
+            },
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 7742
+            },
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 7743
+            },
+            {
+              "type": "COURSE",
+              "subject": "CAEP",
+              "classId": 7744
+            }
+          ]
         },
         {
           "type": "COURSE",
@@ -227,12 +233,11 @@
           "classId": 7798
         }
       ],
-      "minRequirementCount": 18,
+      "minRequirementCount": 15,
       "notes": [
         "Coursework",
         "Practicum",
         "Fieldwork",
-        "Complete a minimum of 2 semester hours required per course, for a total of 8 semester hours:",
         "Internship"
       ]
     },

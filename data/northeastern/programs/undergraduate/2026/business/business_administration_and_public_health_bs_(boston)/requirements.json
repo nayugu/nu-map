@@ -475,79 +475,84 @@
               "classId": 4501
             },
             {
-              "type": "COURSE",
-              "subject": "HINF",
-              "classId": 5301
-            },
-            {
-              "type": "COURSE",
-              "subject": "HSCI",
-              "classId": 4720
-            },
-            {
-              "type": "COURSE",
-              "subject": "HSCI",
-              "classId": 4730
-            },
-            {
-              "type": "COURSE",
-              "subject": "HSCI",
-              "classId": 4740
-            },
-            {
               "type": "AND",
               "courses": [
                 {
                   "type": "COURSE",
-                  "subject": "HSCI",
-                  "classId": 4970
+                  "subject": "HINF",
+                  "classId": 5301
                 },
                 {
                   "type": "COURSE",
                   "subject": "HSCI",
-                  "classId": 4971
+                  "classId": 4720
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 4730
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HSCI",
+                  "classId": 4740
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "HSCI",
+                      "classId": 4970
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "HSCI",
+                      "classId": 4971
+                    }
+                  ]
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4515
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4602
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4616
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4717
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5214
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5230
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5236
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5603
                 }
               ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 4515
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 4602
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 4616
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 4717
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 5214
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 5230
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 5236
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHTH",
-              "classId": 5603
             }
           ]
         }

@@ -369,14 +369,19 @@
                 "classId": 8674
               },
               {
-                "type": "COURSE",
-                "subject": "CS",
-                "classId": 8674
-              },
-              {
-                "type": "COURSE",
-                "subject": "CS",
-                "classId": 7990
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 8674
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 7990
+                  }
+                ]
               }
             ]
           }
@@ -426,14 +431,19 @@
                 "classId": 7945
               },
               {
-                "type": "COURSE",
-                "subject": "EECE",
-                "classId": 7945
-              },
-              {
-                "type": "COURSE",
-                "subject": "EECE",
-                "classId": 7990
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "EECE",
+                    "classId": 7945
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EECE",
+                    "classId": 7990
+                  }
+                ]
               }
             ]
           },
@@ -510,14 +520,19 @@
                 "classId": 7945
               },
               {
-                "type": "COURSE",
-                "subject": "ME",
-                "classId": 7945
-              },
-              {
-                "type": "COURSE",
-                "subject": "ME",
-                "classId": 7990
+                "type": "AND",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ME",
+                    "classId": 7945
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ME",
+                    "classId": 7990
+                  }
+                ]
               }
             ]
           },
