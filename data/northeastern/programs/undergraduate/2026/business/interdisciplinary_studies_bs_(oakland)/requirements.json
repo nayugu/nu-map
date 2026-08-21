@@ -2,7 +2,7 @@
   "name": "Interdisciplinary Studies, BS (Oakland)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 11,
     "tablesConsumed": 11,
@@ -19,8 +19,8 @@
     "verification": {
       "level": "verified",
       "kind": "major",
-      "score": 1,
-      "checkedAt": "2026-08-19",
+      "score": 0.98,
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/interdisciplinary-studies-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -31,6 +31,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 7,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
@@ -39,13 +40,99 @@
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
-      "discrepancies": []
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "7 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Focus Area",
+                "sh": 32
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Restricted Electives",
+                "sh": 24
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Minor Requirement",
+                "sh": 16
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Supporting Courses",
+                "sh": 16
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Biology Focus Area",
+                "sh": 32
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Social Science Selectives",
+                "sh": 7
+              }
+            }
+          ],
+          "overflow": 1
+        }
+      ]
     }
   },
   "totalCreditsRequired": 128,
   "totalCreditsSource": "stated-total",
   "yearVersion": 2026,
   "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Focus Area",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 32
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 24
+    },
+    {
+      "type": "SECTION",
+      "title": "Minor Requirement",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 16
+    },
+    {
+      "type": "SECTION",
+      "title": "Supporting Courses",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 16
+    },
+    {
+      "type": "SECTION",
+      "title": "Biology Focus Area",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 32
+    },
     {
       "type": "SECTION",
       "title": "Business Administration Focus Area",
@@ -487,6 +574,20 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Social Science Selectives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 7
+    },
+    {
+      "type": "SECTION",
+      "title": "Psychology Focus Area",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 32
     }
   ],
   "gpaRequirements": [

@@ -2,7 +2,7 @@
   "name": "Artificial Intelligence, MS (Seattle)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
@@ -16,8 +16,8 @@
     "verification": {
       "level": "verified",
       "kind": "grad",
-      "score": 1,
-      "checkedAt": "2026-08-19",
+      "score": 0.98,
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/computer-information-science/computer-science/artificial-intelligence-ms-sea/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -27,6 +27,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 1,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
@@ -34,7 +35,23 @@
         "planUnexplained": 0,
         "impossibleSections": 0
       },
-      "discrepancies": []
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Coursework Option",
+                "sh": 12
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
     }
   },
   "totalCreditsRequired": 32,
@@ -373,6 +390,13 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Coursework Option",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 12
     },
     {
       "type": "SECTION",

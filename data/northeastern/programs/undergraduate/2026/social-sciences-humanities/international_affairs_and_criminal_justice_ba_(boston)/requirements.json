@@ -2,7 +2,7 @@
   "name": "International Affairs and Criminal Justice, BA (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 11,
     "tablesConsumed": 11,
@@ -12,6 +12,14 @@
     "panes": [
       "programrequirementstextcontainer"
     ],
+    "titleCollisions": {
+      "sections": [
+        "International Affairs Elective",
+        "Global Dynamics",
+        "Regional Analysis Requirement"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [
       "ANTH1101",
       "CRIM1000",
@@ -42,8 +50,8 @@
     "verification": {
       "level": "verified",
       "kind": "major",
-      "score": 1,
-      "checkedAt": "2026-08-19",
+      "score": 0.98,
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/international-affairs/international-affairs-criminal-justice-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -54,6 +62,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 4,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
@@ -62,7 +71,44 @@
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
-      "discrepancies": []
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "4 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "International Affairs Elective",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Global Dynamics",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Regional Analysis Requirement",
+                "sh": 8
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Criminal Justice Electives",
+                "sh": 8
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
     }
   },
   "totalCreditsRequired": 128,
@@ -134,6 +180,13 @@
     {
       "type": "SECTION",
       "title": "International Affairs Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "International Affairs Elective (2)",
       "requirements": [
         {
           "type": "OR",
@@ -211,6 +264,13 @@
     {
       "type": "SECTION",
       "title": "Global Dynamics",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Global Dynamics (2)",
       "requirements": [
         {
           "type": "OR",
@@ -803,6 +863,13 @@
     {
       "type": "SECTION",
       "title": "Regional Analysis Requirement",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8
+    },
+    {
+      "type": "SECTION",
+      "title": "Regional Analysis Requirement (2)",
       "requirements": [
         {
           "type": "OR",
@@ -1286,6 +1353,13 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Criminal Justice Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8
     },
     {
       "type": "SECTION",

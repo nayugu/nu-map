@@ -1,6 +1,6 @@
 # Major verification report
 
-Generated 2026-08-19 by `npm run data:verify`.
+Generated 2026-08-21 by `npm run data:verify`.
 
 > **What this can and cannot tell you.** There is no second authoritative
 > source for Northeastern degree requirements — Degree Works and the
@@ -8,14 +8,30 @@ Generated 2026-08-19 by `npm run data:verify`.
 > the per-page PDF is the same render as the HTML. These checks confirm we
 > parsed the catalog faithfully. They cannot confirm the catalog is right.
 
-**1066 programs** — 917 verified · 141 partial · 8 review · 0 unverified
+**1071 programs** — 922 verified · 141 partial · 8 review · 0 unverified
 
 ## Findings by root cause
 
 Grouped by check rather than by program: one parser bug usually wears many
 names, and a list of every affected program is not a work order.
 
-### `missing-total-credits` · 268 program(s) · medium
+### `unenumerated-sections` · 343 program(s) · info
+
+4 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically
+
+- Architectural Studies and Design, BS (Boston) — `undergraduate/2026/arts-media-design/architectural_studies_and_design_bs_(boston)`
+- Architectural Studies, BS (Boston) — `undergraduate/2026/arts-media-design/architectural_studies_bs_(boston)`
+- Architecture and English, BS (Boston) — `undergraduate/2026/arts-media-design/architecture_and_english_bs_(boston)`
+- Architecture, BS (Boston) — `undergraduate/2026/arts-media-design/architecture_bs_(boston)`
+- Art, BA (Boston) — `undergraduate/2026/arts-media-design/art_ba_(boston)`
+- Communication Studies and Design, BS (Boston) — `undergraduate/2026/arts-media-design/communication_studies_and_design_bs_(boston)`
+- Communication Studies and Sociology, BA (Boston) — `undergraduate/2026/arts-media-design/communication_studies_and_sociology_ba_(boston)`
+- Communication Studies and Speech-Language Pathology and Audiology, BS (Boston) — `undergraduate/2026/arts-media-design/communication_studies_and_speech-language_pathology_and_audiology_bs_(boston)`
+- Communication Studies and Theatre, BA (Boston) — `undergraduate/2026/arts-media-design/communication_studies_and_theatre_ba_(boston)`
+- Communication Studies, BA (Boston) — `undergraduate/2026/arts-media-design/communication_studies_ba_(boston)`
+- …and 333 more
+
+### `missing-total-credits` · 269 program(s) · medium
 
 the catalog page states no total credit requirement
 
@@ -29,7 +45,7 @@ the catalog page states no total credit requirement
 - Art, Minor — `undergraduate/2026/arts-media-design/art_minor`
 - Cinema Studies, Minor — `undergraduate/2026/arts-media-design/cinema_studies_minor`
 - Communication Studies, Minor — `undergraduate/2026/arts-media-design/communication_studies_minor`
-- …and 258 more
+- …and 259 more
 
 ### `plan-witness-unaccounted` · 114 program(s) · medium
 

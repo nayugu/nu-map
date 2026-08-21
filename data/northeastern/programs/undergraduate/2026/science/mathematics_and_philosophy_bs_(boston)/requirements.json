@@ -2,7 +2,7 @@
   "name": "Mathematics and Philosophy, BS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
@@ -36,8 +36,8 @@
     "verification": {
       "level": "verified",
       "kind": "major",
-      "score": 1,
-      "checkedAt": "2026-08-19",
+      "score": 0.98,
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/mathematics/mathematics-philosophy-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -48,6 +48,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 2,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
@@ -56,7 +57,30 @@
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
-      "discrepancies": []
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "2 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Mathematics Electives",
+                "sh": 8
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Open Electives",
+                "sh": 12
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
     }
   },
   "totalCreditsRequired": 68,
@@ -104,6 +128,13 @@
         }
       ],
       "minRequirementCount": 7
+    },
+    {
+      "type": "SECTION",
+      "title": "Mathematics Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8
     },
     {
       "type": "SECTION",
@@ -178,6 +209,13 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Open Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 12
     },
     {
       "type": "SECTION",

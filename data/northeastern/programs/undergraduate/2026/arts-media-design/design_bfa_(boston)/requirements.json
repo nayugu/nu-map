@@ -2,7 +2,7 @@
   "name": "Design, BFA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 9,
     "tablesConsumed": 9,
@@ -16,8 +16,8 @@
     "verification": {
       "level": "partial",
       "kind": "major",
-      "score": 0.85,
-      "checkedAt": "2026-08-19",
+      "score": 0.83,
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/design-bfa/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -27,6 +27,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 2,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
@@ -42,6 +43,28 @@
           "detail": [
             {
               "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "2 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Art and Design Elective",
+                "sh": 8
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Design Electives",
+                "sh": 16
+              }
             }
           ],
           "overflow": 0
@@ -258,6 +281,13 @@
     },
     {
       "type": "SECTION",
+      "title": "Art and Design Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8
+    },
+    {
+      "type": "SECTION",
       "title": "Media Arts Elective",
       "requirements": [
         {
@@ -318,6 +348,13 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Design Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 16
     }
   ],
   "concentrations": {

@@ -2,7 +2,7 @@
   "name": "Political Science and Economics, BA (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 14,
     "tablesConsumed": 14,
@@ -47,8 +47,8 @@
     "verification": {
       "level": "verified",
       "kind": "major",
-      "score": 1,
-      "checkedAt": "2026-08-19",
+      "score": 0.98,
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-economics-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -59,6 +59,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 1,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
@@ -67,7 +68,23 @@
         "planUnexplainedInSubject": 0,
         "impossibleSections": 0
       },
-      "discrepancies": []
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Political Science Electives",
+                "sh": 16
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
     }
   },
   "totalCreditsRequired": 128,
@@ -127,6 +144,13 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Political Science Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 16
     },
     {
       "type": "SECTION",

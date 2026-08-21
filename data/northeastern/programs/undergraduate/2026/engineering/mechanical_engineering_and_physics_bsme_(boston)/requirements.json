@@ -2,7 +2,7 @@
   "name": "Mechanical Engineering and Physics, BSME (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
@@ -80,8 +80,8 @@
     "verification": {
       "level": "review",
       "kind": "major",
-      "score": 0.6,
-      "checkedAt": "2026-08-19",
+      "score": 0.58,
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/mechanical-industrial/mechanical-engineering-physics-bsme/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -92,6 +92,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 1,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
@@ -144,6 +145,21 @@
             }
           ],
           "overflow": 3
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Advanced Physics Elective",
+                "sh": 4
+              }
+            }
+          ],
+          "overflow": 0
         }
       ]
     }
@@ -451,6 +467,13 @@
         }
       ],
       "minRequirementCount": 13
+    },
+    {
+      "type": "SECTION",
+      "title": "Advanced Physics Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4
     },
     {
       "type": "SECTION",

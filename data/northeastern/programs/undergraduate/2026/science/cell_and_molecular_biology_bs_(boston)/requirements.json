@@ -2,7 +2,7 @@
   "name": "Cell and Molecular Biology, BS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
@@ -45,7 +45,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-19",
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/biology/cell-molecular-biology-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -56,6 +56,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 0,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,

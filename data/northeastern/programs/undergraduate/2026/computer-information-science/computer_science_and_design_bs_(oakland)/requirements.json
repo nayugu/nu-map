@@ -2,7 +2,7 @@
   "name": "Computer Science and Design, BS (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 8,
     "tablesConsumed": 8,
@@ -47,8 +47,8 @@
     "verification": {
       "level": "partial",
       "kind": "major",
-      "score": 0.85,
-      "checkedAt": "2026-08-19",
+      "score": 0.83,
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-design-bs-oak/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -59,6 +59,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 3,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
@@ -83,6 +84,35 @@
               "key": "planMissingCourse",
               "params": {
                 "course": "ARTG 2263"
+              }
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "3 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Design Elective",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Art + Design History Elective",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Art + Design Elective",
+                "sh": 4
               }
             }
           ],
@@ -419,6 +449,27 @@
         }
       ],
       "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Design Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design History Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4
     },
     {
       "type": "SECTION",

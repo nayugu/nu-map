@@ -2,7 +2,7 @@
   "name": "Game Experience Design, Graduate Certificate (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 2,
     "tablesConsumed": 2,
@@ -17,7 +17,7 @@
       "level": "verified",
       "kind": "certificate",
       "score": 1,
-      "checkedAt": "2026-08-19",
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/art-design/game-experience-design-graduate-certificate/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -27,6 +27,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 0,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,

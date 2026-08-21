@@ -2,7 +2,7 @@
   "name": "Electrical and Computer Engineering with Concentration in Computer Systems and Software, MSECE (Seattle)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
@@ -12,12 +12,20 @@
     "panes": [
       "programrequirementstextcontainer"
     ],
+    "titleCollisions": {
+      "sections": [
+        "Concentration Courses",
+        "Electives",
+        "Concentration Courses"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
-      "score": 1,
-      "checkedAt": "2026-08-19",
+      "score": 0.98,
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/electrical-computer/electrical-computer-engineering-concentration-computer-systems-software-msece/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -27,6 +35,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 4,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
@@ -34,7 +43,44 @@
         "planUnexplained": 0,
         "impossibleSections": 0
       },
-      "discrepancies": []
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "4 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Concentration Courses",
+                "sh": 16
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Electives",
+                "sh": 8
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Concentration Courses (2)",
+                "sh": 8
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Electives (2)",
+                "sh": 8
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
     }
   },
   "totalCreditsRequired": 32,
@@ -76,6 +122,20 @@
     },
     {
       "type": "SECTION",
+      "title": "Concentration Courses",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 16
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8
+    },
+    {
+      "type": "SECTION",
       "title": "Thesis",
       "requirements": [
         {
@@ -90,6 +150,20 @@
         }
       ],
       "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Concentration Courses (2)",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives (2)",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8
     },
     {
       "type": "SECTION",
@@ -130,7 +204,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Concentration Courses",
+      "title": "Concentration Courses (3)",
       "requirements": [
         {
           "type": "OR",

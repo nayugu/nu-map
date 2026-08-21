@@ -2,7 +2,7 @@
   "name": "Mechanical Engineering and History, BSME (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/19/2026",
+    "lastEdited": "8/21/2026",
     "branch": "main",
     "tablesPresent": 7,
     "tablesConsumed": 7,
@@ -64,8 +64,8 @@
     "verification": {
       "level": "partial",
       "kind": "major",
-      "score": 0.85,
-      "checkedAt": "2026-08-19",
+      "score": 0.83,
+      "checkedAt": "2026-08-21",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/mechanical-industrial/mechanical-engineering-history-bsme/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -76,6 +76,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
+        "unenumeratedSections": 5,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
@@ -94,6 +95,49 @@
               "key": "planMissingCourse",
               "params": {
                 "course": "MATH 2322"
+              }
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "5 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Introductory History",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "History Elective",
+                "sh": 8
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Intermediate History",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Advanced History",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Required General Elective",
+                "sh": 4
               }
             }
           ],
@@ -342,6 +386,20 @@
     },
     {
       "type": "SECTION",
+      "title": "Introductory History",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "History Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8
+    },
+    {
+      "type": "SECTION",
       "title": "Pre-1800 History Elective",
       "requirements": [
         {
@@ -421,6 +479,20 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate History",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Advanced History",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4
     },
     {
       "type": "SECTION",
@@ -617,6 +689,13 @@
         }
       ],
       "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Required General Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4
     }
   ],
   "gpaRequirements": [
