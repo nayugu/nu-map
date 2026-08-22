@@ -2,11 +2,11 @@
 
 One omnibox on every `/data` page that resolves **any entity on the public data
 surface** to its page: a course, a professor, a program, a NUpath code, a
-subject, a section hub. Type a name, get the page.
+subject. Type a name, get the page.
 
 What it is deliberately *not*: prose search and question answering. Course
 descriptions and the 7,637 verbatim catalog notes are ~1.1 MB gzipped and would
-need a server tier; every measured question below is about *reaching a page*,
+need a server tier; every question measured below is about *reaching a page*,
 not about extracting a fact from one. If that changes, it changes as a second
 tier, not by widening this one.
 
@@ -17,26 +17,19 @@ Measured on the 2026-08 build (`dist/data`, 13,081 pages):
 | Type | Records | Match keys |
 |---|---|---|
 | Courses | 7,966 | code (`CHEM 2311`), title, subject |
-| Professors | 3,793 | name, either token order |
+| Professors | 3,741 | name, either token order |
 | Programs | 1,071 | name, degree acronym (`BSCS`), initial-runs (`ie and cs`), kind, college |
-| Subjects | ~180 | code + name |
+| Subjects | 231 | code + name |
 | NUpath | 13 | code (`ND`) + label (`Natural/Designed World`) |
-| Section hubs | 7 | Courses, Majors, Minors, Graduate, NUpath, Professors, Equivalences |
 
-≈13,000 records, and every field already exists in what
-`scripts/build-ai-data.js` emits today:
-
-| Existing file | Raw | Gzip |
-|---|---|---|
-| `json/courses/titles.json` | 338 KB | **81 KB** |
-| `json/programs/index.json` | 485 KB | **31 KB** |
-| `json/professors/*.json` (names only, derived) | ~76 KB | ~25 KB |
+13,022 records against **13,081 pages**, and that gap is not yet explained:
+3,793 professor HTML pages exist against 3,741 professor records. Some of the
+difference is letter-index pages, but not all of it, and "some of it" is not an
+answer. See the bijection rail below — this is exactly the discrepancy it is for.
 
 ## Speed: there is no performance problem
 
-Measured by building the real merged index and timing a real scan
-(13,022 records: 7,966 courses / 3,741 professors / 1,071 programs /
-231 subjects / 13 NUpath):
+Measured by building the real merged index and timing a real scan:
 
 | | |
 |---|---|
@@ -45,278 +38,294 @@ Measured by building the real merged index and timing a real scan
 | One-time lowercase + tokenize of all 13,022 | **11.3 ms** |
 | **Brute-force scan of every record, per keystroke** | **median 1.1 ms, worst 1.9 ms** |
 
-So the design is: **no trie, no inverted index, no prefix map, no WASM.** A
-linear scan over the whole corpus costs about a millisecond, against a 16 ms
-frame — in Node here, so assume 2–3× in a browser and it is still nothing. The
-entire cost of the feature is an 88 KB fetch and ~13 ms of setup, once, lazily
-on first focus. An inverted index would be strictly more code, more build
-surface and more ways to be subtly wrong, bought with latency we do not need.
+So: **no trie, no inverted index, no prefix map, no WASM.** A linear scan over
+the whole corpus costs about a millisecond against a 16 ms frame. The entire
+cost of the feature is an 88 KB fetch and ~13 ms of setup, once, lazily on first
+focus. An inverted index would be more code, more build surface and more ways to
+be subtly wrong, bought with latency we do not need.
+
+Caveat stated honestly: those are Node numbers on an M-series Mac. Assume 5–10×
+on a low-end phone and the scan is still ~10 ms, but the 11 ms precompute could
+become ~100 ms. If it does, the cure is shipping the normalized form in the
+index, not a different algorithm — and that is a measurement to take on a
+throttled CPU, not a guess to pre-empt.
 
 Columnar over an array of objects because it measured smaller on both axes
-(534 vs 712 KB raw, 116 vs 132 KB gzip) for the same data — repeated key names
-are the difference.
+(534 vs 712 KB raw, 116 vs 132 KB gzip) — repeated key names are the difference.
 
-Reaching every page is by construction, not by effort: the index is derived in
-the same `buildAiData()` pass, from the same generated JSON that produces the
-pages. The existing link rail already fails the build on any internal link that
-does not resolve to a generated page; running the index through that same check
-means an unreachable entity cannot ship.
+Pagefind is the obvious off-the-shelf answer and was considered: it is
+full-text-over-pages, cannot express the router, acronym or representation rules
+below, and its runtime plus sharded index for 13,000 pages is larger than our
+entire 88 KB. Licence would have been fine (MIT); the fit is not.
 
 ## Ranking
 
-`src/core/searchRank.js` already solved the hard half, against 7,146 measured
-queries: coverage-of-the-name scoring (so "computer science" beats "Computer
-Science and Biology"), acronym tiers ranked by provenance, and initial-runs
-("ie" ⇒ Industrial Engineering). It is pure, and today it is program-only. This
-work **generalizes it to typed records** rather than adding a second ranker —
-two rankers is how "cs" comes out different in two boxes.
+`src/core/searchRank.js` already solved most of this, against 7,146 measured
+queries: coverage-of-the-name scoring, acronym tiers ranked by provenance
+(NU's own degree code beats derived initials), initial-runs that skip connectors
+so `ece` spans "Electrical **and** Computer Engineering", and a subsequence
+typo fallback armed only when strict matches are sparse. It is pure, and today
+it is program-only.
 
 Two stages:
 
-1. **Router.** An unambiguous shape wins outright and never gets scored.
+1. **Router.** An unambiguous shape wins outright and is never scored:
    `src/core/courseCodeParse.js` already turns `chem2311`, `chem 2311`,
    `CHEM 2311` into a code; a bare NUpath code and a bare subject code are
-   equally decidable. These are exact answers, so scoring them can only make
-   them worse.
-2. **Coverage ranking across all types**, one comparable score, results
-   **grouped by type** with the best of each labelled.
+   equally decidable. Scoring an exact answer can only make it worse.
+2. **One scorer over typed records**, then a **representation guarantee**.
 
-The grouping is the conservative call and the reason it can't be a single row:
-`Chemistry` is legitimately a subject, a BS, a minor and an MS. Collapsing that
-to one confident answer is the expensive failure. Ambiguity is presented as a
-choice; it is never presented as a wrong single answer.
+### What a blended score does, measured
 
-### Why a blended score cannot work, measured
-
-Courses outnumber every other type **6:1**, so a single score lets them flood
-the list. A naive coverage-only ranker over the real index returned:
+Courses outnumber every other type **6:1**, so a single score lets them flood.
+A coverage-only ranker over the real index returned:
 
 ```
 "cs"                → CS 2963 Topics, CS 5963 Topics, CS 7990 Thesis…
-                      (the CS subject page and the BSCS major: nowhere)
 "computer science"  → CS subject, then CS 4973 Topics, CS 6983 Topics…
-                      (Computer Science, BSCS: absent from the top 5)
 "chemistry"         → "Chemistry - CPS", CHEM 5610 Polymer Chemistry…
-                      (Chemistry BS / minor: absent)
 ```
 
-Adding a **coarse tier** (code > exact > name-prefix > ordered-word-prefix >
-any-word > initials), with coverage breaking ties only *inside* a tier, plus a
-**fixed display quota per type**, fixes all three without a single tuned weight:
+— in each case burying the subject page and the degree program the query
+plainly meant.
+
+### Representation guarantee, not per-type quotas
+
+The first version of this design fixed the flood with a per-type display quota
+(4 courses, 3 professors, 4 programs, 2 subjects, 2 NUpath). That is five tuned
+constants dressed up as a principle — the same thing this repo refuses
+elsewhere. The replacement is **one rule**: the best hit of every kind that
+matched at all is guaranteed a slot; the remainder of the list is pure tier
+order. No per-type numbers, and the guarantee is a *property* — "the major you
+meant is visible" — rather than a ration.
+
+Measured side by side on the flood queries, representation alone is as good as
+the quota table and needs nothing tuned:
 
 ```
-"cs"                → CS (subject) ▸ CSYE ▸ CS 1101 Lab…
+"cs"                → CS (subject) ▸ …
 "computer science"  → CS (subject) ▸ CS Minor ▸ MSCS ▸ PhD ▸ BACS ▸ CS 4950…
-"chemistry"         → CHEM ▸ CHM ▸ Chemistry Minor ▸ BS ▸ MS ▸ PhD ▸ CHEM 2117
+"chemistry"         → CHEM ▸ Chemistry BS ▸ CHEM 1000 ▸ CHM ▸ Chemistry MS
 "machine learning"  → CS 6140 Machine Learning ▸ DADS 7305 ▸ FINA 4390…
 "phil 1101"         → PHIL 1101 Introduction to Philosophy   (router, sole answer)
 "nd"                → ND Natural/Designed World              (router, sole answer)
-"ranganathan"       → Aanjhan Ranganathan                    (only hit)
 ```
 
-The quota is what makes this robust rather than lucky: the best program, the
-best professor and the best subject are *always* visible, whatever 7,966 course
-titles happen to say. Latency with tiering and quotas included: median 1.13 ms,
-worst 1.85 ms.
+Its one visible cost: for `algorithms`, the guarantee promotes a very long
+program name ("…with Concentration in Computer Vision, Machine Learning, and
+Algorithms, MSECE") into second place. That is the guarantee working as
+specified, and it is labelled by kind, so it reads as "the closest program" and
+not as a better answer than CS 3000.
 
-`machine learning` also settles the open question about titles-only coverage —
-topical queries land, because course titles carry the topic.
+### A prominence prior was tried and refused
 
-### Two gaps the same run exposed, and what they argue
+The compact subject JSON carries real popularity signals — `unlocks`,
+`typicallyOffered`, `instructors`, `campuses` — so the obvious idea is to break
+within-tier ties by how much a course actually matters instead of by coverage.
+Built it, measured it against coverage on the same queries, and it is **worse**,
+in a specific and instructive way:
 
-- `cs` did not reach **Computer Science, BSCS**; a hand-rolled word-initials
-  rule returned *Clara Shim* instead.
-- `ece` returned nothing useful, where it should be Electrical and Computer
-  Engineering.
+| query | coverage tiebreak | prominence tiebreak |
+|---|---|---|
+| `calculus` | MATH 1241 **Calculus 1** | MATH 2321 Calculus 3 for Science and Engineering |
+| `organic chemistry` | CHEM 2311 **Organic Chemistry 1** | CHEM 2313 Organic Chemistry 2 |
+| `chemistry` | CHM (Chemistry - CPS) | **CHEM** (Chemistry and Chemical Biology) |
+| `writing` | INT 6000 Writing Lab | **WI** Writing Intensive |
 
-Both are already correct in `searchRank.js` — acronyms drawn from NU's own
-degree codes and ranked above derived initials, and initial-runs that skip
-connectors so `ece` spans "Electrical **and** Computer Engineering". A 40-line
-reimplementation produced worse answers than the module measured over 7,146
-queries, which is the case for generalizing that file rather than writing a
-second ranker, stated as evidence instead of as taste.
+Prominence loses wherever a name is *numbered* — a sequence's first course is
+what a bare query means, and popularity picks whichever entry happens to run in
+more terms. It wins only where two records share a name and one is the primary
+(`CHEM` over the CPS mirror `CHM`, `Chemistry, BS` over `Chemistry, Minor`).
 
-`orgo` is a third kind of miss: a real nickname with nothing to derive it from.
-That needs a small hand-written alias list, and nothing else will produce it.
+So prominence is not a replacement for coverage; it is a **late tiebreak for
+same-name duplicates**, which is precisely the job `searchRank`'s existing
+`campusRank` / `credentialRank` chain already does. Conclusion: keep coverage as
+the within-tier tiebreak and add provenance-style tiebreaks below it. The idea
+that felt obviously right was wrong, and one probe was enough to show it.
 
-### Decided
+### The defect the harness found immediately
 
-- **Enter jumps to the top hit.** The dropdown is for when you want to pick.
-- **Typo tolerance is deferred to a measurement**, not assumed. Ship prefix and
-  coverage matching first, then run the self-retrieval harness with injected
-  typos and read what fraction actually fails. Edit distance buys recall and
-  costs precision; the number decides, not the intuition that it "feels
-  necessary".
+Prefix monotonicity (below) reported 3.39% non-monotonic drops and **434
+entities absent even when queried by their full name**. Both collapse to one
+cause: the course code was matched only by *equality*, so `aace 6` — a code
+prefix mid-typing — matched nothing, and `aace 6120 advocacy and the arts`
+failed because `6120` was not a matchable token anywhere.
+
+The fix is not a new tier. It is that **a record's code must be tokenized into
+the same matchable pool as its name words**, exactly as `searchRank` already
+pools degree, location and acronyms for its `ANY` tier. Worth recording because
+the flood queries all looked fine while a third of a percent of every keystroke
+sequence was broken, and no amount of eyeballing `"chemistry"` would have
+surfaced it.
 
 ## How we learn whether it is actually good
 
-"Type anything and the right thing pops up" is testable with no usage logs at
-all: **self-retrieval over all ~13,000 entities.** Every record generates
-queries from its own identity — full name, code, degree acronym, last name
-alone — and must return *itself* at rank 1. That yields recall@1 per type and
-enumerates every collision by name instead of by anecdote.
+**Prefix monotonicity is the primary metric, not recall@1.** Self-retrieval by
+full name scores 99.8%/100% and is nearly free — querying an entity by its exact
+name is the easiest question that exists, so a ratchet on it mostly measures
+nothing. The property that catches real defects is:
 
-Then the hostile pass, which is the one that matters:
+> For every entity, over every prefix of how you would actually type it: once
+> the entity appears in the top 10, one more character must never remove it.
 
-- truncated prefixes at every length (does one more letter ever make a match
-  *vanish*, the defect `searchRank` found in "ie and c");
-- reversed and partial person names;
-- cross-type collision names (`Chemistry`, `Business Administration`, `Physics`);
-- pure junk, which must return nothing rather than something;
-- injected typos, to settle the deferred decision above.
+That is the `"ie and c"` defect from `searchRank`'s own history, generalized into
+a law. It found the code-tokenization bug on its first run, at 5% sampling,
+in seconds. Reported alongside it: entities absent even at their full name
+(must be 0), and ties scored as ties — the 0.8‰ of "misses" in the naive
+harness are name-identical twins (the subject "Biochemistry" and a course titled
+"Biochemistry"), and a headline number that counts those as failures is a number
+someone will later "fix" by breaking something real.
 
-Ratcheted in `test/contract/` so recall@1 cannot silently regress. Runtime is
-seconds — it is arithmetic over an index, not a corpus sweep.
+Then the hostile pass: reversed and partial person names, cross-type collision
+names (`Chemistry`, `Physics`, `Business Administration`), pure junk (must
+return nothing, not something), and injected typos — the last of which measures
+whether `searchRank`'s inherited subsequence fallback suffices rather than
+assuming a new one is needed.
 
-First run of it, against the tier+quota prototype: **recall@1 99.8%,
-recall@3 100%** over all 13,022 entities. The 0.8‰ are not wrong answers — they
-are name-identical records (the subject "Biochemistry" and a course titled
-"Biochemistry"; "First-Year Seminar" and "First Year Seminar"), where the
-harness demanded a specific index and got its twin. So the harness must score a
-tie as a tie; a headline number that counts duplicates as failures is a number
-that will get "fixed" by breaking something real.
+### The bijection rail
 
-## Two edges specific to this repo
-
-- **A missing index file is not a 404.** `/* /index.html 200` in
-  `public/_redirects` answers any unknown path with the SPA shell at status 200.
-  Same trap the recovery screens document: the loader must require
-  `JSON.parse` to succeed and must not trust `r.ok`.
-- **The index and the script ship under `/assets/`**, content-hashed. That path
-  already carries `immutable, max-age=1y` (`public/_headers`) and is already
-  exempted from the zone's Human-Verification rule. A new `/data/*.js` path is a
-  fresh path against that rule, and a zone rule matching an asset path is
-  exactly what made the catalog 500 before. Not worth re-learning.
+Every generated page must be reachable from exactly one index record, checked
+at build time, failing the build on either side of the mismatch. Not just
+"no record points at a missing page" (the existing link rail already does that
+direction) but **no page lacks a record** — an unsearchable page is the failure
+mode this whole feature exists to remove, and it is invisible to any test that
+starts from the index. The 3,793-vs-3,741 professor gap above is what an
+unreconciled surface looks like.
 
 ## Architecture
 
 The framing that makes this fit: **the data surface is a third driving adapter
-onto the same pure core**, alongside the React app and the MCP server. It is not
-a feature of the app, so it does not belong in `src/ui/`; and it is not
-institution-neutral either, so it does not all belong in `src/core/`. Five
-modules, each with one job:
+onto the same pure core**, alongside the React app and the MCP server. Not a
+feature of the app, so not `src/ui/`; not institution-neutral either, so not all
+in `src/core/`.
 
 ```
-src/core/nameMatch.js         pure matching primitives            (new, extracted)
-src/core/searchRank.js        program ranking, API unchanged       (existing)
-src/core/entitySearch.js      tiers, router, quotas, wire format   (new)
+src/core/nameMatch.js         matching primitives                  (new, extracted)
+src/core/rankRecords.js       ONE scorer: tiers, router, guarantee  (new)
+src/core/searchRank.js        thin caller; API unchanged            (existing)
 src/adapters/northeastern/dataEntities.js
-                              which kinds exist, URL grammar,
-                              quotas, aliases                      (new)
-scripts/build-ai-data.js      emits the index + bundles the client (existing)
-build/data-search/client.js   plain-DOM widget                     (new)
+                              record derivation, kind descriptors   (new)
+scripts/build-ai-data.js      I/O, emits index, bundles client      (existing)
+src/adapters/datasurface/searchBox.js
+                              plain-DOM widget, core imports only   (new)
 ```
 
-### `src/core/nameMatch.js` — extraction, not rewrite
+### One scorer, not two
 
-`searchRank.js` already contains exactly the primitives this needs: `words`,
-`coverage`, `orderedPrefixes`, `anyPrefixes`, `orderedInitials`, `anyInitials`,
-`isSubsequence`, the `CONNECTORS` set, the tier table and `COV_MAX`. They move
-out **verbatim**. `searchRank` keeps `rankOptions` and the parts that are
-genuinely about programs — `fieldsOf`, `campusRank`, `credentialRank`,
-`degreePref`, `nameLen` — and imports the rest.
+The original plan was "extract the primitives, build a second ranker on top."
+That is how `cs` comes to mean different things in the app and on `/data`, and
+the prominence measurement above removed its last justification: the tiebreak
+chain `searchRank` already has is the one this needs. So `rankRecords.js` holds
+the single tier table and the single scorer, parameterized per kind by
+(a) which fields to match and (b) a comparator chain. `searchRank.rankOptions`
+becomes the program kind's field mapping plus its existing comparator —
+same public API, so `src/data/majorLoader.js` and the program search UI are
+untouched, and `test/unit/search-rank.test.js` runs **unmodified** as the proof
+that nothing moved.
 
-The public API does not change, so `src/data/majorLoader.js` and the program
-search UI are untouched, and `test/unit/search-rank.test.js` runs **unmodified**
-as the proof that the extraction changed no behavior. That test file is the
-whole reason this is safe: a rewrite would have thrown away the 7,146-query
-result, an extraction inherits it.
+That test file is what makes convergence safe rather than brave: it inherits the
+7,146-query result instead of discarding it. Sequencing matters — land the
+behaviour-neutral extraction and get the test green *before* any new kind is
+scored.
 
-Inherited for free, and worth knowing before writing anything new: `rankOptions`
-already carries a typo fallback — in-order subsequence matching, ranked below
-every strict tier, armed only when strict matches number fewer than five. So
-typo tolerance is not a thing to add; it is a thing to *measure*, and the
-harness will say whether the inherited version suffices.
+### The client is institution-agnostic, by construction
 
-### `src/core/entitySearch.js` — pure, generic, institution-blind
+Everything Northeastern-specific — kind labels, URL templates, aliases like
+`orgo`, router vocabularies — is **baked into the emitted index as data**, not
+compiled into the widget. So the widget imports core only, a second institution
+needs zero client changes, and there is no adapter-importing-adapter edge. This
+is a better boundary than the earlier draft's, which had the client importing
+the Northeastern descriptor directly.
 
-Operates on a record shape that says nothing about Northeastern:
+It also settles where the widget lives. `build/` was wrong — that directory
+holds build-time code (`aiDataDevPlugin.js`), and this is runtime browser code
+that ships. `src/ui/` is React-app-only and its rule is "import ports only". A
+plain-DOM widget driving core over a protocol boundary is a driving adapter,
+which is what `src/adapters/` is for, so `src/adapters/datasurface/` is the
+truthful home.
 
-```js
-{ kind, name, code?, aliases?, extra? }
-```
+The widget does exactly four things: lazy `fetch`, `JSON.parse` guard, debounce,
+render. Anything rankable that ends up in it is in the wrong file.
 
-Exports `rankEntities(index, query)`, `bucketize(hits, quotas)`, and —
-importantly — `encodeIndex` / `decodeIndex` for the columnar wire format. The
-codec lives here, in **one** place, because the producer is a build script and
-the consumer is a browser bundle: the two-ended failure this repo already paid
-for once is a parser emitting `courses` while the renderer read `children`
-(see the `areasubheader` notes). One definition plus a round-trip contract test
-makes that drift unrepresentable.
+### `dataEntities.js` — the institution's part
 
-It knows nothing about NUpath, professors, URLs, `fetch`, or the DOM. Everything
-it does is a pure function of (index, query).
-
-### `src/adapters/northeastern/dataEntities.js` — the institution's part
-
-The descriptor: which kinds exist, how each record is derived from the generated
-data, the URL grammar per kind, the display quota per kind, the router
-predicates (delegating course codes to `core/courseCodeParse.js`), and the alias
-table — `orgo`, and whatever else measurement turns up. Data and thin functions,
-no ranking logic.
-
-This is the seam that makes the whole thing extensible, and it is worth stating
-as a check rather than a hope:
+Pure functions over already-loaded data (I/O stays in the build script): how
+each record is derived, the URL grammar per kind, the router vocabularies, and
+the alias table. Extensibility as checks rather than hopes:
 
 - **A new entity kind** — co-op employers, equivalence pairs, concentrations —
-  is one descriptor entry. `entitySearch` is untouched.
-- **A second institution** is `adapters/<school>/dataEntities.js`. Core untouched.
+  is one descriptor entry. `rankRecords` untouched.
+- **A second institution** is one new `adapters/<school>/dataEntities.js`.
+  Core and client untouched.
 - **The app's own boxes** (`CompanySearch`, `CoopCourseSearch`, program search)
-  can converge on the same ranker, because it is pure core.
-- **An MCP `find` tool** that resolves any name to a URL is the same two imports.
-  This is the strongest reason the ranker must not live inside the build script.
+  can converge on the same scorer, because it is pure core.
+- **An MCP `find` tool** resolving any name to a URL is the same two imports —
+  the reason the scorer must not live inside the build script.
 
 ### No new port, deliberately
 
-A port abstracts *behavior the app calls, with swappable implementations*.
-Here the varying part is a declarative descriptor, the consumers are a build
-script and a static page rather than the app, and there is exactly one
-institution. An `IDataSearch` today would be a port with one implementation and
-no caller inside the hexagon — ceremony that has to be maintained without
-paying for itself. The descriptor shape is designed so that promoting it later
-is mechanical: when the React app's boxes route through it *and* a second
-institution exists, it becomes a port then.
+A port abstracts behaviour the app calls with swappable implementations. The
+varying part here is a declarative descriptor, the consumers are a build script
+and a static page rather than the app, and there is one institution. An
+`IDataSearch` today would be a port with one implementation and no caller inside
+the hexagon. Promotion later is mechanical: when the app's boxes route through
+it *and* a second school exists, it becomes a port then.
 
-Note that `scripts/build-ai-data.js` already imports
-`adapters/northeastern/descriptionPrereq.js` directly. Build scripts sit outside
-the hexagon, so importing an adapter plus core is the established precedent, not
-a new exception.
-
-### `build/data-search/client.js` — why not `src/ui/`
-
-The rule is that `src/ui/` imports ports only. This widget is plain DOM, ships
-in no app bundle, and belongs to a build artifact — so putting it in `src/ui/`
-would mean either bending that rule or inventing a port to satisfy it. `build/`
-already holds `aiDataDevPlugin.js`, and this is the same category of thing. It
-imports `core/entitySearch.js`, does the `fetch`, guards the `JSON.parse`,
-debounces, and renders. That is all it does; anything rankable that ends up in
-here is in the wrong file.
+`scripts/build-ai-data.js` already imports
+`adapters/northeastern/descriptionPrereq.js`, so a build script reaching for an
+adapter plus core is precedent, not a new exception.
 
 ### Testing, by layer
 
 | Layer | What it proves |
 |---|---|
-| `test/unit/search-rank.test.js`, **unchanged** | the extraction changed no behavior |
+| `test/unit/search-rank.test.js`, **unchanged** | convergence changed no program-search behaviour |
 | `test/unit/name-match.test.js` | the primitives, directly |
-| `test/unit/entity-search.test.js` | tiers, router, quota arithmetic |
-| `test/contract/data-search-index.test.js` | `encodeIndex`/`decodeIndex` round-trip; every record's URL resolves to a generated page; self-retrieval ratchet, tie-aware |
+| `test/unit/rank-records.test.js` | tiers, router, representation guarantee |
+| `test/contract/data-search-index.test.js` | index codec round-trip; page↔record bijection; **monotonicity** ratchet; ties scored as ties |
 | headless boot check | the script actually runs on a built page — a green Node suite says nothing about that |
 
-## Placement of the artifacts
+The index codec (`encodeIndex` / `decodeIndex`) lives in core, in one place,
+because the producer is a build script and the consumer is a browser bundle.
+This repo has already paid for a producer emitting `courses` while the consumer
+read `children` (the `areasubheader` groups); one definition plus a round-trip
+test makes that drift unrepresentable.
 
-`buildAiData()` esbuild-bundles the client to `/assets/data-search-<hash>.js`
-and emits `/assets/data-index-<hash>.json`, both referenced from the page chrome
-in `writePage`.
+## Artifacts and the no-JS floor
 
-The `/data` pages currently ship **zero JavaScript**, and that property is worth
-keeping as a floor: the box is a real `<form>` whose target is a generated
-`/data/search` page, so with JS off the form still resolves to a page and the
-nav rail still works. `/data/search?q=…` is also what makes a result set
-shareable as a URL.
+`buildAiData()` esbuild-bundles the widget to `/assets/data-search-<hash>.js`
+and emits `/assets/data-index-<hash>.json`. Under `/assets/` because that path
+already carries `immutable, max-age=1y` (`public/_headers`) and is already
+exempted from the zone's Human-Verification rule; a new `/data/*.js` path would
+be a fresh path against that rule, which is the class of thing that 500'd the
+catalog before.
 
-## Open, and cheap to answer
+**A missing index file is not a 404.** `/* /index.html 200` in
+`public/_redirects` answers any unknown path with the SPA shell at status 200,
+so the loader must require `JSON.parse` to succeed and must never trust `r.ok` —
+the same lesson as the recovery screens.
 
-Titles-only means "machine learning" hits only courses whose *title* says so.
-Before deciding that's a gap, count how many subject-word queries have a title
-match at all — the answer is probably "most", and it costs one pass over
-`titles.json` to know.
+The `/data` pages currently ship **zero JavaScript**, and that is worth keeping
+as a floor: the box is a real `<form>` targeting a generated `/data/search`
+page, so with JS off the form still reaches a page and the nav rail still works.
+`/data/search?q=…` also makes a result set shareable as a URL.
+
+## Open questions
+
+- **Enter jumping to the top hit** is decided, but it should be *gated* on the
+  top hit being a router answer or a top-tier match. Jumping on a weak best
+  guess navigates away from the one screen that could have shown the right
+  answer; falling back to `/data/search?q=…` when the top tier is weak costs one
+  click and cannot be wrong.
+- **Aliases are a guess.** `orgo` is real, but without query logs there is no
+  way to know what else belongs, and the honest set is small — most nicknames
+  (`psych`, `bio`) already resolve as prefixes. Cloudflare analytics on
+  `/data/search?q=` would eventually supply real data; until then, keep the list
+  short and label it a guess.
+- **Concentrations.** 29 concentration pages exist under `majors/` and
+  `graduate/`. Whether they are already inside the 1,071 programs or are a
+  missing kind is unresolved — the bijection rail will answer it, which is the
+  point of running that rail before writing the UI.
+- **Phone precompute** (~11 ms here, possibly ~100 ms throttled) needs one
+  measurement on a throttled CPU before deciding whether the index ships
+  pre-normalized.
