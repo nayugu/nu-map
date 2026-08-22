@@ -73,18 +73,21 @@ export function mountSearchBox(root = document) {
   let cursor = -1;
   let timer = null;
 
-  const close = () => { panel.innerHTML = ""; panel.hidden = true; hits = []; cursor = -1; };
+  // The panel's visibility is announced, not just drawn: the input is a
+  // combobox, so a screen reader needs aria-expanded to change with it.
+  const show = (open) => { panel.hidden = !open; input.setAttribute("aria-expanded", String(open)); };
+  const close = () => { panel.innerHTML = ""; show(false); hits = []; cursor = -1; };
 
   const draw = () => {
     if (!hits.length) {
       // "Nothing" is a real answer and has to look like one, or an empty panel
       // reads as a broken box.
       panel.innerHTML = `<p class="fx-none">No match. Try a course code, a name, or a NUpath code.</p>`;
-      panel.hidden = false;
+      show(true);
       return;
     }
     panel.innerHTML = hits.map((h, i) => rowHtml(prepared, h, i === cursor)).join("");
-    panel.hidden = false;
+    show(true);
   };
 
   const run = () => {
@@ -99,7 +102,7 @@ export function mountSearchBox(root = document) {
       // The index is unreachable or not an index. Say so, and leave the form
       // able to submit — /data/search still works server-side-ish.
       panel.innerHTML = `<p class="fx-none">Search is unavailable right now. Press Enter to open the search page.</p>`;
-      panel.hidden = false;
+      show(true);
     });
   };
 
@@ -133,7 +136,6 @@ export function mountSearchBox(root = document) {
     }
   });
 
-  form.addEventListener("submit", () => { /* let it navigate to /data/search */ });
   document.addEventListener("click", (e) => { if (!form.contains(e.target)) close(); });
 
   // /data/search?q=… renders its own results on load, so a search is shareable.

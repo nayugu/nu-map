@@ -36,7 +36,7 @@ tier, not by widening this one.
 
 ## The inventory
 
-Measured on the 2026-08 build (`dist/data`, 13,081 pages):
+Measured on the 2026-08 build:
 
 | Type | Records | Match keys |
 |---|---|---|
@@ -46,9 +46,10 @@ Measured on the 2026-08 build (`dist/data`, 13,081 pages):
 | Subjects | 231 | code + name |
 | NUpath | 13 | code (`ND`) + label (`Natural/Designed World`) |
 
-13,022 records against **13,081 pages**, and the gap is fully accounted for:
-52 professor pages are *navigation* — 26 first-letter indexes plus 26 under
-`professors/last/` — and the remaining 7 are the section hubs. Reconciled by
+13,022 records against the **13,083 pages** the build now emits, and the gap is
+fully accounted for: 61 navigation pages — 26 first-letter professor indexes, 26
+under `professors/last/`, the 7 section hubs, the hub itself and `/data/search`.
+The build asserts exactly that number. Reconciled by
 running the bijection rail early, which also settled that programs are exact
 (1,071 pages, 1,071 records, zero orphans) and that the 29 concentration pages
 are already inside the programs kind rather than a sixth kind. So the schema is
@@ -59,32 +60,44 @@ allowlist that is itself asserted, never a silent skip.
 
 Measured by building the real merged index and timing a real scan:
 
-| | |
-|---|---|
-| Index payload, columnar (`{t:[],n:[],e:[]}`) | 534 KB raw → **116 KB gzip / 88 KB brotli** |
-| `JSON.parse` of it | **1.5 ms** |
-| One-time lowercase + tokenize of all 13,022 | **11.3 ms** |
-| **Brute-force scan of every record, per keystroke** | **median 1.1 ms, worst 1.9 ms** |
+| | prototype | as shipped |
+|---|---|---|
+| Index payload, columnar | 534 KB raw / 116 KB gzip / 88 KB brotli | **703 KB / 148 KB / 103 KB** |
+| Parse + prepare, once | ~13 ms | **20 ms** |
+| **Scan of every record, per keystroke** | 1.1 ms median | **2.84 ms median, 4.96 ms worst** |
 
 So: **no trie, no inverted index, no prefix map, no WASM.** A linear scan over
-the whole corpus costs about a millisecond against a 16 ms frame. The entire
-cost of the feature is an 88 KB fetch and ~13 ms of setup, once, lazily on first
+the whole corpus costs a few milliseconds against a 16 ms frame. The entire cost
+of the feature is a ~100 KB fetch and 20 ms of setup, once, lazily on first
 focus. An inverted index would be more code, more build surface and more ways to
 be subtly wrong, bought with latency we do not need.
 
+The shipped figures are higher than the prototype's for honest reasons: the real
+index carries paths and aliases the prototype did not, and the real scorer runs
+the full tier ladder rather than a simplified one. The first integration measured
+**13.9 ms median**, because the memoised initials search ran on all 13,022
+records; the fix was not a data structure but an exact precondition — a query
+token can only reach the four middle tiers if some matchable word begins with its
+first character, so one `Set` lookup skips the expensive tiers entirely. It is a
+necessary condition, so it cannot change a score, and
+`test/unit/rank-records.test.js` asserts that equivalence over 3,000 random
+records rather than trusting the argument.
+
 Caveat stated honestly: those are Node numbers on an M-series Mac. Assume 5–10×
-on a low-end phone and the scan is still ~10 ms, but the 11 ms precompute could
-become ~100 ms. If it does, the cure is shipping the normalized form in the
-index, not a different algorithm — and that is a measurement to take on a
-throttled CPU, not a guess to pre-empt.
+on a low-end phone and the scan is still ~15–25 ms behind a debounce, with the
+20 ms precompute paid once behind a fetch that costs more.
 
 Columnar over an array of objects because it measured smaller on both axes
 (534 vs 712 KB raw, 116 vs 132 KB gzip) — repeated key names are the difference.
+Two columns were then deleted for the same reason: `p` (paths) is stored only
+when it is not the code with spaces as slashes, and `pl` (pool words) was always
+the code split on its space, which together were 311 KB of the payload restating
+another column.
 
 Pagefind is the obvious off-the-shelf answer and was considered: it is
 full-text-over-pages, cannot express the router, acronym or representation rules
 below, and its runtime plus sharded index for 13,000 pages is larger than our
-entire 88 KB. Licence would have been fine (MIT); the fit is not.
+entire ~100 KB. Licence would have been fine (MIT); the fit is not.
 
 ## Ranking
 
@@ -114,10 +127,14 @@ pre-existing and both unchanged by the split:
 
 Two stages:
 
-1. **Router.** An unambiguous shape wins outright and is never scored:
-   `src/core/courseCodeParse.js` already turns `chem2311`, `chem 2311`,
-   `CHEM 2311` into a code; a bare NUpath code and a bare subject code are
-   equally decidable. Scoring an exact answer can only make it worse.
+1. **Router.** An unambiguous shape wins outright: any record whose unique
+   `code` the query states exactly is an answer, not a candidate. As built this
+   needs no course-code parser and no vocabulary — the query is canonicalized
+   once (`chem2311` → `chem 2311`, because letters and digits already delimit
+   each other) and then matched against the code column, so subject codes and
+   NUpath codes route by the same line of code. Only the singular `code` routes;
+   a degree code is not unique, and routing "ba" would lift several hundred
+   programs above every other kind at once.
 2. **One scorer over typed records**, then a **representation guarantee**.
 
 ### What a blended score does, measured

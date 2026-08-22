@@ -182,6 +182,24 @@ describe("data search widget", () => {
     await page.close();
   });
 
+  test("the combobox announces itself to a screen reader", async () => {
+    // aria-expanded that never changes is worse than none: it tells a screen
+    // reader the panel is shut while rows are on screen.
+    const { page } = await open("/data.html");
+    const expanded = () => page.$eval("input[name=q]", (e) => e.getAttribute("aria-expanded"));
+    assert.equal(await expanded(), "false");
+    await type(page, "biology");
+    assert.equal(await expanded(), "true");
+    assert.equal(await page.$eval("input[name=q]", (e) => e.getAttribute("aria-controls")),
+      await page.$eval("[data-search-results]", (e) => e.id), "aria-controls points nowhere");
+    // The highlighted row is the selected option, and only it.
+    const selected = await page.$$eval('.fx-row[aria-selected="true"]', (els) => els.length);
+    assert.equal(selected, 1, `${selected} rows claim aria-selected`);
+    await page.keyboard.press("Escape");
+    assert.equal(await expanded(), "false");
+    await page.close();
+  });
+
   test("Enter on a weak best guess opens the search page instead of jumping", async () => {
     // The deliberate gate: jumping on a guess navigates away from the one screen
     // that could have shown the right answer.

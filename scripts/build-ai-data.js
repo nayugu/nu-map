@@ -792,8 +792,9 @@ const writePage = ({ rel, section, title, heading, description, jsonUrl, body, w
   const searchBox = `<form class="find" data-search-form data-index="${searchAssets.index}"`
     + `${rel === "search.html" ? " data-search-page" : ""} action="${PAGE_ROOT}/search" method="get" role="search">`
     + `<input type="search" name="q" placeholder="Search all data" aria-label="Search every course, professor, program, subject and NUpath code"`
-    + ` autocomplete="off" spellcheck="false" />`
-    + `<div class="fx-panel" data-search-results role="listbox" hidden></div>`
+    + ` autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false"`
+    + ` aria-controls="fx-panel" aria-autocomplete="list" />`
+    + `<div class="fx-panel" id="fx-panel" data-search-results role="listbox" aria-label="Search results" hidden></div>`
     + `</form>`;
   const nav = `<a class="home" href="${ORIGIN}"><img src="${ORIGIN}/logo.png" alt="NU Map home" width="26" height="26" /></a>`
     + searchBox
