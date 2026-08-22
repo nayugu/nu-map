@@ -161,7 +161,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -183,7 +186,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -205,7 +211,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -249,6 +258,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following:",
         "With prior linguistics program approval, one of the following experiences can be used to fulfill the research experience:"
       ]
     },
@@ -315,6 +325,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete six electives from the following that have not already been taken to fulfill other major requirements:",
         "LING 3000 to LING 4999",
         "Up to two electives may come from the following list:"
       ]

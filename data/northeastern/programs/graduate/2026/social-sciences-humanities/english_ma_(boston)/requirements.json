@@ -95,7 +95,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -123,7 +126,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following (if completing 12 semester hours of literary period requirements); or complete 8 semester hours from the following (if completing 8 semester hours of literary period requirements):"
+      ]
     },
     {
       "type": "SECTION",
@@ -158,14 +164,54 @@
               "subject": "ENGL",
               "classId": 7351
             }
+          ],
+          "groups": [
+            {
+              "title": "Literature Pre-1700",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 7281
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 7282
+                }
+              ]
+            },
+            {
+              "title": "Literature 1700–1900",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 7284
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 7352
+                }
+              ]
+            },
+            {
+              "title": "Literature Post-1900",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 7351
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Literature Pre-1700",
-        "Literature 1700–1900",
-        "Literature Post-1900"
+        "Complete 8 semester hours from two of the following literary periods (if completing 8 semester hours of writing and rhetoric requirements); or complete 12 semester hours from three of the following literary periods (if completing 4 semester hours of writing and rhetoric requirements):"
       ]
     },
     {
@@ -191,7 +237,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours of ENGL courses, or non-ENGL courses with prior approval.",
+        "ENGL 5000-ENGL 7980"
+      ]
     },
     {
       "type": "SECTION",
@@ -219,7 +269,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Four-month co-ops require registration at 1 SH for one term. Longer co-ops require registration at 1 SH per term for two consecutive terms"
+      ]
     }
   ],
   "gpaRequirements": [

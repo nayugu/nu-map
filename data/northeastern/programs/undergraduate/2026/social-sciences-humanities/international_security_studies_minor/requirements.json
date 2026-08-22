@@ -122,7 +122,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Students may not count any of the courses toward more than one requirement."
+        "Students may not count any of the courses toward more than one requirement.",
+        "Complete two of the following:"
       ]
     }
   ],

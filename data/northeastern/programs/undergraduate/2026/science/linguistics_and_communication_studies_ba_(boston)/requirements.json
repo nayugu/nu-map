@@ -132,7 +132,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -157,7 +160,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two courses not used to fulfill other degree requirements from the following options:",
+        "LING 3000 to LING 4999"
+      ]
     },
     {
       "type": "SECTION",
@@ -212,7 +219,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -250,7 +260,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -328,7 +341,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -367,7 +383,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following, not used to fulfill above requirements:"
+      ]
     },
     {
       "type": "SECTION",
@@ -404,7 +423,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following, not used to fulfill above requirements:"
+      ]
     },
     {
       "type": "SECTION",

@@ -128,7 +128,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete six semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -214,6 +217,9 @@
                 "subject": "AAI",
                 "classId": 6900
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],
@@ -281,6 +287,9 @@
                 "subject": "AAI",
                 "classId": 6900
               }
+            ],
+            "notes": [
+              "Complete two of the following"
             ]
           }
         ],
@@ -343,6 +352,9 @@
                 "subject": "AAI",
                 "classId": 6900
               }
+            ],
+            "notes": [
+              "Complete two of the following:"
             ]
           }
         ],

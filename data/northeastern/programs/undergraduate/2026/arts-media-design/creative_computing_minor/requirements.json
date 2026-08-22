@@ -155,7 +155,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following (note that some courses may require prerequisites). At least one course must be above 3000 level."
+      ]
     }
   ],
   "gpaRequirements": [

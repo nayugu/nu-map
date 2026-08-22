@@ -140,7 +140,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -198,7 +201,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -217,6 +223,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following options (courses used to satisfy this requirement will also typically satisfy another major requirement):",
         "International co-op in a Spanish-speaking country",
         "Study-abroad in a Spanish-speaking country",
         "Dialogue of Civilizations in a Spanish-speaking country"
@@ -361,15 +368,16 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Biology",
+            "Complete one of the following options:",
+            "Option 1",
+            "Option 2"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Biology",
-        "Option 1",
-        "Option 2"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -623,18 +631,22 @@
               "subject": "PHTH",
               "classId": 5234
             }
+          ],
+          "notes": [
+            "Upper-Level Course",
+            "Complete one of the following:",
+            "Society and Behavior",
+            "Globalization and Global Health",
+            "Environmental Health and Climate Change",
+            "Law, Policy, and Human Rights",
+            "Healthcare Administration and Management"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Introductory Course",
-        "Upper-Level Course",
-        "Society and Behavior",
-        "Globalization and Global Health",
-        "Environmental Health and Climate Change",
-        "Law, Policy, and Human Rights",
-        "Healthcare Administration and Management"
+        "Complete one of the following:"
       ]
     },
     {
@@ -674,7 +686,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -708,7 +723,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -740,7 +758,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -774,7 +795,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following, based on home college:"
+      ]
     }
   ],
   "footnotes": [

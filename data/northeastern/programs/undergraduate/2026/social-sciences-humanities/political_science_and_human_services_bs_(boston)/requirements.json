@@ -134,7 +134,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -154,7 +157,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three courses in the following range (elective courses may also fulfill requirements of an optional concentration of this program):",
+        "POLS 2000 to POLS 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -186,7 +193,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following to fulfill the prerequisite for POLS 2400:"
+      ]
     },
     {
       "type": "SECTION",
@@ -240,7 +250,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -289,7 +302,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -339,8 +355,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following options:",
         "Complete POLS 4701 or POLS 4703 and complete one additional HUSV course that has not been used in previous requirements:",
-        "Complete HUSV 4700 and complete one additional POLS course numbered 2000 or higher that has not been used in previous requirements:"
+        "HUSV 1100 to HUSV 5999",
+        "Complete HUSV 4700 and complete one additional POLS course numbered 2000 or higher that has not been used in previous requirements:",
+        "POLS 2000 to POLS 5999"
       ]
     }
   ],
@@ -384,7 +403,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -423,7 +445,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -507,7 +532,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:",
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -551,7 +580,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -605,7 +637,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete one of the following:",
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -654,7 +690,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -693,7 +732,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -737,7 +779,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       }
     ]
   }

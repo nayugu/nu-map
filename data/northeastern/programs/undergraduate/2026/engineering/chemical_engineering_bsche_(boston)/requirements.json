@@ -200,10 +200,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "3 semester hours from the following course count toward the engineering requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "2 semester hours from the following course count toward the engineering requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -292,6 +298,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -313,7 +322,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "1 semester hour from the following course counts toward the mathematics/science requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -387,10 +399,16 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following pairs:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the following pairs:"
+      ]
     },
     {
       "type": "SECTION",
@@ -438,10 +456,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the professional development requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following course counts toward the professional development requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -631,6 +655,8 @@
         ],
         "minRequirementCount": 2,
         "notes": [
+          "Complete two of the following courses, at least one of which must be a CHME course:",
+          "Complete one of the following:",
           "Students may petition for additional science and/or engineering courses to be counted toward the electives if the course content falls within the concentration focus. Students should be aware of any prerequisites for courses and plan appropriately. Students may also petition for independent research to be counted toward the non-CHME engineering elective."
         ]
       },
@@ -738,6 +764,8 @@
         ],
         "minRequirementCount": 2,
         "notes": [
+          "Complete two of the following courses, at least one of which must be a CHME course:",
+          "Complete one of the following:",
           "Students may petition for additional science and/or engineering courses to be counted toward the electives if the course content falls within the concentration focus. Students should be aware of any prerequisites for courses and plan appropriately. Students may also petition for independent research to be counted toward the non-CHME engineering elective."
         ]
       },
@@ -835,6 +863,8 @@
         ],
         "minRequirementCount": 2,
         "notes": [
+          "Complete two of the following courses, at least one of which must be a CHME course:",
+          "Complete one of the following:",
           "Students may petition for additional science and/or engineering courses to be counted toward the electives if the course content falls within the concentration focus. Students should be aware of any prerequisites for courses and plan appropriately. Students may also petition for independent research to be counted toward the non-CHME engineering elective."
         ]
       },
@@ -917,6 +947,8 @@
         ],
         "minRequirementCount": 2,
         "notes": [
+          "Complete two of the following courses, at least one of which must be a CHME course:",
+          "Complete one of the following:",
           "Students may petition for additional science and/or engineering courses to be counted toward the electives if the course content falls within the concentration focus. Students should be aware of any prerequisites for courses and plan appropriately. Students may also petition for independent research to be counted toward the non-CHME engineering elective."
         ]
       },
@@ -1130,7 +1162,8 @@
         "notes": [
           "Complete 4 semester hours of CHME courses (level 2000+). Coursework may include multiple 1–4-semester-hour courses adding up to a minimum of 4 semester hours.",
           "Complete one course numbered between 4000 and 5999 in any of the following subject areas:",
-          "BIOE, CHME, CIVE, EECE, ENGR, IE, ME, and MEIE. GE5100 also specifically accepted."
+          "BIOE, CHME, CIVE, EECE, ENGR, IE, ME, and MEIE. GE5100 also specifically accepted.",
+          "Complete one of the following:"
         ]
       }
     ]

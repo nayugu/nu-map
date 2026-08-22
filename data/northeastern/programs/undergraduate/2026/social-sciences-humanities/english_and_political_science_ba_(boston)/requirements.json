@@ -160,7 +160,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following. You may reuse this course to fulfill an additional English requirement below:"
+      ]
     },
     {
       "type": "SECTION",
@@ -285,13 +288,17 @@
               "subject": "ENGL",
               "classId": 3161
             }
+          ],
+          "notes": [
+            "Post-1850",
+            "Complete one of the following courses:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Pre-1850",
-        "Post-1850"
+        "Complete one course from the following:"
       ]
     },
     {
@@ -394,7 +401,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -473,7 +483,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -547,7 +560,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -569,7 +585,9 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Note: Elective courses may also be used toward fulfilling an optional Political Science concentration"
+        "Note: Elective courses may also be used toward fulfilling an optional Political Science concentration",
+        "Complete three courses in the following range:",
+        "POLS 2000 and above that are not fulfilling other POLS requirements"
       ]
     },
     {
@@ -602,7 +620,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following to fulfill the prerequisite for POLS 2400:"
+      ]
     },
     {
       "type": "SECTION",
@@ -629,7 +650,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following, which may already have been used for another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -651,7 +675,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -683,7 +710,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "concentrations": {
@@ -726,7 +756,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -765,7 +798,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -849,7 +885,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:",
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -893,7 +933,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -947,7 +990,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete one of the following:",
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -996,7 +1043,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1035,7 +1085,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1079,7 +1132,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       }
     ]
   }

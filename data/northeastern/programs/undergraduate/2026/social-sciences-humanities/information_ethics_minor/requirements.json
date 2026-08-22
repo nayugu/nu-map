@@ -72,7 +72,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -125,7 +128,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two courses from the following, not used above, one of which must be at or above the 4000 level:"
+      ]
     },
     {
       "type": "SECTION",
@@ -267,7 +273,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses not used above."
+      ]
     }
   ],
   "gpaRequirements": [

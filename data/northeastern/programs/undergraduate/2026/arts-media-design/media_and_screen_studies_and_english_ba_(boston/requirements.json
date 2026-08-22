@@ -122,7 +122,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -154,7 +157,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -202,7 +208,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -267,6 +276,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete THREE courses that have not been used to satisfy other requirements:",
         "Media and Screen Studies courses, from the range MSCR 1200 - MSCR 4999."
       ]
     },
@@ -353,7 +363,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following. You may reuse this course to fulfill an additional English requirement below:"
+      ]
     },
     {
       "type": "SECTION",
@@ -478,13 +491,17 @@
               "subject": "ENGL",
               "classId": 3161
             }
+          ],
+          "notes": [
+            "Post-1850",
+            "Complete one of the following courses:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Pre-1850",
-        "Post-1850"
+        "Complete one course from the following:"
       ]
     },
     {
@@ -587,7 +604,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -666,7 +686,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

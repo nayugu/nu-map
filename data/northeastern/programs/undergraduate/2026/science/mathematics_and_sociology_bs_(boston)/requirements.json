@@ -186,7 +186,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two courses in the following range that are not required in the requirements above:",
+        "MATH 3001 to MATH 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -297,7 +301,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

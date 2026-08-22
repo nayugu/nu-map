@@ -302,7 +302,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives.",
+        "Complete 8 semester hours from within the following options:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -362,13 +366,14 @@
               "subject": "MUSC",
               "classId": 3300
             }
+          ],
+          "notes": [
+            "Music Theory Elective",
+            "Complete one of the following:"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Music Theory Elective"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -487,6 +492,11 @@
               "subject": "MUSI",
               "classId": 3401
             }
+          ],
+          "notes": [
+            "Complete one course each from three of the four distinct Music in Context categories. No more than one may be at the 1000 level. At least one course must be at the 3000 level or higher.",
+            "Contemporary/Popular Music",
+            "Complete one of the following:"
           ]
         },
         {
@@ -617,6 +627,10 @@
               "subject": "MUST",
               "classId": 2320
             }
+          ],
+          "notes": [
+            "Creative",
+            "Complete one of the following 4-semester-hour courses or complete four 1-semester-hour ensembles and/or lessons from the list below:"
           ]
         },
         {
@@ -697,6 +711,10 @@
               "subject": "MUSI",
               "classId": 3401
             }
+          ],
+          "notes": [
+            "Global Music/Ethnomusicology",
+            "Complete one of the following:"
           ]
         },
         {
@@ -737,17 +755,14 @@
               "subject": "MUSC",
               "classId": 3352
             }
+          ],
+          "notes": [
+            "Western Art Music",
+            "Complete one of the following:"
           ]
         }
       ],
-      "minRequirementCount": 5,
-      "notes": [
-        "Complete one course each from three of the four distinct Music in Context categories. No more than one may be at the 1000 level. At least one course must be at the 3000 level or higher.",
-        "Contemporary/Popular Music",
-        "Creative",
-        "Global Music/Ethnomusicology",
-        "Western Art Music"
-      ]
+      "minRequirementCount": 5
     },
     {
       "type": "SECTION",
@@ -786,6 +801,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following:",
         "If a computer science capstone is taken, complete one additional course in music (MUSC, MUSI, or MUST) at the 2000 level or higher."
       ]
     },
@@ -819,7 +835,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -920,7 +939,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

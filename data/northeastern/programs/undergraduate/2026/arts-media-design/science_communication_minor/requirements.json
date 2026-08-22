@@ -162,16 +162,120 @@
               "subject": "JRNL",
               "classId": 2201
             }
+          ],
+          "groups": [
+            {
+              "title": "Data Visualization",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 5100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 5150
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 5330
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 3700
+                }
+              ]
+            },
+            {
+              "title": "Health Communication",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3201
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 4102
+                }
+              ]
+            },
+            {
+              "title": "Science and Media Production",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 2300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 2625
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 3370
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 3610
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 5314
+                }
+              ]
+            },
+            {
+              "title": "Science Writing",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "JRNL",
+                      "classId": 1101
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "JRNL",
+                      "classId": 1102
+                    }
+                  ]
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 2200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 2201
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
         "Some courses may have prerequisites not listed in the curriculum.",
-        "Data Visualization",
-        "Health Communication",
-        "Science and Media Production",
-        "Science Writing"
+        "Complete 12 semester hours of the following:"
       ]
     }
   ],

@@ -99,7 +99,10 @@
           "classId": 6300
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following repeatable course for six semesters:"
+      ]
     },
     {
       "type": "SECTION",
@@ -251,7 +254,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Students must complete one course from each of the following specialization areas for a total of three courses:"
+        "Students must complete one course from each of the following specialization areas for a total of three courses:",
+        "Complete one of the following:"
       ]
     },
     {

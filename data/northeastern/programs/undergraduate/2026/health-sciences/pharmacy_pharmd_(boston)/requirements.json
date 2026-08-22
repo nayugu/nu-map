@@ -663,7 +663,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least 2 semester hours during the professional phase of the program from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -814,7 +817,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 36 semester hours in the following range:",
+        "PHMD 6440 to PHMD 6474"
+      ]
     }
   ],
   "gpaRequirements": [

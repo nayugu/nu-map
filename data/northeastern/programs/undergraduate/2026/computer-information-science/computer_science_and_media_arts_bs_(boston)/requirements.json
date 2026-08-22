@@ -285,7 +285,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives.",
+        "Complete 8 semester hours from within the following options:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -405,7 +409,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -567,16 +574,159 @@
               "subject": "ARTH",
               "classId": 2212
             }
+          ],
+          "groups": [
+            {
+              "title": "Basics",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2000
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTD",
+                      "classId": 2360
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTD",
+                      "classId": 2361
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTD",
+                      "classId": 2370
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTD",
+                      "classId": 2371
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTD",
+                      "classId": 2380
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTD",
+                      "classId": 2381
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Photography",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3460
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 4565
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 4660
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 4661
+                }
+              ]
+            },
+            {
+              "title": "Animation",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3470
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3471
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3472
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3473
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3490
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 4570
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 4575
+                }
+              ]
+            },
+            {
+              "title": "Video",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3480
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3485
+                }
+              ]
+            },
+            {
+              "title": "History",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTH",
+                  "classId": 2212
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Basics",
-        "Photography",
-        "Animation",
-        "Video",
-        "History"
+        "Complete 28-31 semester hours as long as prerequisites have been met. At least two must be a 3000-level course:"
       ]
     },
     {
@@ -678,7 +828,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

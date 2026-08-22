@@ -84,13 +84,13 @@
         {
           "type": "COURSE",
           "subject": "PJM",
-          "classId": 6910
+          "classId": 6910,
+          "notes": [
+            "The following should be the final course:"
+          ]
         }
       ],
-      "minRequirementCount": 6,
-      "notes": [
-        "The following should be the final course:"
-      ]
+      "minRequirementCount": 6
     },
     {
       "type": "SECTION",

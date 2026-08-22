@@ -68,7 +68,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -91,7 +94,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -119,7 +125,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -344,6 +353,7 @@
         ],
         "minRequirementCount": 1,
         "notes": [
+          "Complete 8 semester hours from the following (students may take other Khoury College of Computer Sciences courses not on the list in consultation with their faculty advisor):",
           "Complete 8 semester hours of courses at the 5000 level or above in the following subject area. See suggested elective course list.",
           "MATH"
         ]
@@ -417,6 +427,7 @@
         ],
         "minRequirementCount": 1,
         "notes": [
+          "Complete 8 semester hours from the following (students may take other College of Engineering courses not on the list in consultation with their faculty advisor):",
           "Complete 8 semester hours of courses at the 5000 level or above in the following subject area. See suggested elective course list.",
           "MATH"
         ]

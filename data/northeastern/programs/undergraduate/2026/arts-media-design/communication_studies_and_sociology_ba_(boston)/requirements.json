@@ -157,7 +157,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -194,7 +197,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -277,7 +283,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -406,7 +415,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -455,6 +467,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following two options:",
         "Option 1:",
         "Complete 4 SH of coursework between SOCL 3000 and SOCL 4999",
         "Option 2:",

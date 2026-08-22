@@ -325,6 +325,10 @@
               "subject": "CRIM",
               "classId": 2380
             }
+          ],
+          "notes": [
+            "Crime Problems and Criminal Justice Institutions",
+            "Complete one of the following:"
           ]
         },
         {
@@ -365,6 +369,10 @@
               "subject": "CRIM",
               "classId": 3540
             }
+          ],
+          "notes": [
+            "Crime Problems",
+            "Complete one of the following:"
           ]
         },
         {
@@ -380,15 +388,17 @@
               "subject": "CRIM",
               "classId": 3120
             }
+          ],
+          "notes": [
+            "Systemic Issues",
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 4,
       "notes": [
         "Current Criminal Justice System Issues",
-        "Crime Problems and Criminal Justice Institutions",
-        "Crime Problems",
-        "Systemic Issues"
+        "Complete one of the following:"
       ]
     },
     {
@@ -422,7 +432,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from home college:"
+      ]
     },
     {
       "type": "SECTION",
@@ -464,7 +477,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -491,7 +507,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -513,7 +532,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

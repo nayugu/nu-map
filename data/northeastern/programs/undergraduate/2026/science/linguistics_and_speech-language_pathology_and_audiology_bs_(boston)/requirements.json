@@ -133,6 +133,9 @@
               "subject": "LING",
               "classId": 3452
             }
+          ],
+          "notes": [
+            "Complete three of the following:"
           ]
         }
       ],
@@ -161,7 +164,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three courses not used to fulfill other degree requirements from the following:",
+        "LING 3000–LING 4999"
+      ]
     },
     {
       "type": "SECTION",
@@ -297,7 +304,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Select one of the following. A grade of C or higher is required for all CHEM and PHYS courses."
+      ]
     },
     {
       "type": "SECTION",

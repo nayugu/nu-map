@@ -191,6 +191,9 @@
               "subject": "PSYC",
               "classId": 2320
             }
+          ],
+          "notes": [
+            "Complete one of the following (students who receive transfer credit for the Advanced Placement statistics exam may complete the 1-semester-hour PSYC 2315 course with department permission):"
           ]
         }
       ],
@@ -324,6 +327,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete four of the following (at least two must be numbered in the 4000–5999 range):",
         "One course may be an experiential course:"
       ]
     },
@@ -389,7 +393,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "An additional behavioral neuroscience core course may be used to fulfill this requirement."
+        "An additional behavioral neuroscience core course may be used to fulfill this requirement.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -492,7 +497,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -549,7 +557,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -608,7 +619,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:",
+        "PSYC 4654 to PSYC 4678"
+      ]
     },
     {
       "type": "SECTION",
@@ -768,6 +783,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Students interested in the CS option can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 can substitute 4–5 semester hours of CS, CY, or DS coursework at the 2000 level or higher. Complete one of the following:"
           ]
         }
       ],

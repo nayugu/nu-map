@@ -119,6 +119,9 @@
               "subject": "PSYC",
               "classId": 5150
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -178,7 +181,10 @@
           "classId": 8401
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Take the following (repeatable) course three times:"
+      ]
     },
     {
       "type": "SECTION",
@@ -190,7 +196,10 @@
           "classId": 7990
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Take the following (repeatable) course twice:"
+      ]
     },
     {
       "type": "SECTION",
@@ -252,7 +261,9 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Note: Proseminars not taken to fulfill core requirements and courses outside the department may be taken if approved by faculty adviser and Director of Graduate Studies."
+        "Complete 14 semester hours from the following:",
+        "Note: Proseminars not taken to fulfill core requirements and courses outside the department may be taken if approved by faculty adviser and Director of Graduate Studies.",
+        "PSYC 7200 to PSYC 7300"
       ]
     },
     {

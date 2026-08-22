@@ -489,7 +489,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete six of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -833,7 +836,11 @@
             ]
           }
         ],
-        "minRequirementCount": 6
+        "minRequirementCount": 6,
+        "notes": [
+          "Complete one of the following:",
+          "Complete five of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -992,7 +999,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete six of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1161,7 +1171,10 @@
             ]
           }
         ],
-        "minRequirementCount": 6
+        "minRequirementCount": 6,
+        "notes": [
+          "Complete five of the following:"
+        ]
       }
     ]
   }

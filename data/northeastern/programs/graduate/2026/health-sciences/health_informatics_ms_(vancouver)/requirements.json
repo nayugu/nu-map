@@ -115,7 +115,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -178,7 +181,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -263,6 +269,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete two of the following:",
         "One course from the following may count toward the technical core requirement:"
       ]
     },
@@ -314,7 +321,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     }
   ],
   "gpaRequirements": [

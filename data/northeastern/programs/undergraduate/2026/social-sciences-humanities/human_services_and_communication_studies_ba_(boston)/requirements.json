@@ -164,7 +164,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -233,7 +236,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -270,7 +276,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -353,7 +362,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -392,6 +404,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following:",
         "Complete one additional HUSV elective."
       ]
     },
@@ -415,6 +428,10 @@
               "idRangeEnd": 4999,
               "exceptions": []
             }
+          ],
+          "notes": [
+            "Complete one course in the following range:",
+            "COMM 3000 to COMM 4999"
           ]
         }
       ],

@@ -221,7 +221,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -273,7 +276,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -332,7 +338,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Directed study, project study, and appropriate graduate-level courses may also be taken as upper-division electives with advisor approval."
+        "Directed study, project study, and appropriate graduate-level courses may also be taken as upper-division electives with advisor approval.",
+        "Complete 4 semester hours from within the following options:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -505,16 +515,174 @@
                 }
               ]
             }
+          ],
+          "groups": [
+            {
+              "title": "Biology",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1111
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1112
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Chemistry",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1161
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1162
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1211
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1212
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1213
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Geology",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 1200
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 1201
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Mathematics",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 1342
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 2280
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 2331
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 3081
+                }
+              ]
+            },
+            {
+              "title": "Physics",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1145
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1146
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1151
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1152
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1153
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1161
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1162
+                    }
+                  ]
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Biology",
-        "Chemistry",
-        "Geology",
-        "Mathematics",
-        "Physics"
+        "Complete one course from one of the following groups:"
       ]
     },
     {
@@ -592,7 +760,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -707,6 +878,9 @@
                 "subject": "DS",
                 "classId": 4440
               }
+            ],
+            "notes": [
+              "Complete two of the following courses not already taken:"
             ]
           }
         ],
@@ -791,6 +965,9 @@
                 "subject": "CY",
                 "classId": 4770
               }
+            ],
+            "notes": [
+              "Complete two of the following courses not already taken:"
             ]
           }
         ],
@@ -845,6 +1022,9 @@
                 "subject": "HINF",
                 "classId": 5300
               }
+            ],
+            "notes": [
+              "Complete two of the following courses not already taken:"
             ]
           }
         ],
@@ -923,6 +1103,9 @@
                 "subject": "CS",
                 "classId": 4830
               }
+            ],
+            "notes": [
+              "Complete one of the following courses not already taken:"
             ]
           }
         ],
@@ -961,6 +1144,9 @@
                 "subject": "CY",
                 "classId": 4740
               }
+            ],
+            "notes": [
+              "Complete one of the following courses not already taken:"
             ]
           },
           {
@@ -1012,6 +1198,9 @@
                 "subject": "CY",
                 "classId": 4760
               }
+            ],
+            "notes": [
+              "Complete two of the following courses not already taken:"
             ]
           }
         ],

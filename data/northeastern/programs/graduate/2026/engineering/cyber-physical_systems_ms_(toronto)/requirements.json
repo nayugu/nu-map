@@ -100,6 +100,9 @@
               "subject": "TELE",
               "classId": 6550
             }
+          ],
+          "notes": [
+            "Complete two out of the following three:"
           ]
         }
       ],
@@ -196,7 +199,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours from the following options:"
+      ]
     }
   ],
   "gpaRequirements": [

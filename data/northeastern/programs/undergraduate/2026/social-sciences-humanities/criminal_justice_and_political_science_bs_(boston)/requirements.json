@@ -124,7 +124,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "These courses introduce students to topical issues related to crime and justice."
+        "These courses introduce students to topical issues related to crime and justice.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -174,7 +175,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "How does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions."
+        "How does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -234,7 +236,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "The following courses provide students a deeper look at a range of crime problems."
+        "The following courses provide students a deeper look at a range of crime problems.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -259,7 +262,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "A consideration of systemic issues facing the criminal justice system."
+        "A consideration of systemic issues facing the criminal justice system.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -304,7 +308,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Successful students develop digital skills and master digital tools useful for careers related to crime and justice. Students choose one of two courses (each has a required lab). The computer science course introduces students to spreadsheets and databases. The data science course introduces students to programming with data."
+        "Successful students develop digital skills and master digital tools useful for careers related to crime and justice. Students choose one of two courses (each has a required lab). The computer science course introduces students to spreadsheets and databases. The data science course introduces students to programming with data.",
+        "Complete one of the following (and the appropriate lab):"
       ]
     },
     {
@@ -359,7 +364,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -396,7 +404,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two additional courses in the following range:",
+        "CRIM 3001 to CRIM 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -416,7 +428,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five courses in the following range:",
+        "POLS 2000 to POLS 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -454,7 +470,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three additional courses in the following range:",
+        "CRIM 3001 to CRIM 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -474,7 +494,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four courses in the following range:",
+        "POLS 2000 to POLS 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -517,6 +541,9 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following sequences:"
+      ],
       "shared": true
     },
     {
@@ -537,7 +564,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two additional courses in the following range:",
+        "CRIM 3001 to CRIM 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -557,7 +588,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four courses in the following range:",
+        "POLS 2000 to POLS 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -640,7 +675,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     }
   ],
   "concentrations": {
@@ -683,7 +721,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -722,7 +763,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -806,7 +850,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:",
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -850,7 +898,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -904,7 +955,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete one of the following:",
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -953,7 +1008,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -992,7 +1050,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1036,7 +1097,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       }
     ]
   }

@@ -94,6 +94,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -169,7 +172,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following: Electives not listed below may be completed in consultation with your faculty advisor."
+      ]
     }
   ]
 }

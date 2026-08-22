@@ -113,7 +113,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 14 semester hours from the following:",
+        "SOCL 5000–7990"
+      ]
     },
     {
       "type": "SECTION",
@@ -242,7 +246,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -262,7 +269,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 14 semester hours from the following:",
+        "SOCL 5000–7990"
+      ]
     }
   ],
   "gpaRequirements": [

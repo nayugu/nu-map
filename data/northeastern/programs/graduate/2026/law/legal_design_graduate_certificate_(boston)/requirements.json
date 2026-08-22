@@ -74,7 +74,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -132,7 +135,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -272,6 +278,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete at least two courses totaling at least 6 semester hours from the following:",
         "Another 2-4 semester hour legal design-related course from subject codes other than LAW, LW, or LS, with pre-approval of the certificate advisor."
       ]
     }

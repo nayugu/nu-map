@@ -126,6 +126,9 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Choose one of the following:",
+        "General Chemistry",
+        "Chemistry for Science Majors",
         "Engineering students may substitute the following course:"
       ]
     },
@@ -221,6 +224,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete the following:",
         "Engineering students may substitute the following course:"
       ]
     },
@@ -264,7 +268,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [

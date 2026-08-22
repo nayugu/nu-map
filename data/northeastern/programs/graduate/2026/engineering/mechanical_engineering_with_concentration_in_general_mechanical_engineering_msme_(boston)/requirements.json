@@ -136,7 +136,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -199,7 +202,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -239,6 +245,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete 4 semester hours from the following:",
         "or any MATL courses"
       ]
     },

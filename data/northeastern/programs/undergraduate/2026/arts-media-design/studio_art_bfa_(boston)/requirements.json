@@ -233,7 +233,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following (if ARTH 3000 or ARTH 4000—or any other topics course in the options listed below—is completed more than once, the additional completions may be allowed toward the art and design history electives):"
+      ]
     },
     {
       "type": "SECTION",
@@ -254,6 +257,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Specific courses are targeted to each student’s unique program of study, which is determined in consultation with an academic advisor at SMFA at Tufts and CAMD. Optional credits for London study abroad or SMFA at Tufts. These courses generally have the following course number:",
         "Optional London study abroad for sound management at Central Saint Martins, University of the Arts London. Specific courses at University of the Arts London are preapproved for transfer to a student's Northeastern University record to apply toward requirements. Students can consult with a CAMD academic advisor for approval prior to registration."
       ]
     },
@@ -267,7 +271,10 @@
           "classId": 4000
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Senior thesis is a self-directed studio practice and exhibition under consultation of senior thesis faculty at SMFA at Tufts. These courses are generally in the SMFA subject area. Complete 8 semester hours of capstone or consult with an advisor."
+      ]
     }
   ],
   "gpaRequirements": [

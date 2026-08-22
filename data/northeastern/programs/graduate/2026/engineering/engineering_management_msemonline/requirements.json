@@ -151,13 +151,100 @@
               "idRangeEnd": 9999,
               "exceptions": []
             }
+          ],
+          "groups": [
+            {
+              "title": "Recommended Electives",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EEBA",
+                  "classId": 6406
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENTR",
+                  "classId": 6250
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "FINA",
+                  "classId": 6318
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HRMG",
+                  "classId": 6318
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "IE",
+                  "classId": 6400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "IE",
+                  "classId": 6600
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "IE",
+                  "classId": 6700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INFO",
+                  "classId": 6245
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INFO",
+                  "classId": 7245
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INFO",
+                  "classId": 7260
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SCHM",
+                  "classId": 6318
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "STRT",
+                  "classId": 6318
+                }
+              ]
+            },
+            {
+              "title": "Other Elective Options",
+              "courses": [
+                {
+                  "type": "RANGE",
+                  "subject": "INFO",
+                  "idRangeStart": 1000,
+                  "idRangeEnd": 9999,
+                  "exceptions": []
+                },
+                {
+                  "type": "RANGE",
+                  "subject": "IE",
+                  "idRangeStart": 1000,
+                  "idRangeEnd": 9999,
+                  "exceptions": []
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Recommended Electives",
-        "Other Elective Options"
+        "Complete 16 semester hours of elective coursework.",
+        "Any INFO course in range 5000–7999",
+        "Any IE course in range 5000–7999"
       ]
     }
   ],

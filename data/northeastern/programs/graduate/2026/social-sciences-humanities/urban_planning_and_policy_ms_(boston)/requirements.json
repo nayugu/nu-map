@@ -99,7 +99,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Students in the urban analytics focus area are encouraged to take INSH 5301."
+        "Students in the urban analytics focus area are encouraged to take INSH 5301.",
+        "Choose one from the following:"
       ]
     },
     {
@@ -123,7 +124,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose one from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -151,7 +155,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose one from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -379,7 +386,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4-8 semester hours of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -407,7 +417,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Requires two consecutive semesters of Co-op Work Experience and Experiential Integration:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -502,7 +515,10 @@
             "classId": 6120
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete one of the following tracks:"
+        ]
       },
       {
         "type": "SECTION",
@@ -668,7 +684,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -791,7 +810,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       }
     ]
   }

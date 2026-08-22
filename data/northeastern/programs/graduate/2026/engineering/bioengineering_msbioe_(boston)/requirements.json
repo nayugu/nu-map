@@ -200,6 +200,14 @@
                 ],
                 "label": "Thesis Option"
               }
+            ],
+            "notes": [
+              "Complete one of the following options:",
+              "Complete 20 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+              "Coursework Option",
+              "Complete 16 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+              "Complete 12 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+              "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
             ]
           },
           {
@@ -326,11 +334,7 @@
         "minRequirementCount": 3,
         "notes": [
           "A grade of C or higher is required.",
-          "Coursework Option",
-          "Complete 20 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
-          "Complete 16 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
-          "Complete 12 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
-          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+          "Complete two of the following:"
         ]
       },
       {
@@ -372,6 +376,9 @@
                 "subject": "BIOE",
                 "classId": 5810
               }
+            ],
+            "notes": [
+              "Complete two of the following:"
             ]
           },
           {
@@ -564,6 +571,14 @@
                 ],
                 "label": "Thesis Option"
               }
+            ],
+            "notes": [
+              "Complete one of the following options:",
+              "Complete 19–20 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+              "Coursework Option",
+              "Complete 15–16 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+              "Complete 11–12 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+              "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
             ]
           },
           {
@@ -689,12 +704,7 @@
         ],
         "minRequirementCount": 4,
         "notes": [
-          "A grade of C or higher is required:",
-          "Coursework Option",
-          "Complete 19–20 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
-          "Complete 15–16 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
-          "Complete 11–12 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
-          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+          "A grade of C or higher is required:"
         ]
       },
       {
@@ -753,6 +763,14 @@
                 ],
                 "label": "Thesis Option"
               }
+            ],
+            "notes": [
+              "Complete one of the following options:",
+              "Complete 15-16 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+              "Coursework Option",
+              "Complete 11-12 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+              "Complete 7-8 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
+              "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
             ]
           },
           {
@@ -869,11 +887,7 @@
         "minRequirementCount": 3,
         "notes": [
           "A grade of C or higher is required.",
-          "Coursework Option",
-          "Complete 15-16 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
-          "Complete 11-12 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
-          "Complete 7-8 semester hours from the course list. Any course on the required course list not used toward the core requirement may also be taken.",
-          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
+          "Complete three of the following:"
         ]
       }
     ]

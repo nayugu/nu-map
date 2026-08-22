@@ -274,7 +274,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -301,7 +304,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:",
+        "BIOL 2327 to BIOL 3999",
+        "BIOL 4705 to BIOL 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -330,6 +338,9 @@
               "subject": "CHEM",
               "classId": 1163
             }
+          ],
+          "notes": [
+            "Chemistry"
           ]
         },
         {
@@ -375,6 +386,9 @@
               "subject": "PHYS",
               "classId": 1146
             }
+          ],
+          "notes": [
+            "Physics"
           ]
         },
         {
@@ -390,6 +404,9 @@
               "subject": "ENGW",
               "classId": 1102
             }
+          ],
+          "notes": [
+            "Writing"
           ]
         },
         {
@@ -410,10 +427,7 @@
       ],
       "minRequirementCount": 7,
       "notes": [
-        "Mathematics",
-        "Chemistry",
-        "Physics",
-        "Writing"
+        "Mathematics"
       ]
     },
     {
@@ -473,7 +487,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -505,7 +522,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -559,7 +579,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -596,7 +619,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -652,7 +678,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -691,7 +720,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -775,7 +807,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:",
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -819,7 +855,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -873,7 +912,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete one of the following:",
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -922,7 +965,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -961,7 +1007,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1005,7 +1054,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       }
     ]
   }

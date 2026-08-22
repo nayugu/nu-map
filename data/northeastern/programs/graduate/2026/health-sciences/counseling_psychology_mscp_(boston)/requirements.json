@@ -219,6 +219,9 @@
                 "subject": "CAEP",
                 "classId": 6286
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],
@@ -261,7 +264,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 9 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -310,7 +316,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 9 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -374,7 +383,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 9 semester hours from the following:"
+        ]
       }
     ]
   }

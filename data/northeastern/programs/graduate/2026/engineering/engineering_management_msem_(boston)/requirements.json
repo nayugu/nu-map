@@ -540,7 +540,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "A maximum of 9 semester hours may be taken from the following toward the elective requirement:"
+      ]
     },
     {
       "type": "SECTION",

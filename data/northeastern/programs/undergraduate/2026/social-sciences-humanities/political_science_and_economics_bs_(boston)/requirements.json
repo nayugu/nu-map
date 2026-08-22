@@ -120,7 +120,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -137,12 +140,27 @@
               "idRangeEnd": 5999,
               "exceptions": []
             }
+          ],
+          "groups": [
+            {
+              "title": "Note: Elective courses may also fulfill requirements of an optional concentration of this program.",
+              "courses": [
+                {
+                  "type": "RANGE",
+                  "subject": "POLS",
+                  "idRangeStart": 2000,
+                  "idRangeEnd": 5999,
+                  "exceptions": []
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Note: Elective courses may also fulfill requirements of an optional concentration of this program."
+        "Complete four courses from the following range, or complete a concentration as outlined below:",
+        "POLS 2000 to POLS 5999"
       ]
     },
     {
@@ -207,13 +225,16 @@
               "subject": "MATH",
               "classId": 1341
             }
+          ],
+          "notes": [
+            "Calculus"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Computer Science",
-        "Calculus"
+        "Complete one of the following:"
       ]
     },
     {
@@ -294,7 +315,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three Economics elective courses found in the following ranges, with no more than one in the ECON 1200 to ECON 1999 range. Unless otherwise noted in specific combined majors, required core economics courses cannot be counted as electives by students completing Department of Economics programs:",
+        "ECON 1200 to ECON 1999",
+        "ECON 2990 to ECON 3559",
+        "ECON 3561 to ECON 4689",
+        "ECON 4900 to ECON 4996",
+        "ECON 5200 to ECON 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -415,8 +444,13 @@
         "Statistics",
         "Economics",
         "Complete one course from the following ranges. This course may not also be used as an Economics elective:",
+        "ECON 1200 to ECON 1999",
+        "ECON 2990 to ECON 4689",
+        "ECON 4900 to ECON 4996",
+        "ECON 5200 to ECON 5999",
         "Political Science",
-        "Complete one course in the following range:"
+        "Complete one course in the following range:",
+        "POLS 2401 to POLS 5999"
       ]
     },
     {
@@ -449,7 +483,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -532,7 +569,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -571,7 +611,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -655,7 +698,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:",
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -699,7 +746,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -753,7 +803,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete one of the following:",
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -802,7 +856,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -841,7 +898,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -885,7 +945,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
       }
     ]
   }

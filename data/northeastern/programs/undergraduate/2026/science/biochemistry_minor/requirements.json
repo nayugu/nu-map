@@ -249,7 +249,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following (other advanced BIOL courses may be accepted at the discretion of the biochemistry director):"
+      ]
     },
     {
       "type": "SECTION",
@@ -451,7 +454,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following (other advanced CHEM courses may be accepted at the discretion of the biochemistry director):"
+      ]
     }
   ],
   "gpaRequirements": [

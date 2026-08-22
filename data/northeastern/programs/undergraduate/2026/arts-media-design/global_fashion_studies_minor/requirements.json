@@ -72,7 +72,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -192,10 +195,16 @@
               "subject": "THTR",
               "classId": 2380
             }
+          ],
+          "notes": [
+            "Complete one of the following OR a third course from the list above:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete two of the following:"
+      ]
     }
   ],
   "gpaRequirements": [

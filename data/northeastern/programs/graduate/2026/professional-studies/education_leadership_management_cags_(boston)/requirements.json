@@ -177,7 +177,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete courses from the EDU 7000 level. Below is a list of courses regularly offered as electives within the Doctor of Education program."
+      ]
     }
   ],
   "gpaRequirements": [

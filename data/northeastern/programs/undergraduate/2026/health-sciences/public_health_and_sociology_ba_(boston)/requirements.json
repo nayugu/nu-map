@@ -217,6 +217,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following options:",
         "Option 1",
         "Option 2"
       ]
@@ -303,7 +304,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -468,16 +472,194 @@
               "subject": "PHTH",
               "classId": 5234
             }
+          ],
+          "groups": [
+            {
+              "title": "Society and Behavior",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3201
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 4102
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 3040
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HLTH",
+                  "classId": 5280
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5222
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 3402
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 3404
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 3450
+                }
+              ]
+            },
+            {
+              "title": "Globalization and Global Health",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "AFCS",
+                  "classId": 3424
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3404
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "INTL",
+                      "classId": 3200
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "INTL",
+                      "classId": 3201
+                    }
+                  ]
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INTL",
+                  "classId": 3400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 3487
+                }
+              ]
+            },
+            {
+              "title": "Environmental Health and Climate Change",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3423
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "INTL",
+                      "classId": 5100
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PPUA",
+                      "classId": 5100
+                    }
+                  ]
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5238
+                }
+              ]
+            },
+            {
+              "title": "Law, Policy, and Human Rights",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3424
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 5001
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 5002
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 3307
+                }
+              ]
+            },
+            {
+              "title": "Healthcare Administration and Management",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ECON",
+                  "classId": 3413
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MGMT",
+                  "classId": 3340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ORGB",
+                  "classId": 3201
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4511
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5232
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 5234
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Society and Behavior",
-        "Globalization and Global Health",
-        "Environmental Health and Climate Change",
-        "Law, Policy, and Human Rights",
-        "Healthcare Administration and Management"
+        "Complete one course (categories provided for reference):"
       ]
     },
     {
@@ -525,10 +707,18 @@
               "idRangeEnd": 5999,
               "exceptions": []
             }
+          ],
+          "notes": [
+            "Complete four additional SOCL courses from the following range:",
+            "SOCL 3000 to SOCL 5999"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete three electives from the following with courses beyond those taken in the requirements above:",
+        "SOCL 1102 to SOCL 2999"
+      ]
     },
     {
       "type": "SECTION",
@@ -550,7 +740,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -574,13 +767,16 @@
               "subject": "ENGW",
               "classId": 3308
             }
+          ],
+          "notes": [
+            "Advanced Writing in the Disciplines",
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
-        "First-Year Writing",
-        "Advanced Writing in the Disciplines"
+        "First-Year Writing"
       ]
     },
     {
@@ -631,13 +827,64 @@
                 }
               ]
             }
+          ],
+          "groups": [
+            {
+              "title": "Bouvé Courses",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 2210
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHTH",
+                  "classId": 4202
+                }
+              ]
+            },
+            {
+              "title": "CSSH Courses",
+              "courses": [
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "SOCL",
+                      "classId": 2320
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "INSH",
+                      "classId": 3102
+                    }
+                  ]
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "SOCL",
+                      "classId": 2321
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "INSH",
+                      "classId": 3101
+                    }
+                  ]
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Bouvé Courses",
-        "CSSH Courses"
+        "Complete one statistics course and one research methods course (both must be from the same college):"
       ]
     },
     {
@@ -743,7 +990,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "footnotes": [

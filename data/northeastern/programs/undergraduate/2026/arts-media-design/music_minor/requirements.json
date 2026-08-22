@@ -109,10 +109,16 @@
               "subject": "MUSC",
               "classId": 3300
             }
+          ],
+          "notes": [
+            "Complete one of the following (music theory placement test permits placement into MUSC 1201 Music Theory 1 or higher):"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -310,7 +316,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following. Four semesters of ensembles and/or lessons may be substituted for one elective. At least one 2000-level course or above must be taken."
+      ]
     },
     {
       "type": "SECTION",

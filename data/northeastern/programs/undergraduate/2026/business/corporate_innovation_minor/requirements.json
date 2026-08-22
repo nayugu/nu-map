@@ -272,11 +272,15 @@
               "subject": "HLTH",
               "classId": 2550
             }
+          ],
+          "notes": [
+            "Additional Electives"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete three of the following, one of which may be chosen from the additional elective options list:",
         "Additional Electives",
         "One course from an approved Dialogue may count toward an elective."
       ]

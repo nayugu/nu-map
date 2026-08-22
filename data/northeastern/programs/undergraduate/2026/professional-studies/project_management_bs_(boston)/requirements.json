@@ -435,15 +435,114 @@
               "subject": "ITC",
               "classId": 3320
             }
+          ],
+          "groups": [
+            {
+              "title": "Healthcare",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "HMG",
+                  "classId": 2100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HMG",
+                  "classId": 4210
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "HMG",
+                  "classId": 3225
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHL",
+                  "classId": 2130
+                }
+              ]
+            },
+            {
+              "title": "Management",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ACC",
+                  "classId": 2100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "FIN",
+                  "classId": 2105
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MGT",
+                  "classId": 4220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MGT",
+                  "classId": 4230
+                }
+              ]
+            },
+            {
+              "title": "Finance",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ACC",
+                  "classId": 2100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ACC",
+                  "classId": 2200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "FIN",
+                  "classId": 2105
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "FIN",
+                  "classId": 3330
+                }
+              ]
+            },
+            {
+              "title": "Information Technology (Database)",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ITC",
+                  "classId": 2000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ITC",
+                  "classId": 2300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ITC",
+                  "classId": 2430
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ITC",
+                  "classId": 3320
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Healthcare",
-        "Management",
-        "Finance",
-        "Information Technology (Database)"
+        "Complete four of the following:"
       ]
     },
     {

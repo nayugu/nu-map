@@ -226,7 +226,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -275,7 +278,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -359,7 +365,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "In consultation with advisor, complete 3 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -423,7 +432,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -482,7 +494,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -531,7 +546,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -610,7 +628,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -669,7 +690,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -723,7 +747,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -777,7 +804,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -846,7 +876,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -885,7 +918,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -919,7 +955,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours of FINA courses for which prerequisites have been met. Students may complete 3 semester hours through our student-managed mutual fund. Each course is 1 semester hour and may be taken multiple times. At least 1 semester hour must be as a fund manager (FINA 6361)."
+        ]
       },
       {
         "type": "SECTION",
@@ -968,7 +1007,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1017,7 +1059,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours from the following for which prerequisites have been met:"
+        ]
       }
     ]
   }

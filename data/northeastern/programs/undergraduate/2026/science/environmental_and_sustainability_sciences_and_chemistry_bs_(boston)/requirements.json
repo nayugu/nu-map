@@ -250,7 +250,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -463,7 +466,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following (two of three must be above the 3000 level):"
+      ]
     },
     {
       "type": "SECTION",
@@ -584,10 +590,16 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the following"
+      ]
     },
     {
       "type": "SECTION",
@@ -668,6 +680,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -783,7 +798,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",

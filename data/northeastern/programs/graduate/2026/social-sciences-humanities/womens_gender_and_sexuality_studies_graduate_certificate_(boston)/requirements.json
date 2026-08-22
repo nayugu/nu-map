@@ -101,7 +101,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "All students, regardless of disciplinary background, must complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

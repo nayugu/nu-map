@@ -79,7 +79,10 @@
         {
           "type": "COURSE",
           "subject": "CED",
-          "classId": 6995
+          "classId": 6995,
+          "notes": [
+            "Complete the following course for four quarter hours:"
+          ]
         }
       ],
       "minRequirementCount": 5

@@ -64,7 +64,10 @@
           "classId": 5100
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (repeatable) course twice:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -104,7 +107,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with faculty advisor, complete 20 semester hours from the topic of cell and molecular biology:",
+          "BIOL 5103 to BIOL 9984"
+        ]
       },
       {
         "type": "SECTION",
@@ -135,7 +142,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with faculty advisor, complete 16 semester hours from the topic of molecular microbiology:",
+          "BIOL 5103 to BIOL 9984"
+        ]
       },
       {
         "type": "SECTION",
@@ -166,7 +177,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 16 semester hours from the following:",
+          "BIOL 5103 to BIOL 9984"
+        ]
       }
     ]
   }

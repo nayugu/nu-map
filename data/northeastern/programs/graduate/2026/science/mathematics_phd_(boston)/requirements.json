@@ -79,7 +79,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 0–8 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -227,7 +230,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "MATH 7346 to MATH 7361",
+        "MATH 7976 to MATH 8986"
+      ]
     },
     {
       "type": "SECTION",
@@ -375,7 +382,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete up to 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -434,7 +444,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete up to 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -514,7 +527,11 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 4 semester hours from the following:",
+          "Complete up to 8 semester hours from the following:"
+        ]
       }
     ]
   }

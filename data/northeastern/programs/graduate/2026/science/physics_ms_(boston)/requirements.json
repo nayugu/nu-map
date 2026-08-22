@@ -189,7 +189,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -204,6 +207,7 @@
         ],
         "minRequirementCount": 1,
         "notes": [
+          "Complete 8 semester hours from the following:",
           "In consultation with your faculty advisor, any remaining semester hours may be completed with electives."
         ]
       },
@@ -220,6 +224,7 @@
         ],
         "minRequirementCount": 1,
         "notes": [
+          "Complete a minimum of 12 semester hours from the following:",
           "Complete a minimum of 8 semester hours of specialization coursework in consultation with your faculty advisor."
         ]
       }

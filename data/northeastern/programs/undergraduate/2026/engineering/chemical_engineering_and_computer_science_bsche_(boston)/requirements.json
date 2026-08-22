@@ -202,10 +202,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "3 semester hours from the following course count toward the engineering requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "2 semester hours from the following course count toward the engineering requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -361,7 +367,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "With advisor approval, a directed study, research, project study, or appropriate graduate-level course may also be taken as a computer science elective."
+        "With advisor approval, a directed study, research, project study, or appropriate graduate-level course may also be taken as a computer science elective.",
+        "Complete 8 semester hours from within the following options:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2000 or higher, except DS 4900"
       ]
     },
     {
@@ -451,6 +461,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -472,7 +485,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "1 semester hour from the following course counts toward the mathematics/science requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -520,10 +536,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the professional development requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following course counts toward the professional development requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -576,7 +598,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "This course is already required above and also fulfills the integrative requirement."
+      ]
     }
   ],
   "gpaRequirements": [

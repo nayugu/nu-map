@@ -115,7 +115,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following (multiple completions of ARTG 5000 or GSND 6000 may apply to the elective requirement):"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -175,7 +175,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one research methods elective from this list or in consultation with your advisor:"
+      ]
     },
     {
       "type": "SECTION",

@@ -102,7 +102,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 20 semester hours in Topics, Directed Study, or Readings:",
+        "HIST 7219-7251 Topics"
+      ]
     },
     {
       "type": "SECTION",
@@ -147,6 +151,10 @@
         }
       ],
       "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following range:",
+        "HIST 7200 to HIST 7702"
+      ],
       "shared": true
     },
     {

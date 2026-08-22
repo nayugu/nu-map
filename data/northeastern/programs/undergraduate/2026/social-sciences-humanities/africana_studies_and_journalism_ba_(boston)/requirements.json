@@ -122,7 +122,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -175,7 +178,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -223,7 +229,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -338,7 +347,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -481,13 +493,14 @@
               "subject": "AFCS",
               "classId": 4700
             }
+          ],
+          "notes": [
+            "Complete one of the following:",
+            "The following course is already required in the major:"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "The following course is already required in the major:"
-      ]
+      "minRequirementCount": 2
     }
   ]
 }

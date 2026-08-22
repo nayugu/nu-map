@@ -204,7 +204,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Electives may be satisfied by any EDU 6000-level course not already being used toward degree requirements. Suggested EDU 6000-level courses are listed below. Additionally, CPS graduate-level courses that may also be used to satisfy elective requirements are listed below:"
+      ]
     }
   ],
   "gpaRequirements": [

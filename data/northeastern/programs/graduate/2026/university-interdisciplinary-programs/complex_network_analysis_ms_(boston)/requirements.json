@@ -100,7 +100,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a total of 4 semester hours from the following (course may be repeated):"
+      ]
     },
     {
       "type": "SECTION",
@@ -182,6 +185,9 @@
                 "subject": "PHYS",
                 "classId": 5211
               }
+            ],
+            "notes": [
+              "Complete 8 semester hours from the following:"
             ]
           },
           {
@@ -218,6 +224,9 @@
                 "subject": "CNET",
                 "classId": 6099
               }
+            ],
+            "notes": [
+              "Complete 4 semester hours from the following (students may opt to take the required course in the College of Science or Bouvé College of Health Sciences concentrations for this section):"
             ]
           }
         ],
@@ -292,6 +301,9 @@
                 "subject": "PPUA",
                 "classId": 7237
               }
+            ],
+            "notes": [
+              "Complete a minimum of 6 semester hours from the following:"
             ]
           },
           {
@@ -328,6 +340,9 @@
                 "subject": "CNET",
                 "classId": 6099
               }
+            ],
+            "notes": [
+              "Complete a minimum of 4 semester hours from the following (students may opt to take the required course in the College of Science or Bouvé College of Health Sciences concentrations for this section):"
             ]
           }
         ],
@@ -377,6 +392,9 @@
                 "subject": "PHYS",
                 "classId": 5211
               }
+            ],
+            "notes": [
+              "Complete a minimum of 7 semester hours from the following:"
             ]
           },
           {
@@ -413,6 +431,9 @@
                 "subject": "CNET",
                 "classId": 6099
               }
+            ],
+            "notes": [
+              "Complete a minimum of 4 semester hours from the following (students may opt to take the required course in the College of Science or Bouvé College of Health Sciences concentrations for this section):"
             ]
           }
         ],
@@ -472,6 +493,9 @@
                 "subject": "PHYS",
                 "classId": 5211
               }
+            ],
+            "notes": [
+              "Complete a minimum of 6 semester hours from the following:"
             ]
           },
           {
@@ -508,6 +532,9 @@
                 "subject": "CNET",
                 "classId": 6099
               }
+            ],
+            "notes": [
+              "Complete a minimum of 4 semester hours from the following (students may opt to take the required course in the College of Science or Bouvé College of Health Sciences concentrations for this section):"
             ]
           }
         ],

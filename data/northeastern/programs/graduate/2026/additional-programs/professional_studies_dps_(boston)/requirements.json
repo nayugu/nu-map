@@ -120,7 +120,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 6 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -132,7 +135,10 @@
           "classId": 7760
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following course three times:"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -253,7 +253,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -330,6 +333,13 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete three additional 4– or 5-semester-hour courses from the following:",
+        "BIOL 2321 to BIOL 3999",
+        "BIOL 4705 to BIOL 4990",
+        "BIOL 5000 to BIOL 5999",
+        "EEMB 2290 to EEMB 5515",
+        "EEMB 5520 to EEMB 5535",
+        "EEMB 5548 to EEMB 5569",
         "One of the three intermediate/advanced electives can be a research course:"
       ]
     },
@@ -358,7 +368,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Please complete one of the following options to fulfill the capstone requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -560,7 +573,17 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:",
+        "BIOL 2301 to BIOL 5999",
+        "CHEM 2311 to CHEM 5999",
+        "EEMB 2290 to EEMB 5999",
+        "ENVR 2310 to ENVR 5999",
+        "MATH 2280 to MATH 5999",
+        "PHYS 2303 to PHYS 5999",
+        "PSYC 2290 to PSYC 5999"
+      ]
     },
     {
       "type": "SECTION",

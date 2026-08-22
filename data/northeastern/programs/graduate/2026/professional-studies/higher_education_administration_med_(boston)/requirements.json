@@ -184,7 +184,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 quarter hours at the EDU 6000 level or choose from the following courses:"
+      ]
     }
   ],
   "gpaRequirements": [

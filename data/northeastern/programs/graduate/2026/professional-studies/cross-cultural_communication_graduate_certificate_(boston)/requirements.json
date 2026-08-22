@@ -125,7 +125,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -407,6 +407,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following lecture/lab pairs:"
           ]
         },
         {
@@ -442,6 +445,9 @@
               "subject": "MATH",
               "classId": 1341
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],

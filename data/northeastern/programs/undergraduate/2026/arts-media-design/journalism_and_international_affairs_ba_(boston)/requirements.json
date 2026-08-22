@@ -190,7 +190,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -965,19 +968,21 @@
               "subject": "MSCR",
               "classId": 2325
             }
+          ],
+          "notes": [
+            "Law, Diplomacy, and Global Governance",
+            "Human Rights and Social Justice",
+            "Conflict and Security",
+            "Globalization",
+            "Population, Migration, and Diaspora",
+            "Development",
+            "Communication and Media"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Environment",
-        "Law, Diplomacy, and Global Governance",
-        "Human Rights and Social Justice",
-        "Conflict and Security",
-        "Globalization",
-        "Population, Migration, and Diaspora",
-        "Development",
-        "Communication and Media"
+        "Environment"
       ]
     },
     {
@@ -1297,16 +1302,18 @@
               "subject": "POLS",
               "classId": 3465
             }
+          ],
+          "notes": [
+            "Asia",
+            "Europe",
+            "Latin America",
+            "Middle East"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Africa",
-        "Asia",
-        "Europe",
-        "Latin America",
-        "Middle East"
+        "Africa"
       ]
     },
     {

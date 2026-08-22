@@ -68,7 +68,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -111,7 +114,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -149,7 +155,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -177,7 +186,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Four-month co-ops require registration at 1 SH for one term. Longer co-ops require registration at 1 SH per term for two consecutive terms."
+      ]
     }
   ],
   "gpaRequirements": [
@@ -272,6 +284,7 @@
         ],
         "minRequirementCount": 1,
         "notes": [
+          "Complete 12 semester hours from the following course list:",
           "Complete 8 semester hours of elective courses from the list below:"
         ]
       },
@@ -348,7 +361,18 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 20 semester hours from the following list of courses:",
+          "LPSC 5000 to LPSC 7999",
+          "PPUA 5000 to PPUA 7999",
+          "CRIM 5000 to CRIM 7999 (by advisement only)",
+          "ECON 5000 to ECON 7999 (by advisement only)",
+          "ENGL 5000 to ENGL 7999 (by advisement only)",
+          "HIST 5000 to HIST 7999 (by advisement only)",
+          "POLS 5000 to POLS 7999 (by advisement only)",
+          "SOCL 5000 to SOCL 7999 (by advisement only)"
+        ]
       }
     ]
   }

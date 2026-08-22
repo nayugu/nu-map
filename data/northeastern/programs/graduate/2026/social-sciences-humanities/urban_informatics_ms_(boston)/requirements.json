@@ -122,7 +122,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Four-month co-ops require registration at 1 SH for one term. Longer co-ops require registration at 1 SH per term for two consecutive terms:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -234,7 +237,9 @@
         ],
         "minRequirementCount": 4,
         "notes": [
-          "CIVE 7000-level Special Topics in Engineering—approved by program director"
+          "Complete 4 semester hours from the following:",
+          "CIVE 7000-level Special Topics in Engineering—approved by program director",
+          "Complete topic-focused capstone or practicum approved by program director:"
         ]
       },
       {
@@ -341,7 +346,11 @@
             "classId": 6410
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from the following:",
+          "Complete topic-focused capstone or practicum approved by program director:"
+        ]
       },
       {
         "type": "SECTION",
@@ -423,7 +432,10 @@
         ],
         "minRequirementCount": 4,
         "notes": [
-          "CIVE 7000-level Special Topics in Engineering—approved by program director"
+          "Complete one of the following:",
+          "Complete 4 semester hours from the following:",
+          "CIVE 7000-level Special Topics in Engineering—approved by program director",
+          "Complete topic-focused capstone or practicum approved by program director:"
         ]
       },
       {
@@ -498,7 +510,10 @@
             "classId": 6410
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from the following:"
+        ]
       }
     ]
   }

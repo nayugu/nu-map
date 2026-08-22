@@ -84,6 +84,9 @@
               "subject": "CIVE",
               "classId": 7251
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
@@ -104,6 +107,9 @@
               "subject": "SBSY",
               "classId": 5100
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
@@ -134,10 +140,16 @@
               "subject": "CIVE",
               "classId": 7388
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [

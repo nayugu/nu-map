@@ -231,6 +231,9 @@
                 "subject": "LDR",
                 "classId": 6150
               }
+            ],
+            "notes": [
+              "Complete three of the following:"
             ]
           }
         ],
@@ -328,6 +331,9 @@
                 "subject": "HRM",
                 "classId": 6070
               }
+            ],
+            "notes": [
+              "Complete three of the following (students waived out of HRM 6015, complete four of the following):"
             ]
           }
         ],
@@ -590,7 +596,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete a minimum 6 quarter hours from the following:"
+        ]
       }
     ]
   }

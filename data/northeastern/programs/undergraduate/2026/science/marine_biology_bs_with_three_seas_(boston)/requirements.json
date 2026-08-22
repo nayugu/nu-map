@@ -284,7 +284,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -409,6 +412,9 @@
               "subject": "ENVR",
               "classId": 4504
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -505,7 +511,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following lecture/lab sets:"
+      ]
     },
     {
       "type": "SECTION",
@@ -554,6 +563,9 @@
               "subject": "EEMB",
               "classId": 5505
             }
+          ],
+          "notes": [
+            "Courses completed at locations other than the Northeastern Nahant campus:"
           ]
         },
         {
@@ -634,13 +646,15 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 13,
       "notes": [
-        "Complete the following at the Northeastern Nahant campus:",
-        "Courses completed at locations other than the Northeastern Nahant campus:"
+        "Complete the following at the Northeastern Nahant campus:"
       ]
     },
     {

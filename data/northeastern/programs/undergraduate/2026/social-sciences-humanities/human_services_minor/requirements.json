@@ -170,7 +170,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four HUSV courses."
+      ]
     }
   ],
   "gpaRequirements": [

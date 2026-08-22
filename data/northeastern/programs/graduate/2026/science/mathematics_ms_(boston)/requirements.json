@@ -172,7 +172,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 16 semester hours from the following; no course can be used to satisfy both a requirement and an elective:"
+      ]
     }
   ],
   "gpaRequirements": [

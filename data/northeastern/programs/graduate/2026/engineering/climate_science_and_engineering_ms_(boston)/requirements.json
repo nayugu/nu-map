@@ -144,7 +144,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 20 semester hours from the core requirements listed below (any core course not used to meet this core course requirement can be taken as a restricted elective):"
+      ]
     },
     {
       "type": "SECTION",
@@ -214,6 +217,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete CIVE 7945 and CIVE 7990 for 8 semester hours or complete EEMB 8984 twice for 8 semester hours:",
         "Complete 4 semester hours from the restricted electives course list below.",
         "In addition to completing the thesis course, College of Engineering students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest."
       ],

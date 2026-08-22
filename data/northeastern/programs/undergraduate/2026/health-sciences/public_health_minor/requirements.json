@@ -174,7 +174,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following (PHTH 2210 is recommended):"
+      ]
     },
     {
       "type": "SECTION",

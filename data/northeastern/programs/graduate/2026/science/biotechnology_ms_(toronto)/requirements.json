@@ -352,6 +352,9 @@
                 "subject": "BIOT",
                 "classId": 5850
               }
+            ],
+            "notes": [
+              "Choose one from the following:"
             ]
           }
         ],
@@ -427,6 +430,9 @@
                 "subject": "CHEM",
                 "classId": 5550
               }
+            ],
+            "notes": [
+              "Choose one from the following:"
             ]
           }
         ],
@@ -495,6 +501,9 @@
                 "subject": "BIOT",
                 "classId": 6340
               }
+            ],
+            "notes": [
+              "Choose one from the following:"
             ]
           }
         ],

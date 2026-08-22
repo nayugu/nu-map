@@ -290,7 +290,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -348,7 +351,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -367,6 +373,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following options (courses used to satisfy this requirement will also typically satisfy another major requirement):",
         "Dialogue of Civilizations in a Spanish-speaking country",
         "International co-op in a Spanish-speaking country",
         "Study-abroad in a Spanish-speaking country"
@@ -409,7 +416,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -455,7 +465,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -487,7 +500,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -516,6 +532,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following, based on home college:",
         "Bouvé",
         "CSSH"
       ]

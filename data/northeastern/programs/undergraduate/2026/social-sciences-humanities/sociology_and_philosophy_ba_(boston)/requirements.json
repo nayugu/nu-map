@@ -155,7 +155,10 @@
           "classId": 4600
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students are expected to complete the following course in spring of their senior year:"
+      ]
     },
     {
       "type": "SECTION",
@@ -219,7 +222,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -291,7 +297,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Take one of the following courses not used to fulfill another requirements:"
+      ]
     },
     {
       "type": "SECTION",

@@ -150,7 +150,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least 10 credits of electives from the following:"
+      ]
     }
   ]
 }

@@ -175,7 +175,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 6 semester hours of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -320,6 +323,7 @@
         ],
         "minRequirementCount": 1,
         "notes": [
+          "Complete 20 semester hours from the following courses as long as prerequisites have been met. At least 4 Semester Hours must be at the 4000 level:",
           "Courses in architectural history and media and screen studies may also be used upon approval by the program coordinator.",
           "If ARTH 3000 or ARTH 4000 (or any other topics course in the options listed below) is completed more than once, the additional completions may be allowed toward the electives."
         ]
@@ -653,21 +657,375 @@
                 "subject": "THTR",
                 "classId": 1270
               }
+            ],
+            "groups": [
+              {
+                "title": "Art + Design",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 2000
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 2100
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 2340
+                  },
+                  {
+                    "type": "AND",
+                    "courses": [
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTD",
+                        "classId": 2360
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTD",
+                        "classId": 2361
+                      }
+                    ]
+                  },
+                  {
+                    "type": "AND",
+                    "courses": [
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTD",
+                        "classId": 2370
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTD",
+                        "classId": 2371
+                      }
+                    ]
+                  },
+                  {
+                    "type": "AND",
+                    "courses": [
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTD",
+                        "classId": 2380
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTD",
+                        "classId": 2381
+                      }
+                    ]
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 3000
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 3460
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 3470
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 3471
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 3472
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 3473
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 3480
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 3490
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 4565
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 4570
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 4575
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 4660
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTD",
+                    "classId": 4661
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTE",
+                    "classId": 2500
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTE",
+                    "classId": 2501
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTE",
+                    "classId": 3901
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTE",
+                    "classId": 4901
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 1250
+                  },
+                  {
+                    "type": "AND",
+                    "courses": [
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTG",
+                        "classId": 2250
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "ARTG",
+                        "classId": 2251
+                      }
+                    ]
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTG",
+                    "classId": 2252
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTH",
+                    "classId": 1100
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTH",
+                    "classId": 2200
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTH",
+                    "classId": 2210
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTH",
+                    "classId": 2211
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTH",
+                    "classId": 2311
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTH",
+                    "classId": 2312
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTH",
+                    "classId": 2313
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTH",
+                    "classId": 3000
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTH",
+                    "classId": 3211
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTH",
+                    "classId": 4000
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTH",
+                    "classId": 5600
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTS",
+                    "classId": 2340
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTS",
+                    "classId": 2341
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARTS",
+                    "classId": 3449
+                  }
+                ]
+              },
+              {
+                "title": "Architecture",
+                "courses": [
+                  {
+                    "type": "AND",
+                    "courses": [
+                      {
+                        "type": "COURSE",
+                        "subject": "ARCH",
+                        "classId": 1310
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "ARCH",
+                        "classId": 1311
+                      }
+                    ]
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARCH",
+                    "classId": 1450
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARCH",
+                    "classId": 2330
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "ARCH",
+                    "classId": 2340
+                  }
+                ]
+              },
+              {
+                "title": "Communication Studies",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "COMM",
+                    "classId": 1101
+                  }
+                ]
+              },
+              {
+                "title": "Game Design",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "GAME",
+                    "classId": 1110
+                  }
+                ]
+              },
+              {
+                "title": "Journalism",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "JRNL",
+                    "classId": 1150
+                  }
+                ]
+              },
+              {
+                "title": "Media and Screen Studies",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "MSCR",
+                    "classId": 1220
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "MSCR",
+                    "classId": 1230
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "MSCR",
+                    "classId": 2220
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "MSCR",
+                    "classId": 2336
+                  }
+                ]
+              },
+              {
+                "title": "Music",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "MUSC",
+                    "classId": 1113
+                  }
+                ]
+              },
+              {
+                "title": "Theatre",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "THTR",
+                    "classId": 1101
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "THTR",
+                    "classId": 1270
+                  }
+                ]
+              }
             ]
           }
         ],
         "minRequirementCount": 1,
         "notes": [
-          "Art + Design",
+          "Complete 20 semester hours from the following lists as long as prerequisites have been met. At least 4 Semester Hours must be at the 4000 level:",
           "If a topics course is completed more than once, the additional completions may be allowed toward the arts, media and design electives.",
-          "Architecture",
-          "Communication Studies",
-          "Game Design",
-          "Journalism",
-          "Media and Screen Studies",
-          "Music",
-          "Theatre",
-          "University of the Arts London",
           "Optional London study abroad for sound management at Central Saint Martins, University of the Arts London. Specific courses at University of the Arts London are preapproved for transfer to a student's Northeastern University record to apply toward requirements. Students can consult with a CAMD academic advisor for approval prior to registration."
         ]
       }

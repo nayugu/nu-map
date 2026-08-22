@@ -146,7 +146,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -185,7 +188,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -293,7 +299,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following not used to fulfill another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -377,7 +386,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses that has not been used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -434,7 +446,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses that has not been used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -557,7 +572,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five of the following courses, one of which must be at the 2000 level or above and another one of which must be at the 3000 level or above, that have not been used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",

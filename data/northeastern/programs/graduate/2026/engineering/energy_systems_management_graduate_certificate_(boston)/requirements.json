@@ -116,10 +116,16 @@
               "subject": "ME",
               "classId": 5685
             }
+          ],
+          "notes": [
+            "Complete one of the following, provided any prerequisites have been satisfied. Electives outside this list may be taken with prior approval from the faculty advisor:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the following, provided any prerequisites have been satisfied. Electives outside this list may be taken with prior approval from the faculty advisor:"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -173,6 +173,9 @@
                 "subject": "EECE",
                 "classId": 7398
               }
+            ],
+            "notes": [
+              "Complete 4 semester hours from the following:"
             ]
           },
           {
@@ -181,7 +184,10 @@
             "classId": 7945
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -288,6 +294,9 @@
                 "subject": "PHSC",
                 "classId": 5900
               }
+            ],
+            "notes": [
+              "Complete 4 semester hours from the following:"
             ]
           },
           {
@@ -298,7 +307,8 @@
         ],
         "minRequirementCount": 3,
         "notes": [
-          "Students without a chemical engineering degree are advised to choose the 510X courses, which serve as a bridge from other degrees."
+          "Students without a chemical engineering degree are advised to choose the 510X courses, which serve as a bridge from other degrees.",
+          "Complete 8 semester hours from the following:"
         ]
       },
       {
@@ -363,7 +373,10 @@
             "classId": 7945
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 12 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -419,6 +432,9 @@
                 "subject": "CS",
                 "classId": 7180
               }
+            ],
+            "notes": [
+              "Complete 8 semester hours from the following:"
             ]
           },
           {
@@ -438,7 +454,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 4 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -474,6 +493,9 @@
                 "subject": "EECE",
                 "classId": 5554
               }
+            ],
+            "notes": [
+              "Complete 8 semester hours from the following:"
             ]
           },
           {
@@ -493,7 +515,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 4 semester hours from the following:"
+        ]
       }
     ]
   }

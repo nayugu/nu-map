@@ -215,7 +215,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following ranges:",
+        "ECON 1200–ECON 1999",
+        "ECON 3000–ECON 4689",
+        "ECON 4900–ECON 4999",
+        "ECON 5200–ECON 5999",
+        "POLS 2000–POLS 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -301,7 +309,10 @@
         {
           "type": "COURSE",
           "subject": "ECON",
-          "classId": 1116
+          "classId": 1116,
+          "notes": [
+            "Economics Requirement"
+          ]
         },
         {
           "type": "OR",
@@ -316,6 +327,9 @@
               "subject": "PHIL",
               "classId": 1000
             }
+          ],
+          "notes": [
+            "First-Year Seminar"
           ]
         },
         {
@@ -351,6 +365,10 @@
               "subject": "MATH",
               "classId": 1341
             }
+          ],
+          "notes": [
+            "Mathematics Requirement",
+            "Complete one of the following. MATH 1231 is strongly recommended for this major:"
           ]
         },
         {
@@ -381,16 +399,16 @@
               "subject": "POLS",
               "classId": 2400
             }
+          ],
+          "notes": [
+            "Statistics Requirement",
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 5,
       "notes": [
-        "Co-op Preparation Requirement",
-        "Economics Requirement",
-        "First-Year Seminar",
-        "Mathematics Requirement",
-        "Statistics Requirement"
+        "Co-op Preparation Requirement"
       ]
     },
     {
@@ -620,11 +638,15 @@
                 "subject": "INNO",
                 "classId": 4983
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
+          "Complete two electives, one of which may come from the Additional Electives list:",
           "Additional Electives",
           "One course from an approved Dialogue may count toward an elective."
         ]
@@ -821,7 +843,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -902,6 +927,9 @@
                 "subject": "FINA",
                 "classId": 4335
               }
+            ],
+            "notes": [
+              "Choose one option below:"
             ]
           },
           {
@@ -946,7 +974,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1085,7 +1116,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1181,12 +1215,15 @@
                 "subject": "MKTG",
                 "classId": 2301
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
-          "Additional Electives",
+          "Complete two of the following, one of which may come from the additional elective list:",
           "One course from an approved Dialogue may count toward an elective."
         ]
       }

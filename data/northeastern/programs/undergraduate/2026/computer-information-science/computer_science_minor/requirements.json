@@ -161,6 +161,9 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete two courses that are not already required in the following ranges:",
+        "CS 2500 to CS 7999, except CS 3950, CS 4950, CS 5010, and CY 4170",
+        "CY 3000 or higher, except CY 4930",
         "One course from Khoury meaningful minors list (see below)."
       ]
     },
@@ -368,7 +371,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "IS 1500 or higher, except IS 4900"
+      ]
     },
     {
       "type": "SECTION",

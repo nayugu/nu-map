@@ -269,7 +269,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following. Students who receive transfer credit for the Advanced Placement Statistics exam may complete the 1-semester-hour PSYC 2315 course (requires department permission):"
+      ]
     },
     {
       "type": "SECTION",
@@ -338,7 +341,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -421,7 +427,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -455,7 +464,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course that is not already taken as long as prerequisites have been met:",
+        "BIOL 3403 or higher",
+        "BNSC 4991 or higher",
+        "PSYC 3404 or higher"
+      ]
     },
     {
       "type": "SECTION",
@@ -555,7 +570,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following list, not taken to fulfill other requirements:"
+      ]
     },
     {
       "type": "SECTION",

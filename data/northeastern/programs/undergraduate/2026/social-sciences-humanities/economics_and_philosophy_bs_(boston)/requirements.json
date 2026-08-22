@@ -266,7 +266,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two ECON elective courses from the following ranges with no more than one in the ECON 1200 to 1999 range. Unless otherwise noted in specific combined majors, required core ECON courses cannot be counted as electives by students completing Department of Economics programs. Additionally, ECON 3520 may not be used as an ECON elective:",
+        "ECON 1200 to ECON 1999",
+        "ECON 2990 to ECON 3559",
+        "ECON 3561 to ECON 4689",
+        "ECON 4900 to ECON 4999",
+        "ECON 5200 to ECON 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -360,7 +368,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses not used to fulfill another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -429,13 +440,13 @@
               "subject": "PHIL",
               "classId": 5002
             }
+          ],
+          "notes": [
+            "Complete one additional integrative course not used to satisfy other requirements:"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Complete one additional integrative course not used to satisfy other requirements:"
-      ]
+      "minRequirementCount": 2
     }
   ],
   "gpaRequirements": [

@@ -181,7 +181,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -306,7 +309,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two courses (not counted elsewhere) from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -334,7 +340,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course (not counted elsewhere) from the following:"
+      ]
     },
     {
       "type": "SECTION",

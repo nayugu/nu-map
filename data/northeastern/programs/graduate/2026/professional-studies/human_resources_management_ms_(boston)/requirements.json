@@ -107,12 +107,16 @@
               "subject": "HRM",
               "classId": 6042
             }
+          ],
+          "notes": [
+            "Fewer than two years of experience:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
-        "Based on your experience, complete one of the two options below:"
+        "Based on your experience, complete one of the two options below:",
+        "Two or more years of human resources experience:"
       ]
     },
     {
@@ -166,7 +170,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -285,7 +292,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -356,7 +366,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -421,7 +434,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -486,7 +502,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -546,7 +565,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -651,7 +673,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

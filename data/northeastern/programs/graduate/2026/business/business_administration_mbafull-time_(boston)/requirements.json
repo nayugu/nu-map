@@ -219,7 +219,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete 3 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -493,7 +496,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete 6 graduate-level semester hours, for which requirements have been met, offered in partnership with other Northeastern University colleges:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -559,7 +565,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -652,7 +661,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -710,7 +722,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -808,7 +823,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Note: Electives are not required; the following course(s) are suggested beyond the concentration:"
+        ]
       },
       {
         "type": "SECTION",
@@ -833,6 +851,9 @@
                 "subject": "FINA",
                 "classId": 6216
               }
+            ],
+            "notes": [
+              "In consultation with advisor, complete 3 graduate-level semester hours for which prerequisites have been met:"
             ]
           },
           {
@@ -902,7 +923,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -965,7 +989,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 12 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1043,7 +1070,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 12 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1106,7 +1136,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1194,7 +1227,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1259,6 +1295,7 @@
         ],
         "minRequirementCount": 1,
         "notes": [
+          "In consultation with advisor, complete 12 graduate-level semester hours for which prerequisites have been met:",
           "Note: Only one course outside HRMG and MGMT may be taken to fulfill the concentration."
         ]
       },
@@ -1338,7 +1375,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1386,7 +1426,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1434,7 +1477,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1487,7 +1533,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 12 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1618,7 +1667,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "In consultation with advisor, complete 4 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1656,7 +1708,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete 4 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1694,7 +1749,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 8 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1732,7 +1790,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 8 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1770,7 +1831,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 8 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1816,10 +1880,16 @@
                 "subject": "PHIL",
                 "classId": 5010
               }
+            ],
+            "notes": [
+              "In consultation with advisor, complete 4 graduate-level semester hours for which prerequisites have been met:"
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 8 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1872,7 +1942,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete 4 graduate-level semester hours for which prerequisites have been met:"
+        ]
       },
       {
         "type": "SECTION",

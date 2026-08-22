@@ -256,13 +256,16 @@
               "subject": "CAEP",
               "classId": 6220
             }
+          ],
+          "notes": [
+            "Public Health Technologies",
+            "Public Mental Health"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Public Health Technologies",
-        "Public Mental Health"
+        "Complete 9 semester hours from the following (in consultation with your academic advisor, you may complete electives from another discipline):"
       ]
     }
   ],

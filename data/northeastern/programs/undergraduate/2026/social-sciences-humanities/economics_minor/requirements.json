@@ -123,7 +123,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two upper-level economics electives within the following ranges:",
+        "ECON 2990 to ECON 3559",
+        "ECON 3561 to ECON 4689",
+        "ECON 4900 to ECON 4996",
+        "ECON 5200 to ECON 5999"
+      ]
     }
   ],
   "gpaRequirements": [

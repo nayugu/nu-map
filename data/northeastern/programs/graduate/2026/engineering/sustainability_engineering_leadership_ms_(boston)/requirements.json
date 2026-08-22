@@ -104,7 +104,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following sequences:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -243,7 +246,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 20 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -292,7 +298,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 20 semester hours from the following:"
+        ]
       }
     ]
   }

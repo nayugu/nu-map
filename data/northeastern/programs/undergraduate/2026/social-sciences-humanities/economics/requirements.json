@@ -112,10 +112,16 @@
               "subject": "ECON",
               "classId": 2560
             }
+          ],
+          "notes": [
+            "The following four core courses should be completed by the end of sophomore year:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "The following three core courses should be completed first:"
+      ]
     }
   ]
 }

@@ -262,11 +262,15 @@
               "subject": "INNO",
               "classId": 4983
             }
+          ],
+          "notes": [
+            "Additional Electives"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete three of the following, one of which may be chosen from the additional electives list:",
         "Additional Electives",
         "One course from an approved Dialogue may count toward an elective."
       ]

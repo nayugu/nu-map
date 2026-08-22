@@ -258,6 +258,9 @@
               "subject": "NRSG",
               "classId": 3120
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -403,6 +406,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "One of the following:"
           ]
         },
         {
@@ -474,6 +480,9 @@
               "subject": "MATH",
               "classId": 1341
             }
+          ],
+          "notes": [
+            "One of the following:"
           ]
         }
       ],

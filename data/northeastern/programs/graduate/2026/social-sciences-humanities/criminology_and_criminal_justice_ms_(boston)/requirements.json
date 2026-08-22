@@ -164,6 +164,12 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete 16 semester hours in the following ranges:",
+        "CRIM 5000 to CRIM 7999",
+        "INSH 5000 to INSH 7999",
+        "POLS 5000 to POLS 7999",
+        "PPUA 5000 to PPUA 7999",
+        "SOCL 5000 to SOCL 7999",
         "The following courses may also count as electives toward the program:"
       ]
     },
@@ -210,6 +216,9 @@
               "subject": "CY",
               "classId": 5250
             }
+          ],
+          "notes": [
+            "Complete two of the following:"
           ]
         }
       ],
@@ -241,7 +250,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Four-month co-ops require registration at 1 semester hour for one term. Longer co-ops require registration at 1 semester hour per term for two consecutive terms."
+      ]
     }
   ],
   "gpaRequirements": [

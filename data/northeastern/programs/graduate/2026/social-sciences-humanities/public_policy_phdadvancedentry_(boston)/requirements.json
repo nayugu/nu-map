@@ -69,6 +69,9 @@
               "subject": "PPUA",
               "classId": 9984
             }
+          ],
+          "notes": [
+            "Complete the following two courses for a minimum of 4 semester hours total:"
           ]
         }
       ],
@@ -121,7 +124,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following (an additional concentration elective may be taken in lieu of the advanced methods elective):"
+      ]
     },
     {
       "type": "SECTION",
@@ -291,7 +297,12 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete 3 semester hours from the following:",
+          "Complete a minimum of 10 semester hours from the following:",
+          "PHTH 6000 to PHTH 9999 (public health elective, by advisement)"
+        ]
       },
       {
         "type": "SECTION",
@@ -360,7 +371,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 16 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -452,7 +466,8 @@
         "minRequirementCount": 2,
         "notes": [
           "Consult an advisor when selecting courses from the following:",
-          "LW 6000 to LW 9999"
+          "LW 6000 to LW 9999",
+          "Complete 16 semester hours from the following:"
         ]
       }
     ]

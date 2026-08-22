@@ -532,6 +532,9 @@
                   }
                 ]
               }
+            ],
+            "notes": [
+              "Complete 7 semester hours of the following:"
             ]
           }
         ],
@@ -561,6 +564,7 @@
         ],
         "minRequirementCount": 1,
         "notes": [
+          "Complete 15 semester hours from the following:",
           "Any course from the BIO, BTC, HSC, or PHY subject codes in the 1000-4999 course number range."
         ]
       }

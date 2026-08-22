@@ -121,7 +121,10 @@
         {
           "type": "COURSE",
           "subject": "JRNL",
-          "classId": 2200
+          "classId": 2200,
+          "notes": [
+            "A grade of C or better is required for the following:"
+          ]
         },
         {
           "type": "COURSE",
@@ -129,10 +132,7 @@
           "classId": 1425
         }
       ],
-      "minRequirementCount": 6,
-      "notes": [
-        "A grade of C or better is required for the following:"
-      ]
+      "minRequirementCount": 6
     },
     {
       "type": "SECTION",
@@ -200,7 +200,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following (and any required corequisites):"
+      ]
     },
     {
       "type": "SECTION",
@@ -293,7 +296,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following (other courses may be proposed in consultation with your academic advisor):"
+      ]
     },
     {
       "type": "SECTION",

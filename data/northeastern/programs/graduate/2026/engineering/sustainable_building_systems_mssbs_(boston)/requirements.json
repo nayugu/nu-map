@@ -95,13 +95,13 @@
               "subject": "SBSY",
               "classId": 5400
             }
+          ],
+          "notes": [
+            "Students must register for this 0-semester-hour course every semester:"
           ]
         }
       ],
-      "minRequirementCount": 4,
-      "notes": [
-        "Students must register for this 0-semester-hour course every semester:"
-      ]
+      "minRequirementCount": 4
     },
     {
       "type": "SECTION",
@@ -259,7 +259,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -322,7 +325,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

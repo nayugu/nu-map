@@ -296,7 +296,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives.",
+        "Complete 8 semester hours from within the following options:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -382,7 +386,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four ECON elective courses from the following ranges with no more than two at the ECON 1200-1999 range. Unless otherwise noted in specific combined majors, required core economics courses cannot be counted as electives by students completing Department of Economics programs:",
+        "ECON 1200 to ECON 1999",
+        "ECON 2990 to ECON 3559",
+        "ECON 3561 to ECON 4689",
+        "ECON 4900 to ECON 4996",
+        "ECON 5200 to ECON 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -544,7 +556,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -594,7 +609,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

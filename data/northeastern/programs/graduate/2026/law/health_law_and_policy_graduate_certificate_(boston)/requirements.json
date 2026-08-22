@@ -110,7 +110,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In addition, complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -238,7 +241,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least two courses totaling at least 6 semester hours from the following:"
+      ]
     }
   ]
 }

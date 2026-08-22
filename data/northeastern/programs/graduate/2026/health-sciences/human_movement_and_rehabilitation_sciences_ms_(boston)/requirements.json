@@ -106,6 +106,7 @@
       ],
       "minRequirementCount": 5,
       "notes": [
+        "Complete one of the following:",
         "Complete the following:"
       ]
     }
@@ -152,6 +153,9 @@
                 "subject": "PHIL",
                 "classId": 5110
               }
+            ],
+            "notes": [
+              "Complete 8 semester hours from the following:"
             ]
           }
         ],
@@ -207,7 +211,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 12 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -368,7 +375,8 @@
         ],
         "minRequirementCount": 1,
         "notes": [
-          "Some courses may require prerequisite coursework."
+          "Some courses may require prerequisite coursework.",
+          "Complete 12 semester hours from following (students must petition to take electives outside the approved list):"
         ]
       }
     ]

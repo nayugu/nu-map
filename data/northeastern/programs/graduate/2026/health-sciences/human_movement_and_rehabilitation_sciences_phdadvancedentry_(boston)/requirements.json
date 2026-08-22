@@ -56,7 +56,10 @@
           "classId": 7030
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students must enroll in the following course every semester until the start of the dissertation phase of the program:"
+      ]
     },
     {
       "type": "SECTION",
@@ -266,7 +269,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a minimum of 3 semester hours from the following. Some courses may require a prerequisite course:"
+      ]
     },
     {
       "type": "SECTION",

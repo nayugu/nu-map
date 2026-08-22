@@ -401,7 +401,11 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 8 semester hours from the following (courses cannot count in multiple categories):",
+          "Complete 12 semester hours from the following (courses cannot count in multiple categories):"
+        ]
       },
       {
         "type": "SECTION",
@@ -684,7 +688,9 @@
         ],
         "minRequirementCount": 5,
         "notes": [
-          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest:"
+          "Complete one of the following options (courses cannot count in multiple categories):",
+          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest:",
+          "Complete 12 semester hours from the following (courses cannot count in multiple categories):"
         ]
       },
       {
@@ -935,7 +941,11 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete two of the following (courses cannot count in multiple categories):",
+          "Complete 12 semester hours from the following (courses cannot count in multiple categories):"
+        ]
       }
     ]
   }

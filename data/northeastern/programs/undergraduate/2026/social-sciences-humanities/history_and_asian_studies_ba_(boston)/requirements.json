@@ -214,7 +214,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose one course from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -265,6 +268,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following:",
         "Complete a professional or academic experience abroad in consultation with your advisor."
       ]
     },
@@ -336,13 +340,84 @@
               "subject": "JPNS",
               "classId": 2102
             }
+          ],
+          "groups": [
+            {
+              "title": "Chinese",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CHNS",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHNS",
+                  "classId": 1102
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CHNS",
+                      "classId": 2101
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CHNS",
+                      "classId": 2301
+                    }
+                  ]
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CHNS",
+                      "classId": 2102
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CHNS",
+                      "classId": 2302
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Japanese",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "JPNS",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JPNS",
+                  "classId": 1102
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JPNS",
+                  "classId": 2101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JPNS",
+                  "classId": 2102
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Chinese",
-        "Japanese"
+        "Complete the following courses in either Chinese or Japanese:"
       ]
     },
     {
@@ -418,14 +493,94 @@
               "subject": "PHIL",
               "classId": 2395
             }
+          ],
+          "groups": [
+            {
+              "title": "Society and Politics Focus Area",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 4350
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 4515
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ASNS",
+                  "classId": 2245
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INTB",
+                  "classId": 2501
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MKTG",
+                  "classId": 4220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1130
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 3487
+                }
+              ]
+            },
+            {
+              "title": "Language, Literature, and Culture Focus Area",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "JPNS",
+                  "classId": 1260
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JPNS",
+                  "classId": 1700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1130
+                }
+              ]
+            },
+            {
+              "title": "Religious Studies Focus Area",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1275
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 1290
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHIL",
+                  "classId": 2395
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Society and Politics Focus Area",
-        "Language, Literature, and Culture Focus Area",
-        "Religious Studies Focus Area"
+        "Complete three courses from the following focus areas."
       ]
     },
     {
@@ -448,7 +603,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

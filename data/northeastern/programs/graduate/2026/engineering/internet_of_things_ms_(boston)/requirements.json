@@ -80,6 +80,9 @@
               "subject": "EECE",
               "classId": 7364
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
@@ -100,6 +103,9 @@
               "subject": "EECE",
               "classId": 7205
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
@@ -125,6 +131,9 @@
               "subject": "EECE",
               "classId": 7398
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
@@ -145,6 +154,9 @@
               "subject": "EECE",
               "classId": 7368
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
@@ -186,6 +198,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following for a total of 4 semester hours:"
           ]
         },
         {
@@ -231,6 +246,9 @@
               "subject": "EECE",
               "classId": 5699
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -615,14 +633,16 @@
               "subject": "EECE",
               "classId": 7398
             }
+          ],
+          "notes": [
+            "Civil and Environmental Engineering",
+            "Electrical and Computer Engineering"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Bioengineering",
-        "Civil and Environmental Engineering",
-        "Electrical and Computer Engineering"
+        "Bioengineering"
       ]
     },
     {
@@ -687,13 +707,15 @@
               "subject": "CY",
               "classId": 6760
             }
+          ],
+          "notes": [
+            "Cybersecurity"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Computer Science",
-        "Cybersecurity"
+        "Computer Science"
       ]
     },
     {
@@ -738,14 +760,16 @@
               "subject": "HRMG",
               "classId": 6280
             }
+          ],
+          "notes": [
+            "Entrepreneurship Technological",
+            "Human Resources Management"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Entrepreneurship and Innovation",
-        "Entrepreneurship Technological",
-        "Human Resources Management"
+        "Entrepreneurship and Innovation"
       ]
     },
     {
@@ -785,13 +809,15 @@
               "subject": "NRSG",
               "classId": 6306
             }
+          ],
+          "notes": [
+            "Nursing"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Health Informatics",
-        "Nursing"
+        "Health Informatics"
       ]
     },
     {
@@ -898,15 +924,17 @@
               "subject": "PPUA",
               "classId": 5262
             }
+          ],
+          "notes": [
+            "Philosophy",
+            "Political Science",
+            "Public Policy and Urban Affairs"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Law and Public Policy",
-        "Philosophy",
-        "Political Science",
-        "Public Policy and Urban Affairs"
+        "Law and Public Policy"
       ]
     },
     {

@@ -273,7 +273,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four courses from the following list, two of which must be at or above the 2000 level:"
+      ]
     }
   ],
   "gpaRequirements": [

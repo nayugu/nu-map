@@ -209,7 +209,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following options:"
+      ]
     },
     {
       "type": "SECTION",
@@ -259,7 +262,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Must be taken in alignment with your home college:"
+      ]
     },
     {
       "type": "SECTION",
@@ -281,7 +287,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -355,7 +364,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -378,7 +390,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Must be taken in alignment with your home college:"
+      ]
     },
     {
       "type": "SECTION",
@@ -514,15 +529,18 @@
         {
           "type": "COURSE",
           "subject": "PSYC",
-          "classId": 1101
+          "classId": 1101,
+          "notes": [
+            "Psychology"
+          ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Biology",
+        "Complete one of the following options:",
         "Option 1",
-        "Option 2",
-        "Psychology"
+        "Option 2"
       ]
     },
     {
@@ -792,18 +810,22 @@
               "subject": "PHTH",
               "classId": 5234
             }
+          ],
+          "notes": [
+            "Upper-Level Course",
+            "Complete one of the following:",
+            "Society and Behavior",
+            "Globalization and Global Health",
+            "Environmental Health and Climate Change",
+            "Law, Policy, and Human Rights",
+            "Healthcare Administration and Management"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Introductory Course",
-        "Upper-Level Course",
-        "Society and Behavior",
-        "Globalization and Global Health",
-        "Environmental Health and Climate Change",
-        "Law, Policy, and Human Rights",
-        "Healthcare Administration and Management"
+        "Complete one of the following:"
       ]
     },
     {

@@ -105,7 +105,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following or another elective in consultation with your faculty advisor:"
+      ]
     }
   ],
   "gpaRequirements": [

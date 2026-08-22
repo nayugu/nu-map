@@ -199,6 +199,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete 4 semester hours from the following:",
         "Note: ECON 5200 is the primary elective offered on the Seattle campus. Consult program for current elective details."
       ]
     },
@@ -321,6 +322,9 @@
                 "subject": "IE",
                 "classId": 7275
               }
+            ],
+            "notes": [
+              "Complete 4 semester hours from the following courses:"
             ]
           }
         ],

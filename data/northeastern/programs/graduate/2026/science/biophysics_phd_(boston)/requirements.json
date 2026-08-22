@@ -161,7 +161,10 @@
           "classId": 9984
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following variable credit course twice (register at 3 semester hours for the first lab rotation and at 2 semester hours for the second lab rotation):"
+      ]
     },
     {
       "type": "SECTION",
@@ -242,7 +245,10 @@
           "exceptions": []
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "BIOL 5103 to BIOL 6961"
+      ]
     },
     {
       "type": "SECTION",
@@ -256,7 +262,10 @@
           "exceptions": []
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "CHEM 5610 to CHEM 5688"
+      ]
     },
     {
       "type": "SECTION",

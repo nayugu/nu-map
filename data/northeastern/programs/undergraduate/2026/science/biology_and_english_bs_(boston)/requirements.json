@@ -278,7 +278,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -305,7 +308,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:",
+        "BIOL 2327 to BIOL 3999",
+        "BIOL 4705 to BIOL 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -364,7 +372,10 @@
         {
           "type": "COURSE",
           "subject": "MATH",
-          "classId": 1341
+          "classId": 1341,
+          "notes": [
+            "Math"
+          ]
         },
         {
           "type": "AND",
@@ -384,6 +395,9 @@
               "subject": "ENVR",
               "classId": 2502
             }
+          ],
+          "notes": [
+            "Biostatistics"
           ]
         },
         {
@@ -399,6 +413,9 @@
               "subject": "PHYS",
               "classId": 1146
             }
+          ],
+          "notes": [
+            "Physics"
           ]
         },
         {
@@ -454,16 +471,23 @@
               "idRangeEnd": 5999,
               "exceptions": []
             }
+          ],
+          "notes": [
+            "Intermediate/Advanced Science Elective",
+            "Complete one course from the following:",
+            "BIOL 2301 to BIOL 5999",
+            "CHEM 2311 to CHEM 5999",
+            "EEMB 2290 to EEMB 5999",
+            "ENVR 2310 to ENVR 5999",
+            "MATH 2280 to MATH 5999",
+            "PHYS 2303 to PHYS 5999",
+            "PSYC 2290 to PSYC 5999"
           ]
         }
       ],
       "minRequirementCount": 7,
       "notes": [
-        "Chemistry",
-        "Math",
-        "Biostatistics",
-        "Physics",
-        "Intermediate/Advanced Science Elective"
+        "Chemistry"
       ]
     },
     {
@@ -575,7 +599,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following (you may reuse this course to fulfill an additional English requirement below):"
+      ]
     },
     {
       "type": "SECTION",
@@ -699,13 +726,17 @@
               "subject": "ENGL",
               "classId": 3161
             }
+          ],
+          "notes": [
+            "Post-1850",
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Pre-1850",
-        "Post-1850"
+        "Complete one of the following:"
       ]
     },
     {
@@ -808,7 +839,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -898,7 +932,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -961,7 +998,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -993,7 +1033,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [

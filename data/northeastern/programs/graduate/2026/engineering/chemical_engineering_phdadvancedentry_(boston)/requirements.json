@@ -87,7 +87,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the four core classes. A cumulative 3.250 GPA—with no individual class below a B minus—is required for core classes taken:"
+      ]
     },
     {
       "type": "SECTION",
@@ -143,14 +146,14 @@
               "subject": "CHME",
               "classId": 7395
             }
+          ],
+          "notes": [
+            "Complete the following repeatable course each semester:",
+            "Recommended but optional:"
           ]
         }
       ],
-      "minRequirementCount": 5,
-      "notes": [
-        "Complete the following repeatable course each semester:",
-        "Recommended but optional:"
-      ]
+      "minRequirementCount": 5
     },
     {
       "type": "SECTION",
@@ -293,7 +296,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a minimum of 8 semester hours. Consult your faculty advisor for acceptable courses:"
+      ]
     },
     {
       "type": "SECTION",

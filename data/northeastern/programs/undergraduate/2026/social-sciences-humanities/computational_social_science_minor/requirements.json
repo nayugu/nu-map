@@ -175,7 +175,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two courses from the following. Students may complete a capstone project under the direction of a faculty member in lieu of an application course:"
+      ]
     },
     {
       "type": "SECTION",
@@ -238,7 +241,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

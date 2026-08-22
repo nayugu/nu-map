@@ -150,7 +150,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a minimum of 8 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -273,7 +276,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "An additional 8 semester hours can either be taken from the list above or from the following list below or by approval of program director:"
+      ]
     }
   ],
   "gpaRequirements": [

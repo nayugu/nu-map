@@ -93,7 +93,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -183,7 +186,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose 2 courses from the following list:"
+      ]
     },
     {
       "type": "SECTION",
@@ -195,7 +201,10 @@
           "classId": 7990
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (repeatable) course twice:"
+      ]
     }
   ],
   "gpaRequirements": [

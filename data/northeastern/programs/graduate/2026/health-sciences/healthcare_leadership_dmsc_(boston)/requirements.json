@@ -111,13 +111,13 @@
               "subject": "MSCI",
               "classId": 7996
             }
+          ],
+          "notes": [
+            "Registration in the following course is required if the thesis is not completed by the conclusion of the term of registration for MSCI 7990:"
           ]
         }
       ],
-      "minRequirementCount": 5,
-      "notes": [
-        "Registration in the following course is required if the thesis is not completed by the conclusion of the term of registration for MSCI 7990:"
-      ]
+      "minRequirementCount": 5
     }
   ],
   "gpaRequirements": [
@@ -234,7 +234,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 12 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -323,7 +326,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete a minimum of 12 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -362,7 +368,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 3 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -413,6 +422,9 @@
                 "subject": "MSCI",
                 "classId": 5005
               }
+            ],
+            "notes": [
+              "Complete a minimum of 6 semester hours from the following (students may choose additional courses from the list below and/or an optional experiential elective to meet the minimum 12-semester-hour program requirement):"
             ]
           },
           {
@@ -510,7 +522,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 3 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -549,7 +564,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -598,7 +616,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "LW 6102 is a prerequisite for the LW courses listed below. Complete 9 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",

@@ -62,7 +62,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -89,7 +92,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -111,7 +117,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -469,6 +478,16 @@
                 ],
                 "label": "Thesis Option"
               }
+            ],
+            "notes": [
+              "Complete one of the following options:",
+              "Coursework Option",
+              "Complete 16 semester hours of courses from the elective course list.",
+              "Project Option",
+              "Students working with Department of Physical Therapy, Movement, and Rehabilitation Sciences faculty should enroll in the PT course. Students working with Department of Bioengineering faculty should choose the BIOE course.",
+              "Complete 12 semester hours of courses from the elective course list.",
+              "Thesis Option",
+              "Complete 8 semester hours of courses from the elective course list."
             ]
           },
           {
@@ -504,11 +523,7 @@
         ],
         "minRequirementCount": 4,
         "notes": [
-          "Coursework Option",
-          "Complete 16 semester hours of courses from the elective course list.",
-          "Students working with Department of Physical Therapy, Movement, and Rehabilitation Sciences faculty should enroll in the PT course. Students working with Department of Bioengineering faculty should choose the BIOE course.",
-          "Complete 12 semester hours of courses from the elective course list.",
-          "Complete 8 semester hours of courses from the elective course list.",
+          "Complete one of the following:",
           "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"
         ]
       },
@@ -563,9 +578,13 @@
         ],
         "minRequirementCount": 2,
         "notes": [
+          "Complete one additional CS course not used to fulfill the core requirements:",
+          "Complete one of the following options:",
           "Coursework Option",
           "Complete 16 semester hours of courses from the elective course list.",
+          "Project Option",
           "Complete 12 semester hours of courses from the elective course list.",
+          "Thesis Option",
           "Complete 8 semester hours of courses from the elective course list."
         ]
       },
@@ -655,9 +674,13 @@
         ],
         "minRequirementCount": 4,
         "notes": [
+          "Complete one additional EECE course not used to fulfill the core requirements:",
+          "Complete one of the following options:",
           "Coursework Option",
           "Complete 16 semester hours of courses from the elective course list.",
+          "Project Option",
           "Complete 12 semester hours of courses from the elective course list.",
+          "Thesis Option",
           "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest.",
           "Complete 8 semester hours of courses from the elective course list.",
           "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"
@@ -744,9 +767,13 @@
         ],
         "minRequirementCount": 4,
         "notes": [
+          "Complete one additional ME course not used to fulfill the core requirements:",
+          "Complete one of the following options:",
           "Coursework Option",
           "Complete 16 semester hours of courses from the elective course list.",
+          "Project Option",
           "Complete 12 semester hours of courses from the elective course list.",
+          "Thesis Option",
           "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest.",
           "Complete 8 semester hours of courses from the elective course list.",
           "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"

@@ -145,7 +145,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Four-month co-ops require registration at 1 semester hour for one term. Longer co-ops require registration at 1 semester hour per term for two consecutive terms."
+      ]
     }
   ],
   "concentrations": {
@@ -194,6 +197,9 @@
                 "subject": "OR",
                 "classId": 6205
               }
+            ],
+            "notes": [
+              "Complete one of the following (it is requested that students seek program approval prior to registering for CS 5800):"
             ]
           },
           {
@@ -255,6 +261,9 @@
                 "subject": "IE",
                 "classId": 7275
               }
+            ],
+            "notes": [
+              "Complete 4 semester hours from the following:"
             ]
           },
           {
@@ -271,7 +280,11 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from the following range:",
+          "ECON 5200 to ECON 7772"
+        ]
       },
       {
         "type": "SECTION",
@@ -292,7 +305,11 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 16 semester hours from the following range (excluding any class taken to fulfill core requirements above):",
+          "ECON 5200 to ECON 7772"
+        ]
       }
     ]
   }

@@ -169,13 +169,13 @@
         {
           "type": "COURSE",
           "subject": "LWP",
-          "classId": 7994
+          "classId": 7994,
+          "notes": [
+            "Registration in the following course is required if the thesis is not completed by the conclusion of the term of registration for LWP 6503:"
+          ]
         }
       ],
-      "minRequirementCount": 23,
-      "notes": [
-        "Registration in the following course is required if the thesis is not completed by the conclusion of the term of registration for LWP 6503:"
-      ]
+      "minRequirementCount": 23
     }
   ],
   "gpaRequirements": [

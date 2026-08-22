@@ -108,7 +108,10 @@
         {
           "type": "COURSE",
           "subject": "ECON",
-          "classId": 7771
+          "classId": 7771,
+          "notes": [
+            "Industrial Organization Field"
+          ]
         },
         {
           "type": "COURSE",
@@ -119,8 +122,7 @@
       "minRequirementCount": 4,
       "notes": [
         "To maintain satisfactory standing in the PhD program, students must earn a grade of B or higher in at least four field courses.",
-        "Labor Economics Field",
-        "Industrial Organization Field"
+        "Labor Economics Field"
       ]
     },
     {
@@ -146,7 +148,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:",
+        "ECON 7200 to ECON 7299"
+      ]
     },
     {
       "type": "SECTION",

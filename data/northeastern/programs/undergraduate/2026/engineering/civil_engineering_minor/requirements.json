@@ -351,10 +351,16 @@
               "subject": "CIVE",
               "classId": 5536
             }
+          ],
+          "notes": [
+            "A maximum of 4 semester hours from the following options may count toward this minor."
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete 15-16 semester hours from the list below:"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -154,7 +154,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following. Courses not listed need approval from student's advisor:"
+      ]
     },
     {
       "type": "SECTION",
@@ -209,7 +212,16 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 32 semester hours in the following ranges. Courses in additional disciplines may be allowed with prior advisor approval:",
+        "CRIM 6000 to CRIM 7999",
+        "INSH 6000 to INSH 7999",
+        "POLS 6000 to POLS 7999",
+        "PPUA 6000 to PPUA 7999",
+        "SOCL 6000 to SOCL 7999",
+        "WMNS 6000 to WMNS 7999"
+      ]
     },
     {
       "type": "SECTION",

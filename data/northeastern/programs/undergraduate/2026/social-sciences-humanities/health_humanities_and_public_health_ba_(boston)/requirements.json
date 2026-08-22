@@ -140,7 +140,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following not used to satsify another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -203,7 +206,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -236,7 +242,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -377,15 +386,18 @@
         {
           "type": "COURSE",
           "subject": "PSYC",
-          "classId": 1101
+          "classId": 1101,
+          "notes": [
+            "Psychology"
+          ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Biology",
+        "Complete one of the following options:",
         "Option 1",
-        "Option 2",
-        "Psychology"
+        "Option 2"
       ]
     },
     {
@@ -632,18 +644,22 @@
               "subject": "PHTH",
               "classId": 5234
             }
+          ],
+          "notes": [
+            "Upper-Level Course",
+            "Complete one upper-level course from the following (categories provided for reference):",
+            "Society and Behavior",
+            "Globalization and Global Health",
+            "Environmental Health and Climate Change",
+            "Law, Policy, and Human Rights",
+            "Healthcare Administration and Management"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Introductory Course",
-        "Upper-Level Course",
-        "Society and Behavior",
-        "Globalization and Global Health",
-        "Environmental Health and Climate Change",
-        "Law, Policy, and Human Rights",
-        "Healthcare Administration and Management"
+        "Complete one introductory course from the following:"
       ]
     },
     {
@@ -732,14 +748,14 @@
               "subject": "ENGW",
               "classId": 3309
             }
+          ],
+          "notes": [
+            "Advanced Writing Course",
+            "Courses listed below are preferred but other advanced writing courses will be accepted:"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Advanced Writing Course",
-        "Courses listed below are preferred but other advanced writing courses will be accepted:"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -826,7 +842,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose one of the following:"
+      ]
     }
   ],
   "footnotes": [

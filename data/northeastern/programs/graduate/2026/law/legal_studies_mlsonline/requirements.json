@@ -100,7 +100,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least four of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -173,7 +176,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students who do not take a concentration must take 6–12 semester hours from this list to complete the degree:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -339,6 +345,9 @@
                 "subject": "PPUA",
                 "classId": 6552
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],

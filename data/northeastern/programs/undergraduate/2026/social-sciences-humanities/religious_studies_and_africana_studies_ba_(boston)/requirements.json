@@ -144,7 +144,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses that is not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -216,7 +219,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses that is not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -324,7 +330,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five of the following courses, one of which must be 2000-level or above and another one of which must be 3000-level or above, that is not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -409,6 +418,9 @@
               "subject": "AFCS",
               "classId": 5544
             }
+          ],
+          "notes": [
+            "Complete two of the following:"
           ]
         }
       ],
@@ -470,7 +482,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -548,7 +563,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",

@@ -195,7 +195,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 6 semester hours of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -517,7 +520,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two courses in the following range:",
+        "MATH 3001 to MATH 4999"
+      ]
     },
     {
       "type": "SECTION",

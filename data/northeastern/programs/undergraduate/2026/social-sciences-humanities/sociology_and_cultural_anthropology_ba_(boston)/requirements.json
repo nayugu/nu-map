@@ -167,6 +167,11 @@
               "idRangeEnd": 3999,
               "exceptions": []
             }
+          ],
+          "notes": [
+            "Intermediate Electives",
+            "Complete one course in the following range not used to satisfy other requirements:",
+            "SOCL 2000 to SOCL 3999"
           ]
         },
         {
@@ -180,14 +185,19 @@
               "idRangeEnd": 4999,
               "exceptions": []
             }
+          ],
+          "notes": [
+            "Advanced Electives",
+            "Complete two courses in the following range not used to satisfy other requirements:",
+            "SOCL 4000 to SOCL 4999"
           ]
         }
       ],
       "minRequirementCount": 3,
       "notes": [
         "Introductory Electives",
-        "Intermediate Electives",
-        "Advanced Electives"
+        "Complete two courses in the following range not used to satisfy other requirements:",
+        "SOCL 1110 to SOCL 1999"
       ]
     },
     {
@@ -275,7 +285,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ]
 }

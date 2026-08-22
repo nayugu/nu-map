@@ -134,7 +134,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -166,7 +169,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -214,7 +220,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -274,12 +283,69 @@
               "subject": "COMM",
               "classId": 3750
             }
+          ],
+          "groups": [
+            {
+              "title": "Media and Screen Studies courses, from the range MSCR 1200 - MSCR 4999",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTD",
+                      "classId": 2380
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTD",
+                      "classId": 2381
+                    }
+                  ]
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3480
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3485
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 1450
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 2550
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 2655
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3655
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "COMM",
+                  "classId": 3750
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Media and Screen Studies courses, from the range MSCR 1200 - MSCR 4999"
+        "Complete THREE courses that have not been used to satisfy other requirements:"
       ]
     },
     {
@@ -387,7 +453,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -417,7 +486,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course in the following range, not used to fulfill another requirement:",
+        "HIST 1001–HIST 1999"
+      ]
     },
     {
       "type": "SECTION",

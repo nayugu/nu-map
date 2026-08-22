@@ -99,7 +99,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following. If additional courses are taken, they may be used as electives."
+      ]
     },
     {
       "type": "SECTION",

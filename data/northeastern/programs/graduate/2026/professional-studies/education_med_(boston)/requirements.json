@@ -385,15 +385,144 @@
                 "subject": "EDU",
                 "classId": 6517
               }
+            ],
+            "groups": [
+              {
+                "title": "Experiential Teaching and Learning Electives",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6001
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6002
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6003
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6004
+                  }
+                ]
+              },
+              {
+                "title": "Learning Experience Design Technology Electives",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6331
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6332
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6333
+                  }
+                ]
+              },
+              {
+                "title": "Generalist Electives",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6182
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6227
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6228
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6229
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6231
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6329
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6340
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6558
+                  }
+                ]
+              },
+              {
+                "title": "ESL Massachusetts Licensure Pathway",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6300
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6310
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6426
+                  },
+                  {
+                    "type": "OR",
+                    "courses": [
+                      {
+                        "type": "COURSE",
+                        "subject": "EDU",
+                        "classId": 6513
+                      },
+                      {
+                        "type": "COURSE",
+                        "subject": "EDU",
+                        "classId": 6185
+                      }
+                    ]
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EDU",
+                    "classId": 6517
+                  }
+                ]
+              }
             ]
           }
         ],
         "minRequirementCount": 6,
         "notes": [
-          "Experiential Teaching and Learning Electives",
-          "Learning Experience Design Technology Electives",
-          "Generalist Electives",
-          "ESL Massachusetts Licensure Pathway"
+          "Complete 16 quarter hours at the EDU 6000 level. Below is a list of elective options:"
         ]
       },
       {

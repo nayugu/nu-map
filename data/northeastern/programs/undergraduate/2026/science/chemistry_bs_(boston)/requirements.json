@@ -347,7 +347,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -383,6 +386,9 @@
               "subject": "MATH",
               "classId": 1342
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -526,6 +532,9 @@
                 "subject": "CHEM",
                 "classId": 5630
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -609,6 +618,9 @@
                 "subject": "CHEM",
                 "classId": 5640
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -624,6 +636,9 @@
                 "subject": "CHME",
                 "classId": 5105
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -729,7 +744,11 @@
         ],
         "minRequirementCount": 1,
         "notes": [
-          "Students can submit a request to the director of undergraduate studies to replace one advanced chemistry elective with a course from the following:"
+          "Complete two of the following (one advanced chemistry elective must have an associated lab):",
+          "Students can submit a request to the director of undergraduate studies to replace one advanced chemistry elective with a course from the following:",
+          "CHEM 5610 to CHEM 5620",
+          "CHEM 5625 to CHEM 5627",
+          "CHEM 5629 to CHEM 5700"
         ]
       }
     ]

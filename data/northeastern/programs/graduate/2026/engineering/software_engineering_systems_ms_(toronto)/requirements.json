@@ -288,10 +288,16 @@
               "subject": "INFO",
               "classId": 7500
             }
+          ],
+          "notes": [
+            "A maximum of 4 semester hours may be taken from the following list toward the elective requirement"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete 8 semester hours from the course code CYSE toward the elective requirement."
+      ]
     },
     {
       "type": "SECTION",

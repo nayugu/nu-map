@@ -284,6 +284,9 @@
                 "subject": "RGA",
                 "classId": 6235
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],
@@ -332,6 +335,9 @@
                 "subject": "RGA",
                 "classId": 6228
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],
@@ -385,6 +391,9 @@
                 "subject": "RGA",
                 "classId": 6370
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],
@@ -472,11 +481,15 @@
                 "subject": "RGA",
                 "classId": 6410
               }
+            ],
+            "notes": [
+              "Choose from the following to reach 16 quarter hours:"
             ]
           }
         ],
         "minRequirementCount": 5,
         "notes": [
+          "Complete one of the following:",
           "Complete the following:"
         ]
       }

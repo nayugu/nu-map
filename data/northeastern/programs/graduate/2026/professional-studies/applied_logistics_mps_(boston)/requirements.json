@@ -230,6 +230,9 @@
                 "subject": "ALY",
                 "classId": 6110
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],
@@ -309,7 +312,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -408,7 +414,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete 3-6 quarter hours from the following:"
+        ]
       }
     ]
   }

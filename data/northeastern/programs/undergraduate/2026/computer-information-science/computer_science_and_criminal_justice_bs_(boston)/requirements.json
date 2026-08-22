@@ -285,7 +285,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives.",
+        "Complete 16 semester hours from the following:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -345,7 +349,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "These courses introduce students to topical issues related to crime and justice."
+        "These courses introduce students to topical issues related to crime and justice.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -435,7 +440,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "The 2000-level courses in this list ask how does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions. The 3000-level courses in this list provide students with a deeper look at a range of crime problems."
+        "The 2000-level courses in this list ask how does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions. The 3000-level courses in this list provide students with a deeper look at a range of crime problems.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -460,7 +466,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "These courses consider systemic issues facing the criminal justice system."
+        "These courses consider systemic issues facing the criminal justice system.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -526,7 +533,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -603,7 +613,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -652,7 +665,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [

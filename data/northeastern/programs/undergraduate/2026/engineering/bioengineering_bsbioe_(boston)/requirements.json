@@ -176,10 +176,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "3 semester hours from the following count toward the engineering requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "2 semester hours from the following count toward the engineering requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -278,6 +284,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
@@ -323,6 +332,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -344,7 +356,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "1 semester hour from the following counts toward the mathematics/science requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -392,10 +407,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "1 semester hour from the following counts toward the professional development requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following counts toward the professional development requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -574,7 +595,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:",
+          "Complete two of the following (any course on the required course list not used toward the core requirement may also be taken):"
+        ]
       },
       {
         "type": "SECTION",
@@ -615,6 +640,9 @@
                 "subject": "BIOE",
                 "classId": 5810
               }
+            ],
+            "notes": [
+              "Complete two of the following:"
             ]
           },
           {
@@ -714,7 +742,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following (any course on the required course list not used toward the core requirement may also be taken):"
+        ]
       },
       {
         "type": "SECTION",
@@ -853,7 +884,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -958,7 +992,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:",
+          "Complete two of the following (any course on the required course list not used toward the core requirement may also be taken):"
+        ]
       }
     ]
   },

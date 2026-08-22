@@ -178,7 +178,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 9 semester hours from the following (in consultation with your academic advisor, you may complete electives from another discipline):"
+      ]
     },
     {
       "type": "SECTION",

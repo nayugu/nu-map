@@ -91,10 +91,16 @@
               "subject": "FINA",
               "classId": 6309
             }
+          ],
+          "notes": [
+            "Complete 4 semester hours from the following:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete 20 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -167,7 +173,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a minimum of 8 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -260,7 +269,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "An additional 8 semester hours can either be taken from the list above or from the list below or by approval of the program director:"
+      ]
     },
     {
       "type": "SECTION",

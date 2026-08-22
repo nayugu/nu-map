@@ -129,7 +129,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following that is not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -186,7 +189,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following that is not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -304,7 +310,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five of the following, one of which must be 2000-level or above and another one of which must be 3000-level or above, that is not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -316,7 +325,10 @@
           "classId": 4903
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following that is not used to satisfy another requirement:"
+      ]
     }
   ]
 }

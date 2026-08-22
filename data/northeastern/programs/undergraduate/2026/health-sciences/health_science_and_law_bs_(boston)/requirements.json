@@ -400,7 +400,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete any combination of 1-semester-hour and 3-semester hour courses for minimum of 8 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -439,7 +442,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

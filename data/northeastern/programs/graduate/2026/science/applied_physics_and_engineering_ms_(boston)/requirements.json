@@ -224,7 +224,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 12 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -329,7 +332,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 12 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -439,7 +445,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 12 semester hours from the following:"
+        ]
       }
     ]
   }

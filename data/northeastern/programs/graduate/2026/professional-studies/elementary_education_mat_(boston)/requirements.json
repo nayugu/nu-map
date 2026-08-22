@@ -104,12 +104,19 @@
         {
           "type": "COURSE",
           "subject": "EDU",
-          "classId": 6513
+          "classId": 6513,
+          "notes": [
+            "Complete one of the following:",
+            "For students pursuing emergency elementary teaching licenses or ESL+ licensure in Massachusetts"
+          ]
         },
         {
           "type": "COURSE",
           "subject": "EDU",
-          "classId": 6185
+          "classId": 6185,
+          "notes": [
+            "For students not pursuing emergency elementary licenses and ESL+ licensure in Massachusetts"
+          ]
         },
         {
           "type": "COURSE",
@@ -122,12 +129,7 @@
           "classId": 6866
         }
       ],
-      "minRequirementCount": 13,
-      "notes": [
-        "Complete one of the following:",
-        "For students pursuing emergency elementary teaching licenses or ESL+ licensure in Massachusetts",
-        "For students not pursuing emergency elementary licenses and ESL+ licensure in Massachusetts"
-      ]
+      "minRequirementCount": 13
     },
     {
       "type": "SECTION",

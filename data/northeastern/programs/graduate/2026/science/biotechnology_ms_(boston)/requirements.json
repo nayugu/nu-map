@@ -106,6 +106,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete 3 semester hours based on lab skills placement test results:",
         "Option A (Student exempted from basic lab skills instruction due to placement test results)",
         "Complete 3 semester hours from the Electives list.",
         "Option B (Student requires lab skills instruction)",
@@ -656,7 +657,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete a minimum of 3 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -710,7 +714,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete a minimum of 3 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -769,7 +776,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete a minimum of 3 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -835,15 +845,79 @@
                 "subject": "BIOT",
                 "classId": 5228
               }
+            ],
+            "groups": [
+              {
+                "title": "Process Sciences Focus",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOT",
+                    "classId": 5560
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOT",
+                    "classId": 5635
+                  }
+                ]
+              },
+              {
+                "title": "Manufacturing Quality Operations Focus",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOT",
+                    "classId": 6300
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOT",
+                    "classId": 6340
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOT",
+                    "classId": 5330
+                  }
+                ]
+              },
+              {
+                "title": "Regulatory Science Focus",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOT",
+                    "classId": 5340
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOT",
+                    "classId": 5500
+                  }
+                ]
+              },
+              {
+                "title": "Enterprise Focus",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOT",
+                    "classId": 5225
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "BIOT",
+                    "classId": 5228
+                  }
+                ]
+              }
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
-          "Process Sciences Focus",
-          "Manufacturing Quality Operations Focus",
-          "Regulatory Science Focus",
-          "Enterprise Focus"
+          "In consultation with advisor, complete a minimum of 3 semester hours from the following:"
         ]
       }
     ]

@@ -110,7 +110,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following (multiple completions of ARTG 5000 or GSND 6001 may apply toward the elective requirement):"
+      ]
     }
   ],
   "gpaRequirements": [

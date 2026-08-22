@@ -62,7 +62,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -108,7 +111,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -715,6 +721,9 @@
                 "subject": "INSH",
                 "classId": 5302
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],

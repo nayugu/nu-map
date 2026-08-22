@@ -92,7 +92,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -124,7 +127,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -252,7 +258,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the following:",
+        "BIOL 4705 to BIOL 4709",
+        "BIOL 5301 to BIOL 5306",
+        "BIOL 5499 to BIOL 5583",
+        "BIOL 5587 to BIOL 5597"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -77,7 +77,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -139,7 +142,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 0-16 semester hours in the following. Courses from other disciplines may be chosen in consultation with your faculty adviser.",
+        "POLS 7200 to POLS 7990"
+      ]
     },
     {
       "type": "SECTION",

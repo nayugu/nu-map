@@ -166,7 +166,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -222,13 +225,13 @@
               "subject": "COMM",
               "classId": 2301
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Complete one of the following:"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -287,6 +290,9 @@
               "subject": "COMM",
               "classId": 2551
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
@@ -358,10 +364,16 @@
               "subject": "COMM",
               "classId": 4631
             }
+          ],
+          "notes": [
+            "Complete two of the following:"
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -475,7 +487,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one COMM course and one JRNL course:"
+      ]
     }
   ]
 }

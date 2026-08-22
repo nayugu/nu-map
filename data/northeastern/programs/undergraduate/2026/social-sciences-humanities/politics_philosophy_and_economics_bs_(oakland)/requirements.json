@@ -130,6 +130,9 @@
               "subject": "POLS",
               "classId": 1155
             }
+          ],
+          "notes": [
+            "Political Science"
           ]
         },
         {
@@ -145,7 +148,10 @@
         {
           "type": "COURSE",
           "subject": "ECON",
-          "classId": 1115
+          "classId": 1115,
+          "notes": [
+            "Economics"
+          ]
         },
         {
           "type": "COURSE",
@@ -170,9 +176,7 @@
       ],
       "minRequirementCount": 9,
       "notes": [
-        "Philosophy",
-        "Political Science",
-        "Economics"
+        "Philosophy"
       ]
     },
     {
@@ -232,7 +236,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -294,7 +301,17 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:",
+        "ECON 1200 to ECON 1999",
+        "ECON 2990 to ECON 3559",
+        "ECON 3561 to ECON 4689",
+        "ECON 4900 to ECON 4996",
+        "ECON 5200 to ECON 5999",
+        "PHIL 2000 to PHIL 5999",
+        "POLS 2000 to POLS 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -466,7 +483,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -535,10 +555,16 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -586,7 +612,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one co-op, study abroad, qualifying Dialogue of Civilizations, or one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -697,10 +726,16 @@
                 "subject": "PHIL",
                 "classId": 1185
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -780,10 +815,16 @@
                 "subject": "POLS",
                 "classId": 3465
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -876,7 +917,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete three of the following, only two of which may be POLS courses:"
+        ]
       },
       {
         "type": "SECTION",
@@ -964,7 +1008,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1027,7 +1074,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete three of the following, only two of which may be PHIL courses:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1125,7 +1175,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1210,6 +1263,8 @@
         ],
         "minRequirementCount": 2,
         "notes": [
+          "Complete two of the following:",
+          "Complete one of the following:",
           "*Students may take courses from the required list as an elective if not taken as a required course."
         ]
       }

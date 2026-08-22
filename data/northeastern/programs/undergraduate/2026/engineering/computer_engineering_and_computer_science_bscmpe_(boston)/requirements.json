@@ -191,7 +191,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -274,7 +277,10 @@
         "Though students may register for EECE 2750 more than once, only 4 semester hours will be allowed to satisfy the requirements of technical electives. An additional 4 semester hours will be allowed as a general elective.",
         "EECE 2310 is not an approved course option for ECE majors to select for a technical elective. It is only for Khoury students.",
         "If more than one electrical engineering fundamentals course is taken, it can count as a technical elective.",
-        "If CS 4530 is taken, EECE 4520 is not an acceptable technical elective."
+        "If CS 4530 is taken, EECE 4520 is not an acceptable technical elective.",
+        "Complete two of the following:",
+        "EECE 2412 to EECE 2530",
+        "EECE 5115 to EECE 5699"
       ]
     },
     {
@@ -334,7 +340,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "With ECE department approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+        "With ECE department approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives.",
+        "Complete 8 semester hours from within the following options:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -361,6 +371,9 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "3 semester hours from the following course count toward the engineering requirement:"
           ]
         },
         {
@@ -372,10 +385,16 @@
               "subject": "EECE",
               "classId": 3468
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the engineering requirement:"
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "2 semester hours from the following course count toward the engineering requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -582,10 +601,16 @@
               "subject": "EECE",
               "classId": 3468
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the mathematics/science requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following course counts toward the mathematics/science requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -633,10 +658,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the professional development requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following course counts toward the professional development requirement:"
+      ]
     },
     {
       "type": "SECTION",

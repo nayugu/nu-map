@@ -88,7 +88,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Take at least two courses totaling at least 6 semester hours from the following list:"
+      ]
     },
     {
       "type": "SECTION",
@@ -131,7 +134,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Take at least two courses totaling at least 6 semester hours from the following list:"
+      ]
     }
   ]
 }

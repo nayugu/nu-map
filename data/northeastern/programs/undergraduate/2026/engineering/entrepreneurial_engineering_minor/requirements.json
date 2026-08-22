@@ -101,7 +101,10 @@
         {
           "type": "COURSE",
           "subject": "GE",
-          "classId": 5010
+          "classId": 5010,
+          "notes": [
+            "Complete three of the following:"
+          ]
         },
         {
           "type": "COURSE",
@@ -120,9 +123,6 @@
         }
       ],
       "minRequirementCount": 5,
-      "notes": [
-        "Complete three of the following:"
-      ],
       "shared": true
     },
     {
@@ -243,14 +243,139 @@
               "subject": "IE",
               "classId": 4530
             }
+          ],
+          "groups": [
+            {
+              "title": "Venture Creation",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENTR",
+                  "classId": 2303
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENTR",
+                  "classId": 3305
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENTR",
+                  "classId": 3306
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENTR",
+                  "classId": 3330
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENTR",
+                  "classId": 4501
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENTR",
+                  "classId": 4510
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENTR",
+                  "classId": 5000
+                }
+              ]
+            },
+            {
+              "title": "Design",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTF",
+                      "classId": 1220
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTF",
+                      "classId": 1221
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTF",
+                      "classId": 1230
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTF",
+                      "classId": 1231
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 1270
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 1271
+                    }
+                  ]
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3462
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3464
+                }
+              ]
+            },
+            {
+              "title": "Manufacturing",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "IE",
+                  "classId": 2310
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "IE",
+                  "classId": 4512
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "IE",
+                  "classId": 4525
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "IE",
+                  "classId": 4530
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Venture Creation",
-        "Design",
-        "Manufacturing"
+        "Complete 4 semester hours of the following:"
       ]
     }
   ],

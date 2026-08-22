@@ -168,11 +168,20 @@
               "idRangeEnd": 5999,
               "exceptions": []
             }
+          ],
+          "notes": [
+            "Required core economics courses cannot be counted as electives."
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete 5 courses that are found in the following ranges, with no more than one in the ECON 1200 to ECON 1999 range:",
+        "ECON 1200 to ECON 1999",
+        "ECON 2990 to ECON 3559",
+        "ECON 3561 to ECON 4689",
+        "ECON 4900 to ECON 4996",
+        "ECON 5200 to ECON 5999",
         "Required core economics courses cannot be counted as electives."
       ]
     },
@@ -248,7 +257,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [

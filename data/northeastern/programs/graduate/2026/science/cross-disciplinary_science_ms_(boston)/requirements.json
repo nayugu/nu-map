@@ -253,7 +253,10 @@
           "exceptions": []
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "BIOL 5103 to BIOL 6961"
+      ]
     },
     {
       "type": "SECTION",
@@ -267,7 +270,10 @@
           "exceptions": []
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "CHEM 5610 to CHEM 5688"
+      ]
     },
     {
       "type": "SECTION",
@@ -332,7 +338,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a minimum of 6 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",

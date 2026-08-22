@@ -230,7 +230,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses that is not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -282,7 +285,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses that is not used to satisfy another requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -405,7 +411,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five of the following courses that have not been used to satisfy another requirement in the combined major. At least one must be at the 2000 level or above and at least one must be at the 3000 level or above:"
+      ]
     },
     {
       "type": "SECTION",

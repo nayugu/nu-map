@@ -147,7 +147,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -208,7 +211,17 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:",
+        "BIOL 2301–BIOL 5999",
+        "CHEM 2311–CHEM 5999",
+        "EEMB 2400–EEMB 5999",
+        "ENVR 2310–ENVR 5999",
+        "MATH 2280–MATH 5999",
+        "PHYS 2303–PHYS 5999",
+        "PSYC 2290–PSYC 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -230,7 +243,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -278,7 +294,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following:"
+      ]
     }
   ]
 }

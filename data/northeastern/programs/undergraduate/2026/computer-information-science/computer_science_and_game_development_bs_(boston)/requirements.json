@@ -346,7 +346,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -430,8 +433,12 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete 12 semester hours from within the following options:",
         "Any course in ARTD, ARTE, ARTF, ARTG, ARTH, or EXRE (EXRE 5011 and 5010, EXRE 5020, EXRE 5030), or GAME subject areas as long as prerequisites have been met.",
-        "If GAME 4000 (or any other topics course in the subjects listed above) is completed more than once, the additional completions may be allowed toward the Game Design electives."
+        "If GAME 4000 (or any other topics course in the subjects listed above) is completed more than once, the additional completions may be allowed toward the Game Design electives.",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -471,6 +478,10 @@
               "idRangeEnd": 9999,
               "exceptions": []
             }
+          ],
+          "notes": [
+            "Complete one course from the following:",
+            "MATH 1342 or higher"
           ]
         }
       ],

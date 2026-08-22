@@ -103,7 +103,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -126,7 +129,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete music lessons for a total of 4 semester hours (courses are repeatable):"
+      ]
     },
     {
       "type": "SECTION",
@@ -209,7 +215,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -431,7 +440,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

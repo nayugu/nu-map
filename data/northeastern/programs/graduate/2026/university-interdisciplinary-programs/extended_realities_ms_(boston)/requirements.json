@@ -238,7 +238,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 12 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -287,7 +290,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 12 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -346,7 +352,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 7–8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -406,7 +415,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -480,7 +492,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 12 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -495,7 +510,10 @@
           {
             "type": "COURSE",
             "subject": "HIST",
-            "classId": 8410
+            "classId": 8410,
+            "notes": [
+              "Complete the following (repeatable) course twice:"
+            ]
           },
           {
             "type": "XOM",
@@ -519,7 +537,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -563,7 +584,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -642,7 +666,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -716,7 +743,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -775,7 +805,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from the following:"
+        ]
       }
     ]
   }

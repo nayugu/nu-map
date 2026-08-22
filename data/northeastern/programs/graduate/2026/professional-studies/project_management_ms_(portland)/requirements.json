@@ -84,13 +84,13 @@
         {
           "type": "COURSE",
           "subject": "PJM",
-          "classId": 6910
+          "classId": 6910,
+          "notes": [
+            "The following should be the final course:"
+          ]
         }
       ],
-      "minRequirementCount": 6,
-      "notes": [
-        "The following should be the final course:"
-      ]
+      "minRequirementCount": 6
     },
     {
       "type": "SECTION",
@@ -321,6 +321,9 @@
                 "subject": "ALY",
                 "classId": 6110
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],
@@ -392,6 +395,9 @@
                 "subject": "LDR",
                 "classId": 6140
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],
@@ -484,6 +490,9 @@
                 "subject": "CMN",
                 "classId": 6110
               }
+            ],
+            "notes": [
+              "Complete four of the following:"
             ]
           }
         ],

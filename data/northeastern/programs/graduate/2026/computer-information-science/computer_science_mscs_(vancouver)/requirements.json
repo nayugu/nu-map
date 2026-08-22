@@ -197,14 +197,144 @@
               "subject": "CY",
               "classId": 6740
             }
+          ],
+          "groups": [
+            {
+              "title": "Artificial Intelligence and Data Science",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5150
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5330
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6120
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6140
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6220
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6240
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7140
+                }
+              ]
+            },
+            {
+              "title": "Systems and Software",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5520
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5600
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5610
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6410
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6510
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6650
+                }
+              ]
+            },
+            {
+              "title": "Theory and Security",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6760
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7805
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 5770
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 6740
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Artificial Intelligence and Data Science",
-        "Systems and Software",
-        "Theory and Security"
+        "Complete three courses from two of the following breadth areas:"
       ]
     },
     {
@@ -548,7 +678,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

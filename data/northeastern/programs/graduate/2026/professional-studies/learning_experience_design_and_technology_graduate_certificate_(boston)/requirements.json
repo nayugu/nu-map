@@ -165,7 +165,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a minimum of 4 quarter hours from the list below to reach the program credits required"
+      ]
     }
   ],
   "gpaRequirements": [

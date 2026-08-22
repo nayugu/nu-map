@@ -177,7 +177,10 @@
         {
           "type": "COURSE",
           "subject": "LAW",
-          "classId": 3101
+          "classId": 3101,
+          "notes": [
+            "Law"
+          ]
         },
         {
           "type": "COURSE",
@@ -202,8 +205,7 @@
       ],
       "minRequirementCount": 10,
       "notes": [
-        "Technology",
-        "Law"
+        "Technology"
       ]
     },
     {
@@ -241,7 +243,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -376,6 +381,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete a total of 12 semester hours:",
         "If choosing a 3-semester-hour course, register for a 1-semester-hour course concurrently. No more than four 1-semester-hour courses may be applied to this requirement."
       ]
     },
@@ -451,7 +457,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -524,7 +533,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [

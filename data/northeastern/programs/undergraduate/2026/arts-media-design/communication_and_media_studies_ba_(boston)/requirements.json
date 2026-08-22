@@ -132,7 +132,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -159,7 +162,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -208,10 +214,16 @@
               "subject": "MSCR",
               "classId": 3437
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -248,7 +260,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -352,10 +367,16 @@
               "subject": "MSCR",
               "classId": 4208
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -402,7 +423,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -432,10 +456,18 @@
               "idRangeEnd": 9999,
               "exceptions": []
             }
+          ],
+          "notes": [
+            "Choose three from the following list:",
+            "Any MSCR courses not already counting above"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Choose three from the following list:",
+        "Any COMM courses not already counting above"
+      ]
     }
   ]
 }

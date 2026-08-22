@@ -328,18 +328,269 @@
               "subject": "POLS",
               "classId": 7341
             }
+          ],
+          "groups": [
+            {
+              "title": "Hardware Security",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6410
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 5666
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 7352
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 7364
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 7390
+                }
+              ]
+            },
+            {
+              "title": "Machine Learning",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6140
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7150
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 5644
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 7397
+                }
+              ]
+            },
+            {
+              "title": "Network Security",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 6740
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7610
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7775
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 5130
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 5155
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 5576
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 7336
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 7364
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 7374
+                }
+              ]
+            },
+            {
+              "title": "Systems Security",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6410
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7600
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7610
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 5130
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 6740
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 6760
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 7352
+                }
+              ]
+            },
+            {
+              "title": "Theory",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7800
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7805
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7810
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7870
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 7337
+                }
+              ]
+            },
+            {
+              "title": "Usable Security and Privacy",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6350
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 6760
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 7340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 6300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 6302
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 6500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 7400
+                }
+              ]
+            },
+            {
+              "title": "Cybersecurity Policy",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 6200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 6262
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 5200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 5210
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CY",
+                  "classId": 5250
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 7341
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Hardware Security",
-        "Machine Learning",
-        "Network Security",
-        "Systems Security",
-        "Theory",
-        "Usable Security and Privacy",
-        "Cybersecurity Policy"
+        "Select at least two courses from one track:"
       ]
     },
     {

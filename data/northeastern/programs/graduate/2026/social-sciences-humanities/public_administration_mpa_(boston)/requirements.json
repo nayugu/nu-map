@@ -143,7 +143,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Four-month co-ops require registration at 1 semester hour for one term. Longer co-ops require registration at 1 semester hour per term for two consecutive terms. Both of the following courses must be taken during each co-op semester:"
+      ]
     },
     {
       "type": "SECTION",
@@ -212,7 +215,18 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours from the following:",
+        "CRIM 5000 to CRIM 7999 (by advisement only)",
+        "ECON 5000 to ECON 7999 (by advisement only)",
+        "ENGL 5000 to ENGL 7999 (by advisement only)",
+        "HIST 5000 to HIST 7999 (by advisement only)",
+        "LPSC 5000 to LPSC 7999",
+        "POLS 5000 to POLS 7999 (by advisement only)",
+        "PPUA 5000 to PPUA 7999",
+        "SOCL 5000 to SOCL 7999 (by advisement only)"
+      ]
     }
   ]
 }

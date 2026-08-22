@@ -155,7 +155,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 3 QH from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

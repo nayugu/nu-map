@@ -82,7 +82,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -130,7 +133,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -170,7 +176,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Fundamentals not taken to satisfy the above requirement may be used as a technical elective."
+        "Fundamentals not taken to satisfy the above requirement may be used as a technical elective.",
+        "Complete one of the following:",
+        "EECE 2322 to EECE 2750",
+        "EECE 3324 to EECE 4698",
+        "EECE 5576 to EECE 5698"
       ]
     }
   ],

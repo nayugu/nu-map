@@ -262,7 +262,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose one of the two options:"
+      ]
     },
     {
       "type": "SECTION",
@@ -348,7 +351,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives.",
+        "Complete 4 semester hours from within the following options:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -381,7 +388,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -648,7 +658,16 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:",
+        "BIOL 2301 to BIOL 5999",
+        "CHEM 2311 to CHEM 5999",
+        "EEMB 2290 to EEMB 5999",
+        "ENVR 2310 to ENVR 5999",
+        "MATH 2280 to MATH 5999",
+        "PHYS 2303 to PHYS 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -672,6 +691,9 @@
               "subject": "CHEM",
               "classId": 4750
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],

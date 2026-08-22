@@ -82,7 +82,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -121,6 +124,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following:",
         "Students from Khoury are highly encouraged to complete EECE 2322 and EECE 3324."
       ]
     },
@@ -163,7 +167,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Fundamentals not taken to satisfy the above requirement may be used as a technical elective. EECE 3324 is recommended for Khoury College students."
+        "Complete two of the following to satisfy the total course requirement for the minor:",
+        "Fundamentals not taken to satisfy the above requirement may be used as a technical elective. EECE 3324 is recommended for Khoury College students.",
+        "EECE 2322 to EECE 2750",
+        "EECE 3324 to EECE 4698",
+        "EECE 5576 to EECE 5698"
       ]
     }
   ],

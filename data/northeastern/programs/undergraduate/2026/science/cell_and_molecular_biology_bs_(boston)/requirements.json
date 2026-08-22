@@ -289,7 +289,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -322,7 +325,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "One of the two intermediate/advanced electives can be a research course:"
+      ]
     },
     {
       "type": "SECTION",
@@ -349,7 +355,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following to fulfill the capstone requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -561,7 +570,17 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:",
+        "BIOL 2301 to BIOL 5999",
+        "CHEM 2311 to CHEM 5999",
+        "EEMB 2290 to EEMB 5999",
+        "ENVR 2310 to ENVR 5999",
+        "MATH 2280 to MATH 5999",
+        "PHYS 2303 to PHYS 5999",
+        "PSYC 2290 to PSYC 5999"
+      ]
     },
     {
       "type": "SECTION",

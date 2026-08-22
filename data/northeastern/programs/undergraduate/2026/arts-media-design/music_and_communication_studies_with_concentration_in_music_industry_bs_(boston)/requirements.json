@@ -117,7 +117,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -150,7 +153,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -347,14 +353,204 @@
               "subject": "MUSI",
               "classId": 3401
             }
+          ],
+          "groups": [
+            {
+              "title": "Western Art Music",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2105
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2312
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2320
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2380
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 3352
+                }
+              ]
+            },
+            {
+              "title": "Global Music/Ethnomusicology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2313
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2316
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2330
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2331
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2336
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 3353
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 3354
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 3355
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 3360
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSI",
+                  "classId": 3210
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSI",
+                  "classId": 3351
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSI",
+                  "classId": 3360
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSI",
+                  "classId": 3401
+                }
+              ]
+            },
+            {
+              "title": "Contemporary/Popular Music",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2150
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2310
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2311
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2317
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2320
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2336
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2351
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 2380
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 3352
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 3353
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSC",
+                  "classId": 3354
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSI",
+                  "classId": 3360
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MUSI",
+                  "classId": 3401
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Western Art Music",
-        "Global Music/Ethnomusicology",
-        "Contemporary/Popular Music"
+        "Complete one course from one of the following categories:"
       ]
     },
     {
@@ -548,7 +744,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -619,7 +818,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -656,7 +858,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -739,7 +944,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -849,7 +1057,11 @@
       "minRequirementCount": 1,
       "notes": [
         "Complete one of the integrative options below:",
-        "If a COMM course is taken, an additional music industry course is required. Choose from the list of music industry electives above."
+        "If a COMM course is taken, an additional music industry course is required. Choose from the list of music industry electives above.",
+        "Complete two of the following. One COMM course is required:",
+        "MUSC 2000 to MUSC 5999",
+        "MUSI 2000 to MUSI 5999",
+        "MUST 2000 to MUST 5999"
       ]
     }
   ]

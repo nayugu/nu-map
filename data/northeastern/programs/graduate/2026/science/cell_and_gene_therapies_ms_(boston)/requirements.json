@@ -267,7 +267,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a minimum of 5 semester hours from the following to meet the 32 total hours for the program:"
+      ]
     }
   ],
   "gpaRequirements": [

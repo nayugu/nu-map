@@ -72,7 +72,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -117,7 +120,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Note: For English majors, only one course from the major may also count toward this elective section of the minor."
+        "Note: For English majors, only one course from the major may also count toward this elective section of the minor.",
+        "Complete four of the following:"
       ]
     }
   ],

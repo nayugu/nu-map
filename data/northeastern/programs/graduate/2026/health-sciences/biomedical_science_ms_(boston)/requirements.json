@@ -148,13 +148,15 @@
               "subject": "PHSC",
               "classId": 6996
             }
+          ],
+          "notes": [
+            "The following course may be taken if additional time is needed to complete the thesis:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
-        "Complete the following (repeatable) course twice:",
-        "The following course may be taken if additional time is needed to complete the thesis:"
+        "Complete the following (repeatable) course twice:"
       ]
     }
   ],

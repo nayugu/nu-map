@@ -141,7 +141,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -240,6 +243,9 @@
               "subject": "DGM",
               "classId": 6550
             }
+          ],
+          "notes": [
+            "Complete 15–17 quarter hours from the following:"
           ]
         }
       ],

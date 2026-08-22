@@ -78,7 +78,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students are required to complete 8–10 semester hours from the following unless otherwise determined by the program:"
+      ]
     },
     {
       "type": "SECTION",
@@ -143,7 +146,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 2 semester hours from the following (courses can be repeated):"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -201,7 +207,10 @@
             "classId": 6964
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 12 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -283,7 +292,10 @@
             "classId": 6964
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 12 semester hours from the following:"
+        ]
       }
     ]
   }

@@ -268,7 +268,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -393,6 +396,9 @@
               "subject": "ENVR",
               "classId": 4504
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -481,12 +487,94 @@
                 }
               ]
             }
+          ],
+          "groups": [
+            {
+              "title": "Physics 1",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1145
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1146
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1151
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1152
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1153
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1161
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1162
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1163
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1171
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1172
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1173
+                    }
+                  ]
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Physics 1"
+        "Complete a lecture/lab set for Physics 1:"
       ]
     },
     {
@@ -602,13 +690,14 @@
               "subject": "EEMB",
               "classId": 5546
             }
+          ],
+          "notes": [
+            "Complete five of the following:",
+            "Elective courses available at Nahant campus to students approved for PlusOne admission to the MS Marine Biology program:"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Elective courses available at Nahant campus to students approved for PlusOne admission to the MS Marine Biology program:"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

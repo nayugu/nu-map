@@ -64,13 +64,13 @@
         {
           "type": "COURSE",
           "subject": "ARTG",
-          "classId": 3100
+          "classId": 3100,
+          "notes": [
+            "Complete the following course after all required and elective courses:"
+          ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Complete the following course after all required and elective courses:"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -113,7 +113,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one from the following list:"
+      ]
     },
     {
       "type": "SECTION",
@@ -263,14 +266,169 @@
               "subject": "MKTG",
               "classId": 4508
             }
+          ],
+          "groups": [
+            {
+              "title": "Content Creation",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTD",
+                      "classId": 2370
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTD",
+                      "classId": 2371
+                    }
+                  ]
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3470
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3471
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3473
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 1100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EXRE",
+                  "classId": 5010
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EXRE",
+                  "classId": 5030
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 2950
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 3700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 4000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GE",
+                  "classId": 1111
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GE",
+                  "classId": 1501
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GE",
+                  "classId": 2500
+                }
+              ]
+            },
+            {
+              "title": "Narrative Development",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENTR",
+                  "classId": 3330
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 2355
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INNO",
+                  "classId": 2301
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 3370
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 3610
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 3630
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MSCR",
+                  "classId": 2160
+                }
+              ]
+            },
+            {
+              "title": "Business and Innovation",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MISM",
+                  "classId": 3501
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MKTG",
+                  "classId": 4502
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MKTG",
+                  "classId": 4508
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Content Creation",
-        "Narrative Development",
-        "Business and Innovation",
+        "Complete two of the following:",
         "Only one course may be taken from this area:"
       ]
     }

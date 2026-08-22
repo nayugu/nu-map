@@ -855,19 +855,21 @@
               "subject": "MSCR",
               "classId": 2325
             }
+          ],
+          "notes": [
+            "Law, Diplomacy, and Global Governance",
+            "Human Rights and Social Justice",
+            "Conflict and Security",
+            "Globalization",
+            "Population, Migration, and Diaspora",
+            "Development",
+            "Communication and Media"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Environment",
-        "Law, Diplomacy, and Global Governance",
-        "Human Rights and Social Justice",
-        "Conflict and Security",
-        "Globalization",
-        "Population, Migration, and Diaspora",
-        "Development",
-        "Communication and Media"
+        "Environment"
       ]
     },
     {
@@ -1187,16 +1189,18 @@
               "subject": "POLS",
               "classId": 3465
             }
+          ],
+          "notes": [
+            "Asia",
+            "Europe",
+            "Latin America",
+            "Middle East"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Africa",
-        "Asia",
-        "Europe",
-        "Latin America",
-        "Middle East"
+        "Africa"
       ]
     },
     {
@@ -1282,7 +1286,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three Economics elective courses from the following ranges with no more than one in the ECON 1200 to ECON 1999 range. Unless otherwise noted in specific combined majors, required core economics courses cannot be counted as electives by students completing Department of Economics programs. Additionally, courses used to satisfy international affairs requirements, courses used to satisfy the integrative requirement, and ECON 3520 may not be used as Economics electives:",
+        "ECON 1200 to ECON 1999",
+        "ECON 2990 to ECON 3559",
+        "ECON 3561 to ECON 4689",
+        "ECON 4900 to ECON 4996",
+        "ECON 5200 to ECON 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -1361,7 +1373,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -1400,7 +1415,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following with a thesis or project that integrates both international affairs and economics:"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -110,6 +110,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete four language courses in sequence from the following list:",
         "For students with prior knowledge of Portuguese, a placement test will determine the appropriate first course. Note: Students who place at or above PORT 2102 must complete PORT 3101 and take additional courses from the list of electives to fulfill the total credit requirements. For guidance on course selection, students should consult the Portuguese academic coordinator."
       ]
     },
@@ -149,7 +150,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one or more courses from the following list to reach a total of five courses in the minor:"
+      ]
     }
   ],
   "gpaRequirements": [

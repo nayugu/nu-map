@@ -79,13 +79,13 @@
               "subject": "MATH",
               "classId": 1252
             }
+          ],
+          "notes": [
+            "Biology majors may substitute the following two courses:"
           ]
         }
       ],
-      "minRequirementCount": 3,
-      "notes": [
-        "Biology majors may substitute the following two courses:"
-      ]
+      "minRequirementCount": 3
     },
     {
       "type": "SECTION",
@@ -113,7 +113,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -133,7 +136,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two courses in the following range:",
+        "MATH 3001 to MATH 4699"
+      ]
     }
   ],
   "gpaRequirements": [

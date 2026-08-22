@@ -105,6 +105,9 @@
               "subject": "CMN",
               "classId": 6100
             }
+          ],
+          "notes": [
+            "Complete two of the following:"
           ]
         }
       ],
@@ -302,7 +305,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -376,7 +382,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -435,7 +444,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -499,7 +511,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -578,7 +593,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -662,7 +680,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete a minimum of 6 quarter hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -721,7 +742,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Choose from the following:"
+        ]
       }
     ]
   }

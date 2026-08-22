@@ -312,7 +312,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 16 semester hours from the following (if a topics course is completed more than once, the additional completions may be allowed toward the electives):"
+      ]
     },
     {
       "type": "SECTION",
@@ -518,7 +521,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 16 semester hours from the following (if a topics course is completed more than once, the additional completions may be allowed toward the electives):"
+      ]
     }
   ],
   "gpaRequirements": [

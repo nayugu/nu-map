@@ -106,6 +106,10 @@
               "classId": 6185,
               "label": "For students not pursuing emergency secondary licenses and ESL+ licensure in Massachusetts"
             }
+          ],
+          "notes": [
+            "Complete one of the following:",
+            "Complete the following:"
           ]
         },
         {
@@ -141,13 +145,13 @@
               "subject": "EDU",
               "classId": 6129
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
-      "minRequirementCount": 11,
-      "notes": [
-        "Complete the following:"
-      ]
+      "minRequirementCount": 11
     },
     {
       "type": "SECTION",
@@ -195,7 +199,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 quarter hours from the following:"
+      ]
     },
     {
       "type": "SECTION",

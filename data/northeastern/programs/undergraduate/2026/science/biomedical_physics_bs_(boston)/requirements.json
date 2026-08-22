@@ -235,13 +235,17 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Physics 2",
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Physics 1",
-        "Physics 2"
+        "Complete one of the following:"
       ]
     },
     {
@@ -348,7 +352,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course not already required in the following range:",
+        "PHYS 3000 to PHYS 7999"
+      ]
     },
     {
       "type": "SECTION",
@@ -639,7 +647,21 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:",
+        "BIOL 2301 to BIOL 5999",
+        "CHEM 2311 to CHEM 5999",
+        "CHME 2001 to CHME 4699",
+        "CIVE 2001 to CIVE 4699",
+        "CS 2990 to CS 4900",
+        "EECE 2001 to EECE 5999",
+        "ENVR 2300 to ENVR 5999",
+        "IE 2001 to IE 4699",
+        "MATH 2321 to MATH 5999",
+        "ME 2001 to ME 4699",
+        "PHYS 2303 to PHYS 7999"
+      ]
     }
   ]
 }

@@ -269,7 +269,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "With advisor approval, a directed study, research, project study, or appropriate graduate-level course may also be taken as a computer science elective."
+        "With advisor approval, a directed study, research, project study, or appropriate graduate-level course may also be taken as a computer science elective.",
+        "Complete 8 semester hours from within the following options:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -350,7 +354,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three courses in the following range:",
+        "MATH 3001 to MATH 4999 but not MATH 4000"
+      ]
     },
     {
       "type": "SECTION",
@@ -422,7 +430,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

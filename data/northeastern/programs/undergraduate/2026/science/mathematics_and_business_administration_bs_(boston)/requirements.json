@@ -112,7 +112,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -142,13 +145,44 @@
               "subject": "MATH",
               "classId": 2331
             }
+          ],
+          "groups": [
+            {
+              "title": "Option 1 (Recommended)",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 2321
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 2341
+                }
+              ]
+            },
+            {
+              "title": "Option 2",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 2321
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 2331
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Option 1 (Recommended)",
-        "Option 2"
+        "Complete either Option 1 or Option 2 below:"
       ]
     },
     {
@@ -177,7 +211,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three courses in the range MATH 3001 to MATH 5999. The following courses are recommended:"
+      ]
     },
     {
       "type": "SECTION",

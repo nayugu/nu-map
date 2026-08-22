@@ -74,7 +74,10 @@
           "classId": 7910
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (repeatable) course twice:"
+      ]
     },
     {
       "type": "SECTION",
@@ -192,7 +195,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

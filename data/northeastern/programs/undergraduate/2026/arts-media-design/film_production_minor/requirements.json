@@ -110,7 +110,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four of the following:"
+      ]
     }
   ],
   "gpaRequirements": [

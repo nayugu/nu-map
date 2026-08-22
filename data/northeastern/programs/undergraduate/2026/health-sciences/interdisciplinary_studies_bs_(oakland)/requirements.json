@@ -347,6 +347,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete 8 semester hours of upper-division CS, CY, DS, or IS courses that are not already required above. Choose courses from the following ranges:",
+        "CS 2502 or higher, except CS 5010",
         "CY 2000 of higher, except CY 4930"
       ]
     },
@@ -627,7 +629,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Select one of the following options:"
+      ]
     },
     {
       "type": "SECTION",

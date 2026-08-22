@@ -166,7 +166,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 economics electives found in the following ranges, with no more than two in the ECON 1200 to ECON 1999 range. Unless otherwise noted in specific combined majors, required core economics courses cannot be counted as electives by students completing Department of Economics programs:",
+        "ECON 1200 to ECON 1999",
+        "ECON 2990 to ECON 3559",
+        "ECON 3561 to ECON 4689",
+        "ECON 4900 to ECON 4996",
+        "ECON 5200 to ECON 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -240,6 +248,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete two courses in the following range:",
+        "MATH 3001 to MATH 4999",
         "The following courses are recommended:"
       ]
     },
@@ -273,7 +283,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -322,7 +335,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [

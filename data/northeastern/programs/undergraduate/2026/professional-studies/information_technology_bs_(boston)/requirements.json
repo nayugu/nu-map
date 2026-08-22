@@ -178,6 +178,9 @@
               "subject": "MTH",
               "classId": 2400
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -208,7 +211,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -262,6 +268,9 @@
               "subject": "ITC",
               "classId": 2430
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -377,6 +386,7 @@
         ],
         "minRequirementCount": 1,
         "notes": [
+          "Complete seven courses from the following that have not been taken to fulfill major requirements:",
           "Complete two additional ITC or ALY courses that have not been taken to fulfill major or concentration requirements."
         ]
       },
@@ -469,6 +479,7 @@
         ],
         "minRequirementCount": 1,
         "notes": [
+          "Complete seven courses from the following that have not been taken to fulfill major requirements:",
           "Complete two additional ITC or ALY courses that have not been taken to fulfill major requirements."
         ]
       },
@@ -551,6 +562,9 @@
                 "subject": "ITC",
                 "classId": 4690
               }
+            ],
+            "notes": [
+              "Complete three courses from the following that have not been taken to fulfill major requirements:"
             ]
           },
           {
@@ -753,6 +767,7 @@
         ],
         "minRequirementCount": 1,
         "notes": [
+          "Complete seven courses from the following that have not been taken to fulfill major requirements:",
           "Complete two additional ITC or ALY courses that have not been taken to fulfill major requirements."
         ]
       }

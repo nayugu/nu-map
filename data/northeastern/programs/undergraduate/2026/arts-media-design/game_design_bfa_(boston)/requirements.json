@@ -297,7 +297,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours of the following as long as prerequisites have been met:"
+      ]
     },
     {
       "type": "SECTION",
@@ -330,7 +333,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours from the following as long as prerequisites have been met:"
+      ]
     },
     {
       "type": "SECTION",
@@ -433,7 +439,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours from the following as long as prerequisites have been met:"
+      ]
     },
     {
       "type": "SECTION",

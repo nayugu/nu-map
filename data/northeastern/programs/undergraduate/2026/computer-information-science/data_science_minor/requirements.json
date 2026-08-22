@@ -104,6 +104,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following courses:"
           ]
         }
       ],
@@ -148,6 +151,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete two of the following (only one course from the meaningful minor list may contribute toward the minor requirements):",
+        "DS 2010 to DS 4989",
         "Meaningful minor list (see below)"
       ]
     },

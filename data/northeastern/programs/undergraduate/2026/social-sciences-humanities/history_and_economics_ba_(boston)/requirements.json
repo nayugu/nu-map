@@ -211,7 +211,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -363,7 +366,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two economics elective courses that are found in the following ranges, with no more than one in the ECON 1200 to ECON 1999 range. Unless otherwise noted in specific combined majors, required core economics courses cannot be counted as electives by students completing Department of Economics programs. Additionally, courses used to satisfy the integrative course requirement and ECON 3520 may not be used as economics electives:",
+        "ECON 1200 to ECON 1999",
+        "ECON 2990 to ECON 3559",
+        "ECON 3561 to ECON 4689",
+        "ECON 4900 to ECON 4996",
+        "ECON 5200 to ECON 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -427,13 +438,16 @@
               "subject": "MATH",
               "classId": 1341
             }
+          ],
+          "notes": [
+            "Calculus"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Computer Science",
-        "Calculus"
+        "Complete one of the following:"
       ]
     },
     {
@@ -466,7 +480,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -493,7 +510,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [

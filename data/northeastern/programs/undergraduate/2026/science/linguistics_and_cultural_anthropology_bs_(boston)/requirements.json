@@ -166,7 +166,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -203,7 +206,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -215,7 +221,10 @@
           "classId": 2700
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one elective (any course in the range LING 3000–4999 that hasn't already been taken to fulfill other major requirements, or the following):"
+      ]
     },
     {
       "type": "SECTION",

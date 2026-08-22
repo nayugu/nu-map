@@ -318,6 +318,9 @@
                 "subject": "ALY",
                 "classId": 6110
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           }
         ],
@@ -389,6 +392,9 @@
                 "subject": "LDR",
                 "classId": 6140
               }
+            ],
+            "notes": [
+              "Choose one of the following:"
             ]
           }
         ],
@@ -476,6 +482,9 @@
                 "subject": "CMN",
                 "classId": 6110
               }
+            ],
+            "notes": [
+              "Complete four courses from the following options:"
             ]
           }
         ],

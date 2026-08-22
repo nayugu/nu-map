@@ -293,7 +293,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours. Consult your faculty advisor for acceptable courses:"
+      ]
     },
     {
       "type": "SECTION",

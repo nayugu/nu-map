@@ -294,7 +294,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 16 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -357,7 +360,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -570,7 +576,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the remaining 12 semester hours from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

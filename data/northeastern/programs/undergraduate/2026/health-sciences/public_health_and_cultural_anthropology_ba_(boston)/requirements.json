@@ -242,6 +242,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following options:",
         "Option 1",
         "Option 2"
       ]
@@ -328,7 +329,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -510,7 +514,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following (categories provided for reference):"
+      ]
     },
     {
       "type": "SECTION",
@@ -579,7 +586,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -603,13 +613,14 @@
               "subject": "ENGW",
               "classId": 3308
             }
+          ],
+          "notes": [
+            "Advanced Writing in the Disciplines",
+            "Complete one of the following:"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Advanced Writing in the Disciplines"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -723,7 +734,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "footnotes": [

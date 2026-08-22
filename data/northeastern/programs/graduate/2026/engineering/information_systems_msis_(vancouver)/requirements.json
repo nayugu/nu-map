@@ -88,6 +88,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete the following course twice:",
         "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing Committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS Thesis to ProQuest."
       ]
     },
@@ -396,7 +397,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 16 semester hours from any of the courses listed below:"
+        ]
       }
     ]
   }

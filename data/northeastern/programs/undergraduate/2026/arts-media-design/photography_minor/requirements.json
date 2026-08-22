@@ -130,7 +130,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following (if ARTD 3000 Topics in Media Arts, or any other topics course in the options listed below, is completed more than once, the additional completions may be allowed toward the electives):"
+      ]
     }
   ],
   "gpaRequirements": [

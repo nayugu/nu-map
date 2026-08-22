@@ -215,7 +215,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "These courses introduce students to topical issues related to crime and justice."
+        "These courses introduce students to topical issues related to crime and justice.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -265,7 +266,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "How does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions."
+        "How does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -325,7 +327,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "The following courses offer students a deeper look at a range of crime problems."
+        "The following courses offer students a deeper look at a range of crime problems.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -365,7 +368,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "A consideration of systemic issues facing the criminal justice system."
+        "A consideration of systemic issues facing the criminal justice system.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -410,7 +414,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Successful students develop digital skills and master digital tools useful for careers related to crime and justice. Students choose one of two courses (each has a required lab). The computer science course introduces students to spreadsheets and databases. The data science course introduces students to programming with data."
+        "Successful students develop digital skills and master digital tools useful for careers related to crime and justice. Students choose one of two courses (each has a required lab). The computer science course introduces students to spreadsheets and databases. The data science course introduces students to programming with data.",
+        "Complete one of the following (and the appropriate lab):"
       ]
     },
     {
@@ -480,7 +485,10 @@
         {
           "type": "COURSE",
           "subject": "CRIM",
-          "classId": 3000
+          "classId": 3000,
+          "notes": [
+            "Students returning from co-op should take:"
+          ]
         },
         {
           "type": "COURSE",
@@ -490,8 +498,7 @@
       ],
       "minRequirementCount": 3,
       "notes": [
-        "Students going on co-op should take:",
-        "Students returning from co-op should take:"
+        "Students going on co-op should take:"
       ]
     },
     {

@@ -130,6 +130,9 @@
               "subject": "MUSC",
               "classId": 3541
             }
+          ],
+          "notes": [
+            "Complete two of the following:"
           ]
         }
       ],
@@ -202,6 +205,10 @@
               "subject": "MUSC",
               "classId": 3352
             }
+          ],
+          "notes": [
+            "Western Art Music",
+            "Complete one of the following:"
           ]
         },
         {
@@ -287,6 +294,10 @@
               "subject": "MUSI",
               "classId": 3401
             }
+          ],
+          "notes": [
+            "Global Music/Ethnomusicology",
+            "Complete one of the following:"
           ]
         },
         {
@@ -382,6 +393,10 @@
               "subject": "MUSI",
               "classId": 3401
             }
+          ],
+          "notes": [
+            "Contemporary/Popular Music",
+            "Complete one of the following:"
           ]
         },
         {
@@ -402,6 +417,10 @@
               "subject": "MUSI",
               "classId": 2331
             }
+          ],
+          "notes": [
+            "Music Industry",
+            "Complete one of the following, as long as prerequisites have been met:"
           ]
         }
       ],
@@ -409,10 +428,7 @@
       "notes": [
         "Complete one from each of these categories: western art music, global music/ethnomusicology, contemporary/popular music, and creative. Of the courses from western art music, global music/ethnomusicology, contemporary/popular music, at least two must be at the 2000 level or higher. Courses may not double count across these areas. Many, but not all, music in context courses at the 2000 level or higher fulfill the writing-intensive in the discipline requirement. Please check writing-intensive status of courses as needed.",
         "Introductory Class",
-        "Western Art Music",
-        "Global Music/Ethnomusicology",
-        "Contemporary/Popular Music",
-        "Music Industry"
+        "Complete one of the following:"
       ]
     },
     {
@@ -503,7 +519,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -587,7 +606,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ]
 }

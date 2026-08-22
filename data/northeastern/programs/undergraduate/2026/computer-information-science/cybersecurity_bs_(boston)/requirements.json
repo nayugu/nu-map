@@ -249,7 +249,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -363,7 +366,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -520,7 +526,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -716,7 +725,8 @@
         ],
         "minRequirementCount": 2,
         "notes": [
-          "If courses require prerequisites, those should be taken using general electives."
+          "If courses require prerequisites, those should be taken using general electives.",
+          "Complete four courses from the following:"
         ]
       }
     ]

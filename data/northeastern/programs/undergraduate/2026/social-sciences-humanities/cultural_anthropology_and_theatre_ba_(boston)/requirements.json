@@ -134,7 +134,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three courses (not used to satisfy other requirements) in the following range. Two study-abroad courses may count toward this requirement with prior permission from the department:",
+        "ANTH 2300 to ANTH 4999"
+      ]
     },
     {
       "type": "SECTION",
@@ -307,7 +311,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -455,7 +462,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -482,7 +492,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -515,7 +528,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one capstone class from either department:"
+      ]
     }
   ]
 }

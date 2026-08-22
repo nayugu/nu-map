@@ -149,7 +149,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete 14 semester hours from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

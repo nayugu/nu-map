@@ -281,7 +281,13 @@
         "Students can register for EECE 4991 / EECE 4992 more than once. For these courses combined, a maximum of 8 semester hours will be allowed to satisfy the requirement of technical electives. An additional 4 semester hours will be allowed as a general elective. At most one of these courses (4 semester hours) can be taken in a semester.",
         "Though students may register for EECE 2750 more than once, only 4 semester hours will be allowed to satisfy the requirements of technical electives. An additional 4 semester hours will be allowed as a general elective.",
         "EECE 2310 is not an approved course option for ECE majors to select for a Technical Elective, it is only for Khoury students.",
-        "Two CS/CY/IS courses from the following approved list may be taken toward the EECE technical elective requirement:"
+        "Complete four of the following:",
+        "EECE 3324 to EECE 3410",
+        "EECE 4512 to EECE 4698",
+        "EECE 5115 to EECE 5699",
+        "Two CS/CY/IS courses from the following approved list may be taken toward the EECE technical elective requirement:",
+        "CS 3540 to CS 3800",
+        "CS 4100 to CS 4770"
       ]
     },
     {
@@ -308,6 +314,9 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "3 semester hours from the following course count toward the engineering requirement:"
           ]
         },
         {
@@ -319,10 +328,16 @@
               "subject": "EECE",
               "classId": 3468
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the engineering requirement:"
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "2 semester hours from the following course count toward the engineering requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -445,10 +460,16 @@
               "subject": "GE",
               "classId": 1501
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the mathematics/science requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "2 semester hours from the following course count toward the mathematics/science requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -496,10 +517,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the professional development requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following course counts toward the professional development requirement:"
+      ]
     },
     {
       "type": "SECTION",

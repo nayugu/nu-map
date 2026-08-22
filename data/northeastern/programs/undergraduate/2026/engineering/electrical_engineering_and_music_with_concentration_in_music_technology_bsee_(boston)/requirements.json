@@ -181,7 +181,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following (if more than one computer engineering fundamentals course is taken, it may count as a technical elective):"
+      ]
     },
     {
       "type": "SECTION",
@@ -280,7 +283,9 @@
       "notes": [
         "Students can register for EECE 4991/EECE 4992 more than once. For these courses combined, a maximum of 8 semester hours will be allowed to satisfy the requirement of technical electives. An additional 4 semester hours will be allowed as a general elective. At most, one of these courses (4 semester hours) can be taken in a semester.",
         "Though students may register for EECE 2750 more than once, only 4 semester hours will be allowed to satisfy the requirements of technical electives. An additional 4 semester hours will be allowed as a general elective.",
-        "EECE 2310 is not an approved course option for ECE majors to select for a technical elective; it is only for Khoury students."
+        "EECE 2310 is not an approved course option for ECE majors to select for a technical elective; it is only for Khoury students.",
+        "Complete two of the following (if EECE 5697 is not taken, then MUSC 2350 is required in place of the acoustic/music elective):",
+        "EECE 5115 to EECE 5699"
       ]
     },
     {
@@ -307,6 +312,9 @@
               "subject": "GE",
               "classId": 1501
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the engineering requirement:"
           ]
         },
         {
@@ -318,10 +326,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "3 semester hours from the following course count toward the engineering requirement:"
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "2 semester hours from the following course count toward the engineering requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -378,7 +392,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following pairs:"
+      ]
     },
     {
       "type": "SECTION",
@@ -410,7 +427,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -502,7 +522,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -528,7 +551,9 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "If EECE 5697 is taken, then students are required to complete a music elective from the following range:"
+        "Complete one of the following.",
+        "If EECE 5697 is taken, then students are required to complete a music elective from the following range:",
+        "MUSC 2000 to MUSC 5999"
       ]
     },
     {
@@ -604,7 +629,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following (other appropriate MUST courses will be considered by petition to fulfill this category):"
+      ]
     },
     {
       "type": "SECTION",
@@ -694,6 +722,9 @@
               "subject": "EECE",
               "classId": 3468
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the mathematics/science requirement:"
           ]
         }
       ],
@@ -715,7 +746,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "1 semester hour from the following course counts toward the mathematics/science requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -763,10 +797,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the professional development requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following course counts toward the professional development requirement:"
+      ]
     },
     {
       "type": "SECTION",

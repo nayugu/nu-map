@@ -250,6 +250,9 @@
               "subject": "IE",
               "classId": 4512
             }
+          ],
+          "notes": [
+            "3 semester hours from the following course count toward the engineering requirement:"
           ]
         },
         {
@@ -261,6 +264,9 @@
               "subject": "IE",
               "classId": 4515
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the engineering requirement:"
           ]
         },
         {
@@ -272,6 +278,9 @@
               "subject": "IE",
               "classId": 4520
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the engineering requirement:"
           ]
         },
         {
@@ -283,6 +292,9 @@
               "subject": "GE",
               "classId": 1501
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the engineering requirement:"
           ]
         },
         {
@@ -294,10 +306,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "3 semester hours from the following course count toward the engineering requirement:"
           ]
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "1 semester hour from the following course counts toward the engineering requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -436,7 +454,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -462,6 +483,9 @@
               "subject": "IE",
               "classId": 4512
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the mathematics/science requirement:"
           ]
         },
         {
@@ -473,6 +497,9 @@
               "subject": "IE",
               "classId": 4515
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the mathematics/science requirement:"
           ]
         },
         {
@@ -484,6 +511,9 @@
               "subject": "IE",
               "classId": 4520
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the mathematics/science requirement:"
           ]
         },
         {
@@ -495,10 +525,16 @@
               "subject": "GE",
               "classId": 1501
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the mathematics/science requirement:"
           ]
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "3 semester hours from the following course count toward the mathematics/science requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -546,10 +582,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the professional development requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following course counts toward the professional development requirement:"
+      ]
     },
     {
       "type": "SECTION",

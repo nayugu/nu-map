@@ -84,6 +84,9 @@
               "subject": "DGM",
               "classId": 6168
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
@@ -104,15 +107,16 @@
               "subject": "DGM",
               "classId": 7980
             }
+          ],
+          "notes": [
+            "Complete one of the following options:",
+            "Thesis Option",
+            "Capstone Option",
+            "Choose one technical course from the workshops list below."
           ]
         }
       ],
-      "minRequirementCount": 5,
-      "notes": [
-        "Thesis Option",
-        "Capstone Option",
-        "Choose one technical course from the workshops list below."
-      ]
+      "minRequirementCount": 5
     },
     {
       "type": "SECTION",
@@ -144,7 +148,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -171,7 +178,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students may complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -355,14 +365,17 @@
               "subject": "DGM",
               "classId": 6525
             }
+          ],
+          "notes": [
+            "Complete four courses from one of the following tracks:",
+            "Design Track",
+            "Usability and Development Track"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
-        "Interactive Design",
-        "Design Track",
-        "Usability and Development Track"
+        "Interactive Design"
       ]
     },
     {
@@ -412,15 +425,17 @@
               "subject": "DGM",
               "classId": 6550
             }
+          ],
+          "notes": [
+            "Electives",
+            "Complete 15–17 quarter hours from the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Complete the following:",
-        "Required",
-        "Electives",
-        "Complete 15–17 quarter hours from the following:"
+        "Required"
       ],
       "shared": true
     }

@@ -149,7 +149,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -197,7 +200,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -209,7 +215,10 @@
           "classId": 2320
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following course. Students who receive transfer credit for the Advanced Placement Statistics exam may complete the 1 semester hour PSYC 2315 course (requires department permission):"
+      ]
     },
     {
       "type": "SECTION",
@@ -276,7 +285,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -356,13 +368,94 @@
                 }
               ]
             }
+          ],
+          "groups": [
+            {
+              "title": "Lab",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 4600
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 4604
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 4606
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 4610
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 4612
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 4614
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 4616
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 4622
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 4624
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 4626
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 4628
+                }
+              ]
+            },
+            {
+              "title": "Directed Study Research or Honors Thesis",
+              "courses": [
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PSYC",
+                      "classId": 4971
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PSYC",
+                      "classId": 4991
+                    }
+                  ]
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Lab",
-        "Directed Study Research or Honors Thesis"
+        "Complete two psychology lab courses OR one psychology lab course and one psychology directed study research or honors thesis:"
       ]
     },
     {
@@ -2017,7 +2110,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses:"
+      ]
     },
     {
       "type": "SECTION",

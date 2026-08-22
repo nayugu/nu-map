@@ -399,7 +399,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following (electives outside this list may be chosen in consultation with faculty advisor):"
+      ]
     }
   ],
   "gpaRequirements": [

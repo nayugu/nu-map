@@ -215,7 +215,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following ranges:",
+        "ECON 1200–ECON 1999",
+        "ECON 3000–ECON 4689",
+        "ECON 4900–ECON 4999",
+        "ECON 5200–ECON 5999",
+        "POLS 2000–POLS 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -311,12 +319,18 @@
               "subject": "EESH",
               "classId": 2000
             }
+          ],
+          "notes": [
+            "Co-op Preparation Requirement"
           ]
         },
         {
           "type": "COURSE",
           "subject": "ECON",
-          "classId": 1116
+          "classId": 1116,
+          "notes": [
+            "Economics Requirement"
+          ]
         },
         {
           "type": "OR",
@@ -346,6 +360,9 @@
               "subject": "POLS",
               "classId": 2400
             }
+          ],
+          "notes": [
+            "Statistics Requirement"
           ]
         },
         {
@@ -381,16 +398,15 @@
               "subject": "MATH",
               "classId": 1341
             }
+          ],
+          "notes": [
+            "Mathematics Requirement"
           ]
         }
       ],
       "minRequirementCount": 5,
       "notes": [
-        "First-Year Seminar",
-        "Co-op Preparation Requirement",
-        "Economics Requirement",
-        "Statistics Requirement",
-        "Mathematics Requirement"
+        "First-Year Seminar"
       ]
     },
     {
@@ -543,7 +559,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -606,7 +625,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -697,6 +719,7 @@
         ],
         "minRequirementCount": 2,
         "notes": [
+          "Complete three electives, with at least 8 credits from MKTG courses:",
           "A maximum of one course may be applied to requirements of a second concentration."
         ]
       },
@@ -751,7 +774,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -867,11 +893,15 @@
                 "subject": "STRT",
                 "classId": 4301
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
+          "Complete two electives, one of which may come from the additional electives list:",
           "Additional Electives",
           "One course from an approved Dialogue may count toward a concentration elective."
         ]
@@ -995,11 +1025,15 @@
                 "subject": "INNO",
                 "classId": 4983
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
+          "Complete two electives, one of which may come from the Additional Electives list:",
           "Additional Electives",
           "One course from an approved Dialogue may count toward an elective."
         ]
@@ -1196,7 +1230,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1277,6 +1314,9 @@
                 "subject": "FINA",
                 "classId": 4335
               }
+            ],
+            "notes": [
+              "Choose one option below:"
             ]
           },
           {
@@ -1321,7 +1361,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1439,7 +1482,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1475,6 +1521,9 @@
                 "subject": "INTB",
                 "classId": 3310
               }
+            ],
+            "notes": [
+              "Complete one or both of the following:"
             ]
           },
           {
@@ -1526,14 +1575,70 @@
                 "subject": "SCHM",
                 "classId": 3301
               }
+            ],
+            "groups": [
+              {
+                "title": "Managing Internationally",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "INTB",
+                    "classId": 3320
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "INTB",
+                    "classId": 3330
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "INTB",
+                    "classId": 4983
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "STRT",
+                    "classId": 3301
+                  }
+                ]
+              },
+              {
+                "title": "International Functional Knowledge",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "ENTR",
+                    "classId": 3306
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "FINA",
+                    "classId": 4320
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "INNO",
+                    "classId": 2206
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "MKTG",
+                    "classId": 4512
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "SCHM",
+                    "classId": 3301
+                  }
+                ]
+              }
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
+          "Complete two of the following courses (one if both courses above selected).",
           "Note: One course can also count toward a different business concentration.",
-          "Managing Internationally",
-          "International Functional Knowledge",
           "Electives not listed may be approved via the undergraduate dean’s office."
         ]
       },
@@ -1661,7 +1766,8 @@
         ],
         "minRequirementCount": 2,
         "notes": [
-          "Note: Only one non-MGMT course may be used as an elective."
+          "Note: Only one non-MGMT course may be used as an elective.",
+          "Complete three of the following:"
         ]
       },
       {
@@ -1766,7 +1872,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1905,7 +2014,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1983,7 +2095,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -2079,12 +2194,15 @@
                 "subject": "MKTG",
                 "classId": 2301
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
-          "Additional Electives",
+          "Complete two of the following, one of which may come from the additional elective list:",
           "One course from an approved Dialogue may count toward an elective."
         ]
       },
@@ -2176,7 +2294,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Choose two from the list below:",
+          "Complete two of the following:"
+        ]
       }
     ]
   }

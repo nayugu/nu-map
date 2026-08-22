@@ -161,6 +161,10 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one course from each category:",
+            "Skills"
           ]
         },
         {
@@ -207,6 +211,9 @@
               "subject": "ENVR",
               "classId": 5670
             }
+          ],
+          "notes": [
+            "Earth, Oceans, and Environmental Change"
           ]
         },
         {
@@ -238,6 +245,9 @@
               "subject": "ENVR",
               "classId": 5700
             }
+          ],
+          "notes": [
+            "Conservation, Restoration, and Management"
           ]
         },
         {
@@ -274,6 +284,9 @@
               "subject": "ENVR",
               "classId": 5800
             }
+          ],
+          "notes": [
+            "Sustainable Planning and Development"
           ]
         },
         {
@@ -300,13 +313,15 @@
               "subject": "SOCL",
               "classId": 2485
             }
+          ],
+          "notes": [
+            "Environment and Society"
           ]
         }
       ],
       "minRequirementCount": 9,
       "notes": [
-        "Core Courses",
-        "Complete one course from each category:"
+        "Core Courses"
       ]
     },
     {
@@ -427,7 +442,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -459,7 +477,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ]
 }

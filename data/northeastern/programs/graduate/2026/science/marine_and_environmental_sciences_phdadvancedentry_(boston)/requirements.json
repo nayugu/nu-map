@@ -78,6 +78,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following:",
         "Alternative statistics course as approved by graduate committee"
       ]
     },
@@ -145,6 +146,9 @@
                 "subject": "EEMB",
                 "classId": 7104
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -183,6 +187,9 @@
                 "subject": "EEMB",
                 "classId": 7104
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -221,6 +228,9 @@
                 "subject": "EEMB",
                 "classId": 7103
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -259,6 +269,9 @@
                 "subject": "EEMB",
                 "classId": 7104
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {

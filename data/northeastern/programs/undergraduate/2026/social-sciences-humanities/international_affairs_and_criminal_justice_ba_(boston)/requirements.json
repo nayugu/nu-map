@@ -861,19 +861,21 @@
               "subject": "MSCR",
               "classId": 2325
             }
+          ],
+          "notes": [
+            "Law, Diplomacy, and Global Governance",
+            "Human Rights and Social Justice",
+            "Conflict and Security",
+            "Globalization",
+            "Population, Migration, and Diaspora",
+            "Development",
+            "Communication and Media"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Environment",
-        "Law, Diplomacy, and Global Governance",
-        "Human Rights and Social Justice",
-        "Conflict and Security",
-        "Globalization",
-        "Population, Migration, and Diaspora",
-        "Development",
-        "Communication and Media"
+        "Environment"
       ]
     },
     {
@@ -1193,16 +1195,18 @@
               "subject": "POLS",
               "classId": 3465
             }
+          ],
+          "notes": [
+            "Asia",
+            "Europe",
+            "Latin America",
+            "Middle East"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Africa",
-        "Asia",
-        "Europe",
-        "Latin America",
-        "Middle East"
+        "Africa"
       ]
     },
     {
@@ -1262,7 +1266,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "These courses introduce students to topical issues related to crime and justice."
+        "These courses introduce students to topical issues related to crime and justice.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -1352,7 +1357,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "The 2000-level courses in this list ask how does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions. The 3000-level courses in this list provide students a deeper look at a range of crime problems."
+        "The 2000-level courses in this list ask how does justice work and for whom? These courses introduce students to the systems and institutions tasked with providing justice. Each includes experiential learning components in cooperation with local criminal justice institutions. The 3000-level courses in this list provide students a deeper look at a range of crime problems.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -1392,7 +1398,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "A consideration of systemic issues facing the criminal justice system."
+        "A consideration of systemic issues facing the criminal justice system.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -1426,7 +1433,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -1448,7 +1458,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -1470,7 +1483,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -1484,15 +1500,24 @@
         {
           "type": "COURSE",
           "subject": "CRIM",
-          "classId": 3000
+          "classId": 3000,
+          "notes": [
+            "Complete after the first co-op:"
+          ]
         },
         {
           "type": "COURSE",
           "subject": "CRIM",
-          "classId": 4000
+          "classId": 4000,
+          "notes": [
+            "Complete after the second co-op:"
+          ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "Complete before the first co-op:"
+      ]
     },
     {
       "type": "SECTION",

@@ -73,7 +73,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -93,7 +96,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours in the following range:",
+        "POLS 5408 to POLS 7976"
+      ]
     },
     {
       "type": "SECTION",
@@ -126,7 +133,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -154,7 +164,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Four-month co-ops require registration at 1 semester hour for one term. Longer co-ops require registration at 1 semester hour per term for two consecutive terms."
+      ]
     }
   ],
   "gpaRequirements": [
@@ -247,7 +260,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -311,7 +327,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -345,7 +364,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -414,7 +436,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete 8 semester hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -452,6 +477,10 @@
                 "subject": "POLS",
                 "classId": 7387
               }
+            ],
+            "notes": [
+              "Complete 8 semester hours from the following:",
+              "POLS 7343 to POLS 7346"
             ]
           }
         ],

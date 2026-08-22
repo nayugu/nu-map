@@ -104,7 +104,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following. This course should be the last course taken and requires faculty advisor approval:"
+      ]
     },
     {
       "type": "SECTION",
@@ -269,6 +272,9 @@
               "subject": "ALY",
               "classId": 6110
             }
+          ],
+          "notes": [
+            "Complete two of the following:"
           ]
         }
       ],

@@ -111,7 +111,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Transfer courses are not permitted to fulfill the Area A requirement."
+        "Transfer courses are not permitted to fulfill the Area A requirement.",
+        "Complete one of the following:"
       ]
     },
     {
@@ -151,7 +152,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Transfer courses are not permitted to fulfill the Area B requirement."
+        "Transfer courses are not permitted to fulfill the Area B requirement.",
+        "Complete one of the following:"
       ]
     },
     {

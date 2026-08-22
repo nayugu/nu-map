@@ -251,7 +251,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following. Students who receive transfer credit for the Advanced Placement Statistics exam may complete the 1 SH PSYC 2315 course (requires department permission)."
+      ]
     },
     {
       "type": "SECTION",
@@ -361,7 +364,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -441,7 +447,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -687,13 +696,13 @@
               "subject": "ARTG",
               "classId": 4550
             }
+          ],
+          "notes": [
+            "The following course is already required in the major:"
           ]
         }
       ],
       "minRequirementCount": 3,
-      "notes": [
-        "The following course is already required in the major:"
-      ],
       "shared": true
     },
     {
@@ -730,7 +739,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Any ARTG course not already required or ARTG 5000 Topics in Design"
+        "Complete one course that is not already taken as long as prerequisites have been met:",
+        "Any ARTG course not already required or ARTG 5000 Topics in Design",
+        "BIOL 3403 or higher",
+        "BNSC 4991 or higher",
+        "PSYC 3404 or higher"
       ]
     },
     {

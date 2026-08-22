@@ -193,10 +193,16 @@
               "subject": "SOCL",
               "classId": 1246
             }
+          ],
+          "notes": [
+            "Complete one introductory social science course:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one introductory science course:"
+      ]
     },
     {
       "type": "SECTION",
@@ -223,7 +229,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -403,7 +412,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four of the following, three of which must be at the 3000 level or above:"
+      ]
     },
     {
       "type": "SECTION",
@@ -453,10 +465,16 @@
               "subject": "SOCL",
               "classId": 2320
             }
+          ],
+          "notes": [
+            "Complete one of the following options to satisfy requirement in statistical training:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one research methods course:"
+      ]
     },
     {
       "type": "SECTION",
@@ -483,7 +501,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following capstone classes:"
+      ]
     },
     {
       "type": "SECTION",
@@ -516,7 +537,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one ENVR course and one SOCL course from the following:"
+      ]
     },
     {
       "type": "SECTION",

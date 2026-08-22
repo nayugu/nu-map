@@ -223,7 +223,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -275,7 +278,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -334,7 +340,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+        "Complete 8 semester hours from within the following options:",
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives.",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -439,7 +449,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -776,16 +789,344 @@
                 }
               ]
             }
+          ],
+          "groups": [
+            {
+              "title": "Biology",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1111
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1112
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1113
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 1114
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 2301
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "BIOL",
+                      "classId": 2302
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Chemistry",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1161
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1162
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1211
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1212
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1213
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1214
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1215
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CHEM",
+                      "classId": 1216
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Geology/Environmental Science",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 1200
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 1201
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 2310
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 2311
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 2340
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 2341
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 3300
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 3301
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 4500
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 4501
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Mathematics",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 1342
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 2280
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 2331
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "MATH",
+                  "classId": 3081
+                }
+              ]
+            },
+            {
+              "title": "Physics",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1145
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1146
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1147
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1148
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1151
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1152
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1153
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1155
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1156
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1157
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1161
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1162
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1163
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1165
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1166
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHYS",
+                      "classId": 1167
+                    }
+                  ]
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Biology",
-        "Chemistry",
-        "Geology/Environmental Science",
-        "Mathematics",
-        "Physics"
+        "Complete any two courses (and any required labs). Courses may be taken from different categories:"
       ]
     },
     {
@@ -901,6 +1242,9 @@
                 "subject": "DS",
                 "classId": 4440
               }
+            ],
+            "notes": [
+              "Complete two of the following not already taken:"
             ]
           }
         ],
@@ -995,10 +1339,16 @@
                 "subject": "CY",
                 "classId": 4770
               }
+            ],
+            "notes": [
+              "Complete two of the following not already taken:"
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1049,6 +1399,9 @@
                 "subject": "HINF",
                 "classId": 5300
               }
+            ],
+            "notes": [
+              "Complete two of the following not already taken:"
             ]
           }
         ],
@@ -1127,6 +1480,9 @@
                 "subject": "CS",
                 "classId": 4830
               }
+            ],
+            "notes": [
+              "Complete one of the following not already taken:"
             ]
           }
         ],
@@ -1165,6 +1521,9 @@
                 "subject": "CY",
                 "classId": 4740
               }
+            ],
+            "notes": [
+              "Complete one of the following not already taken:"
             ]
           },
           {
@@ -1216,6 +1575,9 @@
                 "subject": "CY",
                 "classId": 4760
               }
+            ],
+            "notes": [
+              "Complete two of the following not already taken:"
             ]
           }
         ],

@@ -119,7 +119,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -146,7 +149,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -378,7 +384,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five of the following (one of the courses can be from another global studies concentration, a regional studies course, or a special topics course if you choose):"
+      ]
     },
     {
       "type": "SECTION",
@@ -421,7 +430,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five of the following (one of the courses can be from another global studies concentration, a regional studies course, or a special topics course if you choose):"
+      ]
     },
     {
       "type": "SECTION",
@@ -464,7 +476,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five of the following (one of the courses can be from another global studies concentration, a regional studies course, or a special topics course if you choose):"
+      ]
     },
     {
       "type": "SECTION",
@@ -512,7 +527,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five of the following (one of the courses can be from another global studies concentration, a regional studies course, or a special topics course if you choose):"
+      ]
     }
   ],
   "gpaRequirements": [

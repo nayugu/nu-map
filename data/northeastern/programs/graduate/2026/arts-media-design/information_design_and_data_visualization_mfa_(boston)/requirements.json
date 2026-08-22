@@ -242,7 +242,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with faculty advisor, complete two courses from the following (one of the electives can be chosen from any Northeastern graduate courses; multiple completions of ARTG 5000 may apply toward the elective requirement):"
+      ]
     }
   ],
   "gpaRequirements": [

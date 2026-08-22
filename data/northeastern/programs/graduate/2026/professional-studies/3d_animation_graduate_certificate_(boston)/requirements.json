@@ -100,7 +100,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a minimum of four quarter hours from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

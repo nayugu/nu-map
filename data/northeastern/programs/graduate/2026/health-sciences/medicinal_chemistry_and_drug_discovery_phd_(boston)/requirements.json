@@ -94,7 +94,10 @@
           "classId": 6300
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following repeatable course for six semesters:"
+      ]
     },
     {
       "type": "SECTION",

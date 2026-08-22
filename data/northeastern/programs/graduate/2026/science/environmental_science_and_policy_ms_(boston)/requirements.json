@@ -172,13 +172,129 @@
               "subject": "PPUA",
               "classId": 7237
             }
+          ],
+          "groups": [
+            {
+              "title": "College of Science Skills Course List",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 5130
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 5522
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 5150
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 5210
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 5260
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 5450
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 6500
+                }
+              ]
+            },
+            {
+              "title": "College of Social Sciences and Humanities Skills Course List",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 5301
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 6300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 7400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "LPSC",
+                  "classId": 7311
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5260
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5261
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 5263
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6212
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6216
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6502
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6505
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6506
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 6509
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PPUA",
+                  "classId": 7237
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "College of Science Skills Course List",
-        "College of Social Sciences and Humanities Skills Course List"
+        "Complete 2 courses from the following. At least one course needs to be taken from the College of Science Skills Course List and one course from the College of Social Sciences and Humanities Skills Course List."
       ]
     },
     {
@@ -233,7 +349,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "PPUA 5100 - PPUA 7346"
+      ]
     }
   ],
   "gpaRequirements": [

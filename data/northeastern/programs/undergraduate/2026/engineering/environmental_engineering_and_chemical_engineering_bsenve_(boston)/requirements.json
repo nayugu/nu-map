@@ -275,7 +275,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least three of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -301,6 +304,9 @@
               "subject": "CIVE",
               "classId": 3464
             }
+          ],
+          "notes": [
+            "1 semester hour from the following counts toward the engineering requirement:"
           ]
         },
         {
@@ -312,6 +318,9 @@
               "subject": "GE",
               "classId": 1501
             }
+          ],
+          "notes": [
+            "2 semester hours from the following count toward the engineering requirement:"
           ]
         },
         {
@@ -323,10 +332,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "3 semester hours from the following count toward the engineering requirement:"
           ]
         }
       ],
-      "minRequirementCount": 4
+      "minRequirementCount": 4,
+      "notes": [
+        "3 semester hours from the following count toward the engineering requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -492,7 +507,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -518,6 +536,9 @@
               "subject": "CIVE",
               "classId": 3464
             }
+          ],
+          "notes": [
+            "3 semester hours from the following count toward the mathematics/science requirement:"
           ]
         },
         {
@@ -529,10 +550,16 @@
               "subject": "GE",
               "classId": 1501
             }
+          ],
+          "notes": [
+            "1 semester hour from the following counts toward the mathematics/science requirement:"
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "1 semester hour from the following counts toward the mathematics/science requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -580,10 +607,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "1 semester hour from the following counts toward the professional development requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following counts toward the professional development requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -631,7 +664,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "This course is already required above and also fulfills the integrative requirement."
+      ]
     }
   ],
   "gpaRequirements": [

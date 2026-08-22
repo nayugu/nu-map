@@ -163,7 +163,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from each of the following two pairs of courses:"
+      ]
     },
     {
       "type": "SECTION",

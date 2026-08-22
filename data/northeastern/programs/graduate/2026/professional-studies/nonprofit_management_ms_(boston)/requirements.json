@@ -379,7 +379,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete a minimum of 6 quarter hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -453,7 +456,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete a minimum of 9 quarter hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -516,7 +522,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -600,7 +609,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete a minimum of 6 quarter hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -684,7 +696,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete a minimum of 6 quarter hours from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -743,7 +758,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete a minimum of 5 quarter hours from the following:"
+        ]
       }
     ]
   }

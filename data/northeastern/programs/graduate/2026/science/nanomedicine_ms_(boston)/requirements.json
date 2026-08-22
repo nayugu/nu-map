@@ -184,13 +184,13 @@
               "subject": "NNMD",
               "classId": 6984
             }
+          ],
+          "notes": [
+            "Complete at least one of the following (credit-bearing courses chosen to fulfill this requirement will also be applied to the elective requirements of this program):"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Complete at least one of the following (credit-bearing courses chosen to fulfill this requirement will also be applied to the elective requirements of this program):"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

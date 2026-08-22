@@ -327,7 +327,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five of the following:"
+      ]
     },
     {
       "type": "SECTION",

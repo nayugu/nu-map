@@ -80,25 +80,31 @@
         {
           "type": "COURSE",
           "subject": "CS",
-          "classId": 5002
+          "classId": 5002,
+          "notes": [
+            "Discrete Structures"
+          ]
         },
         {
           "type": "COURSE",
           "subject": "DS",
-          "classId": 5010
+          "classId": 5010,
+          "notes": [
+            "Programming for Data Science"
+          ]
         },
         {
           "type": "COURSE",
           "subject": "DS",
-          "classId": 5020
+          "classId": 5020,
+          "notes": [
+            "Additional Align Coursework"
+          ]
         }
       ],
       "minRequirementCount": 4,
       "notes": [
-        "Fundamentals",
-        "Discrete Structures",
-        "Programming for Data Science",
-        "Additional Align Coursework"
+        "Fundamentals"
       ]
     },
     {
@@ -122,7 +128,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",

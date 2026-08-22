@@ -75,7 +75,10 @@
         {
           "type": "COURSE",
           "subject": "STRT",
-          "classId": 6210
+          "classId": 6210,
+          "notes": [
+            "In consultation with advisor, complete 3 graduate-level semester hours for which prerequisites have been met:"
+          ]
         },
         {
           "type": "XOM",
@@ -108,6 +111,10 @@
               "subject": "MKTG",
               "classId": 6212
             }
+          ],
+          "notes": [
+            "In consultation with advisor, complete 3 graduate-level semester hours from the following for which prerequisites have been met:",
+            "INTB 5000 - 6999"
           ]
         },
         {
@@ -124,6 +131,9 @@
               "subject": "STRT",
               "classId": 6200
             }
+          ],
+          "notes": [
+            "In consultation with advisor, complete 3 graduate-level semester hours from the following for which prerequisites have been met:"
           ]
         }
       ],

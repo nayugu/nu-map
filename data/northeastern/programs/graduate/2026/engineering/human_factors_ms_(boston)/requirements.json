@@ -437,13 +437,13 @@
               "subject": "GSND",
               "classId": 6340
             }
+          ],
+          "notes": [
+            "Design Research Methods"
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "notes": [
-        "Design Research Methods"
-      ]
+      "minRequirementCount": 1
     }
   ],
   "gpaRequirements": [

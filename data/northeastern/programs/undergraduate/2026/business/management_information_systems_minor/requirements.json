@@ -130,7 +130,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following (at least 8 credits must come from MISM courses):"
+      ]
     }
   ],
   "gpaRequirements": [

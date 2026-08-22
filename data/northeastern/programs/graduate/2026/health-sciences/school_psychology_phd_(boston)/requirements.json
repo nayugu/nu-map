@@ -184,7 +184,10 @@
         {
           "type": "COURSE",
           "subject": "CAEP",
-          "classId": 6400
+          "classId": 6400,
+          "notes": [
+            "Practicum"
+          ]
         },
         {
           "type": "COURSE",
@@ -225,20 +228,25 @@
               "subject": "CAEP",
               "classId": 7744
             }
+          ],
+          "notes": [
+            "Fieldwork",
+            "Complete a minimum of 2 semester hours required per course, for a total of 8 semester hours:"
           ]
         },
         {
           "type": "COURSE",
           "subject": "CAEP",
-          "classId": 7798
+          "classId": 7798,
+          "notes": [
+            "Internship",
+            "Complete 3 semester hours. Prior to beginning internship consult with director, DCT, and/or the Doctoral Internship Seminar instructor."
+          ]
         }
       ],
       "minRequirementCount": 15,
       "notes": [
-        "Coursework",
-        "Practicum",
-        "Fieldwork",
-        "Internship"
+        "Coursework"
       ]
     },
     {

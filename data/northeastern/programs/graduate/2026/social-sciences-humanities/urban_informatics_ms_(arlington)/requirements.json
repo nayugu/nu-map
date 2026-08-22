@@ -122,7 +122,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Four-month co-ops require registration at 1 SH for one term. Longer co-ops require registration at 1 SH per term for two consecutive terms:"
+      ]
     },
     {
       "type": "SECTION",

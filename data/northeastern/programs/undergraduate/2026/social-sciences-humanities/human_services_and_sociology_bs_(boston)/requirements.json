@@ -255,7 +255,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one required methods course, one required statistics course, and one qualitative methods course:"
+      ]
     },
     {
       "type": "SECTION",
@@ -283,7 +286,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one integrative course from the following list:"
+      ]
     },
     {
       "type": "SECTION",
@@ -306,7 +312,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one capstone course from either department:"
+      ]
     }
   ]
 }

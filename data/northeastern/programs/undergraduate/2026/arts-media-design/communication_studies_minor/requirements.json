@@ -99,7 +99,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -118,7 +121,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following or any unused foundational courses from above:",
+        "COMM 1120 to COMM 4799"
+      ]
     }
   ],
   "gpaRequirements": [

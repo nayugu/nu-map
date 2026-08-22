@@ -115,7 +115,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one elective from the following list:"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -130,7 +130,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete five of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -184,7 +187,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete five of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -268,7 +274,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete five of the following (electives not on this list may be chosen with faculty advisor approval):"
+        ]
       }
     ]
   }

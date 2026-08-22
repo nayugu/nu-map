@@ -129,7 +129,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -161,7 +164,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -209,7 +215,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -274,6 +283,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete THREE courses that have not been used to satisfy other requirements:",
         "Media and Screen Studies courses, from the range MSCR 1200 - MSCR 4999."
       ]
     },

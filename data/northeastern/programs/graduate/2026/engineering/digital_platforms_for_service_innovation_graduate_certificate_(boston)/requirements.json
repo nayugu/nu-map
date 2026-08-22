@@ -96,7 +96,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Complete a cross-disciplinary training course from the appropriate course 1 option list."
+        "Complete a cross-disciplinary training course from the appropriate course 1 option list.",
+        "This requirement offers cross-disciplinary training in one of two areas: in social sciences or business for learners with a background in engineering or computer science and in knowledge engineering for learners with a background in the social sciences or business. Students should complete one of the courses listed below or submit a petition to their advisor for a different course that they believe is suitable. Some options to meet this course 1 requirement are prerequisites of options to meet the course 3 requirement of this program. Students are encouraged to examine course 3 options when planning their course 1 selection."
       ]
     },
     {
@@ -331,7 +332,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete an elective from one of the following elective lists. Students should choose one of the courses listed below or submit a petition for a different course they believe is suitable. Some options to complete this requirement have prerequisites outside the curriculum for this certificate program."
+      ]
     }
   ],
   "gpaRequirements": [

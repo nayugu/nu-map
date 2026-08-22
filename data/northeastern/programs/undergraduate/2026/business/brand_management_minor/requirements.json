@@ -160,7 +160,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following with at least one course from MKTG:"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -74,6 +74,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following:",
         "Alternative statistics course as approved by graduate committee"
       ]
     },
@@ -87,7 +88,10 @@
           "classId": 8984
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (repeatable) course twice:"
+      ]
     },
     {
       "type": "SECTION",
@@ -153,6 +157,9 @@
                 "subject": "EEMB",
                 "classId": 7104
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -209,6 +216,7 @@
         ],
         "minRequirementCount": 4,
         "notes": [
+          "Complete 12 semester hours from the following:",
           "Substitutions may be made with approval of graduate committee."
         ]
       },
@@ -240,6 +248,9 @@
                 "subject": "EEMB",
                 "classId": 7104
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -311,6 +322,7 @@
         ],
         "minRequirementCount": 4,
         "notes": [
+          "Complete 12 semester hours from the following:",
           "Substitutions may be made with approval of graduate committee."
         ]
       },
@@ -342,6 +354,9 @@
                 "subject": "EEMB",
                 "classId": 7103
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -383,6 +398,7 @@
         ],
         "minRequirementCount": 4,
         "notes": [
+          "Complete 12 semester hours from the following:",
           "Substitutions may be made with approval of graduate committee."
         ]
       },
@@ -414,6 +430,9 @@
                 "subject": "EEMB",
                 "classId": 7104
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -465,6 +484,7 @@
         ],
         "minRequirementCount": 4,
         "notes": [
+          "Complete 12 semester hours from the following:",
           "Substitutions may be made with approval of graduate committee."
         ]
       }

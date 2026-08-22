@@ -113,7 +113,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete 3 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -171,7 +174,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete 3 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -219,7 +225,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete 3 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -262,7 +271,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete 3 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -527,6 +539,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "In consultation with advisor, complete 18 graduate-level semester hours for which prerequisites have been met. Choose from the following subject codes:",
         "ACCT, BUSN, ENTR, FINA, HRMG, INNO, INTB, MECN, MGMT, MISM, MKTG, SCHM, STRT",
         "In consultation with advisor, students may also select an interdisciplinary elective, for which prerequisites have been met, offered in partnership with other Northeastern University colleges. Choose from the following:"
       ]
@@ -630,7 +643,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -684,7 +700,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "In consultation with advisor, complete 4 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -758,7 +777,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -812,7 +834,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -962,7 +987,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1021,7 +1049,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 12 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1117,7 +1148,8 @@
         ],
         "minRequirementCount": 6,
         "notes": [
-          "To earn the Concentration in Digital Transformation in Healthcare, students must complete the following four core courses of the core curriculum of this program:"
+          "To earn the Concentration in Digital Transformation in Healthcare, students must complete the following four core courses of the core curriculum of this program:",
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
         ]
       },
       {
@@ -1192,7 +1224,10 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 1,
+        "notes": [
+          "In consultation with advisor, complete 12 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1318,7 +1353,8 @@
         ],
         "minRequirementCount": 6,
         "notes": [
-          "To earn the Concentration in Healthcare Administration, students must complete the following four core courses of the core curriculum of this program:"
+          "To earn the Concentration in Healthcare Administration, students must complete the following four core courses of the core curriculum of this program:",
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
         ]
       },
       {
@@ -1363,7 +1399,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1412,7 +1451,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1466,7 +1508,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1540,7 +1585,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1584,7 +1632,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1638,7 +1689,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1727,6 +1781,7 @@
         "minRequirementCount": 6,
         "notes": [
           "To earn the Concentration in Strategic Technology Leadership, students must complete the following four core courses of the core curriculum of this program:",
+          "Complete the following course three times:",
           "Complete the following:",
           "In consultation with advisor, complete 6 graduate-level semester hours for which prerequisites have been met. Choose from the following:",
           "ACCT, BUSN, ENTR, FINA, HRMG, INNO, INTB, MECN, MGMT, MKTG, MISM, SCHM, or STRT",
@@ -1785,7 +1840,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "In consultation with advisor, complete 9 graduate-level semester hours for which prerequisites have been met. Choose from the following:"
+        ]
       }
     ]
   }

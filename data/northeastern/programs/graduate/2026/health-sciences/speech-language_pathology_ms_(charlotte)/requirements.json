@@ -168,13 +168,14 @@
               "subject": "SLPA",
               "classId": 6219
             }
+          ],
+          "notes": [
+            "Complete one of the following, as determined by the faculty advisor:",
+            "or Electives from the list below."
           ]
         }
       ],
-      "minRequirementCount": 13,
-      "notes": [
-        "or Electives from the list below."
-      ]
+      "minRequirementCount": 13
     },
     {
       "type": "SECTION",
@@ -323,7 +324,10 @@
           "classId": 6990
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 3 semester hours across two semesters with prior approval."
+      ]
     }
   ],
   "gpaRequirements": [

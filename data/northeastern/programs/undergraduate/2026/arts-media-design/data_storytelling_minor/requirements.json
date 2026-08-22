@@ -142,11 +142,84 @@
               "subject": "JRNL",
               "classId": 5500
             }
+          ],
+          "groups": [
+            {
+              "title": "Designing Data Stories",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2242
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 3610
+                }
+              ]
+            },
+            {
+              "title": "Narrating Data Stories",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 2201
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 3650
+                }
+              ]
+            },
+            {
+              "title": "Visualizing Data Stories",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 2262
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 2263
+                    }
+                  ]
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CS",
+                      "classId": 2000
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CS",
+                      "classId": 2001
+                    }
+                  ]
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JRNL",
+                  "classId": 5500
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete two electives from the following themes (they do not have to be from the same theme, and some electives have prerequisites outside of the curriculum of this minor):",
         "Designing Data Stories",
         "Narrating Data Stories",
         "Visualizing Data Stories"

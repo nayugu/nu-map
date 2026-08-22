@@ -166,7 +166,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 6 semester hours of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -353,7 +356,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4-5 semester hours of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -416,7 +422,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -455,7 +464,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -494,7 +506,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -543,7 +558,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -582,7 +600,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours of the following:"
+        ]
       },
       {
         "type": "SECTION",

@@ -202,6 +202,9 @@
               "subject": "STRT",
               "classId": 3301
             }
+          ],
+          "notes": [
+            "Complete one international business elective from the following:"
           ]
         }
       ],
@@ -227,6 +230,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following:",
         "One semester of study-abroad experience",
         "Two Dialogues of Civilization (summer programs)",
         "Two summer traditional study-abroad experiences",
@@ -361,7 +365,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -424,7 +431,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -515,6 +525,7 @@
         ],
         "minRequirementCount": 2,
         "notes": [
+          "Complete three electives, with at least 8 credits from MKTG courses:",
           "A maximum of one course may be applied to requirements of a second concentration."
         ]
       },
@@ -569,7 +580,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -685,11 +699,15 @@
                 "subject": "STRT",
                 "classId": 4301
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
+          "Complete two electives, one of which may come from the additional electives list:",
           "Additional Electives",
           "One course from an approved Dialogue may count toward a concentration elective."
         ]
@@ -813,11 +831,15 @@
                 "subject": "INNO",
                 "classId": 4983
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
+          "Complete two electives, one of which may come from the Additional Electives list:",
           "Additional Electives",
           "One course from an approved Dialogue may count toward an elective."
         ]
@@ -1014,7 +1036,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1095,6 +1120,9 @@
                 "subject": "FINA",
                 "classId": 4335
               }
+            ],
+            "notes": [
+              "Choose one option below:"
             ]
           },
           {
@@ -1139,7 +1167,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1257,7 +1288,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1383,7 +1417,8 @@
         ],
         "minRequirementCount": 2,
         "notes": [
-          "Note: Only one non-MGMT course may be used as an elective."
+          "Note: Only one non-MGMT course may be used as an elective.",
+          "Complete three of the following:"
         ]
       },
       {
@@ -1488,7 +1523,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1627,7 +1665,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1705,7 +1746,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1801,12 +1845,15 @@
                 "subject": "MKTG",
                 "classId": 2301
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
-          "Additional Electives",
+          "Complete two of the following, one of which may come from the additional elective list:",
           "One course from an approved Dialogue may count toward an elective."
         ]
       },
@@ -1898,7 +1945,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Choose two from the list below:",
+          "Complete two of the following:"
+        ]
       }
     ]
   }

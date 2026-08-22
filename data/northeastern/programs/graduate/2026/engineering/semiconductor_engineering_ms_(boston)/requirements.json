@@ -87,7 +87,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -114,7 +117,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -162,7 +168,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four semester hours from the following. Students may not meet this requirement solely with directed study coursework:"
+      ]
     },
     {
       "type": "SECTION",
@@ -620,10 +629,16 @@
               "subject": "ME",
               "classId": 5976
             }
+          ],
+          "notes": [
+            "FINA, HRMG, INNO, MGMT, and MKTG courses listed above are 3 semester hours, so students may take one additional 1 semester hour of courses from the list below for a total of 4 semester hours:"
           ]
         }
       ],
       "minRequirementCount": 2,
+      "notes": [
+        "A maximum of 4 semester hours may be taken from the following:"
+      ],
       "shared": true
     }
   ],
@@ -714,6 +729,12 @@
                 "subject": "EECE",
                 "classId": 7945
               }
+            ],
+            "notes": [
+              "Complete one of the following options for 12 semester hours:",
+              "Coursework Option",
+              "Complete 12 semester hours from the restricted electives course list.",
+              "Project Option"
             ]
           },
           {
@@ -729,17 +750,16 @@
                 "subject": "EECE",
                 "classId": 7990
               }
+            ],
+            "notes": [
+              "Complete 8 semester hours from the restricted electives course list.",
+              "Thesis Option"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
-          "Complete one of the following options for 12 semester hours:",
-          "Coursework Option",
-          "Complete 12 semester hours from the restricted electives course list.",
-          "Project Option",
-          "Complete 8 semester hours from the restricted electives course list.",
-          "Thesis Option",
+          "Complete two of the following not used to complete other requirements of this program:",
           "Complete 4 semester hours from the restricted electives course list."
         ]
       },
@@ -812,6 +832,12 @@
                   }
                 ]
               }
+            ],
+            "notes": [
+              "Complete one of the following options for 12 semester hours:",
+              "Coursework Option",
+              "Complete 12 semester hours from the restricted electives course list.",
+              "Project Option"
             ]
           },
           {
@@ -857,17 +883,16 @@
                   }
                 ]
               }
+            ],
+            "notes": [
+              "Complete 8 semester hours from the restricted electives course list.",
+              "Thesis Option"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
-          "Complete one of the following options for 12 semester hours:",
-          "Coursework Option",
-          "Complete 12 semester hours from the restricted electives course list.",
-          "Project Option",
-          "Complete 8 semester hours from the restricted electives course list.",
-          "Thesis Option",
+          "Complete two of the following not used to complete other requirements of this program:",
           "Complete 4 semester hours from the restricted electives course list."
         ]
       }

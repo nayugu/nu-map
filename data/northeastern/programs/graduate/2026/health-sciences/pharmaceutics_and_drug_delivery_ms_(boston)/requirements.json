@@ -183,13 +183,15 @@
               "subject": "PHSC",
               "classId": 6996
             }
+          ],
+          "notes": [
+            "Thesis continuation may be taken if additional time is needed to complete the thesis."
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
-        "Thesis research should be taken twice.",
-        "Thesis continuation may be taken if additional time is needed to complete the thesis."
+        "Thesis research should be taken twice."
       ]
     }
   ],

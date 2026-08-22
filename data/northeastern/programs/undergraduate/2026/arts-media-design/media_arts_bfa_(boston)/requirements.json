@@ -161,7 +161,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 6 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -275,7 +278,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Note: If you are pursuing a concentration, select courses not used for your concentration."
+        "Note: If you are pursuing a concentration, select courses not used for your concentration.",
+        "Complete 10 semester hours from the following:"
       ]
     },
     {
@@ -316,7 +320,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "If a topics in course is completed more than once, the additional completions may be allowed toward the electives."
+        "If a topics in course is completed more than once, the additional completions may be allowed toward the electives.",
+        "Complete 4 semester hours from the following:"
       ]
     },
     {
@@ -427,6 +432,7 @@
         "minRequirementCount": 6,
         "notes": [
           "If ARTD 3000 is completed more than once, the additional completions may be allowed toward the electives.",
+          "Complete 16 semester hours from the following (at least 4 semester hours must be at the 4000 level):",
           "Complete 8 semester hours from ARTD, ARTE, ARTG, ARTH, ARTS, or GAME courses as long as prerequisites have been met.",
           "If ARTD 3000 (or any other topics course in the subjects listed above) is completed more than once, the additional completions may be allowed toward the electives.",
           "Courses in this requirement may not be used for the drawing fundamentals elective, media arts basics elective, media arts history elective, or animation electives."
@@ -486,6 +492,7 @@
         ],
         "minRequirementCount": 4,
         "notes": [
+          "Complete 8 semester hours of the following (ARTD 3000 may be completed twice to satisfy this requirement):",
           "Complete 16 semester hours of ARTD, ARTE, ARTG, ARTH, ARTS, or GAME courses as long as prerequisites have been met. At least 4 semester hours must be at the 4000 level.",
           "If ARTD 3000 (or any other topics course in the subjects listed above) is completed more than once, the additional completions may be allowed toward the electives.",
           "Courses in this requirement may not be used for the drawing fundamentals elective, media arts basics elective, media arts history elective, or photography elective."
@@ -561,6 +568,7 @@
         "minRequirementCount": 3,
         "notes": [
           "If ARTD 3000 (or any other topics course in the subjects listed above) is completed more than once, the additional completions may be allowed toward the electives.",
+          "Complete 20 semester hours from the following:",
           "Complete 16 semester hours of ARTD, ARTE, ARTG, ARTH, ARTS, or GAME courses as long as prerequisites have been met. At least 4 semester hours must be at the 4000 level.",
           "Courses in this requirement may not be used for the drawing fundamentals elective, media arts basics elective, and media arts history elective."
         ]
@@ -750,7 +758,8 @@
         "minRequirementCount": 1,
         "notes": [
           "If a topics in course is completed more than once, the additional completions may be allowed toward the electives.",
-          "Courses in this requirement may not be used for the drawing fundamentals elective or media arts history elective."
+          "Courses in this requirement may not be used for the drawing fundamentals elective or media arts history elective.",
+          "Complete 28 semester hours from the following:"
         ]
       }
     ]

@@ -159,7 +159,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Four-month co-ops require registration at 1 semester hour for one term. Longer co-ops require registration at 1 semester hour per term for two consecutive terms. Both of the following courses must be taken during each co-op semester:"
+      ]
     },
     {
       "type": "SECTION",

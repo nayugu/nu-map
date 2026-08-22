@@ -159,19 +159,23 @@
         {
           "type": "COURSE",
           "subject": "BIOL",
-          "classId": 2299
+          "classId": 2299,
+          "notes": [
+            "Inquiries"
+          ]
         },
         {
           "type": "COURSE",
           "subject": "BIOL",
-          "classId": 2309
+          "classId": 2309,
+          "notes": [
+            "Techniques"
+          ]
         }
       ],
       "minRequirementCount": 3,
       "notes": [
-        "Foundations",
-        "Inquiries",
-        "Techniques"
+        "Foundations"
       ]
     },
     {
@@ -331,6 +335,9 @@
               "subject": "CHEM",
               "classId": 5620
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -405,6 +412,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Please complete one of the following options to fulfill the capstone requirement:",
         "One-semester research options:",
         "Two-semester research option (Honors in the Discipline). Second semester will be:",
         "Non-research option:"
@@ -432,7 +440,10 @@
           "exceptions": []
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "BIOL 2311 to BIOL 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -446,7 +457,10 @@
           "exceptions": []
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "CHEM 2310 to CHEM 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -474,7 +488,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Up to 4 semester hours may be biochemistry-related research for credit:"
+      ]
     },
     {
       "type": "SECTION",
@@ -647,13 +664,17 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Physics 2",
+            "Complete a lecture and lab set for Physics 2:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Physics 1",
-        "Physics 2"
+        "Complete a lecture and lab set for Physics 1:"
       ]
     },
     {
@@ -717,7 +738,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following list. Students who receive transfer credit for the Advanced Placement Statistics exam may complete the 1 semester hour PSYC 2315 course (requires Psychology Department permission):"
+      ]
     },
     {
       "type": "SECTION",

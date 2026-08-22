@@ -64,13 +64,13 @@
               "subject": "HINF",
               "classId": 5106
             }
+          ],
+          "notes": [
+            "Choose one of the following courses in consultation with your advisor:"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Choose one of the following courses in consultation with your advisor:"
-      ]
+      "minRequirementCount": 2
     }
   ],
   "gpaRequirements": [
@@ -323,6 +323,7 @@
         ],
         "minRequirementCount": 5,
         "notes": [
+          "Complete two of the following:",
           "One course from the following may count toward the technical core requirement:"
         ]
       },
@@ -431,12 +432,19 @@
                 "subject": "PHTH",
                 "classId": 5232
               }
+            ],
+            "notes": [
+              "Health Informatics",
+              "Complete two of the following:"
             ]
           },
           {
             "type": "COURSE",
             "subject": "IE",
-            "classId": 6200
+            "classId": 6200,
+            "notes": [
+              "Technical"
+            ]
           },
           {
             "type": "COURSE",
@@ -446,7 +454,10 @@
           {
             "type": "COURSE",
             "subject": "HINF",
-            "classId": 7701
+            "classId": 7701,
+            "notes": [
+              "Capstone"
+            ]
           },
           {
             "type": "OR",
@@ -492,9 +503,8 @@
         "minRequirementCount": 6,
         "notes": [
           "Business Management",
-          "Health Informatics",
-          "Technical",
-          "Capstone"
+          "Complete two of the following:",
+          "Complete one of the following:"
         ]
       },
       {
@@ -510,7 +520,10 @@
           {
             "type": "COURSE",
             "subject": "CS",
-            "classId": 5340
+            "classId": 5340,
+            "notes": [
+              "Technical"
+            ]
           },
           {
             "type": "OR",
@@ -535,6 +548,9 @@
                 "subject": "CS",
                 "classId": 6200
               }
+            ],
+            "notes": [
+              "Complete one of the following. Students must petition to take electives outside the approved list:"
             ]
           },
           {
@@ -550,12 +566,18 @@
                 "subject": "HINF",
                 "classId": 6355
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
             "type": "COURSE",
             "subject": "PHTH",
-            "classId": 5210
+            "classId": 5210,
+            "notes": [
+              "Theory and Evaluation"
+            ]
           },
           {
             "type": "OR",
@@ -570,6 +592,9 @@
                 "subject": "HINF",
                 "classId": 5200
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -593,8 +618,7 @@
         "minRequirementCount": 7,
         "notes": [
           "Health Informatics",
-          "Technical",
-          "Theory and Evaluation",
+          "Complete one of the two options below.",
           "Students must enroll in HINF 7990 for two semesters for a total of 6 semester hours with director approval only and under supervision of Personal Health Informatics faculty:",
           "Complete any course for a minimum of 3 semester from the Health Informatics (without concentration) curriculum, that has not been used in previous requirements."
         ]

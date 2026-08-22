@@ -78,7 +78,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a minimum of 6 semester hours from the following courses. Students may choose additional courses from the list below and/or an optional experiential elective to meet the minimum 12 SH program requirement."
+      ]
     },
     {
       "type": "SECTION",

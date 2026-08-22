@@ -219,7 +219,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -333,6 +336,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete 30 semester hours in the following subject areas below:",
         "ALY, AVM, BTC, CET, FIN, GET, HMG, ITC, LDR, MGT, MKT, PJM",
         "Suggested Electives:"
       ]

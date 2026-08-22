@@ -125,7 +125,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -178,7 +181,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "The remaining course can be selected from either the intermediate biological ethics course list or from the list of general ethics electives."
+      ]
     }
   ],
   "gpaRequirements": [

@@ -52,7 +52,10 @@
           "classId": 7030
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students must enroll in the following course every semester until start of the dissertation phase of the program (the course is repeatable two times for 1 semester hour and four times for 0 semester hours):"
+      ]
     },
     {
       "type": "SECTION",
@@ -254,6 +257,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete 19 semester hours from the list below chosen in consultation with a faculty advisor.",
         "Some courses may require prerequisite coursework."
       ]
     },

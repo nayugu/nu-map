@@ -324,7 +324,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives."
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives.",
+        "Complete 8 semester hours from the following options:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -405,7 +409,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 6 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -777,15 +784,150 @@
               "subject": "DS",
               "classId": 4420
             }
+          ],
+          "groups": [
+            {
+              "title": "Psychology",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 1101
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 3452
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 3464
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 3466
+                }
+              ]
+            },
+            {
+              "title": "Computer Science",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2386
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 3200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 3520
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 3650
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 3800
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4150
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4520
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4550
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4730
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4850
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4991
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 4992
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 3000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 4200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 4300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 4400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "DS",
+                  "classId": 4420
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Art + Design",
-        "Complete any ARTG course as long as prerequisites have been met. If ARTG 5000 (or any other topics course in the subject listed) is completed more than once, the additional completions may be allowed toward the electives.",
-        "Psychology",
-        "Computer Science"
+        "Complete 8 semester hours from the following lists:",
+        "Complete any ARTG course as long as prerequisites have been met. If ARTG 5000 (or any other topics course in the subject listed) is completed more than once, the additional completions may be allowed toward the electives."
       ]
     },
     {
@@ -889,7 +1031,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

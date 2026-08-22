@@ -113,7 +113,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following course with lab:"
+      ]
     },
     {
       "type": "SECTION",
@@ -145,7 +148,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -214,7 +220,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the following:",
+        "EEMB 2290 to EEMB 3450",
+        "EEMB 3460 to EEMB 5130"
+      ]
     },
     {
       "type": "SECTION",
@@ -272,7 +283,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "BIOL 2327 to BIOL 3990",
+        "BIOL 4705 to BIOL 4709",
+        "BIOL 5301 to BIOL 5597"
+      ]
     }
   ],
   "gpaRequirements": [

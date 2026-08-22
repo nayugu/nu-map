@@ -105,10 +105,16 @@
               "subject": "EDUT",
               "classId": 6213
             }
+          ],
+          "notes": [
+            "Complete at least two of the following (all four courses are required for the Concentration in Early Childhood Special Education concentration):"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the two following sequences:"
+      ]
     }
   ],
   "gpaRequirements": [

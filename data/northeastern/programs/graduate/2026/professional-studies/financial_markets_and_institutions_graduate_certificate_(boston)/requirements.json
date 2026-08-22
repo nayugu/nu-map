@@ -79,13 +79,13 @@
         {
           "type": "COURSE",
           "subject": "CED",
-          "classId": 6995
+          "classId": 6995,
+          "notes": [
+            "Complete four quarter hours of the course below:"
+          ]
         }
       ],
-      "minRequirementCount": 5,
-      "notes": [
-        "Complete four quarter hours of the course below:"
-      ]
+      "minRequirementCount": 5
     }
   ],
   "gpaRequirements": [

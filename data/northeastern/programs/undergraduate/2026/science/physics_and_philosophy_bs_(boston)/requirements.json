@@ -268,13 +268,17 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Physics 2",
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Physics 1",
-        "Physics 2"
+        "Complete one of the following:"
       ]
     },
     {
@@ -381,7 +385,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -500,7 +507,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following courses not used to fulfill another requirement:"
+      ]
     },
     {
       "type": "SECTION",

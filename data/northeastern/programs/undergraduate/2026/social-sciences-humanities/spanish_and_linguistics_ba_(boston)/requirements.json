@@ -188,7 +188,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -236,7 +239,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -255,6 +261,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following options (courses used to satisfy this requirement will also typically satisfy another major requirement):",
         "International co-op in a Spanish-speaking country",
         "Study abroad in a Spanish-speaking country",
         "Dialogue of Civilizations in a Spanish-speaking country"
@@ -323,7 +330,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -380,6 +390,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete at least one of the following:",
         "With prior linguistics program approval, one of the following experiences can be used to fulfill the research experience:"
       ]
     },
@@ -408,6 +419,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete two 4-semester-hour electives that haven't already been taken to fulfill other major requirements from the following:",
+        "LING 3000–4999",
         "Students may repeat LING 4654 from the seminar requirement above if each iteration is a different seminar topic."
       ]
     },
@@ -439,6 +452,9 @@
               "subject": "SPNS",
               "classId": 3603
             }
+          ],
+          "notes": [
+            "Complete two of the following:"
           ]
         }
       ],

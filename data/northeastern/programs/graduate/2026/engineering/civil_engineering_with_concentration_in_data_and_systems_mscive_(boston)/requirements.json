@@ -176,7 +176,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -249,7 +252,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -352,7 +358,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least 8 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -488,7 +497,10 @@
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Any core course not used to meet the core course requirements can be used as an elective."
+      ]
     },
     {
       "type": "SECTION",

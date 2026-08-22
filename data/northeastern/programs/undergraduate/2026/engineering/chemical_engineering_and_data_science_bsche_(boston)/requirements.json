@@ -206,10 +206,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "3 semester hours from the following count toward the engineering requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "2 semester hours from the following count toward the engineering requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -328,7 +334,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following two options:"
+      ]
     },
     {
       "type": "SECTION",
@@ -450,7 +459,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "1 semester hour from the following counts toward the mathematics/science requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -498,10 +510,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "1 semester hour from the following counts toward the professional development requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following counts toward the professional development requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -554,7 +572,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "This course is already required above and also fulfills the integrative requirement."
+      ]
     }
   ],
   "gpaRequirements": [

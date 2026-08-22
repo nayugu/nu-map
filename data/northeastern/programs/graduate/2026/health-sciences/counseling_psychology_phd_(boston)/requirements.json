@@ -121,7 +121,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -191,7 +194,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 6 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -225,7 +231,10 @@
           "classId": 7798
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 3 semester hours. Prior to beginning internship consult with director, DCT, and/or the Doctoral Internship Seminar instructor."
+      ]
     },
     {
       "type": "SECTION",

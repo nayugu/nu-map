@@ -281,7 +281,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -307,7 +310,12 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:",
+        "BIOL 2327 to BIOL 3999",
+        "BIOL 4705 to BIOL 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -376,6 +384,9 @@
               "subject": "ENGW",
               "classId": 1102
             }
+          ],
+          "notes": [
+            "Writing"
           ]
         },
         {
@@ -396,8 +407,7 @@
       ],
       "minRequirementCount": 5,
       "notes": [
-        "Chemistry",
-        "Writing"
+        "Chemistry"
       ]
     },
     {
@@ -495,7 +505,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:",
+        "MATH 3001 to MATH 4899"
+      ]
     },
     {
       "type": "SECTION",
@@ -537,7 +551,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -620,7 +637,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     }
   ]
 }

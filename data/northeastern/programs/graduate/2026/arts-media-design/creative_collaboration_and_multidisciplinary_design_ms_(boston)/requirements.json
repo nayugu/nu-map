@@ -194,7 +194,14 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours of electives from one of the ranges below (or in consultation with your graduate advisor):",
+        "INAM 5300 to INAM 5349",
+        "INAM 5400 to INAM 5449",
+        "INAM 5500 to INAM 5549",
+        "INAM 6500 to INAM 6549"
+      ]
     }
   ]
 }

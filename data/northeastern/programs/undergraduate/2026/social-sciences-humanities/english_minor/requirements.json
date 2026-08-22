@@ -85,7 +85,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course in the following range:",
+        "ENGL 1001 to ENGL 1999"
+      ]
     },
     {
       "type": "SECTION",

@@ -124,7 +124,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -156,7 +159,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -204,7 +210,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -269,6 +278,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete 3 courses that have not been used to satisfy other requirements:",
         "Media and Screen Studies courses, from the range MSCR 1200 - MSCR 4999."
       ]
     },
@@ -377,7 +387,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 6 semester hours of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -462,7 +475,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 10 semester hours of the following sets:"
+      ]
     },
     {
       "type": "SECTION",

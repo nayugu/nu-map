@@ -122,13 +122,16 @@
               "subject": "GSND",
               "classId": 7995
             }
+          ],
+          "notes": [
+            "Thesis Conclusion",
+            "Complete an additional 4 Semester Hours from the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
-        "Students complete Games Project, then select either Thesis or a second completion of Games Project, in consultation with the program coordinator.",
-        "Thesis Conclusion"
+        "Students complete Games Project, then select either Thesis or a second completion of Games Project, in consultation with the program coordinator."
       ]
     },
     {
@@ -161,7 +164,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -193,7 +199,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

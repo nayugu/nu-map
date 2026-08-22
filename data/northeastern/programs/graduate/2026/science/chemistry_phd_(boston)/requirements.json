@@ -80,7 +80,10 @@
         {
           "type": "COURSE",
           "subject": "CHEM",
-          "classId": 5501
+          "classId": 5501,
+          "notes": [
+            "Complete the following (repeatable) course three times:"
+          ]
         }
       ],
       "minRequirementCount": 4

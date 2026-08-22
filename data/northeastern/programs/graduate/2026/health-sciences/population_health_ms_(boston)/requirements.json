@@ -152,7 +152,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete a minimum of 7 semester hours of additional courses from the following:"
+      ]
     }
   ],
   "gpaRequirements": [

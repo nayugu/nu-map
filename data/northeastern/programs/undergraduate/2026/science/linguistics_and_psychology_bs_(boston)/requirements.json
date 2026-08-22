@@ -130,7 +130,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -155,7 +158,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three courses not used to fulfill other degree requirements from the following:",
+        "LING 3000–LING 4999"
+      ]
     },
     {
       "type": "SECTION",
@@ -179,7 +186,10 @@
           "classId": 2320
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following course. Students who receive transfer credit for the Advanced Placement Statistics exam may complete the 1 semester hour PSYC 2315 course (requires department permission)."
+      ]
     },
     {
       "type": "SECTION",
@@ -233,7 +243,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the laboratory courses or, with prior approval, a directed study or honors project on a topic related to psycholinguistics or cognition:"
+      ]
     },
     {
       "type": "SECTION",
@@ -265,7 +278,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -345,7 +361,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "A directed study on a topic related to psycholinguistics or cognition may be taken with prior approval."
+        "A directed study on a topic related to psycholinguistics or cognition may be taken with prior approval.",
+        "Complete two of the following (not counted elsewhere):"
       ]
     },
     {
@@ -417,6 +434,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following options. Courses used to satisfy this requirement will also typically simultaneously satisfy a requirement above.",
         "Study Abroad (not a Dialogue)",
         "International Co-op"
       ]
@@ -520,7 +538,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

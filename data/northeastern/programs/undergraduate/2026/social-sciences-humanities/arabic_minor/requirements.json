@@ -90,7 +90,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Complete four language courses in sequence from the following list:"
+        "Complete four language courses in sequence from the following list:",
+        "For students with prior knowledge of Arabic, a placement test will determine the appropriate first course. Note: Students who place at or above ARAB 2102 must complete ARAB 3101 and take additional courses from the list of electives to fulfill the total credit requirements. For guidance on course selection, students should consult the Arabic academic coordinator."
       ]
     },
     {
@@ -144,7 +145,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one or more courses from the following list to reach a total of five courses in the minor."
+      ]
     }
   ],
   "gpaRequirements": [

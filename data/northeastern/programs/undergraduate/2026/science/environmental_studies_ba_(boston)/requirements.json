@@ -105,12 +105,18 @@
               "subject": "SOCL",
               "classId": 1246
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
           "type": "COURSE",
           "subject": "ENVR",
-          "classId": 1110
+          "classId": 1110,
+          "notes": [
+            "Scientific Foundations of Environmental Systems"
+          ]
         },
         {
           "type": "COURSE",
@@ -125,7 +131,10 @@
         {
           "type": "COURSE",
           "subject": "ENVR",
-          "classId": 2515
+          "classId": 2515,
+          "notes": [
+            "Human Dimensions of Environmental Systems"
+          ]
         },
         {
           "type": "OR",
@@ -150,9 +159,7 @@
       ],
       "minRequirementCount": 8,
       "notes": [
-        "Introductory Courses",
-        "Scientific Foundations of Environmental Systems",
-        "Human Dimensions of Environmental Systems"
+        "Introductory Courses"
       ]
     },
     {
@@ -227,7 +234,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -254,7 +264,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -387,6 +400,9 @@
                 "subject": "JRNL",
                 "classId": 3700
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -491,7 +507,10 @@
             ]
           }
         ],
-        "minRequirementCount": 7
+        "minRequirementCount": 7,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -635,7 +654,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -754,7 +776,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -784,6 +809,9 @@
                 "subject": "PPUA",
                 "classId": 5268
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -799,6 +827,9 @@
                 "subject": "ENVR",
                 "classId": 5220
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -888,7 +919,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -918,6 +952,9 @@
                 "subject": "ENVR",
                 "classId": 5220
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -938,6 +975,9 @@
                 "subject": "INNO",
                 "classId": 3520
               }
+            ],
+            "notes": [
+              "Complete one of the following:"
             ]
           },
           {
@@ -1037,7 +1077,10 @@
             ]
           }
         ],
-        "minRequirementCount": 5
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete four of the following:"
+        ]
       }
     ]
   }

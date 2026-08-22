@@ -144,7 +144,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -203,6 +206,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following. MATH 1231 is strongly recommended for this major:"
           ]
         }
       ],
@@ -342,15 +348,16 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Biology",
+            "Complete one of the following options:",
+            "Option 1",
+            "Option 2"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Biology",
-        "Option 1",
-        "Option 2"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -422,7 +429,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -460,7 +470,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following. MGSC 2301 or PHTH 2210 is the recommended statistics course for this combined major:"
+      ]
     },
     {
       "type": "SECTION",
@@ -571,6 +584,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following options:",
         "Complete one of the following:"
       ]
     },
@@ -649,7 +663,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -853,11 +870,15 @@
                 "subject": "INNO",
                 "classId": 4983
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
+          "Complete two electives, one of which may come from the Additional Electives list:",
           "Additional Electives",
           "One course from an approved Dialogue may count toward an elective."
         ]
@@ -1054,7 +1075,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1135,6 +1159,9 @@
                 "subject": "FINA",
                 "classId": 4335
               }
+            ],
+            "notes": [
+              "Choose one option below:"
             ]
           },
           {
@@ -1179,7 +1206,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1318,7 +1348,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1414,12 +1447,15 @@
                 "subject": "MKTG",
                 "classId": 2301
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
-          "Additional Electives",
+          "Complete two of the following, one of which may come from the additional elective list:",
           "One course from an approved Dialogue may count toward an elective."
         ]
       }

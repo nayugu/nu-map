@@ -131,7 +131,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two semesters from the following:"
+      ]
     },
     {
       "type": "SECTION",

@@ -138,7 +138,10 @@
           "classId": 2320
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Students who receive transfer credit for the Advanced Placement Statistics exam may complete the 1-semester-hour PSYC 2315 course (requires department permission); otherwise, complete the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -205,7 +208,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -262,7 +268,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -336,7 +345,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -500,7 +512,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following 4-semester-hour courses, or complete four 1-semester-hour ensembles and/or lessons from the list:"
+      ]
     },
     {
       "type": "SECTION",
@@ -612,7 +627,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -720,6 +738,9 @@
               "subject": "MATH",
               "classId": 1241
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],

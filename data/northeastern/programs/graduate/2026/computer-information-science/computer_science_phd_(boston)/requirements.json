@@ -885,7 +885,10 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Note: Consult faculty advisor for the other acceptable courses."
+        "Complete 24 semester hours in the following:",
+        "Note: Consult faculty advisor for the other acceptable courses.",
+        "CS 5100 to CS 5850, except CS 5340",
+        "CS 6110 to CS 6810"
       ]
     },
     {

@@ -101,7 +101,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -210,7 +213,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four courses in the following range:",
+        "MATH 3101 to MATH 4899"
+      ]
     },
     {
       "type": "SECTION",
@@ -294,13 +301,17 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Physics 2",
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Physics 1",
-        "Physics 2"
+        "Complete one of the following:"
       ]
     },
     {
@@ -328,7 +339,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

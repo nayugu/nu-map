@@ -111,7 +111,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -141,7 +144,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Complete 4 semester hours from the following (if completing 12 semester hours of Literary Period requirements)."
+        "Complete 4 semester hours from the following (if completing 12 semester hours of Literary Period requirements).",
+        "Complete 8 semester hours of the following (if completing 8 hours of Literary Period requirements)."
       ]
     },
     {
@@ -172,14 +176,44 @@
               "subject": "ENGL",
               "classId": 7352
             }
+          ],
+          "groups": [
+            {
+              "title": "Literature Pre-1700",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 7281
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 7282
+                }
+              ]
+            },
+            {
+              "title": "Literature 1700–1900",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 7284
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 7352
+                }
+              ]
+            }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Literature Pre-1700",
-        "Literature 1700–1900",
-        "Literature Post-1900"
+        "Complete 8 semester hours from TWO of the following Literary Periods (if completing 8 semester hours of Writing and Rhetoric requirements), or complete 12 semester hours from THREE of the following Literary Periods (if completing 4 semester hours of Writing and Rhetoric requirements):"
       ]
     },
     {

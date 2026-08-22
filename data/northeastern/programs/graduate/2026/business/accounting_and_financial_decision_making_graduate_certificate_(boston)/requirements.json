@@ -120,7 +120,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete one graduate-level course for which prerequisites have been met. Some courses may fulfill requirements of the MBA program."
+      ]
     }
   ],
   "gpaRequirements": [

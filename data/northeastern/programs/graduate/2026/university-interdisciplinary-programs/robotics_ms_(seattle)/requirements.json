@@ -62,7 +62,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -89,7 +92,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -111,7 +117,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -385,15 +394,21 @@
                 ],
                 "label": "Thesis Option"
               }
+            ],
+            "notes": [
+              "Complete one of the following options:",
+              "Coursework Option",
+              "Complete 16 semester hours of courses from the elective course list.",
+              "Project Option",
+              "Complete 12 semester hours of courses from the elective course list.",
+              "Thesis Option",
+              "Complete 8 semester hours of courses from the elective course list."
             ]
           }
         ],
         "minRequirementCount": 2,
         "notes": [
-          "Coursework Option",
-          "Complete 16 semester hours of courses from the elective course list.",
-          "Complete 12 semester hours of courses from the elective course list.",
-          "Complete 8 semester hours of courses from the elective course list."
+          "Complete one additional CS course not used to fulfill the core requirements:"
         ]
       },
       {
@@ -447,6 +462,16 @@
                 ],
                 "label": "Thesis Option"
               }
+            ],
+            "notes": [
+              "Complete one of the following options:",
+              "Coursework Option",
+              "Complete 16 semester hours of courses from the elective course list.",
+              "Project Option",
+              "Complete 12 semester hours of courses from the elective course list.",
+              "Thesis Option",
+              "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest.",
+              "Complete 8 semester hours of courses from the elective course list."
             ]
           },
           {
@@ -482,11 +507,7 @@
         ],
         "minRequirementCount": 4,
         "notes": [
-          "Coursework Option",
-          "Complete 16 semester hours of courses from the elective course list.",
-          "Complete 12 semester hours of courses from the elective course list.",
-          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest.",
-          "Complete 8 semester hours of courses from the elective course list.",
+          "Complete one additional EECE course not used to fulfill the core requirements:",
           "Complete the following (students in EECE and MIE concentrations must complete ENCP 6100 to qualify for co-op experience):"
         ]
       },
@@ -536,6 +557,16 @@
                 ],
                 "label": "Thesis Option"
               }
+            ],
+            "notes": [
+              "Complete one of the following options:",
+              "Coursework Option",
+              "Complete 16 semester hours of courses from the elective course list.",
+              "Project Option",
+              "Complete 12 semester hours of courses from the elective course list.",
+              "Thesis Option",
+              "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest.",
+              "Complete 8 semester hours of courses from the elective course list."
             ]
           },
           {
@@ -571,11 +602,7 @@
         ],
         "minRequirementCount": 4,
         "notes": [
-          "Coursework Option",
-          "Complete 16 semester hours of courses from the elective course list.",
-          "Complete 12 semester hours of courses from the elective course list.",
-          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest.",
-          "Complete 8 semester hours of courses from the elective course list.",
+          "Complete one additional ME course not used to fulfill the core requirements:",
           "Complete the following (students in EECE and MIE concentrations must complete ENCP 6100 to qualify for co-op experience):"
         ]
       }

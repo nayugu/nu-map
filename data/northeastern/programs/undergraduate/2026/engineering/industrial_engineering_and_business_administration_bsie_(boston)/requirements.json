@@ -229,6 +229,9 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "3 semester hours from the following count toward the engineering requirement:"
           ]
         },
         {
@@ -240,6 +243,9 @@
               "subject": "IE",
               "classId": 3412
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the engineering requirement:"
           ]
         },
         {
@@ -251,6 +257,9 @@
               "subject": "IE",
               "classId": 4512
             }
+          ],
+          "notes": [
+            "3 semester hours from the following course counts toward the engineering requirement:"
           ]
         },
         {
@@ -262,6 +271,9 @@
               "subject": "IE",
               "classId": 4515
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course counts toward the engineering requirement:"
           ]
         },
         {
@@ -273,10 +285,16 @@
               "subject": "IE",
               "classId": 4520
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course counts toward the engineering requirement:"
           ]
         }
       ],
-      "minRequirementCount": 6
+      "minRequirementCount": 6,
+      "notes": [
+        "2 semester hours from the folllowing count toward the engineering requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -360,7 +378,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -498,6 +519,9 @@
               "subject": "IE",
               "classId": 3412
             }
+          ],
+          "notes": [
+            "3 semester hours from the following course count toward the mathematics/science requirement:"
           ]
         },
         {
@@ -509,6 +533,9 @@
               "subject": "IE",
               "classId": 4512
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the mathematics/science requirement:"
           ]
         },
         {
@@ -520,6 +547,9 @@
               "subject": "IE",
               "classId": 4515
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the mathematics/science requirement:"
           ]
         },
         {
@@ -531,10 +561,16 @@
               "subject": "IE",
               "classId": 4520
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the mathematics/science requirement:"
           ]
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 5,
+      "notes": [
+        "1 semester hour from the following counts toward the mathematics/science requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -582,10 +618,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "1 semester hour from the following counts toward the professional development requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following counts toward the professional development requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -648,7 +690,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "This course is already required above and also fulfills the integrative requirement:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -729,7 +774,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -792,7 +840,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -883,6 +934,7 @@
         ],
         "minRequirementCount": 2,
         "notes": [
+          "Complete three electives, with at least 8 credits from MKTG courses:",
           "A maximum of one course may be applied to requirements of a second concentration."
         ]
       },
@@ -937,7 +989,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1053,11 +1108,15 @@
                 "subject": "STRT",
                 "classId": 4301
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
+          "Complete two electives, one of which may come from the additional electives list:",
           "Additional Electives",
           "One course from an approved Dialogue may count toward a concentration elective."
         ]
@@ -1181,11 +1240,15 @@
                 "subject": "INNO",
                 "classId": 4983
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
+          "Complete two electives, one of which may come from the Additional Electives list:",
           "Additional Electives",
           "One course from an approved Dialogue may count toward an elective."
         ]
@@ -1382,7 +1445,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1463,6 +1529,9 @@
                 "subject": "FINA",
                 "classId": 4335
               }
+            ],
+            "notes": [
+              "Choose one option below:"
             ]
           },
           {
@@ -1507,7 +1576,10 @@
             ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1625,7 +1697,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1751,7 +1826,8 @@
         ],
         "minRequirementCount": 2,
         "notes": [
-          "Note: Only one non-MGMT course may be used as an elective."
+          "Note: Only one non-MGMT course may be used as an elective.",
+          "Complete three of the following:"
         ]
       },
       {
@@ -1856,7 +1932,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1995,7 +2074,10 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete three of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -2073,7 +2155,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete one of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -2169,12 +2254,15 @@
                 "subject": "MKTG",
                 "classId": 2301
               }
+            ],
+            "notes": [
+              "Additional Electives"
             ]
           }
         ],
         "minRequirementCount": 3,
         "notes": [
-          "Additional Electives",
+          "Complete two of the following, one of which may come from the additional elective list:",
           "One course from an approved Dialogue may count toward an elective."
         ]
       },
@@ -2266,7 +2354,11 @@
             ]
           }
         ],
-        "minRequirementCount": 2
+        "minRequirementCount": 2,
+        "notes": [
+          "Choose two from the list below:",
+          "Complete two of the following:"
+        ]
       }
     ]
   }

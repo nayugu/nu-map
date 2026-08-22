@@ -84,7 +84,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following based on your area of focus:"
+      ]
     }
   ],
   "gpaRequirements": [

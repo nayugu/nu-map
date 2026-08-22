@@ -303,15 +303,16 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Biology",
+            "Complete one of the following options:",
+            "Option 1",
+            "Option 2"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Biology",
-        "Option 1",
-        "Option 2"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -542,18 +543,22 @@
               "subject": "PHTH",
               "classId": 5234
             }
+          ],
+          "notes": [
+            "Upper-Level Course",
+            "Complete 3-4 semester hours from the following:",
+            "Society and Behavior",
+            "Globalization and Global Health",
+            "Environmental Health and Climate Change",
+            "Law, Policy, and Human Rights",
+            "Healthcare Administration and Management"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Introductory Course",
-        "Upper-Level Course",
-        "Society and Behavior",
-        "Globalization and Global Health",
-        "Environmental Health and Climate Change",
-        "Law, Policy, and Human Rights",
-        "Healthcare Administration and Management"
+        "Complete 4 semester hours from the following:"
       ]
     },
     {
@@ -582,7 +587,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 1 semester hour from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -605,7 +613,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 1 semester hour from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -630,13 +641,14 @@
               "subject": "ENGW",
               "classId": 3314
             }
+          ],
+          "notes": [
+            "Advanced Writing in the Disciplines",
+            "Complete 4 semester hours from the following:"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Advanced Writing in the Disciplines"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -679,7 +691,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     }
   ],
   "footnotes": [
@@ -810,7 +825,10 @@
             ]
           }
         ],
-        "minRequirementCount": 4
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete four of the following:"
+        ]
       },
       {
         "type": "SECTION",
@@ -1007,7 +1025,10 @@
         ],
         "minRequirementCount": 4,
         "notes": [
-          "Complete 4 semester hours of ARTH courses."
+          "Complete 4 semester hours from the following:",
+          "Complete 12 semester hours from the following:",
+          "Complete 4 semester hours of ARTH courses.",
+          "As part of the design concentration, complete one of the following sets:"
         ]
       }
     ]

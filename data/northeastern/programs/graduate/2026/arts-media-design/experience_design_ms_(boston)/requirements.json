@@ -149,7 +149,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two elective courses (4 credits each), such as these, in consultation with your advisor; multiple completions of ARTG 5000 may apply toward the elective requirement; other electives may be chosen in consultation with the program coordinator):"
+      ]
     }
   ],
   "gpaRequirements": [

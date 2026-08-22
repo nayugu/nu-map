@@ -143,7 +143,10 @@
         {
           "type": "COURSE",
           "subject": "NRSG",
-          "classId": 9984
+          "classId": 9984,
+          "notes": [
+            "Complete the following (repeatable) course twice:"
+          ]
         }
       ],
       "minRequirementCount": 6

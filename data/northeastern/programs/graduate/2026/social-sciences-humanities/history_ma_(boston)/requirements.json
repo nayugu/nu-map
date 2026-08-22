@@ -83,7 +83,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Requires two consecutive semesters of Co-op Work Experience and Experiential Integration. Each of the following courses must be taken twice."
+      ]
     },
     {
       "type": "SECTION",
@@ -118,7 +121,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following course number range:",
+        "HIST 7301 to HIST 7325"
+      ]
     },
     {
       "type": "SECTION",
@@ -152,7 +159,13 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 20 semester hours from any of the following ranges:",
+        "HIST 6103 to HIST 6295",
+        "HIST 7205 to HIST 7218",
+        "HIST 7220 to HIST 7297"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -241,7 +254,16 @@
             ]
           }
         ],
-        "minRequirementCount": 6
+        "minRequirementCount": 6,
+        "notes": [
+          "Complete 4 semester hours from either of the following course number ranges:",
+          "HIST 6000 to HIST 6900",
+          "HIST 7301 to HIST 7325",
+          "Complete 12 semester hours from any of the following ranges:",
+          "HIST 6238 to HIST 6248",
+          "HIST 6295 to HIST 6966",
+          "HIST 7201 to HIST 7297"
+        ]
       }
     ]
   }

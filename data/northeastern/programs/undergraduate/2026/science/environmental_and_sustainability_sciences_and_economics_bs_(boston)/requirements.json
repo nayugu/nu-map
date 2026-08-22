@@ -213,7 +213,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following skills courses:"
+      ]
     },
     {
       "type": "SECTION",
@@ -408,15 +411,18 @@
               "subject": "SOCL",
               "classId": 2485
             }
+          ],
+          "notes": [
+            "Earth Oceans and Environmental Change",
+            "Conservation, Restoration, and Management",
+            "Sustainable Planning and Development",
+            "Environment and Society"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Earth Oceans and Environmental Change",
-        "Conservation, Restoration, and Management",
-        "Sustainable Planning and Development",
-        "Environment and Society"
+        "Complete four courses from these lists:"
       ]
     },
     {
@@ -523,13 +529,16 @@
               "subject": "MISM",
               "classId": 2510
             }
+          ],
+          "notes": [
+            "Computer Science",
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
-        "Calculus",
-        "Computer Science"
+        "Calculus"
       ]
     },
     {
@@ -578,7 +587,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two courses in the following ranges, with only one at the 1000 level. Unless otherwise noted in specific combined majors, required core economics courses cannot be counted as electives by students completing Department of Economics programs:",
+        "ECON 1200–ECON 1999",
+        "ECON 2990 – ECON 3559",
+        "ECON 3561 - ECON 4689",
+        "ECON 4900–ECON 4996",
+        "ECON 5200–ECON 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -632,7 +649,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following (courses used as electives may not overlap with courses used as integrative):"
+      ]
     },
     {
       "type": "SECTION",
@@ -659,7 +679,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following (courses used as electives may not overlap with courses used as integrative):"
+      ]
     },
     {
       "type": "SECTION",
@@ -696,7 +719,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

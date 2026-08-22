@@ -107,7 +107,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -139,7 +142,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -187,7 +193,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -252,6 +261,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete three courses that have not been used to satisfy other requirements:",
         "Any course from the MSCR 1200 to MSCR 4999 range"
       ]
     },
@@ -416,7 +426,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -564,7 +577,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -588,6 +604,9 @@
               "subject": "THTR",
               "classId": 4702
             }
+          ],
+          "notes": [
+            "Choose one of the following courses:"
           ]
         }
       ],

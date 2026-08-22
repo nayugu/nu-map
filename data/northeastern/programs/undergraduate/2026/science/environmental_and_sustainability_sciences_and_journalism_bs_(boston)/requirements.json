@@ -189,6 +189,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -387,15 +390,18 @@
               "subject": "SOCL",
               "classId": 2485
             }
+          ],
+          "notes": [
+            "Earth Oceans and Environmental Change",
+            "Conservation, Restoration, and Management",
+            "Sustainable Planning and Development",
+            "Environment and Society"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Earth Oceans and Environmental Change",
-        "Conservation, Restoration, and Management",
-        "Sustainable Planning and Development",
-        "Environment and Society"
+        "Complete four courses from the following lists:"
       ]
     },
     {
@@ -460,7 +466,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -482,7 +491,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

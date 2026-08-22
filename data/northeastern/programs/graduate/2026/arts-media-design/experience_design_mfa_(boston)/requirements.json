@@ -181,7 +181,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 16 semester hours of elective courses, such as these, in consultation with your advisor (multiple completions of ARTG 5000 may apply toward the elective requirement):"
+      ]
     }
   ],
   "gpaRequirements": [

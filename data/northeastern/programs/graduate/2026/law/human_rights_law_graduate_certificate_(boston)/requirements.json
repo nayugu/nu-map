@@ -94,10 +94,16 @@
               "subject": "LAW",
               "classId": 7697
             }
+          ],
+          "notes": [
+            "In addition, complete one of the following:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -162,6 +168,7 @@
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete two of the following:",
         "Another 2-4 semester hour human rights law-related course from subject codes other than LAW, LW, or LS, with pre-approval of the certificate advisor."
       ]
     }

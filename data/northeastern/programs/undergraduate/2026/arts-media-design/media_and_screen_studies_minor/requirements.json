@@ -87,7 +87,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three courses in the following range:",
+        "MSCR 2000 to MSCR 4999"
+      ]
     }
   ],
   "gpaRequirements": [

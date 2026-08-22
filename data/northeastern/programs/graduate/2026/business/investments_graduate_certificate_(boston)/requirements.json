@@ -135,7 +135,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete 9 graduate-level semester hours from the following for which prerequisites have been met. Some courses may also apply to requirements of the MBA program."
+      ]
     }
   ],
   "gpaRequirements": [

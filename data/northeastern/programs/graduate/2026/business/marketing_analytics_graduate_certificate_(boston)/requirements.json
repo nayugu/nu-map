@@ -90,7 +90,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete 6 graduate-level semester hours from the following for which prerequisites have been met:"
+      ]
     }
   ],
   "gpaRequirements": [

@@ -146,7 +146,8 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "If preapproved to specialize in nanomedicine or network science, consult program director."
+        "If preapproved to specialize in nanomedicine or network science, consult program director.",
+        "Complete 8 semester hours from the following:"
       ]
     },
     {
@@ -175,7 +176,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",

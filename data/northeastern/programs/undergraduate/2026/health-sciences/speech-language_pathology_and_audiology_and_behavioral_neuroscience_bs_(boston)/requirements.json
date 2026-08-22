@@ -399,6 +399,10 @@
               "subject": "PSYC",
               "classId": 4570
             }
+          ],
+          "notes": [
+            "Behavioral Neuroscience Electives",
+            "Complete two of the following:"
           ]
         },
         {
@@ -426,14 +430,20 @@
               "idRangeEnd": 9999,
               "exceptions": []
             }
+          ],
+          "notes": [
+            "Upper-Level Elective",
+            "Complete one course not otherwise used to fulfill the above requirements:",
+            "BIOL 3405 or higher",
+            "BNSC 4970 or higher",
+            "PSYC 3404 or higher"
           ]
         }
       ],
       "minRequirementCount": 3,
       "notes": [
         "Psychology Elective",
-        "Behavioral Neuroscience Electives",
-        "Upper-Level Elective"
+        "Complete one of the following:"
       ]
     },
     {

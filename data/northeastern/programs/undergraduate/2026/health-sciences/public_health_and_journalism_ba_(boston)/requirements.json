@@ -200,15 +200,16 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Biology",
+            "Complete one of the following options:",
+            "Option 1",
+            "Option 2"
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "notes": [
-        "Biology",
-        "Option 1",
-        "Option 2"
-      ]
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -452,13 +453,17 @@
               "subject": "SOCL",
               "classId": 4520
             }
+          ],
+          "notes": [
+            "Upper Level",
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Introductory",
-        "Upper Level"
+        "Complete one of the following:"
       ]
     },
     {
@@ -528,7 +533,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -550,7 +558,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -626,7 +637,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -745,7 +759,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Choose one of the following:"
+      ]
     }
   ],
   "footnotes": [

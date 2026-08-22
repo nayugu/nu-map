@@ -177,7 +177,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 16 semester hours in the following range.",
+        "CRIM 6000 to CRIM 7999",
+        "INSH 6000 to INSH 7999",
+        "POLS 6000 to POLS 7999",
+        "PPUA 6000 to PPUA 7999",
+        "SOCL 6000 to SOCL 7999"
+      ]
     },
     {
       "type": "SECTION",

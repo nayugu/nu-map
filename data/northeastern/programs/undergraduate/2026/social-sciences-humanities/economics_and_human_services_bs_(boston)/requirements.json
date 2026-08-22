@@ -200,7 +200,15 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three economics elective courses found in the following ranges, with no more than one at the 1000 level. Unless otherwise noted in specific combined majors, required core economics courses cannot be counted as electives by students completing Department of Economics programs:",
+        "ECON 1200–ECON 1999",
+        "ECON 2990 – ECON 3559",
+        "ECON 3561 - ECON 4689",
+        "ECON 4900–ECON 4996",
+        "ECON 5200–ECON 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -264,7 +272,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -316,7 +327,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following. It is highly recommended that students who take MATH 1231 take sections devoted to ECON students only:"
+      ]
     },
     {
       "type": "SECTION",
@@ -348,7 +362,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -415,7 +432,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

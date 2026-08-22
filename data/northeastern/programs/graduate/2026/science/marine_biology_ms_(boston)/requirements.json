@@ -177,7 +177,10 @@
           "classId": 7674
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Take the following (repeatable) course twice:"
+      ]
     },
     {
       "type": "SECTION",

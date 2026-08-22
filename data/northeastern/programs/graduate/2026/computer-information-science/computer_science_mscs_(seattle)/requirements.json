@@ -725,7 +725,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours from the breadth area courses and/or the following:"
+      ]
     }
   ],
   "gpaRequirements": [

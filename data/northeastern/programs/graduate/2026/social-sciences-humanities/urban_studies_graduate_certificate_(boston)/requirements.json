@@ -118,7 +118,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -138,7 +141,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours in the following range (selected by advisement):",
+        "PPUA 5000 to PPUA 7999"
+      ]
     }
   ],
   "gpaRequirements": [

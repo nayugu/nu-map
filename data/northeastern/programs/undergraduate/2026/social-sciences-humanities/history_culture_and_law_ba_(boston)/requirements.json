@@ -175,7 +175,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following not used to fulfill the previous requirement. Note that POLS prerequisites are waived for the 3000- and 4000-level POLS classes for students in this major:"
+      ]
     },
     {
       "type": "SECTION",
@@ -325,7 +328,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following courses (including courses cross-listed) not already used to fulfill one of the requirements above. Courses not used above to fulfill a requirement may also be used to fulfill this elective requirement. However, only one course used to fulfill this requirement may be at the 1000 level:"
+      ]
     },
     {
       "type": "SECTION",
@@ -362,7 +368,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     }
   ],
   "gpaRequirements": [
@@ -401,6 +410,9 @@
                 "subject": "SOCL",
                 "classId": 4520
               }
+            ],
+            "notes": [
+              "Complete one of the following as a writing-intensive course:"
             ]
           }
         ],
@@ -448,6 +460,9 @@
                 "subject": "PHIL",
                 "classId": 2395
               }
+            ],
+            "notes": [
+              "Complete one of the following as a writing-intensive course:"
             ]
           },
           {
@@ -534,6 +549,9 @@
                 "subject": "PHIL",
                 "classId": 1290
               }
+            ],
+            "notes": [
+              "Complete two of the following. If HIST 2308 or PHIL 2395 is the writing-intensive course, at least one of these electives must be at the 3000 level or above:"
             ]
           }
         ],
@@ -663,6 +681,9 @@
                 "subject": "SPNS",
                 "classId": 3715
               }
+            ],
+            "notes": [
+              "Complete three of the following, at least one of which must be at the 3000 level or above:"
             ]
           }
         ],
@@ -727,6 +748,9 @@
                 "subject": "SOCL",
                 "classId": 4528
               }
+            ],
+            "notes": [
+              "Complete three of the following not previously taken, at least one of which must be at the 3000 level or above:"
             ]
           }
         ],
@@ -806,6 +830,9 @@
                 "subject": "WMNS",
                 "classId": 3392
               }
+            ],
+            "notes": [
+              "Complete three of the following:"
             ]
           }
         ],
@@ -824,7 +851,10 @@
           {
             "type": "COURSE",
             "subject": "ANTH",
-            "classId": 4500
+            "classId": 4500,
+            "notes": [
+              "Complete the following as the writing-intensive course:"
+            ]
           },
           {
             "type": "XOM",
@@ -850,13 +880,13 @@
                 "subject": "SPNS",
                 "classId": 3715
               }
+            ],
+            "notes": [
+              "Complete two of the following:"
             ]
           }
         ],
-        "minRequirementCount": 3,
-        "notes": [
-          "Complete the following as the writing-intensive course:"
-        ]
+        "minRequirementCount": 3
       }
     ]
   }

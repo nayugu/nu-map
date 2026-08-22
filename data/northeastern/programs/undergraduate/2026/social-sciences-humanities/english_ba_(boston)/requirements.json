@@ -229,13 +229,17 @@
               "subject": "ENGL",
               "classId": 3161
             }
+          ],
+          "notes": [
+            "Post-1850",
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Pre-1850",
-        "Post-1850"
+        "Complete two of the following:"
       ]
     },
     {
@@ -368,7 +372,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -453,7 +460,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -594,7 +604,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following, which can also count toward another requirement in the major:"
+      ]
     },
     {
       "type": "SECTION",
@@ -637,7 +650,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete any two ENGL courses, except for First-Year Writing and Advanced Writing in the Disciplines, that have not already been used to fulfill another requirement. The following may also be used as electives:"
+      ]
     },
     {
       "type": "SECTION",

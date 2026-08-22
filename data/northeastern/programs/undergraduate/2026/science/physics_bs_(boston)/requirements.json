@@ -203,13 +203,17 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Physics 2",
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Physics 1",
-        "Physics 2"
+        "Complete one of the following:"
       ]
     },
     {
@@ -298,7 +302,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:",
+        "PHYS 3500 to PHYS 7999"
+      ]
     },
     {
       "type": "SECTION",
@@ -552,7 +560,21 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following:",
+        "BIOL 2301 to BIOL 5999",
+        "CHEM 2311 to CHEM 5999",
+        "CHME 2001 to CHME 4699",
+        "CIVE 2001 to CIVE 4699",
+        "CS 2990 to CS 4900",
+        "EECE 2001 to EECE 5999",
+        "ENVR 2300 to ENVR 5999",
+        "IE 2001 to IE 4699",
+        "MATH 2321 to MATH 5999",
+        "ME 2001 to ME 4699",
+        "PHYS 2303 to PHYS 7999"
+      ]
     }
   ],
   "concentrations": {
@@ -570,7 +592,10 @@
           {
             "type": "COURSE",
             "subject": "PHYS",
-            "classId": 3111
+            "classId": 3111,
+            "notes": [
+              "The following courses may be counted toward major electives, if they are listed as applicable options in the approved curriculum:"
+            ]
           },
           {
             "type": "COURSE",
@@ -593,10 +618,7 @@
             ]
           }
         ],
-        "minRequirementCount": 4,
-        "notes": [
-          "The following courses may be counted toward major electives, if they are listed as applicable options in the approved curriculum:"
-        ]
+        "minRequirementCount": 4
       }
     ]
   }

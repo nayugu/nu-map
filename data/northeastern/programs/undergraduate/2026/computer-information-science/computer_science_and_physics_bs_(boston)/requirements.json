@@ -278,13 +278,16 @@
               "subject": "PHYS",
               "classId": 1167
             }
+          ],
+          "notes": [
+            "Physics 2"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Physics 1",
-        "Physics 2"
+        "Complete one of the following:"
       ]
     },
     {
@@ -405,7 +408,11 @@
       ],
       "minRequirementCount": 1,
       "notes": [
-        "With advisor approval, a directed study, research, project study, or appropriate graduate-level course may also be taken as a computer science elective."
+        "With advisor approval, a directed study, research, project study, or appropriate graduate-level course may also be taken as a computer science elective.",
+        "Complete 4 semester hours from within the following options:",
+        "CS 2500 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
       ]
     },
     {
@@ -426,7 +433,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course in the following range:",
+        "PHYS 3000 to PHYS 5999"
+      ]
     },
     {
       "type": "SECTION",
@@ -537,7 +548,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",

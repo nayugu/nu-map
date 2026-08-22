@@ -60,7 +60,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 36 semester hours in the following range:",
+        "PHMD 6440 to PHMD 6474"
+      ]
     }
   ],
   "gpaRequirements": [

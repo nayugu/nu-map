@@ -155,7 +155,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following. At least one must be at 2000-level or higher:"
+      ]
     }
   ],
   "gpaRequirements": [

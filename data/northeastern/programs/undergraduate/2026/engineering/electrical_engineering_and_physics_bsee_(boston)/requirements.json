@@ -230,6 +230,7 @@
       "minRequirementCount": 3,
       "notes": [
         "If more than one computer engineering fundamentals course is taken, it can count as a technical elective.",
+        "Complete one of the following:",
         "If taking EECE 4791 in First Half Summer, EECE 4792 must be taken in Spring. If taking EECE 4791 in Summer EECE 4792 must be taken in Fall.",
         "If taking EECE 4791 in First Half Summer, EECE 4792 must be taken in Spring. If taking EECE 4791 in Second Half Summer EECE 4792 must be taken in Fall."
       ]
@@ -307,7 +308,12 @@
       "notes": [
         "Students can register for EECE 4991/EECE 4992 more than once. For these courses combined, a maximum of 8 semester hours will be allowed to satisfy the requirement of technical electives. An additional 4 semester hours will be allowed as a general elective. At most, one of these courses (4 semester hours) can be taken in a semester.",
         "Though students may register for EECE 2750 more than once, only 4 semester hours will be allowed to satisfy the requirements of technical electives. An additional 4 semester hours will be allowed as a general elective.",
-        "EECE 2310 is not an approved course option for ECE majors to select for a Technical Elective. Only for Khoury students."
+        "EECE 2310 is not an approved course option for ECE majors to select for a Technical Elective. Only for Khoury students.",
+        "Complete two of the following:",
+        "EECE 2540 to EECE 2750",
+        "EECE 3324 to EECE 3410",
+        "EECE 4512 to EECE 4698",
+        "EECE 5115 to EECE 5699"
       ]
     },
     {
@@ -334,6 +340,9 @@
               "subject": "GE",
               "classId": 1501
             }
+          ],
+          "notes": [
+            "2 semester hours from the following course count toward the engineering requirement:"
           ]
         },
         {
@@ -345,10 +354,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "3 semester hours from the following course count toward the engineering requirement:"
           ]
         }
       ],
-      "minRequirementCount": 3
+      "minRequirementCount": 3,
+      "notes": [
+        "2 semester hours from the following course count toward the engineering requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -432,6 +447,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
@@ -477,6 +495,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         },
         {
@@ -529,7 +550,11 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:",
+        "PHYS 3600 to PHYS 7999"
+      ]
     },
     {
       "type": "SECTION",
@@ -555,10 +580,16 @@
               "subject": "GE",
               "classId": 1501
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the mathematics/science requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "2 semester hours from the following course count toward the mathematics/science requirement:"
+      ]
     },
     {
       "type": "SECTION",
@@ -606,10 +637,16 @@
               "subject": "GE",
               "classId": 1502
             }
+          ],
+          "notes": [
+            "1 semester hour from the following course counts toward the professional development requirement:"
           ]
         }
       ],
-      "minRequirementCount": 2
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following course counts toward the professional development requirement:"
+      ]
     },
     {
       "type": "SECTION",

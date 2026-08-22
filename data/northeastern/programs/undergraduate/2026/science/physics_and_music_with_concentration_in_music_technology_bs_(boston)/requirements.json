@@ -202,13 +202,16 @@
               "subject": "PHYS",
               "classId": 1167
             }
+          ],
+          "notes": [
+            "Physics 2"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
         "Physics 1",
-        "Physics 2"
+        "Complete one of the following:"
       ]
     },
     {
@@ -359,6 +362,9 @@
               "subject": "MUST",
               "classId": 2102
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
@@ -391,6 +397,9 @@
                 }
               ]
             }
+          ],
+          "notes": [
+            "Contemporary/Popular Music"
           ]
         },
         {
@@ -471,12 +480,15 @@
               "subject": "MUSI",
               "classId": 3401
             }
+          ],
+          "notes": [
+            "Complete one of the following:"
           ]
         }
       ],
       "minRequirementCount": 2,
       "notes": [
-        "Contemporary/Popular Music"
+        "Complete one of the following:"
       ]
     },
     {
@@ -557,7 +569,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
     },
     {
       "type": "SECTION",

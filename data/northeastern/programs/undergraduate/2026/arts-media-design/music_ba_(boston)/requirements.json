@@ -145,6 +145,9 @@
               "subject": "MUSC",
               "classId": 3541
             }
+          ],
+          "notes": [
+            "Complete two of the following:"
           ]
         }
       ],
@@ -184,7 +187,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Select from the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -231,7 +237,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -323,7 +332,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -425,7 +437,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
@@ -574,11 +589,15 @@
               "subject": "MUSC",
               "classId": 1922
             }
+          ],
+          "notes": [
+            "Ensembles and Lessons"
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
+        "Complete one of the following 4-semester-hour courses or complete four 1-semester-hour ensembles and/or lessons from the list below:",
         "Ensembles and Lessons"
       ]
     },
@@ -607,7 +626,10 @@
           ]
         }
       ],
-      "minRequirementCount": 1
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
     },
     {
       "type": "SECTION",
