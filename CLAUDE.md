@@ -256,6 +256,28 @@ Facts that follow from this:
   how much. Measured on the sampled sweep: refusals 33 → 22, `mostly-unlabelled`
   13 → 3, terms with 3+ general electives 3.4% → 1.7%, and one course moved
   (a plan-of-study witness lost its anonymous slot in PharmD).
+- **A pick-N block takes the registrar's credit, never `N × 4`.** A "Complete N
+  of the following" block is emitted as a credit threshold, and `N × 4` is an
+  assumption about course size, not a reading. Applied AI MPS states "Complete
+  two of the following **[6]**" over 3 SH graduate courses, so 2 × 4 = 8 demanded
+  a third course: the student who took exactly the two named read as UNSATISFIED
+  and the phantom 2 SH inflated `structuralSH`. The instruction row's own
+  hourscol wins when the sentence states no figure of its own (an explicit
+  "12 semester hours" still beats the cell), and `N × 4` remains the fallback for
+  the pages that state nothing. Measured over 657 count blocks that state a
+  figure: 597 agree, 57 lower, **3 higher** — both directions were real, so this
+  was never safety-side rounding.
+  - **A CONDITIONAL count is excluded**, and that came from attacking the change,
+    not from reasoning: an A/B of both parsers in ONE process over the whole cache
+    moved 59 thresholds and exactly one became satisfiable by a single course
+    where two were needed — International Business § Electives, "Complete two of
+    the following courses (**one if both courses above selected**). [4]". The 4 is
+    right for the one-course branch, so neither figure is the block total. Keeping
+    `N × 4` over-requires in one branch (recoverable); trusting the 4
+    under-requires in the other (not). 58 plain against 2 conditional, so the
+    guard costs the fix nothing.
+  - A range cell (`9-12`, `9–12`) reads as its **minimum**, and an unparseable
+    cell falls back rather than becoming a 0 threshold satisfied by nothing.
 - **The free-elective allowance is the RESIDUAL, in one place.** It was computed
   three ways: the panel used `generalElectiveSH ?? 0`, so the 976 of 1,071
   programs that state no figure showed a General Electives section requiring
@@ -292,6 +314,22 @@ Facts that follow from this:
   one** — there the subheaders are thematic categories, and reading a run as a
   conjunction demanded all ~25 courses of a theme in 4 programs, which
   `check-major-integrity` caught as newly over-consuming pools.
+  Those categories are not discarded: the count-above-one case fills
+  **`XOM.groups`** (`[{title, courses}]`), which `XomGroupHeader` already
+  renders above each category's own courses, so the tree is untouched and only
+  the display gains. Public Health BA (Oakland) printed its five area names as a
+  flat list of notes at the top of the section; they now head their own
+  28/8/9/16/8 courses. 106 pools, 397 headings. Two rules here:
+  - **The PARSED shape is `{title, courses}`; the ALLOCATED shape is
+    `{title, children}`.** `allocateNode` reads `g.courses.length` to re-slice
+    the allocated children, so emitting `children` from the parser threw on 40
+    pages and the scrape rails refused the whole run. Verifying against the
+    renderer proves nothing about the producer — check both ends.
+  - Headings are emitted only when the boundaries **partition** the pool; a
+    course outside every category would otherwise be invisible inside a pool it
+    belongs to. When they do not partition, the titles come back as notes on the
+    pool, keyed on the node actually pushed (only the pool shapes carry
+    `groups`, so keying on "did buildGroups succeed" dropped 39 sentences).
   Left alone on purpose: an instruction BEFORE the first subheader whose options
   are flush (Elementary Education MAT), because the run holding the last
   alternative also holds two genuinely required courses and nothing separates
