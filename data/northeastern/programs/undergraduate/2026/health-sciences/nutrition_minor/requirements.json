@@ -80,7 +80,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 8,
+          "numCreditsMin": 7,
           "courses": [
             {
               "type": "OR",

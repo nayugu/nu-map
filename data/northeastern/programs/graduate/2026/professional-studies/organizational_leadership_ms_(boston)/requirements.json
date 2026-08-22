@@ -214,7 +214,7 @@
           },
           {
             "type": "XOM",
-            "numCreditsMin": 12,
+            "numCreditsMin": 9,
             "courses": [
               {
                 "type": "COURSE",
@@ -289,7 +289,7 @@
           },
           {
             "type": "XOM",
-            "numCreditsMin": 12,
+            "numCreditsMin": 9,
             "courses": [
               {
                 "type": "COURSE",

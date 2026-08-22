@@ -65,7 +65,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 8,
+          "numCreditsMin": 6,
           "courses": [
             {
               "type": "COURSE",
@@ -126,7 +126,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 8,
+          "numCreditsMin": 6,
           "courses": [
             {
               "type": "COURSE",
@@ -192,7 +192,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 8,
+          "numCreditsMin": 6,
           "courses": [
             {
               "type": "COURSE",
@@ -291,7 +291,7 @@
       "requirements": [
         {
           "type": "XOM",
-          "numCreditsMin": 8,
+          "numCreditsMin": 6,
           "courses": [
             {
               "type": "COURSE",

@@ -407,7 +407,7 @@
           },
           {
             "type": "XOM",
-            "numCreditsMin": 12,
+            "numCreditsMin": 16,
             "courses": [
               {
                 "type": "COURSE",
