@@ -309,6 +309,44 @@ function XomGroupHeader({ title, style }) {
   return <span style={style}>{scaleLatinRuns(text)}</span>;
 }
 
+// ── Remembering which catalog quotes you closed ─────────────────────────────
+//
+// Scoped to this one feature: a plain unprefixed localStorage key, like
+// `wide-catalog`, holding ONLY the blocks the reader has explicitly toggled.
+// Anything absent falls back to the per-device default, so the store stays as
+// small as the number of deliberate choices made.
+//
+// A quote block has no id, so its identity is its TEXT. That is the one
+// property that survives what this data does: the corpus is re-scraped monthly,
+// so a title or an index is not stable, while the sentence is. And when the
+// registrar DOES reword something, the key changes and the block returns to its
+// default — which is right, because it is text this reader has never seen.
+const QUOTE_PREFS_KEY = "catalog-quote-open";
+
+let quotePrefs = (() => {
+  try {
+    const v = JSON.parse(localStorage.getItem(QUOTE_PREFS_KEY) ?? "{}");
+    return v && typeof v === "object" && !Array.isArray(v) ? v : {};
+  } catch { return {}; }   // private mode, quota, or junk someone hand-edited
+})();
+
+function setQuotePref(id, open) {
+  quotePrefs = { ...quotePrefs, [id]: open };
+  try { localStorage.setItem(QUOTE_PREFS_KEY, JSON.stringify(quotePrefs)); } catch {}
+}
+
+/**
+ * djb2 over the joined sentences. A collision only means two blocks share one
+ * remembered state, which is why a cheap hash is enough here — nothing is
+ * decided by this value, and the cost of being wrong is one extra click.
+ */
+function quoteId(notes) {
+  const s = notes.join(" ");
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(36);
+}
+
 /**
  * The catalog's own sentences, quoted.
  *
@@ -340,8 +378,29 @@ function CatalogNotes({ notes, ph, indent = 4, soleContent = false }) {
   // the only description that exists — the invisibility this feature was built
   // to end. Everywhere else the tree already tells the story, and that is what
   // makes collapsing safe.
-  const [open, setOpen] = useState(!ph || soleContent);
+  //
+  // A choice the reader has actually made outranks both, the same way
+  // `collapse-other-credits` treats its own stored value: a default is what
+  // applies until someone says otherwise.
+  const id = useMemo(() => quoteId(notes ?? []), [notes]);
+  const [open, setOpen] = useState(() => {
+    const stored = quotePrefs[id];
+    // Only a boolean counts as a choice. `??` rather than `||` is load-bearing —
+    // a stored `false` IS a choice ("I closed this"), and `||` would read it as
+    // unset and reopen the block every session, which is the whole bug. The
+    // typeof narrows it further so a hand-edited value cannot become state.
+    return typeof stored === "boolean" ? stored : (!ph || soleContent);
+  });
   if (!notes?.length) return null;
+
+  const toggle = (e) => {
+    e.stopPropagation();
+    // Read `open` from this render rather than from the updater: writing to
+    // storage inside a setState callback would run twice under StrictMode.
+    const next = !open;
+    setOpen(next);
+    setQuotePref(id, next);
+  };
 
   return (
     // Air above, so the quote is not crowded against the row it follows — a
@@ -355,10 +414,10 @@ function CatalogNotes({ notes, ph, indent = 4, soleContent = false }) {
     <div style={{ marginTop: ph ? 5 : 8, marginBottom: ph ? 3 : 5,
                   paddingLeft: indent, borderLeft: "2px solid var(--border-2)" }}>
       <div
-        // stopPropagation because this block sits inside SectionBlock and inside
-        // ReqNode, both of which toggle on click — without it, opening the quote
-        // would also collapse the section that contains it.
-        onClick={(e) => { e.stopPropagation(); setOpen(v => !v); }}
+        // `toggle` stops propagation: this block sits inside SectionBlock and
+        // inside ReqNode, both of which toggle on click, so without it opening
+        // the quote would also collapse the section that contains it.
+        onClick={toggle}
         style={{ display: "flex", alignItems: "center", gap: 3,
                  cursor: "pointer", userSelect: "none",
                  // A slightly taller row on the phone, because the label is 7px
