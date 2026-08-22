@@ -78,7 +78,7 @@ async function build(origin) {
     return resolveInMap(registry, compact, parseMajorPathParts);
   }
 
-  return createPlannerQuery({
+  const query = createPlannerQuery({
     catalog,
     programs: { programs, programData, resolveProgramId },
     calendar, attributeSystem, specialTerms, creditSystem, offeringStats, courseUrl,
@@ -87,12 +87,63 @@ async function build(origin) {
       { id: "nubanner", label: "nubanner.neu.edu",         url: "https://nubanner.neu.edu/StudentRegistrationSsb",       usedFor: "term availability, enrollment, and meeting-pattern history" },
     ],
   });
+
+  // Attached here rather than inside createPlannerQuery because it answers a
+  // question about THIS load — what actually arrived over the eight
+  // subrequests above — not about the planner. `termDetails` is counted
+  // separately from courses because it is the largest single asset (8.3 MB)
+  // and the most likely of the eight to have been the one that failed: a
+  // fetchJson miss returns null and is swallowed by `?? {}`, so without this
+  // the worker would answer questions about offerings with silent blanks.
+  query.healthCounts = () => ({
+    courses: courses.length,
+    programs: programs.length,
+    termDetails: Object.keys(catalog.termDetails).length,
+  });
+
+  return query;
 }
 
 let _queryPromise = null;
 
+// When this isolate first built its adapter, and how long that took. Both are
+// module-global, so they answer "was this request served by a cold isolate"
+// without the caller having to infer it from a stopwatch.
+//
+// That inference was the only tool available before, and it is unreliable in
+// the direction that matters: measured against production on 2026-08-22, ten
+// sequential /health calls split 6 warm / 4 cold, and a second run minutes
+// later split 11 warm / 1 cold. Same worker, same code — the cold ratio is a
+// property of how much traffic has recently arrived, and the burst this
+// project is being prepared for is precisely the moment when many isolates
+// start at once and each independently re-pulls the whole dataset.
+let _builtAt = null;
+let _buildMs = null;
+
 /** Isolate-cached planner query adapter. */
 export function getQuery(env) {
-  _queryPromise ??= build(env.DATA_ORIGIN ?? "https://numap.app");
+  if (!_queryPromise) {
+    const t0 = Date.now();
+    _queryPromise = build(env.DATA_ORIGIN ?? "https://numap.app");
+    _queryPromise.then(
+      () => { _builtAt = Date.now(); _buildMs = Date.now() - t0; },
+      // A failed build must not be cached: the next request would inherit a
+      // rejected promise forever and this isolate would be permanently dead
+      // while reporting nothing unusual.
+      (err) => { _queryPromise = null; throw err; },
+    ).catch(() => {});
+  }
   return _queryPromise;
+}
+
+/**
+ * What this isolate knows about its own startup — for /health, so a probe can
+ * read the cold/warm split as a fact rather than guess it from latency.
+ */
+export function isolateStats() {
+  return {
+    builtAt: _builtAt ? new Date(_builtAt).toISOString() : null,
+    buildMs: _buildMs,
+    ageMs: _builtAt ? Date.now() - _builtAt : null,
+  };
 }

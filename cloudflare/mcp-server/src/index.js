@@ -28,7 +28,7 @@
 //   POST /share · POST /claim/:code
 
 import { OAuthProvider } from "@cloudflare/workers-oauth-provider";
-import { getQuery } from "./loadData.js";
+import { getQuery, isolateStats } from "./loadData.js";
 export { SessionDO } from "./sessionDO.js";
 export { ShareBoxDO } from "./shareBoxDO.js";
 
@@ -163,12 +163,37 @@ const defaultHandler = {
       return env.SHAREBOX.get(env.SHAREBOX.idFromName("global")).fetch(request);
     }
 
+    // Deep health check. `ok: true` used to mean only "the build did not
+    // throw", which is a weaker statement than it looks: a scrape that half
+    // failed, or a DATA_ORIGIN serving the SPA shell instead of JSON, both
+    // produce a catalog that parses fine and is mostly empty. This endpoint is
+    // what a monitor polls, so it has to be able to say "up but wrong".
+    //
+    // The floors below are deliberately far under the real figures (7,966
+    // courses and 1,071 programs as of 2026-08-22). They are not accuracy
+    // checks — verify-chart and the scrape rails do that job properly — they
+    // are a tripwire for the order-of-magnitude failure, which is the one a
+    // liveness probe can actually catch.
     if (pathname === "/health") {
       try {
         const query = await getQuery(env);
-        return json({ ok: true, oauth: true, meta: query.meta });
+        const counts = query.healthCounts?.() ?? null;
+        const floors = { courses: 5000, programs: 500 };
+        const degraded = counts
+          ? Object.entries(floors).filter(([k, min]) => (counts[k] ?? 0) < min).map(([k]) => k)
+          : [];
+        return json({
+          ok: degraded.length === 0,
+          oauth: true,
+          meta: query.meta,
+          counts,
+          degraded: degraded.length ? degraded : undefined,
+          isolate: isolateStats(),
+        }, degraded.length ? 503 : 200);
       } catch (err) {
-        return json({ ok: false, error: err.message }, 500);
+        // The message is the operator's, not a user's — this endpoint is not
+        // reachable from a plan and carries no personal data.
+        return json({ ok: false, error: err.message, isolate: isolateStats() }, 500);
       }
     }
 
