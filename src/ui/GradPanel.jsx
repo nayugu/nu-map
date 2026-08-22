@@ -329,16 +329,68 @@ function XomGroupHeader({ title, style }) {
  * `/northeastern/ai/**` pages stay verbatim because a model reading them should
  * get the registrar's own words.
  */
-function CatalogNotes({ notes, ph, indent = 4 }) {
+function CatalogNotes({ notes, ph, indent = 4, soleContent = false }) {
   const { t } = useLanguage();
+  // `soleContent` — the section has no requirement nodes, so these sentences are
+  // the whole requirement. Starting those collapsed would hide the only
+  // description that exists, which is the invisibility this feature was built to
+  // end; they open by default and stay collapsible. Everywhere else the tree
+  // already tells the story, and that is what makes collapsing safe.
+  const [open, setOpen] = useState(soleContent);
   if (!notes?.length) return null;
+
+  // Collapsed by default, and collapsible at all, ONLY on the phone — a section
+  // can carry several sentences and they crowd out the requirement tree on a
+  // narrow screen. Desktop is untouched: `open` is consulted only when `ph`, so
+  // a stale value cannot hide anything after a resize from phone to desktop.
+  const shown = !ph || open;
+
   return (
     <div style={{ marginBottom: ph ? 3 : 5, paddingLeft: indent, borderLeft: "2px solid var(--border-2)" }}>
-      <div style={{ fontSize: ph ? 7 : 8, fontWeight: 700, letterSpacing: 0.4,
-                    color: "var(--text-5)", textTransform: "uppercase" }}>
-        {t("grad.fromCatalog")}
+      <div
+        // stopPropagation because this block sits inside SectionBlock and inside
+        // ReqNode, both of which toggle on click — without it, opening the quote
+        // would also collapse the section that contains it.
+        onClick={ph ? (e) => { e.stopPropagation(); setOpen(v => !v); } : undefined}
+        style={{ display: "flex", alignItems: "center", gap: 3,
+                 cursor: ph ? "pointer" : "default", userSelect: "none",
+                 // A slightly taller row on the phone, because the label is 7px
+                 // and would otherwise be a ~10px tap target.
+                 padding: ph ? "2px 0" : 0,
+                 fontSize: ph ? 7 : 8, fontWeight: 700,
+                 // No tracking on the phone: at ~66px of column, 0.4 across a
+                 // 16-character label is 6px that decides whether it fits.
+                 letterSpacing: ph ? 0 : 0.4,
+                 color: "var(--text-5)", textTransform: "uppercase" }}>
+        {/* One line, inside the column, in every locale.
+            The phone panel is a ~66px rail — narrow enough that SectionBlock
+            drops its section title entirely and "4 SH" wraps. Two answers were
+            wrong before this one, and both shipped: the flex default (shrink to
+            min-content) stacked CJK one character per line, because CJK breaks
+            between any two characters while "FROM THE CATALOG" has no break
+            opportunity and hid the bug; `flexShrink: 0` then traded stacking for
+            running off-screen, because there is genuinely no room for the long
+            labels at natural width — English needs ~67px and French ~84px.
+            So the label itself is shortened on the phone ("Catalog", 课程目录),
+            which is what actually makes it fit, and the CSS is the guarantee
+            rather than the fix: `minWidth: 0` + `nowrap` + ellipsis means no
+            locale can ever overflow, however long its short form turns out to
+            be. Shrink-to-fit rather than grow, so the chevron stays beside a
+            short label instead of stranded at the right edge. */}
+        <span style={{ minWidth: 0, whiteSpace: "nowrap",
+                       overflow: "hidden", textOverflow: "ellipsis" }}>
+          {t(ph ? "grad.fromCatalogShort" : "grad.fromCatalog")}
+        </span>
+        {/* Same glyph pair as every other collapsible here, sitting beside the
+            label rather than flush right: this file pushes the chevron to the far
+            right only where the label carries `flex: 1` and owns the row
+            (SectionBlock, ReqNode), and keeps it adjacent for a small nested
+            label (the GPA header, the major cards). */}
+        {ph && <span style={{ fontSize: 7, color: "var(--text-5)" }}>
+          {open ? "▼" : "▶"}
+        </span>}
       </div>
-      {notes.map((n, i) => (
+      {shown && notes.map((n, i) => (
         <CatalogNoteText key={i} text={n} ph={ph} />
       ))}
     </div>
@@ -977,7 +1029,12 @@ function SectionBlock({ sec, defaultOpen = true }) {
               their whole requirement this way ("Complete one of the following
               minors…" and the list of them), so this is the only description
               of the requirement the student gets. */}
-          <CatalogNotes notes={sec.notes} ph={ph} />
+          {/* A section with no requirement nodes has nothing BUT these sentences
+              — all 580 of them in the corpus — so collapsing it by default would
+              hide the only description of the requirement that exists. It stays
+              open and stays collapsible. */}
+          <CatalogNotes notes={sec.notes} ph={ph}
+                        soleContent={(sec.children ?? []).length === 0} />
           {sec.children.map((r, i) => (
             <ReqNode key={i} r={r} dimmed={isPoolStructure && !r.sat && sec.satCount >= sec.minRequired} />
           ))}

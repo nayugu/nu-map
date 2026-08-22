@@ -570,6 +570,7 @@ export const strings = {
   "grad.oneOf": "इनमें से एक ({count}/{total})",
   "grad.requiresOutOf": "{total} में से {count} आवश्यक",
   "grad.fromCatalog": "कैटलॉग से",
+  "grad.fromCatalogShort": "कैटलॉग",
   "grad.notCheckable": "कैटलॉग यह नहीं बताता कि इसके लिए कौन-से कोर्स गिने जाते हैं, इसलिए इसे स्वतः पूरा नहीं दिखाया जा सकता। इस पर आपके सलाहकार का निर्णय अंतिम है।",
 
   // ── Course card / info panel ───────────────────────────────────

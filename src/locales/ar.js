@@ -569,6 +569,7 @@ export const strings = {
   "grad.oneOf": "واحد من ({count}/{total})",
   "grad.requiresOutOf": "يتطلب {count} من {total}",
   "grad.fromCatalog": "من دليل المقررات",
+  "grad.fromCatalogShort": "الدليل",
   "grad.notCheckable": "لا يذكر دليل المقررات أي المقررات تُحتسب هنا، لذا لا يمكن اعتماد هذا المطلب تلقائيًا. المرجع في ذلك هو مرشدك الأكاديمي.",
 
   // ── Course card / info panel ───────────────────────────────────

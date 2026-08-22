@@ -570,6 +570,7 @@ export const strings = {
   "grad.oneOf":             "하나 선택 ({count}/{total})",
   "grad.requiresOutOf":     "{total} 중 {count} 필요",
   "grad.fromCatalog":       "요람 원문",
+  "grad.fromCatalogShort":  "요람",
   "grad.notCheckable":      "어떤 과목이 여기에 해당하는지 요람에 나와 있지 않아 자동으로 확인할 수 없습니다. 지도교수의 판단이 기준입니다.",
 
   // ── Course card / info panel ───────────────────────────────────
