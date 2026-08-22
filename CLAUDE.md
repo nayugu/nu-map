@@ -383,7 +383,15 @@ Design of record: `docs/data-search-design.md`. Instrument:
   `adapters/northeastern/dataEntities.js` declares the kinds, URL grammar,
   acronyms and nicknames; all of it is baked into the emitted index as DATA, so
   `adapters/datasurface/searchBox.js` imports core only. Adding a kind is one
-  `KINDS` entry plus one `…Records` function.
+  `KINDS` entry plus one `…Records` function — which is all the `section` kind
+  (the seven directory pages) took.
+- **"Navigation" is how pages go missing.** The directory pages — Courses,
+  Majors, Minors, Graduate, NUpath, Professors, Equivalences — were exempted
+  from the index under that word, so `equivalences` and `nupath` returned
+  nothing at all. Only three things are exempt now: the hub, `/data/search`, and
+  the 52 alphabet indexes, and that last one is a judgement worth keeping — a
+  record named "A" would EXACT-match a bare "a" and top the list ahead of every
+  real entity, 52 times over.
 - **The build refuses to ship an unsearchable page.** A generated page with no
   index record fails the build, with navigation pages exempt by a *declared and
   asserted* list (61 of them). Two records sharing a URL, a record pointing at

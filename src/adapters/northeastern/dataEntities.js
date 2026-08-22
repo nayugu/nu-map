@@ -29,6 +29,7 @@ export const KINDS = [
   { id: "subject",   label: "Subject",   prefix: "/data/courses/" },
   { id: "professor", label: "Professor", prefix: "/data/professors/" },
   { id: "nupath",    label: "NUpath",    prefix: "/data/nupath/" },
+  { id: "section",   label: "Directory", prefix: "/data/" },
 ];
 
 /**
@@ -129,6 +130,37 @@ export function professorRecords(byName) {
     const path = v.page.split("/data/professors/")[1];
     if (!path) throw new Error(`professor page outside /data/professors/: ${v.page}`);
     out.push({ kind: "professor", name, path });
+  }
+  return out;
+}
+
+/**
+ * The directory pages — Courses, Majors, Minors, Graduate, NUpath, Professors,
+ * Equivalences. They were exempt from the index as "navigation", which meant
+ * typing "equivalences", "nupath", "professors" or "minors" returned NOTHING:
+ * seven real destinations, each the front door to a whole section, reachable
+ * only by clicking the rail.
+ *
+ * The HUB is deliberately still not indexed. It is the page the rail's mark
+ * links to from everywhere, so it needs no search result, and its path is empty
+ * — which the encoder refuses, correctly, rather than inventing a URL.
+ *
+ * The 52 letter indexes (`/data/professors/A`, `/data/professors/last/B`) stay
+ * out too, and that is a judgement rather than an oversight: a record named "A"
+ * would EXACT-match a bare "a" and top the list ahead of every real entity,
+ * 52 times over. They are browse aids, reachable from the Professors page,
+ * and the alphabet is not a thing anyone searches for.
+ *
+ * @param {Array<[string, string, string]>} navSections `[id, label, href]`
+ * @param {string} pageRoot the absolute URL the hrefs are rooted at
+ */
+export function sectionRecords(navSections, pageRoot) {
+  const out = [];
+  for (const [, label, href] of navSections) {
+    if (href === pageRoot) continue;                        // the hub
+    const path = href.slice(`${pageRoot}/`.length);
+    if (!path || path.includes("/")) throw new Error(`unexpected section href: ${href}`);
+    out.push({ kind: "section", name: label, path });
   }
   return out;
 }

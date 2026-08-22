@@ -45,16 +45,27 @@ Measured on the 2026-08 build:
 | Programs | 1,071 | name, degree acronym (`BSCS`), initial-runs (`ie and cs`), kind, college |
 | Subjects | 231 | code + name |
 | NUpath | 13 | code (`ND`) + label (`Natural/Designed World`) |
+| Directories | 7 | Courses, Majors, Minors, Graduate, NUpath, Professors, Equivalences |
 
-13,022 records against the **13,083 pages** the build now emits, and the gap is
-fully accounted for: 61 navigation pages — 26 first-letter professor indexes, 26
-under `professors/last/`, the 7 section hubs, the hub itself and `/data/search`.
-The build asserts exactly that number. Reconciled by
-running the bijection rail early, which also settled that programs are exact
-(1,071 pages, 1,071 records, zero orphans) and that the 29 concentration pages
-are already inside the programs kind rather than a sixth kind. So the schema is
-five kinds, and navigation pages need a *declared* exemption in the rail — an
-allowlist that is itself asserted, never a silent skip.
+13,029 records against the **13,083 pages** the build now emits, and the gap is
+fully accounted for: 54 pages — 26 first-letter professor indexes, 26 under
+`professors/last/`, the hub itself and `/data/search`. The build asserts exactly
+that number.
+
+The seven directory pages started out in that exempt list, as "navigation", and
+that was wrong: typing `equivalences`, `nupath`, `professors` or `minors`
+returned NOTHING, so seven front doors were reachable only by clicking the rail.
+They are records now. The 52 letter indexes stay out, and that is a judgement
+rather than an oversight — a record named "A" would EXACT-match a bare "a" and
+top the list ahead of every real entity, 52 times over. The alphabet is a browse
+aid, not something anyone searches for.
+
+The rest was reconciled by running the bijection rail early, which settled that
+programs are exact (1,071 pages, 1,071 records, zero orphans) and that the 29
+concentration pages are already inside the programs kind rather than a kind of
+their own. Whatever stays exempt needs a *declared* exemption in the rail — an
+allowlist that is itself asserted, never a silent skip, because "navigation" is
+the word under which those seven directory pages went missing.
 
 ## Speed: there is no performance problem
 

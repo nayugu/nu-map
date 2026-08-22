@@ -40,6 +40,7 @@ import { parseProgram } from "../src/adapters/northeastern/programNaming.js";
 import { encodeIndex, decodeIndex, prepareIndex } from "../src/core/entitySearch.js";
 import {
   KINDS, courseRecords, subjectRecords, programRecords, professorRecords, nupathRecords,
+  sectionRecords,
 } from "../src/adapters/northeastern/dataEntities.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -1450,6 +1451,7 @@ const searchRecords = [
   ...professorRecords(Object.fromEntries(
     [...professors.keys()].map((name) => [name, { page: `${PAGE_ROOT}/professors/${profSlugOf.get(name)}` }]))),
   ...nupathRecords(nupath),
+  ...sectionRecords(NAV_SECTIONS, PAGE_ROOT),
 ];
 {
   const MIN_RECORDS = 10000;
@@ -1566,10 +1568,13 @@ for (const m of pageQueue) {
 // under professors/last/, the section hubs and the hub itself. When that set
 // stops matching reality the build says so instead of quietly widening.
 {
+  // The directory pages are INDEXED now (kind "section"), so only three things
+  // are exempt: the hub the rail's mark always links to, the search page
+  // itself, and the 52 alphabet indexes — see sectionRecords for why the
+  // alphabet is not searchable.
   const NAV_EXEMPT = new Set([
-    PAGE_ROOT,                                  // the hub
-    `${PAGE_ROOT}/search`,                      // the search page itself
-    ...NAV_SECTIONS.map(([, , href]) => href),  // section hubs
+    PAGE_ROOT,
+    `${PAGE_ROOT}/search`,
   ]);
   const isLetterIndex = (u) => /^https:\/\/numap\.app\/data\/professors\/(last\/)?[A-Z]$/.test(u);
   const indexed = new Set(searchRecords.map((r) => {

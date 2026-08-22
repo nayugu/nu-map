@@ -82,7 +82,7 @@ if (flag("--fixture")) {
   take((r) => (r.aliases ?? []).length > 0, 20);           // every alias carrier
   take((r) => /\b(1|2|3)$/.test(r.name), 40);              // numbered sequences
   take((r) => r.name.length > 90, 20);                     // the longest names
-  stride("nupath", 13); stride("subject", 30); stride("program", 150);
+  stride("section", 8); stride("nupath", 13); stride("subject", 30); stride("program", 150);
   stride("professor", 150); stride("course", 400);
 
   const picked = [...chosen].sort((a, b) => a - b).map((i) => {

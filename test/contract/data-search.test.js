@@ -211,6 +211,34 @@ test("data-search › encode and decode are inverse over the whole fixture", () 
   assert.equal(again.p[round.records.indexOf(coded)], "", "a derivable path was still stored");
 });
 
+test("data-search › a directory page is found by its own name", () => {
+  // These seven were exempt from the index as "navigation", so "equivalences",
+  // "nupath", "professors" and "minors" each returned NOTHING — seven front
+  // doors reachable only by clicking the rail. Each must now come back FIRST
+  // for its own name: a section is the coarsest possible answer, so if it does
+  // not win an exact match on its own label it is not worth indexing at all.
+  const sections = prepared.records.filter((r) => r.kind === "section");
+  assert.ok(sections.length >= 7, `fixture has ${sections.length} sections`);
+  for (const s of sections) {
+    const top = searchEntities(prepared, s.name, { limit: LIMIT })[0];
+    assert.ok(top, `"${s.name}" returned nothing`);
+    assert.equal(prepared.records[top.index].name, s.name, `"${s.name}" was outranked`);
+    assert.equal(prepared.records[top.index].kind, "section");
+  }
+  // …and a directory must not hijack a query that merely CONTAINS its name:
+  // "minors" is a directory, "Biology, Minor" is a program. The example is
+  // DERIVED from the fixture rather than written in, because the fixture is a
+  // sample and a hard-coded program name may simply not be in it — which is
+  // how this assertion first failed, on a fixture with no "Biology, Minor".
+  const labels = sections.map((s) => s.name.toLowerCase().replace(/s$/, ""));
+  const victim = prepared.records.find((r) => r.kind !== "section"
+    && labels.some((l) => r.name.toLowerCase().includes(l)));
+  assert.ok(victim, "fixture has no entity whose name contains a directory's name");
+  const top = searchEntities(prepared, victim.name, { limit: LIMIT })[0];
+  assert.equal(prepared.records[top.index].name, victim.name,
+    `a directory outranked "${victim.name}" for its own name`);
+});
+
 test("data-search › an accented name is reachable by typing ASCII", () => {
   // Synthetic, so the assertion holds whatever the month's catalog contains.
   // Measured on the real index: 3 of 13,022 records carry an accented letter

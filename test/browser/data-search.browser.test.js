@@ -157,7 +157,7 @@ describe("data search widget", () => {
     const kinds = await page.$$eval(".fx-kind", (els) => [...new Set(els.map((e) => e.innerText.trim()))]);
     assert.ok(kinds.length >= 3, `only these kinds shown: ${kinds.join(", ")}`);
     // The tag is what makes the ambiguity legible, so it must be real text.
-    for (const k of kinds) assert.match(k, /^(Course|Program|Subject|Professor|NUpath)$/i, `odd kind tag "${k}"`);
+    for (const k of kinds) assert.match(k, /^(Course|Program|Subject|Professor|NUpath|Directory)$/i, `odd kind tag "${k}"`);
     assert.deepEqual(errors, []);
     await page.close();
   });
