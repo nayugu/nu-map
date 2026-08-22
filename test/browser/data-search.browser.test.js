@@ -196,18 +196,54 @@ describe("data search widget", () => {
     await page.close();
   });
 
-  test("the box reads as a rail item until it is used", async () => {
-    // The point of the restyle: no border, no fill, no padding box — the
-    // placeholder IS the affordance, at the same left edge as "Courses".
+  test("the box is a magnifier that grows a word, not a form control", async () => {
     const { page } = await open("/data/majors");
     const box = await page.$eval("input[name=q]", (el) => {
       const s = getComputedStyle(el);
-      return { border: s.borderTopWidth, bg: s.backgroundColor, left: el.getBoundingClientRect().left };
+      return {
+        border: s.borderTopWidth, bg: s.backgroundColor, icon: s.backgroundImage,
+        left: el.getBoundingClientRect().left,
+      };
     });
     const link = await page.$eval("nav .sections > a", (el) => el.getBoundingClientRect().left);
     assert.equal(box.border, "0px", "the search box still has a border");
     assert.ok(/rgba\(0, 0, 0, 0\)|transparent/.test(box.bg), `background is ${box.bg}`);
+    assert.match(box.icon, /^url\("data:image\/svg\+xml/, "the magnifier is gone");
     assert.equal(box.left, link, "the box and the rail links do not share a left edge");
+
+    // At rest the word is hidden; the glass is all there is.
+    const hint = () => page.$eval(".fx-hint", (el) => {
+      const s = getComputedStyle(el);
+      return { opacity: +s.opacity, tx: s.transform, left: el.getBoundingClientRect().left };
+    });
+    assert.equal((await hint()).opacity, 0, "the hint shows before hover");
+
+    // Hovering slides it out BESIDE the glass, which stays painted. Both
+    // properties are waited on, not just opacity: they transition together, and
+    // opacity rounds to 1 while the transform is still interpolating — which
+    // made "the hint did not finish sliding" fail about one run in three.
+    await page.hover("input[name=q]");
+    await page.waitForFunction(() => {
+      const s = getComputedStyle(document.querySelector(".fx-hint"));
+      return +s.opacity === 1 && s.transform === "none";
+    }, null, { timeout: 5_000 });
+    const shown = await hint();
+    assert.equal(shown.tx, "none", "the hint did not finish sliding");
+    assert.ok(shown.left > box.left, "the hint is not to the right of the glass");
+    assert.match(await page.$eval("input[name=q]", (el) => getComputedStyle(el).backgroundImage),
+      /^url\("data:image\/svg\+xml/, "the glass vanished on hover");
+
+    // The first keystroke must clear the word in the SAME frame: fading it left
+    // "d" sitting on top of "Search", which read as "dearch".
+    await page.click("input[name=q]");
+    await page.type("input[name=q]", "d", { delay: 0 });
+    assert.equal((await hint()).opacity, 0, "the hint is still under the typed text");
+
+    // Clearing it while focused brings the word back.
+    await page.fill("input[name=q]", "");
+    await page.waitForFunction(
+      () => +getComputedStyle(document.querySelector(".fx-hint")).opacity === 1,
+      null, { timeout: 5_000 });
     await page.close();
   });
 

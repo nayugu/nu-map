@@ -759,28 +759,34 @@ const PAGE_CSS =
   // The omnibox sits in the rail under the mark, quiet until focused — the
   // rail's own register. The results panel is absolutely positioned so it can
   // overlap the page rather than reflowing it on every keystroke.
-  // At rest: a magnifying glass and nothing else. Hover or focus SWAPS it for
-  // the word "Search" — not adding the word beside the icon, which would sit at
-  // a different indent from every label under it. The glyph and the word occupy
-  // the same 14px text origin as "Courses", so the swap moves nothing.
-  //
-  // The icon is a background-image and the word is the input's own placeholder,
-  // so there is no second element and no second copy of the word: a screen
-  // reader still meets one label, and with JS off the field still says what it
-  // is. Extra bottom margin because search is not one of the pages listed
-  // below it, and the rail's own 7px gap says "same kind of thing".
+  // A magnifying glass, permanently, at the same 14px origin every label below
+  // it uses. Hover or focus slides the word "Search" out from beside the glass
+  // and fades it in; the glass never moves, so the row grows rightwards instead
+  // of swapping identity. Extra bottom margin because search is not one of the
+  // pages in the list under it, and the rail's own 7px gap would say it is.
   + "form.find{position:relative;margin:0 0 7px}"
-  + "form.find input{width:100%;box-sizing:border-box;display:block;padding:4px 14px;margin:0;"
+  + "form.find input{width:100%;box-sizing:border-box;display:block;padding:4px 14px 4px 36px;margin:0;"
   + "font:inherit;color:#0f172a;background:transparent;border:none;border-radius:0;outline:none;"
   + "-webkit-appearance:none;appearance:none;"
   + "background-image:url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2394a3b8' stroke-width='1.7' stroke-linecap='round'><circle cx='6.6' cy='6.6' r='4.5'/><path d='M10.1 10.1 13.6 13.6'/></svg>\");"
   + "background-repeat:no-repeat;background-position:14px center;background-size:15px 15px}"
-  + "form.find input::placeholder{color:transparent;opacity:1;transition:color .18s ease-out}"
-  + "form.find:hover input,form.find input:focus,form.find input:not(:placeholder-shown){background-image:none}"
-  + "form.find:hover input::placeholder,form.find input:focus::placeholder{color:#94a3b8}"
-  + "form.find:hover input::placeholder{color:#0f172a}"
+  // The input's own placeholder never paints — the sliding span is what you
+  // see. It stays in the markup because it is what a screen reader and a
+  // JavaScript-less browser read.
+  + "form.find input::placeholder{color:transparent}"
+  + ".fx-hint{position:absolute;left:36px;top:0;bottom:0;display:flex;align-items:center;"
+  + "color:#94a3b8;pointer-events:none;white-space:nowrap;opacity:0;transform:translateX(-7px);"
+  + "transition:opacity .2s ease-out,transform .2s ease-out}"
+  + "form.find:hover .fx-hint,form.find input:focus ~ .fx-hint{opacity:1;transform:none}"
+  + "form.find:hover .fx-hint{color:#0f172a}"
+  // Typed text replaces the hint outright, and `transition:none` is the point:
+  // fading it over 200ms left the first keystroke sitting ON TOP of the word,
+  // so typing "d" read as "dearch". Appearing is a flourish; disappearing is
+  // getting out of the way. Higher specificity than the hover rule on purpose,
+  // so hovering a field you have already typed in does not bring it back.
+  + "form.find input:not(:placeholder-shown) ~ .fx-hint{opacity:0;transform:translateX(-7px);transition:none}"
   // Focused, a hairline appears under the text: the least chrome that still
-  // says "you are typing here". It spans the text column, not the panel width.
+  // says "you are typing here".
   + "form.find input:focus{box-shadow:inset 0 -1px 0 #e2e8f0}"
   // WebKit's native clear button is a small grey blob that reintroduced exactly
   // the control-ness this removes; Escape clears, and so does selecting all.
@@ -815,9 +821,10 @@ const PAGE_CSS =
   // `order` override, which is what used to hoist it ABOVE the logo once the
   // form moved inside .sections.
   + "@media(max-width:760px){form.find{flex-basis:100%;margin:2px 0 4px}"
-  // Padding goes to zero here, so the icon's origin must too — at 14px it sat
-  // indented from "Overview" while the word it swaps to would have been flush.
-  + "form.find input{padding:3px 0;font-size:.88rem;background-position:0 center}"
+  // The rail is flush with the page gutter here, so the glass goes to 0 and the
+  // text column shifts with it — at 14px the glyph sat indented from "Overview".
+  + "form.find input{padding:3px 0 3px 22px;font-size:.88rem;background-position:0 center}"
+  + ".fx-hint{left:22px}"
   + ".fx-panel{width:100%}.fx-row{padding:6px 0}}";
 
 const NAV_SECTIONS = [
@@ -855,6 +862,11 @@ const writePage = ({ rel, section, title, heading, description, jsonUrl, body, w
     + `<input type="search" name="q" placeholder="Search" aria-label="Search every course, professor, program, subject and NUpath code"`
     + ` autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false"`
     + ` aria-controls="fx-panel" aria-autocomplete="list" />`
+    // The word slides out from beside the glass, so it is a real element: you
+    // cannot reliably transition `transform` on a ::placeholder. aria-hidden
+    // because it is a PAINTING of the placeholder the input already carries —
+    // without that a screen reader meets "Search" twice.
+    + `<span class="fx-hint" aria-hidden="true">Search</span>`
     + (isSearchPage ? "" : `<div class="fx-panel" id="fx-panel" data-search-results role="listbox" aria-label="Search results" hidden></div>`)
     + `</form>`;
   // The box is the FIRST ITEM of the rail's own list, not a control floating
@@ -1491,8 +1503,9 @@ pageQueue.push({
   title: "Search Northeastern courses, professors and programs",
   heading: "Search",
   description: "Search every Northeastern course, professor, program, subject and NUpath code in NU Map's public data. From NU Map, a student-built planner not affiliated with Northeastern.",
-  body: `<p class="muted">Every course, professor, program, subject and NUpath attribute on this surface — ${catalog.length} courses, ${programs.filter((p) => p.page).length} programs, ${professors.size} instructors. Type a course code (<code>CHEM 2311</code>), a name, or a NUpath code (<code>ND</code>).</p>
-<div class="fx-panel fx-page" id="fx-panel" data-search-results role="listbox" aria-label="Search results" hidden></div>
+  // No preamble. The box is right there and the results are below it; a
+  // paragraph explaining what a search box is only pushed them down.
+  body: `<div class="fx-panel fx-page" id="fx-panel" data-search-results role="listbox" aria-label="Search results" hidden></div>
 <noscript><p>Search needs JavaScript. Without it, browse by
 <a href="${PAGE_ROOT}/courses">subject</a>, <a href="${PAGE_ROOT}/majors">major</a>,
 <a href="${PAGE_ROOT}/minors">minor</a>, <a href="${PAGE_ROOT}/graduate">graduate program</a>,
