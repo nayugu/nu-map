@@ -72,13 +72,27 @@ export function mountSearchBox(root = document) {
   let hits = [];
   let cursor = -1;
   let timer = null;
+  // Whether the user moved the highlight themselves. Not inferable from
+  // `cursor > 0`: arrowing down and back up again lands on row 0, and treating
+  // that as "did not choose" sent a deliberate Enter to the search page.
+  let chose = false;
 
   // The panel's visibility is announced, not just drawn: the input is a
   // combobox, so a screen reader needs aria-expanded to change with it.
   const show = (open) => { panel.hidden = !open; input.setAttribute("aria-expanded", String(open)); };
-  const close = () => { panel.innerHTML = ""; show(false); hits = []; cursor = -1; };
+  const close = () => { panel.innerHTML = ""; show(false); hits = []; cursor = -1; chose = false; };
 
-  const draw = () => {
+  /**
+   * Render the panel for `answered` — the query these rows are an answer to.
+   *
+   * The panel names its own query in `data-q`. That is one attribute, and it
+   * turns "are these rows stale?" from a guess into a fact: a debounced
+   * typeahead always has a window where the panel shows the previous query's
+   * results, and both the browser test and anyone debugging need to tell the
+   * two apart. Waiting for "rows exist" cannot.
+   */
+  const draw = (answered = input.value.trim()) => {
+    panel.dataset.q = answered;
     if (!hits.length) {
       // "Nothing" is a real answer and has to look like one, or an empty panel
       // reads as a broken box.
@@ -97,10 +111,14 @@ export function mountSearchBox(root = document) {
       if (input.value.trim() !== q) return;     // a later keystroke already won
       hits = searchEntities(prep, q, { limit: MAX_RESULTS });
       cursor = hits.length ? 0 : -1;
-      draw();
+      // A new query is a new list, so an earlier arrow press must not keep
+      // making Enter jump into results the user has not looked at.
+      chose = false;
+      draw(q);
     }).catch(() => {
       // The index is unreachable or not an index. Say so, and leave the form
       // able to submit — /data/search still works server-side-ish.
+      panel.dataset.q = q;
       panel.innerHTML = `<p class="fx-none">Search is unavailable right now. Press Enter to open the search page.</p>`;
       show(true);
     });
@@ -118,6 +136,7 @@ export function mountSearchBox(root = document) {
       if (!hits.length) return;
       e.preventDefault();
       cursor = (cursor + (e.key === "ArrowDown" ? 1 : -1) + hits.length) % hits.length;
+      chose = true;
       draw();
       return;
     }
@@ -130,7 +149,7 @@ export function mountSearchBox(root = document) {
     // that could have shown the right answer; one extra click cannot be wrong.
     const chosen = hits[cursor];
     if (!chosen) return;
-    if (chosen.routed || cursor > 0 || hits.length === 1) {
+    if (chosen.routed || chose || hits.length === 1) {
       e.preventDefault();
       window.location.href = urlOf(prepared, chosen.index);
     }

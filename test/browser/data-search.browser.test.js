@@ -111,7 +111,13 @@ describe("data search widget", () => {
   const type = async (page, text, expect = ".fx-row") => {
     await page.click("input[name=q]");
     await page.fill("input[name=q]", text);
-    await page.waitForSelector(`[data-search-results]:not([hidden]) ${expect}`, { timeout: 15_000 });
+    // The panel names the query it is an answer to, so this waits for THESE
+    // results rather than for "some results". Two versions of this helper
+    // asserted against the previous query's rows before that existed —
+    // once passing a real bug, once failing a correct one.
+    const q = JSON.stringify(text.trim());
+    await page.waitForSelector(`[data-search-results]:not([hidden])[data-q=${q}] ${expect}`,
+      { timeout: 15_000 });
   };
   const rows = (page) => page.$$eval(".fx-row",
     (els) => els.map((e) => ({ text: e.innerText.replace(/\s+/g, " ").trim(), href: e.getAttribute("href") })));
@@ -169,6 +175,34 @@ describe("data search widget", () => {
     // Enter on a row the user chose navigates there.
     await Promise.all([page.waitForNavigation({ timeout: 15_000 }), page.keyboard.press("Enter")]);
     assert.equal(new URL(page.url()).pathname, before[1].href);
+    await page.close();
+  });
+
+  test("arrowing back to the first row still honours Enter", async () => {
+    // The gate asks "did the user choose a row", which is NOT "cursor > 0":
+    // arrowing down and back up lands on row 0, and reading that as "did not
+    // choose" sent a deliberate Enter to the search page instead.
+    const { page } = await open("/data.html");
+    await type(page, "biology");
+    const first = (await rows(page))[0].href;
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowUp");
+    const active = await page.$$eval(".fx-row.on", (els) => els.map((e) => e.getAttribute("href")));
+    assert.deepEqual(active, [first], "the highlight is not back on the first row");
+    await Promise.all([page.waitForNavigation({ timeout: 15_000 }), page.keyboard.press("Enter")]);
+    assert.equal(new URL(page.url()).pathname, first);
+    await page.close();
+  });
+
+  test("a new query forgets the previous choice", async () => {
+    // Otherwise one arrow press makes every later Enter jump into a list the
+    // user never looked at.
+    const { page } = await open("/data.html");
+    await type(page, "biology");
+    await page.keyboard.press("ArrowDown");
+    await type(page, "biolog");
+    await Promise.all([page.waitForNavigation({ timeout: 15_000 }), page.keyboard.press("Enter")]);
+    assert.equal(new URL(page.url()).pathname, "/data/search", "a stale choice was honoured");
     await page.close();
   });
 
