@@ -232,13 +232,50 @@ shell-level failure paths in `index.html`.
 
 Six fields, closed vocabularies, no identifier of any kind, no client clock,
 bucketed timings, and `classify()` as a hard redaction boundary between anything
-throwable and the eight words that may be sent. Successes sampled at 2%, failures
-at 25% — both ceilings, sized so that a total outage costs 2,500 requests a minute
-against a 100,000/day free budget rather than blinding the receiver exactly when
-it matters. `test/contract/health-beacon-privacy.test.js` tries to smuggle a plan,
-a course code, a file path, an email address, a session id and a stack frame
-through it, and checks the browser's and the receiver's vocabularies have not
-drifted apart.
+throwable and the eight words that may be sent.
+`test/contract/health-beacon-privacy.test.js` tries to smuggle a plan, a course
+code, a file path, an email address, a session id and a stack frame through it,
+and checks the browser's and the receiver's vocabularies have not drifted apart.
+
+### Sampling took three attempts, and the first two were wrong instructively
+
+Both rates are **1.0 today** — every page load reports — because NU Map's traffic
+is a rounding error against a 100,000/day quota, and a rate sized for traffic you
+do not have yet collects too little to read.
+
+The first version sampled 2% / 25%, sized for the 10,000-per-minute target. At
+actual traffic that is roughly one success beacon per fifty visits: a receiver
+sitting near-empty, most honestly read as "the beacon is broken".
+
+The second and third bounded a **peak minute**, which is the wrong quantity. A
+per-day quota is not threatened by a spike unless the spike is sustained, and a
+registration-morning spike is by definition not — the students who arrive at 07:00
+are not also arriving at 07:30. Worse, that version's boundary landed on exactly
+10,000/min, the project's own stated target, so it *passed at the scale it existed
+to catch* and fired only at 10,001. A boundary that lands on the target by
+coincidence is not a guard.
+
+The guard now bounds `EXPECTED_DAILY_VISITS × max(ok, failure)` against half the
+daily quota. Against Northeastern's 38,000+ students at three page loads a day:
+
+| adoption | active users | visits/day | full sampling? |
+|---|---|---|---|
+| 10% | 3,800 | 11,400 | yes |
+| 25% | 9,500 | 28,500 | yes |
+| **44%** | **16,720** | **50,160** | **tripwire fires** |
+| 100% | 38,000 | 114,000 | over quota outright |
+
+Full sampling survives real success and only forces a decision at roughly half the
+student body. The `max(ok, failure)` is not decoration: while the rates differ, an
+outage multiplies *total* volume by `failure / ok` — 12.5x at the original 2%/25%
+— because every visit that would have been sampled out as a success is sampled in
+as a failure. Taking the max makes the guard correct in both regimes automatically,
+and it reduces to plain daily volume while the rates are equal.
+
+A peak minute does constrain one real thing: receiver throughput. That one is not
+close — 16 shards at Cloudflare's documented 1,000 req/s is 960,000/minute,
+roughly 300× the worst spike Northeastern could produce — and a test asserts it so
+nobody optimises it on a hunch.
 
 Inert until `VITE_HEALTH_BEACON_URL` is set, so every build made before the
 receiver exists — and every fork — sends nothing.

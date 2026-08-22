@@ -42,27 +42,53 @@
 // questions that matter at scale: is the app booting, for what share of visits,
 // on which build, and when it fails, at which of four phases.
 //
-// ── Why sampling is a correctness requirement, not a cost saving ────
+// ── Sampling is a function of TRAFFIC, and must be re-decided as it grows ──
 //
 // The receiving Worker is on Cloudflare's free plan: 100,000 requests per day.
-// The stated target is 10,000 users inside one minute. An unsampled beacon would
-// spend a sixth of the daily budget in that minute and the rest by lunchtime,
-// and the day it matters most — an outage, when EVERY visit fails — is the day
-// it would exhaust the quota fastest and stop reporting exactly when you need it.
+// Sampling exists so that a bad day cannot exhaust that budget — because the day
+// it matters most is an outage, when EVERY visit fails, and that is precisely the
+// day an unsampled beacon would spend the quota by mid-morning and go silent.
 //
-// So successes and failures are sampled at different rates, because they carry
-// different kinds of information:
+// But a rate chosen for a traffic level you do not have yet is not conservative,
+// it is broken. The first version of this file sampled successes at 2%, sized for
+// the 10,000-users-per-minute target. At the ACTUAL traffic — a handful of users,
+// infrequently — 2% means roughly one success beacon per fifty visits, so the
+// receiver would sit near-empty and the honest reading of it would be "the beacon
+// does not work" rather than "the app is fine".
 //
-//   SUCCESS is statistical. You need a rate, not an event. 2% of 10,000 is 200
-//     samples, which pins a boot-success rate to well within a percentage point.
-//     Sampling harder would not tell you more.
+// So the traffic assumption is written down as a constant instead of buried in a
+// chosen rate. Today it is small and both rates are 1.0: every visit reports,
+// which is what you want when a day's entire traffic fits inside a rounding error
+// of the quota.
+//
+// WHEN TRAFFIC GROWS, RAISE `EXPECTED_PEAK_PER_MINUTE` FIRST. The contract test
+// `failure sampling stays within the daily quota` recomputes the worst case
+// against it and fails, which is the signal to bring the rates down. That is the
+// whole mechanism: the tripwire is the test, not somebody remembering.
+//
+// The two classes stay separable because they carry different kinds of
+// information, and they will diverge again as soon as the rates leave 1.0:
+//
+//   SUCCESS is statistical — you need a rate, not an event. A few hundred
+//     samples pin a boot-success rate to well within a percentage point, so past
+//     that point sampling harder buys nothing.
 //   FAILURE is individual — one is already news — but during an outage failures
-//     are not rare, they are universal. 25% is high enough that a single failing
-//     deploy is unmistakable within seconds and low enough that a total outage
-//     costs 2,500 requests a minute rather than 10,000.
+//     are universal rather than rare, so its rate is what bounds the worst case.
 //
-// Both are ceilings on spend under load, which is the property that makes this
-// safe to leave switched on.
+// ── The amplification trap, and why the guard is written as a max ───
+//
+// While the two rates DIFFER, an outage does not merely change which counter
+// moves — it multiplies total volume by `failure / ok`, because every visit that
+// would have been sampled out as a success is now sampled in as a failure. At
+// the original 0.02 / 0.25 that factor was 12.5x: a quiet day inside budget
+// became a bad day 12.5 times over it, on the one day the data mattered.
+//
+// At 1.0 / 1.0 the factor is exactly 1.0 and an outage costs nothing extra,
+// which is a real advantage of full sampling and not a coincidence worth
+// relying on. The quota guard therefore bounds
+// `EXPECTED_DAILY_VISITS x max(ok, failure)`, which is correct in both regimes:
+// it reduces to plain daily volume when the rates are equal, and automatically
+// picks up the amplification the moment they are not.
 // ═══════════════════════════════════════════════════════════════════
 
 /** Payload schema version. Bump when a field's MEANING changes, not on additions. */
@@ -102,10 +128,75 @@ export const PHASES = Object.freeze(["shell", "bundle", "data", "mount"]);
 export const ENGINES = Object.freeze(["chromium", "webkit", "gecko", "other"]);
 
 /**
- * Sampling rates, per outcome class. See the header for why these two numbers
- * differ and why both are ceilings rather than targets.
+ * Expected page loads per day, across all users. THE constraint.
+ *
+ * ── Why daily volume, and not a peak minute ─────────────────────────
+ *
+ * Two earlier versions of this bounded a peak MINUTE, and both were measuring
+ * something that does not bind. Worth recording, because the reasoning is easy
+ * to repeat:
+ *
+ *   The receiver's limit is 100,000 requests per DAY. A peak minute only
+ *   threatens that limit if it is sustained, and a registration-morning spike
+ *   is by definition not sustained — the same students who spike at 07:00 are
+ *   not also spiking at 07:30. Meanwhile a perfectly flat day of ordinary
+ *   traffic can exhaust the quota without ever producing a notable minute.
+ *   Bounding the minute checks the wrong quantity.
+ *
+ * A peak minute IS a real constraint for the receiver's throughput — but that
+ * one is not close: 16 shards at Cloudflare's documented 1,000 req/s soft limit
+ * is 960,000/minute, roughly 300x the worst spike Northeastern could produce.
+ * The contract test asserts this rather than leaving it to intuition.
+ *
+ * ── The arithmetic, at Northeastern's actual size ───────────────────
+ *
+ * 38,000+ students. Measured against a 100,000/day quota at full sampling:
+ *
+ *     adoption   users    loads/day   beacons/day   % of quota
+ *        10%     3,800        3          11,400        11%
+ *        25%     9,500        3          28,500        29%
+ *        50%    19,000        3          57,000        57%
+ *       100%    38,000        3         114,000       114%  OVER
+ *
+ * So full sampling survives real success — up to about half the student body
+ * planning three times a day — and only breaks at saturation. That is a
+ * comfortable place to be, and it is why the rates are 1.0 rather than
+ * defensively small.
+ *
+ * 5,000/day declared today against an actual load of a handful of users: room
+ * for two orders of magnitude of growth before anyone must think about this
+ * again, and the tripwire fires at 50,000/day (~25% adoption), which is early
+ * enough to act on and late enough not to nag.
  */
-export const SAMPLE = Object.freeze({ ok: 0.02, failure: 0.25 });
+export const EXPECTED_DAILY_VISITS = 5_000;
+
+/**
+ * Busiest expected minute, in visits. NOT a quota constraint — see above.
+ * Retained because it is the right input for the receiver's shard throughput,
+ * which the contract test checks has headroom.
+ */
+export const EXPECTED_PEAK_PER_MINUTE = 3_000;
+
+/** The receiver's budget. Cloudflare Workers free plan, verified 2026-08-22. */
+export const DAILY_REQUEST_QUOTA = 100_000;
+
+/**
+ * The share of the daily quota beacons may consume.
+ *
+ * Half, because the estimate above is a guess and guesses about traffic are
+ * wrong in the upward direction. The remaining half absorbs a bad estimate, a
+ * crawler, and a second incident on the same day.
+ */
+export const QUOTA_SAFETY_SHARE = 0.5;
+
+/**
+ * Sampling rates, per outcome class.
+ *
+ * Both 1.0 today — at current traffic every visit can report, and anything less
+ * would collect too little to read. These come down as
+ * EXPECTED_PEAK_PER_MINUTE rises; the contract test enforces the relationship.
+ */
+export const SAMPLE = Object.freeze({ ok: 1.0, failure: 1.0 });
 
 /**
  * Timing buckets, in milliseconds, as upper bounds.

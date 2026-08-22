@@ -20,9 +20,11 @@
 //   · classify() is the redaction boundary: anything in, one of eight words out
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   buildPayload, classify, shouldSend, bucketMs, engineOf,
   OUTCOMES, PHASES, ENGINES, MS_BUCKETS, SAMPLE, BEACON_VERSION,
+  EXPECTED_DAILY_VISITS, EXPECTED_PEAK_PER_MINUTE, DAILY_REQUEST_QUOTA, QUOTA_SAFETY_SHARE,
 } from "../../src/core/healthBeacon.js";
 import * as receiver from "../../cloudflare/health-beacon/src/index.js";
 
@@ -226,25 +228,140 @@ test("sampling holds its rate over many draws", () => {
   }
 });
 
-test("failure sampling stays a ceiling under the stated peak load", () => {
-  // The quota argument in the module header, as a test. Free plan is 100,000
-  // Worker requests/day; the target peak is 10,000 users in one minute. A
-  // total outage means every one of them reports.
-  const PEAK_USERS = 10_000;
-  const DAILY_QUOTA = 100_000;
-  const worstMinute = PEAK_USERS * SAMPLE.failure;
-  assert.ok(worstMinute <= DAILY_QUOTA / 10,
-    `a one-minute total outage would spend ${worstMinute} of ${DAILY_QUOTA} daily requests — `
-    + `more than a tenth of the budget, so sustained failure would blind the receiver`);
-  // And the ordinary case must be far cheaper still.
-  assert.ok(PEAK_USERS * SAMPLE.ok <= worstMinute / 5);
+/** Worst-case rate: an all-failing day samples at SAMPLE.failure, not SAMPLE.ok. */
+const worstRate = () => Math.max(SAMPLE.ok, SAMPLE.failure);
+
+test("beacon volume stays inside the receiver's daily quota", () => {
+  // THIS IS THE GROWTH TRIPWIRE. It checks a RELATIONSHIP between numbers that
+  // are all expected to change, not a constant:
+  //   EXPECTED_DAILY_VISITS — raised by hand as real traffic grows
+  //   SAMPLE.*              — must come down to compensate
+  //   DAILY_REQUEST_QUOTA   — changes if the plan does
+  //
+  // Bounded on DAILY volume, which took two corrections to get right. Both
+  // earlier versions bounded a peak MINUTE, and a peak minute does not threaten
+  // a per-DAY quota unless it is sustained — which a registration-morning spike
+  // is not. Worse, the first version's boundary landed on exactly 10,000/min,
+  // the project's own stated target, so it passed at the very scale it existed
+  // to catch and fired only at 10,001. Arithmetic nobody re-runs is not a guard.
+  //
+  // `worstRate` rather than SAMPLE.ok because the expensive day is the one where
+  // every visit fails. It also makes this correct while the rates differ: it
+  // picks up the failure/ok amplification automatically.
+  const spend = EXPECTED_DAILY_VISITS * worstRate();
+  const budget = DAILY_REQUEST_QUOTA * QUOTA_SAFETY_SHARE;
+  assert.ok(
+    spend <= budget,
+    `an all-failing day at ${EXPECTED_DAILY_VISITS} visits would send ${spend} beacons, `
+    + `above the ${budget} allowed (${QUOTA_SAFETY_SHARE * 100}% of a ${DAILY_REQUEST_QUOTA}/day quota).\n`
+    + `  Traffic has outgrown the sampling. Either lower the rates in `
+    + `src/core/healthBeacon.js to at most ${(budget / EXPECTED_DAILY_VISITS).toFixed(3)}, `
+    + `or move the receiver to a paid plan.`,
+  );
 });
 
-test("the sample rate cannot exceed 1 or drop to 0", () => {
-  // 0 would silently disable reporting; 1 would remove the ceiling the quota
-  // maths depends on. Both are plausible edits.
-  for (const r of Object.values(SAMPLE)) {
-    assert.ok(r > 0 && r < 1, `sample rate ${r} is outside (0,1)`);
+test("the tripwire fires at Northeastern's full scale, and not before", () => {
+  // A guard whose boundary happens to land past the scale you are designing for
+  // is not a guard. Asserted directly rather than left to arithmetic, because
+  // that is exactly how the previous version went wrong.
+  //
+  // 38,000+ students. At saturation — every student, three page loads a day —
+  // full sampling must be REFUSED, because 114,000 beacons exceeds a
+  // 100,000/day quota outright.
+  const budget = DAILY_REQUEST_QUOTA * QUOTA_SAFETY_SHARE;
+  const saturation = 38_000 * 3;
+  assert.ok(saturation * 1.0 > budget,
+    `at full adoption (${saturation} loads/day) full sampling must be refused, and is not`);
+
+  // And it must still permit what is declared today, or it is not a tripwire,
+  // it is a blocker forcing the rates down before there is any reason to.
+  assert.ok(EXPECTED_DAILY_VISITS * 1.0 <= budget,
+    `full sampling is refused at the CURRENT declared ${EXPECTED_DAILY_VISITS} visits/day, `
+    + `which leaves no usable setting`);
+
+  // The point where a decision becomes necessary, stated so it is visible in
+  // the source rather than only derivable: ~25% adoption at 3 loads a day.
+  const firesAt = budget;
+  assert.ok(firesAt >= 38_000 * 3 * 0.10 && firesAt <= 38_000 * 3 * 0.75,
+    `the tripwire fires at ${firesAt} visits/day, which is outside the 10-75% adoption `
+    + `band where forcing this decision is useful`);
+});
+
+test("an outage cannot amplify beacon volume while the rates are equal", () => {
+  // The trap this replaced: while SAMPLE.failure exceeds SAMPLE.ok, an outage
+  // multiplies TOTAL volume by their ratio, because every visit that would have
+  // been sampled out as a success is now sampled in as a failure. At the
+  // original 0.02/0.25 that was 12.5x — a quiet day inside budget becoming a bad
+  // day well over it, on the one day the data mattered.
+  //
+  // This does not forbid the rates diverging; it pins the amplification factor
+  // so that when they do, the quota test above is already accounting for it.
+  const amplification = SAMPLE.failure / SAMPLE.ok;
+  assert.ok(EXPECTED_DAILY_VISITS * SAMPLE.ok * amplification <= DAILY_REQUEST_QUOTA * QUOTA_SAFETY_SHARE,
+    `an outage would multiply volume by ${amplification}x, taking an ordinary day `
+    + `over the quota. Raise SAMPLE.ok or lower SAMPLE.failure.`);
+});
+
+test("index.html's hand-copied sampling rate matches SAMPLE.failure", () => {
+  // The shell beacon runs before any module loads — that is its entire purpose,
+  // since it covers the failures where the bundle never executes — so it cannot
+  // import this constant and has to hand-copy it.
+  //
+  // That copy has already drifted once: it stayed at 0.25 when the module moved
+  // to 1.0, which under-reported precisely the failures nothing else can report,
+  // by 4x. It was found by grep, which is not a system. This is the system.
+  const html = readFileSync(new URL("../../index.html", import.meta.url), "utf8");
+  const m = html.match(/var BEACON_RATE\s*=\s*([0-9.]+)\s*;/);
+  assert.ok(m, "BEACON_RATE not found in index.html — did the shell beacon move or get renamed?");
+  assert.equal(
+    Number(m[1]), SAMPLE.failure,
+    `index.html's BEACON_RATE (${m[1]}) has drifted from SAMPLE.failure (${SAMPLE.failure}). `
+    + `Shell failures — a dead bundle, a stale chunk — would be reported at the wrong rate, `
+    + `and they are the ones no other reporter can see.`,
+  );
+});
+
+test("the receiver has ample throughput for the worst spike", () => {
+  // The one thing a peak MINUTE genuinely constrains: shard throughput. Checked
+  // so that "peak per minute" is not left in the file as a number with no
+  // purpose — and because the honest answer is that it is nowhere near binding,
+  // which is worth knowing before anyone optimises it.
+  const SHARDS = 16;                 // cloudflare/health-beacon/src/index.js
+  const PER_SHARD_PER_SECOND = 1_000; // Cloudflare documented soft limit
+  const capacityPerMinute = SHARDS * PER_SHARD_PER_SECOND * 60;
+  const spike = EXPECTED_PEAK_PER_MINUTE * worstRate();
+  assert.ok(spike * 10 <= capacityPerMinute,
+    `peak ${spike}/min is within 10x of shard capacity ${capacityPerMinute}/min — `
+    + `add shards in cloudflare/health-beacon/src/index.js`);
+});
+
+test("success sampling never costs more than failure sampling", () => {
+  // Successes are the common case by a wide margin, so a success rate above the
+  // failure rate would make ordinary traffic — not outages — the thing that
+  // exhausts the budget. Equal is fine (both are 1.0 today); higher is not.
+  assert.ok(SAMPLE.ok <= SAMPLE.failure,
+    `SAMPLE.ok (${SAMPLE.ok}) exceeds SAMPLE.failure (${SAMPLE.failure}), so normal `
+    + `traffic would spend the quota faster than an outage does`);
+});
+
+test("a sample rate is a probability, and reporting is never silently off", () => {
+  // 0 would disable a whole class of reporting while everything still looked
+  // wired up — the worst kind of broken. Above 1 is meaningless and would make
+  // shouldSend() always true, quietly removing the ceiling.
+  for (const [k, r] of Object.entries(SAMPLE)) {
+    assert.ok(typeof r === "number" && Number.isFinite(r), `SAMPLE.${k} is not a number`);
+    assert.ok(r > 0, `SAMPLE.${k} is ${r} — that silently disables reporting for this class`);
+    assert.ok(r <= 1, `SAMPLE.${k} is ${r} — a probability cannot exceed 1`);
+  }
+});
+
+test("shouldSend at rate 1.0 actually sends everything", () => {
+  // The boundary that matters right now. `rand() < 1.0` must be true for every
+  // value Math.random can return, including 0 — and must still be false at a
+  // rate of 0, which is why the comparison is `<` and not `<=`.
+  for (const r of [0, 0.5, 0.999999, 1 - Number.EPSILON]) {
+    assert.equal(shouldSend("ok", () => r), true, `rand()=${r} should send at rate 1.0`);
+    assert.equal(shouldSend("render-crash", () => r), true, `rand()=${r} should send at rate 1.0`);
   }
 });
 

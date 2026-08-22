@@ -59,10 +59,27 @@ same number split by build tells you which deploy to roll back, which is the
 difference between an alert and a fix. It is the reason the build id is collected
 at all.
 
-Remember that successes are sampled at 2% and failures at 25%, so the two classes
-are **not** directly comparable — the response repeats this in a `note` field for
-the same reason. Multiply failures by 12.5 to put them on the same scale as
-successes, or just compare rates within a class over time.
+### Sampling, and when you have to change it
+
+Both rates are **1.0 today** — every page load reports — because NU Map's traffic
+is a rounding error against a 100,000/day quota, and a rate sized for traffic you
+do not have yet collects too little to read.
+
+They come down as traffic grows, and you do not have to remember to do it. The
+contract test `beacon volume stays inside the receiver's daily quota` recomputes
+the worst case from `EXPECTED_DAILY_VISITS` in `src/core/healthBeacon.js` and
+fails with the exact rate to use. Raise that constant as real traffic arrives; the
+test tells you when full sampling stops fitting.
+
+For Northeastern's 38,000+ students at three page loads a day, that point is
+around **44% adoption** (~16,700 active users). Below it, full sampling is
+affordable; above it, either sample or move the receiver to a paid plan.
+
+One trap the tests pin down: while the two rates *differ*, an outage multiplies
+total volume by `failure / ok`, because every visit that would have been sampled
+out as a success is now sampled in as a failure. At an earlier 2% / 25% setting
+that factor was 12.5x — a quiet day inside budget becoming a bad day well over it,
+on the one day the data mattered. At 1.0 / 1.0 it is exactly 1.0.
 
 ## Architecture note
 

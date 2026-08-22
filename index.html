@@ -220,20 +220,27 @@
         // So this is a deliberate, minimal duplicate of that module's policy,
         // in ES5, with the same guarantees: one send per page load, no
         // identifier of any kind, a closed vocabulary of outcomes, a bucketed
-        // timing, and a total inability to throw. Failures sample at 25% to
-        // match SAMPLE.failure — an outage must not spend the whole daily
-        // quota in its first minute.
+        // timing, and a total inability to throw.
+        //
+        // ⚠ BEACON_RATE MUST TRACK SAMPLE.failure in src/core/healthBeacon.js.
+        // It cannot import it — this runs before any module — so it is a hand-
+        // copied constant, and it has already been wrong once: it was left at
+        // 0.25 when the module moved to 1.0, which under-reported exactly the
+        // failures this script exists to catch, by 4x, and only in the case
+        // where no other reporter can run. If you change the sampling rates,
+        // change this line in the same commit.
         //
         // Vite substitutes %VITE_HEALTH_BEACON_URL% at build time. When the
         // variable is unset the literal token survives, so the leading '%'
         // test is what keeps every unconfigured build and every fork silent.
         var BEACON = '%VITE_HEALTH_BEACON_URL%';
+        var BEACON_RATE = 1.0;   // === SAMPLE.failure in src/core/healthBeacon.js
         var beaconSent = false;
         function beacon(outcome, phase) {
           try {
             if (beaconSent || !BEACON || BEACON.charAt(0) === '%') return;
             beaconSent = true;
-            if (Math.random() >= 0.25) return;   // SAMPLE.failure
+            if (Math.random() >= BEACON_RATE) return;
             var ms = null;
             try { ms = Math.round(performance.now()); } catch (e) {}
             var bucket = null;

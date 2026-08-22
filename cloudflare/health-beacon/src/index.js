@@ -216,9 +216,14 @@ function summarize(counts) {
   return {
     sampled: { ok, fail, total: ok + fail },
     successRate: rate(ok, fail),
-    note: "Successes are sampled at 2%, failures at 25% — these are SAMPLE counts, "
-        + "not visit counts, and the two classes are not directly comparable. "
-        + "Compare rates within a class, or scale by 12.5 to put failures on the ok scale.",
+    // The sampling rates live in src/core/healthBeacon.js and are 1.0 / 1.0
+    // today, so these are visit counts. They will not stay that way: the
+    // contract test forces them down as traffic grows, and at that point ok and
+    // fail are scaled differently and stop being directly comparable. Saying so
+    // here rather than in a doc, because this JSON is what someone reads at 2am.
+    note: "Counts are SAMPLED. While the two rates are equal these are also visit "
+        + "counts; once they diverge, compare rates within a class rather than "
+        + "counts across classes. Current rates: see SAMPLE in src/core/healthBeacon.js.",
     byBuild, byOutcome, byPhase, byEngine, byBucket,
   };
 }
