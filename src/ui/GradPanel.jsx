@@ -331,29 +331,36 @@ function XomGroupHeader({ title, style }) {
  */
 function CatalogNotes({ notes, ph, indent = 4, soleContent = false }) {
   const { t } = useLanguage();
-  // `soleContent` — the section has no requirement nodes, so these sentences are
-  // the whole requirement. Starting those collapsed would hide the only
-  // description that exists, which is the invisibility this feature was built to
-  // end; they open by default and stay collapsible. Everywhere else the tree
-  // already tells the story, and that is what makes collapsing safe.
-  const [open, setOpen] = useState(soleContent);
+  // Collapsible everywhere; the DEFAULT is what differs. Open off the phone,
+  // where there is room for the sentences beside the tree, and closed on the
+  // phone, where several of them crowd the tree off the top of the block.
+  //
+  // `soleContent` overrides that: the section has no requirement nodes, so these
+  // sentences are the whole requirement, and starting them collapsed would hide
+  // the only description that exists — the invisibility this feature was built
+  // to end. Everywhere else the tree already tells the story, and that is what
+  // makes collapsing safe.
+  const [open, setOpen] = useState(!ph || soleContent);
   if (!notes?.length) return null;
 
-  // Collapsed by default, and collapsible at all, ONLY on the phone — a section
-  // can carry several sentences and they crowd out the requirement tree on a
-  // narrow screen. Desktop is untouched: `open` is consulted only when `ph`, so
-  // a stale value cannot hide anything after a resize from phone to desktop.
-  const shown = !ph || open;
-
   return (
-    <div style={{ marginBottom: ph ? 3 : 5, paddingLeft: indent, borderLeft: "2px solid var(--border-2)" }}>
+    // Air above, so the quote is not crowded against the row it follows — a
+    // course sitting directly on top of "FROM THE CATALOG" reads as one unit.
+    //
+    // The value has to CLEAR the preceding row's own margin, not merely exceed
+    // zero: adjacent siblings' vertical margins COLLAPSE to the larger of the
+    // two, and a requirement row already carries `marginBottom: rowMB` (3 off
+    // the phone, 1 on it). `marginTop: 4` therefore bought a single pixel and
+    // looked like nothing had changed. These values are the gap itself.
+    <div style={{ marginTop: ph ? 5 : 8, marginBottom: ph ? 3 : 5,
+                  paddingLeft: indent, borderLeft: "2px solid var(--border-2)" }}>
       <div
         // stopPropagation because this block sits inside SectionBlock and inside
         // ReqNode, both of which toggle on click — without it, opening the quote
         // would also collapse the section that contains it.
-        onClick={ph ? (e) => { e.stopPropagation(); setOpen(v => !v); } : undefined}
+        onClick={(e) => { e.stopPropagation(); setOpen(v => !v); }}
         style={{ display: "flex", alignItems: "center", gap: 3,
-                 cursor: ph ? "pointer" : "default", userSelect: "none",
+                 cursor: "pointer", userSelect: "none",
                  // A slightly taller row on the phone, because the label is 7px
                  // and would otherwise be a ~10px tap target.
                  padding: ph ? "2px 0" : 0,
@@ -386,11 +393,11 @@ function CatalogNotes({ notes, ph, indent = 4, soleContent = false }) {
             right only where the label carries `flex: 1` and owns the row
             (SectionBlock, ReqNode), and keeps it adjacent for a small nested
             label (the GPA header, the major cards). */}
-        {ph && <span style={{ fontSize: 7, color: "var(--text-5)" }}>
+        <span style={{ fontSize: ph ? 7 : 8, color: "var(--text-5)" }}>
           {open ? "▼" : "▶"}
-        </span>}
+        </span>
       </div>
-      {shown && notes.map((n, i) => (
+      {open && notes.map((n, i) => (
         <CatalogNoteText key={i} text={n} ph={ph} />
       ))}
     </div>
@@ -1030,9 +1037,9 @@ function SectionBlock({ sec, defaultOpen = true }) {
               minors…" and the list of them), so this is the only description
               of the requirement the student gets. */}
           {/* A section with no requirement nodes has nothing BUT these sentences
-              — all 580 of them in the corpus — so collapsing it by default would
-              hide the only description of the requirement that exists. It stays
-              open and stays collapsible. */}
+              — all 580 of them in the corpus — so it opens by default even on the
+              phone, where everything else starts collapsed: hiding it would hide
+              the only description of the requirement that exists. */}
           <CatalogNotes notes={sec.notes} ph={ph}
                         soleContent={(sec.children ?? []).length === 0} />
           {sec.children.map((r, i) => (
