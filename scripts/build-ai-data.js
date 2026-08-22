@@ -677,11 +677,15 @@ const PAGE_CSS =
   + "nav .home img{width:26px;height:26px;object-fit:contain;opacity:.85;transition:opacity .18s ease-out}"
   + "nav .home:hover img{opacity:1}"
   + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;gap:7px;padding:18px 14px}"
-  + "nav .sections a{display:block;padding:4px 14px;color:#94a3b8;"
+  // DIRECT children only. The search box lives in this list now, and its
+  // results dropdown is full of <a> rows — under a descendant selector they
+  // inherited the rail's display:block and grey, which collapsed every row to
+  // "Dami KoPROFESSOR". These rules are about rail items, so they say so.
+  + "nav .sections > a{display:block;padding:4px 14px;color:#94a3b8;"
   + "transition:transform .18s ease-out,color .18s ease-out}"
-  + "nav .sections a:hover{transform:translateX(5px);color:#0f172a;text-decoration:none}"
-  + "nav .sections a.here{color:#64748b;font-weight:600}"
-  + "nav .sections a.here:hover{transform:none;color:#64748b}"
+  + "nav .sections > a:hover{transform:translateX(5px);color:#0f172a;text-decoration:none}"
+  + "nav .sections > a.here{color:#64748b;font-weight:600}"
+  + "nav .sections > a.here:hover{transform:none;color:#64748b}"
   + "nav .aux{padding:14px 14px 20px}"
   + "nav .aux a{display:block;color:#cbd5e1;font-size:.82rem;padding:3px 14px;transition:color .15s ease}"
   + "nav .aux a:hover{color:#475569}"
@@ -712,8 +716,8 @@ const PAGE_CSS =
   + "display:flex;flex-direction:row;flex-wrap:wrap;gap:2px 14px;padding:12px 16px 0}"
   + "nav .sections{display:contents}nav .aux{display:contents}"
   + "nav .home{padding:0 0 6px;flex-basis:100%}nav .home img{width:24px;height:24px}"
-  + "nav .sections a,nav .aux a{padding:3px 0;margin:0;font-size:.88rem}"
-  + "nav .sections a:hover{transform:none}"
+  + "nav .sections > a,nav .aux > a{padding:3px 0;margin:0;font-size:.88rem}"
+  + "nav .sections > a:hover{transform:none}"
   + "main,main.wide{margin:0 auto}}"
   + "h1{font-size:1.55rem;margin:.1em 0 .3em}"
   + "h2{font-size:1.12rem;margin:1.6em 0 .5em;padding-bottom:.25em;border-bottom:1px solid #e2e8f0}"
@@ -755,15 +759,40 @@ const PAGE_CSS =
   // The omnibox sits in the rail under the mark, quiet until focused — the
   // rail's own register. The results panel is absolutely positioned so it can
   // overlap the page rather than reflowing it on every keystroke.
-  + "form.find{position:relative;margin:14px 14px 0 28px}"
-  + "form.find input{width:100%;box-sizing:border-box;padding:6px 9px;font:inherit;font-size:.88rem;"
-  + "color:#1e293b;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;outline:none;transition:border-color .18s ease-out,background .18s ease-out}"
-  + "form.find input::placeholder{color:#94a3b8}"
-  + "form.find input:focus{background:#fff;border-color:#cbd5e1}"
+  // At rest: a magnifying glass and nothing else. Hover or focus SWAPS it for
+  // the word "Search" — not adding the word beside the icon, which would sit at
+  // a different indent from every label under it. The glyph and the word occupy
+  // the same 14px text origin as "Courses", so the swap moves nothing.
+  //
+  // The icon is a background-image and the word is the input's own placeholder,
+  // so there is no second element and no second copy of the word: a screen
+  // reader still meets one label, and with JS off the field still says what it
+  // is. Extra bottom margin because search is not one of the pages listed
+  // below it, and the rail's own 7px gap says "same kind of thing".
+  + "form.find{position:relative;margin:0 0 7px}"
+  + "form.find input{width:100%;box-sizing:border-box;display:block;padding:4px 14px;margin:0;"
+  + "font:inherit;color:#0f172a;background:transparent;border:none;border-radius:0;outline:none;"
+  + "-webkit-appearance:none;appearance:none;"
+  + "background-image:url(\"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2394a3b8' stroke-width='1.7' stroke-linecap='round'><circle cx='6.6' cy='6.6' r='4.5'/><path d='M10.1 10.1 13.6 13.6'/></svg>\");"
+  + "background-repeat:no-repeat;background-position:14px center;background-size:15px 15px}"
+  + "form.find input::placeholder{color:transparent;opacity:1;transition:color .18s ease-out}"
+  + "form.find:hover input,form.find input:focus,form.find input:not(:placeholder-shown){background-image:none}"
+  + "form.find:hover input::placeholder,form.find input:focus::placeholder{color:#94a3b8}"
+  + "form.find:hover input::placeholder{color:#0f172a}"
+  // Focused, a hairline appears under the text: the least chrome that still
+  // says "you are typing here". It spans the text column, not the panel width.
+  + "form.find input:focus{box-shadow:inset 0 -1px 0 #e2e8f0}"
+  // WebKit's native clear button is a small grey blob that reintroduced exactly
+  // the control-ness this removes; Escape clears, and so does selecting all.
+  + "form.find input::-webkit-search-cancel-button,form.find input::-webkit-search-decoration{display:none}"
   + ".fx-panel{position:absolute;z-index:20;left:0;top:calc(100% + 5px);width:330px;max-width:78vw;"
   + "max-height:min(62vh,430px);overflow-y:auto;background:#fff;border:1px solid #e2e8f0;border-radius:10px;"
   + "box-shadow:0 8px 24px rgba(15,23,42,.10)}"
-  + ".fx-row{display:flex;align-items:baseline;gap:7px;padding:6px 10px;text-decoration:none;color:#1e293b;font-size:.86rem}"
+  // 14px horizontal padding, matching a rail label's text origin exactly: the
+  // panel is positioned on the form's box, so a row's name lands on the same
+  // vertical line as "Courses" and the dropdown reads as the rail continuing
+  // rather than as a floating card at its own indent.
+  + ".fx-row{display:flex;align-items:baseline;gap:7px;padding:6px 14px;text-decoration:none;color:#1e293b;font-size:.86rem}"
   + ".fx-row:hover,.fx-row.on{background:#f8fafc;text-decoration:none}"
   + ".fx-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}"
   + ".fx-code{color:#64748b;font-size:.78rem;font-variant-numeric:tabular-nums;white-space:nowrap}"
@@ -781,7 +810,15 @@ const PAGE_CSS =
   + ".fx-page .fx-name{white-space:normal;overflow:visible;text-overflow:clip}"
   + ".fx-page .fx-code{font-size:.84rem}"
   + ".fx-page .fx-none{padding:14px 2px;font-size:.9rem}"
-  + "@media(max-width:760px){form.find{margin:8px 0;order:-1;flex-basis:100%}.fx-panel{width:100%}}";
+  // On the phone the rail collapses to a wrapping row (nav .sections is
+  // display:contents), so the box is simply the first item after the mark — no
+  // `order` override, which is what used to hoist it ABOVE the logo once the
+  // form moved inside .sections.
+  + "@media(max-width:760px){form.find{flex-basis:100%;margin:2px 0 4px}"
+  // Padding goes to zero here, so the icon's origin must too — at 14px it sat
+  // indented from "Overview" while the word it swaps to would have been flush.
+  + "form.find input{padding:3px 0;font-size:.88rem;background-position:0 center}"
+  + ".fx-panel{width:100%}.fx-row{padding:6px 0}}";
 
 const NAV_SECTIONS = [
   ["home", "Overview", PAGE_ROOT],
@@ -815,14 +852,17 @@ const writePage = ({ rel, section, title, heading, description, jsonUrl, body, w
   const isSearchPage = rel === "search.html";
   const searchBox = `<form class="find" data-search-form data-index="${searchAssets.index}"`
     + `${isSearchPage ? " data-search-page" : ""} action="${PAGE_ROOT}/search" method="get" role="search">`
-    + `<input type="search" name="q" placeholder="Search all data" aria-label="Search every course, professor, program, subject and NUpath code"`
+    + `<input type="search" name="q" placeholder="Search" aria-label="Search every course, professor, program, subject and NUpath code"`
     + ` autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false"`
     + ` aria-controls="fx-panel" aria-autocomplete="list" />`
     + (isSearchPage ? "" : `<div class="fx-panel" id="fx-panel" data-search-results role="listbox" aria-label="Search results" hidden></div>`)
     + `</form>`;
+  // The box is the FIRST ITEM of the rail's own list, not a control floating
+  // above it: same left edge, same quiet grey, same hover slide as "Courses"
+  // and "Majors". It reads as a label until you use it, which is the register
+  // the whole rail is in — a bordered, filled field there looked bolted on.
   const nav = `<a class="home" href="${ORIGIN}"><img src="${ORIGIN}/logo.png" alt="NU Map home" width="26" height="26" /></a>`
-    + searchBox
-    + `<div class="sections">` + NAV_SECTIONS.map(([id, label, href]) =>
+    + `<div class="sections">` + searchBox + NAV_SECTIONS.map(([id, label, href]) =>
     `<a href="${href}"${id === section ? ` class="here"` : ""}>${label}</a>`).join("")
     + `</div><div class="aux"><a href="${ORIGIN}">numap.app</a><a href="${ORIGIN}/story">the story</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
     + (jsonUrl ? `<a href="${jsonUrl}">JSON of this page</a>` : `<a href="${JSON_ROOT}/index.json">JSON API</a>`)

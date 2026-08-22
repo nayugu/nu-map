@@ -372,6 +372,33 @@ as a floor: the box is a real `<form>` targeting a generated `/data/search`
 page, so with JS off the form still reaches a page and the nav rail still works.
 `/data/search?q=…` also makes a result set shareable as a URL.
 
+## How it presents itself
+
+Two surfaces, because a shortlist and a list are different things:
+
+- **The rail box** is a magnifying glass at rest and the word "Search" on hover
+  or focus — a swap, not an addition, so the glyph and the word share the 14px
+  text origin every label under them uses and nothing moves. The icon is a
+  background image and the word is the input's own placeholder, so there is no
+  second element and no second copy of the word for a screen reader. It shipped
+  first as a bordered, filled field floating above the rail, which read as a
+  control bolted onto a page of quiet text; then as a plain "Search" label,
+  which read as one of the pages.
+- **`/data/search`** is a real results page: 60 results in the document flow,
+  full width, nothing truncated, the page scrolls, and clicking away does not
+  dismiss them. It shipped as the same floating dropdown pinned to the sidebar,
+  covering the page's own text — on the one page whose purpose is showing
+  results. A screenshot found that; the tests could not, because they only asked
+  whether rows existed.
+
+The dropdown's rows sit at the same 14px indent as the rail's labels, so the
+panel reads as the rail continuing rather than a card at its own indent. Which
+is also how a real bug got in: the rows are `<a>` elements inside
+`nav .sections`, and a descendant selector meant they inherited the rail's
+`display:block`, collapsing every row to "Dami KoPROFESSOR". The rail rules are
+now scoped to direct children, and a browser test asserts a row's computed
+display, colour, and that its name and kind tag do not overlap.
+
 ## Found by attacking it after it worked
 
 Two defects the happy path never showed, both fixed:

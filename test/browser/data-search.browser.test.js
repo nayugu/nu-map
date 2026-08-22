@@ -29,6 +29,8 @@ const MIME = {
 };
 
 const exists = async (p) => { try { await stat(p); return true; } catch { return false; } };
+/** A FILE, specifically: dist/data/majors is a directory and also majors.html. */
+const isFile = async (p) => { try { return (await stat(p)).isFile(); } catch { return false; } };
 
 async function ensureBuild() {
   if (await exists(join(DIST, "data.html"))) return;
@@ -53,15 +55,18 @@ function serveDist() {
       if (rel.includes("..")) { res.writeHead(403).end(); return; }
       if (rel === "" || rel.endsWith("/")) rel = join(rel, "index.html");
       let file = join(DIST, rel);
-      // Pretty URLs: /data/search is dist/data/search.html.
-      if (!(await exists(file)) && await exists(`${file}.html`)) file = `${file}.html`;
+      // Pretty URLs: /data/search is dist/data/search.html. Tested with isFile,
+      // not exists — /data/majors is BOTH a directory and majors.html, and
+      // reading the directory throws EISDIR, which surfaced as a 500 page and
+      // two tests failing for a reason that had nothing to do with search.
+      if (!(await isFile(file)) && await isFile(`${file}.html`)) file = `${file}.html`;
       // Fall back to public/, which `vite build` copies into dist/ — the pages
       // reference /logo.png from there. Without this, running after a data-only
       // build (buildAiData alone, no vite) 404s the logo, and every test that
       // asserts the page logged nothing fails for a reason unrelated to search.
-      if (!(await exists(file))) {
+      if (!(await isFile(file))) {
         const pub = join(ROOT, "public", rel);
-        if (await exists(pub)) file = pub;
+        if (await isFile(pub)) file = pub;
         else { res.writeHead(404).end("not found"); return; }
       }
       let body = await readFile(file);
@@ -167,6 +172,42 @@ describe("data search widget", () => {
     const none = await page.$eval(".fx-none", (e) => e.innerText);
     assert.match(none, /No match/i, `empty state said "${none}"`);
     assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("the dropdown keeps its own styling inside the nav rail", async () => {
+    // The box lives in the rail's own list, so its result rows are <a> elements
+    // inside nav .sections. Under a DESCENDANT selector they inherited the
+    // rail's display:block and grey, and every row collapsed to
+    // "Dami KoPROFESSOR" — legible in a screenshot, invisible to any test that
+    // counts rows.
+    const { page } = await open("/data/majors");
+    await type(page, "d");
+    const row = await page.$eval(".fx-row", (el) => {
+      const s = getComputedStyle(el);
+      const name = el.querySelector(".fx-name").getBoundingClientRect();
+      const kind = el.querySelector(".fx-kind").getBoundingClientRect();
+      return { display: s.display, color: s.color, gap: name.right <= kind.left, inNav: !!el.closest("nav") };
+    });
+    assert.equal(row.inNav, true, "this test is no longer about the rail case");
+    assert.equal(row.display, "flex", "the rail's display:block leaked into the results");
+    assert.notEqual(row.color, "rgb(148, 163, 184)", "rows took the rail's grey");
+    assert.ok(row.gap, "the name and the kind tag overlap");
+    await page.close();
+  });
+
+  test("the box reads as a rail item until it is used", async () => {
+    // The point of the restyle: no border, no fill, no padding box — the
+    // placeholder IS the affordance, at the same left edge as "Courses".
+    const { page } = await open("/data/majors");
+    const box = await page.$eval("input[name=q]", (el) => {
+      const s = getComputedStyle(el);
+      return { border: s.borderTopWidth, bg: s.backgroundColor, left: el.getBoundingClientRect().left };
+    });
+    const link = await page.$eval("nav .sections > a", (el) => el.getBoundingClientRect().left);
+    assert.equal(box.border, "0px", "the search box still has a border");
+    assert.ok(/rgba\(0, 0, 0, 0\)|transparent/.test(box.bg), `background is ${box.bg}`);
+    assert.equal(box.left, link, "the box and the rail links do not share a left edge");
     await page.close();
   });
 

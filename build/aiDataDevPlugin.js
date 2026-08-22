@@ -37,6 +37,40 @@ import path from "path";
  *   from this file's location, so moving the module cannot silently change which
  *   directory the middleware treats as the project.
  */
+/**
+ * The sources whose changes the generated surface cannot reflect until it is
+ * regenerated: the generator itself, the widget that ships with it, and the
+ * pure modules that widget bundles.
+ */
+const SURFACE_SOURCES = [
+  "scripts/build-ai-data.js",
+  "src/adapters/datasurface/searchBox.js",
+  "src/adapters/northeastern/dataEntities.js",
+  "src/core/entitySearch.js",
+  "src/core/rankRecords.js",
+  "src/core/nameMatch.js",
+];
+
+/**
+ * Is dist/ missing, or older than any source that produced it?
+ *
+ * Missing-only was the original test, and it made a fixed bug look unfixed: the
+ * surface had been generated earlier in the session, so an edit to the page
+ * template or the widget never reached the browser and the dev server kept
+ * serving pages whose CSS had a defect already repaired in git. "Rebuild when
+ * the inputs are newer than the output" is the oldest rule in build systems and
+ * costs one stat per source.
+ */
+function isStale(root) {
+  const built = path.join(root, "dist/data.html");
+  if (!fs.existsSync(built)) return true;
+  const at = fs.statSync(built).mtimeMs;
+  return SURFACE_SOURCES.some((rel) => {
+    const p = path.join(root, rel);
+    return fs.existsSync(p) && fs.statSync(p).mtimeMs > at;
+  });
+}
+
 export default function aiDataDevPlugin(root) {
   let building = null;
   return {
@@ -83,7 +117,7 @@ export default function aiDataDevPlugin(root) {
           if (fs.existsSync(onDisk) && fs.statSync(onDisk).isFile()) return next();
         } catch { /* undecodable URL — let the surface handle it */ }
         try {
-          if (!fs.existsSync(path.join(root, "dist/data.html"))) {
+          if (isStale(root)) {
             building ??= import(`${path.join(root, "scripts/build-ai-data.js")}`)
               .then((m) => m.buildAiData());
             await building;
