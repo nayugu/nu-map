@@ -68,6 +68,11 @@ captured raw record in `fixtures/banner/`.
 - `catalog-prereq-resolution` — every prereq/coreq reference resolves (baselined).
 - `mcp-actions` — `SUPPORTED_ACTIONS` ↔ `ACTION_DOCS` parity; action set locked.
 - `major-integrity` — no new impossible-to-satisfy requirement sections.
+- `engine-time-budget` — `timeBudgetMs` is a bound the engine honours: the injected
+  clock is read by every generation that searches, and a clock past the deadline
+  stops one. It also pins the deliberate converse — a **constant** clock disables
+  the budget, which is why the determinism and neutrality suites freeze it and
+  accept being node-bounded. Read that file before "speeding up" a frozen clock.
 
 ### Baselines (the drift pattern)
 
