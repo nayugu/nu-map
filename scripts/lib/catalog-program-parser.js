@@ -455,6 +455,7 @@ function parseRowGroup(rows) {
   let optionLabel   = null;   // the subheader naming that run ("Option 1")
   let optionLabelRow = null;  // its <tr>, withheld from notes once it becomes a label
   let catMarks      = [];     // category boundaries inside the open pool (XOM.groups)
+  let chooseStatedSH = null;  // the block's own stated credit, when it states one
 
   function commitPending() {
     if (!pending) return;
@@ -517,7 +518,7 @@ function parseRowGroup(rows) {
       // from the notes expecting to become group headings, so give them back.
       for (const c of catMarks) note(c.title);
       chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false;
-      flushOptions = false; catMarks = [];
+      flushOptions = false; catMarks = []; chooseStatedSH = null;
       return;
     }
 
@@ -586,6 +587,9 @@ function parseRowGroup(rows) {
       pushed = pushReq({
         type: '_CHOOSE',        // internal marker; caller converts
         minCount: chooseCount || chooseItems.length,
+        // The registrar's figure, so the expansion below does not have to guess
+        // a course size. Absent on the pages that state none.
+        ...(chooseStatedSH ? { statedSH: chooseStatedSH } : {}),
         courses: chooseItems,
         ...withGroups,
       });
@@ -607,7 +611,8 @@ function parseRowGroup(rows) {
       else for (const t of titles) note(t);
     }
 
-    chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; flushOptions = false;
+    chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false;
+    flushOptions = false; chooseStatedSH = null;
   }
 
   // Indexed, because arming `runOptions` needs to know whether the row AFTER an
@@ -859,6 +864,40 @@ function parseRowGroup(rows) {
       const hoursCredit = (credits === null && count === null)
         ? (parseHoursCell(tr) || null) : null;
       const effectiveCredits = credits ?? hoursCredit;
+      // ── The registrar's own credit for a COUNT block ──────────────────
+      //
+      // A pick-N block is emitted as a credit threshold, and the threshold used
+      // to be `N × 4` — an assumption about course size, not a reading. It is
+      // right for undergraduate courses and wrong wherever the page says
+      // otherwise: Applied AI MPS says "Complete two of the following [6]" over
+      // 3 SH graduate courses, and 2 × 4 = 8 demanded a third course, so a
+      // student who took exactly the two named read as UNSATISFIED and the extra
+      // 2 SH inflated structuralSH.
+      //
+      // Measured on the current edition: of 657 count blocks that also state a
+      // figure, 597 agree with N × 4, 57 are lower (we over-required) and 3 are
+      // higher (we UNDER-required, the direction a student cannot recover from).
+      // So this is not a safety-side rounding — both directions are real.
+      //
+      // Read only when the text gives no credit of its own, so an explicit
+      // "12 semester hours" in the sentence still wins over the cell.
+      //
+      // A CONDITIONAL count is excluded, and that exclusion was found by
+      // attacking this change rather than by reasoning: an A/B of both parsers
+      // in one process over the whole cache moved 59 thresholds (56 down, 3 up)
+      // and exactly ONE became satisfiable by a single course where two were
+      // needed before — International Business § Electives, "Complete two of the
+      // following courses (ONE IF BOTH COURSES ABOVE SELECTED). [4]". The
+      // registrar's 4 is right for the one-course branch, so neither figure is
+      // the block total; the requirement is conditional and this code cannot
+      // express it. Keeping N × 4 over-requires in one branch, which is
+      // recoverable, where trusting the 4 under-requires in the other, which is
+      // not — and the sentence prints verbatim either way, so the reader still
+      // sees the condition. Measured: 58 plain against 2 conditional, so the
+      // guard costs the fix nothing.
+      const conditional = /\b(?:if|unless|whichever)\b/i.test(text);
+      const statedCountSH = (count !== null && !conditional)
+        ? (parseHoursCell(tr) || null) : null;
 
       if (effectiveCredits !== null || count !== null) {
         commitPending();
@@ -871,6 +910,7 @@ function parseRowGroup(rows) {
         inChoose     = true;
         chooseCreds  = effectiveCredits ?? 0;
         chooseCount  = count  ?? 0;
+        chooseStatedSH = statedCountSH;
         chooseExplicit = true;
         // Options may be flush rather than indented, but only inside a sub-run
         // that bounds them — see the codecol branch above.
@@ -922,7 +962,9 @@ function parseRowGroup(rows) {
       ...(r.groups?.length ? { groups: r.groups } : {}),
     };
     if (r.courses.length <= 2 || r.minCount === 1) return { type: 'OR', courses: r.courses, ...keep };
-    return { type: 'XOM', numCreditsMin: r.minCount * 4, courses: r.courses, ...keep };
+    // The stated figure beats `minCount * 4`, which is an assumption about course
+    // size rather than a reading of the page.
+    return { type: 'XOM', numCreditsMin: r.statedSH ?? r.minCount * 4, courses: r.courses, ...keep };
   });
 
   // Whatever never found a node — a trailing condition, or a group that names

@@ -424,3 +424,104 @@ test('a concentration keeps the notes of the sections it flattens', () => {
   assert.ok(conc, 'the concentration was not found');
   assert.deepEqual(conc.notes, ['Research courses may not be used to satisfy this requirement.']);
 });
+
+// ── The registrar's credit beats our course-size assumption ─────────────────
+
+test('a count block uses the STATED credit, not count × 4', () => {
+  // A pick-N block is emitted as a credit threshold, and that threshold used to
+  // be `N × 4` — an assumption about course size rather than a reading. It is
+  // right for undergraduate courses and wrong wherever the page says otherwise.
+  // Applied AI MPS says "Complete two of the following [6]" over 3 SH graduate
+  // courses; 2 × 4 = 8 demanded a THIRD course, so a student who took exactly
+  // the two named read as unsatisfied and the extra 2 SH inflated structuralSH.
+  const root = page([
+    areaheader('Restricted Electives'),
+    comment('Complete two of the following', '6'),
+    option('AAI 6640', 'Applied Deep Learning', '3'),
+    option('AAI 6650', 'Recommender System', '3'),
+    option('AAI 6655', 'Prompt Engineering', '3'),
+    option('AAI 6665', 'Applied NLP', '3'),
+  ].join(''));
+  const s = byTitle(root, 'Restricted Electives');
+  assert.equal(s.requirements[0].type, 'XOM');
+  assert.equal(s.requirements[0].numCreditsMin, 6,
+    'the page states 6; 2 × 4 = 8 would demand a third 3 SH course');
+});
+
+test('a count block with no stated credit still falls back to count × 4', () => {
+  // The assumption is not removed, only demoted. Most pages state nothing, and
+  // 597 of 657 that do agree with it — so the fallback has to stay.
+  const root = page([
+    areaheader('Electives'),
+    comment('Complete two of the following'),
+    option('PHIL 1145'), option('PHIL 5555'), option('PHIL 5556'),
+  ].join(''));
+  const s = byTitle(root, 'Electives');
+  assert.equal(s.requirements[0].numCreditsMin, 8);
+});
+
+test('an explicit credit sentence still beats the hours cell', () => {
+  // "12 semester hours" in the TEXT is the registrar speaking directly; the cell
+  // is only consulted when the sentence gives no figure of its own.
+  const root = page([
+    areaheader('Electives'),
+    comment('Complete 12 semester hours from the following:', '6'),
+    option('PHIL 1145'), option('PHIL 5555'), option('PHIL 5556'),
+  ].join(''));
+  const s = byTitle(root, 'Electives');
+  assert.equal(s.requirements[0].numCreditsMin, 12);
+});
+
+test('a CONDITIONAL count keeps count × 4, because the figure is one branch', () => {
+  // The one case an A/B of both parsers over the whole cache found harmful.
+  // International Business § Electives says "Complete two of the following
+  // courses (one if both courses above selected). [4]" — the 4 is right for the
+  // ONE-course branch, so it is not the block total and neither figure is
+  // universally correct. Keeping 8 over-requires in one branch (recoverable);
+  // trusting the 4 under-requires in the other (not recoverable). The sentence
+  // prints verbatim regardless, so the reader still sees the condition.
+  const root = page([
+    areaheader('Electives'),
+    comment('Complete two of the following courses (one if both courses above selected).', '4'),
+    option('INTB 3320'), option('INTB 3330'), option('INTB 4983'),
+  ].join(''));
+  const s = byTitle(root, 'Electives');
+  assert.equal(s.requirements[0].numCreditsMin, 8,
+    'a conditional figure describes one branch, so it is not the block total');
+  // And the condition itself is not lost.
+  assert.deepEqual(s.notes,
+    ['Complete two of the following courses (one if both courses above selected).']);
+});
+
+test('a stated RANGE takes the minimum, not the maximum', () => {
+  // "9-12" in the hours cell is a range, and the threshold is a MINIMUM, so the
+  // low end is the reading. parseInt stops at the separator, which gives 9 for
+  // both the hyphen and the en dash the catalog mixes.
+  for (const cell of ['9-12', '9–12']) {
+    const root = page([
+      areaheader('Electives'),
+      comment('Complete three of the following:', cell),
+      option('PHTH 2100', 'A', '3'), option('PHTH 2200', 'B', '3'),
+      option('PHTH 2300', 'C', '3'), option('PHTH 2400', 'D', '3'),
+    ].join(''));
+    const s = byTitle(root, 'Electives');
+    assert.equal(s.requirements[0].numCreditsMin, 9,
+      `"${cell}" must read as 9, so three 3 SH courses satisfy it`);
+  }
+});
+
+test('a junk hours cell falls back rather than reading as zero', () => {
+  // A threshold of 0 would be satisfied by nothing at all, which is the worst
+  // possible failure for a requirement. `parseHoursCell` returns 0 for
+  // unparseable text and `|| null` turns that into "no figure stated".
+  for (const cell of ['', 'var', 'TBD', '—']) {
+    const root = page([
+      areaheader('Electives'),
+      comment('Complete two of the following:', cell),
+      option('PHIL 1145'), option('PHIL 5555'), option('PHIL 5556'),
+    ].join(''));
+    const s = byTitle(root, 'Electives');
+    assert.equal(s.requirements[0].numCreditsMin, 8,
+      `"${cell}" is not a figure, so the count × 4 fallback must hold`);
+  }
+});

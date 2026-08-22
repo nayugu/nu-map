@@ -887,6 +887,11 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   .rg-planned .rg-icon  { background: #dbeafe; border-color: #93c5fd; color: #2563eb; }
   .rg-unsat .rg-icon    { background: #fff; border-color: #d8d8d8; color: #ccc; }
   .rg-lbl    { font-size: 10px; font-weight: 600; color: #444; }
+  /* A category heading inside one pool, mirroring the panel's XomGroupHeader.
+     The markup shipped without this rule, so the heading rendered as an
+     unstyled div — visible, but not reading as a heading. */
+  .rg-cat    { font-size: 8px; font-weight: 700; letter-spacing: .04em;
+               text-transform: uppercase; color: #737373; margin: 3px 0 1px; }
   .rg-done    .rg-lbl   { color: #111; }
   .rg-planned .rg-lbl   { color: #1d4ed8; }
   .rg-unsat   .rg-lbl   { color: #888; }
