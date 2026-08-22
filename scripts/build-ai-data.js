@@ -1533,6 +1533,12 @@ writeJSON("index.json", {
   programs: `${JSON_ROOT}/programs/index.json`,
   courses: `${JSON_ROOT}/courses/index.json`,
   courseTitles: `${JSON_ROOT}/courses/titles.json`,
+  // Every entity on this surface — course, professor, program, subject, NUpath
+  // — mapped to its page, in one file. It is what the /data search box loads;
+  // it is listed here because "resolve a name to a URL" is the same question a
+  // developer or a fetch tool asks. Content-hashed, so read the URL from here
+  // rather than constructing it.
+  searchIndex: searchAssets.index,
   nupath: `${JSON_ROOT}/nupath.json`,
   professors: `${JSON_ROOT}/professors.json`,
   equivalences: `${ORIGIN}/northeastern/course-equivalences.json`,

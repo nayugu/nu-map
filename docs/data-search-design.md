@@ -1,5 +1,29 @@
 # Data-surface search — design
 
+**Status: built and shipping.** `src/core/nameMatch.js`,
+`src/core/rankRecords.js`, `src/core/entitySearch.js`,
+`src/adapters/northeastern/dataEntities.js`,
+`src/adapters/datasurface/searchBox.js`, emission and rails in
+`scripts/build-ai-data.js`, instrument at `scripts/data-search-probe.js`,
+verified by `test/unit/{name-match,rank-records}.test.js`,
+`test/contract/data-search.test.js` and
+`test/browser/data-search.browser.test.js`.
+
+As built, against the design below:
+
+| | designed | built |
+|---|---|---|
+| Index | 116 KB gzip est. | **703 KB raw / 148 KB gzip / 103 KB brotli** |
+| Scan per keystroke | ~1.1 ms | **2.84 ms median, 4.96 ms worst** |
+| Parse + prepare, once | ~13 ms | **20 ms** |
+| Widget bundle | — | **6.0 KB minified** |
+| Prefix monotonicity | the metric | **1 drop in 18,306 (0.005%)** |
+| Absent at own full name | must be 0 | **0** (was 434) |
+
+Three things in the design were deleted during the build because the data made
+them pointless — a `qualifierWords` role, a separate `codes` list, and the
+`pool` column. Each is recorded where it would otherwise be reinvented.
+
 One omnibox on every `/data` page that resolves **any entity on the public data
 surface** to its page: a course, a professor, a program, a NUpath code, a
 subject. Type a name, get the page.
@@ -331,6 +355,23 @@ as a floor: the box is a real `<form>` targeting a generated `/data/search`
 page, so with JS off the form still reaches a page and the nav rail still works.
 `/data/search?q=…` also makes a result set shareable as a URL.
 
+## Known, measured, and left alone
+
+Searching `chemistry` puts **CHM (Chemistry - CPS)** above **CHEM (Chemistry and
+Chemical Biology)**, because coverage prefers the shorter name and CPS's mirror
+subject is shorter. It is not a bug to be patched: the only rule that would flip
+it is a popularity prior over coverage, and that was measured and refused
+(it puts Calculus 3 above Calculus 1). A late tiebreak cannot help either, since
+the two scores are not tied — 225 against 116. Both rows appear, each labelled
+with its kind, which is the honest outcome for a genuinely ambiguous word.
+
+The single monotonicity drop is the same kind of thing: `Bioe` is the derived
+acronym of BSBioE, so every Bioengineering program matches at ACRONYM, and
+`Bioen` matches no acronym so they all fall to PREFIX where coverage reorders
+them. A long qualified name then loses to the plain ones at the ten-row cutoff.
+Legitimate re-ranking, not a lost entity — which is why the contract test
+ratchets the rate and demands zero only for absent-at-full-name.
+
 ## Open questions
 
 - **Enter jumping to the top hit** is decided, but it should be *gated* on the
@@ -343,6 +384,10 @@ page, so with JS off the form still reaches a page and the nav rail still works.
   (`psych`, `bio`) already resolve as prefixes. Cloudflare analytics on
   `/data/search?q=` would eventually supply real data; until then, keep the list
   short and label it a guess.
-- **Phone precompute** (~11 ms here, possibly ~100 ms throttled) needs one
+- **Phone precompute** (20 ms here, possibly ~100–200 ms throttled) needs one
   measurement on a throttled CPU before deciding whether the index ships
-  pre-normalized.
+  pre-normalized. It happens once, on focus, behind a fetch that costs more —
+  so this is a nice-to-know, not a blocker.
+- **The alias list is three courses.** It will stay a guess until there is real
+  query data; `/data/search?q=` page loads are the only place that could ever
+  supply it.
