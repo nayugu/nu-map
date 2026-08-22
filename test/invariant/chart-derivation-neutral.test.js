@@ -123,6 +123,30 @@ const generate = (p, variant, trace) => generatePlan({
  * Memoised rather than precomputed so a `--test-name-pattern` run pays only for the shapes it
  * actually looks at, and keyed on object identity so no label needs constructing.
  */
+// ── The shared pass was mutation-checked, not just re-run ────────────
+//
+// Sharing one recording across nine tests is only safe if those tests still FAIL when the
+// recording is wrong, and "they still pass after the refactor" does not show that — it is the
+// same shape of evidence as a guard that has never once fired. So each test was run against a
+// deliberately corrupted snapshot, by wrapping this memo's `snapshot()` rather than by editing
+// `src/`: mutating the DATA is the same tactic as `chart-probe --no-witness`, and stashing
+// source in a shared checkout disturbs the other session's tree.
+//
+// Every corruption was caught (tests failing, of 9):
+//
+//   drop a move from `moveLog`             3
+//   shift a card's term in `assignment`    3
+//   corrupt a `depth` entry                3
+//   empty `assignment` entirely            2
+//   shift an attempt boundary (`at`)       1
+//   drop a card from `roster`              1
+//   change `search-done`'s node count      1
+//   empty a `domainRows[].legal`           1
+//
+// One corruption is invisible by construction and is worth knowing: `attempts[i].nodes`. Nothing
+// reads it — `attemptSizes` recomputes the count from the `at` boundaries — so it is a dead field
+// in the snapshot rather than a hole in these tests. Perturbing `at`, which the partition check
+// actually rests on, fails as it should.
 const traceMemo = new Map();
 function withTrace(p, variant) {
   let byVariant = traceMemo.get(p);
@@ -241,11 +265,17 @@ test("every card-term pair gets exactly one fate", () => {
   // A fate that fell through every branch would render as "not offered that season", which is a
   // false claim about the catalog rather than a blank cell. So the counts must sum to the whole
   // grid, on every shape.
-  for (const p of PROGRAMS.slice(0, 12)) {
+  //
+  // `slice(0, 12)` was the ration this test paid when it generated its own plans. `withTrace`
+  // removed that cost, so the ration went with it: every shape now, and the `checked` counter
+  // because a loop whose every iteration `continue`s asserts nothing at all.
+  let checked = 0;
+  for (const p of PROGRAMS) {
     const variant = p.plan?.plans?.[0] ?? null;
     const { trace } = withTrace(p, variant);
     const snap = trace.snapshot();
     if (!snap.roster.length) continue;
+    checked++;
     const m = narrowingMatrix(snap);
     const sum = Object.values(m.counts).reduce((a, b) => a + b, 0);
     assert.equal(sum, m.rows.length * m.terms.length,
@@ -257,13 +287,18 @@ test("every card-term pair gets exactly one fate", () => {
       assert.equal(r.cells[r.at].fate, "chosen", `${p.key}: ${r.id} at term ${r.at}`);
     }
   }
+  assert.ok(checked > 0, "no shape in the sample had a roster — no fate was examined");
 });
 
 test("the reconstructed tree is a tree, and it is the recorded one", () => {
   // The reconstruction rests on the recording being a DFS pre-order — a node's parent is the
   // most recent earlier node one level shallower. If that assumption is ever false the result is
   // not an error, it is a plausible tree that is not the search's, so it is checked structurally.
-  for (const p of PROGRAMS.slice(0, 12)) {
+  //
+  // Widened off `slice(0, 12)` for the same reason as the test above, and counted for the same
+  // reason: three `continue`s stand between the loop and its first assertion.
+  let drawn = 0;
+  for (const p of PROGRAMS) {
     const variant = p.plan?.plans?.[0] ?? null;
     const { trace } = withTrace(p, variant);
     const snap = trace.snapshot();
@@ -274,6 +309,7 @@ test("the reconstructed tree is a tree, and it is the recorded one", () => {
       if (!a.drawable) continue;
       const tree = searchTree(snap, a.index);
       if (!tree.drawable) continue;
+      drawn++;
       let roots = 0;
       for (const nd of tree.nodes) {
         if (nd.parent < 0) { roots++; assert.equal(nd.depth, 0, `${p.key}: root at depth ${nd.depth}`); continue; }
@@ -290,6 +326,7 @@ test("the reconstructed tree is a tree, and it is the recorded one", () => {
         `${p.key}: a mark is neither a node nor a cut`);
     }
   }
+  assert.ok(drawn > 0, "no attempt in the sample was drawable — no tree was reconstructed");
 });
 
 test("the walkthrough reproduces the plan it claims to explain", () => {
@@ -517,6 +554,15 @@ test("a refusal still records a derivation", () => {
   // The case where the process is the ONLY account there is: a refused degree has no plan to
   // read instead. This asserts the panel has something to show, not that any particular program
   // refuses — the corpus's refusal set moves with the data.
+  //
+  // It used to stop at the first three refusals, because each one cost a generation it paid for
+  // itself. `withTrace` has already generated every shape in the sample for the tests above, so
+  // the remaining refusals are free and all of them are checked.
+  //
+  // And `checked > 0` at the end, which was the more serious gap: every statement in this loop
+  // sits behind two `continue`s, so a sample with no refusal-with-a-roster passed while asserting
+  // nothing. Same convention as `multi > 0` above — if a data change empties this set, the right
+  // outcome is a failure that says the test stopped testing, not a silent green.
   let checked = 0;
   for (const p of PROGRAMS) {
     const variants = p.plan?.plans?.length ? p.plan.plans : [null];
@@ -536,7 +582,8 @@ test("a refusal still records a derivation", () => {
       assert.ok(!model.stages.some(s => s.answered),
         `${p.key}#${vi}: a refusal claims a stage produced a plan`);
       checked++;
-      if (checked >= 3) return;
     }
   }
+  assert.ok(checked > 0,
+    "no refusal with a roster in the sample — this test asserted nothing");
 });

@@ -179,7 +179,15 @@ const SHAPES = process.env.CHART_CORPUS === "all"
   ? ALL_SHAPES
   : coveringSample(ALL_SHAPES, { size: 60 }).chosen;
 
-const results = SHAPES.map(({ p, variant }) => ({ p, variant, out: generate(p, variant) }));
+// `ms` is recorded HERE rather than re-measured later. The latency test below used to generate
+// 25 more plans to time work this pass had already done; this is the honest place to hold a
+// stopwatch — a live clock, a fresh engine, the real budget — so the measurement is free and
+// covers every success in the sample instead of the first 25.
+const results = SHAPES.map(({ p, variant }) => {
+  const t0 = Date.now();
+  const out = generate(p, variant);
+  return { p, variant, out, ms: Date.now() - t0 };
+});
 const made = results.filter(r => !r.out.refused);
 
 test("corpus › the engine has programs to work with", () => {
@@ -527,19 +535,17 @@ test("corpus › generation is deterministic", () => {
 });
 
 test("corpus › a plan is produced in a time a person would wait for", () => {
-  // Timed over plans that GENERATED, and re-using nothing.
+  // Timed over plans that GENERATED — refusals excluded, because a refusal spends the whole
+  // budget by definition and a median that includes them is partly a median of timeouts. What
+  // the assertion is about is how long a student waits for a plan they get.
   //
-  // This walked the first 40 of the corpus, refusals included, and a refusal costs the
-  // whole budget by definition — so the "median generation time" it reported was partly a
-  // median of timeouts, and it was 40 extra generations on top of the suite's own.
-  // What the assertion is about is how long a student waits for a plan they get.
-  const times = [];
-  for (const { p, variant } of made.slice(0, 25)) {
-    const t = Date.now();
-    generate(p, variant);
-    times.push(Date.now() - t);
-  }
-  times.sort((a, b) => a - b);
+  // The times come from this suite's own generation pass, not from 25 more generations run here.
+  // Same clock, same budget, same engine; the difference is that it is now every success in the
+  // sample rather than the first 25, and it costs nothing. "Re-using nothing" was the previous
+  // note's reasoning, and re-using the pass is strictly better — a second generation of a plan
+  // already built measures the same thing twice.
+  const times = made.map(r => r.ms).sort((a, b) => a - b);
+  assert.ok(times.length > 10, `only ${times.length} successful generations to time`);
   const median = times[Math.floor(times.length / 2)];
   // Measured: median 85 ms after the objective phase stopped running a full
   // prereq-aware witness on every trial move (it was 4.9 seconds).

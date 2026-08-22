@@ -192,6 +192,11 @@ test("budget › a CONSTANT clock is node-bounded, by design — do not 'fix' th
   // frozen clock can never search LESS — and the strict inequality is asserted once over the
   // sample, which is what actually demonstrates the budget is clock-driven. Without the second
   // half a sample of nothing but tiny certificates would pass this file while proving nothing.
+  // Stops at two strict witnesses. The frozen arm runs to the NODE budget by definition — that
+  // is the whole point — so each one costs a full unbounded search, and sweeping all eight put
+  // 17 s on the suite's clock to re-confirm the same fact six more times. Two is enough to
+  // distinguish "clock-driven" from "not", and the loop still checks monotonicity on every shape
+  // it reaches before stopping.
   let compared = 0, strict = 0;
   for (const p of PROGRAMS) {
     let t = 0;
@@ -203,6 +208,7 @@ test("budget › a CONSTANT clock is node-bounded, by design — do not 'fix' th
     assert.ok(frozen >= bounded,
       `${p.key}: an advancing clock spent ${bounded} nodes and a frozen one only ${frozen} — `
       + "a frozen clock cannot search less, so the budget is no longer clock-driven");
+    if (strict >= 2) break;
   }
   assert.ok(compared > 0, "no program produced a node count under both clocks");
   assert.ok(strict > 0,
