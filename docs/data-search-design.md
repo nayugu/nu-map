@@ -22,10 +22,14 @@ Measured on the 2026-08 build (`dist/data`, 13,081 pages):
 | Subjects | 231 | code + name |
 | NUpath | 13 | code (`ND`) + label (`Natural/Designed World`) |
 
-13,022 records against **13,081 pages**, and that gap is not yet explained:
-3,793 professor HTML pages exist against 3,741 professor records. Some of the
-difference is letter-index pages, but not all of it, and "some of it" is not an
-answer. See the bijection rail below — this is exactly the discrepancy it is for.
+13,022 records against **13,081 pages**, and the gap is fully accounted for:
+52 professor pages are *navigation* — 26 first-letter indexes plus 26 under
+`professors/last/` — and the remaining 7 are the section hubs. Reconciled by
+running the bijection rail early, which also settled that programs are exact
+(1,071 pages, 1,071 records, zero orphans) and that the 29 concentration pages
+are already inside the programs kind rather than a sixth kind. So the schema is
+five kinds, and navigation pages need a *declared* exemption in the rail — an
+allowlist that is itself asserted, never a silent skip.
 
 ## Speed: there is no performance problem
 
@@ -322,10 +326,6 @@ page, so with JS off the form still reaches a page and the nav rail still works.
   (`psych`, `bio`) already resolve as prefixes. Cloudflare analytics on
   `/data/search?q=` would eventually supply real data; until then, keep the list
   short and label it a guess.
-- **Concentrations.** 29 concentration pages exist under `majors/` and
-  `graduate/`. Whether they are already inside the 1,071 programs or are a
-  missing kind is unresolved — the bijection rail will answer it, which is the
-  point of running that rail before writing the UI.
 - **Phone precompute** (~11 ms here, possibly ~100 ms throttled) needs one
   measurement on a throttled CPU before deciding whether the index ships
   pre-normalized.
