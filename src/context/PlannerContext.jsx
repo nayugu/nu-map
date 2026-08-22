@@ -30,6 +30,7 @@ import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
          effectiveGradeOfTakes } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
+import { report } from "../data/healthReporter.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam, getHashCodeParam } from "../core/planShare.js";
 import { tabTitle, FIRST_PLAN_NAME } from "../core/tabTitle.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
@@ -841,6 +842,16 @@ const { locale, setLocale, locales, t } = useLanguage();
   const onDropPaletteRef    = useRef(null);
 
   // ── Effects: data loading ────────────────────────────────────
+  //
+  // This is where the boot verdict is decided, so it is where the health
+  // beacon fires. Reaching the `.then` means the bundle ran, React mounted,
+  // the providers built and ~1.4 MB of catalog arrived and parsed — which is
+  // every step of a boot except drawing, and the only honest place to say "the
+  // app started". The `.catch` is the one failure a user cannot work around:
+  // without a catalog there is no planner to show them.
+  //
+  // Both branches are sampled and carry no identifier; see
+  // src/core/healthBeacon.js for what may be sent and why.
   useEffect(() => {
     let mounted = true;
     setLoading(true); setLoadPct(5);
@@ -852,11 +863,16 @@ const { locale, setLocale, locales, t } = useLanguage();
         setLoadPct(100);
         setCourses(Object.values(base));
         setLoading(false);
+        report({ outcome: "ok", phase: "mount" });
       })
       .catch(err => {
         if (!mounted) return;
         setLoadErr(err.message);
         setLoading(false);
+        // `err` is handed over whole and reduced to one of eight enum values
+        // inside; the message — which carries the failing URL — is discarded
+        // before anything is sent.
+        report({ error: err, phase: "data" });
       });
     return () => { mounted = false; };
   }, []);

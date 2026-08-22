@@ -17,6 +17,7 @@
 // overlay it visually matches.
 
 import { Component } from "react";
+import { report } from "../data/healthReporter.js";
 
 const MSG = {
   en: "Something went wrong. Fixing it…",
@@ -298,6 +299,16 @@ export default class RecoveryBoundary extends Component {
 
   componentDidCatch(error, info) {
     console.error("[nu-map] render crash:", error, info?.componentStack);
+    // The 2026-08-20 outage landed exactly here — a const read before its
+    // initializer in PlannerContext threw on every render, every visitor saw
+    // this screen, and nothing outside the browser knew. A console.error is
+    // read by whoever has devtools open, which in production is nobody.
+    //
+    // Only the classified outcome leaves: not `error.message`, not
+    // `info.componentStack`. A component stack names the file, the component
+    // and often the props path, which is a source map of the app for anyone
+    // who collects it, and it is not needed to answer "is this build broken".
+    report({ error, phase: "mount" });
     this.scheduleGhost();
     this.startProbe();
     try {

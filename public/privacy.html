@@ -195,11 +195,62 @@
     at most once. You can turn course translation off in settings, which stops all such requests.
   </p>
 
+  <h2>Whether the app started</h2>
+  <p class="status">
+    Status, August 2026: switched off. Nothing is sent until a receiving server exists
+    and is configured into a build; today no NU Map build has one, so this describes what
+    will happen when it is switched on, not what happens now.
+  </p>
+  <details class="terms">
+    <summary>Read the full terms</summary>
+    <p>
+      NU Map has no accounts and no analytics, which means that when it breaks for
+      everybody, nobody finds out. That is not hypothetical: on 20 August 2026 a bug made
+      the app fail to start for every visitor, every automated test passed, every page
+      still answered normally, and it was noticed only because somebody happened to open
+      it. As more people rely on NU Map, "we find out by accident" stops being good enough.
+    </p>
+    <p>
+      So NU Map may send <em>one</em> tiny message per page load saying whether it managed
+      to start. It is not analytics and it cannot be turned into analytics: it carries
+      <strong>no identifier of any kind</strong> — no account, no session, no cookie, no
+      random id — so two of these messages cannot be recognised as coming from the same
+      browser, or the same person, by us or by anyone reading the logs. We deliberately give
+      up being able to count how many people use NU Map in exchange for that.
+    </p>
+    <p>A message carries six things and nothing else:</p>
+    <ul>
+      <li>whether the app started, or which of eight ways it failed — chosen from a fixed
+          list, never free text, so an error message that happened to mention a course or a
+          file can never travel with it;</li>
+      <li>how far it got: the page, the program code, the course data, or the planner;</li>
+      <li>roughly how long that took, rounded into a band such as "under 2 seconds" — never
+          an exact number, because an exact timing is itself a way to recognise a device;</li>
+      <li>which version of NU Map was running, so a bad release can be identified and undone;</li>
+      <li>which browser family it was — Chrome-like, Safari-like or Firefox-like — with the
+          version and device model removed <em>in your browser</em>, before anything is sent;</li>
+      <li>a number saying which version of this message format it is.</li>
+    </ul>
+    <p>
+      There is no plan, no course, no grade, no program, no page address, no language, no
+      screen size, no location and no clock reading from your device. Most page loads send
+      nothing at all: successful starts are sampled at about one in fifty, and failures at
+      about one in four, which is enough to see a problem and not enough to follow anyone.
+    </p>
+    <p>
+      Like the course-ratings rules, every claim here is a property of code you can read —
+      <code>src/core/healthBeacon.js</code> — and is enforced by tests that deliberately try
+      to smuggle a plan, a file path, an email address and a session id through it
+      (<code>test/contract/health-beacon-privacy.test.js</code>).
+    </p>
+  </details>
+
   <h2>What we don't do</h2>
   <ul>
     <li>We do not sell your data, and we do not share personal data with third parties. The one
         outbound case is public catalog text sent for course translation, described above.</li>
-    <li>We do not use advertising or tracking networks.</li>
+    <li>We do not use advertising or tracking networks. The start-up message described above
+        goes to NU Map's own server, carries no identifier, and is never shared.</li>
     <li>We do not store plan data server-side except as described above for the
         opt-in Claude integration, for as long as the link exists.</li>
     <li>We do not attach your identity, your device, or a clock reading to a course

@@ -209,6 +209,60 @@
           });
           return kept.length ? '?' + kept.join('&') : '';
         }
+        // ── Health beacon, shell edition ──────────────────────────
+        //
+        // src/data/healthReporter.js covers everything from React mounting
+        // onward. It cannot cover the failures that happen HERE, because in
+        // those the module never executes — and those are the worst ones: a
+        // stale shell pointing at a deleted chunk leaves a permanently frozen
+        // page, and the only party who can report it is this inline script.
+        //
+        // So this is a deliberate, minimal duplicate of that module's policy,
+        // in ES5, with the same guarantees: one send per page load, no
+        // identifier of any kind, a closed vocabulary of outcomes, a bucketed
+        // timing, and a total inability to throw. Failures sample at 25% to
+        // match SAMPLE.failure — an outage must not spend the whole daily
+        // quota in its first minute.
+        //
+        // Vite substitutes %VITE_HEALTH_BEACON_URL% at build time. When the
+        // variable is unset the literal token survives, so the leading '%'
+        // test is what keeps every unconfigured build and every fork silent.
+        var BEACON = '%VITE_HEALTH_BEACON_URL%';
+        var beaconSent = false;
+        function beacon(outcome, phase) {
+          try {
+            if (beaconSent || !BEACON || BEACON.charAt(0) === '%') return;
+            beaconSent = true;
+            if (Math.random() >= 0.25) return;   // SAMPLE.failure
+            var ms = null;
+            try { ms = Math.round(performance.now()); } catch (e) {}
+            var bucket = null;
+            if (typeof ms === 'number' && ms >= 0) {
+              var B = [500, 1000, 2000, 3000, 5000, 8000, 15000];
+              bucket = '15000+';
+              for (var i = 0; i < B.length; i++) { if (ms <= B[i]) { bucket = B[i]; break; } }
+            }
+            var build = null;
+            try {
+              var s = document.querySelector('script[type="module"][src*="/assets/index-"]');
+              build = s ? (s.getAttribute('src') || '').split('/').pop() : null;
+              if (build && !/^[A-Za-z0-9._-]{1,64}$/.test(build)) build = null;
+            } catch (e) {}
+            var ua = '';
+            try { ua = navigator.userAgent || ''; } catch (e) {}
+            var engine = /Firefox\/|FxiOS/i.test(ua) ? 'gecko'
+                       : /Chrome\/|Chromium\/|CriOS|Edg\//i.test(ua) ? 'chromium'
+                       : /Safari\/|AppleWebKit/i.test(ua) ? 'webkit' : 'other';
+            var body = JSON.stringify({ v: 1, o: outcome, p: phase, ms: bucket, b: build, e: engine });
+            // text/plain keeps this a CORS-simple request, so sendBeacon can
+            // make it without a preflight it is not allowed to make.
+            if (navigator.sendBeacon) {
+              navigator.sendBeacon(BEACON + '/b', new Blob([body], { type: 'text/plain;charset=UTF-8' }));
+            }
+          } catch (e) { /* a beacon must never be why the page failed */ }
+        }
+        window.__numapBeacon = beacon;
+
         var booted = false;
         window.__numapBooted = function () {
           booted = true;
@@ -928,6 +982,10 @@
 
         function recover() {
           if (booted) return;
+          // 'shell-only': this script ran, the entry bundle did not. Phase
+          // 'bundle' rather than 'shell' because the shell demonstrably
+          // worked — it is executing this line.
+          beacon('shell-only', 'bundle');
           showRecovery();
           startProbe();
         }
@@ -949,6 +1007,11 @@
           // overwrite exactly that.
           var pm = e && e.payload && (e.payload.message || String(e.payload));
           noteDeadChunk(pm && (pm.match(/https?:\/\/\S+?\.js/) || [])[0]);
+          // The dead chunk's URL is noted locally (hardReturn needs it to
+          // overwrite the poisoned cache entry) and is NOT sent. The build id
+          // already identifies the deploy, which is the actionable half; the
+          // specific chunk would only add a map of the app's code splitting.
+          beacon('chunk-dead', 'bundle');
           showRecovery();
           startProbe();
         });
@@ -959,6 +1022,7 @@
           var m = e && e.reason && (e.reason.message || String(e.reason));
           if (m && /Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed/i.test(m)) {
             noteDeadChunk((m.match(/https?:\/\/\S+?\.js/) || [])[0]);
+            beacon('chunk-dead', 'bundle');
             showRecovery();
             startProbe();
           }

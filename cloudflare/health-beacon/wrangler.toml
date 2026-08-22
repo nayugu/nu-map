@@ -1,0 +1,35 @@
+# NU Map health beacon receiver — Cloudflare Worker.
+#
+# Deploy:  npx wrangler deploy          (from this directory, after wrangler login)
+# Domain:  dashboard -> this worker -> Settings -> Domains & Routes
+#          -> add health.numap.app
+# Then set VITE_HEALTH_BEACON_URL=https://health.numap.app in Cloudflare Pages ->
+# nu-map -> Settings -> Environment variables, and redeploy the site.
+#
+# Until that variable is set, src/data/healthReporter.js is inert and the app
+# sends nothing — which is the intended state for any build made before this
+# worker exists, and for every fork.
+#
+# Read the stats with:
+#   npx wrangler secret put STATS_TOKEN        (once)
+#   curl -H "Authorization: Bearer $TOKEN" https://health.numap.app/stats
+
+name = "numap-health"
+main = "src/index.js"
+compatibility_date = "2026-07-01"
+
+# 16 independent shards, addressed by idFromName("shard-N") and picked at
+# random per beacon. See the header of src/index.js for why 16 and not 1 —
+# ShareBoxDO's single global instance is the mistake this is avoiding.
+[[durable_objects.bindings]]
+name = "BEACONS"
+class_name = "BeaconShard"
+
+# SQLite backend: the only Durable Object storage available on the Workers
+# free plan.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["BeaconShard"]
+
+[observability]
+enabled = true
