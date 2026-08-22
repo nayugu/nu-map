@@ -13082,4 +13082,5 @@
   <url><loc>https://numap.app/data/professors/zorana-matic-isautier</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/equivalences</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/search</loc><changefreq>monthly</changefreq></url>
 </urlset>
