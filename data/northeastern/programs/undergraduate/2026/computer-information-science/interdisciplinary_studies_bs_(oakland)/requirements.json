@@ -20,7 +20,7 @@
       "level": "verified",
       "kind": "major",
       "score": 0.98,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-science/interdisciplinary-studies-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -585,7 +585,8 @@
                   "subject": "BIOL",
                   "classId": 1147
                 }
-              ]
+              ],
+              "label": "Option 1"
             },
             {
               "type": "AND",
@@ -620,16 +621,13 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "label": "Option 2"
             }
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "notes": [
-        "Option 1",
-        "Option 2"
-      ]
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

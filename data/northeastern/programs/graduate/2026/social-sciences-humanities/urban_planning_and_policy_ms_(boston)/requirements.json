@@ -17,7 +17,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/public-policy-urban-affairs/urban-planning-policy-ms/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -449,7 +449,8 @@
                     "subject": "ARCH",
                     "classId": 5530
                   }
-                ]
+                ],
+                "label": "Urban Design and Real Estate"
               },
               {
                 "type": "AND",
@@ -464,7 +465,8 @@
                     "subject": "SUEN",
                     "classId": 7240
                   }
-                ]
+                ],
+                "label": "Physical Planning and Design for Sustainable Urbanism"
               },
               {
                 "type": "AND",
@@ -489,7 +491,8 @@
                     "subject": "ARTG",
                     "classId": 6310
                   }
-                ]
+                ],
+                "label": "Urban Experience Track"
               }
             ]
           },
@@ -499,12 +502,7 @@
             "classId": 6120
           }
         ],
-        "minRequirementCount": 3,
-        "notes": [
-          "Urban Design and Real Estate",
-          "Physical Planning and Design for Sustainable Urbanism",
-          "Urban Experience Track"
-        ]
+        "minRequirementCount": 3
       },
       {
         "type": "SECTION",

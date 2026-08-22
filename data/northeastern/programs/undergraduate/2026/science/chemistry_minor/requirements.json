@@ -17,7 +17,7 @@
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/chemistry-chemical-biology/chemistry-minor/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -92,7 +92,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "label": "General Chemistry"
             },
             {
               "type": "AND",
@@ -117,15 +118,14 @@
                   "subject": "CHEM",
                   "classId": 1151
                 }
-              ]
+              ],
+              "label": "Chemistry for Science Majors"
             }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "General Chemistry",
-        "Chemistry for Science Majors",
         "Engineering students may substitute the following course:"
       ]
     },

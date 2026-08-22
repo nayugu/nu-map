@@ -50,7 +50,7 @@
       "level": "verified",
       "kind": "major",
       "score": 0.98,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/architecture/design-public-health-bs-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -925,7 +925,8 @@
                     "subject": "ARTG",
                     "classId": 3810
                   }
-                ]
+                ],
+                "label": "Creative Fabrication"
               },
               {
                 "type": "AND",
@@ -940,7 +941,8 @@
                     "subject": "ARTG",
                     "classId": 3464
                   }
-                ]
+                ],
+                "label": "Experience Design"
               },
               {
                 "type": "AND",
@@ -955,7 +957,8 @@
                     "subject": "ARTG",
                     "classId": 3452
                   }
-                ]
+                ],
+                "label": "Graphic Design"
               },
               {
                 "type": "AND",
@@ -970,7 +973,8 @@
                     "subject": "ARTG",
                     "classId": 3444
                   }
-                ]
+                ],
+                "label": "Information Design"
               },
               {
                 "type": "AND",
@@ -995,19 +999,15 @@
                     "subject": "ARTG",
                     "classId": 3400
                   }
-                ]
+                ],
+                "label": "Interaction Design"
               }
             ]
           }
         ],
         "minRequirementCount": 4,
         "notes": [
-          "Complete 4 semester hours of ARTH courses.",
-          "Creative Fabrication",
-          "Experience Design",
-          "Graphic Design",
-          "Information Design",
-          "Interaction Design"
+          "Complete 4 semester hours of ARTH courses."
         ]
       }
     ]

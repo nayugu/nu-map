@@ -45,7 +45,7 @@
       "level": "verified",
       "kind": "major",
       "score": 0.98,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-english-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -247,7 +247,8 @@
                   "subject": "CS",
                   "classId": 4120
                 }
-              ]
+              ],
+              "label": "Focus 1: Natural Language Processing"
             },
             {
               "type": "AND",
@@ -262,7 +263,8 @@
                   "subject": "CS",
                   "classId": 4400
                 }
-              ]
+              ],
+              "label": "Focus 2: Programming Languages"
             },
             {
               "type": "AND",
@@ -277,17 +279,13 @@
                   "subject": "DS",
                   "classId": 4200
                 }
-              ]
+              ],
+              "label": "Focus 3: Analytics"
             }
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "notes": [
-        "Focus 1: Natural Language Processing",
-        "Focus 2: Programming Languages",
-        "Focus 3: Analytics"
-      ]
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

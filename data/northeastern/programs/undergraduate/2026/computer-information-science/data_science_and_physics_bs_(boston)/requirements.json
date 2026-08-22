@@ -62,7 +62,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/data-science-physics-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -240,7 +240,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "label": "Computer Science Option"
             },
             {
               "type": "AND",
@@ -265,16 +266,13 @@
                   "subject": "DS",
                   "classId": 3500
                 }
-              ]
+              ],
+              "label": "Data Science Option"
             }
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "notes": [
-        "Computer Science Option",
-        "Data Science Option"
-      ]
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

@@ -17,7 +17,7 @@
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/early-intervention-minor/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -102,7 +102,8 @@
                   "subject": "SLPA",
                   "classId": 5155
                 }
-              ]
+              ],
+              "label": "Option 1: Practicum Courses"
             },
             {
               "type": "AND",
@@ -152,16 +153,15 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "label": "Option 2: Electives"
             }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Option 1: Practicum Courses",
         "Completing the courses below will provide eligibility to pursue provisional certification with advanced standing in the state of Massachusetts upon employment in an early intervention setting. Consult with your program director to determine eligibility for and availability of these course options:",
-        "Option 2: Electives",
         "Complete a total of 4 semester hours. Suggested options are listed below. Students may select other coursework that focuses on working with young children and/or families; however, any courses outside of those listed will require approval from the early intervention program director:"
       ]
     }

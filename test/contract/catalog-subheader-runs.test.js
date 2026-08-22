@@ -28,6 +28,7 @@ import assert from 'node:assert/strict';
 import { parse as parseHTML } from 'node-html-parser';
 
 import { parseRequirements, UNDERGRAD_PROFILE } from '../../scripts/lib/catalog-program-parser.js';
+import { checkSection } from '../../src/core/gradRequirements.js';
 
 const page = (rows, heading = 'Requirements') => parseHTML(`
   <div id="programrequirementstextcontainer">
@@ -229,20 +230,77 @@ test('subheader › an indented pool with no instruction is untouched', () => {
   assert.deepEqual(s.requirements[0].courses.map(shape), ['CS3650', 'CS4800']);
 });
 
-test('subheader › a subheader is never consumed — it is a condition', () => {
-  // "For students pursuing emergency elementary teaching licenses" is a
-  // condition on the option beneath it that no node expresses, so it prints.
+test('subheader › the subheader NAMES its branch, and stops being a note', () => {
+  // Notes are section-level and printed in document order, which is right when a
+  // sentence's scope is unknown. Here it is not: the subheader labels the run
+  // directly beneath it. As notes, "Option 1" and "Option 2" stacked at the top
+  // of the section as a flat pair — divorced from the branches they name and
+  // reading like two conditions on the whole requirement — while the catalog
+  // prints each one INLINE above its own group.
+  const root = page([
+    areaheader('Biology'),
+    comment('Complete one of the following options:', '8'),
+    subheader('Option 1'), option('BIOL 1141'), option('BIOL 1147'),
+    subheader('Option 2'), option('BIOL 1111'), option('BIOL 1113'),
+  ].join(''));
+  const s = byTitle(root, 'Biology');
+  const or = s.requirements[0];
+  assert.equal(or.type, 'OR');
+  assert.deepEqual(or.courses.map(c => c.label), ['Option 1', 'Option 2']);
+  assert.equal(s.notes, undefined,
+    'expressed as labels, so they must not ALSO be quoted at the top');
+});
+
+test('subheader › a named branch reaches the audit as its own heading', () => {
+  // Hexagonal: the parser writes `label` on the node, the checkers surface it as
+  // `branchLabel`, and every renderer heads the branch with it instead of
+  // "All of". Kept apart from `label` so a renderer can tell the catalog's own
+  // name from the text composed for nesting.
+  const root = page([
+    areaheader('Biology'),
+    comment('Complete one of the following options:', '8'),
+    subheader('Option 1'), option('BIOL 1141'), option('BIOL 1147'),
+    subheader('Option 2'), option('BIOL 1111'), option('BIOL 1113'),
+  ].join(''));
+  const res = checkSection(byTitle(root, 'Biology'), new Set(['BIOL1141', 'BIOL1147']), {});
+  const branches = res.children[0].children;
+  assert.deepEqual(branches.map(b => b.branchLabel), ['Option 1', 'Option 2']);
+  assert.equal(branches[0].sat, true, 'Option 1 is complete');
+  assert.equal(branches[1].sat, false, 'Option 2 is not, and is not required to be');
+  // And the composed label a PARENT shows names the branches rather than
+  // nesting "All of (…)" inside "One of (…)".
+  assert.equal(res.children[0].label, 'One of (Option 1, Option 2)');
+});
+
+test('subheader › an unnamed branch still falls back to "All of"', () => {
   const root = page([
     areaheader('Track'),
     comment('Complete one of the following:'),
-    subheader('For students pursuing emergency licensure'), option('CS 2500'),
-    subheader('For students not pursuing emergency licensure'), option('DS 2000'),
+    subheader(''), option('CS 2500'), option('CS 2510'),
+    subheader(''), option('DS 2000'), option('DS 2500'),
   ].join(''));
-  const s = byTitle(root, 'Track');
-  assert.deepEqual(s.notes, [
-    'For students pursuing emergency licensure',
-    'For students not pursuing emergency licensure',
-  ], 'the instruction IS expressed and drops out; the conditions are not');
+  const res = checkSection(byTitle(root, 'Track'), new Set(), {});
+  for (const b of res.children[0].children) {
+    assert.equal(b.branchLabel, undefined);
+    assert.match(b.label, /^All of \(/);
+  }
+});
+
+test('subheader › a subheader naming no BRANCH still prints as a note', () => {
+  // Consumption is earned, not assumed: a subheader only becomes a label when a
+  // branch is actually built from the run beneath it. With no count instruction
+  // there is no branch, so the row is prose we could not express — and it prints,
+  // which is what keeps a condition from vanishing when the shape is one we do
+  // not read.
+  const root = page([
+    areaheader('Electives', '8'),
+    subheader('Approved by the program director'),
+    option('CS 3650'), option('CS 4800'),
+  ].join(''));
+  const s = byTitle(root, 'Electives');
+  assert.deepEqual(s.notes, ['Approved by the program director']);
+  assert.equal(JSON.stringify(s.requirements).includes('label'), false,
+    'and nothing claims it as a name');
 });
 
 // ── The real page ──────────────────────────────────────────────────────────

@@ -273,6 +273,9 @@ function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
   }
   const isSat   = r.sat;
   const heading =
+    // A branch the catalog NAMED keeps its name, so the export reads the way the
+    // page does: "Option 2 (0/2)" rather than "All of (0/2)".
+    r.branchLabel ? `${r.branchLabel} (${r.satCount ?? 0}/${r.total ?? 0})` :
     r.type === "AND" ? `All of (${r.satCount ?? 0}/${r.total ?? 0})` :
     r.type === "OR"  ? `One of (${r.satCount ?? 0}/${r.total ?? 0})` :
     r.type === "XOM" ? `${r.satSh ?? 0}/${r.reqSh ?? 0} SH from elective pool` :

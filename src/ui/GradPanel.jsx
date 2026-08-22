@@ -471,7 +471,16 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
   // the COURSE / RANGE / XOM early returns — a hook that only ran for some
   // requirement types, which is the ordering violation React warns about and
   // the reason the pool row could not reach for a key without moving it anyway.
+  // A branch the catalog NAMED keeps its name. `areasubheader` labels the run
+  // beneath it ("Option 1", "Computer Science Option"), and the parser attaches
+  // that to the branch rather than leaving it as a section note — where the two
+  // labels piled up at the top of the section, divorced from the branches they
+  // name, while the catalog prints each one inline above its own group. No
+  // locale key: the label is the registrar's own text, like a course title, and
+  // the surrounding "(n/m)" carries no translatable word.
+  const branchLabel = r.type === "AND" || r.type === "OR" ? r.branchLabel : null;
   const heading =
+    branchLabel ? `${branchLabel} (${r.satCount ?? 0}/${r.total ?? 0})` :
     r.type === "AND" ? t("grad.allOf", { count: r.satCount ?? 0, total: r.total ?? 0 }) :
     r.type === "OR"  ? t("grad.oneOf", { count: r.satCount ?? 0, total: r.total ?? 0 }) :
     sectionHeading || (r.label ?? "");

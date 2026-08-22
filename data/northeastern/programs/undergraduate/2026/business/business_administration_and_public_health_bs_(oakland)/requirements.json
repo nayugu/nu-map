@@ -44,7 +44,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/business-administration-combined-majors/business-administration-public-health-bs-oak/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -472,7 +472,8 @@
             {
               "type": "COURSE",
               "subject": "STRT",
-              "classId": 4501
+              "classId": 4501,
+              "label": "DMSB Students"
             },
             {
               "type": "AND",
@@ -562,15 +563,14 @@
                   "subject": "PHTH",
                   "classId": 5603
                 }
-              ]
+              ],
+              "label": "Bouvé Students"
             }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "DMSB Students",
-        "Bouvé Students",
         "Complete one of the following:"
       ]
     },

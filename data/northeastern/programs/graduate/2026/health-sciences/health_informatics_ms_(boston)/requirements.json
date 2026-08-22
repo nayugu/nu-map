@@ -17,7 +17,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/interdisciplinary/health-informatics-ms/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -578,12 +578,14 @@
               {
                 "type": "COURSE",
                 "subject": "HINF",
-                "classId": 7990
+                "classId": 7990,
+                "label": "Thesis Option"
               },
               {
                 "type": "COURSE",
                 "subject": "HINF",
-                "classId": 7701
+                "classId": 7701,
+                "label": "Capstone Option"
               }
             ]
           }
@@ -593,9 +595,7 @@
           "Health Informatics",
           "Technical",
           "Theory and Evaluation",
-          "Thesis Option",
           "Students must enroll in HINF 7990 for two semesters for a total of 6 semester hours with director approval only and under supervision of Personal Health Informatics faculty:",
-          "Capstone Option",
           "Complete any course for a minimum of 3 semester from the Health Informatics (without concentration) curriculum, that has not been used in previous requirements."
         ]
       }

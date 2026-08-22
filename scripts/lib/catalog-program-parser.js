@@ -381,6 +381,8 @@ function parseRowGroup(rows, consumed = null) {
   let flushOptions  = false;  // the open block's options are UNINDENTED (see below)
   let runOptions    = false;  // each SUBHEADERED RUN is one option of the block
   let optionNodes   = [];     // courses of the run currently open
+  let optionLabel   = null;   // the subheader naming that run ("Option 1")
+  let optionLabelRow = null;  // its <tr>, consumed once the label is attached
 
   function commitPending() {
     if (!pending) return;
@@ -396,10 +398,29 @@ function parseRowGroup(rows, consumed = null) {
    * branch below for what it fixes.
    */
   function closeOption() {
-    if (!optionNodes.length) return;
-    chooseItems.push(optionNodes.length === 1
+    if (!optionNodes.length) { optionLabel = null; optionLabelRow = null; return; }
+    const node = optionNodes.length === 1
       ? optionNodes[0]
-      : { type: 'AND', courses: optionNodes });
+      : { type: 'AND', courses: optionNodes };
+    // ── The subheader NAMES this branch, so it travels with it ────────
+    //
+    // Notes are section-level and printed in document order, which is right when
+    // a sentence's scope is unknown. Here it is not: the subheader labels the run
+    // directly beneath it. Left as a note, "Option 1" and "Option 2" stacked at
+    // the top of the section as a flat pair, divorced from the branches they
+    // name and reading like two conditions on the whole requirement — while the
+    // catalog prints each one INLINE above its own group.
+    //
+    // As a label it is expressed rather than quoted, so the row is consumed and
+    // stops appearing in the section's notes, and the panel can head the branch
+    // "Option 1 (0/2)" instead of "All of (0/2)".
+    if (optionLabel) {
+      node.label = optionLabel;
+      consume(optionLabelRow);
+    }
+    optionLabel = null;
+    optionLabelRow = null;
+    chooseItems.push(node);
     optionNodes = [];
   }
 
@@ -488,7 +509,14 @@ function parseRowGroup(rows, consumed = null) {
     // so it survives as a verbatim note.
     if (isSubheaderRow(tr)) {
       subheaderSeen = true;
-      if (runOptions) closeOption();
+      if (runOptions) {
+        closeOption();
+        // This subheader names the run that STARTS here, so it is remembered
+        // rather than emitted, and attached when that run closes.
+        const sp = tr.querySelector('td[colspan="2"] span');
+        optionLabel = sp?.text?.replace(/ /g, ' ').replace(/\s+/g, ' ').trim() || null;
+        optionLabelRow = optionLabel ? tr : null;
+      }
       else if (flushOptions) { commitPending(); commitChooseGroup(); }
       // Deliberately NOT a `continue`. A subheader can carry credit in its own
       // hourscol — Environmental and Sustainability Sciences says "Complete one

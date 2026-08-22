@@ -40,7 +40,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/spanish-public-health-ba-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -762,21 +762,19 @@
                   "subject": "HSCI",
                   "classId": 4730
                 }
-              ]
+              ],
+              "label": "Bouvé"
             },
             {
               "type": "COURSE",
               "subject": "SPNS",
-              "classId": 4700
+              "classId": 4700,
+              "label": "CSSH"
             }
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "notes": [
-        "Bouvé",
-        "CSSH"
-      ]
+      "minRequirementCount": 1
     }
   ],
   "footnotes": [

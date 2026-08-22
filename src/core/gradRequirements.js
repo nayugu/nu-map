@@ -151,7 +151,15 @@ const CHECKERS = Object.assign(Object.create(null), {
     return {
       type: 'AND', sat: satCount === children.length,
       satCount, total: children.length, children,
-      label: `All of (${labelList(children)})`,
+      // The catalog's own name for this branch when it gave one — an
+      // `areasubheader` above a run of options ("Option 1", "Computer Science
+      // Option"). It beats the generated label because it is what the page
+      // prints above exactly these courses, and a renderer showing "All of"
+      // where NEU shows "Option 2" makes the reader reconstruct the choice.
+      label: req.label ?? `All of (${labelList(children)})`,
+      // Kept apart from `label` so a renderer can tell the catalog's own name
+      // for this branch from the text we compose for nesting.
+      ...(req.label ? { branchLabel: req.label } : {}),
     };
   },
 
@@ -160,7 +168,8 @@ const CHECKERS = Object.assign(Object.create(null), {
     const children = checkAll(req.courses, placedSet, courseMap);
     return {
       type: 'OR', sat: children.some(c => c.sat), children,
-      label: `One of (${labelList(children)})`,
+      label: req.label ?? `One of (${labelList(children)})`,
+      ...(req.label ? { branchLabel: req.label } : {}),
     };
   },
 
@@ -1213,7 +1222,8 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
           satCount: children.length,
           total: children.length,
           children,
-          label: `All of (${children.map(c => c.label).join(', ')})`,
+          label: node.label ?? `All of (${children.map(c => c.label).join(', ')})`,
+          ...(node.label ? { branchLabel: node.label } : {}),
           allocatedCourses,
         };
       } else {
@@ -1226,7 +1236,8 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
           satCount,
           total: children.length,
           children,
-          label: `All of (${children.map(c => c.label).join(', ')})`,
+          label: node.label ?? `All of (${children.map(c => c.label).join(', ')})`,
+          ...(node.label ? { branchLabel: node.label } : {}),
           allocatedCourses: new Set(),
         };
       }
@@ -1277,7 +1288,8 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
         satCount: satisfiedChild ? 1 : 0,
         total: children.length,
         children,
-        label: `One of (${children.map(c => c.label).join(', ')})`,
+        label: node.label ?? `One of (${children.map(c => c.label).join(', ')})`,
+        ...(node.label ? { branchLabel: node.label } : {}),
         allocatedCourses,
       };
     }

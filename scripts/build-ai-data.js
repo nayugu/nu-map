@@ -933,10 +933,15 @@ const renderNode = (n) => {
       const t = titleOf.get(`${n.subject} ${n.classId}`);
       return `<li>${linkRef(n.subject, n.classId)}${t ? ` — ${escapeHtml(t)}` : ""}</li>`;
     }
+    // A branch the catalog named keeps its name — the requirement node carries
+    // the `areasubheader` above its run ("Option 1", "Computer Science Option"),
+    // and a model reading this page should see the choice the way NEU states it.
     case "AND":
-      return `<li>All of:<ul>${(n.courses ?? []).map(renderNode).join("")}</ul></li>`;
+      return `<li>${n.label ? `${escapeHtml(n.label)} — all of:` : "All of:"}`
+        + `<ul>${(n.courses ?? []).map(renderNode).join("")}</ul></li>`;
     case "OR":
-      return `<li>One of:<ul>${(n.courses ?? []).map(renderNode).join("")}</ul></li>`;
+      return `<li>${n.label ? `${escapeHtml(n.label)} — one of:` : "One of:"}`
+        + `<ul>${(n.courses ?? []).map(renderNode).join("")}</ul></li>`;
     case "XOM": {
       const want = n.numCreditsMin != null ? `${n.numCreditsMin} semester hours`
         : n.numRequired != null ? `${n.numRequired} course${n.numRequired === 1 ? "" : "s"}` : "courses";

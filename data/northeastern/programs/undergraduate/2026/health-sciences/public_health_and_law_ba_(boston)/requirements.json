@@ -43,7 +43,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/public-health-law-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -294,7 +294,8 @@
                   "subject": "SOCL",
                   "classId": 4520
                 }
-              ]
+              ],
+              "label": "Society and Behavior"
             },
             {
               "type": "AND",
@@ -334,7 +335,8 @@
                   "subject": "POLS",
                   "classId": 3487
                 }
-              ]
+              ],
+              "label": "Globalization and Global Health"
             },
             {
               "type": "AND",
@@ -364,7 +366,8 @@
                   "subject": "PPUA",
                   "classId": 5238
                 }
-              ]
+              ],
+              "label": "Environmental Health and Climate Change"
             },
             {
               "type": "AND",
@@ -389,7 +392,8 @@
                   "subject": "POLS",
                   "classId": 3307
                 }
-              ]
+              ],
+              "label": "Law, Policy, and Human Rights"
             },
             {
               "type": "AND",
@@ -419,19 +423,13 @@
                   "subject": "PHTH",
                   "classId": 5234
                 }
-              ]
+              ],
+              "label": "Healthcare Administration and Management"
             }
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "notes": [
-        "Society and Behavior",
-        "Globalization and Global Health",
-        "Environmental Health and Climate Change",
-        "Law, Policy, and Human Rights",
-        "Healthcare Administration and Management"
-      ]
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

@@ -17,7 +17,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/chemical/master-of-science-chemical-engineering-msche/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -449,7 +449,8 @@
                     "subject": "CHME",
                     "classId": 7990
                   }
-                ]
+                ],
+                "label": "Thesis Option"
               },
               {
                 "type": "AND",
@@ -479,7 +480,8 @@
                     "subject": "CHME",
                     "classId": 7945
                   }
-                ]
+                ],
+                "label": "Project Option"
               }
             ]
           },
@@ -682,9 +684,7 @@
         ],
         "minRequirementCount": 5,
         "notes": [
-          "Thesis Option",
-          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest:",
-          "Project Option"
+          "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest:"
         ]
       },
       {

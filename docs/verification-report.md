@@ -1,6 +1,6 @@
 # Major verification report
 
-Generated 2026-08-21 by `npm run data:verify`.
+Generated 2026-08-22 by `npm run data:verify`.
 
 > **What this can and cannot tell you.** There is no second authoritative
 > source for Northeastern degree requirements — Degree Works and the

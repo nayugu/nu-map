@@ -17,7 +17,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/university-interdisciplinary-programs/robotics-ms-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -430,7 +430,8 @@
                     "subject": "PT",
                     "classId": 7995
                   }
-                ]
+                ],
+                "label": "Project Option"
               },
               {
                 "type": "AND",
@@ -465,7 +466,8 @@
                       }
                     ]
                   }
-                ]
+                ],
+                "label": "Thesis Option"
               }
             ]
           },
@@ -504,10 +506,8 @@
         "notes": [
           "Coursework Option",
           "Complete 16 semester hours of courses from the elective course list.",
-          "Project Option",
           "Students working with Department of Physical Therapy, Movement, and Rehabilitation Sciences faculty should enroll in the PT course. Students working with Department of Bioengineering faculty should choose the BIOE course.",
           "Complete 12 semester hours of courses from the elective course list.",
-          "Thesis Option",
           "Complete 8 semester hours of courses from the elective course list.",
           "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"
         ]
@@ -539,7 +539,8 @@
               {
                 "type": "COURSE",
                 "subject": "CS",
-                "classId": 8674
+                "classId": 8674,
+                "label": "Project Option"
               },
               {
                 "type": "AND",
@@ -554,7 +555,8 @@
                     "subject": "CS",
                     "classId": 8674
                   }
-                ]
+                ],
+                "label": "Thesis Option"
               }
             ]
           }
@@ -563,9 +565,7 @@
         "notes": [
           "Coursework Option",
           "Complete 16 semester hours of courses from the elective course list.",
-          "Project Option",
           "Complete 12 semester hours of courses from the elective course list.",
-          "Thesis Option",
           "Complete 8 semester hours of courses from the elective course list."
         ]
       },
@@ -601,7 +601,8 @@
               {
                 "type": "COURSE",
                 "subject": "EECE",
-                "classId": 7945
+                "classId": 7945,
+                "label": "Project Option"
               },
               {
                 "type": "AND",
@@ -616,7 +617,8 @@
                     "subject": "EECE",
                     "classId": 7990
                   }
-                ]
+                ],
+                "label": "Thesis Option"
               }
             ]
           },
@@ -655,9 +657,7 @@
         "notes": [
           "Coursework Option",
           "Complete 16 semester hours of courses from the elective course list.",
-          "Project Option",
           "Complete 12 semester hours of courses from the elective course list.",
-          "Thesis Option",
           "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest.",
           "Complete 8 semester hours of courses from the elective course list.",
           "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"
@@ -690,7 +690,8 @@
               {
                 "type": "COURSE",
                 "subject": "ME",
-                "classId": 7945
+                "classId": 7945,
+                "label": "Project Option"
               },
               {
                 "type": "AND",
@@ -705,7 +706,8 @@
                     "subject": "ME",
                     "classId": 7990
                   }
-                ]
+                ],
+                "label": "Thesis Option"
               }
             ]
           },
@@ -744,9 +746,7 @@
         "notes": [
           "Coursework Option",
           "Complete 16 semester hours of courses from the elective course list.",
-          "Project Option",
           "Complete 12 semester hours of courses from the elective course list.",
-          "Thesis Option",
           "In addition to completing the thesis course, students must successfully complete the thesis submission process, including securing committee and Graduate School of Engineering signatures and submission of an electronic copy of their MS thesis to ProQuest.",
           "Complete 8 semester hours of courses from the elective course list.",
           "Complete the following (students must complete ENCP 6100 to qualify for co-op experience):"

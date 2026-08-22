@@ -43,7 +43,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/data-science/data-science-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -167,7 +167,8 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "label": "Computer Science Option"
             },
             {
               "type": "AND",
@@ -192,16 +193,13 @@
                   "subject": "DS",
                   "classId": 3500
                 }
-              ]
+              ],
+              "label": "Data Science Option"
             }
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "notes": [
-        "Computer Science Option",
-        "Data Science Option"
-      ]
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

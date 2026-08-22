@@ -17,7 +17,7 @@
       "level": "verified",
       "kind": "certificate",
       "score": 1,
-      "checkedAt": "2026-08-21",
+      "checkedAt": "2026-08-22",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/digital-platforms-service-innovation-graduate-certificate-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -72,7 +72,8 @@
                   "subject": "PPUA",
                   "classId": 6502
                 }
-              ]
+              ],
+              "label": "Course 1 for Learners with Background in Engineering or Computer Science"
             },
             {
               "type": "AND",
@@ -87,16 +88,15 @@
                   "subject": "IE",
                   "classId": 6400
                 }
-              ]
+              ],
+              "label": "Course 1 for Learners with Background in the Social Sciences or Business"
             }
           ]
         }
       ],
       "minRequirementCount": 1,
       "notes": [
-        "Complete a cross-disciplinary training course from the appropriate course 1 option list.",
-        "Course 1 for Learners with Background in Engineering or Computer Science",
-        "Course 1 for Learners with Background in the Social Sciences or Business"
+        "Complete a cross-disciplinary training course from the appropriate course 1 option list."
       ]
     },
     {
@@ -191,7 +191,8 @@
                   "subject": "PPUA",
                   "classId": 5261
                 }
-              ]
+              ],
+              "label": "Modeling and Algorithms Electives"
             },
             {
               "type": "AND",
@@ -241,7 +242,8 @@
                   "subject": "PPUA",
                   "classId": 7237
                 }
-              ]
+              ],
+              "label": "Urban Affairs Electives"
             },
             {
               "type": "AND",
@@ -276,7 +278,8 @@
                   "subject": "PPUA",
                   "classId": 6506
                 }
-              ]
+              ],
+              "label": "Policy and Regulation Electives"
             },
             {
               "type": "AND",
@@ -291,7 +294,8 @@
                   "subject": "CIVE",
                   "classId": 5699
                 }
-              ]
+              ],
+              "label": "Energy and Environment Electives"
             },
             {
               "type": "AND",
@@ -321,19 +325,13 @@
                   "subject": "MKTG",
                   "classId": 6283
                 }
-              ]
+              ],
+              "label": "Product Management and Platform-Based Business Model Innovations Electives"
             }
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "notes": [
-        "Modeling and Algorithms Electives",
-        "Urban Affairs Electives",
-        "Policy and Regulation Electives",
-        "Energy and Environment Electives",
-        "Product Management and Platform-Based Business Model Innovations Electives"
-      ]
+      "minRequirementCount": 1
     }
   ],
   "gpaRequirements": [
