@@ -57,11 +57,15 @@ export const COURSE_ALIASES = {
 export function courseRecords(courses) {
   const out = [];
   for (const c of courses) {
-    if (!c.subject || c.number == null || !c.title) continue;
+    if (!c.subject || c.number == null) continue;
     const code = `${c.subject} ${c.number}`;
     out.push({
       kind: "course",
-      name: c.title,
+      // A titleless course still gets a page, so it still needs a record: the
+      // build's bijection rail would otherwise fail the monthly unattended
+      // scrape over one bad row upstream. Falling back to the code keeps it
+      // findable by the thing it is actually identified by.
+      name: c.title || code,
       code,
       path: `${c.subject}/${c.number}`,
       aliases: COURSE_ALIASES[code] ?? [],

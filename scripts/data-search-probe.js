@@ -25,9 +25,16 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
 const flag = (f) => args.includes(f);
 
+// Newest by mtime, not first by name: running buildAiData without vite leaves
+// older hashed indexes in place, and measuring a stale one silently is worse
+// than not measuring at all.
 const assets = path.join(ROOT, "dist", "assets");
 const file = fs.existsSync(assets)
-  ? fs.readdirSync(assets).find((f) => /^data-index-.*\.json$/.test(f))
+  ? fs.readdirSync(assets)
+      .filter((f) => /^data-index-.*\.json$/.test(f))
+      .map((f) => [f, fs.statSync(path.join(assets, f)).mtimeMs])
+      .sort((a, b) => b[1] - a[1])
+      .map(([f]) => f)[0]
   : null;
 if (!file) {
   console.error("No dist/assets/data-index-*.json. Run a build first:\n"
