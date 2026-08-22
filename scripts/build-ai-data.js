@@ -925,8 +925,22 @@ const renderCourse = (subject, c) => {
   return out.join("\n");
 };
 
-// Program requirements: the parser's node tree, rendered recursively.
+// The catalog's own sentences, quoted and attributed. Shared by the section and
+// the node: a model answering from the tree alone would confidently omit the
+// conditions that live only in prose, so both levels have to carry them.
+const catalogQuote = (notes) => (notes ?? []).length
+  ? `<blockquote class="cat"><p class="muted">From the catalog</p>`
+    + notes.map((n) => `<p>${escapeHtml(n)}</p>`).join("")
+    + `</blockquote>`
+  : "";
+
+// Program requirements: the parser's node tree, rendered recursively. The quote
+// precedes the node it introduced, so document order here matches the catalog's.
 const renderNode = (n) => {
+  const quoted = catalogQuote(n?.notes);
+  return quoted ? `<li class="cat-lead">${quoted}</li>${renderNodeInner(n)}` : renderNodeInner(n);
+};
+const renderNodeInner = (n) => {
   if (!n || typeof n !== "object") return `<li>${escapeHtml(String(n))}</li>`;
   switch (n.type) {
     case "COURSE": {
@@ -945,7 +959,16 @@ const renderNode = (n) => {
     case "XOM": {
       const want = n.numCreditsMin != null ? `${n.numCreditsMin} semester hours`
         : n.numRequired != null ? `${n.numRequired} course${n.numRequired === 1 ? "" : "s"}` : "courses";
-      return `<li>Choose ${want} from:<ul>${(n.courses ?? []).map(renderNode).join("")}</ul></li>`;
+      // The registrar's own category headings inside the pool, where the page
+      // groups it that way. A model reading a flat list of 60 courses cannot
+      // answer "two must be from the same area"; with the areas named it can at
+      // least quote the structure the requirement is stated over.
+      const inner = (n.groups ?? []).length
+        ? n.groups.map((g) =>
+            `<li><strong>${escapeHtml(g.title)}</strong>`
+            + `<ul>${(g.courses ?? []).map(renderNode).join("")}</ul></li>`).join("")
+        : (n.courses ?? []).map(renderNode).join("");
+      return `<li>Choose ${want} from:<ul>${inner}</ul></li>`;
     }
     case "RANGE": {
       const ex = (n.exceptions ?? []).map((e) => linkRef(e.subject, e.classId)).join(", ");
@@ -975,11 +998,7 @@ const sectionInner = (s) => {
   // people, so the exclusions and eligibility lists that live only in prose
   // ("Research courses may not be used…") have to be readable here too — a
   // model answering from the tree alone would confidently omit them.
-  const cat = (s.notes ?? []).length
-    ? `<blockquote class="cat"><p class="muted">From the catalog</p>`
-      + s.notes.map((n) => `<p>${escapeHtml(n)}</p>`).join("")
-      + `</blockquote>`
-    : "";
+  const cat = catalogQuote(s.notes);
   return `${sh}${cat}${note}<ul class="req">${reqs.map(renderNode).join("")}</ul>`;
 };
 const prettyWords = (s) => String(s ?? "").replace(/[-_]+/g, " ").replace(/\b[a-z]/g, (ch) => ch.toUpperCase());

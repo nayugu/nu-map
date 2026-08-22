@@ -309,7 +309,60 @@ function XomGroupHeader({ title, style }) {
   return <span style={style}>{scaleLatinRuns(text)}</span>;
 }
 
-function ReqNode({ r, depth = 0, dimmed = false }) {
+/**
+ * The catalog's own sentences, quoted.
+ *
+ * One component for both placements — on a section (prose that names no course,
+ * where it is the only description of the requirement the student gets) and on a
+ * requirement node (the sentence that introduced that menu). It was written
+ * twice before this: the section copy printed every sentence at the top, so an
+ * instruction belonging to the third menu appeared above the first.
+ *
+ * Never paraphrased and never translated: it is the registrar's text, like a
+ * course title, and the attribution line is what stops it reading as our claim.
+ */
+function CatalogNotes({ notes, ph, indent = 4 }) {
+  const { t } = useLanguage();
+  if (!notes?.length) return null;
+  return (
+    <div style={{ marginBottom: ph ? 3 : 5, paddingLeft: indent, borderLeft: "2px solid var(--border-2)" }}>
+      <div style={{ fontSize: ph ? 7 : 8, fontWeight: 700, letterSpacing: 0.4,
+                    color: "var(--text-5)", textTransform: "uppercase" }}>
+        {t("grad.fromCatalog")}
+      </div>
+      {notes.map((n, i) => (
+        <div key={i} style={{ fontSize: ph ? 8 : 9, color: "var(--text-3)", lineHeight: 1.35 }}>
+          {n}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * A requirement node, preceded by the sentence that introduced it.
+ *
+ * The quote is rendered by a wrapper rather than inside ReqNodeInner because
+ * that function has four early returns (COURSE / RANGE / XOM / branch) and a
+ * note can sit on any node type — one place cannot be forgotten. It also keeps
+ * the hook order in ReqNodeInner untouched, which is the failure this file has
+ * already paid for once.
+ */
+function ReqNode(props) {
+  const ctx = useContext(GradCtx);
+  const notes = props.r?.notes;
+  if (!notes?.length) return <ReqNodeInner {...props} />;
+  return (
+    <>
+      <div style={{ paddingLeft: (props.depth ?? 0) * (ctx?.isPhone ? 4 : 10) }}>
+        <CatalogNotes notes={notes} ph={ctx?.isPhone} />
+      </div>
+      <ReqNodeInner {...props} />
+    </>
+  );
+}
+
+function ReqNodeInner({ r, depth = 0, dimmed = false }) {
   const [open, setOpen]  = useState(true);
   const [hov,  setHov]   = useState(false);
   const { t }            = useLanguage();
@@ -899,19 +952,7 @@ function SectionBlock({ sec, defaultOpen = true }) {
               their whole requirement this way ("Complete one of the following
               minors…" and the list of them), so this is the only description
               of the requirement the student gets. */}
-          {sec.notes?.length > 0 && (
-            <div style={{ marginBottom: ph ? 3 : 5, paddingLeft: 4, borderLeft: "2px solid var(--border-2)" }}>
-              <div style={{ fontSize: ph ? 7 : 8, fontWeight: 700, letterSpacing: 0.4,
-                            color: "var(--text-5)", textTransform: "uppercase" }}>
-                {t("grad.fromCatalog")}
-              </div>
-              {sec.notes.map((n, i) => (
-                <div key={i} style={{ fontSize: ph ? 8 : 9, color: "var(--text-3)", lineHeight: 1.35 }}>
-                  {n}
-                </div>
-              ))}
-            </div>
-          )}
+          <CatalogNotes notes={sec.notes} ph={ph} />
           {sec.children.map((r, i) => (
             <ReqNode key={i} r={r} dimmed={isPoolStructure && !r.sat && sec.satCount >= sec.minRequired} />
           ))}

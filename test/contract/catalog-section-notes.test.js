@@ -98,10 +98,14 @@ test('the live ME BSME markup keeps a grade condition on a fully-parsed section'
 
 // ── What must NOT become a note ──────────────────────────────────────────────
 
-test('a choose instruction the tree expresses is not repeated as a note', () => {
-  // The whole point of point-of-consumption marking. "Complete one of the
-  // following:" over two indented options IS the OR node below it, so quoting
-  // it back would be the parser talking to itself.
+test('a choose instruction heading the section is quoted at the section', () => {
+  // Nothing precedes it, so the section is its scope as printed. It is quoted
+  // even though the OR below expresses its COUNT, because deciding that a
+  // sentence adds nothing needs an instruction grammar — measured over all
+  // 4,213 instruction rows and refused (47.2% leave a tail, 1,159 distinct,
+  // mostly boilerplate). A redundant quote is recoverable; a dropped condition
+  // is not, and "(excluding HIST 2301 and HIST 2302)" rides sentences shaped
+  // exactly like this one.
   const root = page([
     areaheader('Ethics Elective'),
     comment('Complete one of the following:'),
@@ -109,13 +113,37 @@ test('a choose instruction the tree expresses is not repeated as a note', () => 
     option('PHIL 5555', 'Ethics'),
   ].join(''));
   const s = byTitle(root, 'Ethics Elective');
-  assert.equal(s.notes, undefined, `unexpected notes: ${JSON.stringify(s.notes)}`);
-  // Paired proof the sentence's content is actually in the tree.
+  assert.deepEqual(s.notes, ['Complete one of the following:']);
+  // The sentence is quoted AND expressed — the quote never replaces the tree.
   assert.equal(s.requirements[0].type, 'OR');
   assert.equal(s.requirements[0].courses.length, 2);
+  // Heading the section, it is not ALSO hung on the node.
+  assert.equal(s.requirements[0].notes, undefined);
 });
 
-test('a credit-hours instruction the tree expresses is not repeated as a note', () => {
+test('a SECOND instruction is quoted on the menu it introduces, not at the top', () => {
+  // The defect this design exists to fix. Under the old subtraction the
+  // unexpressed sentences were collected after the fact with no position, so an
+  // instruction belonging to the second menu printed above the first.
+  const root = page([
+    areaheader('Electives'),
+    comment('Complete one of the following:'),
+    option('PHIL 1145', 'Technology and Human Values'),
+    option('PHIL 5555', 'Ethics'),
+    comment('Complete one of the following, excluding any course used above:'),
+    option('HIST 2301', 'World History'),
+    option('HIST 2302', 'Modern History'),
+  ].join(''));
+  const s = byTitle(root, 'Electives');
+  // First sentence heads the section; the second rides its own menu.
+  assert.deepEqual(s.notes, ['Complete one of the following:']);
+  assert.equal(s.requirements.length, 2);
+  assert.equal(s.requirements[0].notes, undefined);
+  assert.deepEqual(s.requirements[1].notes,
+    ['Complete one of the following, excluding any course used above:']);
+});
+
+test('a credit-hours instruction heading the section is quoted at the section', () => {
   const root = page([
     areaheader('Technical Electives'),
     comment('Select 8 credit hours from the following:'),
@@ -124,17 +152,19 @@ test('a credit-hours instruction the tree expresses is not repeated as a note', 
     option('EECE 2412', 'Fundamentals of Electronics'),
   ].join(''));
   const s = byTitle(root, 'Technical Electives');
-  assert.equal(s.notes, undefined);
+  assert.deepEqual(s.notes, ['Select 8 credit hours from the following:']);
   assert.equal(s.requirements[0].numCreditsMin, 8);
 });
 
-test('a range sentence the tree expresses is not repeated as a note', () => {
+test('a range sentence is quoted as well as parsed', () => {
   const root = page([
     areaheader('Biology Electives'),
     range('BIOL 3000 or higher'),
   ].join(''));
   const s = byTitle(root, 'Biology Electives');
-  assert.equal(s.notes, undefined);
+  // A RANGE renders synthesised, never verbatim, so the sentence still carries
+  // what the node cannot — an "(excluding …)" tail used to go with it.
+  assert.deepEqual(s.notes, ['BIOL 3000 or higher']);
   assert.equal(s.requirements[0].type, 'RANGE');
 });
 
@@ -216,16 +246,19 @@ test('an areaheader is never a note — it is the section title', () => {
   assert.equal(s.notes, undefined);
 });
 
-test('a split-credit annotation is consumed only when a course takes it up', () => {
-  // "…count toward the mathematics requirement:" is expressed by the XOM the
-  // NEXT course row becomes. With no course row after it, nothing expresses it
-  // and it must print.
+test('a split-credit annotation prints whether or not a course takes it up', () => {
+  // "…count toward the mathematics requirement:" is a cross-counting rule, and
+  // the XOM the next course row becomes carries only its NUMBER. Which
+  // requirement the credit counts toward is stated nowhere else, so the sentence
+  // prints in both shapes — heading the section when a course follows it, and as
+  // the section's only description when none does.
   const taken = page([
     areaheader('Integrative Requirement'),
     comment('3 semester hours from the following count toward the mathematics requirement:'),
     course('MATH 2331', 'Linear Algebra'),
   ].join(''));
-  assert.equal(byTitle(taken, 'Integrative Requirement').notes, undefined);
+  assert.deepEqual(byTitle(taken, 'Integrative Requirement').notes,
+    ['3 semester hours from the following count toward the mathematics requirement:']);
 
   const orphaned = page([
     areaheader('Integrative Requirement', '3'),

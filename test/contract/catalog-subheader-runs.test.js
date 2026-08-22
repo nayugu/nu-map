@@ -28,7 +28,7 @@ import assert from 'node:assert/strict';
 import { parse as parseHTML } from 'node-html-parser';
 
 import { parseRequirements, UNDERGRAD_PROFILE } from '../../scripts/lib/catalog-program-parser.js';
-import { checkSection } from '../../src/core/gradRequirements.js';
+import { checkSection, allocateMajor } from '../../src/core/gradRequirements.js';
 
 const page = (rows, heading = 'Requirements') => parseHTML(`
   <div id="programrequirementstextcontainer">
@@ -247,8 +247,15 @@ test('subheader › the subheader NAMES its branch, and stops being a note', () 
   const or = s.requirements[0];
   assert.equal(or.type, 'OR');
   assert.deepEqual(or.courses.map(c => c.label), ['Option 1', 'Option 2']);
-  assert.equal(s.notes, undefined,
-    'expressed as labels, so they must not ALSO be quoted at the top');
+  // The LABELS are displayed verbatim as branch headings, so they are the one
+  // thing withheld from the notes — by string identity, not by judging
+  // expressiveness. The instruction above them is not a label, so it is quoted,
+  // and it heads the section because nothing precedes it.
+  assert.deepEqual(s.notes, ['Complete one of the following options:']);
+  for (const label of ['Option 1', 'Option 2']) {
+    assert.ok(!s.notes.includes(label),
+      `${label} is displayed as a branch heading — quoting it too would double it`);
+  }
 });
 
 test('subheader › a named branch reaches the audit as its own heading', () => {
@@ -324,4 +331,143 @@ test('subheader › the live Data Science BS pathway is a choice of TRACKS', () 
   // The co-requisite pairs survive as pairs inside their branch: a student on
   // the CS track takes CS 2500 WITH its lab, not one or the other.
   assert.ok(!shape(s.requirements[0]).includes('OR(CS2500'));
+});
+
+// ── A count above one: the subheaders are CATEGORIES, not branches ──────────
+//
+// The third reading of an areasubheader, and the one the other two exist to be
+// told apart from. "Complete three of the following" over five themed areas is
+// one pool of three courses, not a choice between areas — reading the runs as
+// alternatives demanded a whole theme (~25 courses) and check-major-integrity
+// caught it as newly over-consuming. So the TREE is left alone and the titles
+// become display metadata in XOM.groups, which XomGroupHeader renders above the
+// courses each one heads.
+//
+// Before this, the five titles were five notes stacked at the top of the
+// section: present, but in a flat list divorced from the courses they head, so
+// they read as five conditions on the whole requirement. That is the shape a
+// screenshot of Public Health BA (Oakland) showed.
+
+test('subheader › a count above one makes the subheaders category HEADINGS', () => {
+  const root = page([
+    areaheader('Upper-Level Course'),
+    comment('Complete three of the following (two must be from the same area):', '9'),
+    subheader('Society and Behavior'), option('SOCL 3441'), option('PSYC 3402'),
+    subheader('Global Health'), option('PHTH 1270'), option('INTL 3200'),
+  ].join(''));
+  const s = byTitle(root, 'Upper-Level Course');
+
+  // One pool: the tree is untouched, which is the whole point.
+  assert.equal(s.requirements.length, 1);
+  const pool = s.requirements[0];
+  assert.equal(pool.type, 'XOM');
+  assert.equal(pool.courses.length, 4, 'still ONE pool of four options');
+
+  // The titles head their own courses, in document order.
+  assert.deepEqual(pool.groups.map(g => g.title),
+    ['Society and Behavior', 'Global Health']);
+  assert.deepEqual(pool.groups.map(g => g.courses.map(shape)),
+    [['SOCL3441', 'PSYC3402'], ['PHTH1270', 'INTL3200']]);
+
+  // Displayed verbatim as headings, so they are NOT also quoted as notes —
+  // the same rule as a branch label, and it holds by string identity.
+  const notes = s.notes ?? [];
+  for (const title of ['Society and Behavior', 'Global Health']) {
+    assert.ok(!notes.includes(title), `${title} is a heading; quoting it would double it`);
+  }
+  // The instruction itself is not a heading, so it is still quoted.
+  assert.deepEqual(notes,
+    ['Complete three of the following (two must be from the same area):']);
+});
+
+test('subheader › a category set that does not PARTITION the pool prints instead', () => {
+  // The hostile case, and a bug this file was written to catch. Options appear
+  // BEFORE the first subheader, so the boundaries do not account for every
+  // option; rendering headings would hide MATH 2331 inside a pool it belongs to.
+  // Headings are refused — and then the titles must come back as notes, because
+  // they were withheld expecting to be displayed. Getting that wrong dropped 39
+  // sentences corpus-wide and moved the partition ratchet from 5.68% to 7.3%.
+  const root = page([
+    areaheader('Electives'),
+    comment('Complete three of the following:', '9'),
+    option('MATH 2331'),
+    subheader('Applied'), option('MATH 3081'),
+    subheader('Theory'), option('MATH 3150'),
+  ].join(''));
+  const s = byTitle(root, 'Electives');
+  const pool = s.requirements[0];
+  assert.equal(pool.courses.length, 3, 'every option is still in the pool');
+  assert.equal(pool.groups, undefined, 'a non-partition yields no headings');
+  // Nothing is lost: the titles are quoted instead of shown, ON THE POOL they
+  // describe rather than at the section, so they stay beside their own courses.
+  const notes = pool.notes ?? [];
+  for (const title of ['Applied', 'Theory']) {
+    assert.ok(notes.includes(title), `${title} was withheld AND not displayed — dropped`);
+  }
+});
+
+test('subheader › category headings never change what satisfies the pool', () => {
+  // Display metadata must be inert. Same pool twice, headings and none.
+  const rows = (withSubs) => [
+    areaheader('Electives'),
+    comment('Complete two of the following:', '8'),
+    ...(withSubs ? [subheader('A')] : []), option('SOCL 3441'),
+    ...(withSubs ? [subheader('B')] : []), option('PSYC 3402'),
+  ].join('');
+  const courseMap = {
+    'SOCL 3441': { subject: 'SOCL', classId: '3441', title: 'A', credits: 4 },
+    'PSYC 3402': { subject: 'PSYC', classId: '3402', title: 'B', credits: 4 },
+  };
+  const strip = (o) => JSON.parse(JSON.stringify(o,
+    (k, v) => (k === 'notes' || k === 'groups' ? undefined : v)));
+  for (const placed of [[], ['SOCL 3441'], ['SOCL 3441', 'PSYC 3402']]) {
+    const set = new Set(placed);
+    assert.deepEqual(
+      strip(checkSection(byTitle(page(rows(true)), 'Electives'), set, courseMap)),
+      strip(checkSection(byTitle(page(rows(false)), 'Electives'), set, courseMap)),
+      `headings changed the verdict for [${placed.join(', ')}]`);
+  }
+});
+
+test('subheader › category headings survive ALLOCATION, not just checking', () => {
+  // The bug this exists to prevent, and it is not hypothetical: the headings
+  // were first emitted as {title, children}, but the PARSED group shape is
+  // {title, courses} — allocateNode reads `g.courses.length` to re-slice the
+  // allocated children, so it threw on 40 pages and the scrape rails refused
+  // the whole run. checkSection does not touch `groups`, so a check-only test
+  // passed while the scraper could not write at all.
+  //
+  // The lesson is the repo's own rule, which I broke: enumerate the consumers of
+  // a node shape before introducing one. The panel reads the ALLOCATED shape
+  // (`children`); the allocator reads the PARSED shape (`courses`). Verifying
+  // against the renderer alone proved nothing about the producer.
+  const root = page([
+    areaheader('Upper-Level Course'),
+    comment('Complete three of the following:', '9'),
+    subheader('Society and Behavior'), option('SOCL 3441'), option('PSYC 3402'),
+    subheader('Global Health'), option('PHTH 1270'), option('INTL 3200'),
+  ].join(''));
+  const section = byTitle(root, 'Upper-Level Course');
+  assert.deepEqual(section.requirements[0].groups.map(g => g.courses.length), [2, 2],
+    'the parsed shape must be {title, courses} — allocateNode slices on it');
+
+  const courseMap = Object.fromEntries(
+    ['SOCL 3441', 'PSYC 3402', 'PHTH 1270', 'INTL 3200'].map((k) => {
+      const [subject, classId] = k.split(' ');
+      return [k, { subject, classId, title: k, credits: 4 }];
+    }));
+  const major = { requirementSections: [section], totalCreditsRequired: 12 };
+
+  // Must not throw, with nothing placed and with the pool satisfied.
+  for (const placed of [[], ['SOCL 3441', 'PSYC 3402', 'PHTH 1270']]) {
+    // allocateMajor returns the section results ARRAY (plus a synthetic General
+    // Electives section appended), not an object.
+    const res = allocateMajor(major, new Set(placed), courseMap);
+    const pool = res[0].children[0];
+    // And the allocated shape carries `children`, which is what the panel and
+    // the PDF render. Both halves of the contract, in one assertion.
+    assert.deepEqual(pool.groups.map(g => g.title),
+      ['Society and Behavior', 'Global Health']);
+    assert.deepEqual(pool.groups.map(g => g.children.length), [2, 2]);
+  }
 });

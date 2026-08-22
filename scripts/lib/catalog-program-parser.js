@@ -337,19 +337,51 @@ function flattenCourseNodes(reqs) {
  * Handles: COURSE, AND (lab pairs), OR (orclass rows), RANGE (commentindent),
  *          XOM/OR groups introduced by "choose N" comment rows.
  *
- * `consumed` (optional Set) collects the <tr>s whose prose this parse actually
- * EXPRESSED as structure. Every comment row left out of it is residue, and
- * parseTable prints it verbatim as a section note — so the marking is the
- * mechanism behind change 2 and has to be exact in one direction: a row marked
- * consumed that was not really expressed makes a real requirement disappear
- * silently, which is the failure mode this whole area was built to end.
+ * Returns `{ requirements, notes }`. Every prose row of the group reaches one
+ * of them — the node it sat above (`node.notes`), or the section (`notes`,
+ * for sentences with no node after them). That is a PARTITION, and the
+ * partition is the design.
  *
- * Hence marking happens at the point the OUTPUT is pushed, never at the point
- * the row is READ. The distinction is not academic: ME BSME's "Complete one
- * technical elective in one of the following subject areas:" is read here, and
- * it does open a choose block (its 4 lands in the hourscol) — but no course row
- * follows, so the block commits nothing and the sentence stays a note. Marking
- * on read would have swallowed the only statement of that requirement.
+ * It replaces a subtraction. Notes used to be the complement of a `consumed`
+ * Set: parseRowGroup marked the rows it had expressed, and `residualNotes`
+ * scanned the group afterwards for whatever was left. Two defects followed
+ * from that one choice, and both are structural rather than incidental:
+ *
+ *   · POSITION was lost. The complement is computed after the fact, so a
+ *     sentence introducing the third menu of a section arrived as an
+ *     unordered section-level note and printed at the top, above the first.
+ *   · PARTIAL expression was invisible. A row is consumed atomically, so
+ *     "Complete two of the following (excluding HIST 2301 and HIST 2302):"
+ *     was consumed for its COUNT and the exclusion — which names real course
+ *     codes — went with it. 325 groups / 172 distinct conditions.
+ *
+ * The obvious repair is to extract the unexpressed tail: match an anchored
+ * head and keep the residue. It was measured against all 4,213 instruction
+ * rows (1,253 distinct) and refused. 47.2% of rows leave a tail across 1,159
+ * distinct tails, and the overwhelming majority are not conditions at all but
+ * boilerplate the pattern happened not to cover — "the following", "from the
+ * following", "course list", "range", "two options". Tightening the grammar
+ * to silence those is unbounded, and it fails in the expensive direction: a
+ * pattern that grows to cover boilerplate eventually swallows a real
+ * condition, silently. Worse, it would be a THIRD grammar beside
+ * parseChooseInstruction and parseCreditInstruction, free to drift from the
+ * two that actually drive the parse.
+ *
+ * So nothing is subtracted. A sentence is printed even when the structure
+ * beside it says the same thing, because "says the same thing" is exactly the
+ * judgement that needs the grammar. The only sentences withheld are the ones
+ * displayed VERBATIM elsewhere, which is decidable by string identity and
+ * needs no grammar at all:
+ *
+ *   · GPA prose      — parseRequirements copies it into a gpaConstraint;
+ *   · a branch label — a subheader becomes `node.label`, printed as the
+ *     branch's own heading.
+ *
+ * Notes attach to the NODE, never to an index into `requirements`. Indices do
+ * not survive this file: the `g.creditHint` path wraps the whole array in one
+ * XOM, `mergeDuplicateSections` concatenates two sections' arrays, and
+ * `_CHOOSE` post-processing rebuilds nodes. An anchor that is part of the node
+ * moves with it through all three for free.
  */
 /**
  * A CourseLeaf sub-run header: `<span class="courselistcomment areasubheader">`.
@@ -358,14 +390,55 @@ function flattenCourseNodes(reqs) {
  * areasubheader undefined subheader".includes("areaheader")` is false, which is
  * exactly why parseTable's boundary test never saw one of these.
  */
+/**
+ * Catalog prose as one line. `\s` matches U+00A0 in JavaScript, so collapsing
+ * whitespace folds the nbsp too.
+ */
+function normText(s) {
+  return (s ?? '').replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 function isSubheaderRow(tr) {
   if (!tr) return false;          // called on rows[i + 1] at the end of a group
   return !!tr.querySelector('td[colspan="2"] span.areasubheader, td[colspan="2"] span.courselistcomment.areasubheader');
 }
 
-function parseRowGroup(rows, consumed = null) {
+function parseRowGroup(rows) {
   const requirements = [];
-  const consume = (tr) => { if (consumed && tr) consumed.add(tr); };
+
+  // Prose read but not yet attached. It drains onto the next node pushed to
+  // `requirements`, which is what makes the sentence land on the thing it
+  // introduces: an instruction opens a menu whose node is committed later by
+  // commitChooseGroup, and draining at the push means the sentence rides that
+  // menu rather than its first option.
+  let pendingNotes = [];
+  const note = (text) => {
+    if (!text) return;
+    // Flush first, so the anchor is the node AFTER the sentence rather than the
+    // one above it. Without this a condition sitting between two courses would
+    // drain onto the course it follows and read as a condition on that course.
+    commitPending();
+    if (!pendingNotes.includes(text)) pendingNotes.push(text);
+  };
+
+  // The single funnel for top-level nodes. Every `requirements.push` goes
+  // through it, so there is no way to add a node and forget the prose above it.
+  const leadNotes = [];
+  const pushReq = (node) => {
+    if (pendingNotes.length) {
+      // Prose ABOVE the first requirement HEADS the section. Nothing precedes
+      // it, so the section is its scope as printed — "A grade of C or higher is
+      // required in each course:" governs the whole list, and hanging it on the
+      // first course would claim a narrower scope than the page states. Only a
+      // sentence with a requirement already above it can be read as introducing
+      // what follows rather than heading the whole.
+      if (!requirements.length) leadNotes.push(...pendingNotes);
+      else node.notes = [...(node.notes ?? []), ...pendingNotes];
+      pendingNotes = [];
+    }
+    requirements.push(node);
+    return node;
+  };
 
   // Pending state
   let pending       = null;   // last node awaiting possible OR alternatives
@@ -375,18 +448,17 @@ function parseRowGroup(rows, consumed = null) {
   let chooseCount   = 0;      // pick-N count (OR / minRequirementCount)
   let chooseExplicit = false; // true when a "Complete N"/credit comment opened the group
   let splitPendingCredit = null; // split/supplemental credit (SH) awaiting its single course
-  let chooseRow     = null;   // the comment <tr> that opened the current choose block
-  let splitPendingRow = null; // the comment <tr> holding that split-credit annotation
   let subheaderSeen = false;  // an areasubheader has opened a sub-run in this group
   let flushOptions  = false;  // the open block's options are UNINDENTED (see below)
   let runOptions    = false;  // each SUBHEADERED RUN is one option of the block
   let optionNodes   = [];     // courses of the run currently open
   let optionLabel   = null;   // the subheader naming that run ("Option 1")
-  let optionLabelRow = null;  // its <tr>, consumed once the label is attached
+  let optionLabelRow = null;  // its <tr>, withheld from notes once it becomes a label
+  let catMarks      = [];     // category boundaries inside the open pool (XOM.groups)
 
   function commitPending() {
     if (!pending) return;
-    (inChoose ? chooseItems : requirements).push(pending);
+    if (inChoose) chooseItems.push(pending); else pushReq(pending);
     pending = null;
   }
 
@@ -398,7 +470,13 @@ function parseRowGroup(rows, consumed = null) {
    * branch below for what it fixes.
    */
   function closeOption() {
-    if (!optionNodes.length) { optionLabel = null; optionLabelRow = null; return; }
+    if (!optionNodes.length) {
+      // The run held nothing, so the subheader labels nothing. It was withheld
+      // from the notes on the expectation of becoming a label, so give it back
+      // rather than let it disappear on the one path that has no label to show.
+      if (optionLabel) note(optionLabel);
+      optionLabel = null; optionLabelRow = null; return;
+    }
     const node = optionNodes.length === 1
       ? optionNodes[0]
       : { type: 'AND', courses: optionNodes };
@@ -411,13 +489,11 @@ function parseRowGroup(rows, consumed = null) {
     // name and reading like two conditions on the whole requirement — while the
     // catalog prints each one INLINE above its own group.
     //
-    // As a label it is expressed rather than quoted, so the row is consumed and
-    // stops appearing in the section's notes, and the panel can head the branch
-    // "Option 1 (0/2)" instead of "All of (0/2)".
-    if (optionLabel) {
-      node.label = optionLabel;
-      consume(optionLabelRow);
-    }
+    // As a label it is displayed VERBATIM as the branch's own heading, so it is
+    // withheld from the notes — the one exception to printing every sentence,
+    // and it holds by string identity, not by judging expressiveness. The panel
+    // heads the branch "Option 1 (0/2)" instead of "All of (0/2)".
+    if (optionLabel) node.label = optionLabel;
     optionLabel = null;
     optionLabelRow = null;
     chooseItems.push(node);
@@ -433,11 +509,47 @@ function parseRowGroup(rows, consumed = null) {
   function commitChooseGroup() {
     if (!inChoose) return;
     inChoose = false;
-    // Nothing accumulated → the instruction expressed nothing, so its row is
-    // deliberately NOT consumed and survives as a verbatim note.
-    if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; chooseRow = null; flushOptions = false; return; }
-    consume(chooseRow);
-    chooseRow = null;
+    // Nothing accumulated → the instruction expressed nothing. Its sentence is
+    // already buffered, so it simply stays buffered and attaches to whatever
+    // comes next (or to the section, if nothing does).
+    if (!chooseItems.length) {
+      // No pool formed, so the category titles head nothing. They were withheld
+      // from the notes expecting to become group headings, so give them back.
+      for (const c of catMarks) note(c.title);
+      chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false;
+      flushOptions = false; catMarks = [];
+      return;
+    }
+
+    // Category headings for the pool about to be pushed. Sliced from the option
+    // list by the position each boundary was read at, so a title heads exactly
+    // the courses that followed it. A boundary before the first option (or one
+    // that caught no courses) contributes nothing rather than an empty heading.
+    const marks = catMarks;
+    catMarks = [];
+    let pushed = null;
+    const buildGroups = () => {
+      if (!marks.length) return null;
+      const out = [];
+      for (let m = 0; m < marks.length; m++) {
+        const from = marks[m].at;
+        const to = m + 1 < marks.length ? marks[m + 1].at : chooseItems.length;
+        const courses = chooseItems.slice(from, to);
+        // `courses`, NOT `children`: the parsed group shape is {title, courses}
+        // — allocateNode reads `g.courses.length` to re-slice the allocated
+        // children, and the breadth-area path above has always emitted that.
+        // Emitting `children` here threw on 40 pages and the scrape rails
+        // refused the whole run, which is exactly what they are for.
+        if (courses.length) out.push({ title: marks[m].title, courses });
+      }
+      // Only a partition is safe to render: if the boundaries do not account for
+      // every option, some course would be invisible inside a pool it belongs to,
+      // which is worse than showing the pool unheaded.
+      const covered = out.reduce((n, g) => n + g.courses.length, 0);
+      return covered === chooseItems.length && out.length ? out : null;
+    };
+    const groups = buildGroups();
+    const withGroups = groups ? { groups } : {};
 
     if (chooseCreds > 0) {
       // A credit-hour annotation followed by exactly one course is normally just a
@@ -453,29 +565,46 @@ function parseRowGroup(rows, consumed = null) {
       // src/core/gradRequirements.js, which sums the real per-instance total instead.
       if (chooseItems.length === 1 && chooseItems[0].type === 'COURSE') {
         if (chooseCreds > 16) {
-          requirements.push({ type: 'XOM', accumulate: true, numCreditsMin: chooseCreds, courses: chooseItems });
+          pushed = pushReq({ type: 'XOM', accumulate: true, numCreditsMin: chooseCreds, courses: chooseItems });
         } else {
-          requirements.push(chooseItems[0]);
+          pushed = pushReq(chooseItems[0]);
         }
       } else {
-        requirements.push({ type: 'XOM', numCreditsMin: chooseCreds, courses: chooseItems });
+        pushed = pushReq({ type: 'XOM', numCreditsMin: chooseCreds, courses: chooseItems, ...withGroups });
       }
     } else if (chooseCount === 1 || chooseItems.length <= 2) {
-      requirements.push({ type: 'OR', courses: chooseItems });
+      pushed = pushReq({ type: 'OR', courses: chooseItems });
     } else if (!chooseExplicit) {
       // Group formed only by blockindent, with no "Complete N"/credit instruction —
       // e.g. a bare referenced electives pool whose required count is stated in another
       // section. Default to "pick one" rather than fabricating "take all N courses".
-      requirements.push({ type: 'OR', courses: chooseItems });
+      pushed = pushReq({ type: 'OR', courses: chooseItems });
     } else {
       // Pick N of M: emit as a SECTION node inline so the outer section can wrap it
       // For now emit the items directly; the section's minRequirementCount will be set
       // by the caller when it knows the choose count.  Tag the group for the caller.
-      requirements.push({
+      pushed = pushReq({
         type: '_CHOOSE',        // internal marker; caller converts
         minCount: chooseCount || chooseItems.length,
         courses: chooseItems,
+        ...withGroups,
       });
+    }
+
+    // A category title is withheld from the notes expecting to be DISPLAYED, so
+    // if the node that was actually pushed carries no headings the titles have to
+    // come back — keyed on the pushed node, not on whether `buildGroups`
+    // succeeded, because only the pool shapes spread `groups` and an OR would
+    // have dropped them silently. Attached to the node rather than buffered, so
+    // they sit with the pool they describe instead of drifting to the next one.
+    //
+    // Getting the simpler version of this wrong dropped 39 sentences, and the
+    // partition contract test is what caught it: its miss rate went UP, which is
+    // the only signal that would have shown it.
+    if (marks.length && !pushed?.groups) {
+      const titles = marks.map(m => m.title);
+      if (pushed) pushed.notes = [...(pushed.notes ?? []), ...titles];
+      else for (const t of titles) note(t);
     }
 
     chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; flushOptions = false;
@@ -518,6 +647,25 @@ function parseRowGroup(rows, consumed = null) {
         optionLabelRow = optionLabel ? tr : null;
       }
       else if (flushOptions) { commitPending(); commitChooseGroup(); }
+      // ── A category boundary INSIDE one pool ──────────────────────────────
+      //
+      // The third case, and the one the other two exist to be distinguished
+      // from: a count above one over subheadered runs means the subheaders are
+      // thematic categories, not branches (Public Health BA — "Complete three of
+      // the following (two must be at the 3000 level or above and from the same
+      // area)" over five areas). The pool is genuinely one pool, so the tree is
+      // untouched; the titles are recorded as DISPLAY metadata in `XOM.groups`,
+      // which XomGroupHeader already renders above each category's own courses.
+      //
+      // Without this the five titles piled up as five notes at the top of the
+      // section, in a flat list divorced from the courses they head — visible,
+      // but reading like five conditions on the whole requirement.
+      else if (inChoose) {
+        commitPending();
+        const sp = tr.querySelector('td[colspan="2"] span');
+        const title = normText(sp?.text);
+        if (title) catMarks.push({ title, at: chooseItems.length, tr });
+      }
       // Deliberately NOT a `continue`. A subheader can carry credit in its own
       // hourscol — Environmental and Sustainability Sciences says "Complete one
       // course from each category:" over "Skills 4", "Earth, Oceans, and
@@ -584,14 +732,11 @@ function parseRowGroup(rows, consumed = null) {
       // single-course XOM carrying the section's allotted SH, so the course can satisfy
       // this section while also counting toward the others it appears in.
       if (splitPendingCredit !== null && node.type === 'COURSE') {
-        requirements.push({ type: 'XOM', numCreditsMin: splitPendingCredit, courses: [node] });
-        consume(splitPendingRow);
+        pushReq({ type: 'XOM', numCreditsMin: splitPendingCredit, courses: [node] });
         splitPendingCredit = null;
-        splitPendingRow = null;
         continue;
       }
       splitPendingCredit = null;
-      splitPendingRow = null;
 
       if (runOptions && isIndented) {
         // ── One option is a RUN, not a course ─────────────────────────────
@@ -657,14 +802,21 @@ function parseRowGroup(rows, consumed = null) {
     // RANGE: <span class="courselistcomment commentindent"> inside blockindent div
     const rangeSpan = wide.querySelector('span.commentindent');
     if (rangeSpan) {
+      const rangeText = normText(rangeSpan.text);
       const node = parseRangeText(rangeSpan.text.trim());
+      // Whether or not it parsed, the sentence prints. A RANGE renders
+      // synthesised ("BIOL 3000 or above"), never verbatim, so the original
+      // still carries what the node cannot — "(excluding HIST 2301 and
+      // HIST 2302)" was previously read for its bounds and thrown away with it.
+      // Noted BEFORE the push so it rides the range node itself; inside a menu
+      // it stays buffered and rides the menu, which is its real scope.
       if (node) {
         commitPending();
-        (inChoose ? chooseItems : requirements).push(node);
-        consume(tr);
+        note(rangeText);
+        if (inChoose) chooseItems.push(node); else pushReq(node);
+      } else {
+        note(rangeText);
       }
-      // A range sentence parseRangeText cannot read is left unconsumed on
-      // purpose — it prints verbatim instead of vanishing.
       continue;
     }
 
@@ -672,6 +824,18 @@ function parseRowGroup(rows, consumed = null) {
     const commentSpan = wide.querySelector('span.courselistcomment');
     if (commentSpan && !commentSpan.getAttribute('class')?.includes('areaheader')) {
       const text = commentSpan.text.trim();
+
+      // ── Every sentence prints; the two exceptions are shown VERBATIM already ──
+      //
+      // A GPA rule is copied into a gpaConstraint by parseRequirements, and a
+      // subheader that armed `optionLabel` becomes that branch's heading. Both
+      // tests are string identity, not a judgement about expressiveness — which
+      // is the whole reason this needs no instruction grammar.
+      const noteText = (parseGpaRule(text)
+                        || tr === optionLabelRow
+                        || catMarks.some(c => c.tr === tr))
+        ? null
+        : normText(commentSpan.text);
 
       // Split/supplemental credit: a per-course annotation cross-counting one course into
       // this section, e.g. "3 semester hours from the following count toward the
@@ -682,9 +846,8 @@ function parseRowGroup(rows, consumed = null) {
       // as an XOM so gradRequirements' split-credit path lets it satisfy every section it
       // appears in without inflating total credits.
       if (/(?:counts? toward|fulfills) the .+? requirement/i.test(text)) {
-        commitPending();
+        note(noteText);
         splitPendingCredit = parseCreditInstruction(text) ?? 0;
-        splitPendingRow = tr;
         continue;
       }
 
@@ -699,12 +862,16 @@ function parseRowGroup(rows, consumed = null) {
 
       if (effectiveCredits !== null || count !== null) {
         commitPending();
+        // Closes the PREVIOUS block, draining any prose still buffered onto it —
+        // so this sentence must be noted after, not before, or it would ride the
+        // menu above the one it introduces. That off-by-one IS the misplacement
+        // this change exists to fix.
         commitChooseGroup();
+        note(noteText);
         inChoose     = true;
         chooseCreds  = effectiveCredits ?? 0;
         chooseCount  = count  ?? 0;
         chooseExplicit = true;
-        chooseRow    = tr;   // consumed only if the block it opens commits something
         // Options may be flush rather than indented, but only inside a sub-run
         // that bounds them — see the codecol branch above.
         flushOptions = subheaderSeen;
@@ -731,6 +898,10 @@ function parseRowGroup(rows, consumed = null) {
         // the subheaders are labels; a count of one over several runs is the
         // either/or that this reading exists to express.
         runOptions = !subheaderSeen && count === 1 && isSubheaderRow(rows[i + 1] ?? null);
+      } else {
+        // Prose that opens nothing: a condition, a pointer to an advisor, a
+        // heading. It buffers and attaches to whatever node comes next.
+        note(noteText);
       }
       continue;
     }
@@ -740,12 +911,24 @@ function parseRowGroup(rows, consumed = null) {
   commitPending();
   commitChooseGroup();
 
-  // Post-process: expand _CHOOSE markers into proper OR/XOM nodes
-  return requirements.map(r => {
+  // Post-process: expand _CHOOSE markers into proper OR/XOM nodes.
+  // `notes` is carried across explicitly — the rebuilt node is a different
+  // object, and dropping it here would lose the sentence for exactly the
+  // pick-N-of-M sections that state the most conditions.
+  const expanded = requirements.map(r => {
     if (r.type !== '_CHOOSE') return r;
-    if (r.courses.length <= 2 || r.minCount === 1) return { type: 'OR', courses: r.courses };
-    return { type: 'XOM', numCreditsMin: r.minCount * 4, courses: r.courses };
+    const keep = {
+      ...(r.notes?.length ? { notes: r.notes } : {}),
+      ...(r.groups?.length ? { groups: r.groups } : {}),
+    };
+    if (r.courses.length <= 2 || r.minCount === 1) return { type: 'OR', courses: r.courses, ...keep };
+    return { type: 'XOM', numCreditsMin: r.minCount * 4, courses: r.courses, ...keep };
   });
+
+  // Whatever never found a node — a trailing condition, or a group that names
+  // no course at all (the 580 codeless sections, where the prose IS the
+  // requirement) — belongs to the section.
+  return { requirements: expanded, notes: [...leadNotes, ...pendingNotes] };
 }
 
 /**
@@ -763,19 +946,24 @@ function parseRowGroup(rows, consumed = null) {
  * whatever the grammars above fail to express, the reader still gets, in the
  * registrar's own words and in document order.
  *
- * Two exclusions, both because the sentence IS already said elsewhere:
- *   · rows consumed by parseRowGroup / parseSubjectPool, and
- *   · GPA prose, which parseRequirements turns into a gpaConstraint carrying
- *     the same text verbatim.
+ * Every prose row, flat and in document order, with GPA prose withheld because
+ * parseRequirements copies it into a gpaConstraint verbatim.
+ *
+ * This is the POSITIONLESS reading, used only where the parse has already
+ * discarded position: parseSubjectPool builds one pool from a whole group, and
+ * the breadth-area path flattens several groups into a single XOM. Somewhere to
+ * attach a sentence has to exist before it can be attached, so on those two
+ * paths the section carries them all. Everywhere else prose rides the node it
+ * introduced — see parseRowGroup.
  */
-function residualNotes(rows, consumedRows) {
+function proseNotes(rows, exclude = null) {
   const seen = new Set();
   const out = [];
   for (const tr of rows) {
-    if (consumedRows.has(tr)) continue;
+    if (exclude?.has(tr)) continue;
     const sp = tr.querySelector('td[colspan="2"] span.courselistcomment');
     if (!sp || (sp.getAttribute('class') ?? '').includes('areaheader')) continue;
-    const text = sp.text.replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
+    const text = normText(sp.text);
     if (!text || seen.has(text)) continue;
     if (parseGpaRule(text)) continue;
     seen.add(text);
@@ -844,20 +1032,20 @@ function parseTable(table, h2Title, profile) {
             }
           }
         }
-        if (poolCredit > 0 && parseRowGroup(initial.rows).length === 0) {
-          const poolConsumed = new Set();
+        if (poolCredit > 0 && parseRowGroup(initial.rows).requirements.length === 0) {
           const groups2 = areaGroups.map(g => ({
             title: g.title,
-            courses: flattenCourseNodes(parseRowGroup(g.rows, poolConsumed)),
+            courses: flattenCourseNodes(parseRowGroup(g.rows).requirements),
           })).filter(g => g.courses.length > 0);
           const allCourses = groups2.flatMap(g => g.courses);
           if (allCourses.length > 0) {
-            // The instruction row is residue here even though its NUMBER was
-            // read: merging the areas into one pool drops "from two of the
-            // following breadth areas", so the sentence still carries a
-            // condition the tree does not. It prints.
-            const notes = residualNotes(
-              [...initial.rows, ...areaGroups.flatMap(g => g.rows)], poolConsumed);
+            // Positionless here by necessity: flattenCourseNodes throws the
+            // structure away, so there is no node left to hang a sentence on.
+            // The instruction matters especially on this path — merging the
+            // areas into one pool drops "from two of the following breadth
+            // areas", a condition the tree does not carry.
+            const notes = proseNotes(
+              [...initial.rows, ...areaGroups.flatMap(g => g.rows)]);
             return [{
               type: 'SECTION',
               title: h2Title,
@@ -872,8 +1060,10 @@ function parseTable(table, h2Title, profile) {
   }
 
   return groups.map(g => {
-    const consumedRows = new Set();
-    const requirements = parseRowGroup(g.rows, consumedRows);
+    // `trailingNotes` is the prose that found no node to ride: a condition after
+    // the last requirement, or — for the 580 codeless sections — every sentence
+    // in the group, because the prose IS the requirement there.
+    const { requirements, notes: trailingNotes } = parseRowGroup(g.rows);
 
     // Comment texts survive on the section (transient — parseRequirements
     // strips them) so a GPA-titled group can be re-read as a constraint:
@@ -926,8 +1116,17 @@ function parseTable(table, h2Title, profile) {
       const pool = parseSubjectPool(g.rows, profile);
       if (pool) {
         const { rows: poolRows, ...xom } = pool;
-        poolRows.forEach(tr => consumedRows.add(tr));
-        const notes = residualNotes(g.rows, consumedRows);
+        // The pool is built from the whole group at once, so there is no per-node
+        // position to preserve; the section carries every sentence — except the
+        // two rows the pool itself came from.
+        //
+        // This is the ONE place a sentence is withheld as "already expressed",
+        // and it is sound here for a reason that does not generalise:
+        // SUBJECT_POOL_INSTRUCTION is ANCHORED and refuses on any residue, so a
+        // match proves the hours and the subject list are the whole of what
+        // those two rows say. Everywhere else that judgement would need an
+        // instruction grammar, which was measured and refused.
+        const notes = proseNotes(g.rows, new Set(poolRows));
         return {
           type: 'SECTION',
           title: g.title,
@@ -945,8 +1144,9 @@ function parseTable(table, h2Title, profile) {
       if (stated > 0) {
         // The section that names no course is where notes matter most: with no
         // children, the prose is the ONLY description of the requirement the
-        // reader gets. ME BSME's two sentences both land here.
-        const notes = residualNotes(g.rows, consumedRows);
+        // reader gets. ME BSME's two sentences both land here — and with no node
+        // to ride, parseRowGroup returns them as trailing notes already.
+        const notes = trailingNotes;
         return {
           type: 'SECTION',
           title: g.title,
@@ -960,7 +1160,7 @@ function parseTable(table, h2Title, profile) {
       return null;
     }
 
-    const notes = residualNotes(g.rows, consumedRows);
+    const notes = trailingNotes;
 
     if (g.creditHint > 0) {
       // The section header specifies a credit total → wrap in XOM

@@ -249,7 +249,20 @@ function nodeMinStatus(r, doneKeys) {
     .reduce((min, s) => STATUS_RANK[s] < STATUS_RANK[min] ? s : min, "done");
 }
 
+/**
+ * A requirement node, preceded by the sentence that introduced it. Wrapper for
+ * the same reason as the panel's: the inner function has early returns for
+ * COURSE and RANGE, and a note can sit on any node type.
+ */
 function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
+  const quoted = catalogNotesHtml(r?.notes);
+  const body = reqNodeHtmlInner(r, doneKeys, depth, dimmed);
+  if (!quoted) return body;
+  const pl = depth * 10;
+  return `<div style="padding-left:${pl}px">${quoted}</div>${body}`;
+}
+
+function reqNodeHtmlInner(r, doneKeys, depth = 0, dimmed = false) {
   const pl = depth * 12;
   if (r.type === "COURSE") {
     const isDimmed = dimmed && !r.sat;
@@ -282,9 +295,18 @@ function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
     r.title ?? r.label ?? "";
   // XOM and OR: dim unsatisfied children once parent is satisfied (same as app)
   const dimChildren = (r.type === "XOM" || r.type === "OR") && isSat;
-  const childrenHtml = (r.children ?? []).map(c =>
-    reqNodeHtml(c, doneKeys, depth + 1, dimChildren && !c.sat)
-  ).join("");
+  // Category headings inside one pool, mirroring the panel's XomGroupHeader. The
+  // export used to render the flat child list here while the panel grouped them,
+  // so an advisor's PDF and the student's screen disagreed about the same pool.
+  const childrenHtml = (r.groups ?? []).length
+    ? r.groups.map(g =>
+        `<div class="rg-cat" style="padding-left:${pl + 10}px">${esc(g.title)}</div>`
+        + (g.children ?? []).map(c =>
+            reqNodeHtml(c, doneKeys, depth + 1, dimChildren && !c.sat)).join("")
+      ).join("")
+    : (r.children ?? []).map(c =>
+        reqNodeHtml(c, doneKeys, depth + 1, dimChildren && !c.sat)
+      ).join("");
   const groupDimmed = dimmed && !isSat;
   const groupStatus = isSat ? nodeMinStatus(r, doneKeys) : "unsat";
   const groupIcon   = groupStatus === "done" ? "✓" : groupStatus === "planned" ? "○" : groupDimmed ? "╱" : "";
@@ -295,6 +317,19 @@ function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
     </div>
     ${childrenHtml}
   </div>`;
+}
+
+/**
+ * The catalog's own sentences, quoted. Shared by the section and the node so the
+ * export cannot drift from the panel — the two used to hold separate copies and
+ * only the section one existed, which is why an instruction belonging to the
+ * third menu printed above the first.
+ */
+function catalogNotesHtml(notes) {
+  if (!(notes ?? []).length) return "";
+  return `<div class="sec-cat"><div class="sec-cat-h">From the catalog</div>`
+    + notes.map(n => `<div class="sec-cat-n">${esc(n)}</div>`).join("")
+    + `</div>`;
 }
 
 function sectionHtml(sec, doneKeys) {
@@ -343,11 +378,7 @@ function sectionHtml(sec, doneKeys) {
   // Catalog prose the parse could not express. English literal like the rest of
   // the export (PDF export is English-only by design), and here that is not even
   // a compromise: the sentence itself is the catalog's English.
-  const catalogHtml = (sec.notes ?? []).length
-    ? `<div class="sec-cat"><div class="sec-cat-h">From the catalog</div>`
-      + sec.notes.map(n => `<div class="sec-cat-n">${esc(n)}</div>`).join("")
-      + `</div>`
-    : "";
+  const catalogHtml = catalogNotesHtml(sec.notes);
   const noteHtml = isPoolStructure && sec.minRequired > 0
     ? `<div class="sec-note">Requires ${esc(sec.minRequired)} of ${esc(sec.total)}</div>` : "";
   const secStatus = sec.sat ? (() => {

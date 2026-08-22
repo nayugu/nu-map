@@ -144,6 +144,32 @@ if (argv.includes('--parse')) {
         + (s.creditsRequired ? `, ${s.creditsRequired} SH` : '')
         + (s.notes?.length ? `, ${s.notes.length} note(s)` : ''));
       for (const note of s.notes ?? []) console.log(`      note: ${note}`);
+      // The requirement tree, so a note's POSITION is visible. A note attached
+      // to a node prints above that node, exactly where the renderers put it —
+      // which is the only way to check placement without a scraper run.
+      const walk = (nodes, depth) => {
+        for (const r of nodes ?? []) {
+          const pad = '  '.repeat(depth + 3);
+          for (const note of r.notes ?? []) console.log(`${pad}↳ note: ${note}`);
+          const what = r.type === 'COURSE'
+            ? `${r.subject} ${r.classId}`
+            : r.type + (r.label ? ` "${r.label}"` : '')
+              + (r.numCreditsMin ? ` ≥${r.numCreditsMin}SH` : '');
+          console.log(`${pad}${what}`);
+          // XOM.groups is display metadata — category headings inside one pool.
+          // Printed here because "did the subheader become a heading or vanish"
+          // is the only question that distinguishes the fix from a data loss.
+          if (r.groups?.length) {
+            for (const g of r.groups) {
+              console.log(`${pad}  ▸ ${g.title}`);
+              walk(g.children, depth + 2);
+            }
+            continue;
+          }
+          if (r.courses) walk(r.courses, depth + 1);
+        }
+      };
+      if (process.argv.includes('--tree')) walk(s.requirements, 0);
     }
     if (out.generalElectiveSH) console.log(`  general electives: ${out.generalElectiveSH} SH`);
     for (const note of out.notes ?? []) console.log(`  program note: ${note}`);
@@ -179,11 +205,17 @@ if (SECTIONS) {
     const profile = file.includes('_graduate_') ? GRAD_PROFILE : UNDERGRAD_PROFILE;
     let out;
     try { out = parseRequirements(root, profile, {}); } catch { continue; }
+    const nodeNotesOf = (nodes) => (nodes ?? []).flatMap(
+      r => [...(r.notes ?? []), ...nodeNotesOf(r.courses)]);
     const push = (s, conc) => records.push({
       page, file, pane: conc ? 'concentration' : 'section', table: 0,
       section: s.title ?? '', hours: s.creditsRequired ?? 0,
       reqs: (s.requirements ?? []).length, min: s.minRequirementCount ?? 0,
       notes: s.notes ?? [], conc: !!conc, rows: [],
+      // Prose attached to a NODE rather than the section. `g.notes` alone can no
+      // longer answer a coverage question, because the sentences that used to
+      // pile up there are now the ones that found their place.
+      nodeNotes: nodeNotesOf(s.requirements ?? []),
     });
     for (const s of out.requirementSections ?? []) push(s, false);
     for (const c of out.concentrations?.concentrationOptions ?? []) push(c, true);

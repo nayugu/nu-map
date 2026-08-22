@@ -226,10 +226,16 @@ const CHECKERS = Object.assign(Object.create(null), {
  */
 export function checkReq(req, placedSet, courseMap) {
   const checker = CHECKERS[req.type];
+  // The catalog's own sentences for this node, carried here rather than in each
+  // checker: notes can sit on any node type, and a note is display-only — no
+  // checker reads one, and none may, because a sentence must never decide
+  // whether a requirement is met (see the notes contract in the parser).
+  const notes = req.notes?.length ? { notes: req.notes } : null;
   if (!checker) {
-    return { type: req.type ?? 'UNKNOWN', sat: false, label: String(req.type ?? 'Unknown') };
+    return { type: req.type ?? 'UNKNOWN', sat: false, label: String(req.type ?? 'Unknown'), ...notes };
   }
-  return checker(req, placedSet, courseMap);
+  const out = checker(req, placedSet, courseMap);
+  return notes ? { ...out, ...notes } : out;
 }
 
 /**
@@ -886,7 +892,21 @@ function releaseNode(result) {
   return { ...result, sat: false, satCount: 0, allocatedCourses: new Set(), released: true };
 }
 
-function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContext = false,
+/**
+ * Attach the catalog's own sentences to an allocation result.
+ *
+ * A wrapper rather than an edit to each of allocateNodeInner's ~20 returns: one
+ * place cannot be forgotten when a return is added, and notes are display-only,
+ * so nothing about the allocation itself may depend on them. Recursive calls go
+ * through here too, so a note on a nested branch survives.
+ */
+function allocateNode(...args) {
+  const out = allocateNodeInner(...args);
+  const notes = args[0]?.notes;
+  return notes?.length ? { ...out, notes } : out;
+}
+
+function allocateNodeInner(node, placedSet, used, originalUsed, courseMap, poolContext = false,
                       creditBudget = Infinity, ctx = null, countBudget = Infinity) {
   // A hole or a scalar where a requirement node belongs. Unsatisfied and
   // contributing nothing is the honest reading; crashing would take out the whole

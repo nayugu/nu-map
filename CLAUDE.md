@@ -193,12 +193,38 @@ Facts that follow from this:
      static `/northeastern/ai/**` pages, always attributed ("From the catalog")
      and never translated — the words are the registrar's.
   Rules that must not be weakened:
-  - **Consumption is marked where the OUTPUT is pushed, never where the row is
-    read** (`parseRowGroup`'s `consume`). ME BSME's instruction row IS read and
-    does open a choose block; the block commits nothing, so the sentence stays.
-    Re-testing the instruction patterns from outside was the cheaper design and
-    is wrong: it drifts the moment a grammar changes, and a row wrongly marked
-    consumed deletes a real requirement in silence.
+  - **Notes are a PARTITION, not a subtraction.** Every prose row reaches one
+    place: `node.notes` (the sentence that introduced that node) or
+    `section.notes` (prose above the first requirement, which HEADS the section,
+    plus anything trailing). There is no `consumed` Set and no `residualNotes`
+    — that earlier design computed notes as the complement of what the parser
+    marked, and both of its defects were structural: position was lost (an
+    instruction belonging to the third menu printed above the first), and
+    partial expression was invisible (a row is consumed atomically, so
+    "Complete two of the following (excluding HIST 2301 and HIST 2302):" was
+    consumed for its COUNT and the exclusion went with it — 325 groups / 172
+    distinct conditions).
+    A sentence is printed even when the structure beside it says the same thing,
+    because "says the same thing" is exactly the judgement that needs an
+    instruction grammar. That grammar was built and measured against all **4,213
+    instruction rows (1,253 distinct)** and refused: 47.2% leave a tail across
+    1,159 distinct tails, and most are boilerplate the pattern happened not to
+    cover ("the following", "course list", "range", "two options"). Tightening it
+    is unbounded and fails in the expensive direction — a pattern that grows to
+    cover boilerplate eventually swallows a real condition, silently.
+    Only sentences **displayed VERBATIM elsewhere** are withheld, which is
+    decidable by string identity and needs no grammar: GPA prose (copied into a
+    `gpaConstraint`), a subheader that became a branch `label`, a subheader that
+    became an `XOM.groups` heading, and the two subject-pool rows — that last one
+    the sole "already expressed" exception, sound only because
+    `SUBJECT_POOL_INSTRUCTION` is anchored and refuses on any residue, so a match
+    is a proof. Guarded by `test/contract/catalog-note-partition.test.js`
+    (coverage ratchet, no-invention, and inertness).
+  - **Notes attach to the NODE, never to an index** into `requirements`. Indices
+    do not survive this file: the `creditHint` path wraps the whole array in one
+    XOM, `mergeDuplicateSections` concatenates two arrays, and `_CHOOSE`
+    post-processing rebuilds nodes. An anchor that is part of the node moves
+    through all three for free.
   - **Do not filter notes by shape.** Short label-like lines look like noise
     until you check: Interdisciplinary Studies BS (Oakland) § Minor Requirement
     is 16 SH with zero parsed requirements, and the fifteen bare minor names
