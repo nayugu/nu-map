@@ -105,6 +105,19 @@ jobs:
       - run: npm run build
       - run: npm run test:boot
 
+      # Platform walls. This job is the only one that produces a dist/, so it is
+      # the only place these can be checked at all.
+      #
+      # They matter here because they fail a DEPLOY, not a request: Cloudflare
+      # rejects the upload, the site keeps serving the last good build, and the
+      # monthly scrape goes on committing data that never ships. Nobody is
+      # watching that happen. This turns it into a red check on the commit that
+      # crossed the line, while the fixes are still cheap.
+      #
+      # Warns from 75% and only fails at 90%, so it does not block on a wall that
+      # is merely worth knowing about. See scripts/load-probe.js.
+      - run: npm run probe:ci
+
   live:
     # Non-deterministic (hits catalog.northeastern.edu). Scheduled + manual only,
     # never gating a PR. Catches NEU markup changes that break the scrape parser.

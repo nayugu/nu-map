@@ -59,6 +59,11 @@
  *                     at your own production during registration week is a
  *                     way to cause the outage you were trying to prevent.
  *
+ *   --ci              The walls as a GATE, for the build. Warns from 75% and
+ *                     fails at 90%, so a wall is caught on the commit that
+ *                     crossed it rather than by Cloudflare rejecting a deploy
+ *                     silently, weeks later, with the scrape still committing.
+ *
  * ── Reading the output ──────────────────────────────────────────────
  *
  * Headroom is reported as percent-consumed against a CITED limit, never as a
@@ -559,12 +564,113 @@ function diff(aPath, bPath) {
   return { moved };
 }
 
+// ── Mode: --ci (fail the build before Cloudflare does) ───────────────
+
+/**
+ * The walls, as a gate.
+ *
+ * Every wall in this file fails a DEPLOY rather than a request, and that is a
+ * uniquely bad failure shape here: Cloudflare rejects the upload, the site keeps
+ * serving the last good build, and the monthly scrape goes on committing data
+ * that never ships. Nobody is watching that happen — the first symptom a student
+ * sees is wrong course data, weeks later.
+ *
+ * So the build should refuse first, where a human is watching and the error says
+ * what to do.
+ *
+ * TWO levels, not one, and that is deliberate. A single threshold has to sit
+ * somewhere, and just underneath it is a band that reports "ok" while being in
+ * real trouble — which is exactly what the first run of this gate did:
+ * `largest single asset` came back **89.9%** against a 90% threshold and printed
+ * `ok`. A tenth of a percent from a limit no paid plan lifts is not ok, and a
+ * gate that says otherwise is lying by rounding.
+ *
+ * WARN at 75% (visible, does not block), FAIL at 90% (blocks). The band between
+ * them is where the fixes are still cheap, which is the only reason to be told
+ * early at all. `--ci-warn-only` downgrades the failure for a first rollout.
+ */
+function ci() {
+  const { dir, built } = siteRoot();
+  if (!built) {
+    console.error("\nload-probe --ci needs a build. Run `npm run build` first.\n");
+    process.exitCode = 2;
+    return null;
+  }
+
+  const WARN_AT = 0.75;
+  const FAIL_AT = 0.9;
+  const all = walk(dir);
+  const biggest = all.sort((a, b) => b.size - a.size)[0];
+
+  const checks = [
+    {
+      name: "Pages files per site",
+      used: all.length,
+      limit: LIMITS.pagesFilesFree,
+      unit: (n) => String(n),
+      fix: "Options, cheapest first: move to a paid Cloudflare plan (limit becomes "
+         + `${LIMITS.pagesFilesPaid.toLocaleString()}); drop the per-professor pages from `
+         + "scripts/build-ai-data.js (~3,700 files); or publish dist/data as its own "
+         + "Pages project, which gets its own budget. Do NOT serve /data from a Worker "
+         + "on the free plan — one full crawl is 14% of the daily request quota, and "
+         + "these URLs exist to be crawled. See docs/scalability.md.",
+    },
+    {
+      name: "largest single asset",
+      used: biggest.size,
+      limit: LIMITS.pagesMaxFileBytes,
+      unit: mb,
+      detail: relative(dir, biggest.path),
+      // Worth stating loudly: this is the one limit with no paid escape at all.
+      fix: "No paid plan lifts this one. Serve the file from R2 instead, or remove it. "
+         + "If it is public/ort/*.wasm: nothing loads it — TransformersJsEngine is "
+         + "commented out of the cascade in TranslationContext.jsx.",
+    },
+  ];
+
+  console.log(`\nLOAD-PROBE CI GATE   (warn at ${WARN_AT * 100}%, fail at ${FAIL_AT * 100}% of a hard limit)\n`);
+  let failed = 0, warned = 0;
+  const report = { mode: "ci", checks: {} };
+
+  for (const c of checks) {
+    const share = c.used / c.limit;
+    const level = share >= FAIL_AT ? "FAIL" : share >= WARN_AT ? "WARN" : "ok  ";
+    if (level === "FAIL") failed++;
+    else if (level === "WARN") warned++;
+    report.checks[c.name] = { used: c.used, limit: c.limit, share, level: level.trim() };
+    console.log(`${level}  ${c.name.padEnd(24)} ${String(c.unit(c.used)).padStart(11)} / ${String(c.unit(c.limit)).padStart(11)}  ${pct(c.used, c.limit).padStart(6)}`);
+    if (c.detail) console.log(`      ${"".padEnd(24)} ${c.detail}`);
+    if (level !== "ok  ") console.log(`\n      ${c.fix}\n`);
+  }
+
+  report.failed = failed;
+  report.warned = warned;
+
+  if (failed && !has("--ci-warn-only")) {
+    console.error(`${failed} wall(s) at or past ${FAIL_AT * 100}%. Failing the build now, because\n`
+      + `Cloudflare would reject the DEPLOY instead — and a rejected deploy is silent:\n`
+      + `the site keeps serving the last good build while the monthly scrape goes on\n`
+      + `committing data that never ships.\n`);
+    process.exitCode = 1;
+  } else if (failed) {
+    console.log(`${failed} wall(s) past ${FAIL_AT * 100}% — not failing (--ci-warn-only).\n`);
+  } else if (warned) {
+    console.log(`${warned} wall(s) past ${WARN_AT * 100}%. Not blocking — but this is the band\n`
+      + `where the fixes are still cheap, which is the only reason to be told early.\n`);
+  } else {
+    console.log(`All walls have headroom.\n`);
+  }
+  return report;
+}
+
 // ── Main ─────────────────────────────────────────────────────────────
 
 const out = flag("--json");
 let report;
 
-if (has("--diff")) {
+if (has("--ci")) {
+  report = ci();
+} else if (has("--diff")) {
   const i = argv.indexOf("--diff");
   report = diff(argv[i + 1], argv[i + 2]);
 } else if (has("--edge")) {
