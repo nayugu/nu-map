@@ -211,6 +211,33 @@ test("data-search › encode and decode are inverse over the whole fixture", () 
   assert.equal(again.p[round.records.indexOf(coded)], "", "a derivable path was still stored");
 });
 
+test("data-search › an accented name is reachable by typing ASCII", () => {
+  // Synthetic, so the assertion holds whatever the month's catalog contains.
+  // Measured on the real index: 3 of 13,022 records carry an accented letter
+  // ("Bouvé" twice, professor "Zoë Lang"), and every one of them was
+  // unreachable — the tokenizer treats "é" as a separator, so the word became
+  // "bouv" and "bouve" prefixed nothing.
+  const kinds = [
+    { id: "course", label: "Course", prefix: "/data/courses/" },
+    { id: "professor", label: "Professor", prefix: "/data/professors/" },
+  ];
+  const idx = prepareIndex(decodeIndex(encodeIndex([
+    { kind: "course", name: "Professional Development for Bouvé Co-op", code: "PHTH 1201", path: "PHTH/1201" },
+    { kind: "professor", name: "Zoë Lang", path: "zoe-lang" },
+    { kind: "professor", name: "José Martínez", path: "jose-martinez" },
+  ], kinds)));
+
+  const names = (q) => searchEntities(idx, q, { limit: 5 }).map((h) => idx.records[h.index].name);
+  assert.ok(names("bouve").some((n) => n.includes("Bouvé")), `"bouve" → ${names("bouve")}`);
+  assert.ok(names("bouvé").some((n) => n.includes("Bouvé")), "the accented spelling must still work");
+  assert.deepEqual(names("zoe"), ["Zoë Lang"]);
+  assert.deepEqual(names("zoë"), ["Zoë Lang"]);
+  assert.ok(names("jose martinez").includes("José Martínez"));
+  assert.ok(names("martinez").includes("José Martínez"), "last name alone, unaccented");
+  // Display text keeps its accents — folding is for matching only.
+  assert.equal(idx.records[1].name, "Zoë Lang");
+});
+
 test("data-search › search is stable and order-independent of record order", () => {
   // Reversing the corpus must not change what comes back, or the ranking is
   // resting on insertion order somewhere.

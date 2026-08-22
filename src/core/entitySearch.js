@@ -14,10 +14,14 @@
 // ## Why a brute-force scan
 //
 // Measured over the real 13,022-record index: a full scan costs a median of
-// 1.1 ms and a worst case of 1.9 ms per keystroke, against a 16 ms frame; the
-// index is 88 KB brotli and 1.5 ms to parse. A trie or an inverted index
-// would be more code, more build surface and more ways to be wrong, bought
-// with latency that is already free. See docs/data-search-design.md.
+// 2.8 ms and a worst case of 5.0 ms per keystroke, against a 16 ms frame; the
+// index is ~100 KB brotli and 20 ms to parse and prepare, once. A trie or an
+// inverted index would be more code, more build surface and more ways to be
+// wrong, bought with latency that is already free.
+//
+// What DID matter is the `heads` precondition in rankRecords: without it the
+// same scan takes 14 ms, because the memoised initials search then runs on
+// every record. See docs/data-search-design.md.
 //
 // ## The representation guarantee
 //
@@ -69,6 +73,26 @@ const SEP = "|";
 
 /** The path a code implies, when a record does not state one of its own. */
 const pathOfCode = (code) => code.replace(/ /g, "/");
+
+/**
+ * Strip diacritics for MATCHING only; the displayed name keeps them.
+ *
+ * Measured: 3 of 13,022 records carry an accented letter — two "Bouvé" courses
+ * and one professor, "Zoë Lang" — and all three were unreachable, because the
+ * tokenizer treats "é" as a separator, so "Bouvé" became the word "bouv" and
+ * typing "bouve" matched no prefix. Three records is a small number and
+ * "bouve" is exactly what a Northeastern student types; instructor names also
+ * arrive from Banner monthly, so the set only grows.
+ *
+ * Folded here rather than in rankRecords' normalizeQuery, which program search
+ * shares: this is the data surface's fix, and quietly re-ranking the planner is
+ * not part of it.
+ *
+ * The character class below is the combining-diacritical-marks block,
+ * U+0300–U+036F, written as the literal range NFD decomposition produces.
+ * It looks empty in some editors; it is not. Do not "tidy" it away.
+ */
+const fold = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
 
 /**
  * Encode records into the shipped payload: columnar, because it measured
@@ -148,10 +172,10 @@ export function decodeIndex(payload) {
  */
 export function prepareIndex(decoded) {
   const { kinds, records } = decoded;
-  const lower = (xs) => xs.map((s) => s.toLowerCase());
+  const lower = (xs) => xs.map((s) => fold(s.toLowerCase()));
   const scored = records.map((r) => {
-    const code = (r.code ?? "").toLowerCase();
-    const name = r.name.toLowerCase();
+    const code = fold((r.code ?? "").toLowerCase());
+    const name = fold(r.name.toLowerCase());
     const nameWords = name.split(/[^a-z0-9]+/).filter(Boolean);
     // A code's own words, so a half-typed code still matches: "chem 2" has to
     // keep CHEM 2311 alive. Derived here rather than shipped as a pool column,
@@ -196,7 +220,7 @@ function canonicalQuery(q) {
  *   best first, at most `limit`, with the representation guarantee applied.
  */
 export function searchEntities(prepared, query, { limit = 10 } = {}) {
-  const { q: raw } = normalizeQuery(query);
+  const { q: raw } = normalizeQuery(fold(String(query ?? "")));
   if (!raw) return [];
   const { q, qTokens } = normalizeQuery(canonicalQuery(raw));
   // A query with no letters or digits is not a search. Without this, "!!!"
