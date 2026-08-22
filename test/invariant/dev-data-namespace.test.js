@@ -23,7 +23,7 @@
 // Committed data only — no network, no server.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT } from "../helpers/paths.js";
 
@@ -90,6 +90,43 @@ test("the generated surface still answers for its own pages", async () => {
   // Not a file under data/, so it belongs to the surface — whether it exists
   // there or not, this middleware is the one that must decide.
   assert.match(await ask(fn, "/data/nonexistent-page-xyz"), /^answered/);
+});
+
+test("the dev server serves the search box's own build artifacts", async () => {
+  // Reported as "I type and nothing comes up" on localhost. The /data pages
+  // load a hashed index and widget from /assets/, and in dev nothing serves
+  // that directory — Vite has no dist/, and these files are emitted by the
+  // build rather than transformed from source. The pages rendered, the script
+  // 404'd, and the box was inert. Status was no clue either: the page was 200.
+  const fn = await devMiddleware();
+  const dist = join(ROOT, "dist", "assets");
+  const built = existsSync(dist)
+    ? readdirSync(dist).filter((f) => /^data-(index|search)-[a-f0-9]+\.(json|js)$/.test(f))
+    : [];
+  for (const f of built) {
+    assert.equal(await ask(fn, `/assets/${f}`), "answered 200",
+      `dev did not serve /assets/${f}`);
+  }
+  // The prefix is narrow on purpose: no other /assets/ request may be swallowed,
+  // or the dev server stops serving the app's own bundles.
+  for (const other of ["/assets/index-abc123.js", "/assets/build.json",
+                       "/assets/data-other-abc.js", "/assets/data-index-.json"]) {
+    assert.equal(await ask(fn, other), "next", `dev swallowed ${other}`);
+  }
+});
+
+test("no page asks another origin for the search assets", () => {
+  // The bug underneath the one above: the markup named
+  // https://numap.app/assets/... so a dev browser asked PRODUCTION for a hash
+  // that only exists locally. Root-relative is correct on both, and this is
+  // the cheap guard against reintroducing an absolute one.
+  const hub = join(ROOT, "dist", "data.html");
+  if (!existsSync(hub)) return;                 // nothing built here to check
+  const html = readFileSync(hub, "utf8");
+  assert.ok(!/https:\/\/numap\.app\/assets\//.test(html),
+    "a generated page names the assets origin absolutely");
+  assert.match(html, /src="\/assets\/data-search-[a-f0-9]+\.js"/);
+  assert.match(html, /data-index="\/assets\/data-index-[a-f0-9]+\.json"/);
 });
 
 test("no surface route shadows a directory the app serves from data/", () => {

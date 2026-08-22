@@ -110,7 +110,15 @@ const pageQueue = []; // filled by the loops, flushed at the page stage
 // Filled just before the page flush, read by writePage: the hashed URLs of the
 // search index and widget. Pages are written after the index exists, so they
 // can name it; the alternative (a fixed filename) cannot be cached immutably.
-const searchAssets = { index: "", script: "" };
+//
+// ROOT-RELATIVE in the page markup, absolute only for the JSON API. Pages are
+// served from this origin either way, so "/assets/…" is correct in production
+// AND on the dev server — where the pages are served out of dist/ by
+// build/aiDataDevPlugin.js, which rewrites https://numap.app/data but has no
+// reason to know about anything else. An absolute asset URL sent the dev
+// browser to production for a hash that only exists locally, so the widget
+// silently never loaded and typing did nothing.
+const searchAssets = { index: "", script: "", indexUrl: "" };
 
 const programs = [];
 const seenUrls = new Map(); // url → id, for collision rails
@@ -1412,8 +1420,9 @@ const searchRecords = [
   // already exempt from the zone's Human-Verification rule. A new /data/*.js
   // path would be a fresh path against that rule — the class of thing that
   // 500'd the catalog once already.
-  searchAssets.index = `${ORIGIN}/assets/${indexName}`;
-  searchAssets.script = `${ORIGIN}/assets/${scriptName}`;
+  searchAssets.index = `/assets/${indexName}`;
+  searchAssets.script = `/assets/${scriptName}`;
+  searchAssets.indexUrl = `${ORIGIN}/assets/${indexName}`;   // for the JSON API
   console.log(`  search: ${searchRecords.length} records → ${(body.length / 1024).toFixed(0)} KB index + ${(js.length / 1024).toFixed(1)} KB widget`);
 }
 
@@ -1539,7 +1548,7 @@ writeJSON("index.json", {
   // it is listed here because "resolve a name to a URL" is the same question a
   // developer or a fetch tool asks. Content-hashed, so read the URL from here
   // rather than constructing it.
-  searchIndex: searchAssets.index,
+  searchIndex: searchAssets.indexUrl,
   nupath: `${JSON_ROOT}/nupath.json`,
   professors: `${JSON_ROOT}/professors.json`,
   equivalences: `${ORIGIN}/northeastern/course-equivalences.json`,

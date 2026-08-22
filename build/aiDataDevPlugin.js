@@ -45,6 +45,22 @@ export default function aiDataDevPlugin(root) {
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = (req.url || "").split("?")[0];
+        // The /data search box loads two build artifacts from /assets/, and in
+        // dev nothing serves that directory: Vite's dev server has no dist/,
+        // and these files are emitted by the build rather than transformed from
+        // source. Without this the pages load, the script 404s, and typing does
+        // nothing — which is exactly how it was first reported. Narrow prefixes
+        // on purpose, so no other /assets/ request is swallowed.
+        if (/^\/assets\/data-(index|search)-[a-f0-9]+\.(json|js)$/.test(url)) {
+          const p = path.join(root, "dist", url.slice(1));
+          if (fs.existsSync(p)) {
+            res.setHeader("Content-Type",
+              url.endsWith(".json") ? "application/json; charset=utf-8" : "text/javascript; charset=utf-8");
+            res.end(fs.readFileSync(p));
+            return;
+          }
+          return next();
+        }
         if (url !== "/data" && url !== "/data.html" && !url.startsWith("/data/")) return next();
         if (url.includes("..")) return next();
         // Two different things claim /data in dev, and only one of them is

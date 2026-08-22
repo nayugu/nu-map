@@ -55,7 +55,15 @@ function serveDist() {
       let file = join(DIST, rel);
       // Pretty URLs: /data/search is dist/data/search.html.
       if (!(await exists(file)) && await exists(`${file}.html`)) file = `${file}.html`;
-      if (!(await exists(file))) { res.writeHead(404).end("not found"); return; }
+      // Fall back to public/, which `vite build` copies into dist/ — the pages
+      // reference /logo.png from there. Without this, running after a data-only
+      // build (buildAiData alone, no vite) 404s the logo, and every test that
+      // asserts the page logged nothing fails for a reason unrelated to search.
+      if (!(await exists(file))) {
+        const pub = join(ROOT, "public", rel);
+        if (await exists(pub)) file = pub;
+        else { res.writeHead(404).end("not found"); return; }
+      }
       let body = await readFile(file);
       if (extname(file) === ".html") {
         body = Buffer.from(body.toString("utf8")
