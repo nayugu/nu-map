@@ -2200,17 +2200,19 @@ export default function Header() {
               )}
 
               {/* About — short links, two deliberate rows (2 up top, 3 below)
-                  so every pill in a row shares the same width */}
+                  so every pill in a row shares the same width. No leading
+                  slash: the terminal look read as a command to type rather than
+                  a link to click (same call in DisclaimerModal). */}
               <SettingsSection label={t("header.links.title")}>
                 {[
                   [
-                    { href: "https://github.com/nayugu/nu-map",                label: "/github" },
-                    { href: `${import.meta.env.BASE_URL}privacy.html`,          label: "/privacy" },
+                    { href: "https://github.com/nayugu/nu-map",                label: "github" },
+                    { href: `${import.meta.env.BASE_URL}privacy.html`,          label: "privacy" },
                   ],
                   [
-                    { href: `${import.meta.env.BASE_URL}data.html`,             label: "/data" },
-                    { href: `${import.meta.env.BASE_URL}story.html`,            label: "/story" },
-                    { href: `${import.meta.env.BASE_URL}northeastern/dev.html`, label: "/dev" },
+                    { href: `${import.meta.env.BASE_URL}data.html`,             label: "data" },
+                    { href: `${import.meta.env.BASE_URL}story.html`,            label: "story" },
+                    { href: `${import.meta.env.BASE_URL}northeastern/dev.html`, label: "dev" },
                   ],
                 ].map((row, i) => (
                   <div key={i} style={{ display: "flex", gap: 4, marginTop: i ? 4 : 0 }}>

@@ -122,15 +122,27 @@ export default function DisclaimerModal() {
           ))}
         </div>
 
-        {/* GitHub + privacy policy links */}
+        {/* Short links — the same four the header's About section lists, in the
+            same order, minus dev (developer page, not for this audience).
+            No leading slash: the terminal look read as a command to type rather
+            than a link to click. One row of four: at the 440px modal width each
+            pill is ~97px, and even on a 360px phone ~70px, which still clears
+            "privacy" in 11px mono — so `flex: 1` keeps every pill the same
+            width without wrapping. */}
         <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-          {[["https://github.com/nayugu/nu-map", "/github"], [`${import.meta.env.BASE_URL}privacy.html`, "/privacy"]].map(([href, label]) => (
+          {[
+            ["https://github.com/nayugu/nu-map",            "github"],
+            [`${import.meta.env.BASE_URL}privacy.html`,     "privacy"],
+            [`${import.meta.env.BASE_URL}data.html`,        "data"],
+            [`${import.meta.env.BASE_URL}story.html`,       "story"],
+          ].map(([href, label]) => (
             <a
               key={label}
               href={href}
               target="_blank" rel="noreferrer"
               style={{
-                display: "block", flex: 1, textAlign: "center", boxSizing: "border-box",
+                display: "block", flex: "1 1 0", minWidth: 0,
+                textAlign: "center", whiteSpace: "nowrap", boxSizing: "border-box",
                 padding: "7px 0", borderRadius: 7,
                 background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
                 fontSize: 11, fontWeight: 400, color: "var(--text-3)", textDecoration: "none",
