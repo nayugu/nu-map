@@ -318,8 +318,16 @@ function XomGroupHeader({ title, style }) {
  * twice before this: the section copy printed every sentence at the top, so an
  * instruction belonging to the third menu appeared above the first.
  *
- * Never paraphrased and never translated: it is the registrar's text, like a
- * course title, and the attribution line is what stops it reading as our claim.
+ * Never paraphrased, and never OUR words — the attribution line is what stops it
+ * reading as our claim. It is live-translated in the GUI like every other piece
+ * of scraped English here, which this component originally got wrong: it
+ * justified staying English by analogy to a course title, and course titles are
+ * translated. The result was a zh/ja panel showing a translated section title,
+ * an English instruction, and translated category headings underneath it.
+ *
+ * GUI only. The PDF export is English-only by design, and the static
+ * `/northeastern/ai/**` pages stay verbatim because a model reading them should
+ * get the registrar's own words.
  */
 function CatalogNotes({ notes, ph, indent = 4 }) {
   const { t } = useLanguage();
@@ -331,10 +339,27 @@ function CatalogNotes({ notes, ph, indent = 4 }) {
         {t("grad.fromCatalog")}
       </div>
       {notes.map((n, i) => (
-        <div key={i} style={{ fontSize: ph ? 8 : 9, color: "var(--text-3)", lineHeight: 1.35 }}>
-          {n}
-        </div>
+        <CatalogNoteText key={i} text={n} ph={ph} />
       ))}
+    </div>
+  );
+}
+
+/**
+ * One quoted sentence, translated.
+ *
+ * Its own component because `useTranslatedText` is a hook and a note list is
+ * mapped — the same reason `DescribedRuleText` exists for a GPA rule, which is
+ * the closest precedent: prose scraped in English, carrying a condition, shown
+ * in the reader's language. The hook returns `translated || text`, so a failed
+ * or disabled translation degrades to the registrar's English rather than to
+ * nothing.
+ */
+function CatalogNoteText({ text, ph }) {
+  const translated = useTranslatedText(text);
+  return (
+    <div style={{ fontSize: ph ? 8 : 9, color: "var(--text-3)", lineHeight: 1.35 }}>
+      {scaleLatinRuns(translated)}
     </div>
   );
 }

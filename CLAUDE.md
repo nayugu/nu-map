@@ -186,12 +186,22 @@ Facts that follow from this:
      `requirements: []` so nothing is enumerated wrongly, and
      **`creditsRequired` must never be summed into a total** — 90 of the 580
      restate credit another section already counts;
-  2. every prose row the parse could not express survives verbatim as
-     `section.notes`, in document order (2,068 sections / 3,384 notes, median 1;
-     **all 580** of the codeless ones, which is what makes them legible rather
-     than merely visible). It reaches the panel, the PDF, the MCP tree and the
-     static `/northeastern/ai/**` pages, always attributed ("From the catalog")
-     and never translated — the words are the registrar's.
+  2. every prose row survives verbatim, in document order (7,637 notes over
+     3,703 of 6,887 sections, median 38 chars; **all 580** of the codeless ones,
+     which is what makes them legible rather than merely visible). It reaches the
+     panel, the PDF, the MCP tree and the static `/northeastern/ai/**` pages,
+     always attributed ("From the catalog") and never paraphrased.
+     **Live-translated in the GUI only.** Notes are scraped English carrying a
+     condition, exactly like a GPA rule, and `DescribedRuleText` has always
+     translated those — an English sentence in a zh/ja panel is the bug, not the
+     safeguard. `CatalogNotes` shipped untranslated by arguing "like a course
+     title", which refutes itself: course titles ARE translated, and so are
+     section titles and `XomGroupHeader`, so a zh reader got a translated
+     heading, an English instruction, and translated category headings under it.
+     `useTranslatedText` returns `translated || text`, so a failure degrades to
+     the registrar's English. The PDF export stays English (English-only by
+     design) and the AI pages stay verbatim, because a model reading them should
+     get the registrar's own words rather than a machine translation of them.
   Rules that must not be weakened:
   - **Notes are a PARTITION, not a subtraction.** Every prose row reaches one
     place: `node.notes` (the sentence that introduced that node) or
