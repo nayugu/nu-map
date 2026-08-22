@@ -372,6 +372,25 @@ as a floor: the box is a real `<form>` targeting a generated `/data/search`
 page, so with JS off the form still reaches a page and the nav rail still works.
 `/data/search?q=…` also makes a result set shareable as a URL.
 
+## Found by attacking it after it worked
+
+Two defects the happy path never showed, both fixed:
+
+- **An accented name was unreachable by ASCII.** The tokenizer splits on
+  anything outside `a-z0-9`, so "Bouvé" became the word `bouv` and no prefix of
+  `bouve` matched it. 3 of 13,022 records carry an accented letter — small, but
+  one of them is a college name students type constantly, and instructor names
+  arrive from Banner monthly. Matching now folds combining diacritics; display
+  and URLs are untouched.
+- **A titleless course would have failed the monthly job.** Such a course was
+  skipped by the record builder while its page was still generated, so the
+  bijection rail would have failed the unattended scrape over one bad upstream
+  row. The name now falls back to the course code.
+
+And one in the test rather than the code: the browser test's typing helper
+waited only for the panel to be *visible*, which passed instantly against the
+previous query's rows — a stale result asserted as a fresh one.
+
 ## Known, measured, and left alone
 
 Searching `chemistry` puts **CHM (Chemistry - CPS)** above **CHEM (Chemistry and

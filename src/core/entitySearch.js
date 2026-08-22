@@ -195,7 +195,12 @@ export function prepareIndex(decoded) {
   return {
     kinds, records, scored,
     byId: new Map(kinds.map((k) => [k.id, k])),
-    codes: new Set(scored.flatMap((s) => s.codes)),
+    // What the router matches against, named rather than implied. Reading it
+    // back out of `scored[i].codes[0]` worked only because that array happens
+    // to hold exactly the unique code today; anything added to it later would
+    // have moved routing silently.
+    route: scored.map((s) => s.codes[0] ?? ""),
+    codes: new Set(scored.map((s) => s.codes[0]).filter(Boolean)),
   };
 }
 
@@ -234,7 +239,7 @@ export function searchEntities(prepared, query, { limit = 10 } = {}) {
   const hits = [];
   for (let i = 0; i < prepared.scored.length; i++) {
     let score = scoreRecord(prepared.scored[i], q, qTokens);
-    const routed = routes && prepared.scored[i].codes[0] === q;
+    const routed = routes && prepared.route[i] === q;
     if (routed) score += ROUTE_BOOST;
     if (score > -Infinity) hits.push({ index: i, kind: prepared.records[i].kind, score, routed });
   }

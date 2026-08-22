@@ -367,6 +367,43 @@ Facts that follow from this:
 - Program discovery uses the **sitemap**; `/azindex/` is `Disallow`ed in
   robots.txt and both scrapers used to violate it.
 
+## /data search
+
+One omnibox on every `/data` page resolves any entity the surface publishes.
+Design of record: `docs/data-search-design.md`. Instrument:
+`node scripts/data-search-probe.js [--mono] [--fixture] ["a query"]`.
+
+- **One scorer, not two.** `core/nameMatch.js` (primitives) and
+  `core/rankRecords.js` (the tier order) are shared with the planner's program
+  search, so "cs" cannot come to mean different things in two boxes. The split
+  out of `searchRank.js` was proved behaviour-neutral over 7,548 queries and
+  `test/unit/search-rank.test.js` is unmodified from before it — keep it that
+  way when touching either file.
+- **The index carries the institution, not the client.**
+  `adapters/northeastern/dataEntities.js` declares the kinds, URL grammar,
+  acronyms and nicknames; all of it is baked into the emitted index as DATA, so
+  `adapters/datasurface/searchBox.js` imports core only. Adding a kind is one
+  `KINDS` entry plus one `…Records` function.
+- **The build refuses to ship an unsearchable page.** A generated page with no
+  index record fails the build, with navigation pages exempt by a *declared and
+  asserted* list (61 of them). Two records sharing a URL, a record pointing at
+  no page, or an index that will not round-trip through its own codec all fail
+  too. Never widen the exemption to make a build pass.
+- **Prefix monotonicity is the metric, not recall@1.** Recall@1 on an entity's
+  exact name is 99.8% before any work; monotonicity ("once it appears, one more
+  character must not drop it") found the real defect — matching course codes by
+  equality left 3.39% of prefix queries non-monotonic and 434 entities
+  unreachable by their own full name. Now 0.005% and 0.
+- **A per-kind quota is not the answer; representation is.** The best hit of
+  every kind that matched gets a slot — one rule, no tuned constants. And a
+  popularity prior over coverage was measured and refused: it puts Calculus 3
+  above Calculus 1 and Organic Chemistry 2 above Organic Chemistry 1.
+- Don't put a campus or college into `poolWords`: a bare pool word matches at
+  the ANY tier, which is harmless over 1,071 programs and noise over 13,022
+  records. Program names already contain their campus.
+- Verify in a browser (`test/browser/data-search.browser.test.js`) — nothing in
+  Node evaluates the widget's DOM code.
+
 ## Claude/MCP integration
 
 - Node dev server: `mcp-server/` (port 27182). Production: `cloudflare/mcp-server/`
