@@ -771,6 +771,16 @@ const PAGE_CSS =
   // BS, a minor and an MS, and the row says which one it is.
   + ".fx-kind{color:#94a3b8;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}"
   + ".fx-none{margin:0;padding:9px 11px;color:#94a3b8;font-size:.82rem}"
+  // The results PAGE: the same rows, in the document flow. No overlay, no
+  // scroll box of its own, no width cap — the page scrolls, which is what makes
+  // a long result list readable instead of a peephole.
+  + ".fx-panel.fx-page{position:static;width:auto;max-width:none;max-height:none;overflow:visible;"
+  + "border:none;border-radius:0;box-shadow:none;margin:1.2em 0 0}"
+  + ".fx-page .fx-row{gap:11px;padding:9px 2px;font-size:.94rem;border-bottom:1px solid #f1f5f9}"
+  + ".fx-page .fx-row:hover,.fx-page .fx-row.on{background:#f8fafc}"
+  + ".fx-page .fx-name{white-space:normal;overflow:visible;text-overflow:clip}"
+  + ".fx-page .fx-code{font-size:.84rem}"
+  + ".fx-page .fx-none{padding:14px 2px;font-size:.9rem}"
   + "@media(max-width:760px){form.find{margin:8px 0;order:-1;flex-basis:100%}.fx-panel{width:100%}}";
 
 const NAV_SECTIONS = [
@@ -797,12 +807,18 @@ const writePage = ({ rel, section, title, heading, description, jsonUrl, body, w
   // The omnibox. A real form with a real target, so it survives having no
   // JavaScript: submitting lands on /data/search, which renders the same
   // results from ?q=. The widget upgrades it to a live dropdown when it loads.
+  // On /data/search the results belong in the page BODY, not in a dropdown:
+  // a floating overlay pinned to the sidebar covered the page's own text on the
+  // one page whose entire purpose is showing results. So exactly one results
+  // container exists per page — the dropdown everywhere, the in-flow list
+  // there — and the widget renders into whichever it finds.
+  const isSearchPage = rel === "search.html";
   const searchBox = `<form class="find" data-search-form data-index="${searchAssets.index}"`
-    + `${rel === "search.html" ? " data-search-page" : ""} action="${PAGE_ROOT}/search" method="get" role="search">`
+    + `${isSearchPage ? " data-search-page" : ""} action="${PAGE_ROOT}/search" method="get" role="search">`
     + `<input type="search" name="q" placeholder="Search all data" aria-label="Search every course, professor, program, subject and NUpath code"`
     + ` autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false"`
     + ` aria-controls="fx-panel" aria-autocomplete="list" />`
-    + `<div class="fx-panel" id="fx-panel" data-search-results role="listbox" aria-label="Search results" hidden></div>`
+    + (isSearchPage ? "" : `<div class="fx-panel" id="fx-panel" data-search-results role="listbox" aria-label="Search results" hidden></div>`)
     + `</form>`;
   const nav = `<a class="home" href="${ORIGIN}"><img src="${ORIGIN}/logo.png" alt="NU Map home" width="26" height="26" /></a>`
     + searchBox
@@ -1435,8 +1451,13 @@ pageQueue.push({
   title: "Search Northeastern courses, professors and programs",
   heading: "Search",
   description: "Search every Northeastern course, professor, program, subject and NUpath code in NU Map's public data. From NU Map, a student-built planner not affiliated with Northeastern.",
-  body: `<p>Search every course, professor, program, subject and NUpath attribute on this data surface — ${catalog.length} courses, ${programs.filter((p) => p.page).length} programs, ${professors.size} instructors.</p>
-<p class="muted">Type a course code (<code>CHEM 2311</code>), a name, a NUpath code (<code>ND</code>), or anything else. Results appear as you type; the box is in the sidebar on every page.</p>`,
+  body: `<p class="muted">Every course, professor, program, subject and NUpath attribute on this surface — ${catalog.length} courses, ${programs.filter((p) => p.page).length} programs, ${professors.size} instructors. Type a course code (<code>CHEM 2311</code>), a name, or a NUpath code (<code>ND</code>).</p>
+<div class="fx-panel fx-page" id="fx-panel" data-search-results role="listbox" aria-label="Search results" hidden></div>
+<noscript><p>Search needs JavaScript. Without it, browse by
+<a href="${PAGE_ROOT}/courses">subject</a>, <a href="${PAGE_ROOT}/majors">major</a>,
+<a href="${PAGE_ROOT}/minors">minor</a>, <a href="${PAGE_ROOT}/graduate">graduate program</a>,
+<a href="${PAGE_ROOT}/nupath">NUpath attribute</a> or
+<a href="${PAGE_ROOT}/professors">professor</a> — every page is reachable by link.</p></noscript>`,
 });
 
 // Program pages cover only the NEWEST catalog year: JSONs keep every

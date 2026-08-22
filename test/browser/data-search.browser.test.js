@@ -266,6 +266,41 @@ describe("data search widget", () => {
     await page.close();
   });
 
+  test("the results page is a page, not a dropdown over one", async () => {
+    // It shipped as a floating overlay pinned to the sidebar, covering the
+    // page's own text on the one page whose entire purpose is showing results.
+    const { page } = await open("/data/search?q=chemistry");
+    await page.waitForSelector('[data-search-results]:not([hidden]) .fx-row', { timeout: 15_000 });
+
+    // In the document flow, inside <main>, and NOT inside the sidebar form.
+    const where = await page.$eval("[data-search-results]", (el) => ({
+      position: getComputedStyle(el).position,
+      inForm: !!el.closest("[data-search-form]"),
+      inMain: !!el.closest("main"),
+      inNav: !!el.closest("nav"),
+    }));
+    assert.equal(where.position, "static", "the results still float over the page");
+    assert.equal(where.inForm, false);
+    assert.equal(where.inNav, false, "the results are still in the sidebar");
+    assert.equal(where.inMain, true);
+    // Exactly one results container, or two render paths exist.
+    assert.equal(await page.$$eval("[data-search-results]", (e) => e.length), 1);
+
+    // A list, not a shortlist.
+    const found = await rows(page);
+    assert.ok(found.length > 10, `only ${found.length} rows on the results page`);
+    // Names are not truncated to a dropdown's width.
+    const clipped = await page.$$eval(".fx-name",
+      (els) => els.filter((e) => e.scrollWidth > e.clientWidth + 1).length);
+    assert.equal(clipped, 0, `${clipped} result names are cut off`);
+
+    // Clicking elsewhere must not erase the page's content.
+    await page.click("h1");
+    assert.equal(await page.$eval("[data-search-results]", (e) => e.hidden), false,
+      "clicking the page dismissed its own results");
+    await page.close();
+  });
+
   test("the box survives the index being missing", async () => {
     // On Pages a deleted asset answers with the HTML shell at status 200, so the
     // widget must degrade to a usable form rather than throwing or hanging.

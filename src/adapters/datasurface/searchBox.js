@@ -19,7 +19,13 @@
 
 import { decodeIndex, prepareIndex, searchEntities, urlOf } from "../../core/entitySearch.js";
 
-const MAX_RESULTS = 10;
+/**
+ * A dropdown is a shortlist; a results page is a list. Ten rows is right when
+ * the panel floats over the page you are already reading, and wrong on
+ * /data/search, where the whole point is to look through what matched.
+ */
+const MAX_DROPDOWN = 10;
+const MAX_PAGE = 60;
 const DEBOUNCE_MS = 60;
 
 let prepared = null;
@@ -65,9 +71,14 @@ export function mountSearchBox(root = document) {
   const form = root.querySelector("[data-search-form]");
   if (!form) return;
   const input = form.querySelector("input[name=q]");
-  const panel = form.querySelector("[data-search-results]");
+  // Looked up on the DOCUMENT, not inside the form: on /data/search the results
+  // live in the page body instead of a dropdown. Exactly one container exists
+  // per page, so there is nothing to disambiguate and one render path serves both.
+  const panel = root.querySelector("[data-search-results]");
   const indexUrl = form.getAttribute("data-index");
   if (!input || !panel || !indexUrl) return;
+  const inPage = panel.classList.contains("fx-page");
+  const limit = inPage ? MAX_PAGE : MAX_DROPDOWN;
 
   let hits = [];
   let cursor = -1;
@@ -109,7 +120,7 @@ export function mountSearchBox(root = document) {
     if (!q) return close();
     loadIndex(indexUrl).then((prep) => {
       if (input.value.trim() !== q) return;     // a later keystroke already won
-      hits = searchEntities(prep, q, { limit: MAX_RESULTS });
+      hits = searchEntities(prep, q, { limit });
       cursor = hits.length ? 0 : -1;
       // A new query is a new list, so an earlier arrow press must not keep
       // making Enter jump into results the user has not looked at.
@@ -155,7 +166,9 @@ export function mountSearchBox(root = document) {
     }
   });
 
-  document.addEventListener("click", (e) => { if (!form.contains(e.target)) close(); });
+  // Clicking away dismisses a dropdown, because a dropdown is covering
+  // something. On the results page it would erase the page's own content.
+  if (!inPage) document.addEventListener("click", (e) => { if (!form.contains(e.target)) close(); });
 
   // /data/search?q=… renders its own results on load, so a search is shareable.
   const preset = new URLSearchParams(window.location.search).get("q");
