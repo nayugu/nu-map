@@ -152,6 +152,48 @@ test("rankRecords › loose fields are last resort and carry their penalty", () 
   assert.equal(score({ name: "x", loose: [{ text: "", penalty: 100 }] }, "zzz"), -Infinity);
 });
 
+test("rankRecords › the precomputed hints cannot change a score", () => {
+  // `heads` skips four tiers when no matchable word starts with a token's first
+  // character. If that condition is not truly necessary, results change
+  // silently and only for some queries — so it is checked by brute force over
+  // random records rather than by argument.
+  let seed = 7;
+  const rnd = () => (seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+  const pick = (xs) => xs[Math.floor(rnd() * xs.length)];
+  const WORDS = ["computer", "science", "and", "biology", "chemistry", "1", "2311",
+    "organic", "lab", "for", "advanced", "cs", "of", "engineering", "x", "electrical"];
+
+  const words = (s) => s.split(/[^a-z0-9]+/).filter(Boolean);
+  let compared = 0;
+  for (let n = 0; n < 3000; n++) {
+    const name = Array.from({ length: 1 + Math.floor(rnd() * 5) }, () => pick(WORDS)).join(" ");
+    const code = rnd() < 0.5 ? `${pick(["chem", "cs", "phil"])} ${pick(["1101", "2311"])}` : "";
+    const acronyms = rnd() < 0.3 ? [pick(["cs", "bscs", "ie"])] : [];
+    const poolWords = code ? code.split(" ") : [];
+    const nameWords = words(name);
+    const bare = { name, acronyms, poolWords, codes: code ? [code] : [] };
+    const hinted = {
+      ...bare, nameWords,
+      heads: new Set([...nameWords, ...poolWords, ...acronyms].map((w) => w[0])),
+    };
+    // Queries drawn to hit and to miss: real name words, initials, junk letters.
+    const q = pick([
+      pick(WORDS),
+      `${pick(WORDS)} ${pick(WORDS)}`,
+      nameWords.map((w) => w[0]).join(""),
+      pick(["zz", "q", "cs", "ece", "1", "23", "x y"]),
+      name.slice(0, 1 + Math.floor(rnd() * name.length)),
+      code || "chem 2",
+    ]);
+    const { q: nq, qTokens } = normalizeQuery(q);
+    if (!nq || !qTokens.length) continue;
+    compared++;
+    assert.equal(scoreRecord(hinted, nq, qTokens), scoreRecord(bare, nq, qTokens),
+      `hint changed the score for name="${name}" code="${code}" q="${q}"`);
+  }
+  assert.ok(compared > 2500, `expected a real sample, compared ${compared}`);
+});
+
 test("rankRecords › a mid-word hit is LOOSE, not a prefix", () => {
   const rec = { name: "introduction to philosophy" };
   assert.equal(tierOf(score(rec, "philosophy")), "ORDERED", "a whole word still lands ORDERED");

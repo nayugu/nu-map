@@ -31,6 +31,14 @@
 //   loose      last-resort substring fields, each with its own penalty; `slug`
 //              also tries the query with spaces turned into underscores
 //
+// A bare pool word matches on its own, which is worth knowing before adding
+// one: searching "boston" returns every program whose pool holds it. Over the
+// planner's 1,071 programs that is harmless. A `qualifierWords` role was built
+// to make such a word unable to match alone — and then deleted, because the
+// data surface's program names already CONTAIN their campus ("Chemistry, BS
+// (Boston)"), so "cs oakland" resolves through the name and the role solved
+// nothing. Look at the strings before inventing a role for them.
+//
 // A caller that has none of the secondary fields passes `name` alone. That is
 // the whole extensibility story: a new kind of thing becomes searchable by
 // describing which of its strings play which role.
@@ -40,6 +48,26 @@ import {
   T, words, coverage,
   orderedPrefixes, anyPrefixes, orderedInitials, anyInitials,
 } from "./nameMatch.js";
+
+/**
+ * Two OPTIONAL precomputed hints a caller may attach to a record. Both are
+ * pure derivations of fields already on it, so they can only make the same
+ * answer arrive faster — `test/unit/rank-records.test.js` asserts that
+ * equivalence over random records rather than trusting it.
+ *
+ *   nameWords  words(name), which would otherwise be re-split per keystroke
+ *   heads      the distinct FIRST characters of every matchable word
+ *
+ * `heads` is what makes 13,022 records affordable. Every one of the four
+ * middle tiers — ORDERED, ANY, INITIALS, INITIALS_ANY — requires each query
+ * token to either prefix a word or open an initials run, and both need some
+ * matchable word beginning with that token's first character. So if one token
+ * fails that test, all four tiers fail, and the expensive ones (the memoised
+ * backtracking initials search, twice) are never entered. It is a necessary
+ * condition, not a heuristic: skipping on it cannot change a score.
+ */
+const canReachMiddleTiers = (rec, qTokens) =>
+  !rec.heads || qTokens.every((t) => rec.heads.has(t[0]));
 
 /**
  * Normalize raw input into the query form every tier expects: lowercased,
@@ -80,21 +108,23 @@ export function scoreRecord(rec, q, qTokens) {
 
   if (name.startsWith(q))                                 return T.PREFIX       + cov;
 
-  const nameWords = words(name);
-  if (orderedPrefixes(qTokens, nameWords))                return T.ORDERED      + cov;
+  if (canReachMiddleTiers(rec, qTokens)) {
+    const nameWords = rec.nameWords ?? words(name);
+    if (orderedPrefixes(qTokens, nameWords))              return T.ORDERED      + cov;
 
-  // Secondary fields join the pool here, acronyms whole rather than split.
-  const pool = [...nameWords, ...(rec.poolWords ?? []), ...(rec.acronyms ?? [])];
-  if (anyPrefixes(qTokens, pool))                         return T.ANY          + cov;
+    // Secondary fields join the pool here, acronyms whole rather than split.
+    const pool = [...nameWords, ...(rec.poolWords ?? []), ...(rec.acronyms ?? [])];
+    if (anyPrefixes(qTokens, pool))                       return T.ANY          + cov;
 
-  // Name only, and below ANY: an initials run is weaker than a word prefix, so
-  // it may add candidates but must never reorder ones that already matched.
-  if (orderedInitials(qTokens, nameWords))                return T.INITIALS     + cov;
+    // Name only, and below ANY: an initials run is weaker than a word prefix,
+    // so it may add candidates but must never reorder ones that already matched.
+    if (orderedInitials(qTokens, nameWords))              return T.INITIALS     + cov;
 
-  // Word prefixes get an order-free tier (ORDERED → ANY) and initials get the
-  // same, so "cs and ie" finds what "ie and cs" finds. Keeping it a tier lower
-  // preserves the ordering signal where a name actually carries one.
-  if (anyInitials(qTokens, nameWords))                    return T.INITIALS_ANY + cov;
+    // Word prefixes get an order-free tier (ORDERED → ANY) and initials get the
+    // same, so "cs and ie" finds what "ie and cs" finds. Keeping it a tier lower
+    // preserves the ordering signal where a name actually carries one.
+    if (anyInitials(qTokens, nameWords))                  return T.INITIALS_ANY + cov;
+  }
 
   if (name.includes(q))                                   return T.LOOSE        + cov;
 

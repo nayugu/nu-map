@@ -32,8 +32,15 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
+import { buildSync } from "esbuild";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseDescriptionPrereq } from "../src/adapters/northeastern/descriptionPrereq.js";
+import { parseProgram } from "../src/adapters/northeastern/programNaming.js";
+import { encodeIndex, decodeIndex, prepareIndex } from "../src/core/entitySearch.js";
+import {
+  KINDS, courseRecords, subjectRecords, programRecords, professorRecords, nupathRecords,
+} from "../src/adapters/northeastern/dataEntities.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "dist", "data");
@@ -100,6 +107,10 @@ const bundleById = new Map(bundle.programs.map((p) => [p.id, p]));
 const meta = readJSON(path.join(ROOT, "public", "data-meta.json"));
 const generatedAt = new Date().toISOString();
 const pageQueue = []; // filled by the loops, flushed at the page stage
+// Filled just before the page flush, read by writePage: the hashed URLs of the
+// search index and widget. Pages are written after the index exists, so they
+// can name it; the alternative (a fixed filename) cannot be cached immutably.
+const searchAssets = { index: "", script: "" };
 
 const programs = [];
 const seenUrls = new Map(); // url → id, for collision rails
@@ -732,7 +743,27 @@ const PAGE_CSS =
   + "footer.tidy{border-top:none;text-align:center;margin-top:1.6em}"
   + "footer.tidy summary{display:inline-block}"
   + "footer.tidy .inner{text-align:left;margin-top:1em;border-top:1px solid #f1f5f9;padding-top:1em}"
-  + "pre{white-space:pre-wrap;word-break:break-word;background:#f8fafc;padding:10px;border-radius:8px;font-size:.85rem}";
+  + "pre{white-space:pre-wrap;word-break:break-word;background:#f8fafc;padding:10px;border-radius:8px;font-size:.85rem}"
+  // The omnibox sits in the rail under the mark, quiet until focused — the
+  // rail's own register. The results panel is absolutely positioned so it can
+  // overlap the page rather than reflowing it on every keystroke.
+  + "form.find{position:relative;margin:14px 14px 0 28px}"
+  + "form.find input{width:100%;box-sizing:border-box;padding:6px 9px;font:inherit;font-size:.88rem;"
+  + "color:#1e293b;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;outline:none;transition:border-color .18s ease-out,background .18s ease-out}"
+  + "form.find input::placeholder{color:#94a3b8}"
+  + "form.find input:focus{background:#fff;border-color:#cbd5e1}"
+  + ".fx-panel{position:absolute;z-index:20;left:0;top:calc(100% + 5px);width:330px;max-width:78vw;"
+  + "max-height:min(62vh,430px);overflow-y:auto;background:#fff;border:1px solid #e2e8f0;border-radius:10px;"
+  + "box-shadow:0 8px 24px rgba(15,23,42,.10)}"
+  + ".fx-row{display:flex;align-items:baseline;gap:7px;padding:6px 10px;text-decoration:none;color:#1e293b;font-size:.86rem}"
+  + ".fx-row:hover,.fx-row.on{background:#f8fafc;text-decoration:none}"
+  + ".fx-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}"
+  + ".fx-code{color:#64748b;font-size:.78rem;font-variant-numeric:tabular-nums;white-space:nowrap}"
+  // The kind tag is what makes ambiguity legible: "Chemistry" is a subject, a
+  // BS, a minor and an MS, and the row says which one it is.
+  + ".fx-kind{color:#94a3b8;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}"
+  + ".fx-none{margin:0;padding:9px 11px;color:#94a3b8;font-size:.82rem}"
+  + "@media(max-width:760px){form.find{margin:8px 0;order:-1;flex-basis:100%}.fx-panel{width:100%}}";
 
 const NAV_SECTIONS = [
   ["home", "Overview", PAGE_ROOT],
@@ -755,7 +786,17 @@ const writePage = ({ rel, section, title, heading, description, jsonUrl, body, w
   // so canonicals and the sitemap must use the extensionless form.
   const url = isHub ? PAGE_ROOT : `${PAGE_ROOT}/${rel.replace(/\.html$/, "")}`;
   pageUrls.push(url);
+  // The omnibox. A real form with a real target, so it survives having no
+  // JavaScript: submitting lands on /data/search, which renders the same
+  // results from ?q=. The widget upgrades it to a live dropdown when it loads.
+  const searchBox = `<form class="find" data-search-form data-index="${searchAssets.index}"`
+    + `${rel === "search.html" ? " data-search-page" : ""} action="${PAGE_ROOT}/search" method="get" role="search">`
+    + `<input type="search" name="q" placeholder="Search all data" aria-label="Search every course, professor, program, subject and NUpath code"`
+    + ` autocomplete="off" spellcheck="false" />`
+    + `<div class="fx-panel" data-search-results role="listbox" hidden></div>`
+    + `</form>`;
   const nav = `<a class="home" href="${ORIGIN}"><img src="${ORIGIN}/logo.png" alt="NU Map home" width="26" height="26" /></a>`
+    + searchBox
     + `<div class="sections">` + NAV_SECTIONS.map(([id, label, href]) =>
     `<a href="${href}"${id === section ? ` class="here"` : ""}>${label}</a>`).join("")
     + `</div><div class="aux"><a href="${ORIGIN}">numap.app</a><a href="${ORIGIN}/story">the story</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
@@ -826,6 +867,7 @@ ${aiInner}
 <link rel="icon" type="image/png" href="${ORIGIN}/logo.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>${PAGE_CSS}</style>
+<script type="module" src="${searchAssets.script}" defer></script>
 </head><body>
 <div class="layout">
 <nav>${nav}</nav>
@@ -1315,6 +1357,78 @@ pageQueue.push({
 </dl>`,
 });
 
+// ── The search index ─────────────────────────────────────────────────
+// Built BEFORE the pages so each page can name the hashed asset it loads.
+// One record per page, from the same data the pages render, which is what
+// makes total coverage a property of the build rather than an aspiration —
+// the bijection rail below turns any drift into a failed build.
+const searchRecords = [
+  ...courseRecords(catalog),
+  ...subjectRecords(subjects),
+  // Acronyms come from the folder slug through the same parser the planner's
+  // program search uses, so "cs" reaches Computer Science here exactly as it
+  // does there — the degree code (BSCS → cs) outranking derived initials.
+  ...programRecords(programs.filter((p) => p.page),
+    (p) => parseProgram(p.id.split("/").pop()).acronyms ?? []),
+  ...professorRecords(Object.fromEntries(
+    [...professors.keys()].map((name) => [name, { page: `${PAGE_ROOT}/professors/${profSlugOf.get(name)}` }]))),
+  ...nupathRecords(nupath),
+];
+{
+  const MIN_RECORDS = 10000;
+  if (searchRecords.length < MIN_RECORDS)
+    throw new Error(`rails: search index has ${searchRecords.length} records, under ${MIN_RECORDS}`);
+
+  const payload = encodeIndex(searchRecords, KINDS, { lastUpdated: meta.lastUpdated, generatedAt });
+  const body = JSON.stringify(payload);
+  // Round-trip here, in the build, rather than trusting the browser to be the
+  // first reader: the producer and the consumer are different programs, and
+  // this repo has already shipped a parser emitting one field name while the
+  // renderer read another.
+  const back = prepareIndex(decodeIndex(JSON.parse(body)));
+  if (back.records.length !== searchRecords.length)
+    throw new Error(`rails: index round-trip lost rows (${back.records.length} of ${searchRecords.length})`);
+
+  const assetsDir = path.join(ROOT, "dist", "assets");
+  fs.mkdirSync(assetsDir, { recursive: true });
+  const hash = (s) => crypto.createHash("sha256").update(s).digest("hex").slice(0, 10);
+  const indexName = `data-index-${hash(body)}.json`;
+  fs.writeFileSync(path.join(assetsDir, indexName), body);
+
+  // The widget, bundled from src/adapters/datasurface/. Sync on purpose:
+  // buildAiData() is called un-awaited by the Vite plugin, so an async step
+  // here would turn a bundling failure into a silently green build.
+  const bundled = buildSync({
+    entryPoints: [path.join(ROOT, "src", "adapters", "datasurface", "searchBox.js")],
+    bundle: true, format: "esm", target: "es2019", minify: true, write: false,
+    legalComments: "none",
+  });
+  const js = bundled.outputFiles[0].text;
+  const scriptName = `data-search-${hash(js)}.js`;
+  fs.writeFileSync(path.join(assetsDir, scriptName), js);
+
+  // /assets/ because that path already carries `immutable, max-age=1y` and is
+  // already exempt from the zone's Human-Verification rule. A new /data/*.js
+  // path would be a fresh path against that rule — the class of thing that
+  // 500'd the catalog once already.
+  searchAssets.index = `${ORIGIN}/assets/${indexName}`;
+  searchAssets.script = `${ORIGIN}/assets/${scriptName}`;
+  console.log(`  search: ${searchRecords.length} records → ${(body.length / 1024).toFixed(0)} KB index + ${(js.length / 1024).toFixed(1)} KB widget`);
+}
+
+// The search landing page, so the box works with no JavaScript at all and a
+// result set is shareable as a URL. Its body is deliberately static: the
+// widget fills the panel from ?q= on load.
+pageQueue.push({
+  rel: "search.html",
+  section: "",
+  title: "Search Northeastern courses, professors and programs",
+  heading: "Search",
+  description: "Search every Northeastern course, professor, program, subject and NUpath code in NU Map's public data. From NU Map, a student-built planner not affiliated with Northeastern.",
+  body: `<p>Search every course, professor, program, subject and NUpath attribute on this data surface — ${catalog.length} courses, ${programs.filter((p) => p.page).length} programs, ${professors.size} instructors.</p>
+<p class="muted">Type a course code (<code>CHEM 2311</code>), a name, a NUpath code (<code>ND</code>), or anything else. Results appear as you type; the box is in the sidebar on every page.</p>`,
+});
+
 // Program pages cover only the NEWEST catalog year: JSONs keep every
 // year, but pages for old years would compound the Pages file count
 // (~1,000/year) for pages nobody searches for.
@@ -1355,6 +1469,43 @@ for (const m of pageQueue) {
     const sample = [...dead.entries()].slice(0, 5).map(([u, f]) => `${u} (in ${path.basename(f)})`).join("\n  ");
     throw new Error(`rails: ${dead.size} dead internal links, e.g.\n  ${sample}`);
   }
+}
+
+// ── Bijection rail: every page is reachable from the search index ─────
+// The link rail above proves no record points at a missing page. This is the
+// other direction, and it is the one that matters for search: a page with no
+// record is unsearchable, which is the exact failure this feature exists to
+// remove — and it is invisible to any check that starts from the index.
+//
+// Navigation pages are exempt, and the exemption is DECLARED and asserted
+// rather than silently skipped: it is 26 first-letter professor indexes, 26
+// under professors/last/, the section hubs and the hub itself. When that set
+// stops matching reality the build says so instead of quietly widening.
+{
+  const NAV_EXEMPT = new Set([
+    PAGE_ROOT,                                  // the hub
+    `${PAGE_ROOT}/search`,                      // the search page itself
+    ...NAV_SECTIONS.map(([, , href]) => href),  // section hubs
+  ]);
+  const isLetterIndex = (u) => /^https:\/\/numap\.app\/data\/professors\/(last\/)?[A-Z]$/.test(u);
+  const indexed = new Set(searchRecords.map((r) => {
+    const kind = KINDS.find((k) => k.id === r.kind);
+    return `${ORIGIN}${kind.prefix}${r.path}`;
+  }));
+  if (indexed.size !== searchRecords.length)
+    throw new Error(`rails: ${searchRecords.length - indexed.size} search records share a URL with another`);
+
+  const unsearchable = pageUrls.filter((u) => !indexed.has(u) && !NAV_EXEMPT.has(u) && !isLetterIndex(u));
+  if (unsearchable.length) {
+    throw new Error(`rails: ${unsearchable.length} generated pages are not in the search index, e.g.\n  `
+      + unsearchable.slice(0, 6).join("\n  "));
+  }
+  const navCount = pageUrls.filter((u) => NAV_EXEMPT.has(u) || isLetterIndex(u)).length;
+  const generated = new Set(pageUrls);
+  const missingPages = [...indexed].filter((u) => !generated.has(u));
+  if (missingPages.length)
+    throw new Error(`rails: ${missingPages.length} search records point at no page, e.g.\n  ${missingPages.slice(0, 6).join("\n  ")}`);
+  console.log(`  search: ${indexed.size} records ↔ ${pageUrls.length} pages (${navCount} navigation pages exempt)`);
 }
 
 // Old /data/programs/* page URLs 301 to their new directory homes. Pages
