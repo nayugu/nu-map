@@ -71,6 +71,23 @@ so `ece` spans "Electrical **and** Computer Engineering", and a subsequence
 typo fallback armed only when strict matches are sparse. It is pure, and today
 it is program-only.
 
+### Two inherited behaviours the descriptor has to respect
+
+Found by writing hostile unit tests against the extracted scorer, both
+pre-existing and both unchanged by the split:
+
+- **A bare pool word matches, at the ANY tier.** Searching `boston` returns
+  every Boston program rather than nothing, because campus and degree words
+  join the ANY pool. Harmless over 1,071 programs; over 13,022 records it would
+  mean one word matching a third of the corpus at a mid tier. So the data
+  surface must not pour campus or college into `poolWords` — a secondary field
+  is only safe there if a bare query for it is a query someone means.
+- **The loose sub-tiers overlap `LOOSE` itself.** The penalties (100, 200) are
+  smaller than `COV_MAX` (400), so a well-covered slug hit outscores a
+  barely-covered mid-word one. Sound only because the whole loose band sits far
+  below `ANY`; that bound is what the test asserts, rather than the sub-order,
+  which is not actually guaranteed.
+
 Two stages:
 
 1. **Router.** An unambiguous shape wins outright and is never scored:

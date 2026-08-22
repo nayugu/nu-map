@@ -74,34 +74,21 @@
 // every strict match. Cheap — a few string ops over ~1.5k short labels.
 // ═══════════════════════════════════════════════════════════════════
 
-// Tier floors. The gaps are wide enough that coverage (0–100) never lets a
-// weaker tier overtake a stronger one.
-const T = {
-  EXACT:        8000,  // the whole program name
-  ACRONYM_CODE: 7500,  // "cs" backed by the BSCS degree code
-  ACRONYM:      7000,  // "cs" as derived initials
-  PREFIX:       6000,  // "computer sci" → Computer Science…
-  ORDERED:      5000,  // every query word starts a name word, in order
-  ANY:          4000,  // …in any order, campus and degree included ("cs boston")
-  INITIALS:     3000,  // a token stands for a run of name words ("ie and cs")
-  INITIALS_ANY: 2500,  // …in any order ("cs and ie")
-  LOOSE:        2000,  // mid-word, or a hit on the folder slug / group heading
-  FUZZY:       -1000,  // dropped-letter fallback
-};
-
-/** Ceiling on the within-tier coverage bonus; must stay under the tier gap. */
-const COV_MAX = 400;
-
-/** Are all chars of q present in s in order (allows dropped/extra letters)? */
-function isSubsequence(q, s) {
-  let i = 0;
-  for (let j = 0; j < s.length && i < q.length; j++) if (s[j] === q[i]) i++;
-  return i === q.length;
-}
-
-function words(s) {
-  return s.split(/[^a-z0-9]+/).filter(Boolean);
-}
+// ## Where the matching itself lives
+//
+// The tier ladder and the primitives (word prefixes, initial-runs, coverage)
+// moved to core/nameMatch.js, and the order the tiers are tried in moved to
+// core/rankRecords.js, when the /data surface needed the same matching over
+// courses, professors, subjects and NUpath codes. Everything measured above
+// still holds — the extraction was behaviour-neutral, and this file's unit
+// test is unchanged from before it, which is the proof.
+//
+// What stays here is the part that is genuinely about PROGRAMS: which of a
+// program's strings play which matching role, and the tiebreak chain that
+// settles otherwise-equal matches (Boston first, degrees over certificates,
+// BS over BA).
+import { T, words, isSubsequence } from "./nameMatch.js";
+import { normalizeQuery, scoreRecord } from "./rankRecords.js";
 
 /**
  * The fields to score against. Options that predate parseProgram (concentration
@@ -119,120 +106,29 @@ function fieldsOf(o) {
   };
 }
 
-/** Is every query token the start of some word in `pool`, in order? */
-function orderedPrefixes(qTokens, pool) {
-  let i = 0;
-  for (const w of pool) {
-    if (i < qTokens.length && w.startsWith(qTokens[i])) i++;
-  }
-  return i === qTokens.length;
-}
-
-/** Is every query token the start of some word in `pool`, in any order? */
-function anyPrefixes(qTokens, pool) {
-  return qTokens.every(t => pool.some(w => w.startsWith(t)));
-}
-
 /**
- * Words that carry no initial. Deliberately a copy of programNaming's set
- * rather than an import: core may not reach into an adapter, and this list is
- * about English, not about Northeastern's slugs.
- */
-const CONNECTORS = new Set(['and', 'of', 'in', 'with', 'for', 'the', 'to', 'a', 'an', 'on', 'at']);
-
-/**
- * Like orderedPrefixes, but a token may instead be the initials of a run of
- * consecutive name words — "ie and cs" over Industrial Engineering and
- * Computer Science. Gaps between tokens are allowed, as in orderedPrefixes.
+ * A program, described as matching ROLES rather than as a program — the record
+ * shape scoreRecord understands (see core/rankRecords.js for what each role
+ * does). This mapping is the whole of what makes program search program-shaped.
  *
- * Memoised over (token, word) because a token can be spent two ways, so the
- * search backtracks; the grid is at most ~6 × ~15, and the whole rank stays
- * near a millisecond over ~1.5k options.
+ * `degree` and `acronym` are codes because they are NU's own abbreviations;
+ * derived initials go in `acronyms`, one tier below. Campus and degree words
+ * are admitted to the ANY tier only, so "cs boston" resolves without letting
+ * "boston" match a program on its own.
  */
-function orderedInitials(qTokens, nameWords) {
-  const seen = new Map();
-  const go = (qi, wi) => {
-    if (qi === qTokens.length) return true;
-    if (wi >= nameWords.length) return false;
-    const key = `${qi},${wi}`;
-    if (seen.has(key)) return seen.get(key);
-    const t = qTokens[qi];
-    let ok = nameWords[wi].startsWith(t) && go(qi + 1, wi + 1);
-
-    // A run must open on a real word: without this, "…and Biology" reads "ab".
-    if (!ok && t.length >= 2 && !CONNECTORS.has(nameWords[wi]) && nameWords[wi][0] === t[0]) {
-      let li = 1, wj = wi + 1;
-      while (wj < nameWords.length && li < t.length) {
-        // Skipped inside a run, so "ece" spans "Electrical and Computer Engineering".
-        if (CONNECTORS.has(nameWords[wj])) { wj++; continue; }
-        if (nameWords[wj][0] !== t[li]) break;
-        li++; wj++;
-        if (li === t.length && go(qi + 1, wj)) { ok = true; break; }
-      }
-    }
-
-    if (!ok) ok = go(qi, wi + 1);   // this word matches nothing; move past it
-    seen.set(key, ok);
-    return ok;
-  };
-  return go(0, 0);
-}
-
-/** orderedInitials without the ordering: each token has to land somewhere. */
-function anyInitials(qTokens, nameWords) {
-  return qTokens.every(t => orderedInitials([t], nameWords));
-}
-
-/**
- * How much of the program's name the query accounts for, 0–COV_MAX.
- * The bonus that pushes combined and qualified programs down inside a tier.
- * It rounds, so equal-ish names tie here and the name-length tiebreak in
- * rankOptions settles them — which matters most for two-letter acronyms,
- * where every candidate's ratio is small and close.
- */
-function coverage(q, name) {
-  if (!name) return 0;
-  return Math.round(COV_MAX * Math.min(q.length / name.length, 1));
-}
-
-function scoreOption(o, q, qTokens) {
+function recordOf(o) {
   const f = fieldsOf(o);
-  if (!f.name) return -Infinity;
-  const cov = coverage(q, f.name);
-
-  if (f.name === q || f.label === q)                      return T.EXACT   + cov;
-
-  // The degree code is NU's own abbreviation, so it settles acronym
-  // collisions: for "cs", Computer Science (BSCS) sits above Cinema Studies,
-  // whose "cs" is only the initials we derived.
-  if (f.degree === q || f.acronym === q)                  return T.ACRONYM_CODE + cov;
-  if (f.acronyms.includes(q))                             return T.ACRONYM      + cov;
-
-  if (f.name.startsWith(q))                               return T.PREFIX  + cov;
-
-  const nameWords = words(f.name);
-  if (orderedPrefixes(qTokens, nameWords))                return T.ORDERED + cov;
-
-  // Acronyms join the pool here so "cs oakland" and "cs bscs" resolve.
-  const all = [...nameWords, ...words(f.degree), ...words(f.location), ...f.acronyms];
-  if (anyPrefixes(qTokens, all))                          return T.ANY     + cov;
-
-  // Name only, and below ANY: an initials run is weaker than a word prefix,
-  // so it may add candidates but must never reorder ones that already matched.
-  if (orderedInitials(qTokens, nameWords))                return T.INITIALS + cov;
-
-  // Word prefixes get an order-free tier (ORDERED → ANY) and initials now get
-  // the same, so "cs and ie" finds what "ie and cs" finds. Keeping it a tier
-  // lower preserves the ordering signal where a name actually carries one.
-  if (anyInitials(qTokens, nameWords))                    return T.INITIALS_ANY + cov;
-
-  if (f.name.includes(q))                                 return T.LOOSE   + cov;
-  const folder = (o.folder ?? "").toLowerCase();
-  if (folder && (folder.includes(q) || folder.includes(q.replace(/\s+/g, "_"))))
-    return T.LOOSE - 100 + cov;
-  if ((o.grp ?? "").toLowerCase().includes(q))            return T.LOOSE - 200 + cov;
-
-  return -Infinity;
+  return {
+    name:      f.name,
+    exact:     [f.label],
+    codes:     [f.degree, f.acronym],
+    acronyms:  f.acronyms,
+    poolWords: [...words(f.degree), ...words(f.location)],
+    loose: [
+      { text: (o.folder ?? "").toLowerCase(), penalty: 100, slug: true },
+      { text: (o.grp ?? "").toLowerCase(),    penalty: 200 },
+    ],
+  };
 }
 
 /** Exact form of what coverage approximates, for resolving its rounding ties. */
@@ -276,13 +172,12 @@ function degreePref(o) {
  * @returns {Array} the matching options, ordered by closeness (capped at limit)
  */
 export function rankOptions(options, query, limit = 60) {
-  const q = (query ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+  const { q, qTokens } = normalizeQuery(query);
   if (!q) return [];
-  const qTokens = words(q);
 
   const scored = [];
   for (const o of options) {
-    const s = scoreOption(o, q, qTokens);
+    const s = scoreRecord(recordOf(o), q, qTokens);
     if (s > -Infinity) scored.push({ o, s });
   }
 
