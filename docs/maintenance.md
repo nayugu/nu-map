@@ -307,6 +307,16 @@ Two things that check settled and were genuinely open beforehand: `next()`
 `no-cache`, not a default), and the injected window arrives in the body as
 `var INJECTED = {"end":…}` so the page makes no request of its own.
 
+⚠ **`wrangler pages dev` does not reproduce everything.** Pages normalises HTML
+URLs in production: `/maintenance.html` answers **308** to `/maintenance`. The
+function originally asked for `.html` and gated on `res.ok`, so in production a
+308 read as "template unreachable" and every real 503 would have served the plain
+built-in fallback instead of the designed page — while passing locally. It now
+asks for `/maintenance` first and decides it has the template by finding the
+injection token rather than by the status. If you add anything else that fetches
+its own assets, curl production after the deploy; the local runtime will not tell
+you.
+
 If it ever misbehaves, deleting `functions/index.js` restores pure static serving
 and everything else here still works — only the status code is lost.
 
