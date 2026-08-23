@@ -1223,13 +1223,15 @@ function maintDrawQueue(cfg, core, now) {
       ? `~${Math.round((w.expectedEnd - w.start) / MAINT_HOUR)}h`
       : `~${Math.round(w.durationMs / MAINT_HOUR)}h`;
 
+    // A live window is STOPPED. Anything else can simply be removed — a queued
+    // one because nothing has been shown to anyone yet, a finished one because
+    // it is only a record, and a record of a mistyped test run is worth less
+    // than a tidy list.
     const action = live
       ? `<button class="maint-act stop" title="Stop it now — this is what produces the “we’re back” notice"
                  onclick="maintDispatch('done')">Stop</button>`
-      : over
-        ? ""
-        : `<button class="maint-x" title="Cancel — it hasn't started, so nothing has been shown to anyone"
-                   onclick="maintCancel('${maintEsc(w.id)}')">×</button>`;
+      : `<button class="maint-x" title="${over ? "Remove from the queue" : "Cancel — it hasn't started, so nothing has been shown to anyone"}"
+                 onclick="maintRemove('${maintEsc(w.id)}', ${over ? "true" : "false"})">×</button>`;
 
     const tag = live
       ? `<span class="maint-tag live">RUNNING</span>`
@@ -1424,9 +1426,17 @@ function maintArm() {
   maintDispatch("outage");
 }
 
-/** Cancel a queued window (never a running one — see maintDrawQueue). */
-function maintCancel(id) {
-  if (!confirm(`Cancel "${id}"?\n\nIt has not started, so nothing is shown to anyone and nothing needs to be un-said.`)) return;
+/**
+ * Remove a window that is not running — queued, or finished.
+ *
+ * Both go through the CLI's `cancel`, which refuses only a LIVE window; the two
+ * differ in what they mean, so they differ in what they ask.
+ */
+function maintRemove(id, finished) {
+  const q = finished
+    ? `Remove "${id}" from the queue?\n\nIt is already over, so this only deletes the record of it.`
+    : `Cancel "${id}"?\n\nIt has not started, so nothing is shown to anyone and nothing needs to be un-said.`;
+  if (!confirm(q)) return;
   maintDispatch("cancel", { id });
 }
 
