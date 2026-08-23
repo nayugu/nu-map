@@ -11,6 +11,7 @@ import { ThemeProvider }               from './context/ThemeContext.jsx';
 import { InstitutionProvider }         from './context/InstitutionContext.jsx';
 import { LanguageProvider }            from './context/LanguageContext.jsx';
 import { TranslationProvider }         from './context/TranslationContext.jsx';
+import { MaintenanceProvider }         from './context/MaintenanceContext.jsx';
 import { institutionAdapter }          from './config.js';
 import LoadingScreen   from './ui/LoadingScreen.jsx';
 import RelationLines   from './ui/RelationLines.jsx';
@@ -29,6 +30,7 @@ import PlanLibrary      from './ui/PlanLibrary.jsx';
 import PalettePanel     from './ui/PalettePanel.jsx';
 import MigrationBanner  from './ui/MigrationBanner.jsx';
 import StorageAlarm     from './ui/StorageAlarm.jsx';
+import MaintenancePage   from './ui/MaintenancePage.jsx';
 import DevClockPanel    from './ui/DevClockPanel.jsx';
 import TermReviewPrompt from './ui/TermReviewPrompt.jsx';
 import PastClassRater   from './ui/PastClassRater.jsx';
@@ -240,11 +242,21 @@ export default function App() {
         <LanguageProvider>
           <TranslationProvider catalogLocale={institutionAdapter.institution?.contentLocale ?? institutionAdapter.institution?.defaultLocale ?? "en"}>
             <PlannerProvider>
-              <RelevanceProvider>
-                <CandidatesProvider>
-                  <PlannerApp />
-                </CandidatesProvider>
-              </RelevanceProvider>
+              {/* Inside PlannerProvider so the notice and the page can offer the
+                  one-click library backup, and OUTSIDE PlannerApp so both still
+                  render while the catalog is loading or has failed to load —
+                  which is precisely when a maintenance window is the
+                  explanation. `children` is built here, not in the provider, so
+                  the provider's 10 s tick never re-renders this subtree; see
+                  MaintenanceContext. */}
+              <MaintenanceProvider>
+                <RelevanceProvider>
+                  <CandidatesProvider>
+                    <PlannerApp />
+                  </CandidatesProvider>
+                </RelevanceProvider>
+                <MaintenancePage />
+              </MaintenanceProvider>
             </PlannerProvider>
           </TranslationProvider>
         </LanguageProvider>

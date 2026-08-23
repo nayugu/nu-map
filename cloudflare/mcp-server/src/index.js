@@ -29,6 +29,7 @@
 
 import { OAuthProvider } from "@cloudflare/workers-oauth-provider";
 import { getQuery, isolateStats } from "./loadData.js";
+import { maintenanceGate } from "./maintenance.js";
 export { SessionDO } from "./sessionDO.js";
 export { ShareBoxDO } from "./shareBoxDO.js";
 
@@ -61,6 +62,12 @@ const sessionStub = (env, sid) => env.SESSION.get(env.SESSION.idFromName(sid));
 
 const apiHandler = {
   async fetch(request, env, ctx) {
+    // Scheduled maintenance closes this surface too. The site's edge returns
+    // 503 during an `offline` window, and a worker that kept answering would
+    // leave Claude reading and proposing against a deployment we took off for
+    // safety. See ./maintenance.js — fails open, never gates /health.
+    const shut = await maintenanceGate(request, env);
+    if (shut) return shut;
     const sid = ctx.props?.sessionId;
     if (!sid) return json({ error: "Grant is missing a session binding" }, 403);
     // Forward into that session's Durable Object as an MCP request.
@@ -77,6 +84,11 @@ const apiHandler = {
 const defaultHandler = {
   async fetch(request, env) {
     if (request.method === "OPTIONS") return new Response(null, { headers: CORS });
+    // Same gate as apiHandler, and deliberately BEFORE the router: during an
+    // offline window there is nothing here worth answering except /health,
+    // which ./maintenance.js exempts precisely so an incident stays observable.
+    const shut = await maintenanceGate(request, env);
+    if (shut) return shut;
     const url = new URL(request.url);
     const { pathname } = url;
 

@@ -1,0 +1,151 @@
+# ═══════════════════════════════════════════════════════════════════
+# MAINTENANCE — the switch, dispatchable from the dev portal.
+#
+# This is the ONLY workflow here that a human triggers on purpose in a hurry,
+# and the only one whose effect is visible to every visitor within a minute. It
+# exists so that taking the site off does not require a laptop: the Maintenance
+# panel in public/northeastern/dev.html calls it with `workflow_dispatch`.
+#
+# It does exactly what a human would do at a terminal — runs
+# `scripts/maintenance.js`, commits `public/maintenance.json`, pushes to main —
+# so there is ONE source of truth and no second read path. Pages picks the file
+# up on deploy; nothing needs turning off afterwards, because every time in that
+# file is absolute (see docs/maintenance.md).
+#
+# ── Why this cannot be the whole story ─────────────────────────────
+#
+# It needs GitHub Actions AND the Pages deploy to be healthy. If the reason you
+# are taking the site down is that the pipeline itself is broken, this will not
+# fire — and neither would committing by hand, for the same reason. The fix for
+# that case is an override that does not go through a deploy at all; it is not
+# built. Do not treat this as an emergency stop of last resort.
+#
+# ⚠ `--write` writes; the CLI's dry run is not available here on purpose. The
+# panel shows the derived timeline BEFORE dispatching, which is where the review
+# belongs — a workflow input form cannot show you what a visitor will see.
+# ═══════════════════════════════════════════════════════════════════
+name: Maintenance
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "What to do"
+        required: true
+        type: choice
+        options:
+          - "outage — schedule maintenance"
+          - "extend — push the deadline out"
+          - "done — stop a live one now"
+          - "cancel — drop one that has not started"
+          - "clear — remove every window outright"
+      name:
+        description: "What to call it in the queue (outage only) — never shown to students"
+        required: false
+        default: ""
+        type: string
+      start:
+        description: 'Start (outage only): "now", "+2h", or "2026-08-30 22:00"'
+        required: false
+        default: "now"
+        type: string
+      expect:
+        description: "Expected duration we SHOW (outage only), e.g. 8h"
+        required: false
+        default: "8h"
+        type: string
+      deadline:
+        description: "Hard deadline — the site recovers itself here (outage only)"
+        required: false
+        default: "2d"
+        type: string
+      by:
+        description: "How much to extend by (extend only), e.g. 6h"
+        required: false
+        default: "6h"
+        type: string
+      id:
+        description: "Which window to cancel (cancel only)"
+        required: false
+        default: ""
+        type: string
+
+# Only `contents: write`, and only this file is ever committed. Same posture as
+# the data workflows, which also push straight to main.
+permissions:
+  contents: write
+
+# One at a time, and never cancel one in flight: two concurrent runs could
+# interleave a `done` with an `extend` and leave the file describing neither.
+concurrency:
+  group: maintenance
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # No `npm ci`: scripts/maintenance.js imports only src/core/maintenance.js,
+      # which is pure and dependency-free. Installing would add a minute to the
+      # one workflow where a minute is actually felt.
+
+      - name: Apply
+        id: apply
+        run: |
+          set -euo pipefail
+          case "${{ inputs.action }}" in
+            outage*)
+              node scripts/maintenance.js outage \
+                --start "${{ inputs.start }}" \
+                --expect "${{ inputs.expect }}" \
+                --for "${{ inputs.deadline }}" \
+                --name "${{ inputs.name }}" \
+                --write
+              MSG="chore(maint): take the site off (expect ${{ inputs.expect }}, deadline ${{ inputs.deadline }})"
+              ;;
+            extend*)
+              node scripts/maintenance.js extend "${{ inputs.by }}" --write
+              MSG="chore(maint): extend the window by ${{ inputs.by }}"
+              ;;
+            done*)
+              node scripts/maintenance.js done --write
+              MSG="chore(maint): back online"
+              ;;
+            cancel*)
+              node scripts/maintenance.js cancel "${{ inputs.id }}" --write
+              MSG="chore(maint): cancel ${{ inputs.id }}"
+              ;;
+            clear*)
+              node scripts/maintenance.js clear --write
+              MSG="chore(maint): clear the schedule"
+              ;;
+            *)
+              echo "unknown action: ${{ inputs.action }}" >&2; exit 1 ;;
+          esac
+          echo "msg=$MSG" >> "$GITHUB_OUTPUT"
+
+      - name: Show what visitors will see
+        run: node scripts/maintenance.js
+
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          git config user.name  "numap-bot"
+          git config user.email "bot@numap.app"
+          # Stage ONLY the schedule. `git add -A` in a shared checkout is how one
+          # session's edits end up in another's commit (see CLAUDE.md).
+          git add public/maintenance.json
+          if git diff --cached --quiet; then
+            echo "No change to the schedule — nothing to push."
+            exit 0
+          fi
+          git commit -m "${{ steps.apply.outputs.msg }}"
+          git push origin main

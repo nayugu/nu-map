@@ -810,6 +810,55 @@
           ko: 'NU Map으로 돌아가기',
           zh: '返回 NU Map'
         };
+        // ── Scheduled maintenance, shell edition ──────────────────
+        //
+        // A boot that fails DURING a maintenance window is the likeliest way
+        // anyone ever sees this screen, and "NU Map just updated" is a poor
+        // description of a window we announced in advance. So if the schedule
+        // says a window is open, the same card says so instead — and names the
+        // time it ends, which is the only thing the reader actually wants.
+        //
+        // ⚠ This is a deliberately WEAKER reading than resolveMaintenance() in
+        // src/core/maintenance.js: is `now` inside any window, at all. No
+        // phases, no severity, no caps. It cannot import that module (nothing
+        // has loaded yet, which is the whole problem), and it does not need to:
+        // this decides WORDING on a screen that is already showing a failure,
+        // never whether the app runs. The key is written by
+        // src/data/maintenanceSource.js — renaming it is a two-file change.
+        var MAINT_MSG = {
+          en: 'NU Map is under scheduled maintenance.',
+          es: 'NU Map está en mantenimiento programado.',
+          fr: 'NU Map est en maintenance planifiée.',
+          ar: 'NU Map في صيانة مجدولة.',
+          hi: 'NU Map निर्धारित रखरखाव में है।',
+          ja: 'NU Map は計画メンテナンス中です。',
+          ko: 'NU Map은 예정된 점검 중입니다.',
+          zh: 'NU Map 正在进行计划维护。'
+        };
+        var MAINT_SUB = {
+          en: 'Your plans are safe in this browser. Back around {t}.',
+          es: 'Tus planes están a salvo en este navegador. Volvemos alrededor de {t}.',
+          fr: 'Vos plans sont en sécurité dans ce navigateur. De retour vers {t}.',
+          ar: 'خططك آمنة في هذا المتصفّح. نعود نحو {t}.',
+          hi: 'आपकी योजनाएँ इस ब्राउज़र में सुरक्षित हैं। लगभग {t} पर वापसी।',
+          ja: 'プランはこのブラウザに安全に残っています。復旧は {t} ごろです。',
+          ko: '플랜은 이 브라우저에 안전합니다. {t}쯤 복구됩니다.',
+          zh: '你的方案安全地保存在这个浏览器里。预计 {t} 左右恢复。'
+        };
+        function maintWindow() {
+          try {
+            var raw = localStorage.getItem('numap.maintenance.v1');
+            if (!raw) return null;
+            var v = JSON.parse(raw), cfg = v && v.config;
+            var ws = (cfg && cfg.windows) || (cfg && cfg.window ? [cfg.window] : []);
+            var now = Date.now() + ((v && v.skewMs) || 0);
+            for (var i = 0; i < ws.length; i++) {
+              var s = Date.parse(ws[i].start), e = Date.parse(ws[i].end);
+              if (isFinite(s) && isFinite(e) && now >= s && now < e) return e;
+            }
+          } catch (e) {}
+          return null;
+        }
         function showRecovery() {
           var make = function () {
             if (document.getElementById('numap-recovery') || !document.body) return;
@@ -817,6 +866,18 @@
             try { lc = (localStorage.getItem('ncp-locale') || navigator.language || 'en').slice(0, 2); } catch (e) {}
             var msg = RECOVERY_MSG[lc] || RECOVERY_MSG.en;
             var sub = RECOVERY_SUB[lc] || RECOVERY_SUB.en;
+            // A window we announced explains this better than "just updated"
+            // does, and the probe below still watches for the way back either
+            // way — so this changes the words and nothing else.
+            var mEnd = maintWindow();
+            if (mEnd) {
+              msg = MAINT_MSG[lc] || MAINT_MSG.en;
+              var mAt;
+              try {
+                mAt = new Intl.DateTimeFormat(lc, { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).format(new Date(mEnd));
+              } catch (e) { mAt = new Date(mEnd).toISOString().slice(11, 16) + ' UTC'; }
+              sub = (MAINT_SUB[lc] || MAINT_SUB.en).replace('{t}', mAt);
+            }
             // Same theme resolution as the pre-paint script above, so this
             // overlay blends with whatever background is already up. If a
             // reveal veil is mid-flight, the overlay replaces it — the app

@@ -65,6 +65,103 @@ function dataMetaPlugin() {
 }
 
 /**
+ * Copies src/core/maintenance.js to dist/northeastern/maintenance-core.js.
+ *
+ * The dev portal (public/northeastern/dev.html) is a hand-written static page
+ * with no bundler, and its Maintenance panel has to answer the same questions
+ * the app answers: which phase is this window in, what does a visitor see, what
+ * will this schedule actually do. Recomputing that arithmetic in the page was
+ * the obvious shortcut and is exactly the mistake this whole feature is careful
+ * about — a portal that says "scheduled" while the app says "active" is how a
+ * wrong call gets made at 2 a.m.
+ *
+ * So the portal imports the real resolver. `src/core/maintenance.js` is pure
+ * with ZERO imports of its own, which is what makes a flat copy sufficient; if
+ * it ever grows an import this plugin has to grow with it, and the portal's
+ * `catch` will fall back to the dev path rather than break the page.
+ */
+/**
+ * DEV ONLY: `POST /__maint` runs scripts/maintenance.js and writes the schedule.
+ *
+ * Without this, the portal's Schedule button had exactly one route to the file —
+ * dispatching a GitHub workflow — so on `npm run dev` with no saved PAT it could
+ * only ever show "no token saved" and refuse. That is a dead end in the place
+ * you are most likely to be trying it out.
+ *
+ * This runs on the Vite dev server, so it exists whenever `npm run dev` does: no
+ * second process, no port to configure, and no possibility of shipping — a Vite
+ * dev middleware has no production counterpart.
+ *
+ * Arguments are passed as an ARRAY to `spawn` with no shell, and the verb is
+ * checked against a closed list, so nothing here can be talked into running
+ * something else.
+ */
+function maintenanceDevPlugin(root) {
+  const VERBS = ["outage", "extend", "done", "cancel", "clear", "status"];
+  return {
+    name: "numap-maintenance-dev",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use("/__maint", (req, res) => {
+        if (req.method !== "POST") { res.statusCode = 405; return res.end("POST only"); }
+        let body = "";
+        req.on("data", c => { body += c; if (body.length > 4096) req.destroy(); });
+        req.on("end", async () => {
+          const done = (status, payload) => {
+            res.statusCode = status;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify(payload));
+          };
+          let args;
+          try {
+            const { verb, flags = {} } = JSON.parse(body || "{}");
+            if (!VERBS.includes(verb)) return done(400, { error: `unknown verb: ${verb}` });
+            args = [path.join(root, "scripts/maintenance.js"), verb];
+            for (const [k, v] of Object.entries(flags)) {
+              if (!/^[a-z-]{1,20}$/.test(k)) return done(400, { error: `bad flag: ${k}` });
+              if (v === true) args.push(`--${k}`);
+              else if (v != null && v !== "") { args.push(`--${k}`, String(v)); }
+            }
+            args.push("--write");
+          } catch (e) { return done(400, { error: String(e?.message ?? e) }); }
+
+          const { spawn: sp } = await import("child_process");
+          const child = sp(process.execPath, args, { cwd: root });
+          let out = "";
+          child.stdout.on("data", d => { out += d; });
+          child.stderr.on("data", d => { out += d; });
+          child.on("error", e => done(500, { error: String(e?.message ?? e) }));
+          child.on("close", code => done(code === 0 ? 200 : 500, {
+            ok: code === 0,
+            // ANSI colours are for a terminal; the portal renders this as text.
+            output: out.replace(/\x1b\[[0-9;]*m/g, ""),
+          }));
+        });
+      });
+    },
+  };
+}
+
+function maintenanceCorePlugin() {
+  return {
+    name: "numap-maintenance-core",
+    writeBundle() {
+      try {
+        fs.mkdirSync("./dist/northeastern", { recursive: true });
+        const src = fs.readFileSync("./src/core/maintenance.js", "utf8");
+        fs.writeFileSync(
+          "./dist/northeastern/maintenance-core.js",
+          "// GENERATED — a verbatim copy of src/core/maintenance.js, emitted by\n"
+          + "// maintenanceCorePlugin in vite.config.js so the dev portal can run the\n"
+          + "// SAME resolver the app runs. Do not edit; edit the original.\n"
+          + src,
+        );
+      } catch { /* portal falls back to /src/core/maintenance.js in dev */ }
+    },
+  };
+}
+
+/**
  * Emits dist/assets/build.json — {entry, built} — naming the entry bundle of
  * THIS build. It is the only way the recovery screens can learn what the live
  * deployment's entry bundle is called, and that is the only honest readiness
@@ -156,7 +253,7 @@ function catalogCheckPlugin() {
 }
 
 export default defineConfig({
-  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), buildManifestPlugin(), aiDataPlugin(), aiDataDevPlugin(ROOT)],
+  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), maintenanceCorePlugin(), maintenanceDevPlugin(ROOT), buildManifestPlugin(), aiDataPlugin(), aiDataDevPlugin(ROOT)],
   base: "./",
   define: { __COMMIT_DATE__: JSON.stringify(commitDate) },
   optimizeDeps: { exclude: ["@huggingface/transformers"] },

@@ -412,6 +412,113 @@ Design of record: `docs/data-search-design.md`. Instrument:
 - Verify in a browser (`test/browser/data-search.browser.test.js`) — nothing in
   Node evaluates the widget's DOM code.
 
+## Maintenance windows
+
+Full runbook in `docs/maintenance.md`. `npm run maint` to see or schedule; the
+four things worth knowing before touching any of it:
+
+- **One JSON file, absolute times, one deploy.** `public/maintenance.json` drives
+  everything, and because every time in it is absolute, the app announces,
+  escalates, shows the page and **clears itself** with nothing shipped at the
+  end. That is a safety property, not a convenience: if coming back up needed a
+  second deploy, a window that overran *because a deploy failed* would strand
+  every visitor on a maintenance page — the moment we are least able to ship.
+  Never reintroduce a "maintenance: on" flag.
+- **`notice` is the default and `offline` has to be asked for.** Plans live in
+  the visitor's own `localStorage` and the catalog is a static JSON, so an
+  already-loaded page is unaffected by anything we do to the deployment and a
+  fresh one only needs static assets. `offline` therefore does not describe a
+  state we are *in* — it is a decision to stop serving, and it causes an outage
+  that would not otherwise exist. The maintenance page keeps a "Continue anyway"
+  link (`?nomaint=1` at the edge) for exactly that reason; `hardBlock` removes it
+  and is only correct for a storage migration, where an edit made during the
+  window would be written into a schema being replaced.
+- **The 503 is the point of the edge layer.** `functions/index.js` is a Pages
+  Function on **`/` only** — not `_middleware.js`, which would put a Worker
+  invocation in front of every asset, the cost `public/_headers` already
+  documents refusing. It returns 503 + `Retry-After` + `no-store`, because a
+  maintenance page at 200 tells Google that "Under maintenance" is our content.
+  Every branch of it fails open to `next()`; the only way to get a 503 out of it
+  is a schedule that positively says so. Verified against `wrangler pages dev`
+  (results in the runbook) — including that `next()` carries the `_headers` rules
+  through.
+- **`end` is a deadline; `expectedEnd` is a forecast.** Two promises, and neither
+  does the other's job: `end` is when the site turns itself back on regardless
+  (so an outage of unknown length is still expressible), `expectedEnd` is the
+  number we quote and what `Retry-After` carries. Past the forecast, every
+  surface says "taking longer than expected" rather than counting down to a time
+  that has gone — a visibly-expired countdown on a live page reads as abandoned.
+  Quote hours, guarantee days. `MAX_OFFLINE_HOURS` is **72**, not 24: at 24 the
+  guard demoted this project's own stated worst case (off for up to two days) to
+  a notice, i.e. it fired on the real case instead of the typo it exists for.
+- **An ordinary push to main needs NO maintenance, and there is deliberately no
+  playbook for one.** The only visible effect of a routine deploy is a tab on a
+  stale shell, which `index.html`'s recovery screen already detects and repairs
+  (see `public/_headers`). An `update` playbook existed for a day and was
+  deleted: it announced a non-event, which is the crying-wolf failure that makes
+  the notice that matters unreadable. Maintenance means one thing here — **the
+  site is coming off**.
+- **A window always STARTS from the schedule; there is no "off now" verb.** An
+  emergency is a window whose start is `now`, so the only creation action is
+  *schedule* — hence the portal button says "Schedule maintenance". The two
+  un-scheduling verbs are NOT interchangeable: `done` stops a LIVE one by setting
+  `end = now`, which is what PRODUCES the "we're back" notice, while `cancel <id>`
+  deletes one that never started. `cancel` refuses a live window, because
+  deleting one would drop the maintenance page mid-outage with nothing said.
+  `extend` pushes the forecast and deadline out instead. The playbook sets
+  defaults only and shares the hand-built code path.
+- **`name` is for the queue, never for a student.** It is free text only because
+  nothing in the app renders it; a student-facing string would owe eight
+  hand-written locales, which is why the reason shown to students (`kind`) is a
+  closed vocabulary. Don't render `name` in the app.
+- **The dev portal's Maintenance panel imports the REAL resolver.**
+  `maintenanceCorePlugin` (vite.config.js) copies `src/core/maintenance.js` to
+  `dist/northeastern/maintenance-core.js` so `public/northeastern/dev.html` runs
+  the same function the app does; in dev it falls back to `/src/core/…`. Do not
+  reimplement phase arithmetic in that page — a portal that says "scheduled"
+  while the app says "active" is how a wrong call gets made at 2 a.m. The panel
+  reaches the file two ways, in order: `POST /__maint` on the **Vite dev server**
+  (`maintenanceDevPlugin`) runs the CLI directly, so `npm run dev` needs no token
+  at all; otherwise it dispatches `.github/workflows/maintenance.yml` (which
+  commits and pushes `public/maintenance.json`, like the data workflows) using the
+  PAT the Trigger tab stores, so it works from a phone. With neither it copies the
+  equivalent command instead of refusing. Both real routes need the Pages deploy
+  healthy, and so does committing by hand — an override that skips the deploy is
+  NOT built, so don't describe this as an emergency stop of last resort.
+- **Don't put a preview iframe inside markup you rebuild.** The stage preview
+  lived in the element `maintDrawStage` rewrites, so typing a name re-created the
+  iframe and booted the app once per keystroke. The frame is now outside every
+  rebuilt region and its `src` changes only when the STAGE changes; there is a
+  browser test that types ten characters and asserts zero frame navigations.
+  Related: an embedded app must not steal focus — `MaintenancePage` skips its
+  autofocus when `window.top !== window.self`, because a 22%-scale thumbnail was
+  taking keystrokes from the portal, and the portal also listens for Escape inside
+  each same-origin preview frame since other components autofocus too.
+- **ONE resolver, everywhere.** `functions/index.js` and
+  `cloudflare/mcp-server/src/maintenance.js` both import `resolveMaintenance`
+  from `src/core/maintenance.js`. The Function first shipped a hand-copied subset
+  on the belief that a Pages Function cannot reach `src/` — it can (loadData.js
+  has always done it, and `wrangler pages dev` confirms), so that duplicate and
+  its copy of the cap are gone. Only two hand-copied strings remain, both
+  unavoidable: `CACHE_KEY` (read in ES5 by `index.html`, which runs before any
+  module exists — same situation as `BEACON_RATE`) and `TOKEN` (must match the
+  placeholder in `public/maintenance.html`).
+- **The MCP worker honours the schedule too, and `/health` never does.** The
+  worker is a separate deployment, so without that gate a safety shutdown would
+  leave Claude reading and proposing against a site we deliberately took off.
+  `offline` closes everything there; `degraded` closes only what it names, which
+  is what finally makes `claude`/`share` a real switch rather than a label
+  (`ratings`, `translation`, `catalog` are still declarative). `/health` stays up
+  by design — gating it would remove the one instrument you need during an
+  incident, which is also why the health beacon, stripe-split and
+  translate-proxy are left alone.
+
+`public/maintenance.html` is self-contained by requirement — inline CSS, the mark
+traced as inline SVG (the PNG is 132 KB, thirteen times the page), system fonts,
+no `<img>`, renders with JS off. Its eight locales are duplicated from
+`src/locales/` on purpose: like the recovery screen, it must not depend on a
+bundle.
+
 ## Claude/MCP integration
 
 - Node dev server: `mcp-server/` (port 27182). Production: `cloudflare/mcp-server/`

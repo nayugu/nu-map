@@ -28,6 +28,7 @@ import FadeText       from "./FadeText.jsx";
 import { generateQr } from "../core/qrEncode.js";
 import { getHashCodeParam, buildCodeUrl } from "../core/planShare.js";
 import { CODE_LENGTH, filterCodeInput } from "../core/shareCrypto.js";
+import MaintenanceNotice from "./MaintenanceNotice.jsx";
 
 // Measured header-row width (logical px) below which the labeled buttons fold
 // to icon-only. Above it, labeled buttons wrap into two stacked groups
@@ -1243,6 +1244,12 @@ export default function Header() {
         position: "sticky", top: 0, zIndex: 30, background: "var(--bg-app)",
         paddingTop: 10, paddingBottom: 8, borderBottom: "1px solid var(--border-1)",
       }}>
+        {/* Row 0: scheduled maintenance, when there is any. Renders nothing at
+            all the rest of the time (99% of loads — there is not even a timer;
+            see MaintenanceContext). First row rather than last because it is
+            about the whole page, and IN FLOW rather than floating so it can
+            never cover a course card. */}
+        <MaintenanceNotice />
         {/* Row 1: title + info — last-updated anchored right, never wraps */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "nowrap", minWidth: 0, overflow: "hidden" }}>
           {/* The mark is the site-wide home link — same affordance on every NU

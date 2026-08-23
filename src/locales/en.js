@@ -226,6 +226,52 @@ export const strings = {
   "storage.alarm.pressure":   "This browser is nearly out of storage, and your plans are saved here and nowhere else. Deleting a few plans now will keep new edits from being lost.",
   "storage.alarm.dismiss":    "Got it",
 
+  // ── Scheduled maintenance ──────────────────────────────────────
+  // The header strip, and the full-screen page for a window we chose to take.
+  // Times and countdowns are NOT here: `Intl` already knows how to say "in 20
+  // minutes" and "Sat, Aug 30, 2:00 AM EDT" in all eight locales, so writing
+  // them as strings would mean hand-maintaining plural rules (Arabic has six).
+  // See src/core/maintenanceFormat.js.
+  "maint.label.scheduled":    "Maintenance {when}",
+  "maint.label.imminent":     "Maintenance starts {when}",
+  "maint.label.active":       "Maintenance in progress \xb7 back {when}",
+  "maint.label.restored":     "Maintenance finished",
+  "maint.details":            "Details",
+  "maint.dismiss":            "Got it",
+  "maint.reload":             "Reload",
+  // Why, in a closed vocabulary — a free-text reason could not be translated,
+  // so it would have shipped English into a zh/ja/ar panel.
+  "maint.kind.deploy":        "We’re shipping an update.",
+  "maint.kind.data":          "We’re refreshing course data.",
+  "maint.kind.migration":     "We’re changing how plans are stored.",
+  "maint.kind.infra":         "We’re doing work on our hosting.",
+  "maint.kind.other":         "Planned maintenance.",
+  "maint.effect.notice":      "The app should keep working — you may just see a brief interruption.",
+  "maint.effect.degraded":    "These will be unavailable: {features}. Everything else keeps working.",
+  "maint.effect.offline":     "NU Map will be unavailable during this window.",
+  // Said on every window, not only the ones asking for a backup: it is the one
+  // fact that turns this from alarming into merely informative.
+  "maint.safe":               "Your plans are saved in this browser, not on our servers, so maintenance can’t change or lose them.",
+  "maint.backup.optional":    "Want a copy on disk anyway? One click saves your whole library as a file.",
+  "maint.backup.recommended": "This one changes how plans are stored, so save a copy of your library first — it takes a second.",
+  "maint.backup.action":      "Save my plans",
+  "maint.backup.done":        "Saved to your downloads",
+  "maint.restored.body":      "We’re back. If anything looks off, reload the page.",
+  // Shown once the FORECAST return time has passed but the deadline has not. A
+  // countdown the reader can see has expired reads as abandoned; this doesn't.
+  "maint.overrun":            "Taking longer than expected",
+  "maint.feature.claude":     "Claude connection",
+  "maint.feature.share":      "Share codes",
+  "maint.feature.ratings":    "Course ratings",
+  "maint.feature.translation": "Auto-translation",
+  "maint.feature.catalog":    "Catalog updates",
+  // The separator between feature names, because it is not a comma everywhere.
+  "maint.feature.join":       ", ",
+  "maint.page.title":         "NU Map is under maintenance",
+  "maint.page.back":          "Back {when}",
+  "maint.page.continue":      "Keep using my plan",
+  "maint.page.hardblock":     "This page comes back on its own as soon as we’re done.",
+
   "chart.refused":            "No generated plan for this program.",
   // Not a failure, and worded so: the concentrations genuinely need different schedules, and
   // the plan can be built as soon as one is chosen. Shown only before a pick is made.
