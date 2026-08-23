@@ -145,12 +145,28 @@ async function maintenanceResponse(env, url, w, bodyless) {
   };
   if (bodyless) return new Response(null, { status: 503, headers });
 
+  // `/maintenance` FIRST, `.html` second.
+  //
+  // Cloudflare Pages normalises HTML URLs: in production `/maintenance.html`
+  // answers **308** to `/maintenance`, and this code checks `res.ok`, so a 308
+  // meant the template was "unreachable" and every real 503 would have served
+  // the plain built-in body below instead of the page we designed. `wrangler
+  // pages dev` does not normalise, so it looked fine locally and was only
+  // visible by curling production after the deploy.
   let html = "";
-  try {
-    const req = new Request(new URL("/maintenance.html", url).toString());
-    const res = env?.ASSETS?.fetch ? await env.ASSETS.fetch(req) : await fetch(req);
-    if (res && res.ok) html = await res.text();
-  } catch { /* handled below */ }
+  for (const path of ["/maintenance", "/maintenance.html"]) {
+    try {
+      const req = new Request(new URL(path, url).toString());
+      const res = env?.ASSETS?.fetch ? await env.ASSETS.fetch(req) : await fetch(req);
+      if (res && res.ok) {
+        const text = await res.text();
+        // Under the SPA catch-all a miss answers with the app shell at 200, so
+        // "did we get the template" is decided by the token, not the status.
+        if (text.includes(TOKEN)) { html = text; break; }
+        if (!html) html = text;   // keep as a last resort, keep looking
+      }
+    } catch { /* try the next path */ }
+  }
 
   // If the template is unreachable there is still a duty to answer with the
   // right STATUS, so a plain built-in body stands in. It is deliberately ugly:

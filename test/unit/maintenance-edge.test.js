@@ -47,10 +47,16 @@ function ctx({ schedule, url = "https://numap.app/", method = "GET", cookie, noT
           const body = typeof schedule === "string" ? schedule : JSON.stringify(schedule);
           return new Response(body, { status: 200 });
         }
-        if (p === "/maintenance.html") {
+        // Production serves the template at `/maintenance`; `/maintenance.html`
+        // answers 308 there, because Pages normalises HTML URLs. Modelled
+        // exactly, so the "template unreachable" fallback cannot come back.
+        if (p === "/maintenance") {
           return noTemplate
             ? new Response("nope", { status: 404 })
             : new Response(TEMPLATE, { status: 200 });
+        }
+        if (p === "/maintenance.html") {
+          return new Response(null, { status: 308, headers: { location: "/maintenance" } });
         }
         return new Response("?", { status: 404 });
       },
