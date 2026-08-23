@@ -34,29 +34,5 @@
     "A file we cannot read or cannot parse means 'nothing scheduled' — this feature can",
     "never be the reason the app is down."
   ],
-  "windows": [
-    {
-      "id": "2026-08-23-02-01-infra",
-      "start": "2026-08-23T02:01:00.000Z",
-      "end": "2026-08-23T02:02:08.586Z",
-      "severity": "offline",
-      "kind": "infra",
-      "backup": "recommended",
-      "announceHours": 48,
-      "imminentMinutes": 10,
-      "restoredHours": 12
-    },
-    {
-      "id": "2026-08-23-02-02-infra",
-      "name": "dfdfd",
-      "start": "2026-08-23T02:02:00.000Z",
-      "end": "2026-08-23T02:02:24.849Z",
-      "severity": "offline",
-      "kind": "infra",
-      "backup": "recommended",
-      "announceHours": 48,
-      "imminentMinutes": 10,
-      "restoredHours": 12
-    }
-  ]
+  "windows": []
 }

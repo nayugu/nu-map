@@ -38,7 +38,7 @@
 // the copy says plainly that plans are local either way, and the button is the
 // same whole-library export the plan library already offers.
 // ═══════════════════════════════════════════════════════════════════
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useMaintenance } from "../context/MaintenanceContext.jsx";
@@ -47,6 +47,42 @@ import { formatRelative, formatWindow } from "../core/maintenanceFormat.js";
 const DISMISS_KEY = "numap.maintenance.dismissed";
 /** Keep the record small — it lives in the store StorageAlarm warns about. */
 const DISMISS_MAX = 8;
+
+/**
+ * Windows this browser was actually present for.
+ *
+ * "We're back" is only news to someone who was here when it went down. Without
+ * this, a `restored` phase of 12 h — what the outage playbook sets — greeted
+ * every fresh visitor for half a day with a notice about an event they never
+ * experienced, and the reload button it carries would have been advice about a
+ * stale bundle they never loaded.
+ */
+const SEEN_KEY = "numap.maintenance.seen";
+
+/**
+ * How long the "we're back" strip stays before retiring itself.
+ *
+ * Five seconds. It is an acknowledgement, not a status: one glance and it has
+ * done its job. Dismissing it is final — unlike every other phase, where × only
+ * collapses the detail and keeps the countdown reachable, because a window that
+ * has ENDED has nothing left to look up.
+ */
+const RESTORED_VISIBLE_MS = 5e3;
+
+function readSeen() {
+  try {
+    const v = JSON.parse(localStorage.getItem(SEEN_KEY) || "[]");
+    return Array.isArray(v) ? v.filter(x => typeof x === "string") : [];
+  } catch { return []; }
+}
+
+function markSeen(id) {
+  try {
+    const list = readSeen();
+    if (list.includes(id)) return;
+    localStorage.setItem(SEEN_KEY, JSON.stringify([...list, id].slice(-DISMISS_MAX)));
+  } catch { /* no store — the strip simply won't claim they were here */ }
+}
 
 function readDismissed() {
   try {
@@ -74,9 +110,40 @@ export default function MaintenanceNotice() {
   const { exportLibraryJSON } = usePlanner();
   const [dismissed, setDismissed] = useState(readDismissed);
   const [saved, setSaved] = useState(false);
+  const [restoredExpired, setRestoredExpired] = useState(false);
+
+  // Declared before the early returns below, because hooks must be — and read
+  // off `m` rather than the window object so the deps are primitives.
+  const phase = m.phase;
+  const winId = m.window?.id ?? null;
+
+  // Remember that this browser was here for it. `imminent` counts: someone
+  // watching the countdown ten minutes out is exactly who the "we're back"
+  // strip is for.
+  useEffect(() => {
+    if (winId && (phase === "active" || phase === "imminent")) markSeen(winId);
+  }, [winId, phase]);
+
+  // Retire the "we're back" strip on its own. It is an acknowledgement, not a
+  // status — once read it has no job, and it should not outlive the glance.
+  useEffect(() => {
+    if (phase !== "restored") return;
+    const id = setTimeout(() => setRestoredExpired(true), RESTORED_VISIBLE_MS);
+    return () => clearTimeout(id);
+  }, [phase, winId]);
 
   // The full-screen page is already saying all of this, at length.
   if (m.phase === "none" || m.blocking) return null;
+
+  // "We're back" goes only to whoever was here when it went down, only for a
+  // few seconds, and never again once dismissed. Everyone else gets the
+  // ordinary app with nothing to explain.
+  if (m.phase === "restored") {
+    const gone = restoredExpired
+      || !readSeen().includes(m.window.id)
+      || dismissed.includes(`${m.window.id}:restored`);
+    if (gone) return null;
+  }
 
   const key = `${m.window.id}:${m.phase}`;
   const open = !dismissed.includes(key);

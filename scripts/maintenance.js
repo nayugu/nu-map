@@ -70,7 +70,10 @@ const PLAYBOOKS = {
   // every deploy fails.
   outage: {
     for: "2d", expect: "8h", severity: "offline", kind: "infra",
-    announce: "48h", imminent: "10m", backup: "recommended", restored: "12h",
+    // `restored: 2h`, not 12: the "we're back" strip is shown only to browsers
+    // that were present for the window and retires itself after ~15 s, so a long
+    // tail bought nothing and kept a needless timer running in every open tab.
+    announce: "48h", imminent: "10m", backup: "recommended", restored: "2h",
     _blurb: "a real outage: 48 h notice, 10 min warning, offline with a way through",
   },
 };

@@ -73,14 +73,17 @@ so there is no second implementation to drift.
   |---|---|---|
   | `RUNNING` | tinted red, red rule down the left | **Stop** |
   | queued | plain | **×** cancel |
-  | `COMPLETED` | faded, and it *stays* | none |
+  | `COMPLETED` | faded, and it *stays* | **×** remove |
 
   A running window is **stopped**, never cancelled — stopping is what leaves the
   "we're back" notice, and cancelling would drop the maintenance page mid-outage
-  with nothing said. The CLI refuses it for the same reason. A finished window
-  stays in the list as the record of what happened; the CLI keeps a week of them
-  (`HISTORY_MS`), which bounds a file every visitor fetches. The start time is
-  read-only text throughout — this list never edits anything.
+  with nothing said. The CLI refuses it for the same reason, and permits removing
+  anything else, queued or finished (`maint -- cancel <id>`). A finished window
+  stays in the list as the record of what happened, but it can be deleted: the
+  record of a mistyped test run is worth less than a tidy list. The CLI also ages
+  them out after a week (`HISTORY_MS`), which bounds a file every visitor
+  fetches. The start time is read-only text throughout — this list never edits
+  anything.
 - **One line to fill it**: name, date, time, expected, deadline, `Schedule` hard
   right. Shortcuts underneath — `Now`, `+1h`, `+6h`, `Tonight 2am` — *write into*
   the date and time rather than being a selection of their own, so hand-editing
@@ -238,9 +241,17 @@ wiring those in the client.
    these are two different messages. This is where `--backup` asks.
 3. **`active`** — `notice`/`degraded` keep the strip; `offline` shows
    `MaintenancePage` over the app (and a 503 at the edge for new arrivals).
-4. **`restored`** — for 2 h after the end (`restoredHours`), a green strip with a
-   reload button. A tab left open through a deploy is running a bundle that no
-   longer exists, and reloading is the fix.
+4. **`restored`** — a green strip with a reload button, for **five seconds**, and
+   **only for a browser that was actually present** while the window was open or
+   imminent. Dismissing it is final, unlike the other phases where × collapses
+   the detail and keeps the countdown reachable — a window that has ended has
+   nothing left to look up.
+
+   Both limits exist because the phase itself lasts hours: without the presence
+   check, every fresh visitor was greeted with a notice about an outage they
+   never experienced, holding a reload button about a stale bundle they never
+   loaded. The mark is `numap.maintenance.seen`, and `?maint=restored` seeds it
+   deliberately or previewing that state would render nothing.
 5. **gone** — automatically. No deploy.
 
 ## The backup prompt

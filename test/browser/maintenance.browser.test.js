@@ -92,10 +92,58 @@ describe("maintenance screens", () => {
     assert.match(text, /COURSE BANK/i, "degraded must not take the app away");
   });
 
-  test("a finished window says so, with a way to reload", async () => {
-    const { text } = await visit("/?maint=restored");
-    assert.match(text, /Maintenance finished/i);
-    assert.match(text, /Reload/i);
+  test("a finished window says so briefly, then retires itself", async () => {
+    // The preview seeds the "was here for it" mark, which is the only reason
+    // this renders at all — see the next test.
+    assert.equal(launchError, null, `chromium unavailable: ${launchError?.message}`);
+    const page = await browser.newPage();
+    await page.goto(`http://127.0.0.1:${port}/?maint=restored`, { waitUntil: "load", timeout: 60_000 });
+    await page.waitForTimeout(2200);
+    const shown = await page.evaluate(() => document.body?.innerText ?? "");
+    assert.match(shown, /Maintenance finished/i);
+    assert.match(shown, /Reload/i);
+
+    // An acknowledgement, not a status: one glance and it has done its job.
+    await page.waitForTimeout(5200);
+    const later = await page.evaluate(() => document.body?.innerText ?? "");
+    await page.close();
+    assert.doesNotMatch(later, /Maintenance finished/i, "the strip should retire itself");
+    assert.match(later, /COURSE BANK/i, "and leave the app alone");
+  });
+
+  test('"we\'re back" is not shown to someone who was never there', async () => {
+    // A `restored` phase lasts hours, so without this gate every fresh visitor
+    // got a notice about an outage they never experienced — and a reload button
+    // about a stale bundle they never loaded.
+    //
+    // Driven by a REAL schedule rather than `?maint=restored`: the preview seeds
+    // the witness mark by design (or previewing it would show nothing), so it
+    // cannot express "a browser that was never here".
+    assert.equal(launchError, null, `chromium unavailable: ${launchError?.message}`);
+    const now = Date.now();
+    await writeFile(join(DIST, "maintenance.json"), JSON.stringify({
+      windows: [{
+        id: "just-ended", name: "Ended five minutes ago", severity: "offline", kind: "infra",
+        start: new Date(now - 3 * 3600e3).toISOString(),
+        end: new Date(now - 5 * 60e3).toISOString(),
+        restoredHours: 2,
+      }],
+    }));
+    try {
+      const page = await browser.newPage();
+      await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load", timeout: 60_000 });
+      await page.waitForTimeout(4000);
+      const text = await page.evaluate(() => document.body?.innerText ?? "");
+      await page.close();
+      // The window IS in its restored phase — this is not a case of nothing
+      // being scheduled — and the strip still stays away.
+      assert.doesNotMatch(text, /Maintenance finished/i);
+      assert.doesNotMatch(text, /We’re back|We're back/i);
+      // …and the app underneath is perfectly fine.
+      assert.match(text, /COURSE BANK/i);
+    } finally {
+      await writeFile(join(DIST, "maintenance.json"), EMPTY_SCHEDULE);
+    }
   });
 
   // ── The full-screen page ──────────────────────────────────────────
@@ -296,7 +344,11 @@ describe("maintenance screens", () => {
       assert.equal(await page.locator(".maint-q.live .maint-act.stop").count(), 1, "running → Stop");
       assert.equal(await page.locator(".maint-q.live .maint-x").count(), 0, "running must NOT offer cancel");
       assert.equal(await page.locator(".maint-q:not(.live):not(.over) .maint-x").count(), 1, "queued → cancel");
-      assert.equal(await page.locator(".maint-q.over .maint-x").count(), 0, "finished → nothing to press");
+      // A finished row can be removed — it is only a record, and the record of a
+      // mistyped test run is worth less than a tidy list. It still cannot be
+      // *stopped*, because there is nothing running.
+      assert.equal(await page.locator(".maint-q.over .maint-x").count(), 1, "finished → remove");
+      assert.equal(await page.locator(".maint-q.over .maint-act.stop").count(), 0);
 
       // Faded as a whole, and the start time is plain readable text, not a field.
       const op = Number(await page.locator(".maint-q.over").evaluate(e => getComputedStyle(e).opacity));

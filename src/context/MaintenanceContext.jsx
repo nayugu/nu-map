@@ -57,7 +57,19 @@ function previewConfig() {
     }
     if (want === "scheduled") return { windows: [{ ...base, severity: "notice", start: now + 6 * H, end: now + 8 * H }] };
     if (want === "imminent") return { windows: [{ ...base, severity: "offline", start: now + 11 * 60e3, end: now + 2 * H }] };
-    if (want === "restored") return { windows: [{ ...base, severity: "offline", start: now - 2 * H, end: now - 3 * 60e3 }] };
+    if (want === "restored") {
+      // The "we're back" strip only shows to a browser that was present for the
+      // window (see MaintenanceNotice's SEEN_KEY), so a preview has to say it
+      // was — otherwise asking to preview it renders nothing at all.
+      try {
+        const seen = JSON.parse(localStorage.getItem("numap.maintenance.seen") || "[]");
+        const id = `preview-${want}`;
+        if (Array.isArray(seen) && !seen.includes(id)) {
+          localStorage.setItem("numap.maintenance.seen", JSON.stringify([...seen, id]));
+        }
+      } catch { /* no store: the preview will be empty, which is honest */ }
+      return { windows: [{ ...base, severity: "offline", start: now - 2 * H, end: now - 3 * 60e3 }] };
+    }
     // Overrunning: the forecast has passed, the deadline has not. A state the
     // real world reaches often and no other preview can reach at all.
     if (want === "overrun") {
