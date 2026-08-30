@@ -55,6 +55,7 @@ const PARSER = "scripts/lib/catalog-program-parser.js";
 const RECORD = "scripts/lib/program-record.js";
 const OVERLAP = "src/core/minorOverlap.js";
 const MODEL   = "src/core/planModel.js";
+const COURSE  = "src/core/courseModel.js";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
@@ -62,6 +63,7 @@ const MAJORPARSE = "cd test/contract  && node --test major-parser.test.js";
 const SUBTOTAL   = "cd test/contract  && node --test catalog-major-subtotal.test.js";
 const UNITDEMAND = "cd test/unit      && node --test engine-demand.test.js engine-stated-cells.test.js";
 const MINOR      = "cd test/unit      && node --test minor-overlap.test.js";
+const PARTNERS   = "cd test/unit      && node --test related-partners.test.js";
 
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
@@ -190,6 +192,23 @@ const MUTANTS = [
   { name: "minor: the printed note announces a breach that is not one", file: MODEL,
     from: "  return share.over",
     to:   "  return true", run: [MINOR] },
+
+  // ── UNLOCKS lists a partner COURSE, not an edge ─────────────────
+  { name: "unlocks: the dedup is defeated (every edge becomes a row)", file: COURSE,
+    from: "    const row = byId.get(otherId);",
+    to:   "    const row = null;", run: [PARTNERS] },
+
+  { name: "unlocks: the strongest relation loses the tie-break", file: COURSE,
+    from: "    } else if (rank(e.type) > rank(row.type)) {",
+    to:   "    } else if (rank(e.type) < rank(row.type)) {", run: [PARTNERS] },
+
+  { name: "unlocks: incoming prerequisites are listed too", file: COURSE,
+    from: "    if (!isOut && !(coreq && e.to === id)) continue;",
+    to:   "    if (false) continue;", run: [PARTNERS] },
+
+  { name: "unlocks: a course becomes its own corequisite", file: COURSE,
+    from: "    if (otherId === id) continue;              // a self-edge is not a relationship",
+    to:   "", run: [PARTNERS] },
 
   { name: "total: the shared reader loses the doctoral form", file: PARSER,
     from: "    [new RegExp(`a\\\\s+minimum\\\\s+of\\\\s+${N}\\\\s+${UNIT}[^.]*?beyond\\\\s+the\\\\s+(?:under)?graduate\\\\s+degree`, 'i'),",

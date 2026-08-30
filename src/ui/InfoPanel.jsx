@@ -15,6 +15,7 @@ import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
 import { ISpecialTerms }            from "../ports/ISpecialTerms.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
+import { relatedPartners } from "../core/courseModel.js";
 import { conditionStatus } from "../core/prereqConditions.js";
 // Pure core, like prereqConditions beside it — the codes and their ordering, never
 // the display names: those are localized and come from `t`.
@@ -775,8 +776,11 @@ function RelationshipList({ selCourse, selEdges, courseMap, navTo, compact = fal
 
   // Only show courses this course unlocks (outgoing prereqs) and coreqs.
   // Incoming prereqs are already shown in the "Prereqs:" line above.
+  // One row per PARTNER COURSE, not per edge — a mutually declared corequisite
+  // is two edges for one pair, which used to print the partner twice (see
+  // relatedPartners).
   const isCoreq = type => type === "corequisite" || type === "corequisite-viol";
-  const unlocks = selEdges.filter(rel => isCoreq(rel.type) || rel.from === selCourse.id);
+  const unlocks = relatedPartners(selCourse.id, selEdges);
 
   if (unlocks.length === 0) return null;
 
@@ -791,14 +795,13 @@ function RelationshipList({ selCourse, selEdges, courseMap, navTo, compact = fal
           outer paddingRight here used to stack on top of that gap, pushing this column's
           content noticeably farther from the back button than any other column's. */}
       <div style={{ overflowY: "auto", maxHeight: 220, paddingRight: compact ? 0 : 6 }}>
-        {unlocks.map((rel, i) => {
-          const isOut   = rel.from === selCourse.id;
-          const otherId = isOut ? rel.to : rel.from;
+        {unlocks.map(rel => {
+          const otherId = rel.id;
           const other   = courseMap[otherId];
           const rs      = REL_STYLE[rel.type];
           const coreq   = isCoreq(rel.type);
           return (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 3 }}>
+            <div key={otherId} style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 3 }}>
               <span title={other ? `${other.title}. Click to view.` : undefined}
                 onClick={other ? (e => { e.stopPropagation(); navTo(otherId); }) : undefined}
                 onMouseEnter={other ? (e => { e.currentTarget.style.textDecoration = "underline"; }) : undefined}

@@ -93,16 +93,30 @@ export function createPlannerQuery(deps) {
   // unlocksIndex: prereqId → [{ courseId, concurrent? }] — the reverse
   // of the prereq edges, i.e. "what does taking X unlock".
 
+  // One entry per unlocked COURSE, not per edge. A prerequisite named in two
+  // branches of one OR is two edges differing only in the minGrade this index
+  // does not carry (352 pairs in the live catalog — ACCT 5230 unlocks ACCT 5232
+  // at D- in one branch and C- in the other), so listing edges said the same
+  // course twice. `concurrent` is kept if ANY branch allows it: the question
+  // answered here is "could taking this unlock that", and one permitting branch
+  // is enough.
   let _unlocksIndex = null;
   function unlocksIndex() {
     if (_unlocksIndex) return _unlocksIndex;
     _unlocksIndex = new Map();
+    const seen = new Map();                  // "from|to|type" → the entry already pushed
     for (const c of courses) {
       for (const e of extractEdges(c.id, c.prereqs, c.coreqs)) {
         if (!_unlocksIndex.has(e.from)) _unlocksIndex.set(e.from, []);
-        _unlocksIndex.get(e.from).push({
-          courseId: e.to, type: e.type, ...(e.concurrent && { concurrent: true }),
-        });
+        const key = `${e.from}|${e.to}|${e.type}`;
+        const prev = seen.get(key);
+        if (prev) {
+          if (e.concurrent) prev.concurrent = true;
+          continue;
+        }
+        const entry = { courseId: e.to, type: e.type, ...(e.concurrent && { concurrent: true }) };
+        seen.set(key, entry);
+        _unlocksIndex.get(e.from).push(entry);
       }
     }
     return _unlocksIndex;
