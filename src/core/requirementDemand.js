@@ -257,9 +257,17 @@ function creditsOfSection(allocSection, courseMap, unit) {
  * or from `courseMap`. A section's demand must not move as a student places
  * courses, or the derived free-elective allowance would drift under them.
  *
- * `courseMap` is optional so that a caller with no catalog still gets the
- * count-times-unit reading rather than a crash — but every caller in `src` has
- * one, because `typicalSH` needs it to compute `unitSH` in the first place.
+ * ⚠ `courseMap` is optional in the signature and NOT optional in spirit. Omit it
+ * and every named course falls back to `unitSH`, which is the superseded
+ * `count x modal credit` estimate — the exact reading this function was rewritten
+ * to stop producing, returned silently and looking plausible. It stays optional
+ * only so a malformed call degrades instead of throwing inside the graduation
+ * audit; it is not a supported way to ask the question. Every caller in `src`
+ * passes one, and `scripts/grad-probe.js` was the one caller that did not, which
+ * had it comparing real course credits against the estimate.
+ *
+ * If you are adding a caller: you already hold a `courseMap`, because `typicalSH`
+ * needs it to compute `unitSH` in the first place. Pass it.
  */
 export function demandOf(allocSection, unitSH = DEFAULT_UNIT_SH, courseMap = {}) {
   return creditsOfSection(allocSection, courseMap, unitSH).req;

@@ -128,7 +128,7 @@ test("allocate › a course NAMED by two sections satisfies both, and its credit
   ] };
   const placedSet = set("CS2000");
   const { sections, generalElectives } =
-    allocateMajorWithElectives(major, placedSet, courseMap, null, placedSet);
+    allocateMajorWithElectives(major, placedSet, courseMap, { realPlacedSet: placedSet });
   assert.equal(sections.filter(s => s.sat).length, 2, "both sections name it, so both are met");
   assert.equal(generalElectives.placedSH, 0, "and it is not ALSO free elective credit");
 });
@@ -151,7 +151,7 @@ test("allocate › a credit pool may not spend a course another section already 
     ] },
   ] };
   const placedSet = set("CS2000");
-  const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, null, placedSet);
+  const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, { realPlacedSet: placedSet });
   const byTitle = Object.fromEntries(sections.map(s => [s.title, s]));
   assert.equal(byTitle["Core"].sat, true);
   assert.equal(byTitle["Elective credit"].sat, false,
@@ -174,7 +174,7 @@ test("allocate › a `choose N` section counts slots, not credit, so a named cou
     ] },
   ] };
   const placedSet = set("BIOL2500", "BIOL2600");
-  const { sections } = allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+  const { sections } = allocateMajorWithElectives(major, placedSet, bioMap, { realPlacedSet: placedSet });
   assert.equal(sections.every(s => s.sat), true, "both met from two courses");
 });
 
@@ -184,7 +184,7 @@ test("allocate › a `shared` section cross-counts without starving a normal sec
     { title: "Core", minRequirementCount: 1, requirements: [{ type: "COURSE", subject: "CS", classId: "2000" }] },
   ] };
   const placedSet = set("CS2000");
-  const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, null, placedSet);
+  const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, { realPlacedSet: placedSet });
   const byTitle = Object.fromEntries(sections.map(s => [s.title, s]));
   assert.equal(byTitle["GPA re-list"].sat, true, "shared section satisfied");
   assert.equal(byTitle["Core"].sat, true, "normal section still satisfied (not starved)");
@@ -197,7 +197,7 @@ test("allocate › placed coreq is consumed with its course, not shown as a gene
     { title: "Core", minRequirementCount: 1, requirements: [{ type: "COURSE", subject: "CS", classId: "3000" }] },
   ] };
   const placedSet = set("CS3000", "CS3001");
-  const { generalElectives } = allocateMajorWithElectives(major, placedSet, courseMap, null, placedSet);
+  const { generalElectives } = allocateMajorWithElectives(major, placedSet, courseMap, { realPlacedSet: placedSet });
   const geKeys = generalElectives.children.map(c => c.key);
   assert.ok(!geKeys.includes("CS3001"), "coreq should be absorbed, not a general elective");
 });
@@ -228,7 +228,7 @@ test("allocate › XOM pool caps consumption at numCreditsMin, so excess named c
     ARTD2000: { subject: "ARTD", number: "2000", sh: 4 },
   };
   const placedSet = set("ARTH2210", "ARTH2211");
-  const { sections } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  const { sections } = allocateMajorWithElectives(major, placedSet, cm, { realPlacedSet: placedSet });
   const byTitle = Object.fromEntries(sections.map(s => [s.title, s]));
   assert.equal(byTitle["History Elective"].sat, true, "first pool satisfied by one course");
   assert.equal(byTitle["Electives Option"].sat, true,
@@ -248,7 +248,7 @@ test("allocate › a RANGE inside an XOM pool also stops consuming once numCredi
   ] };
   // CS3500 and CS3800 both fall in the 3000-3999 range; Pool A only needs 4 SH (one of them).
   const placedSet = set("CS3500", "CS3800");
-  const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, null, placedSet);
+  const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, { realPlacedSet: placedSet });
   const byTitle = Object.fromEntries(sections.map(s => [s.title, s]));
   assert.equal(byTitle["Pool A"].sat, true, "range pool satisfied by one match");
   assert.equal(byTitle["Pool B"].sat, true,
@@ -278,7 +278,7 @@ test("allocate › a released XOM-pool course with nowhere else to go lands in G
     ARTH2212: { subject: "ARTH", number: "2212", sh: 4 },
   };
   const placedSet = set("ARTH2210", "ARTH2211", "ARTH2212");
-  const { generalElectives } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  const { generalElectives } = allocateMajorWithElectives(major, placedSet, cm, { realPlacedSet: placedSet });
   const geKeys = generalElectives.children.map(c => c.key);
   assert.deepEqual(geKeys.sort(), ["ARTH2211", "ARTH2212"],
     "the two courses the pool didn't need must land in General Electives, not vanish");
@@ -338,10 +338,10 @@ test("allocate › accumulate XOM sums repeatTotalSh across repeat placements, n
   const cmEnough = { SMFA3000: { subject: "SMFA", number: "3000", sh: 4, repeatTotalSh: 68 } };
   const placedSet = set("SMFA3000");
 
-  const short = allocateMajorWithElectives(major, placedSet, cmShort, null, placedSet);
+  const short = allocateMajorWithElectives(major, placedSet, cmShort, { realPlacedSet: placedSet });
   assert.equal(short.sections[0].sat, false, "40 of 68 SH is not enough");
 
-  const enough = allocateMajorWithElectives(major, placedSet, cmEnough, null, placedSet);
+  const enough = allocateMajorWithElectives(major, placedSet, cmEnough, { realPlacedSet: placedSet });
   assert.equal(enough.sections[0].sat, true, "68 of 68 SH satisfies the requirement");
 });
 
@@ -358,7 +358,7 @@ test("allocate › accumulate XOM without repeatTotalSh data reports unsatisfied
   // 4-credit term; the honest answer is unsatisfied.
   const cm = { SMFA3000: { subject: "SMFA", number: "3000", sh: 4 } };
   const placedSet = set("SMFA3000");
-  const { sections } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  const { sections } = allocateMajorWithElectives(major, placedSet, cm, { realPlacedSet: placedSet });
   assert.equal(sections[0].sat, false);
 });
 
@@ -373,7 +373,7 @@ test("allocate › a plain (non-accumulate) single-course XOM keeps its existing
     ] },
   ] };
   const placedSet = set("CS2000");
-  const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, null, placedSet);
+  const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, { realPlacedSet: placedSet });
   assert.equal(sections[0].sat, true);
 });
 
@@ -382,7 +382,7 @@ test("allocate › an unrequired placed course lands in General Electives with i
     { title: "Core", minRequirementCount: 1, requirements: [{ type: "COURSE", subject: "CS", classId: "2000" }] },
   ] };
   const placedSet = set("CS2000", "FREE1");
-  const { generalElectives } = allocateMajorWithElectives(major, placedSet, courseMap, null, placedSet);
+  const { generalElectives } = allocateMajorWithElectives(major, placedSet, courseMap, { realPlacedSet: placedSet });
   const geKeys = generalElectives.children.map(c => c.key);
   assert.deepEqual(geKeys, ["FREE1"]);
   assert.equal(generalElectives.placedSH, 4);
@@ -417,7 +417,7 @@ test("allocate › a RANGE with no credit cap claims ONE course, not its whole w
   ] };
   const placedSet = set("BIOL2500", "BIOL2600", "BIOL2700");
   const { sections, generalElectives } =
-    allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+    allocateMajorWithElectives(major, placedSet, bioMap, { realPlacedSet: placedSet });
   assert.equal(sections[0].sat, true);
   assert.equal(sections[0].allocatedCourses.size, 1, "one course claimed, not three");
   assert.equal(generalElectives.placedSH, 8, "the other two are free credit, not swallowed");
@@ -434,7 +434,7 @@ test("allocate › a `choose N of M` section stops at N, and the surplus is gene
   ] };
   const placedSet = set("BIOL2500", "BIOL2600", "BIOL2700", "BIOL2800");
   const { sections, generalElectives } =
-    allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+    allocateMajorWithElectives(major, placedSet, bioMap, { realPlacedSet: placedSet });
   assert.equal(sections[0].allocatedCourses.size, 2, "claims exactly the two it asked for");
   assert.equal(generalElectives.placedSH, 8,
     "the other two must land in General Electives, not disappear from the audit");
@@ -451,7 +451,7 @@ test("allocate › every placed course is claimed exactly once, or is general-el
   ] };
   const placedSet = set("BIOL2500", "BIOL2600", "BIOL2700", "BIOL2800");
   const { sections, generalElectives, allocatedSet } =
-    allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+    allocateMajorWithElectives(major, placedSet, bioMap, { realPlacedSet: placedSet });
   const accounted = new Set([...allocatedSet, ...generalElectives.allocatedCourses]);
   assert.deepEqual([...placedSet].filter(k => !accounted.has(k)), [],
     "no placed course may be claimed by nothing");
@@ -477,7 +477,7 @@ test("allocate › a flexible range does not eat the only course an inflexible s
     ] },
   ] };
   const placedSet = set("HIST2211", "HIST2500");
-  const { sections } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  const { sections } = allocateMajorWithElectives(major, placedSet, cm, { realPlacedSet: placedSet });
   const byTitle = Object.fromEntries(sections.map(s => [s.title, s]));
   assert.equal(byTitle["Integrative"].sat, true,
     "the course only one section can use must go to that section");
@@ -501,7 +501,7 @@ test("allocate › a course two sections equally cannot do without is not reserv
   ] };
   const placedSet = set("HIST2211");
   const { sections, generalElectives } =
-    allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+    allocateMajorWithElectives(major, placedSet, cm, { realPlacedSet: placedSet });
   assert.equal(sections[0].sat && sections[1].sat, true, "both name it, so both are met");
   assert.equal(generalElectives.placedSH, 0, "its credit is not ALSO free elective credit");
 });
@@ -529,7 +529,7 @@ test("allocate › the verdict does not depend on the order courses were added t
   const verdicts = orderings.map(order => {
     const placedSet = new Set(order);
     const { sections, generalElectives } =
-      allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+      allocateMajorWithElectives(major, placedSet, bioMap, { realPlacedSet: placedSet });
     return JSON.stringify({
       claimed: [...sections[0].allocatedCourses].sort(),
       general: generalElectives.children.map(c => c.key).sort(),
@@ -556,7 +556,7 @@ test("allocate › a credit pool overshoots its threshold as little as the cours
   ] };
   const placedSet = set("CS2502", "CS2503", "CS2504");
   const { sections, generalElectives } =
-    allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+    allocateMajorWithElectives(major, placedSet, cm, { realPlacedSet: placedSet });
   assert.equal(sections[0].sat, true);
   assert.deepEqual([...sections[0].allocatedCourses].sort(), ["CS2503", "CS2504"]);
   assert.equal(generalElectives.placedSH, 3, "the 3 SH course was never needed");
@@ -578,7 +578,7 @@ test("allocate › capping a pool never strands a course a nested SECTION still 
     ] },
   ] };
   const placedSet = set("PHYS2303", "PHYS2304");
-  const { sections } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  const { sections } = allocateMajorWithElectives(major, placedSet, cm, { realPlacedSet: placedSet });
   assert.equal(sections[0].sat, true, "range takes 2303, nested section keeps 2304");
 });
 
@@ -592,7 +592,7 @@ test("allocate › a malformed requirement node still allocates the rest of the 
   ] };
   const placedSet = set("BIOL2500", "BIOL2600");
   const { sections, generalElectives } =
-    allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+    allocateMajorWithElectives(major, placedSet, bioMap, { realPlacedSet: placedSet });
   assert.equal(sections[0].sat, true);
   assert.equal(sections[0].allocatedCourses.size, 1);
   assert.equal(generalElectives.placedSH, 4);

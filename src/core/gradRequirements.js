@@ -1422,9 +1422,19 @@ export function allocateMajorSections(major, placedSet, courseMap) {
  * When nothing is supplied the denominator is 0, which is what the bar renders
  * as "no stated requirement". Callers that only want `allocatedSet` should use
  * `allocateMajorSections` and skip this entirely.
+ *
+ * ── Why the tail is an options object ──────────────────────────────
+ *
+ * `geAllowance` arrived as a sixth positional parameter, behind two nullable
+ * sets, so the two real call sites read `(major, doneSet, courseMap, null, null,
+ * geAllowance)`. Three of those six slots carry credit-bearing meaning and
+ * nothing but position distinguishes them — put the allowance one slot early and
+ * it silently becomes `realPlacedSet`, which is a wrong NUMBER on a student's
+ * degree audit rather than a crash. Named, that mistake is unspellable.
  */
-export function allocateMajorWithElectives(major, placedSet, courseMap, completedSet = null,
-                                           realPlacedSet = null, geAllowance = 0) {
+export function allocateMajorWithElectives(major, placedSet, courseMap,
+                                           { completedSet = null, realPlacedSet = null,
+                                             geAllowance = 0 } = {}) {
   const { sections, allocatedSet: globalUsed } = allocateMajorSections(major, placedSet, courseMap);
   const candidateKeys = collectCandidateKeys(sections, realPlacedSet ?? placedSet);
   const generalElectives = calculateGeneralElectives(placedSet, globalUsed, courseMap, geAllowance, completedSet, candidateKeys, realPlacedSet);

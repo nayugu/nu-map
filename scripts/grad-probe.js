@@ -169,7 +169,11 @@ export function overconsumption(courseMap) {
       const choice = pools.some(pool =>
         (pool.children ?? []).some(c => c.type === "RANGE") || (pool.children ?? []).length > 1);
       if (!choice) continue;
-      const demand = demandOf(a);
+      // `courseMap` is not optional in spirit: without it every named course
+      // falls back to the modal unit, so this would compare `claimed` — real
+      // course credits — against an estimate, which is the two-accountings
+      // mistake this probe exists to report.
+      const demand = demandOf(a, undefined, courseMap);
       const claimedKeys = [...(a.allocatedCourses ?? [])];
       const claimed = shOf(courseMap, claimedKeys);
       // Overshoot smaller than the cheapest course claimed is granularity, not a

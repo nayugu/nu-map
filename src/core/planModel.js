@@ -611,8 +611,9 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     // was printed from — and for the 976 programs that state nothing it printed
     // a denominator of 0.
     const { sections: majorSections, generalElectives } = allocateMajorWithElectives(
-      prog, placedSet, courseMap, doneKeysSet, realPlacedSet,
-      generalElectiveSHOf(prog, courseMap));
+      prog, placedSet, courseMap,
+      { completedSet: doneKeysSet, realPlacedSet,
+        geAllowance: generalElectiveSHOf(prog, courseMap) });
     let sections = [...majorSections, generalElectives];
     if (!showGeneralElectives) {
       sections = sections.filter(s => s.title !== "General Electives");

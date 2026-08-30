@@ -2025,7 +2025,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const major1DoneSections = useMemo(() => {
     if (!major) return [];
     const { sections, generalElectives } = allocateMajorWithElectives(
-      major, doneSet, courseMap, null, null, geAllowance);
+      major, doneSet, courseMap, { geAllowance });
     return [...sections, generalElectives].slice(0, majorSectionsCount + 1);
   }, [major, doneSet, courseMap, majorSectionsCount, geAllowance]);
 
@@ -2077,7 +2077,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const major2DoneSections = useMemo(() => {
     if (!major2Data) return [];
     const { sections, generalElectives } = allocateMajorWithElectives(
-      major2Data, doneSet, courseMap, null, null, geAllowance2);
+      major2Data, doneSet, courseMap, { geAllowance: geAllowance2 });
     return [...sections, generalElectives];
   }, [major2Data, doneSet, courseMap, geAllowance2]);
 

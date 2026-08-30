@@ -111,7 +111,7 @@ test("substitution › a substituted course satisfies every requirement that NAM
   const placedSet = buildPlacedKeySet(ep, new Set(), courseMap);
   const realPlacedSet = buildPlacedKeySet({ CS1000: "fall" }, new Set(), courseMap);
   const { sections, generalElectives } =
-    allocateMajorWithElectives(major, placedSet, courseMap, null, realPlacedSet);
+    allocateMajorWithElectives(major, placedSet, courseMap, { realPlacedSet });
   assert.equal(sections.filter(s => s.sat).length, 2, "both sections name CS2000, so both are met");
   assert.equal(generalElectives.children.some(c => c.key === "CS2000"), false,
     "the virtual target is never free elective credit — it was never placed");
