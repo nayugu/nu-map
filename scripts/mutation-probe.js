@@ -52,10 +52,12 @@ const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 
 const DEMAND = "src/core/requirementDemand.js";
 const PARSER = "scripts/lib/catalog-program-parser.js";
+const RECORD = "scripts/lib/program-record.js";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
 const MAJORPARSE = "cd test/contract  && node --test major-parser.test.js";
+const SUBTOTAL   = "cd test/contract  && node --test catalog-major-subtotal.test.js";
 const UNITDEMAND = "cd test/unit      && node --test engine-demand.test.js engine-stated-cells.test.js";
 
 /**
@@ -129,6 +131,28 @@ const MUTANTS = [
   { name: "prose: the 'Electives Option' minOptions correction is reverted", file: PARSER,
     from: "  if (minOptions === 0 &&\n      concentrationOptions.some(o => /\\belectives?\\s+option\\b/i.test(o.title ?? ''))) {\n    minOptions = 1;\n  }",
     to:   "", run: [PROSE] },
+
+  // ── The major subtotal, as a floor ──────────────────────────────
+  { name: "floor: the subtotal is ADDED instead of used as a floor", file: RECORD,
+    from: "  const gap = subtotal - demand;\n  if (gap <= 0) return null;",
+    to:   "  const gap = subtotal;\n  if (gap <= 0) return null;", run: [SUBTOTAL] },
+
+  { name: "floor: fires even when the parse already meets the subtotal", file: RECORD,
+    from: "  if (gap <= 0) return null;",
+    to:   "  if (gap < -999) return null;", run: [SUBTOTAL] },
+
+  { name: "floor: guesses with no catalog instead of declining", file: RECORD,
+    from: "  if (!subtotal || !courseMap || !Object.keys(courseMap).length) return null;",
+    to:   "  if (!subtotal) return null;\n  courseMap = courseMap ?? {};", run: [SUBTOTAL] },
+
+  { name: "floor: the emitted section enumerates a phantom course", file: RECORD,
+    from: "    requirements: [],\n    notes: [`The catalog states ${subtotal} semester hours in the major. `",
+    to:   "    requirements: [{ type: 'COURSE', subject: 'PHIL', classId: 9999 }],\n    notes: [`The catalog states ${subtotal} semester hours in the major. `",
+    run: [SUBTOTAL] },
+
+  { name: "subtotal: the plausibility bound is removed", file: PARSER,
+    from: "      if (Number.isFinite(n) && n >= 12 && n <= 90) return n;",
+    to:   "      if (Number.isFinite(n)) return n;", run: [SUBTOTAL] },
 
   { name: "total: the shared reader loses the doctoral form", file: PARSER,
     from: "    [new RegExp(`a\\\\s+minimum\\\\s+of\\\\s+${N}\\\\s+${UNIT}[^.]*?beyond\\\\s+the\\\\s+(?:under)?graduate\\\\s+degree`, 'i'),",
