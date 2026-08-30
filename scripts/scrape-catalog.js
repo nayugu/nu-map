@@ -33,6 +33,7 @@ import { parseNUPath, findAttributeText, reconcileNuPath, SOURCE_POLICY } from "
 import { extractConcurrentCourses, parsePrereqText, parseCoreqText, hasPrereqSignal } from "./lib/prereq-parse.js";
 import { parseDescriptionGpaGate } from "../src/adapters/northeastern/gpaGate.js";
 import { parseDescriptionPrereq } from "../src/adapters/northeastern/descriptionPrereq.js";
+import { mergeDescriptionCoreqs } from "../src/adapters/northeastern/descriptionCoreq.js";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
@@ -215,7 +216,15 @@ function parseSubjectPage(html, subjectCode) {
       // evaluated only against grades the user entered, like minGrade.
       ...(parseDescriptionGpaGate(description) != null
         ? { minGPA: parseDescriptionGpaGate(description) } : {}),
-      coreqs:  [...(coreqText ? parseCoreqText(coreqText) : []), ...concurrent],
+      // The labelled line UNION the description's "Requires concurrent
+      // registration in …" sentence. The catalog is uneven about which one it
+      // uses: PHYS 1152 has no Corequisite(s) line at all and only the
+      // sentence, so the lab sat outside its own lecture/lab/seminar triple.
+      // See src/adapters/northeastern/descriptionCoreq.js — the reader refuses
+      // anything that is not a plain conjunction of course codes.
+      coreqs:  mergeDescriptionCoreqs(
+        [...(coreqText ? parseCoreqText(coreqText) : []), ...concurrent],
+        description, `${subject}${number}`),
       // Parse when the prereq names a course OR carries a recognized non-course
       // phrase (e.g. a grad course whose only prereq is "Graduate program
       // admission") — otherwise a phrase-only prereq is dropped before it can

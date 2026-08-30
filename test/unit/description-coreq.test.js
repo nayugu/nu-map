@@ -1,0 +1,176 @@
+// UNIT · parseDescriptionCoreqs — the "Requires concurrent registration in …"
+// reader, and the union it forms with the labelled Corequisite(s) line.
+//
+// A corequisite is a hard same-term constraint that drags cards between terms
+// and can refuse a plan, and `coreqPartnersOf` walks the whole connected
+// component — so one wrong edge welds two groups together. These tests are
+// therefore weighted towards what must NOT be read: a choice, a sentence with
+// prose in the operand list, an "Accompanies …" line, a recommendation.
+//
+// The corpus checks at the bottom pin both directions at once: exactly the
+// eight known courses gain refs, and the count of coreq edges moves by exactly
+// the fifteen the sentences add.
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { parseDescriptionCoreqs, mergeDescriptionCoreqs }
+  from "../../src/adapters/northeastern/descriptionCoreq.js";
+import { normalizeCourse } from "../../src/adapters/northeastern/courseNorm.js";
+import { extractEdges, coreqPartnersOf } from "../../src/core/courseModel.js";
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../..");
+const ids = (refs) => refs.map(r => `${r.subject}${r.number}`);
+
+// ── What it reads ───────────────────────────────────────────────────
+
+test("descriptionCoreq › the PHYS lab sentence › both partners", () => {
+  const desc = "Accompanies PHYS 1151. Covers topics from the course through various "
+    + "experiments. Requires concurrent registration in PHYS 1151 and PHYS 1153.";
+  assert.deepEqual(ids(parseDescriptionCoreqs(desc, "PHYS1152")), ["PHYS1151", "PHYS1153"]);
+});
+
+test("descriptionCoreq › a comma list › every operand", () => {
+  const desc = "Requires concurrent registration in CHEM 1211, CHEM 1212 and CHEM 1213.";
+  assert.deepEqual(ids(parseDescriptionCoreqs(desc)), ["CHEM1211", "CHEM1212", "CHEM1213"]);
+});
+
+test("descriptionCoreq › it names itself › the self-reference is dropped", () => {
+  const desc = "Requires concurrent registration in PHYS 1152 and PHYS 1153.";
+  assert.deepEqual(ids(parseDescriptionCoreqs(desc, "PHYS1152")), ["PHYS1153"]);
+});
+
+test("descriptionCoreq › the same course twice › one ref", () => {
+  assert.deepEqual(ids(parseDescriptionCoreqs("Requires concurrent registration in BIOL 1111 and BIOL 1111.")),
+    ["BIOL1111"]);
+});
+
+// ── What it refuses ─────────────────────────────────────────────────
+
+test("descriptionCoreq › a CHOICE › refused whole, not read as a conjunction", () => {
+  // BIOC 4900, verbatim. Read as an "and" this would demand four research
+  // courses in one term; `coreqs` is a flat all-of list with no room for "or".
+  const desc = "Requires concurrent registration in BIOC 4991, BIOC 4994, BIOL 4991, "
+    + "CHEM 4991, or other 4-SH research course approved by the Biochemistry Director.";
+  assert.deepEqual(parseDescriptionCoreqs(desc, "BIOC4900"), []);
+});
+
+test("descriptionCoreq › prose among the operands › refused whole", () => {
+  for (const desc of [
+    "Requires concurrent registration in PHYS 1151 and permission of the instructor.",
+    "Requires concurrent registration in the associated laboratory section.",
+    "Requires concurrent registration in PHYS 1151 and a second-year seminar.",
+  ]) assert.deepEqual(parseDescriptionCoreqs(desc), [], desc);
+});
+
+test("descriptionCoreq › 'Accompanies X' alone › reads nothing", () => {
+  // 152 courses say this and 141 already carry a real link; of the rest,
+  // BIOL 1112 states "BIOL 1111 (may be taken concurrently)" as a PREREQ —
+  // the weaker relation, which permits the lab in a later term.
+  assert.deepEqual(parseDescriptionCoreqs("Accompanies BIOL 1111. Covers topics from the course."), []);
+});
+
+test("descriptionCoreq › advisory or absent phrasings › read nothing", () => {
+  for (const desc of [
+    "Students are encouraged to register concurrently in PHYS 1151.",
+    "May be taken concurrently with PHYS 1151.",
+    "Offers concurrent registration opportunities for qualified students.",
+    "", null, undefined,
+  ]) assert.deepEqual(parseDescriptionCoreqs(desc), [], String(desc));
+});
+
+test("descriptionCoreq › mid-sentence › not read (the anchor is a sentence start)", () => {
+  const desc = "Offers a laboratory that requires concurrent registration in PHYS 1151 for majors "
+    + "but not for others.";
+  // The sentence does not end after the operand list, so the operand segment
+  // carries prose and the reader refuses rather than guessing where it stops.
+  assert.deepEqual(parseDescriptionCoreqs(desc), []);
+});
+
+// ── The union with the labelled field ───────────────────────────────
+
+test("descriptionCoreq › merge › additive, labelled first, deduplicated", () => {
+  // PHYS 1157: labelled `Corequisite(s): PHYS 1155`, sentence naming 1155+1156.
+  const merged = mergeDescriptionCoreqs(
+    [{ subject: "PHYS", number: "1155" }],
+    "Requires concurrent registration in PHYS 1155 and PHYS 1156.", "PHYS1157");
+  assert.deepEqual(ids(merged), ["PHYS1155", "PHYS1156"]);
+});
+
+test("descriptionCoreq › merge › a refused sentence leaves the labelled field alone", () => {
+  const labelled = [{ subject: "BIOC", number: "4991" }];
+  const merged = mergeDescriptionCoreqs(labelled,
+    "Requires concurrent registration in BIOC 4991, BIOL 4991, or other research course.", "BIOC4900");
+  assert.deepEqual(ids(merged), ["BIOC4991"]);
+});
+
+test("descriptionCoreq › merge › junk in, nothing out", () => {
+  assert.deepEqual(mergeDescriptionCoreqs(null, null), []);
+  assert.deepEqual(mergeDescriptionCoreqs("not an array", "no sentence here"), []);
+  assert.deepEqual(mergeDescriptionCoreqs([{ subject: "X" }, null, {}], ""), []);
+});
+
+test("descriptionCoreq › normalizeCourse wires it in › the lab knows its triple", () => {
+  const c = normalizeCourse({
+    subject: "PHYS", number: "1152", title: "Lab for PHYS 1151", credits: 1,
+    coreqs: [],
+    description: "Accompanies PHYS 1151. Requires concurrent registration in PHYS 1151 and PHYS 1153.",
+  });
+  assert.deepEqual(ids(c.coreqs), ["PHYS1151", "PHYS1153"]);
+});
+
+// ── Against the shipped catalog ─────────────────────────────────────
+
+test("descriptionCoreq › live catalog › exactly the known sentences are read", () => {
+  const raw = JSON.parse(readFileSync(join(ROOT, "public/northeastern/catalog-courses.json"), "utf8"));
+  const courses = Array.isArray(raw) ? raw : (raw.courses ?? Object.values(raw));
+
+  const gained = [];
+  let added = 0;
+  for (const c of courses) {
+    const id = `${(c.subject ?? "").toUpperCase()}${c.number ?? ""}`;
+    const before = (c.coreqs ?? []).length;
+    const after = mergeDescriptionCoreqs(c.coreqs ?? [], c.description, id).length;
+    if (after > before) { gained.push(id); added += after - before; }
+    assert.ok(after >= before, `${id} lost a corequisite`);
+  }
+
+  // The four PHYS lecture/lab/seminar triples, and nothing else in 7,966 courses.
+  assert.deepEqual(gained.sort(), [
+    "PHYS1152", "PHYS1153", "PHYS1156", "PHYS1157",
+    "PHYS1172", "PHYS1173", "PHYS1176", "PHYS1177",
+  ]);
+  // 16 refs across 8 courses, one of which (PHYS 1157 → PHYS 1155) the
+  // labelled field already carried.
+  assert.equal(added, 15);
+});
+
+test("descriptionCoreq › live catalog › every triple is a complete group", () => {
+  const raw = JSON.parse(readFileSync(join(ROOT, "public/northeastern/catalog-courses.json"), "utf8"));
+  const courses = Array.isArray(raw) ? raw : (raw.courses ?? Object.values(raw));
+  const edges = courses.flatMap(c => {
+    const id = `${(c.subject ?? "").toUpperCase()}${c.number ?? ""}`;
+    return extractEdges(id, c.prereqs, mergeDescriptionCoreqs(c.coreqs ?? [], c.description, id));
+  });
+
+  for (const [lecture, lab, seminar] of [
+    ["PHYS1151", "PHYS1152", "PHYS1153"],
+    ["PHYS1155", "PHYS1156", "PHYS1157"],
+    ["PHYS1171", "PHYS1172", "PHYS1173"],
+    ["PHYS1175", "PHYS1176", "PHYS1177"],
+  ]) {
+    for (const member of [lecture, lab, seminar]) {
+      const group = new Set([member, ...coreqPartnersOf(edges, member)]);
+      assert.deepEqual([...group].sort(), [lecture, lab, seminar],
+        `${member} does not see its whole triple`);
+    }
+  }
+
+  // BIOC 4900's choice stayed out of the graph.
+  assert.deepEqual(coreqPartnersOf(edges, "BIOC4900"), []);
+  // BIOL 1112's "(may be taken concurrently)" stayed a prerequisite: a coreq
+  // would forbid taking the lab in a later term, which the catalog allows.
+  assert.deepEqual(coreqPartnersOf(edges, "BIOL1112"), []);
+});

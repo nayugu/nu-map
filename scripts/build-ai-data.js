@@ -36,6 +36,7 @@ import crypto from "node:crypto";
 import { buildSync } from "esbuild";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseDescriptionPrereq } from "../src/adapters/northeastern/descriptionPrereq.js";
+import { mergeDescriptionCoreqs } from "../src/adapters/northeastern/descriptionCoreq.js";
 import { parseProgram } from "../src/adapters/northeastern/programNaming.js";
 import { encodeIndex, decodeIndex, prepareIndex } from "../src/core/entitySearch.js";
 import {
@@ -311,6 +312,10 @@ const enrich = (course) => {
     const derived = parseDescriptionPrereq(course.description);
     if (derived) rest.prereqs = derived;
   }
+  // Same reason, for the corequisite the four PHYS triples state only in
+  // prose — a union, not a fallback, since the labelled line can be partial.
+  rest.coreqs = mergeDescriptionCoreqs(rest.coreqs, course.description,
+                                       `${course.subject}${course.number}`);
   const code = `${course.subject}${course.number}`;
   const off = offering[code];
 

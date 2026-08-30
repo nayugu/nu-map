@@ -39,6 +39,29 @@ Facts that follow from this:
   with **no** nupath/attribute class — find it by its label text
   (`findAttributeText`), never by a class selector. A class-based selector
   matched zero blocks and made the catalog contribute no NUPath at all.
+- **A requirement can be stated ONLY in the description, for prereqs and for
+  coreqs alike, and both readers are anchored and refuse on residue.**
+  `descriptionPrereq.js` covers "Requires prior completion of …" (33 courses;
+  MATH 1342 → MATH 1341 among them). `descriptionCoreq.js` covers "Requires
+  concurrent registration in …": 9 descriptions say it, 8 are the four PHYS
+  lecture/lab/seminar triples, and the 9th (BIOC 4900) is a CHOICE — "…, or
+  other 4-SH research course approved by the Director" — which a flat `coreqs`
+  list cannot express, so it is refused whole rather than read as a
+  conjunction. Three rules:
+  1. The coreq reader is **additive, not a fallback**: PHYS 1157 carries a
+     labelled `Corequisite(s): PHYS 1155` *and* a sentence naming 1155 and
+     1156, and PHYS 1152 carries no labelled line at all, so the lab sat
+     outside its own triple and the planner linked only two of the three.
+  2. **"Accompanies PHYS 1151" is not read** (152 courses). 141 already carry a
+     real link, and of the rest BIOL 1112/1114/2302, ENVR 1201 and CHEM 5622
+     state "(may be taken concurrently)" as a PREREQUISITE — the weaker,
+     correct relation, which permits the lab in a *later* term. Promoting those
+     would forbid a legal plan.
+  3. A coreq is a hard same-term constraint and `coreqPartnersOf` walks the
+     whole component, so one wrong edge welds two groups together. Refusing
+     costs a missing link; guessing costs a refused plan.
+  Both readers live in `src/` and are called by the scraper (canonical) AND by
+  `courseNorm.js`, so a fix reaches students before the next monthly scrape.
 - **Term windows are read where possible, estimated only as a fallback.**
   Which semester is "now" — and therefore which courses count as completed —
   comes from `src/adapters/northeastern/termWindows.js`, regenerated monthly

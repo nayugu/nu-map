@@ -11,6 +11,7 @@ import calendar from "./calendar.js";
 import { parseRepeatability } from "./repeatability.js";
 import { parseDescriptionGpaGate } from "./gpaGate.js";
 import { parseDescriptionPrereq } from "./descriptionPrereq.js";
+import { mergeDescriptionCoreqs } from "./descriptionCoreq.js";
 
 /**
  * Earliest term code (numeric) where the course was ever confirmed offered.
@@ -139,7 +140,15 @@ export function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
     // tokens from already-shipped data until that scrape lands. The labelled
     // field always wins — this only fills a genuinely empty one.
     prereqs:      descPrereqFallback(raw),
-    coreqs:       raw.coreqs  ?? raw.corequisites  ?? [],
+    // Corequisites are the labelled field UNION the ones the description
+    // states, not a fallback: PHYS 1157 carries `Corequisite(s): PHYS 1155`
+    // and a sentence naming PHYS 1155 and PHYS 1156, and the catalog means
+    // both. Four PHYS lecture/lab/seminar triples are only complete this way
+    // — PHYS 1152 has no labelled line at all, so the lab sat outside its own
+    // triple. See descriptionCoreq.js for why the reader refuses everything
+    // that is not a plain conjunction of course codes.
+    coreqs:       mergeDescriptionCoreqs(raw.coreqs ?? raw.corequisites ?? [],
+                                         raw.description, id),
     // A GPA gate stated in the description (3 courses corpus-wide). Same
     // pattern as repeatability above: prefer the scraper's field, else
     // derive it from the description. The fallback matters because a
