@@ -160,29 +160,55 @@ const MUTANTS = [
     to:   "      if (Number.isFinite(n)) return n;", run: [SUBTOTAL] },
 
   // ── The 50% cap on double counting a minor ──────────────────────
+  //
+  // Four of these SKIPPED the first time they were re-run, because the
+  // major-side release moved their anchors — the exact failure this probe exits
+  // non-zero on. Re-anchored, and the release has its own mutants below.
   { name: "minor: the cap is a floor, not a ceiling (comparison flipped)", file: OVERLAP,
-    from: "  const over  = dependentSH - capSH > EPS;",
-    to:   "  const over  = capSH - dependentSH > EPS;", run: [MINOR] },
+    from: "  const over = dependentSH - capSH > EPS;",
+    to:   "  const over = capSH - dependentSH > EPS;", run: [MINOR] },
 
   { name: "minor: the cap is the whole requirement, not half of it", file: OVERLAP,
     from: "  const capSH = requiredSH * MINOR_SHARE_FRACTION;",
     to:   "  const capSH = requiredSH;", run: [MINOR] },
 
   { name: "minor: the verdict reverts to the plain shared sum", file: OVERLAP,
-    from: "  const over  = dependentSH - capSH > EPS;",
-    to:   "  const over  = sharedSH - capSH > EPS;", run: [MINOR] },
+    from: "  const over = dependentSH - capSH > EPS;",
+    to:   "  const over = sharedSH - capSH > EPS;", run: [MINOR] },
 
   { name: "minor: a course the major does not claim is counted as shared", file: OVERLAP,
-    from: "  const sharedKeys = [...claimed].filter(k => major.has(k));",
-    to:   "  const sharedKeys = [...claimed];", run: [MINOR] },
+    from: "  const sharedKeys = [...claimed].filter(k => major.has(k)).sort();",
+    to:   "  const sharedKeys = [...claimed].sort();", run: [MINOR] },
 
   { name: "minor: General Electives counts as a minor requirement", file: OVERLAP,
     from: "    section => section && section.title !== \"Required General Electives\"",
     to:   "    section => Boolean(section)", run: [MINOR] },
 
   { name: "minor: the withheld allocation is skipped (unique credit assumed zero)", file: OVERLAP,
-    from: "  let uniqueSH = claimedSH;",
+    from: "  let uniqueSH = minorWithout(major);",
     to:   "  let uniqueSH = 0;", run: [MINOR] },
+
+  // ── The major-side release ──────────────────────────────────────
+  { name: "minor: the release runs whether or not the cap is exceeded", file: OVERLAP,
+    from: "  if (dependentSH - capSH > EPS && typeof majorClaim === \"function\") {",
+    to:   "  if (typeof majorClaim === \"function\") {", run: [MINOR] },
+
+  { name: "minor: releases are tested one at a time, not accumulated", file: OVERLAP,
+    from: "    const without = new Set(placed);\n    for (const r of released) without.delete(r);\n    without.delete(key);",
+    to:   "    const without = new Set(placed);\n    without.delete(key);", run: [MINOR] },
+
+  { name: "minor: the release compares TOTALS instead of per-section credit", file: OVERLAP,
+    from: "    if (next.sat.every((sh, i) => sh >= base.sat[i] - EPS)) released.push(key);",
+    to:   "    const sum = a => a.reduce((n, x) => n + x, 0);\n"
+        + "    if (sum(next.sat) >= sum(base.sat) - EPS) released.push(key);", run: [MINOR] },
+
+  { name: "minor: a throwing majorClaim takes the panel down with it", file: OVERLAP,
+    from: "  const ask = (set) => { try { return majorClaim(set); } catch { return null; } };",
+    to:   "  const ask = (set) => majorClaim(set);", run: [MINOR] },
+
+  { name: "minor: a malformed majorClaim is trusted rather than declined", file: OVERLAP,
+    from: "    if (!next || !Array.isArray(next.sat) || next.sat.length !== base.sat.length) continue;",
+    to:   "    if (!next || !Array.isArray(next.sat)) continue;", run: [MINOR] },
 
   { name: "minor: a course with no credit on record is charged the default 4", file: OVERLAP,
     from: "  const sharedSH = sharedKeys.reduce((n, k) => n + (courseMap[k]?.sh ?? 0), 0);",
