@@ -16,7 +16,7 @@ import { markSharedSections } from './major-integrity.js';
 import { applySharedSections } from './shared-sections.js';
 import { extractPlanGrid }    from './plan-grid.js';
 import {
-  parseRequirements, parseTotalCredits, parseMajorCreditSubtotal,
+  parseRequirements, parseTotalCredits, parseMajorCreditSubtotal, totalsProfileFor,
   extractPlanOfStudyCourses, listRequirementPanes, normalizeConcentrationHref,
 } from './catalog-program-parser.js';
 import { obligationsOf, GENERAL_ELECTIVE } from '../../src/core/requirementBinding.js';
@@ -205,8 +205,12 @@ async function buildOne(root, url, pageName, group, deps) {
   // Media, PhD—Advanced Entry did exactly that and reported 48 SH for a 28 SH
   // degree. Three programs in the catalog depend on the fallback, all of them
   // single-pane, so restricting it to the primary costs nothing.
+  // A MINOR reads its total through a minor-sized window — 15–25 SH, not the
+  // degree's 120–134 — or the figure its own page states is discarded as a
+  // stray number. See MINOR_CREDIT_WINDOW.
   const { value: totalCreditsRequired, source: totalCreditsSource } =
-    parseTotalCredits(root, profile, { panes: paneEls, allowPageFallback: !isVariant });
+    parseTotalCredits(root, totalsProfileFor(profile, name),
+                      { panes: paneEls, allowPageFallback: !isVariant });
 
   const { requirementSections, concentrations, generalElectiveSH, gpaConstraints,
           footnotes,

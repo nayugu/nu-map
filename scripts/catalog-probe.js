@@ -44,7 +44,8 @@
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { parse as parseHTML } from 'node-html-parser';
 import {
-  parseRequirements, UNDERGRAD_PROFILE, GRAD_PROFILE,
+  parseRequirements, parseTotalCredits, totalsProfileFor, isMinorProgramName,
+  UNDERGRAD_PROFILE, GRAD_PROFILE,
 } from './lib/catalog-program-parser.js';
 
 const CACHE_DIR = process.env.CATALOG_HTML_CACHE || '.cache/catalog';
@@ -63,7 +64,8 @@ const TALLY = flag('--tally');
 const OUT   = flag('--json');
 const LIMIT = parseInt(flag('--limit') ?? '40', 10);
 
-if (argv.includes('--help') || (!WHERE && !TALLY && !argv.includes('--parse'))) {
+if (argv.includes('--help')
+    || (!WHERE && !TALLY && !argv.includes('--parse') && !argv.includes('--totals'))) {
   console.log(readFileSync(new URL(import.meta.url), 'utf8')
     .split('\n').slice(1).filter(l => l.startsWith(' *')).map(l => l.slice(3)).join('\n'));
   process.exit(0);
@@ -174,6 +176,80 @@ if (argv.includes('--parse')) {
     if (out.generalElectiveSH) console.log(`  general electives: ${out.generalElectiveSH} SH`);
     for (const note of out.notes ?? []) console.log(`  program note: ${note}`);
   }
+  process.exit(0);
+}
+
+/**
+ * --totals [--floor N]: what `parseTotalCredits` reads off every cached page,
+ * and what it WOULD read with a different lower bound on the credit window.
+ *
+ * That bound has now been argued three times — the graduate floor came down
+ * 20 → 8 (certificates) and 8 → 4 (advanced-entry doctorates), each time
+ * because a smaller class of real program turned out to live below it, and each
+ * time the deciding evidence was "how many totals actually move". Answering it
+ * used to mean a scraper run per candidate value; the window is a field on the
+ * profile, so both readings can be taken in ONE process over the same cache,
+ * which is also the only way to be sure the two are comparable.
+ *
+ * The split that matters is between the class you are trying to reach and
+ * everything else: a floor low enough to admit minors must not start letting a
+ * SECTION subtotal outrank a degree total on a major's page.
+ *
+ *   node scripts/catalog-probe.js --totals --floor 12
+ */
+if (argv.includes('--totals')) {
+  const floor = parseFloat(flag('--floor') ?? '12');
+  const rows = [];
+  for (const file of readdirSync(CACHE_DIR).filter(f => f.endsWith('.html'))) {
+    const root = parseHTML(readFileSync(`${CACHE_DIR}/${file}`, 'utf8'));
+    const base = file.includes('_graduate_') ? GRAD_PROFILE : UNDERGRAD_PROFILE;
+    const page = norm(root.querySelector('h1')?.text);
+    if (!page) continue;
+    // `now` is what the SCRAPER would read, minor window included — measuring
+    // against a profile the scraper does not use answers a question nobody
+    // asked. `next` is the candidate: the same profile with the floor moved.
+    const shipping = totalsProfileFor(base, page);
+    const lower = { ...shipping, creditWindow: [floor, shipping.creditWindow[1]] };
+    let now = null, next = null;
+    try { now  = parseTotalCredits(root, shipping, {}); } catch { /* unparseable page */ }
+    try { next = parseTotalCredits(root, lower,    {}); } catch { /* unparseable page */ }
+    rows.push({ page, minor: isMinorProgramName(page),
+                now: now?.value ?? 0, nowSrc: now?.source ?? '-',
+                next: next?.value ?? 0, nextSrc: next?.source ?? '-' });
+  }
+  const moved = rows.filter(r => r.now !== r.next);
+  const say = (label, list) => {
+    console.log(`\n${label}: ${list.length}`);
+    for (const r of list.slice(0, 40)) {
+      console.log(`  ${r.now} → ${r.next}  (${r.nextSrc})  ${r.page}`);
+    }
+    if (list.length > 40) console.log(`  … and ${list.length - 40} more`);
+  };
+  const minorRows = rows.filter(r => r.minor);
+  console.log(`cache ${rows.length} pages · ${minorRows.length} minors`);
+  console.log(`AS SHIPPED: ${minorRows.filter(r => r.now).length} of ${minorRows.length} minors`
+    + ` state a total · ${rows.filter(r => !r.minor && r.now).length} of`
+    + ` ${rows.length - minorRows.length} other pages do`);
+  console.log(`\nfloor → ${floor}, against each page's OWN window   moved ${moved.length}`);
+  say('MINORS whose total moves', moved.filter(r => r.minor));
+  // The blast radius. Every one of these needs a reason; a degree total
+  // replaced by a section subtotal is the failure this floor was protecting
+  // against, and it is silent in the data.
+  say('NOT minors — check each one', moved.filter(r => !r.minor));
+
+  // ── Implausible totals ──────────────────────────────────────────
+  //
+  // An absolute metric rather than a diff, and that is the point: a diff can
+  // only compare two parsers in one process, while this can be read before a
+  // change and again after it. A Northeastern bachelor's is 120–134 SH, so a
+  // degree page reporting less than 110 is reporting something that is not its
+  // degree — in practice the "N semester hours required IN THE MAJOR" subtotal,
+  // which sits on the page in the same words and, on combined majors, ahead of
+  // the real figure.
+  const IMPLAUSIBLE = 110;
+  const suspect = rows.filter(r => !r.minor && r.next > 0 && r.next < IMPLAUSIBLE
+                                   && !/certificate|graduate|phd|ms|ma\b/i.test(r.page));
+  say(`DEGREE pages reporting under ${IMPLAUSIBLE} SH (a bachelor's is 120–134)`, suspect);
   process.exit(0);
 }
 

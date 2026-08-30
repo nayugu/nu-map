@@ -47,9 +47,57 @@ import { parse as parseHTML } from 'node-html-parser';
 export const UNDERGRAD_PROFILE = {
   level: 'undergrad',
   pathPrefix: '/undergraduate/',
-  // Sanity window for a plausible degree total, used to reject stray numbers.
+  // Sanity window for a plausible DEGREE total, used to reject stray numbers.
+  // A minor is an undergraduate program too and does not fit in it — see
+  // MINOR_CREDIT_WINDOW, which is why this floor did not simply come down.
   creditWindow: [60, 250],
 };
+
+/**
+ * The same window for a MINOR, which is 15–25 SH and not 120–134.
+ *
+ * All 173 shipped minors carry `totalCreditsRequired: 0` and `verify-majors`
+ * flags every one of them as `missing-total-credits`, while Computer Science,
+ * Minor prints "20 semester hours required" on the page in as many words. The
+ * pattern that reads it has always been there; the number was thrown away by a
+ * floor built for a degree.
+ *
+ * The first attempt was to lower the undergraduate floor, the way the graduate
+ * floor came down twice before it (20 → 8 for certificates, 8 → 4 for
+ * advanced-entry doctorates). Measured with `catalog-probe.js --totals
+ * --floor N`, which reads both windows in ONE process over the cached catalog:
+ *
+ *     floor   minors gained   pages that are NOT minors moved
+ *        4         12                     19
+ *        8         12                     17
+ *       12         12                      1
+ *       16          5                      1
+ *
+ * 12 looked like a clean knee and it is the wrong instrument anyway: every one
+ * of those 17–19 collateral pages is a DEGREE picking up one of its own section
+ * subtotals, because a window wide enough for a 15 SH minor cannot also reject
+ * a 15 SH subtotal on a 128 SH degree. Two kinds of program, two windows, and
+ * the collateral goes to zero by construction rather than by choosing a number
+ * carefully.
+ *
+ * The ceiling is 60 rather than 250 for the same reason: a figure above it on a
+ * minor's page is the degree's, not the minor's.
+ */
+export const MINOR_CREDIT_WINDOW = [12, 60];
+
+/** Does this program name a MINOR? The catalog's own suffix, e.g. "Arabic, Minor". */
+export const isMinorProgramName = name => /,\s*minor\b/i.test(name ?? '');
+
+/**
+ * The profile to read a TOTAL with, given which program the page is for.
+ *
+ * Deliberately narrow: it is applied to `parseTotalCredits` and nothing else.
+ * Handing the minor window to `parseRequirements` as well would change which
+ * prose sentences `proseSectionSH` refuses on 181 pages, which is a different
+ * change with a different blast radius and no measurement behind it yet.
+ */
+export const totalsProfileFor = (profile, name) =>
+  isMinorProgramName(name) ? { ...profile, creditWindow: MINOR_CREDIT_WINDOW } : profile;
 
 export const GRAD_PROFILE = {
   level: 'grad',
@@ -1373,17 +1421,40 @@ function requirementsRoot(pageRoot) {
 const N = String.raw`(\d+)(?:\s*[-–]\s*\d+)?`;
 const UNIT = String.raw`(?:semester\s+hours?|credits?)`;
 
+/**
+ * The subtotal's tell, as a lookahead that makes a pattern skip PAST it.
+ *
+ * A combined major states two figures in the same words and puts the smaller
+ * one first: Behavioral Neuroscience and Philosophy, BS reads "92 total
+ * semester hours required IN THE MAJOR" and then "128 total semester hours
+ * required". `text.match` takes the first occurrence, so the degree shipped as
+ * 92 SH — and `totalCreditsRequired` is the number the free-elective allowance
+ * is a residual against, so 36 SH of a real degree simply vanished.
+ *
+ * `proseSectionSH` has refused this exact phrasing since the prose-section work
+ * ("`Complete N semester hours in the major` is a SUBTOTAL and must never be
+ * summed"). It was never wired into the reader on the other side of the same
+ * knowledge, which is how the reader kept making the mistake the writer was
+ * already guarding against.
+ *
+ * A lookahead rather than a rejection, so the pattern goes on to find the real
+ * figure later in the text instead of falling through to a weaker pattern. No
+ * DEGREE total is ever qualified "in the major" — the qualification is what
+ * makes it a subtotal — so this can only ever skip the wrong number.
+ */
+const NOT_A_SUBTOTAL = String.raw`(?!\s*\.?\s*(?:in|for|toward)\s+the\s+major\b)`;
+
 function statedTotalIn(text, profile) {
   const [lo, hi] = profile.creditWindow;
   const patterns = [
-    [new RegExp(`${N}\\s+total\\s+${UNIT}\\s+required`, 'i'),   'stated-total'],
-    [new RegExp(`a\\s+total\\s+of\\s+${N}\\s+${UNIT}`, 'i'),     'stated-total'],
-    [new RegExp(`${N}\\s+overall\\s+${UNIT}\\s+required`, 'i'),  'stated-overall'],
-    [new RegExp(`${N}\\s+total\\s+${UNIT}`, 'i'),                'stated-total'],
-    [new RegExp(`${N}\\s+minimum\\s+${UNIT}\\s+required`, 'i'),  'stated-minimum'],
+    [new RegExp(`${N}\\s+total\\s+${UNIT}\\s+required${NOT_A_SUBTOTAL}`, 'i'), 'stated-total'],
+    [new RegExp(`a\\s+total\\s+of\\s+${N}\\s+${UNIT}${NOT_A_SUBTOTAL}`, 'i'),  'stated-total'],
+    [new RegExp(`${N}\\s+overall\\s+${UNIT}\\s+required${NOT_A_SUBTOTAL}`, 'i'), 'stated-overall'],
+    [new RegExp(`${N}\\s+total\\s+${UNIT}${NOT_A_SUBTOTAL}`, 'i'),             'stated-total'],
+    [new RegExp(`${N}\\s+minimum\\s+${UNIT}\\s+required${NOT_A_SUBTOTAL}`, 'i'), 'stated-minimum'],
     [new RegExp(`a\\s+minimum\\s+of\\s+${N}\\s+${UNIT}[^.]*?beyond\\s+the\\s+(?:under)?graduate\\s+degree`, 'i'),
                                                                  'stated-minimum'],
-    [new RegExp(`${N}\\s+${UNIT}\\s+required`, 'i'),             'stated-required'],
+    [new RegExp(`${N}\\s+${UNIT}\\s+required${NOT_A_SUBTOTAL}`, 'i'),          'stated-required'],
   ];
   for (const [re, source] of patterns) {
     const m = text.match(re);
