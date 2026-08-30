@@ -24,7 +24,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse as parseHTML } from 'node-html-parser';
-import { parseRequirements, UNDERGRAD_PROFILE } from '../../scripts/lib/catalog-program-parser.js';
+import { parseRequirements, UNDERGRAD_PROFILE, GRAD_PROFILE } from '../../scripts/lib/catalog-program-parser.js';
 
 /** A requirements pane built from raw block HTML. */
 const pane = (inner) => parseHTML(`
@@ -114,6 +114,30 @@ test('prose sections › the DEGREE TOTAL is refused even when it is small', () 
 
   const undergrad = pane(h2('Program Requirement') + p('130 total semester hours required'));
   assert.deepEqual(titles(undergrad), []);
+});
+
+test('prose sections › on a GRADUATE page the total guard is the ONLY thing standing', () => {
+  // Where the guard actually earns its place, and it took two rounds of mutation
+  // testing to find out. On an UNDERGRADUATE page it is structurally redundant:
+  // `statedTotalIn` only matches inside the credit window, whose floor is 60,
+  // and the plausibility ceiling is also 60 — so any total big enough to be
+  // recognised is already too big to be emitted, and no undergraduate test can
+  // ever isolate the guard.
+  //
+  // The graduate window floor is 4. A certificate's "12 total semester hours
+  // required" is recognised as a total AND sits under the ceiling, so the guard
+  // is the only thing between it and a phantom 12 SH requirement — on all 88
+  // CPS graduate programs and every certificate in the catalog.
+  for (const text of [
+    '12 total semester hours required',
+    'A total of 34 semester hours are required.',
+    '34 minimum semester hours required',
+    'A minimum of 28 semester hours beyond the graduate degree is required',
+  ]) {
+    const root = pane(h2('Program Requirement') + p(text));
+    const got = parseRequirements(root, GRAD_PROFILE, {}).requirementSections.map(s => s.title);
+    assert.deepEqual(got, [], `"${text}" is a graduate degree total, not a requirement`);
+  }
 });
 
 test('prose sections › EVERY phrasing of a degree total is refused', () => {
