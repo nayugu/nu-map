@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════
 // INFO PANEL  — bottom drawer for selected course details
 // ═══════════════════════════════════════════════════════════════════
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import HoverCard from "./HoverCard.jsx";
 import SubjectTip from "./SubjectTip.jsx";
 import { createPortal } from "react-dom";
@@ -15,7 +15,7 @@ import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
 import { ISpecialTerms }            from "../ports/ISpecialTerms.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
-import { relatedPartners } from "../core/courseModel.js";
+import { unlockedCourses, coreqPartnersOf } from "../core/courseModel.js";
 import { conditionStatus } from "../core/prereqConditions.js";
 // Pure core, like prereqConditions beside it — the codes and their ordering, never
 // the display names: those are localized and come from `t`.
@@ -267,7 +267,7 @@ export default function InfoPanel() {
 }
 
 function CourseInfo({ selCourse, navTo }) {
-  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX, specialTermPl, revealCourse } = usePlanner();
+  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX, specialTermPl, revealCourse, allEdges } = usePlanner();
   const specialTerms = usePort(ISpecialTerms);
   // Where the ↻ cycle is, when the panel's own `selCourse.id` cannot say.
   // A work-term take is not a course id, so cycling onto one leaves selCourse
@@ -309,6 +309,24 @@ function CourseInfo({ selCourse, navTo }) {
   // which is the one number they opened it for.
   const semOrder = Object.fromEntries(SEMESTERS.map((s, i) => [s.id, i]));
   const base = baseId(selCourse.id);
+
+  // Corequisites, from the EDGE GRAPH rather than from `selCourse.coreqs`.
+  // The relation is symmetric and the catalog states it on one side only in 19
+  // pairs (ARCH 1310 names ARCH 1311; ARCH 1311 names nothing), so reading the
+  // course's own field would show the partner on one card and nothing on the
+  // other. `coreqPartnersOf` walks the whole connected component, which is also
+  // what makes a lecture/lab/seminar triple show all of itself — PHYS 1151 must
+  // name 1152 and 1153 even though it only ever names one of them itself.
+  //
+  // Memoised because CourseInfo re-renders on hover state and the walk indexes
+  // every edge in the catalog.
+  const coreqRefs = useMemo(() => coreqPartnersOf(allEdges, base).map(id => {
+    const c = courseMap[id];
+    if (c) return { subject: c.subject, number: c.number };
+    // A partner missing from the catalog still gets a chip, from its own id.
+    const m = /^([A-Z]{2,6})(\d{3,4}[A-Z]?)$/.exec(id);
+    return m ? { subject: m[1], number: m[2] } : null;
+  }).filter(Boolean), [allEdges, base, courseMap]);
   const placedTakes = Object.entries(placements)
     // timeline only — takes parked outside the cohort range don't list
     .filter(([pid, sid]) => baseId(pid) === base && SEM_INDEX[sid] !== undefined)
@@ -591,6 +609,20 @@ function CourseInfo({ selCourse, navTo }) {
           <PrereqChips nodes={selCourse.prereqs} courseMap={courseMap} navTo={navTo} onDragStart={onDragStart} />
         </div>
       )}
+      {/* Corequisites, directly beneath the prerequisites and in the same frame,
+          because they are the same KIND of fact — what else has to be true for
+          this course to be registrable. They used to appear only in the UNLOCKS
+          column at the far right of the panel, which is where courses that
+          DEPEND on this one live: a lecture's mandatory lab read as an optional
+          onward path, and on a phone it sat below the fold. The label carries
+          the coreq blue the lines and the legend already use. */}
+      {coreqRefs.length > 0 && (
+        <div title={t("course.tooltip.coreq.sep")}
+             style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 4, padding: "4px 8px", marginTop: 4, lineHeight: "calc(1.9 * var(--lh-scale, 1))" }}>
+          <span style={{ color: REL_STYLE.corequisite.color, fontWeight: 700 }}>{t("info.coreqs")} </span>
+          <PrereqChips nodes={coreqRefs} courseMap={courseMap} navTo={navTo} onDragStart={onDragStart} />
+        </div>
+      )}
       {/* Class standing — beside the prereqs because that is what it IS: the real
           entry condition for a capstone or Advanced Writing, which the catalog
           states only in prose and Banner states properly. Shown as information, not
@@ -774,13 +806,11 @@ function PrereqNode({ item, courseMap, navTo, onDragStart, conditions }) {
 function RelationshipList({ selCourse, selEdges, courseMap, navTo, compact = false }) {
   const { t } = useLanguage();
 
-  // Only show courses this course unlocks (outgoing prereqs) and coreqs.
-  // Incoming prereqs are already shown in the "Prereqs:" line above.
-  // One row per PARTNER COURSE, not per edge — a mutually declared corequisite
-  // is two edges for one pair, which used to print the partner twice (see
-  // relatedPartners).
-  const isCoreq = type => type === "corequisite" || type === "corequisite-viol";
-  const unlocks = relatedPartners(selCourse.id, selEdges);
+  // Only the courses this one unlocks. Incoming prereqs are on the "Prereqs:"
+  // line and corequisites now have their own line directly beneath it — they
+  // were listed here until they turned out to print twice (a coreq declared on
+  // both sides is two edges), and "unlocks" was never what a coreq means.
+  const unlocks = unlockedCourses(selCourse.id, selEdges);
 
   if (unlocks.length === 0) return null;
 
@@ -795,11 +825,8 @@ function RelationshipList({ selCourse, selEdges, courseMap, navTo, compact = fal
           outer paddingRight here used to stack on top of that gap, pushing this column's
           content noticeably farther from the back button than any other column's. */}
       <div style={{ overflowY: "auto", maxHeight: 220, paddingRight: compact ? 0 : 6 }}>
-        {unlocks.map(rel => {
-          const otherId = rel.id;
-          const other   = courseMap[otherId];
-          const rs      = REL_STYLE[rel.type];
-          const coreq   = isCoreq(rel.type);
+        {unlocks.map(otherId => {
+          const other = courseMap[otherId];
           return (
             <div key={otherId} style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 3 }}>
               <span title={other ? `${other.title}. Click to view.` : undefined}
@@ -810,11 +837,6 @@ function RelationshipList({ selCourse, selEdges, courseMap, navTo, compact = fal
                   cursor: other ? "pointer" : "default", textUnderlineOffset: 2, userSelect: "none" }}>
                 {other?.code || otherId}
               </span>
-              {coreq && (
-                <span style={{ fontSize: 8, background: `${rs?.color}20`, color: rs?.color, borderRadius: 3, padding: "1px 4px", whiteSpace: "nowrap" }}>
-                  {t("legend.corequisite")}
-                </span>
-              )}
             </div>
           );
         })}

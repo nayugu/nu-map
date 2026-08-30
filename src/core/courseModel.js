@@ -184,53 +184,38 @@ export function coreqPartnersOf(edges, id, exclude = []) {
   return [...out];
 }
 
-/** Strongest relation wins when one pair of courses carries several edges. */
-const REL_RANK = { "corequisite-viol": 2, corequisite: 1, prerequisite: 0 };
-
 /**
- * The courses a details panel lists under UNLOCKS for `id`: everything it is a
- * prerequisite of, plus its corequisite partners. Incoming prerequisites are
- * excluded — the panel prints those on its own "Prereqs:" line.
+ * The courses `id` UNLOCKS: the ones that name it as a prerequisite, once each,
+ * in first-appearance order.
  *
- * ONE ROW PER PARTNER COURSE, which is the whole point of this function. The
- * edge list holds one edge per catalog statement, and a single pair of courses
- * routinely produces several — none of them distinguishable in the row that
- * gets drawn, so the panel printed the same course twice:
+ * Two things it is deliberately not:
  *
- *   • a corequisite declared on BOTH sides is two edges. IE 4522 names
- *     IE 4523 and IE 4523 names IE 4522, so Human-Machine Systems listed its
- *     own lab twice. Measured over the live catalog, 243 of the 262 coreq
- *     groups are mutual (505 edges, only 19 one-sided) — the ordinary case,
- *     not a corner.
- *   • a prerequisite named in two branches of one OR is two edges differing
- *     only in the gate: ACCT 5230 unlocks ACCT 5232 at D- in one branch and
- *     C- in the other. 352 such pairs, 88 of which differ in minGrade or
- *     `concurrent`. Neither is shown here, so both rows read identically.
+ *   • not one entry per EDGE. A prerequisite named in two branches of one OR is
+ *     two edges differing only in the gate — ACCT 5230 unlocks ACCT 5232 at D-
+ *     in one branch and C- in the other — and the gate is not displayed, so
+ *     both read as the same row twice. 352 such pairs in the live catalog, 88
+ *     of them differing in minGrade or `concurrent`.
+ *   • not a place for CORequisites. They used to be folded in here, which is
+ *     how IE 4522 (Human-Machine Systems) came to list its own lab twice: a
+ *     coreq declared on both sides is two edges, and 243 of the 262 coreq
+ *     groups are mutual. They are a symmetric same-term relation, not something
+ *     this course unlocks, and the panel now prints them on their own line
+ *     under the prerequisites, sourced from `coreqPartnersOf` so that the whole
+ *     group shows on every member.
  *
- * Returns `{ id, type }` in first-appearance order. `type` is the strongest
- * relation the pair carries, so a misplaced corequisite still badges as one
- * whichever direction's edge the list happened to hold first.
+ * Incoming prerequisites are excluded too — the panel prints those above.
  */
-export function relatedPartners(id, edges) {
-  const rank = t => REL_RANK[t] ?? 0;
-  const rows = [];
-  const byId = new Map();
+export function unlockedCourses(id, edges) {
+  const out = [];
+  const seen = new Set();
   for (const e of edges ?? []) {
-    const coreq = e.type === "corequisite" || e.type === "corequisite-viol";
-    const isOut = e.from === id;
-    if (!isOut && !(coreq && e.to === id)) continue;
-    const otherId = isOut ? e.to : e.from;
-    if (otherId === id) continue;              // a self-edge is not a relationship
-    const row = byId.get(otherId);
-    if (!row) {
-      const added = { id: otherId, type: e.type };
-      byId.set(otherId, added);
-      rows.push(added);
-    } else if (rank(e.type) > rank(row.type)) {
-      row.type = e.type;
-    }
+    if (e.type === "corequisite" || e.type === "corequisite-viol") continue;
+    if (e.from !== id || e.to === id) continue;
+    if (seen.has(e.to)) continue;
+    seen.add(e.to);
+    out.push(e.to);
   }
-  return rows;
+  return out;
 }
 
 // ── Offering helpers ─────────────────────────────────────────────

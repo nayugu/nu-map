@@ -56,6 +56,7 @@ const RECORD = "scripts/lib/program-record.js";
 const OVERLAP = "src/core/minorOverlap.js";
 const MODEL   = "src/core/planModel.js";
 const COURSE  = "src/core/courseModel.js";
+const DESCCOREQ = "src/adapters/northeastern/descriptionCoreq.js";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
@@ -63,7 +64,8 @@ const MAJORPARSE = "cd test/contract  && node --test major-parser.test.js";
 const SUBTOTAL   = "cd test/contract  && node --test catalog-major-subtotal.test.js";
 const UNITDEMAND = "cd test/unit      && node --test engine-demand.test.js engine-stated-cells.test.js";
 const MINOR      = "cd test/unit      && node --test minor-overlap.test.js";
-const PARTNERS   = "cd test/unit      && node --test related-partners.test.js";
+const UNLOCKS      = "cd test/unit      && node --test unlocked-courses.test.js";
+const DESCOREQ_TEST = "cd test/unit      && node --test description-coreq.test.js";
 
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
@@ -219,22 +221,35 @@ const MUTANTS = [
     from: "  return share.over",
     to:   "  return true", run: [MINOR] },
 
-  // ── UNLOCKS lists a partner COURSE, not an edge ─────────────────
+  // ── UNLOCKS lists a COURSE, not an edge, and never a coreq ──────
   { name: "unlocks: the dedup is defeated (every edge becomes a row)", file: COURSE,
-    from: "    const row = byId.get(otherId);",
-    to:   "    const row = null;", run: [PARTNERS] },
+    from: "    if (seen.has(e.to)) continue;",
+    to:   "", run: [UNLOCKS] },
 
-  { name: "unlocks: the strongest relation loses the tie-break", file: COURSE,
-    from: "    } else if (rank(e.type) > rank(row.type)) {",
-    to:   "    } else if (rank(e.type) < rank(row.type)) {", run: [PARTNERS] },
+  { name: "unlocks: corequisites are listed here again (the doubled lab)", file: COURSE,
+    from: "    if (e.type === \"corequisite\" || e.type === \"corequisite-viol\") continue;",
+    to:   "", run: [UNLOCKS] },
 
-  { name: "unlocks: incoming prerequisites are listed too", file: COURSE,
-    from: "    if (!isOut && !(coreq && e.to === id)) continue;",
-    to:   "    if (false) continue;", run: [PARTNERS] },
+  { name: "unlocks: incoming prerequisites and self-edges are listed too", file: COURSE,
+    from: "    if (e.from !== id || e.to === id) continue;",
+    to:   "    if (e.from !== id && e.to !== id) continue;", run: [UNLOCKS] },
 
-  { name: "unlocks: a course becomes its own corequisite", file: COURSE,
-    from: "    if (otherId === id) continue;              // a self-edge is not a relationship",
-    to:   "", run: [PARTNERS] },
+  // ── A corequisite stated in the description ─────────────────────
+  { name: "coreq prose: a CHOICE is read as a conjunction", file: DESCCOREQ,
+    from: "  if (/\\bor\\b/i.test(body)) return [];",
+    to:   "", run: [DESCOREQ_TEST] },
+
+  { name: "coreq prose: prose among the operands is skipped, not refused", file: DESCCOREQ,
+    from: "    if (!c) return [];                       // residue: refuse the sentence",
+    to:   "    if (!c) continue;", run: [DESCOREQ_TEST] },
+
+  { name: "coreq prose: a course becomes its own corequisite", file: DESCCOREQ,
+    from: "    if (id === String(selfId).toUpperCase()) continue;   // never its own coreq",
+    to:   "", run: [DESCOREQ_TEST] },
+
+  { name: "coreq prose: the merge is a fallback, not a union", file: DESCCOREQ,
+    from: "  for (const r of [...(Array.isArray(labelled) ? labelled : []),\n                   ...parseDescriptionCoreqs(description, selfId)]) {",
+    to:   "  for (const r of (Array.isArray(labelled) ? labelled : [])) {", run: [DESCOREQ_TEST] },
 
   { name: "total: the shared reader loses the doctoral form", file: PARSER,
     from: "    [new RegExp(`a\\\\s+minimum\\\\s+of\\\\s+${N}\\\\s+${UNIT}[^.]*?beyond\\\\s+the\\\\s+(?:under)?graduate\\\\s+degree`, 'i'),",

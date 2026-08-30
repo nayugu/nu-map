@@ -688,6 +688,7 @@ export const strings = {
   "course.star.remove":           "저장에서 제거",
   "course.tooltip.variable-sh":   "가변 학점: {min}–{max} {unit} (클릭하여 설정)",
   "info.prereqs":                 "선수 과목:",
+  "info.coreqs":                  "동시 수강:",
   "info.standing.title":          "학년 제한:",
   "info.standing.min":            "{standing} 이상",
   "info.standing.note":           "이 과목의 모든 분반이 Banner에서 학년 제한을 받습니다. 학년은 경과 학기가 아니라 취득 학점으로 결정되며, Banner도 모든 제한이 모든 학생에게 적용되는 것은 아니라고 안내합니다. 지도교수와 확인하세요.",

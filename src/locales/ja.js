@@ -689,6 +689,7 @@ export const strings = {
   "course.star.remove":           "保存から削除",
   "course.tooltip.variable-sh":   "可変単位: {min}–{max} {unit}（クリックして設定）",
   "info.prereqs":                 "履修条件：",
+  "info.coreqs":                  "同時履修：",
   "info.standing.title":          "学年制限：",
   "info.standing.min":            "{standing}以上",
   "info.standing.note":           "この科目の全セクションが Banner で学年制限されています。学年は経過学期ではなく取得単位で決まり、Banner もすべての制限が全学生に適用されるわけではないと注記しています。アドバイザーに確認してください。",

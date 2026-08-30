@@ -687,6 +687,7 @@ export const strings = {
   "course.star.remove":           "إزالة من المحفوظات",
   "course.tooltip.variable-sh":   "ساعات معتمدة متغيرة: {min}–{max} {unit} (انقر للتحديد)",
   "info.prereqs":                 "المتطلبات السابقة:",
+  "info.coreqs":                  "المتطلبات المتزامنة:",
   "info.standing.title":          "المستوى الدراسي:",
   "info.standing.min":            "{standing} أو أعلى",
   "info.standing.note":           "جميع شُعب هذا المقرر مقيَّدة بالمستوى الدراسي في Banner. يُحدَّد المستوى بالساعات المكتسبة وليس بعدد الفصول المنقضية، وينبِّه Banner إلى أن القيود لا تنطبق على كل الطلاب — راجع مرشدك الأكاديمي.",

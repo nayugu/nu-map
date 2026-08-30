@@ -665,6 +665,13 @@ export const strings = {
   // has another course for that slot or because the major does — so one
   // sentence covers both rather than explaining our allocator to them.
   "grad.share.replaceable":       "Your major and minor can be arranged so only {sh} SH is counted twice.",
+  // ── The 2× badge on a course card ───────────────────────────────
+  // Three states, and the difference between the first two is the difference
+  // between a possibility and a fact about the plan. The figures quoted are the
+  // MINOR's, not this course's — no single course is the one over the limit.
+  "relevance.both.eligible":      "Would count toward your major and {name}.",
+  "relevance.both.counted":       "Counts toward your major and {name} — {sh} of {cap} SH double-counted.",
+  "relevance.both.over":          "Counts toward your major and {name} — {sh} of {cap} SH double-counted, over the 50% limit.",
   "grad.conc.search":       "\u2315 search concentrations",
   "grad.minor1.label":      "MINOR 1",
   "grad.minor2.label":      "MINOR 2",
@@ -831,6 +838,7 @@ export const strings = {
   "course.star.remove":           "Remove from saved",
   "course.tooltip.variable-sh":   "Variable credit: {min}–{max} {unit} (click to set)",
   "info.prereqs":                 "Prereqs:",
+  "info.coreqs":                  "Coreqs:",
   "info.standing.title":          "Class standing:",
   "info.standing.min":            "{standing} standing or above",
   "info.standing.note":           "Every section of this course is restricted in Banner. Standing is earned by credits, not by terms elapsed, and Banner notes that not all restrictions apply to every student — check with your advisor.",

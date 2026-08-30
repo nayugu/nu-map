@@ -688,6 +688,7 @@ export const strings = {
   "course.star.remove":           "सहेजे से हटाएं",
   "course.tooltip.variable-sh":   "परिवर्तनीय क्रेडिट: {min}–{max} {unit} (सेट करने के लिए क्लिक करें",
   "info.prereqs":                 "पूर्व-आवश्यकताएँ:",
+  "info.coreqs":                  "सह-आवश्यकताएँ:",
   "info.standing.title":          "श्रेणी की शर्त:",
   "info.standing.min":            "{standing} या उससे ऊपर",
   "info.standing.note":           "इस कोर्स के सभी सेक्शन Banner में श्रेणी-प्रतिबंधित हैं। श्रेणी बीते सेमेस्टर से नहीं, अर्जित क्रेडिट से तय होती है, और Banner यह भी बताता है कि हर प्रतिबंध हर छात्र पर लागू नहीं होता — अपने सलाहकार से पुष्टि करें।",

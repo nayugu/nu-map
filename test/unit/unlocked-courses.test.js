@@ -1,10 +1,15 @@
-// UNIT · src/core/courseModel.js — relatedPartners, the UNLOCKS list of the
-// details panel. One row per PARTNER COURSE, however many edges the pair has.
+// UNIT · src/core/courseModel.js — unlockedCourses, the UNLOCKS list of the
+// details panel. One entry per COURSE, however many edges the pair has, and
+// corequisites are not one of them.
 //
-// The defect it fixes: a corequisite declared on both sides is two edges, so
-// IE 4522 (Human-Machine Systems) listed IE 4523 (its lab) twice, and a
-// prerequisite named in two branches of one OR is two edges differing only in
-// a minGrade the row never shows. Both printed the same course twice.
+// Two defects it pins:
+//   · a corequisite declared on both sides is two edges, so IE 4522
+//     (Human-Machine Systems) printed IE 4523 (its lab) twice — 243 of the 262
+//     coreq groups are mutual, so this was the ordinary case;
+//   · a prerequisite named in two branches of one OR is two edges differing
+//     only in a minGrade the row never shows (352 pairs).
+// Corequisites have since moved out of this list entirely, onto their own line
+// under the prerequisites, so the coreq cases here assert an EXCLUSION.
 //
 // Pure, deterministic, no I/O. Naming: "subject › condition › expected".
 import { test } from "node:test";
@@ -14,83 +19,60 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { getConnections } from "../../src/core/planModel.js";
-import { relatedPartners, extractEdges } from "../../src/core/courseModel.js";
+import { unlockedCourses, coreqPartnersOf, extractEdges } from "../../src/core/courseModel.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../..");
 const edge = (from, to, type = "prerequisite", extra = {}) => ({ from, to, type, ...extra });
-const ids  = list => list.map(r => r.id);
 
-test("relatedPartners › mutually declared corequisite › the partner appears once", () => {
-  // Exactly the IE 4522 / IE 4523 shape: each course names the other.
-  const edges = [edge("IE4523", "IE4522", "corequisite"), edge("IE4522", "IE4523", "corequisite")];
-  const rows  = relatedPartners("IE4522", getConnections("IE4522", edges));
-  assert.deepEqual(rows, [{ id: "IE4523", type: "corequisite" }]);
-  // …and from the lab's side too, which is a different edge order.
-  assert.deepEqual(relatedPartners("IE4523", getConnections("IE4523", edges)),
-    [{ id: "IE4522", type: "corequisite" }]);
-});
-
-test("relatedPartners › coreq declared on one side only › still listed, either direction", () => {
-  const declaredByOther = [edge("B", "A", "corequisite")];   // B names A
-  const declaredBySelf  = [edge("A", "B", "corequisite")];   // A names B
-  assert.deepEqual(relatedPartners("A", declaredByOther), [{ id: "B", type: "corequisite" }]);
-  assert.deepEqual(relatedPartners("A", declaredBySelf),  [{ id: "B", type: "corequisite" }]);
-});
-
-test("relatedPartners › same prereq in two OR branches › one row, gates not shown", () => {
+test("unlockedCourses › same prereq in two OR branches › one entry, gates not shown", () => {
   const edges = [
     edge("ACCT5230", "ACCT5232", "prerequisite", { minGrade: "D-" }),
     edge("ACCT5230", "ACCT5232", "prerequisite", { minGrade: "C-" }),
   ];
-  assert.deepEqual(relatedPartners("ACCT5230", edges), [{ id: "ACCT5232", type: "prerequisite" }]);
+  assert.deepEqual(unlockedCourses("ACCT5230", edges), ["ACCT5232"]);
 });
 
-test("relatedPartners › incoming prerequisites › excluded (the panel prints those above)", () => {
-  const edges = [edge("PREREQ", "ME"), edge("ME", "DEPENDENT")];
-  assert.deepEqual(ids(relatedPartners("ME", edges)), ["DEPENDENT"]);
+test("unlockedCourses › a mutually declared corequisite › listed neither once nor twice", () => {
+  // The IE 4522 / IE 4523 shape, from both ends. Coreqs belong to the panel's
+  // own Coreqs line now; if they ever come back here, they come back doubled.
+  const edges = [edge("IE4523", "IE4522", "corequisite"), edge("IE4522", "IE4523", "corequisite")];
+  assert.deepEqual(unlockedCourses("IE4522", getConnections("IE4522", edges)), []);
+  assert.deepEqual(unlockedCourses("IE4523", getConnections("IE4523", edges)), []);
 });
 
-test("relatedPartners › a misplaced coreq › outranks the plain edge in BOTH orders", () => {
-  const plainFirst = [edge("A", "B", "corequisite"), edge("B", "A", "corequisite-viol")];
-  const violFirst  = [edge("B", "A", "corequisite-viol"), edge("A", "B", "corequisite")];
-  assert.deepEqual(relatedPartners("A", plainFirst), [{ id: "B", type: "corequisite-viol" }]);
-  assert.deepEqual(relatedPartners("A", violFirst),  [{ id: "B", type: "corequisite-viol" }]);
+test("unlockedCourses › a one-sided coreq › excluded in whichever direction it was declared", () => {
+  assert.deepEqual(unlockedCourses("A", [edge("A", "B", "corequisite")]), []);
+  assert.deepEqual(unlockedCourses("A", [edge("B", "A", "corequisite")]), []);
+  assert.deepEqual(unlockedCourses("A", [edge("A", "B", "corequisite-viol")]), []);
 });
 
-test("relatedPartners › a pair that is both prereq and coreq › the coreq badge wins", () => {
-  // Not in the live catalog (measured: 0 pairs), but the tie-break must be
-  // decided by rank rather than by whichever edge the array held first.
-  const prereqFirst = [edge("A", "B"), edge("A", "B", "corequisite")];
-  const coreqFirst  = [edge("A", "B", "corequisite"), edge("A", "B")];
-  assert.deepEqual(relatedPartners("A", prereqFirst), [{ id: "B", type: "corequisite" }]);
-  assert.deepEqual(relatedPartners("A", coreqFirst),  [{ id: "B", type: "corequisite" }]);
+test("unlockedCourses › a coreq beside a real dependent › only the dependent", () => {
+  const edges = [edge("A", "LAB", "corequisite"), edge("A", "NEXT"), edge("PREV", "A")];
+  assert.deepEqual(unlockedCourses("A", edges), ["NEXT"]);
 });
 
-test("relatedPartners › junk input › a self-edge and an unrelated edge are ignored", () => {
-  const edges = [
-    edge("A", "A", "corequisite"),   // a course is not its own corequisite
-    edge("X", "Y"),                  // touches neither end
-    edge("A", "B"),
-  ];
-  assert.deepEqual(ids(relatedPartners("A", edges)), ["B"]);
-  assert.deepEqual(relatedPartners("A", []), []);
+test("unlockedCourses › incoming prerequisites › excluded (the panel prints those above)", () => {
+  assert.deepEqual(unlockedCourses("ME", [edge("PREREQ", "ME"), edge("ME", "DEPENDENT")]), ["DEPENDENT"]);
 });
 
-test("relatedPartners › order › first appearance, and dedup does not reorder", () => {
+test("unlockedCourses › junk input › self-edge, unrelated edge and empty list", () => {
+  const edges = [edge("A", "A"), edge("X", "Y"), edge("A", "B")];
+  assert.deepEqual(unlockedCourses("A", edges), ["B"]);
+  assert.deepEqual(unlockedCourses("A", []), []);
+  assert.deepEqual(unlockedCourses("A", undefined), []);
+});
+
+test("unlockedCourses › order › first appearance, and dedup does not reorder", () => {
   const edges = [edge("A", "C"), edge("A", "B"), edge("A", "C"), edge("A", "D")];
-  assert.deepEqual(ids(relatedPartners("A", edges)), ["C", "B", "D"]);
+  assert.deepEqual(unlockedCourses("A", edges), ["C", "B", "D"]);
 });
 
-test("relatedPartners › live catalog › no course lists any partner twice", () => {
+test("unlockedCourses › live catalog › no course is listed twice, and no coreq leaks in", () => {
   const raw = JSON.parse(readFileSync(join(ROOT, "public/northeastern/catalog-courses.json"), "utf8"));
   const courses = Array.isArray(raw) ? raw : (raw.courses ?? Object.values(raw));
-  const allEdges = courses.flatMap(c => {
-    const id = `${(c.subject ?? "").toUpperCase()}${c.number ?? ""}`;
-    return extractEdges(id, c.prereqs, c.coreqs);
-  });
+  const allEdges = courses.flatMap(c =>
+    extractEdges(`${(c.subject ?? "").toUpperCase()}${c.number ?? ""}`, c.prereqs, c.coreqs));
 
-  // Only the courses that touch an edge — walking 8,000 × 15,000 is pointless.
-  const touched = new Set(allEdges.flatMap(e => [e.from, e.to]));
   const byId = new Map();
   for (const e of allEdges) {
     for (const end of [e.from, e.to]) {
@@ -99,18 +81,19 @@ test("relatedPartners › live catalog › no course lists any partner twice", (
     }
   }
 
-  let coreqRows = 0;
-  for (const id of touched) {
-    const rows = relatedPartners(id, byId.get(id));
-    const seen = new Set(rows.map(r => r.id));
-    assert.equal(seen.size, rows.length, `${id} lists a partner more than once`);
-    coreqRows += rows.filter(r => r.type === "corequisite").length;
+  let listed = 0;
+  for (const [id, edges] of byId) {
+    const rows = unlockedCourses(id, edges);
+    assert.equal(new Set(rows).size, rows.length, `${id} lists a course more than once`);
+    listed += rows.length;
+    // Nothing this course must be taken WITH may appear in what it unlocks.
+    const partners = new Set(coreqPartnersOf(allEdges, id));
+    for (const r of rows) assert.ok(!partners.has(r), `${id} lists its corequisite ${r} under unlocks`);
   }
+  // The dedup must not have emptied the list: ~7,500 prereq edges fold to
+  // rather fewer rows, but the order of magnitude has to survive.
+  assert.ok(listed > 5000, `expected the unlocks to survive, got ${listed}`);
 
-  // The dedup must not have deleted the relationships themselves: every coreq
-  // edge is one row on each of its two ends, minus the mutual pairs that fold
-  // (243 of them at time of writing, so ~500 rows survive, not ~1,010).
-  assert.ok(coreqRows > 400, `expected the coreq rows to survive, got ${coreqRows}`);
-  const ie = relatedPartners("IE4522", byId.get("IE4522") ?? []).filter(r => r.id === "IE4523");
-  assert.deepEqual(ie, [{ id: "IE4523", type: "corequisite" }]);
+  // Human-Machine Systems: the lab is its coreq and appears in neither list here.
+  assert.deepEqual(unlockedCourses("IE4522", byId.get("IE4522") ?? []).filter(r => r === "IE4523"), []);
 });
