@@ -107,65 +107,110 @@ export function typicalSH(spec, courseMap, fallback = DEFAULT_UNIT_SH,
 }
 
 /**
- * A section's children, split by how they state their demand.
+ * What one node of an allocation result REQUIRES and how much of that is MET,
+ * both in credit hours.
  *
- * `reqSh` marks a credit-hour threshold over a pool (an XOM); everything else is
- * counted in courses. A section can hold BOTH — 61 of the 6,185 shipped sections
- * do — and the two halves have to be added, not chosen between.
+ * ── Why one function and not two ──────────────────────────────────
+ *
+ * `demandOf` and `satisfiedOf` are subtracted from each other by `shortfallOf`,
+ * so any disagreement between them shows up as a section that can never be
+ * finished. They used to be two independent walks in two different currencies —
+ * demand in `count x modal credit`, satisfaction in `satCount x modal credit` —
+ * which agreed only because both were wrong the same way. Measuring the real
+ * thing means measuring it once, here, and letting both read off the result.
+ *
+ * The cap is what makes the subtraction safe: `sat` can never exceed `req` for
+ * any node, so a 12 SH pool answered with 16 SH does not lend 4 SH of surplus
+ * to the section beside it.
+ *
+ * ── Why the modal unit is now only a FALLBACK ─────────────────────
+ *
+ * A section's credit was `minRequired x typicalSH(...)` — how many children it
+ * has, times the credit of the pool's most common course. That is an estimate
+ * standing in for a number the catalog states outright, and it was wrong in
+ * every direction at once. Mechanical Engineering and Design (Boston), which is
+ * how this was found:
+ *
+ *   Senior Capstone Design Project   MEIE 4701 (1 SH) + MEIE 4702 (5 SH) = 6 SH.
+ *                                    Modal credit over {1, 5} is 1, so: 2 x 1 = 2.
+ *   Design Requirements              four ARTG co-requisite pairs, 4 SH each = 16.
+ *                                    Every course is 2 SH, so: 4 x 2 = 8.
+ *   Required Engineering             seven entries, five of them a lecture plus a
+ *                                    1 SH lab = 32 SH. Modal credit 4, so: 7 x 4 = 28.
+ *
+ * 117 SH of a 139 SH degree, leaving **22 SH of free electives** where the
+ * registrar's own page says 4. Summing the courses gives 135, and 139 - 135 = 4,
+ * exactly. The estimate is only needed where nothing names a credit value: a
+ * RANGE ("any MATH 3001-4999"), a course missing from the catalog (54 nodes
+ * corpus-wide), and a section that names no course at all.
+ *
+ * ── The tie-breaks, each measured ─────────────────────────────────
+ *
+ * OR takes the **minimum** of its branches. 518 of 3,318 OR nodes offer branches
+ * of differing credit, so this had to be decided rather than assumed, and min
+ * beat both alternatives against the 95 programs that state their own free-
+ * elective figure: exact matches 22 (min) against 20 (modal branch) and 16 (max).
+ * It is also the honest reading — the requirement is answerable with the
+ * cheapest branch — and it errs by inflating free electives rather than by
+ * demanding credit the student does not owe.
+ *
+ * A "choose N of M" section would need a fourth rule, and does not get one:
+ * `minRequirementCount >= children.length` for **all 6,887 shipped sections**,
+ * and there are zero nested SECTION nodes and zero pick-N concentration options.
+ * The N-smallest branch below is unexercised by the corpus; it is there so that
+ * a page that starts doing this degrades to the conservative reading instead of
+ * silently demanding everything.
  */
-function splitChildren(allocSection) {
+function creditsOfNode(node, courseMap, unit) {
+  const sh = (key) => courseMap?.[key]?.sh;
+  const met = (req) => (node?.sat ? req : 0);
+  switch (node?.type) {
+    case "COURSE": {
+      const req = sh(node.key) ?? unit;
+      return { req, sat: met(req) };
+    }
+    case "AND": {
+      const kids = (node.children ?? []).map(c => creditsOfNode(c, courseMap, unit));
+      return { req: kids.reduce((n, k) => n + k.req, 0),
+               sat: kids.reduce((n, k) => n + k.sat, 0) };
+    }
+    case "OR": {
+      const kids = (node.children ?? []).map(c => creditsOfNode(c, courseMap, unit));
+      if (!kids.length) return { req: 0, sat: 0 };
+      // One branch answers it, so the credit is one branch's — and the credit
+      // MET is the best single branch, not the sum, or placing two alternatives
+      // would report the requirement as doubly satisfied.
+      const req = Math.min(...kids.map(k => k.req));
+      return { req, sat: Math.min(req, Math.max(...kids.map(k => k.sat))) };
+    }
+    case "XOM":
+      // Already exact in both halves: `reqSh` is the registrar's threshold and
+      // `satSh` the allocator's own credit accounting, split-credit included.
+      return { req: node.reqSh ?? 0, sat: Math.min(node.reqSh ?? 0, node.satSh ?? 0) };
+    case "RANGE": {
+      // A window over a subject names no course, so its credit is unknowable
+      // until something lands in it. One course's worth is the reading that
+      // matches how the catalog prints these.
+      return { req: unit, sat: met(unit) };
+    }
+    case "SECTION":
+      return creditsOfSection(node, courseMap, unit);
+    default:
+      // An unrecognised or malformed node still occupies a requirement slot. It
+      // must not contribute 0 and silently hand its credit to free electives.
+      return { req: unit, sat: met(unit) };
+  }
+}
+
+/** The same, for a SECTION result — top-level or (hypothetically) nested. */
+function creditsOfSection(allocSection, courseMap, unit) {
   const kids = allocSection?.children ?? [];
-  const pools = [], plain = [];
-  for (const c of kids) (typeof c.reqSh === "number" ? pools : plain).push(c);
-  return { kids, pools, plain };
-}
-
-/**
- * How many of the plain children this section actually requires.
- *
- * `minRequired` counts ALL children, pools included, so the plain share is
- * whatever is left after the pools have taken their places. Clamped both ways:
- * a section may state a minimum above its child count, and one below its pool
- * count would otherwise ask for a negative number of courses.
- */
-function plainRequired(allocSection, pools, plain) {
-  const min = allocSection?.minRequired ?? allocSection?.total ?? (pools.length + plain.length);
-  return Math.max(0, Math.min(plain.length, min - pools.length));
-}
-
-/**
- * Credit a section demands in total, whatever is placed.
- *
- * A child carrying `reqSh` states its demand in credit hours (an XOM pool);
- * anything else is counted in courses via the section's own `minRequired`.
- *
- * ── Both halves, when a section has both ──────────────────────────
- *
- * This used to return the pool total ALONE as soon as any child carried
- * `reqSh`, which reported Behavioral Neuroscience's eight-course, 34 SH
- * "Foundation Requirements" as demanding **1 SH** — the credit of the one small
- * pool sitting beside the courses. 61 sections mix the two shapes, understating
- * their demand by a median of 4 SH and up to 32.
- *
- * That number is not cosmetic. `obligationsOf` derives the general-elective
- * allowance as `totalCreditsRequired − Σ demand`, so an understated section
- * inflated the free-elective bucket by exactly as much: 42 programs were
- * affected, and Behavioral Neuroscience was told 84 of its 132 SH were free
- * electives. It also sets `bindCells`' capacity, so a section could not absorb
- * the cells it genuinely demands.
- *
- * All 61 have `minRequired >= children.length` — every child required — so the
- * split is arithmetic rather than a guess. `plainRequired` generalises it in
- * case a "choose N" section ever mixes the two.
- */
-export function demandOf(allocSection, unitSH = DEFAULT_UNIT_SH) {
-  const { pools, plain } = splitChildren(allocSection);
-  if (!pools.length) {
+  if (!kids.length) {
     // ── A section with NO children states its demand in PROSE ──────
     //
     // The catalog can print a credit figure and never name a course to satisfy
     // it (580 sections, 343 programs). There is nothing to count, so
-    // `minRequired * unitSH` is arithmetic over children that do not exist: it
+    // `minRequired * unit` is arithmetic over children that do not exist: it
     // answered a flat 4 SH for every one of them, including a 16 SH minor
     // requirement and a 32 SH focus area. Corpus-wide it under-claimed 4,305
     // of 6,625 SH, and `obligationsOf` derives the free-elective allowance as
@@ -173,32 +218,63 @@ export function demandOf(allocSection, unitSH = DEFAULT_UNIT_SH) {
     // electives — the planner told the student to fill it with anything.
     //
     // The registrar's own number is the better claim, so it wins when present.
-    if (!plain.length && allocSection?.statedSH > 0) return allocSection.statedSH;
-    return (allocSection?.minRequired ?? allocSection?.total ?? 0) * unitSH;
+    const req = allocSection?.statedSH > 0
+      ? allocSection.statedSH
+      : (allocSection?.minRequired ?? allocSection?.total ?? 0) * unit;
+    // Nothing is enumerated, so nothing here can be marked met; `satCount` is
+    // structurally 0 for these. Kept as arithmetic rather than a literal 0 so a
+    // future shape that does count something is not silently reported unmet.
+    return { req, sat: Math.min(req, (allocSection?.satCount ?? 0) * unit) };
   }
-  const poolSH = pools.reduce((n, c) => n + c.reqSh, 0);
-  if (!plain.length) return poolSH;
-  return poolSH + plainRequired(allocSection, pools, plain) * unitSH;
+
+  const parts = kids.map(c => creditsOfNode(c, courseMap, unit));
+  const min = allocSection?.minRequired ?? allocSection?.total ?? kids.length;
+  if (min >= kids.length) {
+    return { req: parts.reduce((n, k) => n + k.req, 0),
+             sat: parts.reduce((n, k) => n + k.sat, 0) };
+  }
+  // Unexercised by the shipped corpus — see the note above. The N cheapest
+  // children bound the demand from below, and satisfaction is capped by it.
+  const need = Math.max(0, min);
+  const req = [...parts].sort((a, b) => a.req - b.req).slice(0, need)
+    .reduce((n, k) => n + k.req, 0);
+  const sat = [...parts].sort((a, b) => b.sat - a.sat).slice(0, need)
+    .reduce((n, k) => n + k.sat, 0);
+  return { req, sat: Math.min(req, sat) };
+}
+
+/**
+ * Credit a section demands in total, whatever is placed.
+ *
+ * Placement-independent by construction: `creditsOfNode` reads `sat` for the
+ * satisfied half only, and every credit figure it sums comes from the catalog
+ * or from `courseMap`. A section's demand must not move as a student places
+ * courses, or the derived free-elective allowance would drift under them.
+ *
+ * `courseMap` is optional so that a caller with no catalog still gets the
+ * count-times-unit reading rather than a crash — but every caller in `src` has
+ * one, because `typicalSH` needs it to compute `unitSH` in the first place.
+ */
+export function demandOf(allocSection, unitSH = DEFAULT_UNIT_SH, courseMap = {}) {
+  return creditsOfSection(allocSection, courseMap, unitSH).req;
 }
 
 /**
  * Credit of a section the placed courses already answer.
  *
- * Split the same way as `demandOf`, and for the same reason: measuring
- * satisfaction over the pools alone while demanding both halves would report a
- * section as permanently unmet.
+ * The same walk as `demandOf`, reading the other half of the pair. That is the
+ * point: a section whose every child is satisfied returns exactly its demand,
+ * so `shortfallOf` reaches 0 rather than leaving a residue in whatever unit the
+ * two happened to disagree about.
  */
-export function satisfiedOf(allocSection, unitSH = DEFAULT_UNIT_SH) {
-  const { pools, plain } = splitChildren(allocSection);
-  if (!pools.length) return (allocSection?.satCount ?? 0) * unitSH;
-  const poolSH = pools.reduce((n, c) => n + (c.satSh ?? 0), 0);
-  if (!plain.length) return poolSH;
-  return poolSH + plain.filter(c => c.sat).length * unitSH;
+export function satisfiedOf(allocSection, unitSH = DEFAULT_UNIT_SH, courseMap = {}) {
+  return creditsOfSection(allocSection, courseMap, unitSH).sat;
 }
 
 /** Credit of a section still outstanding. */
-export function shortfallOf(allocSection, unitSH = DEFAULT_UNIT_SH) {
-  return Math.max(0, demandOf(allocSection, unitSH) - satisfiedOf(allocSection, unitSH));
+export function shortfallOf(allocSection, unitSH = DEFAULT_UNIT_SH, courseMap = {}) {
+  const { req, sat } = creditsOfSection(allocSection, courseMap, unitSH);
+  return Math.max(0, req - sat);
 }
 
 /**
@@ -238,7 +314,7 @@ export function satisfiedByTarget(programData, placedSet, courseMap = {}) {
   sections.forEach((section, i) => {
     const unit = typicalSH(specForNode(section), courseMap);
     unitSH.set(i, unit);
-    satisfied.set(i, satisfiedOf(alloc[i], unit));
+    satisfied.set(i, satisfiedOf(alloc[i], unit, courseMap));
     alloc[i]?.allocatedCourses?.forEach(k => allocated.add(k));
   });
 

@@ -1404,10 +1404,29 @@ export function allocateMajorSections(major, placedSet, courseMap) {
  * Convenience wrapper for a major with no concentration to also account for —
  * see allocateMajorSections' comment for why a caller that DOES apply a
  * concentration must not use this directly.
+ *
+ * ── `geAllowance` is passed IN, and that is not an oversight ────────
+ *
+ * The free-elective allowance is the degree total minus what the requirements
+ * demand, and `core/requirementBinding.generalElectiveSHOf` is the one place
+ * that computes it. This module cannot call it — `requirementBinding` and
+ * `requirementDemand` both import `allocateSections` from here, so reaching back
+ * would close an import cycle in core.
+ *
+ * It used to sidestep that with `major.generalElectiveSH ?? 0`, the catalog's
+ * own stated figure, which only 95 of 1,071 programs state at all. The other 976
+ * printed "General Electives 12/0 SH" — a section reporting more credit than it
+ * required — and the 95 got a figure the panel beside them disagreed with. So
+ * the caller supplies it; `GradPanel` and `planModel` both already hold it.
+ *
+ * When nothing is supplied the denominator is 0, which is what the bar renders
+ * as "no stated requirement". Callers that only want `allocatedSet` should use
+ * `allocateMajorSections` and skip this entirely.
  */
-export function allocateMajorWithElectives(major, placedSet, courseMap, completedSet = null, realPlacedSet = null) {
+export function allocateMajorWithElectives(major, placedSet, courseMap, completedSet = null,
+                                           realPlacedSet = null, geAllowance = 0) {
   const { sections, allocatedSet: globalUsed } = allocateMajorSections(major, placedSet, courseMap);
   const candidateKeys = collectCandidateKeys(sections, realPlacedSet ?? placedSet);
-  const generalElectives = calculateGeneralElectives(placedSet, globalUsed, courseMap, major.generalElectiveSH ?? 0, completedSet, candidateKeys, realPlacedSet);
+  const generalElectives = calculateGeneralElectives(placedSet, globalUsed, courseMap, geAllowance, completedSet, candidateKeys, realPlacedSet);
   return { sections, generalElectives, allocatedSet: globalUsed };
 }

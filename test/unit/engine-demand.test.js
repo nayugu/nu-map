@@ -380,15 +380,30 @@ test("demand › a concentration with nothing enumerable stays unbounded", () =>
 
 // ── Reconciliation, reported and not silently absorbed ─────────────
 
-test("demand › a structural/arithmetic disagreement is REPORTED", () => {
-  // A co-requisite pair really is 5 SH; `demandOf` counts it as one course at the
-  // section's modal credit. The difference is recorded rather than papered over.
+test("demand › a co-requisite pair no longer splits the two accountings", () => {
+  // This used to be the canonical DISAGREEMENT: a pair really is 5 SH, and
+  // `demandOf` answered 4 — one course at the section's modal credit — so CHART
+  // measured the section structurally and the residual against a smaller number.
+  // That is what left Industrial Engineering eight credits short of its own
+  // degree. `demandOf` now sums the courses, so the two agree and there is
+  // nothing to report.
   const { reconciliation } = cellsOf([
     SECTION("Core", 2, AND(C("CS", "1800"), C("CS", "1802")), C("CS", "2800")),
   ]);
+  assert.deepEqual(reconciliation, [],
+    "9 SH of courses, 9 SH demanded — the coreq is not a disagreement any more");
+});
+
+test("demand › a structural/arithmetic disagreement is still REPORTED", () => {
+  // The mechanism has to survive the fix above, so here is a shape that genuinely
+  // cannot reconcile: a 3 SH threshold over a subject window. The pool demands 3,
+  // and CHART can only emit whole courses, so the cell it builds is worth more
+  // than the requirement asks for. 838 sections across 454 programs still land
+  // here — overwhelmingly prose sections that name no course at all.
+  const { reconciliation } = cellsOf([SECTION("Odd", 1, XOM(3, RANGE("MATH", 3001, 4999)))]);
   assert.equal(reconciliation.length, 1);
-  assert.equal(reconciliation[0].structuralSH, 9);
-  assert.ok(reconciliation[0].delta > 0);
+  assert.equal(reconciliation[0].demandSH, 3);
+  assert.notEqual(reconciliation[0].delta, 0);
 });
 
 test("demand › an indivisible remainder is recorded, not hidden", () => {

@@ -145,15 +145,15 @@ export function obligationsOf(programData, { placedSet = new Set(), courseMap = 
   sections.forEach((section, i) => {
     const spec = specForNode(section);
     const unitSH = typicalSH(spec, courseMap);
-    const short = shortfallOf(alloc[i], unitSH);
-    demand += demandOf(alloc[i], unitSH);
+    const short = shortfallOf(alloc[i], unitSH, courseMap);
+    demand += demandOf(alloc[i], unitSH, courseMap);
     // `shared` sections are deliberately cross-counted toward several
     // requirements, so charging their demand to the total would shrink the
     // derived general-elective allowance below.
     // Optional-chained because a hole in the array must not take down the whole
     // audit: no shipped program has one, and a crash here would surface as a blank
     // requirements panel rather than as the one bad section.
-    if (section?.shared) demand -= demandOf(alloc[i], unitSH);
+    if (section?.shared) demand -= demandOf(alloc[i], unitSH, courseMap);
     if (short <= 0) return;
     out.push({ target: i, title: section.title ?? "", spec, shortfallSH: short, unitSH });
   });
@@ -169,7 +169,7 @@ export function obligationsOf(programData, { placedSet = new Set(), courseMap = 
     for (const option of conc.concentrationOptions) {
       const s = specForNode(option);
       const a = allocateSections([option], placedSet, new Set(), courseMap)[0];
-      floor = Math.min(floor, demandOf(a, typicalSH(s, courseMap)));
+      floor = Math.min(floor, demandOf(a, typicalSH(s, courseMap), courseMap));
     }
     if (Number.isFinite(floor) && floor > 0) {
       const sh = floor * (conc.minOptions ?? 1);

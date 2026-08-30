@@ -131,11 +131,14 @@ if (SNAP) {
 // The expression is evaluated with the vocabulary in scope. This is a developer tool run on a
 // developer's own checkout against committed data — the input is the operator's own keystrokes,
 // so there is nothing here to sandbox against.
+// Built as an async function and awaited, so a question may `await import(...)` a core module
+// the vocabulary does not carry. Without that, such a question printed `{}` — a Promise
+// stringified — which reads as "the answer is empty" rather than "you were handed a promise".
 const fn = new Function(
   "courses", "courseMap", "programs", "plans",
   "plansWith", "positionsOf", "termsWhere", "cellsWhere",
-  `return (${JS});`);
-const value = fn(courses, courseMap, programs, plans,
+  `return (async () => (${JS}))();`);
+const value = await fn(courses, courseMap, programs, plans,
   plansWith, positionsOf, termsWhere, cellsWhere);
 
 /** Print a count beside an array, because "how many" is the question underneath most of these. */

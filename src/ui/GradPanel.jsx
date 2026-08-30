@@ -2024,9 +2024,10 @@ export default function GradPanel({ wideCatalog = false }) {
   // Done-only allocation for Major 1 progress bar (uses doneSet instead of placedSet)
   const major1DoneSections = useMemo(() => {
     if (!major) return [];
-    const { sections, generalElectives } = allocateMajorWithElectives(major, doneSet, courseMap);
+    const { sections, generalElectives } = allocateMajorWithElectives(
+      major, doneSet, courseMap, null, null, geAllowance);
     return [...sections, generalElectives].slice(0, majorSectionsCount + 1);
-  }, [major, doneSet, courseMap, majorSectionsCount]);
+  }, [major, doneSet, courseMap, majorSectionsCount, geAllowance]);
 
   const major1Progress = useMemo(() => {
     let totalSat = 0, totalReq = 0, doneSat = 0;
@@ -2075,9 +2076,10 @@ export default function GradPanel({ wideCatalog = false }) {
 
   const major2DoneSections = useMemo(() => {
     if (!major2Data) return [];
-    const { sections, generalElectives } = allocateMajorWithElectives(major2Data, doneSet, courseMap);
+    const { sections, generalElectives } = allocateMajorWithElectives(
+      major2Data, doneSet, courseMap, null, null, geAllowance2);
     return [...sections, generalElectives];
-  }, [major2Data, doneSet, courseMap]);
+  }, [major2Data, doneSet, courseMap, geAllowance2]);
 
   const major2Progress = useMemo(() => {
     let totalSat = 0, totalReq = 0, doneSat = 0;

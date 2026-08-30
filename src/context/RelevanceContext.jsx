@@ -15,7 +15,7 @@ import { filterInTimeline }   from "../core/planModel.js";
 import { workTermGrants, coopOptionsInPrograms } from "../core/specialTermUtils.js";
 import {
   buildPlacedKeySet,
-  allocateMajorWithElectives,
+  allocateMajorSections,
   allocateSections,
   courseKey,
 } from "../core/gradRequirements.js";
@@ -44,7 +44,10 @@ function allocateProgram(p, placedSet, courseMap) {
     allocateSections(sections, placedSet, used, courseMap);
     return used;
   }
-  const { allocatedSet } = allocateMajorWithElectives(p.data, placedSet, courseMap);
+  // Only the allocated set matters here, so this deliberately stops short of
+  // General Electives — building that section would need the free-elective
+  // allowance passed in, and nothing below reads it.
+  const { allocatedSet } = allocateMajorSections(p.data, placedSet, courseMap);
   if (p.concSection) allocateSections([p.concSection], placedSet, allocatedSet, courseMap);
   return allocatedSet;
 }
@@ -126,7 +129,7 @@ export function RelevanceProvider({ children }) {
     const majorKeys = new Set();
     for (const m of [majorData, major2Data]) {
       if (!m) continue;
-      const { allocatedSet } = allocateMajorWithElectives(m, placedSet, courseMap);
+      const { allocatedSet } = allocateMajorSections(m, placedSet, courseMap);
       // Concentration shares the primary major's used set (same as GradPanel)
       if (m === majorData && conc && m.concentrations) {
         const concSection = resolveConcentration(m, conc);

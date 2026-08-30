@@ -2,6 +2,7 @@
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
 import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirements.js";
+import { generalElectiveSHOf } from "./requirementBinding.js";
 import { resolveTermByDuration, termSpans, computeGrantedAttrs, workTermGrants } from "./specialTermUtils.js";
 import { dropVoidTakes, dropUnearnedTakes } from "./gradeSystem.js";
 import { resolveCompanyLogo } from "./companyLogo.js";
@@ -605,7 +606,13 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
 
   function renderProgram(prog, doneKeysSet, headerLabel, name, showGeneralElectives = true) {
     if (!prog) return "";
-    const { sections: majorSections, generalElectives } = allocateMajorWithElectives(prog, placedSet, courseMap, doneKeysSet, realPlacedSet);
+    // The same residual the panel shows. The export used to take the catalog's
+    // stated figure instead, so a printed plan could disagree with the screen it
+    // was printed from — and for the 976 programs that state nothing it printed
+    // a denominator of 0.
+    const { sections: majorSections, generalElectives } = allocateMajorWithElectives(
+      prog, placedSet, courseMap, doneKeysSet, realPlacedSet,
+      generalElectiveSHOf(prog, courseMap));
     let sections = [...majorSections, generalElectives];
     if (!showGeneralElectives) {
       sections = sections.filter(s => s.title !== "General Electives");
