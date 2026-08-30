@@ -102,18 +102,32 @@ test('prose sections › the DEGREE TOTAL is refused even when it is small', () 
   // is 12 semester hours, so its total is indistinguishable BY SIZE from a real
   // 12 SH requirement — only the phrasing separates them. Without this guard
   // every certificate in the catalog grows a phantom 12 SH section.
-  const root = pane(h2('Program Credit/GPA Requirements')
-    + p('12 total semester hours required') + p('Minimum 3.000 GPA required'));
-  assert.deepEqual(titles(root), [],
+  //
+  // The heading must NOT mention GPA and the figure must sit under the ceiling,
+  // or one of the other two guards rejects this and the test proves nothing
+  // about the total guard. The first attempt used CourseLeaf's combined
+  // "Program Credit/GPA Requirements" heading and was masked by the GPA guard —
+  // mutation testing caught it surviving.
+  const cert = pane(h2('Program Requirement') + p('12 total semester hours required'));
+  assert.deepEqual(titles(cert), [],
     'that is the number the free-elective residual is subtracted FROM');
 
   const undergrad = pane(h2('Program Requirement') + p('130 total semester hours required'));
   assert.deepEqual(titles(undergrad), []);
 });
 
-test('prose sections › a GPA rule is refused', () => {
-  const root = pane(h2('Major GPA Requirement') + p('A major GPA of 2.500 is required.'));
+test('prose sections › a GPA rule is refused, by the GPA guard alone', () => {
+  // Also isolated: a figure present, under the ceiling, no "total … required",
+  // no "in the major". This is the only shape in which the GPA guard is
+  // load-bearing, and it was measured to occur on 0 of 30 sampled pages — so
+  // the guard is insurance, and this test is what stops insurance from rotting
+  // into a comment that describes a check nothing performs.
+  const root = pane(h2('Major GPA Requirement')
+    + p('A major GPA of 2.500 is required across 16 semester hours of upper-division coursework.'));
   assert.deepEqual(titles(root), [], 'parseGpaRule owns this sentence');
+
+  // The plain form, which no guard but "there is no figure" needs to reject.
+  assert.deepEqual(titles(pane(h2('Major GPA Requirement') + p('A major GPA of 2.500 is required.'))), []);
 });
 
 test('prose sections › the ceiling is a backstop, not the mechanism', () => {
