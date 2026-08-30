@@ -251,14 +251,68 @@ semester hours in the major' — that is a major-only subtotal"), and
 `proseSectionSH` reuses the refusal. Measured on 30 cached pages, the change
 gains **18 sections and loses 0**.
 
-The subtotal is deliberately left on the floor. Where a program's sections are
-parsed it is pure restatement; where they are not — Philosophy BA has **zero**
-requirement sections, its whole major being five mutually-exclusive
-concentrations — it is the only statement of the major's size, and using it there
-means treating it as a **lower bound on the concentration floor**, not as a
-section. That is a different mechanism, it needs a corpus-wide HTML cache to
-validate, and it fails in the expensive direction, so it is written down here
-rather than guessed at.
+The subtotal is now used, as a **floor and never a sum** — see §5.1.
+
+### 5.1 The major subtotal, as a floor
+
+**⚠ Correction to an earlier draft of this section.** It said the ~50
+undergraduate degrees reporting >40% free electives were "still wrong". They are
+mostly *right*, and four checks say so:
+
+- **0 of the 53 state their own figure**, so nothing in the catalog contradicts us.
+- **The registrar's own sample plans** for those 48 programs average **40 SH of
+  named courses against 90 SH of unnamed elective slots**. The catalog itself
+  describes that space as electives.
+- **The Universitywide Requirements page names no courses** — only "minimum 128
+  semester hours", "minimum 2.000 GPA", "64 Northeastern semester hours". There
+  is no requirement block to import.
+- The plan-named-but-unclaimed courses (ENGW 1111 in 43 of 48 plans, EESH 2000 in
+  21, ENGW 3315 in 12) are the plan **taking one branch of a NUpath choice** —
+  precisely what a sample plan can never prove, per §3 of `sample-plan-design.md`.
+
+A Northeastern BA really is about half electives. "88% is obviously wrong" was
+intuition, and it cost two rounds of work before it was checked.
+
+What *is* wrong is narrow. Of 21 pages stating a major subtotal, **4 under-parse**
+— Philosophy BA/BS by 20 SH, Spanish BA and Global Asian Studies BA by 16 — while
+7 agree exactly and 10 already demand *more*. Philosophy BA is the corpus's worst
+case and a genuine parse gap: its "Philosophy Major (No Concentration)" option
+parses 14 courses but demands **16 SH**, where the page says 36, and the
+concentration floor takes the cheapest option.
+
+**The rule: total demand must be at least the major subtotal.** The major is a
+subset of the degree, so where total demand falls below the stated subtotal we
+have certainly under-parsed, by at least the difference.
+
+The obvious alternative — `majorDemand = max(parsed major, subtotal)` — was
+rejected because it needs a classifier for "which sections are in the major", and
+the only available one misfiles the cases that matter:
+
+| section | credit | in the major? |
+|---|---|---|
+| Spanish BA § Spanish Language Requirements | 16 SH | **yes** |
+| Philosophy BA § BA Language Requirements | 12 SH | **no** |
+
+Keying on `/language/` gets one right and the other wrong. Taking the floor
+against *total* demand needs no attribution at all. Measured: **3 of 21 move, 18
+untouched — and Spanish BA is one of the untouched**, which is the case the
+classifier would have got wrong.
+
+| program | before | after | of |
+|---|---|---|---|
+| Philosophy BS | 112 | **92** | 128 |
+| Philosophy BA | 100 | **92** | 128 |
+| Global Asian Studies BA | 76 | **72** | 128 |
+
+It **under-corrects on purpose**: Philosophy BA has 12 SH of language on top of
+its 36 SH major, so true demand is 48 and this claims 36 — 36 is what the page
+guarantees, 48 is what we would be guessing. Under-claiming hands a student extra
+free electives; over-claiming refuses a valid plan.
+
+Emitted as a **codeless section**, not a fourth obligation sentinel: that shape
+ships 580 times and every consumer already handles it, where a new sentinel would
+need `runtimeBinding`, `engine/demand` (three places), `candidates` and the MCP
+adapter audited first.
 
 ### A required choice that read as optional
 
