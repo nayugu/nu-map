@@ -53,12 +53,15 @@ const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const DEMAND = "src/core/requirementDemand.js";
 const PARSER = "scripts/lib/catalog-program-parser.js";
 const RECORD = "scripts/lib/program-record.js";
+const OVERLAP = "src/core/minorOverlap.js";
+const MODEL   = "src/core/planModel.js";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
 const MAJORPARSE = "cd test/contract  && node --test major-parser.test.js";
 const SUBTOTAL   = "cd test/contract  && node --test catalog-major-subtotal.test.js";
 const UNITDEMAND = "cd test/unit      && node --test engine-demand.test.js engine-stated-cells.test.js";
+const MINOR      = "cd test/unit      && node --test minor-overlap.test.js";
 
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
@@ -153,6 +156,40 @@ const MUTANTS = [
   { name: "subtotal: the plausibility bound is removed", file: PARSER,
     from: "      if (Number.isFinite(n) && n >= 12 && n <= 90) return n;",
     to:   "      if (Number.isFinite(n)) return n;", run: [SUBTOTAL] },
+
+  // ── The 50% cap on double counting a minor ──────────────────────
+  { name: "minor: the cap is a floor, not a ceiling (comparison flipped)", file: OVERLAP,
+    from: "  const over  = dependentSH - capSH > EPS;",
+    to:   "  const over  = capSH - dependentSH > EPS;", run: [MINOR] },
+
+  { name: "minor: the cap is the whole requirement, not half of it", file: OVERLAP,
+    from: "  const capSH = requiredSH * MINOR_SHARE_FRACTION;",
+    to:   "  const capSH = requiredSH;", run: [MINOR] },
+
+  { name: "minor: the verdict reverts to the plain shared sum", file: OVERLAP,
+    from: "  const over  = dependentSH - capSH > EPS;",
+    to:   "  const over  = sharedSH - capSH > EPS;", run: [MINOR] },
+
+  { name: "minor: a course the major does not claim is counted as shared", file: OVERLAP,
+    from: "  const sharedKeys = [...claimed].filter(k => major.has(k));",
+    to:   "  const sharedKeys = [...claimed];", run: [MINOR] },
+
+  { name: "minor: General Electives counts as a minor requirement", file: OVERLAP,
+    from: "    section => section && section.title !== \"Required General Electives\"",
+    to:   "    section => Boolean(section)", run: [MINOR] },
+
+  { name: "minor: the withheld allocation is skipped (unique credit assumed zero)", file: OVERLAP,
+    from: "  let uniqueSH = claimedSH;",
+    to:   "  let uniqueSH = 0;", run: [MINOR] },
+
+  { name: "minor: a course with no credit on record is charged the default 4", file: OVERLAP,
+    from: "  const sharedSH = sharedKeys.reduce((n, k) => n + (courseMap[k]?.sh ?? 0), 0);",
+    to:   "  const sharedSH = sharedKeys.reduce((n, k) => n + (courseMap[k]?.sh ?? 4), 0);",
+    run: [MINOR] },
+
+  { name: "minor: the printed note announces a breach that is not one", file: MODEL,
+    from: "  return share.over",
+    to:   "  return true", run: [MINOR] },
 
   { name: "total: the shared reader loses the doctoral form", file: PARSER,
     from: "    [new RegExp(`a\\\\s+minimum\\\\s+of\\\\s+${N}\\\\s+${UNIT}[^.]*?beyond\\\\s+the\\\\s+(?:under)?graduate\\\\s+degree`, 'i'),",
