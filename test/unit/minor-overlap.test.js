@@ -233,22 +233,29 @@ test("minor share › releases are checked TOGETHER, not one at a time", () => {
 });
 
 test("minor share › a swap that robs one requirement to pay another is refused", () => {
-  // Total satisfied credit is the tempting comparison and it is wrong: dropping
-  // BB2000 frees CC3000 for the second requirement, so the total is unchanged
-  // while the first requirement goes from satisfied to unsatisfied. The
-  // per-section test catches it; a total would call it harmless.
+  // Comparing TOTAL satisfied credit is the tempting shortcut and it is wrong:
+  // one requirement can gain exactly what another loses, and the sum says
+  // nothing happened while a requirement just broke.
+  //
+  // The callback here is deliberately NON-MONOTONE — section 2 is satisfied
+  // only once BB2000 is gone — because that is the contract being tested. The
+  // guard promises "every section at least as satisfied", not "the allocator
+  // I happen to ship is monotone", and a first version of this test used a
+  // well-behaved stand-in whose total dropped anyway. It asserted the right
+  // outcome for the wrong reason and the mutation probe caught it: the
+  // sum-comparing mutant survived with this test green.
   const one = minor(SECTION("Core", 1, C("BB", 2000)));
   const claim = (placed) => {
     const set = placed instanceof Set ? placed : new Set(placed);
-    const first  = set.has("BB2000") ? "BB2000" : null;
-    const second = set.has("CC3000") && first !== "CC3000" ? "CC3000" : null;
-    return {
-      sat: [first ? 4 : 0, second ? 4 : 0],
-      claimed: new Set([first, second].filter(Boolean)),
-    };
+    const has = set.has("BB2000");
+    return { sat: [has ? 4 : 0, has ? 0 : 4], claimed: new Set(has ? ["BB2000"] : []) };
   };
   const placed = new Set(["BB2000", "CC3000"]);
-  const r = minorShare({ minor: one, placedSet: placed, majorKeys: claim(placed).claimed,
+  const base = claim(placed);
+  assert.equal(base.sat.reduce((a, b) => a + b, 0),
+               claim(new Set(["CC3000"])).sat.reduce((a, b) => a + b, 0),
+               "the fixture must hold the TOTAL constant, or it proves nothing");
+  const r = minorShare({ minor: one, placedSet: placed, majorKeys: base.claimed,
                          courseMap: CM, majorClaim: claim });
   assert.deepEqual(r.releasedKeys, [], "released a course the major still needed");
 });
@@ -263,7 +270,14 @@ test("minor share › a malformed majorClaim is declined, not trusted", () => {
     () => ({ sat: "lots", claimed: new Set() }),   // sat not an array
     () => { throw new Error("boom"); },
     // Different section count between calls — the two runs are not comparable.
-    (() => { let n = 0; return () => ({ sat: new Array(++n).fill(4), claimed: new Set() }); })(),
+    //
+    // SHRINKING, not growing, and that distinction is the whole test. A longer
+    // second array fails the element-wise compare on its own (`>= undefined` is
+    // false), so it would pass with no length check at all: the probe showed
+    // the length guard surviving deletion against a growing fixture. A SHORTER
+    // one is the dangerous shape — every element of it can match while a whole
+    // section has silently vanished — so it is the one that has to be here.
+    (() => { let n = 3; return () => ({ sat: new Array(n--).fill(4), claimed: new Set() }); })(),
   ];
   for (const majorClaim of junk) {
     let r;
