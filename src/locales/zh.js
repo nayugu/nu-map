@@ -537,7 +537,7 @@ export const strings = {
   "grad.share.scope":             "同时计入你的专业",
   "grad.share.over":              "超出上限 {sh} SH — 这部分辅修必须由专业不计入的课程来完成",
   "grad.share.policy":            "东北大学最多允许辅修所需学分的 {pct}% 同时计入专业 — 本辅修共需 {required} SH，其中 {cap} SH 可重复计入。",
-  "grad.share.replaceable":       "你已安排的其他课程可以顶替其中一部分，因此只有 {sh} SH 计入上限。",
+  "grad.share.replaceable":       "你的专业与辅修可以这样安排：只有 {sh} SH 被重复计入。",
   "grad.conc.search":        "\u2315 \u641c\u7d22\u65b9\u5411",
   "grad.minor1.label":       "\u8f85\u4fee 1",
   "grad.minor2.label":       "\u8f85\u4fee 2",

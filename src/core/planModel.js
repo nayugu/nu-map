@@ -1,8 +1,9 @@
 // ═══════════════════════════════════════════════════════════════════
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
-import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirements.js";
+import { buildPlacedKeySet, allocateMajorWithElectives, allocateMajorSections } from "./gradRequirements.js";
 import { generalElectiveSHOf } from "./requirementBinding.js";
+import { satisfiedOf, DEFAULT_UNIT_SH } from "./requirementDemand.js";
 import { minorShare, MINOR_SHARE_FRACTION } from "./minorOverlap.js";
 import { resolveTermByDuration, termSpans, computeGrantedAttrs, workTermGrants } from "./specialTermUtils.js";
 import { dropVoidTakes, dropUnearnedTakes } from "./gradeSystem.js";
@@ -634,19 +635,35 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   ) ?? new Set();
 
   /**
-   * Course keys a MAJOR's requirements claim, filled as the majors render.
+   * What the MAJORS claim, over any hypothetical placed set.
    *
    * Feeds the minors' double-counting line below, and nothing else. It excludes
    * General Electives by construction (`allocatedSet` is the requirement claim)
    * — a minor course landing in the degree's free electives is not shared
    * credit, it is the room a minor is meant to occupy.
    *
+   * A function rather than a set accumulated while the majors render, for two
+   * reasons: the cap needs counterfactuals (see core/minorOverlap.js), and the
+   * accumulating version made the answer depend on `reqHtml` evaluating its
+   * array literal left to right, which is true and is a silly thing to rest on.
+   *
    * ⚠ The printed report does not apply the concentration to either major, and
    * never has, so a course claimed only by a concentration is missing here.
    * That makes the printed figure a LOWER bound on the screen's, which is the
    * permissive direction; it is a gap in the export, not in the rule.
    */
-  const majorClaimed = new Set();
+  const majorClaim = (placed) => {
+    const claimed = new Set();
+    const sat = [];
+    for (const prog of [major, major2]) {
+      if (!prog) continue;
+      const { sections, allocatedSet } = allocateMajorSections(prog, placed, courseMap);
+      for (const s of sections) sat.push(satisfiedOf(s, DEFAULT_UNIT_SH, courseMap));
+      allocatedSet.forEach(k => claimed.add(k));
+    }
+    return { sat, claimed };
+  };
+  const majorClaimedKeys = isGrad ? new Set() : majorClaim(placedSet).claimed;
 
   function renderProgram(prog, doneKeysSet, headerLabel, name, showGeneralElectives = true,
                          isMinor = false) {
@@ -655,11 +672,10 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     // stated figure instead, so a printed plan could disagree with the screen it
     // was printed from — and for the 976 programs that state nothing it printed
     // a denominator of 0.
-    const { sections: majorSections, generalElectives, allocatedSet } = allocateMajorWithElectives(
+    const { sections: majorSections, generalElectives } = allocateMajorWithElectives(
       prog, placedSet, courseMap,
       { completedSet: doneKeysSet, realPlacedSet,
         geAllowance: generalElectiveSHOf(prog, courseMap) });
-    if (!isMinor) allocatedSet.forEach(k => majorClaimed.add(k));
     let sections = [...majorSections, generalElectives];
     if (!showGeneralElectives) {
       sections = sections.filter(s => s.title !== "General Electives");
@@ -673,7 +689,8 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   /** Northeastern's 50% cap on double counting a minor, as printed. */
   function shareNoteHtml(prog) {
     const line = _minorShareNote(
-      minorShare({ minor: prog, placedSet, majorKeys: majorClaimed, courseMap }), unitName);
+      minorShare({ minor: prog, placedSet, majorKeys: majorClaimedKeys, courseMap, majorClaim }),
+      unitName);
     return line ? `<div class="sec-note">${esc(line)}</div>` : "";
   }
 

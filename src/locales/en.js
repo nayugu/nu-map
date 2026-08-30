@@ -659,7 +659,12 @@ export const strings = {
   "grad.share.scope":             "also counts toward your major",
   "grad.share.over":              "{sh} SH over the limit — that much of the minor has to come from courses your major doesn’t count",
   "grad.share.policy":            "Northeastern lets at most {pct}% of the credit a minor requires also count toward your major — {cap} of the {required} SH this minor requires.",
-  "grad.share.replaceable":       "Other courses you’ve placed could take some of these slots, so only {sh} SH counts against the limit.",
+  // Shown when the courses listed above carry more credit than the figure. Both
+  // ways that happens are the same fact for a student — some of this overlap is
+  // avoidable with the courses already on the board, either because the minor
+  // has another course for that slot or because the major does — so one
+  // sentence covers both rather than explaining our allocator to them.
+  "grad.share.replaceable":       "Your major and minor can be arranged so only {sh} SH is counted twice.",
   "grad.conc.search":       "\u2315 search concentrations",
   "grad.minor1.label":      "MINOR 1",
   "grad.minor2.label":      "MINOR 2",

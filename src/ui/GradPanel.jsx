@@ -7,7 +7,7 @@
 // Double major: courses count freely toward both majors (NU policy).
 // Each major is allocated independently with allocateMajorWithElectives.
 // ═══════════════════════════════════════════════════════════════════
-import { useState, useMemo, useEffect, useContext, createContext, useRef } from "react";
+import { useState, useMemo, useEffect, useContext, createContext, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import VerificationPopover from "./VerificationPopover.jsx";
 import { usePlanner }         from "../context/PlannerContext.jsx";
@@ -40,6 +40,7 @@ import {
   calculateGeneralElectives,
 } from "../core/gradRequirements.js";
 import { generalElectiveSHOf } from "../core/requirementBinding.js";
+import { satisfiedOf, DEFAULT_UNIT_SH } from "../core/requirementDemand.js";
 import { minorShare, minorRequirementSections, MINOR_SHARE_FRACTION } from "../core/minorOverlap.js";
 import { findNewerMajorVersion, findNewerGradMajorVersion } from "../data/majorLoader.js";
 import { rankOptions } from "../core/searchRank.js";
@@ -1425,7 +1426,8 @@ function VerificationPill({ verification, verified, t, isPhone, isMobile }) {
   );
 }
 
-function MinorBlock({ path, onClear, placedSet, doneSet, majorKeys, label = "MINOR", nameColor }) {
+function MinorBlock({ path, onClear, placedSet, doneSet, majorKeys, majorClaim,
+                      label = "MINOR", nameColor }) {
   const { courseMap, majorRequirements, isPhone, isMobile } = useContext(GradCtx);
   const { t } = useLanguage();
   const [minor, setMinor] = useState(null);
@@ -1466,8 +1468,8 @@ function MinorBlock({ path, onClear, placedSet, doneSet, majorKeys, label = "MIN
   // and a limit only reported once the courses are behind them is a limit
   // reported too late to act on.
   const share = useMemo(
-    () => (minor ? minorShare({ minor, placedSet, majorKeys, courseMap }) : null),
-    [minor, placedSet, majorKeys, courseMap]
+    () => (minor ? minorShare({ minor, placedSet, majorKeys, courseMap, majorClaim }) : null),
+    [minor, placedSet, majorKeys, courseMap, majorClaim]
   );
 
   // Sum using the SAME logic as SectionBlock's display numbers
@@ -2098,8 +2100,8 @@ export default function GradPanel({ wideCatalog = false }) {
   const geAllowance  = useMemo(() => generalElectiveSHOf(major, courseMap), [major, courseMap]);
   const geAllowance2 = useMemo(() => generalElectiveSHOf(major2Data, courseMap), [major2Data, courseMap]);
 
-  const { majorSections, concSection, majorUsed } = useMemo(() => {
-    if (!major) return { majorSections: [], concSection: null, majorUsed: new Set() };
+  const { majorSections, concSection } = useMemo(() => {
+    if (!major) return { majorSections: [], concSection: null };
 
     // Allocate major requirements first, WITHOUT General Electives yet.
     const { sections: majorResults, allocatedSet } = allocateMajorSections(major, placedSet, courseMap);
@@ -2128,11 +2130,7 @@ export default function GradPanel({ wideCatalog = false }) {
     );
     const majorWithElectives = [...majorResults, generalElectives];
 
-    // `allocatedSet` is the requirement-and-concentration claim, and stops
-    // there on purpose: General Electives is not the major, so a minor course
-    // landing in it is not double-counted credit — it is the free-elective room
-    // a minor is meant to occupy. See core/minorOverlap.js.
-    return { majorSections: majorWithElectives, concSection: concAllocated, majorUsed: allocatedSet };
+    return { majorSections: majorWithElectives, concSection: concAllocated };
   }, [allSections, placedSet, doneSet, realPlacedSet, courseMap, major, selConc, geAllowance]);
 
   const allocatedSections = concSection ? [...majorSections, concSection] : majorSections;
@@ -2169,8 +2167,8 @@ export default function GradPanel({ wideCatalog = false }) {
   }, [majorSections, major1DoneSections, totalSHDone, totalSHPlaced, major]);
 
   // ── Second major allocation (courses double-count freely per NU policy) ─
-  const { sections: major2Sections, used: major2Used } = useMemo(() => {
-    if (!major2Data) return { sections: [], used: new Set() };
+  const major2Sections = useMemo(() => {
+    if (!major2Data) return [];
     const { sections, allocatedSet } = allocateMajorSections(major2Data, placedSet, courseMap);
     // Concentration shares this major's used set, so a course already counted
     // toward its requirements can't also satisfy its concentration — the same
@@ -2188,22 +2186,50 @@ export default function GradPanel({ wideCatalog = false }) {
     const generalElectives = calculateGeneralElectives(
       placedSet, allocatedSet, courseMap, geAllowance2, doneSet, candidateKeys, realPlacedSet
     );
-    return { sections: [...sections, generalElectives, ...concResults], used: allocatedSet };
+    return [...sections, generalElectives, ...concResults];
   }, [major2Data, placedSet, courseMap, doneSet, realPlacedSet, selConc2, geAllowance2]);
 
   /**
-   * Every course key a MAJOR's requirements claim — both majors, both
-   * concentrations, general electives excluded.
+   * What the MAJORS claim, over any hypothetical placed set.
    *
-   * Read off the allocations already computed above rather than allocated a
-   * third time. A second opinion about what the major claimed is exactly how
-   * the minor card comes to report an overlap the major card does not show.
+   * Both majors, both concentrations, General Electives excluded — a minor
+   * course landing in the degree's free electives is not double-counted credit,
+   * it is the room a minor is meant to occupy.
+   *
+   * A FUNCTION rather than a value because the double-counting cap has to ask
+   * counterfactuals: "could the major have satisfied that requirement without
+   * this course?" (see core/minorOverlap.js). Returning per-section satisfied
+   * credit rather than one total is what makes the answer trustworthy — a total
+   * cannot tell "nothing changed" from "one section lost exactly what another
+   * gained", and the second is a broken requirement.
+   *
+   * It repeats the allocation the display memos above already ran for the real
+   * placed set. That is duplicated WORK, not a duplicated opinion: same
+   * function, same inputs, same result — and `allocateMajorSections` is 0.1 ms
+   * on the largest undergraduate program.
    */
-  const majorClaimedKeys = useMemo(() => {
-    if (!major2Used.size) return majorUsed;
-    if (!majorUsed.size)  return major2Used;
-    return new Set([...majorUsed, ...major2Used]);
-  }, [majorUsed, major2Used]);
+  const majorClaim = useCallback((placed) => {
+    const claimed = new Set();
+    const sat = [];
+    for (const [m, c] of [[major, selConc], [major2Data, selConc2]]) {
+      if (!m) continue;
+      const { sections, allocatedSet } = allocateMajorSections(m, placed, courseMap);
+      const all = [...sections];
+      if (c && m.concentrations) {
+        const chosen = resolveConcentration(m, c);
+        if (chosen) all.push(...allocateSections([chosen], placed, allocatedSet, courseMap));
+      }
+      // A CONSTANT unit, not the per-section modal credit: the two runs being
+      // compared must measure the same way, and `typicalSH` needs the raw
+      // section, which `mergeDuplicateSections` no longer lines up with.
+      for (const s of all) sat.push(satisfiedOf(s, DEFAULT_UNIT_SH, courseMap));
+      allocatedSet.forEach(k => claimed.add(k));
+    }
+    return { sat, claimed };
+  }, [major, major2Data, selConc, selConc2, courseMap]);
+
+  const majorClaimedKeys = useMemo(() => majorClaim(placedSet).claimed,
+                                   [majorClaim, placedSet]);
 
   const major2DoneSections = useMemo(() => {
     if (!major2Data) return [];
@@ -2629,8 +2655,8 @@ export default function GradPanel({ wideCatalog = false }) {
         </MajorCard>}
 
         {/* ── Minor requirement sections — undergrad only ─────── */}
-        {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} label={t("grad.minor1.label")} nameColor={claudePreview?.changed?.has?.("minor1") ? "#fb923c" : undefined} />}
-        {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} label={t("grad.minor2.label")} nameColor={claudePreview?.changed?.has?.("minor2") ? "#fb923c" : undefined} />}
+        {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} majorClaim={majorClaim} label={t("grad.minor1.label")} nameColor={claudePreview?.changed?.has?.("minor1") ? "#fb923c" : undefined} />}
+        {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} majorClaim={majorClaim} label={t("grad.minor2.label")} nameColor={claudePreview?.changed?.has?.("minor2") ? "#fb923c" : undefined} />}
 
         {/* ── PlusOne — after the minors, matching the selector order above.
                Last of the program cards because it is the only one that is

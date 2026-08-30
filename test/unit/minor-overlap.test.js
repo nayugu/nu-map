@@ -155,6 +155,138 @@ test("minor share › the courses listed can exceed the credit charged, never th
   assert.equal(r.dependentSH, 4, "with both alternatives in the major, the slot is shared");
 });
 
+// ── The major-side release ───────────────────────────────────────
+// A course only counts toward both if BOTH audits claim it, and this app
+// chooses both assignments. So when the major could have satisfied its
+// requirement with another course the student already placed, the overlap is
+// ours, not the plan's. Measured: 1 of 19 over-cap verdicts in a 6,920-pair
+// sweep is a false violation without this.
+
+/**
+ * A stand-in for the panel's major allocator.
+ *
+ * `pools` is a list of course-key arrays: each pool is one major requirement
+ * satisfied by ANY ONE of its courses. That is the shape the release exists
+ * for, and it is enough to test the contract (`sat` per requirement, `claimed`)
+ * without dragging a whole program record in.
+ */
+const majorOf = (...pools) => (placed) => {
+  const set = placed instanceof Set ? placed : new Set(placed);
+  const claimed = new Set();
+  const sat = [];
+  for (const pool of pools) {
+    const pick = pool.find(k => set.has(k) && !claimed.has(k));
+    if (pick) claimed.add(pick);
+    sat.push(pick ? (CM[pick]?.sh ?? 0) : 0);
+  }
+  return { sat, claimed };
+};
+
+test("minor share › a shared course the MAJOR could swap out is not charged", () => {
+  // The major's one requirement takes AA1000 or CC3000; both are placed. The
+  // minor needs AA1000 and AA1001 (8 SH, cap 4), so greedily the whole minor
+  // reads as double-counted — but the major has CC3000 sitting right there.
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const claim = majorOf(["AA1000", "CC3000"], ["AA1001"]);
+  const placed = new Set(["AA1000", "AA1001", "CC3000"]);
+  const majorKeys = claim(placed).claimed;
+
+  const strict = minorShare({ minor: two, placedSet: placed, majorKeys, courseMap: CM });
+  assert.equal(strict.over, true, "without the release this is a violation");
+  assert.equal(strict.dependentSH, 8);
+
+  const fair = minorShare({ minor: two, placedSet: placed, majorKeys, courseMap: CM,
+                            majorClaim: claim });
+  assert.deepEqual(fair.releasedKeys, ["AA1000"]);
+  assert.equal(fair.dependentSH, 4, "only AA1001, which the major genuinely needs");
+  assert.equal(fair.over, false);
+  // The listing is unchanged: both courses really are ticked under the major on
+  // the card beside this one, and hiding that would make the two disagree.
+  assert.deepEqual(fair.sharedKeys, ["AA1000", "AA1001"]);
+});
+
+test("minor share › a course the major CANNOT do without is still charged", () => {
+  // The mirror image, and the one that matters: an alternative that is not
+  // placed is not an alternative. If this ever passes for the same reason as
+  // the test above, the release has stopped testing anything.
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const claim = majorOf(["AA1000", "CC3000"], ["AA1001"]);
+  const placed = new Set(["AA1000", "AA1001"]);            // no CC3000 on the board
+  const r = minorShare({ minor: two, placedSet: placed, majorKeys: claim(placed).claimed,
+                         courseMap: CM, majorClaim: claim });
+  assert.deepEqual(r.releasedKeys, []);
+  assert.equal(r.dependentSH, 8);
+  assert.equal(r.over, true);
+});
+
+test("minor share › releases are checked TOGETHER, not one at a time", () => {
+  // Two major requirements, both able to fall back on CC3000 — but there is
+  // only one CC3000. Each release is harmless alone and they are not harmless
+  // together, which is exactly what a per-course test would miss.
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const claim = majorOf(["AA1000", "CC3000"], ["AA1001", "CC3000"]);
+  const placed = new Set(["AA1000", "AA1001", "CC3000"]);
+  const r = minorShare({ minor: two, placedSet: placed, majorKeys: claim(placed).claimed,
+                         courseMap: CM, majorClaim: claim });
+  assert.equal(r.releasedKeys.length, 1, `released ${r.releasedKeys} — both cannot go`);
+  assert.equal(r.dependentSH, 4);
+});
+
+test("minor share › a swap that robs one requirement to pay another is refused", () => {
+  // Total satisfied credit is the tempting comparison and it is wrong: dropping
+  // BB2000 frees CC3000 for the second requirement, so the total is unchanged
+  // while the first requirement goes from satisfied to unsatisfied. The
+  // per-section test catches it; a total would call it harmless.
+  const one = minor(SECTION("Core", 1, C("BB", 2000)));
+  const claim = (placed) => {
+    const set = placed instanceof Set ? placed : new Set(placed);
+    const first  = set.has("BB2000") ? "BB2000" : null;
+    const second = set.has("CC3000") && first !== "CC3000" ? "CC3000" : null;
+    return {
+      sat: [first ? 4 : 0, second ? 4 : 0],
+      claimed: new Set([first, second].filter(Boolean)),
+    };
+  };
+  const placed = new Set(["BB2000", "CC3000"]);
+  const r = minorShare({ minor: one, placedSet: placed, majorKeys: claim(placed).claimed,
+                         courseMap: CM, majorClaim: claim });
+  assert.deepEqual(r.releasedKeys, [], "released a course the major still needed");
+});
+
+test("minor share › a malformed majorClaim is declined, not trusted", () => {
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const placed = new Set(["AA1000", "AA1001"]);
+  const majorKeys = new Set(["AA1000", "AA1001"]);
+  const junk = [
+    () => null,
+    () => ({}),                                    // no sat
+    () => ({ sat: "lots", claimed: new Set() }),   // sat not an array
+    () => { throw new Error("boom"); },
+    // Different section count between calls — the two runs are not comparable.
+    (() => { let n = 0; return () => ({ sat: new Array(++n).fill(4), claimed: new Set() }); })(),
+  ];
+  for (const majorClaim of junk) {
+    let r;
+    try { r = minorShare({ minor: two, placedSet: placed, majorKeys, courseMap: CM, majorClaim }); }
+    catch (e) { assert.fail(`threw on a bad callback: ${e.message}`); }
+    assert.equal(r.over, true, "declined to the strict answer, as it must");
+    assert.deepEqual(r.releasedKeys, []);
+  }
+});
+
+test("minor share › the release cannot run when nothing is over", () => {
+  // It is only applied where it changes the verdict — see the note in
+  // minorOverlap.js about the major card showing the greedy allocation.
+  let calls = 0;
+  const claim = (placed) => { calls++; return majorOf(["AA1000", "CC3000"])(placed); };
+  const three = THREE;                                     // 12 SH, cap 6
+  const placed = new Set([...ALL_THREE, "CC3000"]);
+  const r = minorShare({ minor: three, placedSet: placed, majorKeys: new Set(["AA1000"]),
+                         courseMap: CM, majorClaim: claim });
+  assert.equal(r.over, false);
+  assert.equal(calls, 0, "the callback ran for a plan that was already inside the cap");
+});
+
 // ── Invention ────────────────────────────────────────────────────
 
 test("minor share › a major course the minor does not claim is not shared", () => {

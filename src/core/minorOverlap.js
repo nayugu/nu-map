@@ -33,26 +33,36 @@
 //
 // ── The denominator, and why it is derived ────────────────────────
 //
-// "the credits required for a minor" is not published in a field we hold:
-// measured 2026-08-30, **0 of 173 shipped minors** carry a non-zero
-// `totalCreditsRequired`, and `verify-majors` flags every one of them as
-// `missing-total-credits`. The pages really are quiet about it — the Arabic
-// minor states "A total of five courses is required" in prose and nothing else
-// — with exactly one exception (Computer Science, whose "20 semester hours
-// required" is currently swallowed into the Credit/GPA row's text). So the
-// requirement is read off the same allocator the rest of the audit uses:
-// Σ `demandOf` over the minor's sections, which gets Arabic right at 16 + 4.
+// "the credits required for a minor" is mostly not published in a field we
+// hold: 169 of 181 minor pages state no total at all, and the 12 that do state
+// one shipped as `totalCreditsRequired: 0` until the scraper learned to read a
+// minor-sized figure (see MINOR_CREDIT_WINDOW in catalog-program-parser.js).
+// So the requirement is read off the same allocator the rest of the audit uses:
+// Σ `demandOf` over the minor's sections.
 //
-// ⚠ That sum is inflated for the minors whose page prints an elective's MENU
-// as sibling sections — Computer Science derives 52 SH against a stated 20,
-// because seven of its ten sections are the colleges making up the "Khoury
-// meaningful minors list"; Biochemical Engineering derives 56 SH because its
-// supporting math and science are listed in full. This is the same defect
-// CLAUDE.md records for Data Science MSAlign, it is not introduced here, and
-// its effect on this rule is to make the cap too GENEROUS (26 SH where the
-// truth is 10). A missed warning leaves a student where they already were; a
-// false one tells them to take courses they do not owe. `totalCreditsRequired`
-// is preferred whenever a future scrape supplies it.
+// Those 12 are the only place that derivation can be CHECKED against the
+// registrar, and it holds: derived equals stated exactly on **9 of 10** minors
+// where both numbers exist — Aerospace 20, Audiology 15, Behavioral
+// Neuroscience 20, English 16, Global Perspectives in Engineering 24, and the
+// rest. Not "within a credit": equal.
+//
+// ⚠ The tenth is Computer Science, Minor, which derives **52 SH against a page
+// that says 20**, because eight of its ten parsed sections are the colleges
+// making up the "Khoury meaningful minors list" — one elective's MENU, printed
+// as siblings of the requirement it belongs to. That is the defect CLAUDE.md
+// records for Data Science MSAlign, it lives in the section parse, and it is
+// not repaired here.
+//
+// It is deliberately not repaired by preferring `totalCreditsRequired` either,
+// which is the obvious move and is wrong: the denominator would become the
+// registrar's 20 while the numerator went on being counted against the same
+// inflated sections, and a course claimed by one of those phantom menu sections
+// would then be charged against a cap less than half the size. Two accountings,
+// one subtraction — the trap `demandOf` and `satisfiedOf` were merged to avoid.
+// Left as it is, the cap on that one minor is too GENEROUS (26 SH where the
+// truth is 10), and that is the survivable direction: a missed warning leaves a
+// student where they already were, a false one tells them to take courses they
+// do not owe.
 // ═══════════════════════════════════════════════════════════════════
 
 import { allocateSections } from "./gradRequirements.js";
@@ -111,19 +121,64 @@ export function minorRequirementSections(minor) {
  * 4 SH on this one, so the plain reading would have declared a violation of a
  * 10 SH cap that the student's own placed courses already avoid.
  *
+ * ── The MAJOR gets the same defence, and it needed it ─────────────
+ *
+ * The minor-side measure above only asks whether the MINOR could have reached
+ * its credit another way. The symmetric question — could the MAJOR have
+ * satisfied that requirement with a different course the student already
+ * placed? — is just as real, and answering "no" by default is what makes the
+ * whole thing lopsided: a course only counts toward both if BOTH audits claim
+ * it, and this app chooses both assignments.
+ *
+ * Releasing a shared course from the major is free, which is the property that
+ * makes it legitimate rather than wishful. The major swaps in another placed
+ * course for that requirement and the released one becomes a general elective;
+ * both were already on the board, so the degree total does not move by a single
+ * credit. It is a re-labelling, and NU's own audit would accept either label.
+ *
+ * So when the naive reading says "over", `majorClaim` is asked whether the
+ * major can do without each shared course — accumulating, so what comes back is
+ * a set the major can release ALL AT ONCE, not a list of individually harmless
+ * removals. The test is per-section and one-directional (`every section at
+ * least as satisfied`), not a comparison of totals: removing a course can free
+ * one the greedy allocator was hoarding, so a section can gain exactly as
+ * another loses, and a total would call that swap harmless when it just broke a
+ * requirement.
+ *
+ * Measured over 6,920 pairs (40 majors x all 173 minors): the cap fires 19
+ * times, 5 of those have a releasable shared course, and **1 verdict flips** —
+ * Video Arts minor against Media and Screen Studies and Theatre BA, 22 SH
+ * against a 20 SH cap, where the major has another way to fill the requirement.
+ * One false violation in nineteen is the expensive direction, and the pass
+ * costs 0.1 ms per allocation on the largest undergraduate program.
+ *
+ * The release runs ONLY when the naive verdict is "over", and that is a
+ * decision about the panel rather than about speed: the major card on screen
+ * shows the greedy allocation, so quietly re-labelling a course the student can
+ * see ticked under a major requirement would make the two cards contradict each
+ * other. Applied only where it changes the verdict, the story stays coherent —
+ * "these courses count toward both, and there is an arrangement that fits".
+ *
  * @param {object}      args.minor      minor program record (Major2 JSON shape)
  * @param {Set<string>} args.placedSet  canonical keys of everything placed
  * @param {Set<string>} args.majorKeys  keys claimed by a major's requirement
  *                                      sections (concentration included,
  *                                      general electives excluded)
  * @param {Record<string, object>} args.courseMap
+ * @param {null | ((placed: Set<string>) => {sat: number[], claimed: Set<string>})}
+ *        args.majorClaim  re-runs the MAJOR's allocation over a hypothetical
+ *        placed set, returning per-section satisfied credit and the claimed
+ *        keys. Optional: without it the release pass cannot run and the answer
+ *        is the stricter one, so a caller that can supply it should.
  * @returns {null | {requiredSH: number, capSH: number, sharedSH: number,
  *                   dependentSH: number, claimedSH: number, uniqueSH: number,
- *                   overSH: number, over: boolean, sharedKeys: string[]}}
+ *                   overSH: number, over: boolean, sharedKeys: string[],
+ *                   releasedKeys: string[]}}
  *          null when the minor states no requirement at all — there is no
  *          denominator, so there is no percentage to report.
  */
-export function minorShare({ minor, placedSet, majorKeys, courseMap = {} } = {}) {
+export function minorShare({ minor, placedSet, majorKeys, courseMap = {},
+                             majorClaim = null } = {}) {
   const sections = minorRequirementSections(minor);
   if (!sections.length) return null;
 
@@ -138,29 +193,84 @@ export function minorShare({ minor, placedSet, majorKeys, courseMap = {} } = {})
   const full = allocateSections(sections, placed, claimed, courseMap);
   const requiredSH = sections.reduce((n, _, i) => n + demandOf(full[i], units[i], courseMap), 0);
   const claimedSH  = sections.reduce((n, _, i) => n + satisfiedOf(full[i], units[i], courseMap), 0);
+  const capSH = requiredSH * MINOR_SHARE_FRACTION;
 
-  const sharedKeys = [...claimed].filter(k => major.has(k));
+  const sharedKeys = [...claimed].filter(k => major.has(k)).sort();
   const sharedSH = sharedKeys.reduce((n, k) => n + (courseMap[k]?.sh ?? 0), 0);
 
-  // The same minor, allocated as if the major's courses had never been placed.
-  // Only run when something is actually shared — otherwise the answer is
-  // `claimedSH` by construction and the second allocation is pure cost.
-  let uniqueSH = claimedSH;
-  if (sharedKeys.length) {
-    const withheld = new Set([...placed].filter(k => !major.has(k)));
-    const alone = allocateSections(sections, withheld, new Set(), courseMap);
-    uniqueSH = sections.reduce((n, _, i) => n + satisfiedOf(alone[i], units[i], courseMap), 0);
+  /** Credit the minor reaches without the courses in `blocked`. */
+  const minorWithout = (blocked) => {
+    if (!blocked.size) return claimedSH;
+    const pool = new Set([...placed].filter(k => !blocked.has(k)));
+    const alone = allocateSections(sections, pool, new Set(), courseMap);
+    return sections.reduce((n, _, i) => n + satisfiedOf(alone[i], units[i], courseMap), 0);
+  };
+
+  // Nothing shared → nothing to charge, and the two extra allocations below
+  // would only rediscover `claimedSH`.
+  if (!sharedKeys.length) {
+    return { requiredSH, capSH, sharedSH: 0, dependentSH: 0, claimedSH,
+             uniqueSH: claimedSH, overSH: 0, over: false,
+             sharedKeys: [], releasedKeys: [] };
   }
-  const dependentSH = Math.max(0, claimedSH - uniqueSH);
 
-  const capSH = requiredSH * MINOR_SHARE_FRACTION;
-  const over  = dependentSH - capSH > EPS;
+  let uniqueSH = minorWithout(major);
+  let dependentSH = Math.max(0, claimedSH - uniqueSH);
+  let releasedKeys = [];
 
+  if (dependentSH - capSH > EPS && typeof majorClaim === "function") {
+    releasedKeys = releasableFromMajor(sharedKeys, placed, majorClaim, courseMap);
+    if (releasedKeys.length) {
+      const stillClaimed = new Set([...major].filter(k => !releasedKeys.includes(k)));
+      uniqueSH = minorWithout(stillClaimed);
+      dependentSH = Math.max(0, claimedSH - uniqueSH);
+    }
+  }
+
+  const over = dependentSH - capSH > EPS;
   return {
     requiredSH, capSH, sharedSH, dependentSH, claimedSH, uniqueSH,
     overSH: over ? dependentSH - capSH : 0,
     over,
-    // Stable order so the expansion does not reshuffle between renders.
-    sharedKeys: sharedKeys.sort(),
+    sharedKeys,
+    releasedKeys,
   };
+}
+
+/**
+ * The largest set of shared courses the major can do without ALL AT ONCE.
+ *
+ * Greedy over an independence system: dropping fewer courses can never satisfy
+ * less than dropping more, so "the major survives without this set" is
+ * downward-closed and adding one at a time never has to backtrack. It yields a
+ * maximal set, not necessarily a maximum one — which errs toward charging more
+ * shared credit, the safe direction.
+ *
+ * Biggest courses first, because the point is to release credit rather than
+ * course count, and a 5 SH course the major can spare is worth more to the
+ * student than a 1 SH lab.
+ */
+function releasableFromMajor(sharedKeys, placed, majorClaim, courseMap) {
+  // The callback belongs to a caller — the panel's own allocator, a report's,
+  // a test's — and this runs inside the graduation audit. A callback that
+  // throws must cost the student a slightly stricter figure, not the panel.
+  const ask = (set) => { try { return majorClaim(set); } catch { return null; } };
+
+  const base = ask(placed);
+  if (!base || !Array.isArray(base.sat)) return [];
+  const order = [...sharedKeys].sort(
+    (a, b) => (courseMap[b]?.sh ?? 0) - (courseMap[a]?.sh ?? 0) || a.localeCompare(b));
+
+  const released = [];
+  for (const key of order) {
+    const without = new Set(placed);
+    for (const r of released) without.delete(r);
+    without.delete(key);
+    const next = ask(without);
+    // A different number of sections means the two runs are not comparable —
+    // decline rather than compare whatever lines up.
+    if (!next || !Array.isArray(next.sat) || next.sat.length !== base.sat.length) continue;
+    if (next.sat.every((sh, i) => sh >= base.sat[i] - EPS)) released.push(key);
+  }
+  return released.sort();
 }
