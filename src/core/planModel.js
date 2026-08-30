@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirements.js";
 import { generalElectiveSHOf } from "./requirementBinding.js";
+import { minorShare, MINOR_SHARE_FRACTION } from "./minorOverlap.js";
 import { resolveTermByDuration, termSpans, computeGrantedAttrs, workTermGrants } from "./specialTermUtils.js";
 import { dropVoidTakes, dropUnearnedTakes } from "./gradeSystem.js";
 import { resolveCompanyLogo } from "./companyLogo.js";
@@ -415,6 +416,34 @@ function sectionHtml(sec, doneKeys) {
 export const _sectionHtml = sectionHtml;
 
 /**
+ * The printed sentence for Northeastern's 50% cap on double counting a minor.
+ *
+ * Module level, not nested in `exportReport`, for the same reason as
+ * `_sectionHtml`: this is a claim an advisor reads off paper, and it must be
+ * checkable without opening a print window. English only, like the rest of the
+ * export.
+ *
+ * Printed whether or not the cap is exceeded — the budget is as much use to the
+ * advisor as the breach, and a line that appears only in trouble reads as an
+ * accusation rather than a figure.
+ *
+ * @param {ReturnType<import("./minorOverlap.js").minorShare>} share
+ * @returns {string} the sentence, or "" when there is nothing measurable
+ */
+export function _minorShareNote(share, unitName = "SH") {
+  if (!share || !(share.requiredSH > 0)) return "";
+  const n = (sh) => (Number.isInteger(sh) ? String(sh) : sh.toFixed(1));
+  const pct = Math.round(MINOR_SHARE_FRACTION * 100);
+  return share.over
+    ? `Double counting: ${n(share.dependentSH)} of the ${n(share.requiredSH)} ${unitName} this `
+      + `minor requires also count toward the major — ${n(share.overSH)} ${unitName} over `
+      + `Northeastern's ${pct}% limit.`
+    : `Double counting: ${n(share.dependentSH)} of ${n(share.capSH)} ${unitName} shared with the `
+      + `major (Northeastern allows up to ${pct}% of the ${n(share.requiredSH)} ${unitName} this `
+      + `minor requires).`;
+}
+
+/**
  * The grade-scoped course sets a degree audit runs on.
  *
  * Extracted because this derivation had two implementations that disagreed.
@@ -604,30 +633,57 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     computeGrantedAttrs(specialTermPl, termTypes, dynSemIdx)
   ) ?? new Set();
 
-  function renderProgram(prog, doneKeysSet, headerLabel, name, showGeneralElectives = true) {
+  /**
+   * Course keys a MAJOR's requirements claim, filled as the majors render.
+   *
+   * Feeds the minors' double-counting line below, and nothing else. It excludes
+   * General Electives by construction (`allocatedSet` is the requirement claim)
+   * — a minor course landing in the degree's free electives is not shared
+   * credit, it is the room a minor is meant to occupy.
+   *
+   * ⚠ The printed report does not apply the concentration to either major, and
+   * never has, so a course claimed only by a concentration is missing here.
+   * That makes the printed figure a LOWER bound on the screen's, which is the
+   * permissive direction; it is a gap in the export, not in the rule.
+   */
+  const majorClaimed = new Set();
+
+  function renderProgram(prog, doneKeysSet, headerLabel, name, showGeneralElectives = true,
+                         isMinor = false) {
     if (!prog) return "";
     // The same residual the panel shows. The export used to take the catalog's
     // stated figure instead, so a printed plan could disagree with the screen it
     // was printed from — and for the 976 programs that state nothing it printed
     // a denominator of 0.
-    const { sections: majorSections, generalElectives } = allocateMajorWithElectives(
+    const { sections: majorSections, generalElectives, allocatedSet } = allocateMajorWithElectives(
       prog, placedSet, courseMap,
       { completedSet: doneKeysSet, realPlacedSet,
         geAllowance: generalElectiveSHOf(prog, courseMap) });
+    if (!isMinor) allocatedSet.forEach(k => majorClaimed.add(k));
     let sections = [...majorSections, generalElectives];
     if (!showGeneralElectives) {
       sections = sections.filter(s => s.title !== "General Electives");
     }
     const sectionsHtml = sections.map(s => sectionHtml(s, doneKeysSet)).join("");
     return `<div class="section-title">${esc(headerLabel)}<span class="prog-name">${esc(name)}</span></div>
+      ${isMinor ? shareNoteHtml(prog) : ""}
       ${sectionsHtml}`;
+  }
+
+  /** Northeastern's 50% cap on double counting a minor, as printed. */
+  function shareNoteHtml(prog) {
+    const line = _minorShareNote(
+      minorShare({ minor: prog, placedSet, majorKeys: majorClaimed, courseMap }), unitName);
+    return line ? `<div class="sec-note">${esc(line)}</div>` : "";
   }
 
   const reqHtml = [
     renderProgram(major,  doneKeys, major2 ? "Major 1 Requirements: " : "Major Requirements: ", major?.name ?? "",  true),
     major2 ? renderProgram(major2, doneKeys, "Major 2 Requirements: ", major2?.name ?? "", true) : "",
-    renderProgram(minor1, doneKeys, "Minor 1 Requirements: ", minor1?.name ?? "", false),
-    renderProgram(minor2, doneKeys, "Minor 2 Requirements: ", minor2?.name ?? "", false),
+    // The minors render AFTER both majors, which is also the order the double-
+    // counting line needs: `majorClaimed` is filled by the calls above.
+    renderProgram(minor1, doneKeys, "Minor 1 Requirements: ", minor1?.name ?? "", false, true),
+    renderProgram(minor2, doneKeys, "Minor 2 Requirements: ", minor2?.name ?? "", false, true),
   ].join("");
 
   // ── NUPath grid HTML ──────────────────────────────────────────

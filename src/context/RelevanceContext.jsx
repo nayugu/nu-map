@@ -25,6 +25,7 @@ import {
   courseEligible,
   countsAsElectiveOnly,
 } from "../core/programEligibility.js";
+import { minorRequirementSections } from "../core/minorOverlap.js";
 
 const EMPTY = new Set();
 const RelevanceContext = createContext({
@@ -37,11 +38,8 @@ const RelevanceContext = createContext({
 // major/minor allocation in RelevanceProvider (and the Graduation panel).
 function allocateProgram(p, placedSet, courseMap) {
   if (p.isMinor) {
-    const sections = (p.data.requirementSections ?? []).filter(
-      s => s.title !== "Required General Electives"
-    );
     const used = new Set();
-    allocateSections(sections, placedSet, used, courseMap);
+    allocateSections(minorRequirementSections(p.data), placedSet, used, courseMap);
     return used;
   }
   // Only the allocated set matters here, so this deliberately stops short of
@@ -141,11 +139,8 @@ export function RelevanceProvider({ children }) {
     const minorKeys = new Set();
     for (const m of [minor1Data, minor2Data]) {
       if (!m) continue;
-      const sections = (m.requirementSections ?? []).filter(
-        s => s.title !== "Required General Electives"
-      );
       const used = new Set();
-      allocateSections(sections, placedSet, used, courseMap);
+      allocateSections(minorRequirementSections(m), placedSet, used, courseMap);
       used.forEach(k => { if (!majorKeys.has(k)) minorKeys.add(k); });
     }
 

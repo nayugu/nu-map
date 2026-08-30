@@ -650,6 +650,16 @@ export const strings = {
   "grad.gpa.sofar":               "GPA SO FAR",
   "grad.gpa.sofar.n":             "from {n} graded",
   "grad.gpa.coop":                "below the {gpa} GPA needed to search for a co-op",
+  // ── The 50% cap on double counting a minor against a major ──────
+  // Only ever rendered on a minor card, so "your major" needs no qualifier and
+  // the word "minor" can be left implicit. `over` is deliberately actionable
+  // rather than a verdict: the plan is not refused, and the way out is more
+  // minor coursework the major does not claim.
+  "grad.share.title":             "Double counting",
+  "grad.share.scope":             "also counts toward your major",
+  "grad.share.over":              "{sh} SH over the limit — that much of the minor has to come from courses your major doesn’t count",
+  "grad.share.policy":            "Northeastern lets at most {pct}% of the credit a minor requires also count toward your major — {cap} of the {required} SH this minor requires.",
+  "grad.share.replaceable":       "Other courses you’ve placed could take some of these slots, so only {sh} SH counts against the limit.",
   "grad.conc.search":       "\u2315 search concentrations",
   "grad.minor1.label":      "MINOR 1",
   "grad.minor2.label":      "MINOR 2",

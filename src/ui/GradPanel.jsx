@@ -40,6 +40,7 @@ import {
   calculateGeneralElectives,
 } from "../core/gradRequirements.js";
 import { generalElectiveSHOf } from "../core/requirementBinding.js";
+import { minorShare, minorRequirementSections, MINOR_SHARE_FRACTION } from "../core/minorOverlap.js";
 import { findNewerMajorVersion, findNewerGradMajorVersion } from "../data/majorLoader.js";
 import { rankOptions } from "../core/searchRank.js";
 
@@ -945,6 +946,106 @@ function GpaRules({ program, programKind = "major" }) {
   );
 }
 
+// ── Double counting against the major ────────────────────────────
+// Northeastern lets at most half the credit a minor requires also count toward
+// the major (undergraduate catalog, Degrees, Majors, and Minors § Minors). The
+// arithmetic is `core/minorOverlap.js`; this only renders it, in the same
+// compact shape as a GPA rule, because it is the same kind of thing: a
+// program-level constraint that no single requirement row can express and that
+// no course can tick off.
+//
+// It never withholds credit. Over the cap the minor's rows and its progress bar
+// are unchanged and this row goes amber — the fix is "place minor coursework
+// the major doesn't claim", which is the student's decision to make, and
+// silently dropping a course from a requirement it genuinely satisfies would
+// make the audit disagree with the board.
+function SharedCredit({ share }) {
+  const { t } = useLanguage();
+  const { courseMap, isPhone } = useContext(GradCtx);
+  const [open, setOpen] = useState(false);
+
+  // A minor with no derivable requirement has no denominator, so there is no
+  // percentage to report — silence rather than a 0 that looks measured.
+  if (!share || share.requiredSH <= 0) return null;
+
+  // Credits are whole numbers in the catalog; the cap halves them, so it is the
+  // one figure here that can carry a .5.
+  const fmt = (sh) => (Number.isInteger(sh) ? String(sh) : sh.toFixed(1));
+  const color = share.over ? REL_STYLE["corequisite-viol"].color : "var(--text-5)";
+
+  return (
+    <div style={{ marginTop: 10, borderTop: "1px solid var(--border-2)", paddingTop: 9 }}>
+      <div onClick={() => setOpen(v => !v)}
+           style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
+                    cursor: "pointer", userSelect: "none", marginBottom: 6 }}>
+        <span style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)",
+                       letterSpacing: "0.05em" }}>
+          {t("grad.share.title")}
+        </span>
+        <span style={{ fontSize: 8, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
+      </div>
+
+      <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+        {share.over && (
+          <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, color, lineHeight: "14px" }}>!</span>
+        )}
+        <span style={{ flexShrink: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis",
+                       whiteSpace: "nowrap", fontSize: isPhone ? 8 : 9.5, fontWeight: 600,
+                       color: "var(--text-4)" }}>
+          {t("grad.share.scope")}
+        </span>
+        <span style={{ flex: 1 }} />
+        <span style={{ flexShrink: 0, fontSize: isPhone ? 8.5 : 10, fontWeight: 700,
+                       color: share.over ? color : "var(--text-2)", letterSpacing: 0,
+                       whiteSpace: "nowrap" }}>
+          {fmt(share.dependentSH)}
+          <span style={{ fontSize: isPhone ? 6.5 : 8, fontWeight: 500, color: "var(--text-5)",
+                         marginLeft: 3 }}>
+            /{fmt(share.capSH)} SH
+          </span>
+        </span>
+      </div>
+
+      {share.over && (
+        <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, color, marginTop: 2 }}>
+          {t("grad.share.over", { sh: fmt(share.overSH) })}
+        </div>
+      )}
+
+      {/* Provenance: the rule quoted, and exactly which courses are involved. */}
+      {open && (
+        <div style={{ margin: "5px 0 2px 0", paddingLeft: 8,
+                      borderLeft: "2px solid var(--border-2)" }}>
+          <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, color: "var(--text-5)" }}>
+            {t("grad.share.policy", { pct: Math.round(MINOR_SHARE_FRACTION * 100),
+                                      cap: fmt(share.capSH), required: fmt(share.requiredSH) })}
+          </div>
+          {share.sharedKeys.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "2px 8px", marginTop: 4 }}>
+              {share.sharedKeys.map(k => (
+                <span key={k} style={{ fontSize: isPhone ? 7.5 : 9, fontWeight: 700,
+                                       letterSpacing: 0, color: "var(--text-3)" }}>
+                  {courseMap[k]?.code ?? k}
+                </span>
+              ))}
+            </div>
+          )}
+          {/* Only when the greedy allocation reached for a major course a spare
+              non-major one could have covered — 4.2% of measured pairs. Without
+              this line the codes above look like they should add up to the
+              number, and they legitimately do not. */}
+          {share.sharedSH > share.dependentSH && (
+            <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, color: "var(--text-5)",
+                          marginTop: 4 }}>
+              {t("grad.share.replaceable", { sh: fmt(share.dependentSH) })}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── GPA so far ───────────────────────────────────────────────────
 // The one place the overall number renders, and only from ENTERED letter
 // grades — with none entered this returns null and no GPA exists anywhere
@@ -1324,7 +1425,7 @@ function VerificationPill({ verification, verified, t, isPhone, isMobile }) {
   );
 }
 
-function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameColor }) {
+function MinorBlock({ path, onClear, placedSet, doneSet, majorKeys, label = "MINOR", nameColor }) {
   const { courseMap, majorRequirements, isPhone, isMobile } = useContext(GradCtx);
   const { t } = useLanguage();
   const [minor, setMinor] = useState(null);
@@ -1352,19 +1453,22 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
 
   const sections = useMemo(() => {
     if (!minor) return [];
-    const minorSections = (minor.requirementSections ?? []).filter(
-      section => section.title !== 'Required General Electives'
-    );
-    return allocateSections(minorSections, placedSet, new Set(), courseMap);
+    return allocateSections(minorRequirementSections(minor), placedSet, new Set(), courseMap);
   }, [minor, placedSet, courseMap]);
 
   const doneSections = useMemo(() => {
     if (!minor || !doneSet) return [];
-    const minorSections = (minor.requirementSections ?? []).filter(
-      section => section.title !== 'Required General Electives'
-    );
-    return allocateSections(minorSections, doneSet, new Set(), courseMap);
+    return allocateSections(minorRequirementSections(minor), doneSet, new Set(), courseMap);
   }, [minor, doneSet, courseMap]);
+
+  // The 50% double-counting cap. Measured against the PLANNED set, not the
+  // completed one: it is a statement about the plan the student is building,
+  // and a limit only reported once the courses are behind them is a limit
+  // reported too late to act on.
+  const share = useMemo(
+    () => (minor ? minorShare({ minor, placedSet, majorKeys, courseMap }) : null),
+    [minor, placedSet, majorKeys, courseMap]
+  );
 
   // Sum using the SAME logic as SectionBlock's display numbers
   const { totalSat, totalReq, doneSat } = useMemo(() => {
@@ -1411,6 +1515,14 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
           <div style={{ fontSize: isPhone ? 8 : 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <span>{scaleLatinRuns(label)}</span>
+              {/* Collapsed, the double-counting row below is out of sight, so the
+                  card keeps one glyph of it. Dropped when expanded rather than
+                  shown twice — the row itself is the detailed version. */}
+              {!expanded && share?.over && (
+                <span title={t("grad.share.title")}
+                      style={{ marginLeft: 5, fontSize: 9, fontWeight: 800,
+                               color: REL_STYLE["corequisite-viol"].color }}>!</span>
+              )}
               {!isPhone && <VerificationPill verification={minor.metadata?.verification}
                                              verified={minor.metadata?.verified} t={t} isMobile={isMobile} />}
               {isPhone && <span style={{ fontSize: 6, color: "var(--text-5)", marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
@@ -1447,6 +1559,7 @@ function MinorBlock({ path, onClear, placedSet, doneSet, label = "MINOR", nameCo
       {expanded && (
         <div style={{ padding: "0 10px 6px" }}>
           {sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+          <SharedCredit share={share} />
           <GpaRules program={minor} programKind="minor" />
         </div>
       )}
@@ -1985,8 +2098,8 @@ export default function GradPanel({ wideCatalog = false }) {
   const geAllowance  = useMemo(() => generalElectiveSHOf(major, courseMap), [major, courseMap]);
   const geAllowance2 = useMemo(() => generalElectiveSHOf(major2Data, courseMap), [major2Data, courseMap]);
 
-  const { majorSections, concSection } = useMemo(() => {
-    if (!major) return { majorSections: [], concSection: null };
+  const { majorSections, concSection, majorUsed } = useMemo(() => {
+    if (!major) return { majorSections: [], concSection: null, majorUsed: new Set() };
 
     // Allocate major requirements first, WITHOUT General Electives yet.
     const { sections: majorResults, allocatedSet } = allocateMajorSections(major, placedSet, courseMap);
@@ -2015,7 +2128,11 @@ export default function GradPanel({ wideCatalog = false }) {
     );
     const majorWithElectives = [...majorResults, generalElectives];
 
-    return { majorSections: majorWithElectives, concSection: concAllocated };
+    // `allocatedSet` is the requirement-and-concentration claim, and stops
+    // there on purpose: General Electives is not the major, so a minor course
+    // landing in it is not double-counted credit — it is the free-elective room
+    // a minor is meant to occupy. See core/minorOverlap.js.
+    return { majorSections: majorWithElectives, concSection: concAllocated, majorUsed: allocatedSet };
   }, [allSections, placedSet, doneSet, realPlacedSet, courseMap, major, selConc, geAllowance]);
 
   const allocatedSections = concSection ? [...majorSections, concSection] : majorSections;
@@ -2052,8 +2169,8 @@ export default function GradPanel({ wideCatalog = false }) {
   }, [majorSections, major1DoneSections, totalSHDone, totalSHPlaced, major]);
 
   // ── Second major allocation (courses double-count freely per NU policy) ─
-  const major2Sections = useMemo(() => {
-    if (!major2Data) return [];
+  const { sections: major2Sections, used: major2Used } = useMemo(() => {
+    if (!major2Data) return { sections: [], used: new Set() };
     const { sections, allocatedSet } = allocateMajorSections(major2Data, placedSet, courseMap);
     // Concentration shares this major's used set, so a course already counted
     // toward its requirements can't also satisfy its concentration — the same
@@ -2071,8 +2188,22 @@ export default function GradPanel({ wideCatalog = false }) {
     const generalElectives = calculateGeneralElectives(
       placedSet, allocatedSet, courseMap, geAllowance2, doneSet, candidateKeys, realPlacedSet
     );
-    return [...sections, generalElectives, ...concResults];
+    return { sections: [...sections, generalElectives, ...concResults], used: allocatedSet };
   }, [major2Data, placedSet, courseMap, doneSet, realPlacedSet, selConc2, geAllowance2]);
+
+  /**
+   * Every course key a MAJOR's requirements claim — both majors, both
+   * concentrations, general electives excluded.
+   *
+   * Read off the allocations already computed above rather than allocated a
+   * third time. A second opinion about what the major claimed is exactly how
+   * the minor card comes to report an overlap the major card does not show.
+   */
+  const majorClaimedKeys = useMemo(() => {
+    if (!major2Used.size) return majorUsed;
+    if (!majorUsed.size)  return major2Used;
+    return new Set([...majorUsed, ...major2Used]);
+  }, [majorUsed, major2Used]);
 
   const major2DoneSections = useMemo(() => {
     if (!major2Data) return [];
@@ -2498,8 +2629,8 @@ export default function GradPanel({ wideCatalog = false }) {
         </MajorCard>}
 
         {/* ── Minor requirement sections — undergrad only ─────── */}
-        {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} nameColor={claudePreview?.changed?.has?.("minor1") ? "#fb923c" : undefined} />}
-        {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} nameColor={claudePreview?.changed?.has?.("minor2") ? "#fb923c" : undefined} />}
+        {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} label={t("grad.minor1.label")} nameColor={claudePreview?.changed?.has?.("minor1") ? "#fb923c" : undefined} />}
+        {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} label={t("grad.minor2.label")} nameColor={claudePreview?.changed?.has?.("minor2") ? "#fb923c" : undefined} />}
 
         {/* ── PlusOne — after the minors, matching the selector order above.
                Last of the program cards because it is the only one that is
