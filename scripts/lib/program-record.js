@@ -16,9 +16,11 @@ import { markSharedSections } from './major-integrity.js';
 import { applySharedSections } from './shared-sections.js';
 import { extractPlanGrid }    from './plan-grid.js';
 import {
-  parseRequirements, parseTotalCredits,
+  parseRequirements, parseTotalCredits, parseMajorCreditSubtotal,
   extractPlanOfStudyCourses, listRequirementPanes, normalizeConcentrationHref,
 } from './catalog-program-parser.js';
+import { obligationsOf, GENERAL_ELECTIVE } from '../../src/core/requirementBinding.js';
+import { catalogCourseMap } from './catalog-course-map.js';
 import { planPanes, assertPaneCoverage, variantSlug } from './program-variants.js';
 import { fmtProgramLabel, fmtLocation, isDegreeToken }
   from '../../src/adapters/northeastern/programNaming.js';
@@ -83,6 +85,74 @@ async function parseResolvingExternals(root, { profile, fetchPage, panes }) {
  * @returns {Promise<object[]>}          primary first; `[]` when the page holds none
  * @throws  {UnadjudicatedPaneError}     on a pane shape nobody has decided about
  */
+/**
+ * Raise total demand to the major's stated size, if the parse fell short.
+ *
+ * "Complete 36 semester hours in the major" is a SUBTOTAL: normally it restates
+ * requirements already parsed, and adding it would demand the major twice — up
+ * to 60 SH of phantom credit on one page. But where the parse is thin it is the
+ * only statement of the major's size, and the gap goes straight into free
+ * electives: Philosophy BA parses 16 SH of demand against a stated 36, and told
+ * the student 112 of its 128 credits were theirs to spend.
+ *
+ * ── Why a floor on the DEGREE, not on "the major" ──────────────────
+ *
+ * The obvious reading is `majorDemand = max(parsed major, subtotal)`, and it
+ * cannot be implemented, because deciding which sections are "in the major" is a
+ * classifier and the only one available — the section title — misfiles exactly
+ * the cases that matter. Spanish BA's "Spanish Language Requirements" is 16 SH
+ * and IS its major; Philosophy BA's "BA Language Requirements" is 12 SH and is
+ * not. Keying on /language/ gets one right and the other wrong.
+ *
+ * So the claim used here needs no attribution: the major is a SUBSET of the
+ * degree, therefore TOTAL demand must be at least the major subtotal. Where it
+ * is not, we have certainly under-parsed, by at least the difference — true
+ * whatever the sections turn out to be. Measured over 21 pages stating a
+ * subtotal: 3 move, 18 are untouched, and Spanish BA is one of the untouched,
+ * which is the case the classifier would have got wrong.
+ *
+ * It UNDER-corrects on purpose. Philosophy BA has 12 SH of language on top of
+ * its 36 SH major, so true demand is 48 and this claims only 36 — because 36 is
+ * what the page guarantees and 48 is what we would be guessing. Under-claiming
+ * hands a student extra free electives; over-claiming refuses a valid plan.
+ *
+ * Emitted as a codeless SECTION rather than a new obligation target: that shape
+ * ships 580 times already and every consumer — the residual, CHART's cells, the
+ * panel, the PDF, the MCP tree — handles it today. A fourth sentinel would need
+ * all five audited first.
+ *
+ * @param data      the record, mutated in place
+ * @param courseMap sizing requires real credits; an EMPTY map means the catalog
+ *                  is missing, and the comparison would then be against the
+ *                  modal-unit estimate — so it declines rather than guessing.
+ * @returns the section it appended, or null
+ */
+export function applyMajorCreditFloor(data, courseMap) {
+  const subtotal = data?.majorCreditSubtotal;
+  if (!subtotal || !courseMap || !Object.keys(courseMap).length) return null;
+
+  const demand = obligationsOf(data, { courseMap })
+    .filter(o => o.target !== GENERAL_ELECTIVE)
+    .reduce((n, o) => n + o.shortfallSH, 0);
+  const gap = subtotal - demand;
+  if (gap <= 0) return null;
+
+  const section = {
+    type: 'SECTION',
+    // The registrar's own name for the block, so no panel has to invent one.
+    title: 'Major Credit Requirement',
+    creditsRequired: gap,
+    // Nothing is enumerated, so nothing may draw a checked box — the same
+    // contract the other 580 codeless sections carry.
+    minRequirementCount: 1,
+    requirements: [],
+    notes: [`The catalog states ${subtotal} semester hours in the major. `
+      + `${demand} are enumerated above; this stands for the remaining ${gap}.`],
+  };
+  data.requirementSections.push(section);
+  return section;
+}
+
 export async function buildProgramsForPage(root, url, deps) {
   const pageName = root.querySelector('#page-title h1, h1.page-title, h1')
     ?.text?.trim()
@@ -212,6 +282,43 @@ async function buildOne(root, url, pageName, group, deps) {
     ...(concentrations ? { concentrations } : {}),
     ...(generalElectiveSH > 0 ? { generalElectiveSH } : {}),
   };
+
+  // ── The major's stated size, as a FLOOR on demand ─────────────────
+  //
+  // "Complete 36 semester hours in the major" is a SUBTOTAL: normally it restates
+  // requirements already parsed, and adding it would demand the major twice. But
+  // where the parse is thin it is the only statement of the major's size, and
+  // the gap goes straight into free electives — Philosophy BA parses 16 SH of
+  // demand against a stated 36 and told the student 112 of its 128 credits were
+  // theirs to spend.
+  //
+  // ── Why a floor on the DEGREE, not on "the major" ─────────────────
+  //
+  // The obvious reading is `majorDemand = max(parsed major, subtotal)`, and it
+  // cannot be implemented: deciding which sections are "in the major" is a
+  // classifier, and the one available — the section title — misfiles the cases
+  // that matter. Spanish BA's "Spanish Language Requirements" is 16 SH and IS
+  // its major; Philosophy BA's "BA Language Requirements" is 12 SH and is not.
+  // Keying on /language/ gets one right and the other wrong.
+  //
+  // So the claim used here needs no attribution at all: the major is a SUBSET of
+  // the degree, therefore TOTAL demand must be at least the major subtotal. If
+  // it is not, we have certainly under-parsed, by at least the difference. That
+  // is true whatever the sections turn out to be.
+  //
+  // It under-corrects on purpose. Philosophy BA has 12 SH of language ON TOP of
+  // its 36 SH major, so true demand is 48 and this claims only 36 — because 36
+  // is what the page guarantees and 48 is what we would be guessing. Under-
+  // claiming leaves a student extra free electives; over-claiming refuses a
+  // valid plan.
+  //
+  // Emitted as a codeless SECTION rather than a new obligation target: that
+  // shape already ships 580 times and every consumer — the residual, CHART's
+  // cell derivation, the panel, the PDF, the MCP tree — handles it today. A
+  // fourth sentinel would need all five audited.
+  const majorCreditSubtotal = parseMajorCreditSubtotal(root);
+  if (majorCreditSubtotal) data.majorCreditSubtotal = majorCreditSubtotal;
+  applyMajorCreditFloor(data, catalogCourseMap());
 
   // Mark cross-count sections (integrative / GPA re-lists / shared credit) that
   // would otherwise be impossible to satisfy under single-use allocation.

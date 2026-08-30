@@ -2420,6 +2420,37 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
  * "Universitywide Requirements" — real, but quantified nowhere on the page —
  * produces no section instead of a 0 SH one that claims to be measured.
  */
+/**
+ * "Complete 36 semester hours in the major" — the major's own credit subtotal.
+ *
+ * The one sentence `proseSectionSH` refuses that is worth KEEPING rather than
+ * discarding, because for a program whose requirements are thin it is the only
+ * statement of how big the major is. Philosophy BA parses to 16 SH of demand —
+ * its whole major is five mutually-exclusive concentrations and the floor takes
+ * the cheapest — while the page says 36.
+ *
+ * Recorded verbatim as a number and interpreted nowhere near here: the parser's
+ * job is to copy what the page says. `program-record.js` decides what to do
+ * with it, and what it does is take a FLOOR, never an addition — see the note
+ * there for why that distinction is the whole safety argument.
+ */
+export function parseMajorCreditSubtotal(pageRoot) {
+  for (const root of requirementsRoots(pageRoot)) {
+    const text = root.text.replace(/ /g, ' ').replace(/\s+/g, ' ');
+    const m = text.match(
+      new RegExp(`(?:complete\\s+(?:a\\s+minimum\\s+of\\s+)?)?${N}\\s+${UNIT}\\s+`
+        + `(?:required\\s+|are\\s+required\\s+)?(?:in|for)\\s+the\\s+major`, 'i'));
+    if (m) {
+      const n = parseInt(m[1], 10);
+      // A major cannot be bigger than a degree, and the smallest real one in the
+      // corpus is 36. Bounded rather than trusted, because this number is about
+      // to raise a demand floor, and over-demanding refuses valid plans.
+      if (Number.isFinite(n) && n >= 12 && n <= 90) return n;
+    }
+  }
+  return null;
+}
+
 function proseSectionSH(title, paras, profile) {
   const text = [title, ...paras].join(' ').replace(/ /g, ' ').replace(/\s+/g, ' ');
   // ── Which guard actually does the work, measured ─────────────────
