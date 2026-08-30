@@ -92,6 +92,12 @@ export function parseDescriptionCoreqs(description, selfId = "") {
 
   // An "or" anywhere in the list makes it a choice, which this shape cannot
   // express — BIOC 4900. Refuse the whole sentence rather than pick a branch.
+  //
+  // Belt and braces, deliberately: mutation-probe proved this line currently
+  // changes nothing, because "or" is not a separator below, so it stays inside
+  // a segment and that segment then fails the bare-code test. It is kept
+  // because it is the ONLY thing that would refuse a disjunction if "or" ever
+  // joined the separators, and the probe carries the note.
   if (/\bor\b/i.test(body)) return [];
 
   const out = [];

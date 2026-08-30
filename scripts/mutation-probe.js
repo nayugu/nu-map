@@ -235,9 +235,17 @@ const MUTANTS = [
     to:   "    if (e.from !== id && e.to !== id) continue;", run: [UNLOCKS] },
 
   // ── A corequisite stated in the description ─────────────────────
+  // KNOWN EQUIVALENT, and the probe is what proved it. Deleting the "or" guard
+  // changes nothing today: the operand list is split on commas and " and "
+  // only, so any "or" stays INSIDE a segment ("or other 4-SH research course",
+  // "PHYS 1151 or PHYS 1153") and that segment then fails the bare-code test,
+  // which refuses the whole sentence anyway. So the BIOC 4900 test asserts the
+  // right outcome for the wrong reason, which is worth knowing. The guard stays
+  // because it becomes load-bearing the moment anyone adds "or" to the
+  // separators — and a KILL here is the signal that they did.
   { name: "coreq prose: a CHOICE is read as a conjunction", file: DESCCOREQ,
     from: "  if (/\\bor\\b/i.test(body)) return [];",
-    to:   "", run: [DESCOREQ_TEST] },
+    to:   "", run: [DESCOREQ_TEST], equivalent: true },
 
   { name: "coreq prose: prose among the operands is skipped, not refused", file: DESCCOREQ,
     from: "    if (!c) return [];                       // residue: refuse the sentence",

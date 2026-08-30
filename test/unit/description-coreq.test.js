@@ -55,6 +55,12 @@ test("descriptionCoreq › a CHOICE › refused whole, not read as a conjunction
   const desc = "Requires concurrent registration in BIOC 4991, BIOC 4994, BIOL 4991, "
     + "CHEM 4991, or other 4-SH research course approved by the Biochemistry Director.";
   assert.deepEqual(parseDescriptionCoreqs(desc, "BIOC4900"), []);
+  // A bare two-course choice, which no page states today. Refused by the
+  // bare-code test rather than by the "or" guard — see the equivalent mutant
+  // recorded in mutation-probe.js. Pinned here so the behaviour is covered
+  // whichever of the two is doing the work.
+  assert.deepEqual(parseDescriptionCoreqs("Requires concurrent registration in PHYS 1151 or PHYS 1153."), []);
+  assert.deepEqual(parseDescriptionCoreqs("Requires concurrent registration in PHYS 1151, PHYS 1152, or PHYS 1153."), []);
 });
 
 test("descriptionCoreq › prose among the operands › refused whole", () => {
