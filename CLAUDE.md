@@ -445,33 +445,81 @@ Facts that follow from this:
   (undergraduate catalog § Minors; `src/core/minorOverlap.js`). Two majors
   double-count freely, and a minor course landing in the degree's GENERAL
   ELECTIVES is not shared credit — that is the room a minor is meant to occupy —
-  so only a major's requirement-and-concentration claim counts. Three rules:
-  1. The charge is **marginal, not gross**: the minor is allocated twice, once
-     against everything placed and once with the major's courses withheld, and
-     the difference is what the cap applies to. Summing the credit of every
-     course both programs claim over-reports whenever greedy allocation reached
-     for the major's course with a spare non-major one beside it — measured over
-     500 (major, minor) pairs, the two disagree on 4.2% and the gross reading
-     declares 7 violations where 3 are real.
-  2. The denominator is **derived**, because 0 of 173 shipped minors state a
-     `totalCreditsRequired` — Σ `demandOf`, the audit's own figure. It is
-     inflated for the minors whose page prints an elective's MENU as sibling
-     sections (Computer Science derives 52 SH against a page that says 20, and
-     that 20 is currently swallowed into the Credit/GPA row's text), which
-     leaves the cap too GENEROUS. Keep it that way round: a missed warning
-     leaves a student where they were, a false one tells them to take courses
-     they do not owe.
+  so only a major's requirement-and-concentration claim counts. Four rules:
+  1. **A course counts toward both only if BOTH audits claim it, and this app
+     chooses both assignments** — so the charge is what neither side can avoid,
+     not what greedy allocation happened to pick. The minor is re-allocated with
+     the major's courses withheld; and, when that still reads as over, the major
+     is asked whether it can do without each shared course, accumulating, so the
+     answer is a set it can release ALL AT ONCE. Releasing is free by
+     construction: the major swaps in another placed course and the released one
+     becomes a general elective, so the degree total does not move.
+     Both halves were measured, and both earn their place. Minor side: over 500
+     pairs the gross and marginal readings disagree on 4.2%, and gross declares
+     7 violations where 3 are real. Major side: over 6,920 pairs (40 majors ×
+     all 173 minors) the cap fires 19 times and **1 of those is false** without
+     it. The major test is per-section and one-directional, never a comparison
+     of totals — removing a course can free one the allocator was hoarding, so a
+     section can gain exactly as another loses, and a total calls that swap
+     harmless when it just broke a requirement.
+  2. The denominator is **derived** — Σ `demandOf`, the audit's own figure —
+     because 169 of 181 minor pages state no total at all. The 12 that do are
+     the only place it can be checked, and it holds: **derived equals stated
+     exactly on 9 of 10** minors where both numbers exist. The tenth is Computer
+     Science, Minor, 52 SH derived against a page that says 20, because eight of
+     its ten parsed sections are the colleges making up the "Khoury meaningful
+     minors list" — one elective's MENU parsed as siblings of the requirement it
+     belongs to (the Data Science MSAlign defect, in the section parse).
+     Do **not** "fix" that by preferring `totalCreditsRequired`: the denominator
+     would become the registrar's 20 while the numerator went on being counted
+     against the same inflated sections, which is two accountings either side of
+     one subtraction. Left alone the cap is too GENEROUS on that one minor,
+     which is the survivable direction.
   3. It **never un-allocates**. The requirement rows and the progress bar are
      byte-identical with and without it; over the cap a row goes amber and the
      printed report carries the sentence. Choosing a course to drop in order to
      respect a percentage is an advising decision, and it would make the audit
-     disagree with the board.
+     disagree with the board. The release in (1) is applied **only when the
+     naive verdict is "over"**, for the same reason: the major card shows the
+     greedy allocation, so re-labelling a course the student can see ticked
+     there would make the two cards contradict each other.
+  4. A minor may state a **stricter** rule of its own, and prose is copied, not
+     interpreted — Rhetoric, Minor says "For English majors, only one course
+     from the major may also count toward this elective section of the minor",
+     and that reaches the panel as a catalog note like any other sentence. Only
+     one of 173 does. Don't build a second rule engine for it.
   Not modelled, deliberately: transfer and advanced-standing credit share the
   same budget in the policy, but this app has no transfer input and a
   placed-out course carries no credit, so the figure is a lower bound. The
   catalog's separate **subset ban** ("a biology major cannot enroll in the
   biology minor") is also unimplemented — the cap catches the same plans by
   arithmetic, at 100% overlap.
+- **A MINOR's credit total needs a minor-sized window** (`MINOR_CREDIT_WINDOW`,
+  `totalsProfileFor`). `UNDERGRAD_PROFILE.creditWindow` starts at 60 because a
+  bachelor's is 120–134 SH, so every total a minor page published was thrown
+  away as a stray number and all 173 shipped `totalCreditsRequired: 0` while
+  Computer Science, Minor prints "20 semester hours required" in as many words.
+  The first attempt was to lower the undergraduate floor, the way the graduate
+  floor came down twice before it; measured with `catalog-probe.js --totals
+  --floor N`, floor 4/8 pollute 17–19 DEGREE pages with their own section
+  subtotals and floor 16 loses real 15 SH minors. Two kinds of program need two
+  windows, and then the collateral is zero by construction. 12 minors gain a
+  total; 169 still state none, so the derived figure above remains the rule.
+- **The major SUBTOTAL must not outrank the degree total, and it did.** A
+  combined major states both in identical words and puts the smaller first —
+  "92 total semester hours required **in the major**" ahead of "128 total
+  semester hours required" — and `text.match` takes the first occurrence, so
+  Behavioral Neuroscience and Philosophy BS shipped as a 92 SH degree and
+  Environmental and Sustainability Sciences and Chemistry BS as 97. Since
+  `totalCreditsRequired` is what the free-elective allowance is a residual
+  against, 36 SH of a real degree vanished. `proseSectionSH` had refused that
+  phrasing for years; the reader on the other side of the same knowledge never
+  learned it. `NOT_A_SUBTOTAL` is a lookahead, not a rejection, so the pattern
+  goes on to find the real figure rather than falling through to a weaker one.
+  ⚠ Three degree pages state their subtotal with NO qualifier ("94 semester
+  hours required" then "128 semester hours required") and are still read wrong;
+  `test/contract/catalog-total-credits.test.js` pins that limitation so closing
+  it later is a visible change.
 
 ## /data search
 
