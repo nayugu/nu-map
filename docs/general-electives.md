@@ -160,9 +160,11 @@ plans* were fine while the *panel* was wrong by 18 SH. Two consequences:
 
 1. **The fix is mostly invisible in plan output.** An A/B of both readings inside
    one process (an env hatch, deleted with the measurement — a two-run A/B is
-   unreliable in a shared checkout) moved **2 of 98** sampled plans, both "same
-   courses, different arrangement", none gained or lost, refusals 22 either way.
-   §6 records the corpus-wide figure.
+   unreliable in a shared checkout), over the **whole corpus**: 864 plans
+   unchanged, **12 moved and every one of them "same courses, different
+   arrangement"**, 1 gained and 1 lost. Both readings generated 881 of 1,082
+   shapes, threw 0, and passed every hard rule; the refusal mix is identical bar
+   one plan swapping `concentration-unfillable` for `no-candidate`.
 2. **The reconciliation for co-requisite pairs is gone**, because the two
    accountings converged. The unit test that asserted the disagreement now
    asserts its absence, and a genuinely irreconcilable shape (a 3 SH threshold
@@ -215,24 +217,82 @@ identically to a sizing defect from inside the app, which is exactly why it is
 worth stating the difference here. *Before believing a free-elective number,
 check the parsed section count and the degree total.*
 
-Two related gaps, both real, neither modelled:
+### ⚠ A correction: the pages DO state it, in prose
 
-**The BA language requirement is on no program page.** The general-education
-page requires every BA candidate to complete elementary language proficiency
-(course numbers 1101 and 1102, grade C− or better, or AP/IB/transfer
-equivalent) *and* an intermediate requirement (2101 or equivalent, or an
-approved culture/history/society course, or a proficiency interview). That is
-roughly 12 SH. **None of the 105 BA programs carries it** — the program pages do
-not print it, and our scrapers copy the program pages. It therefore lands
-entirely in free electives for every BA in the corpus. Fixing it means injecting
-a university-wide requirement the source pages do not state, which is a policy
-decision (and a per-catalog-year one), not a parser change.
+An earlier draft of this section said the BA language requirement "is on no
+program page" and that fixing it would mean injecting a university-wide rule the
+sources do not state. **That was wrong, and it was wrong because it was never
+checked against the markup.** Every BA page carries, inside the requirements
+pane:
 
-**All 88 CPS graduate programs ship `totalCreditsRequired: 0`.** With no total
-there is no residual, so free electives are structurally 0 and simply not
-expressible for the College of Professional Studies at the graduate level. CPS
-undergraduate (13 programs) is unaffected. 93 of 524 graduate programs corpus-wide
-have the same gap.
+```html
+<h2>BA Language Requirements</h2>
+<p>All BA students are required to complete the BA degree language requirements,
+   for a total of 12 semester hours of language study or demonstrated equivalent
+   proficiency, as described in Additional Requirements for BA students.</p>
+```
+
+The pane is a sequence of `<h2>` + body pairs, and the parser only ever read the
+pairs whose body was a **table**. So this was not a policy gap — it was a parser
+that could not see prose. Measured over the 24 undergraduate degrees with the
+largest residual, **23 state credit in prose the parser could not see, 1,177 SH
+in total**, under two dominant headings:
+
+| heading | pages | nature |
+|---|---|---|
+| `BA Language Requirements` — 12 SH | 18 of 24 | **additive** — nothing else covers it |
+| `<Major> Credit Requirement` — "Complete 56 semester hours in the major" | ~16 of 24 | **a subtotal** — restates sections already parsed |
+
+Those two must be treated oppositely, which is the whole difficulty. Summing the
+subtotal would demand the major twice — up to 60 SH of phantom credit on one
+page — and over-demanding *refuses valid plans*, the expensive direction.
+`parseTotalCredits` already refuses that exact phrasing ("Never matches 'N
+semester hours in the major' — that is a major-only subtotal"), and
+`proseSectionSH` reuses the refusal. Measured on 30 cached pages, the change
+gains **18 sections and loses 0**.
+
+The subtotal is deliberately left on the floor. Where a program's sections are
+parsed it is pure restatement; where they are not — Philosophy BA has **zero**
+requirement sections, its whole major being five mutually-exclusive
+concentrations — it is the only statement of the major's size, and using it there
+means treating it as a **lower bound on the concentration floor**, not as a
+section. That is a different mechanism, it needs a corpus-wide HTML cache to
+validate, and it fails in the expensive direction, so it is written down here
+rather than guessed at.
+
+### A required choice that read as optional
+
+Art BA states "A concentration is not required. Students may complete the
+electives option **in lieu of** a concentration." `concentrationMinOptions`
+matched *"concentration is not required"* and returned 0, so a 20 SH choice
+demanded nothing. The sentence is true and the reading was wrong: no
+*concentration* is required, but the page lists an **"Electives Option"** beside
+the concentrations, and one of the listed options must be done.
+
+The tell is in the option list, not the prose, which is what makes it decidable:
+"Electives Option" is the catalog's own name for the opt-out, so its presence
+means the opt-out is already a choice and the choice is mandatory. **19 of the 58
+programs scoring 0 have one**; the other 39 are genuinely optional ("Astrophysics
+Concentration (Optional)") and keep their 0.
+
+### CPS graduate: stale data, not a defect
+
+All 88 CPS graduate programs ship `totalCreditsRequired: 0`, so their residual is
+structurally 0. This is **not** a parser gap. Run against the live pages, the
+current parser reads their totals correctly — 12, 15, 34, 12, 34 across a
+six-program sample, with one program genuinely stating none. The shipped data was
+scraped **2026-08-21** and `parseTotalCredits` has not changed since, so the
+*pages* changed: the 2026–27 catalog rolled over and CPS pages gained the
+standard "Program Credit/GPA Requirements — N total semester hours required"
+block. `verify-majors` already flagged every one of them with the
+`missing-total-credits` discrepancy at scrape time, which is the system working.
+
+**No code change is needed**; the bimonthly `update-grad-majors.yml` run picks it
+up. 93 of 524 graduate programs corpus-wide carry the same gap.
+
+*Method note: the wrong claim and the right one differ only in that the second
+one opened the HTML. "The pages don't state it" was inferred from our data being
+empty — which is evidence about the parser, not about the pages.*
 
 For contrast, where the data *is* complete the numbers are now sane: Boston
 graduate degrees average 1.8 SH of free electives with 251 of 323 at exactly
@@ -271,8 +331,16 @@ Invariants, checked across all 1,071 programs:
 - the residual stays within `[0, totalCreditsRequired]` for every program
 
 Suites: 2,183 unit · 198 contract · 273 invariant, all passing; `npm run
-test:boot` mounts the app. `verify-chart` corpus results are recorded in the
-commit that carries them.
+test:boot` mounts the app.
+
+`verify-chart --all` — the corpus verdict, 799 degrees over 1,082 shapes:
+
+```
+generated 881 (81.4%)   refused 201   threw 0
+EMPTY full terms 0                       plans with an empty-semester GAP 0 of 881
+terms leaving 4+ cells unguided 0        concentration reservations unfillable 0 of 94
+terms with 3+ GENERAL ELECTIVES 124 of 6276 (2.0%)   with 2+: 1188 (18.9%)
+```
 
 ---
 

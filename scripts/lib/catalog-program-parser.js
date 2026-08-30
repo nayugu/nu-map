@@ -2147,8 +2147,47 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
     consumed.add(tb);
   }
 
-  for (const [headingIdx, tableBlocks] of owners) {
+  // Every heading in DOCUMENT ORDER, whether or not it owns a table. `owners`
+  // is already insertion-ordered, so iterating it kept order for the sections
+  // that have tables — but a heading with none was not in it at all, and that
+  // is a requirement stated in prose (see `proseSectionSH`). Emitting those
+  // afterwards would append them at the end, so the walk is over headings now
+  // and `owners.get` decides which path a heading takes.
+  const headingIdxs = [];
+  for (let i = 0; i < blocks.length; i++) if (blocks[i].kind === 'heading') headingIdxs.push(i);
+
+  for (const headingIdx of headingIdxs) {
+    const tableBlocks = owners.get(headingIdx);
     const title = blocks[headingIdx].text;
+
+    if (!tableBlocks) {
+      // ── A requirement stated in PROSE, with no course list ─────────
+      //
+      // The pane is <h2> + <p> pairs, and only the pairs whose body is a table
+      // were ever read. "BA Language Requirements … a total of 12 semester
+      // hours of language study" is a real, separate, university-wide
+      // requirement that no other section covers, and it was invisible: 18 of
+      // the 24 worst free-elective offenders state exactly it, and every one of
+      // the 105 BA programs owes it. Measured across that sample, 23 of 24
+      // pages state credit here the parser could not see.
+      //
+      // Emitted as a CODELESS section — the shape `e496b91712d` already built
+      // for prose rows inside a table: `creditsRequired` set, `requirements: []`
+      // so nothing is enumerated wrongly, `minRequirementCount: 1` so nothing
+      // draws a checked box.
+      if (concHeadings.has(headingIdx)) continue;
+      const sh = proseSectionSH(title, adjacentParas(headingIdx));
+      if (sh === null) continue;
+      requirementSections.push({
+        type: 'SECTION',
+        title: uniquify(title, usedSectionTitles, sectionCollisions),
+        creditsRequired: sh,
+        minRequirementCount: 1,
+        requirements: [],
+        notes: adjacentParas(headingIdx).map(t => t.replace(/\s+/g, ' ').trim()).filter(Boolean),
+      });
+      continue;
+    }
 
     // "Required General Electives" contributes only its SH — the section is
     // rebuilt at runtime by gradRequirements.calculateGeneralElectives.
@@ -2260,8 +2299,29 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
     warnings.push(`${unaccounted} of ${tablesOnPage} tables on the page were neither parsed nor excluded`);
   }
 
+  // ── "not required" can still mean "pick one" ──────────────────────
+  //
+  // Art BA reads "A concentration is not required. Students may complete the
+  // electives option **in lieu of** a concentration", which scored 0 — so its
+  // 20 SH choice demanded nothing and 20 SH of the degree became free
+  // electives. The sentence is true and the reading was wrong: no CONCENTRATION
+  // is required, but the page also lists an "Electives Option" beside the
+  // concentrations, and one of the listed options must be done.
+  //
+  // The tell is in the option list rather than the prose, which is what makes
+  // it decidable: an "Electives Option" is the catalog's own name for the
+  // opt-out, so its presence means the opt-out is already one of the choices
+  // and the choice itself is mandatory. 19 of the 58 programs scoring 0 have
+  // one; the other 39 are genuinely optional ("Astrophysics Concentration
+  // (Optional)", a lone "Concentration in Applied AI") and keep their 0.
+  let minOptions = concentrationMinOptions(blocks, gateways, concHeadings);
+  if (minOptions === 0 &&
+      concentrationOptions.some(o => /\belectives?\s+option\b/i.test(o.title ?? ''))) {
+    minOptions = 1;
+  }
+
   const concentrations = concentrationOptions.length
-    ? { minOptions: concentrationMinOptions(blocks, gateways, concHeadings), concentrationOptions }
+    ? { minOptions, concentrationOptions }
     : null;
 
   return { requirementSections, concentrations, generalElectiveSH,
@@ -2292,6 +2352,59 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
  * ("Political Science Concentrations (Optional)", "Astrophysics Concentration
  * (Optional)") as required. Read from the gateway heading and its intro prose.
  */
+/**
+ * The credit a prose-only requirement heading demands, or null for "not one".
+ *
+ * ── The distinction this function exists to make ───────────────────
+ *
+ * A requirements pane states credit in prose in two completely different ways,
+ * and summing them both double-counts most of a degree:
+ *
+ *   ADDITIVE     "BA Language Requirements — All BA students are required to
+ *                complete the BA degree language requirements, for a total of
+ *                **12 semester hours** of language study". A separate
+ *                requirement no course list on the page covers. 18 of 24 sampled
+ *                pages, every BA program in the catalog.
+ *
+ *   A SUBTOTAL   "Philosophy Major Credit Requirement — Complete **36 semester
+ *                hours** in the major." That is the sum of the sections and
+ *                concentrations already parsed, restated. Adding it would demand
+ *                the major twice — up to 60 SH of phantom credit on one page.
+ *
+ * `parseTotalCredits` already refuses the second form for exactly this reason
+ * ("Never matches 'N semester hours in the major' — that is a major-only
+ * subtotal"), and the same refusal is the whole safety argument here. The test
+ * is on the phrase "in/for the major", which is how all 16 of the sampled
+ * subtotals are worded, NOT on the heading containing "Major" — "BA Language
+ * Requirements" would pass that and "Major Credit Requirement" is sometimes
+ * titled without its subject.
+ *
+ * Two more exclusions, both the same kind of restatement:
+ *   · the degree TOTAL ("130 total semester hours required"), which
+ *     `parseTotalCredits` owns and which is the number this is subtracted from;
+ *   · a GPA sentence, which `parseGpaRule` owns.
+ *
+ * Returns null rather than 0 when nothing is stated, so a heading like
+ * "Universitywide Requirements" — real, but quantified nowhere on the page —
+ * produces no section instead of a 0 SH one that claims to be measured.
+ */
+function proseSectionSH(title, paras) {
+  const text = [title, ...paras].join(' ').replace(/ /g, ' ').replace(/\s+/g, ' ');
+  // A subtotal of the major, the degree total, or a GPA rule: all restatements
+  // of something another reader already owns.
+  if (/\b(?:in|for|toward)\s+the\s+major\b/i.test(text)) return null;
+  if (/\btotal\s+(?:semester\s+hours?|credits?)\s+required\b/i.test(text)) return null;
+  if (/\bGPA\b/i.test(text)) return null;
+  // "for a total of 12 semester hours", "Complete 8 semester hours of …"
+  const m = text.match(/(\d+)\s*(?:semester\s+hours?|credits?)\b/i);
+  if (!m) return null;
+  const sh = parseInt(m[1], 10);
+  // A plausible single requirement. The ceiling is deliberately well under a
+  // degree: anything larger is a total or a subtotal that got past the tests
+  // above, and over-demanding is the direction that refuses a real plan.
+  return sh > 0 && sh <= 24 ? sh : null;
+}
+
 function concentrationMinOptions(blocks, gateways, concHeadings = new Map()) {
   let best = null;
 

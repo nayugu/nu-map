@@ -334,18 +334,48 @@ Facts that follow from this:
   `demandOf` also reads a childless section's `statedSH`;
   before that it answered a flat 4 SH for all 580 of them, so 4,305 of 6,625 SH
   leaked into free electives.
-- **A big free-elective figure is usually a COVERAGE bug, not an arithmetic
-  one.** After the fix above, 51 of 330 Boston undergrad degrees still report
-  >40% free electives — Theatre BA 116/132, Philosophy BA 112/128, Art BA
-  93/130 off **37 SH of parsed requirements against a 130 SH degree**. That is a
-  thin requirement pane, not a sizing error, and no amount of credit arithmetic
-  will close it. Two related gaps, both real and neither modelled: the
-  university-wide **BA language requirement** (elementary 1101/1102 plus
-  intermediate 2101-or-approved, ~12 SH) appears on the general-education page
-  and on **none of the 105 BA program pages**; and all **88 CPS graduate
-  programs ship `totalCreditsRequired: 0`**, so their residual is structurally 0
-  and free electives are not expressible there at all. Check `totalCreditsRequired`
-  and the parsed section count before believing a free-elective number.
+- **A requirements pane states credit in PROSE, and prose is not a table.** The
+  pane is a run of `<h2>` + body pairs and only the table-bodied ones were read,
+  so `<h2>BA Language Requirements</h2><p>… a total of 12 semester hours of
+  language study</p>` was invisible on all **105 BA programs**. Over the 24
+  undergrad degrees with the largest residual, **23 state credit in prose the
+  parser could not see, 1,177 SH**. `proseSectionSH` emits these as codeless
+  sections, and the danger is that the SAME shape carries a restatement:
+  1. **`"Complete N semester hours in the major"` is a SUBTOTAL and must never
+     be summed** — it restates the sections already parsed, up to 60 SH of
+     phantom credit on one page, and over-demanding *refuses valid plans*.
+     `parseTotalCredits` already refuses that phrasing; the refusal is reused,
+     keyed on "in/for the major", never on the heading containing "Major".
+  2. The degree total and GPA prose are refused for the same reason — other
+     readers own those sentences.
+  3. A figure with no requirement stated ("Universitywide Requirements") emits
+     **nothing**, not a 0 SH section, which would claim a measurement.
+  4. The walk is over ALL headings in document order, so a prose section lands
+     where the page prints it. Measured on 30 cached pages: **18 sections
+     gained, 0 lost**.
+  ⚠ Left on the floor deliberately: using the major subtotal as a **lower bound
+  on the concentration floor** for the all-concentration programs (Philosophy BA
+  has zero requirement sections). Different mechanism, needs a corpus HTML cache
+  to validate, fails in the expensive direction.
+- **"A concentration is not required" can still mean "pick one".** Art BA adds
+  "students may complete the electives option **in lieu of** a concentration",
+  and `concentrationMinOptions` matched the first sentence and returned 0 — so a
+  20 SH choice demanded nothing. The tell is the option LIST, not the prose: an
+  **"Electives Option"** among the options is the catalog's own name for the
+  opt-out, so the choice itself is mandatory. 19 of the 58 programs scoring 0
+  have one; the other 39 ("Astrophysics Concentration (Optional)") keep their 0.
+- **Check COVERAGE before believing a free-elective number.** 51 of 330 Boston
+  undergrad degrees report >40% free electives, and the cause is almost never
+  arithmetic: Art BA parsed 37 SH against a 130 SH degree. Look at
+  `totalCreditsRequired`, the parsed section count, and `minOptions` first.
+  And do not infer a fact about the CATALOG from a hole in our DATA — "the pages
+  don't state the language requirement" was asserted from an empty field and
+  disproved by opening the HTML. All 88 CPS graduate programs shipping
+  `totalCreditsRequired: 0` is the same shape: the live parser reads their totals
+  fine (12/15/34/12/34 over a six-program sample), the pages changed in the
+  2026–27 rollover after the 2026-08-21 scrape, `verify-majors` flagged every one
+  as `missing-total-credits`, and the next bimonthly grad run fixes it with no
+  code change.
 - **`areasubheader` is a sub-run boundary, and it does THREE jobs.** CourseLeaf
   marks a sub-run inside an areaheader group with
   `<span class="courselistcomment areasubheader">` — 1,663 groups on 466 cached
