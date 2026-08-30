@@ -517,6 +517,40 @@ Facts that follow from this:
   catalog's separate **subset ban** ("a biology major cannot enroll in the
   biology minor") is also unimplemented — the cap catches the same plans by
   arithmetic, at 100% overlap.
+- **The 2× badge marks major↔minor overlap and NOTHING else**
+  (`src/ui/DoubleCountBadge.jsx`), because it is the only double counting in the
+  app with a budget attached. Two majors double-count freely, a concentration is
+  a component of its major rather than a second credential, and NUPath/degree
+  overlap is unlimited by the same catalog sentence that permits the minor's. A
+  badge on any of those invents a constraint.
+  - Three states: outlined = would count twice, filled = both audits claim it,
+    amber = that minor is over its cap. The eligible/counted split is free —
+    `courseRole` already reports a placed course's REAL allocation and simulates
+    an unplaced one — and the badge reuses it rather than asking allocation a
+    second question, so it cannot contradict the bank's own filter.
+  - **The amber is a fact about the MINOR.** No single course is the one past
+    the limit, the shared set is, so the whole set turns together and the
+    tooltip quotes the minor's numbers. An unplaced course quotes none.
+  - **It is dark for most students by design.** Measured over 225 (major, minor)
+    pairs against the whole catalog, ranges included: 172 — **76%** — have ZERO
+    courses eligible for both; median 0, p90 two, max twenty. A precision mark
+    for cognate pairs, not a browsing aid. Don't "improve" its reach by widening
+    what it marks.
+- **ONE placed set and ONE claim function, or the board contradicts the panel.**
+  `RelevanceContext` used to build its own placed set without `dropVoidTakes` or
+  work-term grants, so a failed course still lit up as major-relevant and a
+  co-op's registered course counted in the audit and nowhere on the board. It
+  uses `derivePlanSets` now — the same derivation the printed report already had.
+  `majorClaimOf` is the matching consolidation for "what the majors claim",
+  shared by the panel, the badge and the report. A student can see the card and
+  the requirement row at the same time; that is who finds out when two
+  derivations drift.
+  ⚠ Passing the major's used set into the concentration's allocation does NOT
+  stop the concentration re-using a major course — `allocateSection` blocks
+  against a snapshot, and a concentration naming a course the core already took
+  will still take it. Checked, not assumed; left alone as the audit's existing
+  behaviour, and harmless here because the same key lands in `claimed` either
+  way. Don't repeat the panel's comment, which claims otherwise.
 - **A MINOR's credit total needs a minor-sized window** (`MINOR_CREDIT_WINDOW`,
   `totalsProfileFor`). `UNDERGRAD_PROFILE.creditWindow` starts at 60 because a
   bachelor's is 120–134 SH, so every total a minor page published was thrown
