@@ -26,7 +26,9 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { parse as parseHTML } from 'node-html-parser';
-import { parseRequirements } from '../../scripts/lib/catalog-program-parser.js';
+import {
+  parseRequirements, UNDERGRAD_PROFILE, GRAD_PROFILE,
+} from '../../scripts/lib/catalog-program-parser.js';
 import { checkSection } from '../../src/core/gradRequirements.js';
 
 // Resolved from THIS FILE, not the cwd. `npm run test:contract` runs with cwd
@@ -36,6 +38,45 @@ import { checkSection } from '../../src/core/gradRequirements.js';
 const CACHE = process.env.CATALOG_HTML_CACHE
   ?? fileURLToPath(new URL('../../.cache/catalog', import.meta.url));
 const norm = (s) => (s ?? '').replace(/\s+/g, ' ').trim();
+
+/**
+ * The profile a cached page must be parsed with.
+ *
+ * ⚠ Both tests below used to pass `{}`, and an empty profile is not a neutral
+ * one: `proseSectionSH` asks `statedTotalIn` whether a sentence is a degree
+ * total, and that reads `profile.creditWindow`. Destructuring `undefined`
+ * throws, the `catch { continue }` beneath swallowed it, and **605 of the 631
+ * cached program pages were skipped in silence** — the partition guarantee ran
+ * on 4% of the corpus while reporting nothing wrong. The `rows > 1000`
+ * assertion is the only reason anyone found out, and only once a cache existed.
+ *
+ * So the profile is now the real one, and `parseFailures` below counts what
+ * the catch swallows instead of letting it hide the next one.
+ */
+const profileFor = (file) => (file.includes('_graduate_') ? GRAD_PROFILE : UNDERGRAD_PROFILE);
+
+/**
+ * Prose the pane prints OUTSIDE any table.
+ *
+ * A requirements pane is a run of headings and body copy, and the body copy is
+ * a source of sections in its own right: `proseSectionSH` reads "…a total of 12
+ * semester hours of language study" off a `<p>` on all 105 BA programs. The
+ * note such a section carries is a page sentence like any other — it simply is
+ * not a `courselistcomment` row.
+ *
+ * Missing from `onPage` below until the sample stopped being 4% of the corpus,
+ * at which point 136 of 5,709 notes read as invented when every one of them is
+ * printed on its page. "On the page" has to mean the page, not the tables.
+ */
+function proseParasOf(root) {
+  const out = [];
+  for (const el of root.querySelectorAll('p, li, div.noindent')) {
+    if (el.closest('table')) continue;
+    const t = norm(el.text);
+    if (t) out.push(t);
+  }
+  return out;
+}
 
 /** Every prose row the markup shows, by group, ignoring areaheaders. */
 function proseRowsOf(root) {
@@ -76,12 +117,13 @@ const sample = pages.filter((_, i) => i % Math.max(1, Math.floor(pages.length / 
 test('every prose row the catalog prints survives somewhere', (t) => {
   if (!pages.length) return t.skip(`no catalog cache at ${CACHE}`);
   const missing = [];
-  let rows = 0;
+  let rows = 0, parseFailures = 0;
   for (const file of sample) {
     const html = readFileSync(`${CACHE}/${file}`, 'utf8');
     if (!html.includes('sc_courselist')) continue;
     let root, out;
-    try { root = parseHTML(html); out = parseRequirements(root, {}, {}); } catch { continue; }
+    try { root = parseHTML(html); out = parseRequirements(root, profileFor(file), {}); }
+    catch { parseFailures++; continue; }
 
     const printed = new Set(allNotesOf(out));
     // Titles and labels are displayed verbatim too, and a sentence promoted to
@@ -111,6 +153,11 @@ test('every prose row the catalog prints survives somewhere', (t) => {
       }
     }
   }
+  // A page the parser THREW on is a page this guarantee did not check, and a
+  // silent `continue` is how 96% of them went missing once before. Assert on
+  // the swallowed count, not just on the sample size — the two fail for
+  // different reasons and only this one names the cause.
+  assert.equal(parseFailures, 0, `${parseFailures} pages threw and were skipped in silence`);
   assert.ok(rows > 1000, `expected a substantial sample, saw ${rows} prose rows`);
   // Measured 5.68% (134/2360), and NOT expected to be zero, for two reasons
   // that were both checked rather than assumed:
@@ -134,18 +181,26 @@ test('every prose row the catalog prints survives somewhere', (t) => {
 test('no note is invented — every one is a sentence on the page', (t) => {
   if (!pages.length) return t.skip(`no catalog cache at ${CACHE}`);
   const bogus = [];
-  let notes = 0;
+  let notes = 0, parseFailures = 0;
   for (const file of sample) {
     const html = readFileSync(`${CACHE}/${file}`, 'utf8');
     if (!html.includes('sc_courselist')) continue;
     let root, out;
-    try { root = parseHTML(html); out = parseRequirements(root, {}, {}); } catch { continue; }
-    const onPage = new Set(proseRowsOf(root));
+    try { root = parseHTML(html); out = parseRequirements(root, profileFor(file), {}); }
+    catch { parseFailures++; continue; }
+    const onPage = new Set([...proseRowsOf(root), ...proseParasOf(root)]);
     for (const n of allNotesOf(out)) {
       notes++;
-      if (!onPage.has(n)) bogus.push({ file, note: n });
+      // Equal to a row or a paragraph, or a sentence taken verbatim out of one
+      // — `proseSectionSH` may quote part of a paragraph. Containment is the
+      // weaker test and it is the honest one: what is being ruled out is text
+      // the page does not say, not text the page says at a different length.
+      if (!onPage.has(n) && ![...onPage].some((v) => v.includes(n))) {
+        bogus.push({ file, note: n });
+      }
     }
   }
+  assert.equal(parseFailures, 0, `${parseFailures} pages threw and were skipped in silence`);
   assert.ok(notes > 500, `expected a substantial sample, saw ${notes} notes`);
   assert.deepEqual(bogus.slice(0, 5), [],
     `${bogus.length}/${notes} notes are not verbatim rows of their own page`);
