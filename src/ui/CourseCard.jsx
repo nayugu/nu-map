@@ -13,6 +13,7 @@ import { baseId, takesUsed } from "../core/repeatInstances.js";
 import { courseInk } from "../core/courseModel.js";
 import { reservationNameSource, reservationSubline, optionGroupsText, cardOptionGroups } from "../core/reservations.js";
 import GradePopover from "./GradePopover.jsx";
+import DoubleCountBadge from "./DoubleCountBadge.jsx";
 import { CardHover } from "./HoverCard.jsx";
 import { takeConsumesSlot } from "../core/gradeSystem.js";
 import { requiredSHFor } from "../core/classStanding.js";
@@ -426,6 +427,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 7 : 10, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 3px", flexShrink: 0 }}>
           {shOverrides[course.id] ?? course.sh}
         </span>
+        <DoubleCountBadge course={course} compact />
         {/* Grade entry (phone): completed semesters only, and only once
             selected or already graded — the 17px card row has no room for
             a resting affordance on every card */}
@@ -543,6 +545,10 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
                      detail={hoverTitle ? hoverDetail : ""} maxWidth={280} />
         )}
         {course.isCps && <span style={{ fontWeight: 500, fontSize: 8, color: "var(--text-4)", flexShrink: 0 }}>· CPS</span>}
+        {/* Counts toward a major AND a minor. Beside the code rather than with
+            the warning icons on the right: it is an attribute of the course,
+            not a problem with the card. */}
+        <DoubleCountBadge course={course} />
         {multiTake && (
           <span
             title={t("bank.repeat.title").replace("{used}", String(takeCount)).replace("{max}", String(course.repeatMax ?? "∞"))}

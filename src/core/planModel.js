@@ -1,10 +1,9 @@
 // ═══════════════════════════════════════════════════════════════════
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
-import { buildPlacedKeySet, allocateMajorWithElectives, allocateMajorSections } from "./gradRequirements.js";
+import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirements.js";
 import { generalElectiveSHOf } from "./requirementBinding.js";
-import { satisfiedOf, DEFAULT_UNIT_SH } from "./requirementDemand.js";
-import { minorShare, MINOR_SHARE_FRACTION } from "./minorOverlap.js";
+import { minorShare, majorClaimOf, MINOR_SHARE_FRACTION } from "./minorOverlap.js";
 import { resolveTermByDuration, termSpans, computeGrantedAttrs, workTermGrants } from "./specialTermUtils.js";
 import { dropVoidTakes, dropUnearnedTakes } from "./gradeSystem.js";
 import { resolveCompanyLogo } from "./companyLogo.js";
@@ -652,17 +651,8 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
    * That makes the printed figure a LOWER bound on the screen's, which is the
    * permissive direction; it is a gap in the export, not in the rule.
    */
-  const majorClaim = (placed) => {
-    const claimed = new Set();
-    const sat = [];
-    for (const prog of [major, major2]) {
-      if (!prog) continue;
-      const { sections, allocatedSet } = allocateMajorSections(prog, placed, courseMap);
-      for (const s of sections) sat.push(satisfiedOf(s, DEFAULT_UNIT_SH, courseMap));
-      allocatedSet.forEach(k => claimed.add(k));
-    }
-    return { sat, claimed };
-  };
+  const majorClaim = majorClaimOf(
+    [major, major2].map(data => ({ data, concentration: null })), courseMap);
   const majorClaimedKeys = isGrad ? new Set() : majorClaim(placedSet).claimed;
 
   function renderProgram(prog, doneKeysSet, headerLabel, name, showGeneralElectives = true,

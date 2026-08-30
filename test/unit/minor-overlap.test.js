@@ -16,7 +16,7 @@
 //   · INERTNESS — the report must not perturb the audit or its own inputs.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { minorShare, minorRequirementSections, MINOR_SHARE_FRACTION }
+import { minorShare, minorRequirementSections, majorClaimOf, MINOR_SHARE_FRACTION }
   from "../../src/core/minorOverlap.js";
 import { allocateSections, courseKey } from "../../src/core/gradRequirements.js";
 import { _minorShareNote } from "../../src/core/planModel.js";
@@ -395,6 +395,85 @@ test("minor share › computing it changes neither the audit nor its own inputs"
 test("minor share › the fraction is the policy's, and the key helper agrees with it", () => {
   assert.equal(MINOR_SHARE_FRACTION, 0.5);
   assert.equal(courseKey("AA", 1000), "AA1000");
+});
+
+// ── majorClaimOf: one owner for "what the majors claim" ──────────
+// The panel draws the requirement rows and the board draws the badge on the
+// card. A student looking at both at once is the person who finds out when they
+// disagree, so both go through this.
+
+test("claim › General Electives are not the major, so they are not claimed", () => {
+  // The catalog permits it outright — "courses used to fulfil requirements for
+  // the minor may also be used to complete undergraduate degree requirements"
+  // — so a minor course sitting in the degree's free electives is the room a
+  // minor is meant to occupy, not double-counted credit.
+  const major = { requirementSections: [
+    SECTION("Core", 1, C("AA", 1000)),
+    { type: "SECTION", title: "Required General Electives", minRequirementCount: 1,
+      requirements: [C("CC", 3000)] },
+  ] };
+  const { claimed } = majorClaimOf([{ data: major }], CM)(new Set(["AA1000", "CC3000"]));
+  assert.deepEqual([...claimed], ["AA1000"]);
+});
+
+test("claim › a concentration is allocated with the major, and its courses are claimed", () => {
+  // The catalog calls a concentration "a component of a major", so its courses
+  // are major courses and the badge must treat them as such.
+  //
+  // What this does NOT assert is that the concentration avoids the major's own
+  // courses. It does not: with AA1000 already claimed by Core, the
+  // concentration takes AA1000 again rather than BB2000. That surprised me and
+  // was checked rather than assumed — `allocateSection` decides blocking
+  // against a snapshot, so passing the used set in constrains less than the
+  // panel's comment implies. It is the audit's existing behaviour, it is out of
+  // this module's scope, and it does not change the claimed SET, which is all
+  // `minorShare` reads.
+  const major = { requirementSections: [SECTION("Core", 1, C("AA", 1000))] };
+  const conc  = SECTION("Focus", 1, C("AA", 1000), C("BB", 2000));
+  const { claimed, sat } = majorClaimOf([{ data: major, concentration: conc }], CM)(
+    new Set(["AA1000", "BB2000"]));
+  assert.ok(claimed.has("AA1000"));
+  assert.equal(sat.length, 2, "one entry per section, major then concentration");
+  assert.equal(sat[1], 4, "the concentration is satisfied");
+});
+
+test("claim › a concentration-only course is claimed by the major", () => {
+  // The case the badge depends on: a course named ONLY by the concentration is
+  // still the major's claim, so a minor course that collides with it is
+  // double-counted and must be marked.
+  const major = { requirementSections: [SECTION("Core", 1, C("AA", 1000))] };
+  const conc  = SECTION("Focus", 1, C("BB", 2000));
+  const { claimed } = majorClaimOf([{ data: major, concentration: conc }], CM)(
+    new Set(["AA1000", "BB2000"]));
+  assert.deepEqual([...claimed].sort(), ["AA1000", "BB2000"]);
+});
+
+test("claim › both majors are claimed, and their sections stay in one vector", () => {
+  const a = { requirementSections: [SECTION("A", 1, C("AA", 1000))] };
+  const b = { requirementSections: [SECTION("B", 1, C("BB", 2000)), SECTION("B2", 1, C("CC", 3000))] };
+  const { claimed, sat } = majorClaimOf([{ data: a }, { data: b }], CM)(
+    new Set(["AA1000", "BB2000", "CC3000"]));
+  assert.deepEqual([...claimed].sort(), ["AA1000", "BB2000", "CC3000"]);
+  assert.equal(sat.length, 3);
+});
+
+test("claim › the vector length is stable across placed sets", () => {
+  // `minorShare` compares two runs element-wise and declines when the lengths
+  // differ. If this ever became placement-dependent the release would silently
+  // stop working rather than fail.
+  const major = { requirementSections: [SECTION("Core", 2, C("AA", 1000), C("AA", 1001))] };
+  const claim = majorClaimOf([{ data: major }], CM);
+  const lengths = [[], ["AA1000"], ["AA1000", "AA1001"], ["ZZ9999"]]
+    .map(p => claim(new Set(p)).sat.length);
+  assert.equal(new Set(lengths).size, 1, `lengths varied: ${lengths}`);
+});
+
+test("claim › junk programs are skipped rather than thrown on", () => {
+  for (const programs of [null, undefined, [], [null], [{}], [{ data: null }]]) {
+    const r = majorClaimOf(programs, CM)(new Set(ALL_THREE));
+    assert.deepEqual([...r.claimed], []);
+    assert.deepEqual(r.sat, []);
+  }
 });
 
 // ── The printed sentence ─────────────────────────────────────────

@@ -11,10 +11,9 @@ import { usePlanner }         from "./PlannerContext.jsx";
 import { usePort }            from "./InstitutionContext.jsx";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
 import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
-import { filterInTimeline }   from "../core/planModel.js";
+import { derivePlanSets }     from "../core/planModel.js";
 import { workTermGrants, coopOptionsInPrograms } from "../core/specialTermUtils.js";
 import {
-  buildPlacedKeySet,
   allocateMajorSections,
   allocateSections,
   courseKey,
@@ -25,12 +24,12 @@ import {
   courseEligible,
   countsAsElectiveOnly,
 } from "../core/programEligibility.js";
-import { minorRequirementSections } from "../core/minorOverlap.js";
+import { minorRequirementSections, minorShare, majorClaimOf } from "../core/minorOverlap.js";
 
 const EMPTY = new Set();
 const RelevanceContext = createContext({
   active: false, majorKeys: EMPTY, minorKeys: EMPTY,
-  hasProgram: false, courseRole: () => null,
+  hasProgram: false, courseRole: () => null, doubleCount: () => null, minorCaps: [],
 });
 
 // Allocate a single program against a placed-key set, returning the set of keys
@@ -70,8 +69,9 @@ function useProgram(loader, path) {
 
 export function RelevanceProvider({ children }) {
   const {
-    effectivePlacements, placedOut, courseMap, SEM_INDEX,
-    major, major2, conc, minor1, minor2, studentType, specialTermPl,
+    placements, grades, effectiveSubstitutions, placedOut, courseMap, SEM_INDEX,
+    currentSemIdx,
+    major, major2, conc, conc2, minor1, minor2, studentType, specialTermPl,
   } = usePlanner();
   const majorRequirements = usePort(IMajorRequirements);
   const specialTerms      = usePort(ISpecialTerms);
@@ -88,11 +88,30 @@ export function RelevanceProvider({ children }) {
   const minor1Data = useProgram(loadMinor, minor1);
   const minor2Data = useProgram(loadMinor, minor2);
 
-  // Timeline-scoped: parked courses must not consume requirement slots (a
-  // genuine candidate would otherwise read as "free elective").
+  /**
+   * The AUDIT's placed set — the same one the graduation panel allocates from.
+   *
+   * This used to be its own expression: `buildPlacedKeySet(filterInTimeline(
+   * effectivePlacements, …))`. Close, and not the same, in two ways that both
+   * put the board at odds with the panel. A definitively failed take (F/U/W)
+   * satisfies nothing in the audit but still lit its card up as major-relevant
+   * here, and a work term's registered course (COOP 3945, which 37 undergraduate
+   * programs require) counted in the panel and nowhere on the board.
+   *
+   * Timeline-scoping — parked courses must not consume requirement slots, or a
+   * genuine candidate reads as a free elective — comes along inside
+   * `derivePlanSets`, which is where that derivation already lived for the
+   * printed report. Three copies of it existed; this is the second of them
+   * folded back in.
+   */
   const placedSet = useMemo(
-    () => buildPlacedKeySet(filterInTimeline(effectivePlacements, SEM_INDEX), placedOut, courseMap),
-    [effectivePlacements, placedOut, courseMap, SEM_INDEX]
+    () => derivePlanSets({
+      placements, grades, substitutions: effectiveSubstitutions, placedOut, courseMap,
+      dynSemIdx: SEM_INDEX, curIdx: currentSemIdx,
+      specialTermPl, specialTermTypes: specialTerms?.getTypes() ?? [],
+    }).placedSet,
+    [placements, grades, effectiveSubstitutions, placedOut, courseMap, SEM_INDEX,
+     currentSemIdx, specialTermPl, specialTerms]
   );
 
   /**
@@ -123,25 +142,35 @@ export function RelevanceProvider({ children }) {
     () => new Set(coopOptionsInPrograms([majorData, major2Data], courseMap).map(o => o.key)),
     [majorData, major2Data, courseMap]);
 
+  /**
+   * What the majors claim, over any placed set — the panel's own function.
+   *
+   * Resolving the concentration TITLES here (rather than inside core) keeps
+   * `concentrationResolve` the single owner of that lookup, which is what saved
+   * plans and share links depend on.
+   */
+  const majorClaim = useMemo(() => majorClaimOf([
+    { data: majorData,  concentration: conc  && majorData?.concentrations
+        ? resolveConcentration(majorData, conc) : null },
+    { data: major2Data, concentration: conc2 && major2Data?.concentrations
+        ? resolveConcentration(major2Data, conc2) : null },
+  ], courseMap), [majorData, major2Data, conc, conc2, courseMap]);
+
   const value = useMemo(() => {
-    const majorKeys = new Set();
-    for (const m of [majorData, major2Data]) {
-      if (!m) continue;
-      const { allocatedSet } = allocateMajorSections(m, placedSet, courseMap);
-      // Concentration shares the primary major's used set (same as GradPanel)
-      if (m === majorData && conc && m.concentrations) {
-        const concSection = resolveConcentration(m, conc);
-        if (concSection) allocateSections([concSection], placedSet, allocatedSet, courseMap);
-      }
-      allocatedSet.forEach(k => majorKeys.add(k));
-    }
+    const majorKeys = majorClaim(placedSet).claimed;
 
     const minorKeys = new Set();
-    for (const m of [minor1Data, minor2Data]) {
+    // Per-minor double-counting state, so the board can mark a card without
+    // opening the graduation panel — and mark it with the SAME numbers, since
+    // both sides now allocate from one placed set through one claim function.
+    const minorCaps = [];
+    for (const [i, m] of [minor1Data, minor2Data].entries()) {
       if (!m) continue;
       const used = new Set();
       allocateSections(minorRequirementSections(m), placedSet, used, courseMap);
       used.forEach(k => { if (!majorKeys.has(k)) minorKeys.add(k); });
+      const share = minorShare({ minor: m, placedSet, majorKeys, courseMap, majorClaim });
+      if (share) minorCaps.push({ n: i + 1, name: m.name ?? "", share });
     }
 
     const active = !!(majorData || major2Data || minor1Data || minor2Data);
@@ -205,12 +234,56 @@ export function RelevanceProvider({ children }) {
       return roles.length ? roles : [{ type: "free" }];
     };
 
-    return { active, majorKeys, minorKeys, hasProgram, courseRole, workTermCourse, coopProgramOptions };
+    /**
+     * Does this course count toward a MAJOR and a MINOR at once?
+     *
+     * Northeastern lets it, up to half the credit the minor requires — the one
+     * overlap in the app that carries a budget, which is why it is the only one
+     * marked. Two majors double-count freely (no budget, nothing to watch), a
+     * concentration is part of its major rather than a second credential, and
+     * NUPath overlap is unlimited by the same catalog sentence that permits it.
+     *
+     * Reuses `courseRole` rather than asking allocation a second question, so
+     * the badge cannot say one thing while the bank's own filter says another.
+     * That also gets the placed/unplaced split for free: `courseRole` reports a
+     * placed course's REAL allocation and simulates an unplaced one, which is
+     * exactly the difference between "counts twice" and "would count twice".
+     *
+     * `over` is a fact about the MINOR, not about this course. No single course
+     * is the one past the limit — the shared set is — so every card in that set
+     * carries the same mark and the tooltip carries the set's own numbers.
+     */
+    const doubleCount = (crs) => {
+      if (!minorCaps.length) return null;
+      const roles = courseRole(crs);
+      if (!roles) return null;
+      const minorRole = roles.find(r => r.type === "minor");
+      if (!minorRole || !roles.some(r => r.type === "major")) return null;
+      const cap = minorCaps.find(c => c.n === minorRole.n);
+      if (!cap) return null;
+      return {
+        placed: placedSet.has(courseKey(crs.subject, crs.number)),
+        over: cap.share.over,
+        minorN: minorRole.n,
+        numbered: minorRole.numbered,
+        minorName: cap.name,
+        sh: cap.share.dependentSH,
+        capSH: cap.share.capSH,
+      };
+    };
+
+    return { active, majorKeys, minorKeys, hasProgram, courseRole, doubleCount,
+             minorCaps, workTermCourse, coopProgramOptions };
     // `workTermCourse` MUST be listed. Without it this memo keeps the object it
     // closed over on first render — when the plan has not loaded and there are
     // no work terms — so dragging a co-op onto the board recomputed the map and
     // published nothing, and the card's course field never appeared.
-  }, [majorData, major2Data, minor1Data, minor2Data, conc, placedSet, courseMap, workTermCourse, coopProgramOptions]);
+    // `majorClaim` and `conc2` MUST be listed for the same reason `workTermCourse`
+    // is: without them the memo keeps the claim function it closed over, so
+    // changing the second major's concentration would leave every card marked
+    // against the previous one.
+  }, [majorData, major2Data, minor1Data, minor2Data, conc, conc2, majorClaim,
+      placedSet, courseMap, workTermCourse, coopProgramOptions]);
 
   return <RelevanceContext.Provider value={value}>{children}</RelevanceContext.Provider>;
 }

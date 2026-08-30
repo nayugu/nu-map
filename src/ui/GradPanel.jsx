@@ -7,7 +7,7 @@
 // Double major: courses count freely toward both majors (NU policy).
 // Each major is allocated independently with allocateMajorWithElectives.
 // ═══════════════════════════════════════════════════════════════════
-import { useState, useMemo, useEffect, useContext, createContext, useRef, useCallback } from "react";
+import { useState, useMemo, useEffect, useContext, createContext, useRef } from "react";
 import { createPortal } from "react-dom";
 import VerificationPopover from "./VerificationPopover.jsx";
 import { usePlanner }         from "../context/PlannerContext.jsx";
@@ -40,8 +40,9 @@ import {
   calculateGeneralElectives,
 } from "../core/gradRequirements.js";
 import { generalElectiveSHOf } from "../core/requirementBinding.js";
-import { satisfiedOf, DEFAULT_UNIT_SH } from "../core/requirementDemand.js";
-import { minorShare, minorRequirementSections, MINOR_SHARE_FRACTION } from "../core/minorOverlap.js";
+import {
+  minorShare, minorRequirementSections, majorClaimOf, MINOR_SHARE_FRACTION,
+} from "../core/minorOverlap.js";
 import { findNewerMajorVersion, findNewerGradMajorVersion } from "../data/majorLoader.js";
 import { rankOptions } from "../core/searchRank.js";
 
@@ -2208,25 +2209,12 @@ export default function GradPanel({ wideCatalog = false }) {
    * function, same inputs, same result — and `allocateMajorSections` is 0.1 ms
    * on the largest undergraduate program.
    */
-  const majorClaim = useCallback((placed) => {
-    const claimed = new Set();
-    const sat = [];
-    for (const [m, c] of [[major, selConc], [major2Data, selConc2]]) {
-      if (!m) continue;
-      const { sections, allocatedSet } = allocateMajorSections(m, placed, courseMap);
-      const all = [...sections];
-      if (c && m.concentrations) {
-        const chosen = resolveConcentration(m, c);
-        if (chosen) all.push(...allocateSections([chosen], placed, allocatedSet, courseMap));
-      }
-      // A CONSTANT unit, not the per-section modal credit: the two runs being
-      // compared must measure the same way, and `typicalSH` needs the raw
-      // section, which `mergeDuplicateSections` no longer lines up with.
-      for (const s of all) sat.push(satisfiedOf(s, DEFAULT_UNIT_SH, courseMap));
-      allocatedSet.forEach(k => claimed.add(k));
-    }
-    return { sat, claimed };
-  }, [major, major2Data, selConc, selConc2, courseMap]);
+  const majorClaim = useMemo(() => majorClaimOf([
+    { data: major, concentration: selConc && major?.concentrations
+        ? resolveConcentration(major, selConc) : null },
+    { data: major2Data, concentration: selConc2 && major2Data?.concentrations
+        ? resolveConcentration(major2Data, selConc2) : null },
+  ], courseMap), [major, major2Data, selConc, selConc2, courseMap]);
 
   const majorClaimedKeys = useMemo(() => majorClaim(placedSet).claimed,
                                    [majorClaim, placedSet]);

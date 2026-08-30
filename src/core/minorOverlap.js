@@ -65,8 +65,8 @@
 // do not owe.
 // ═══════════════════════════════════════════════════════════════════
 
-import { allocateSections } from "./gradRequirements.js";
-import { demandOf, satisfiedOf, typicalSH } from "./requirementDemand.js";
+import { allocateSections, allocateMajorSections } from "./gradRequirements.js";
+import { demandOf, satisfiedOf, typicalSH, DEFAULT_UNIT_SH } from "./requirementDemand.js";
 import { specForNode } from "./programEligibility.js";
 
 /** The policy's fraction. A parameter of Northeastern's rule, not of degrees. */
@@ -89,6 +89,71 @@ export function minorRequirementSections(minor) {
   return (minor?.requirementSections ?? []).filter(
     section => section && section.title !== "Required General Electives"
   );
+}
+
+/**
+ * What the MAJORS claim, as a function of a hypothetical placed set.
+ *
+ * The shape `minorShare` wants for `majorClaim`, built once so the three places
+ * that need it cannot form three opinions: the graduation panel, the board's
+ * relevance layer, and the printed report. The panel and the board in
+ * particular MUST agree — one draws the requirement rows and the other draws
+ * the badge on the card, and a student looking at both at once is the person
+ * who finds out when they disagree.
+ *
+ * A function rather than a set, because the cap asks counterfactuals: "could
+ * the major have satisfied that requirement without this course?"
+ *
+ * Returns per-section satisfied credit rather than one total. A total cannot
+ * tell "nothing changed" from "one section lost exactly what another gained",
+ * and the second is a broken requirement.
+ *
+ * General Electives is excluded by construction — `allocatedSet` is the
+ * requirement claim — because a minor course landing in the degree's free
+ * electives is not double-counted credit, it is the room a minor is meant to
+ * occupy. The catalog says so outright: "courses used to fulfil requirements
+ * for the minor may also be used to complete undergraduate degree
+ * requirements."
+ *
+ * @param {{data: object, concentration?: object|null}[]} programs
+ *        Each major, with its chosen concentration SECTION already resolved
+ *        (title resolution is the caller's; `concentrationResolve` owns it).
+ * @param {Record<string, object>} courseMap
+ * @returns {(placed: Set<string>) => {sat: number[], claimed: Set<string>}}
+ */
+export function majorClaimOf(programs, courseMap = {}) {
+  const list = (programs ?? []).filter(p => p?.data);
+  return (placed) => {
+    const set = placed instanceof Set ? placed : new Set(placed ?? []);
+    const claimed = new Set();
+    const sat = [];
+    for (const { data, concentration } of list) {
+      const { sections, allocatedSet } = allocateMajorSections(data, set, courseMap);
+      const all = [...sections];
+      // The concentration is allocated with the major's used set passed in,
+      // which is exactly what the graduation panel does — the point here is to
+      // match it, not to improve on it.
+      //
+      // ⚠ Passing that set in does NOT guarantee the concentration avoids the
+      // major's courses; `allocateSection` decides blocking against a snapshot,
+      // and a concentration naming a course the major's core already claimed
+      // will still take it (checked, not assumed). That is the audit's existing
+      // behaviour and it is left alone: the catalog calls a concentration "a
+      // component of a major", states no double-counting rule for one, and
+      // changing it here would move requirement rows on 81 programs to serve a
+      // badge that never reads this. Either way the same key lands in
+      // `claimed`, which is all `minorShare` asks of us.
+      if (concentration) {
+        all.push(...allocateSections([concentration], set, allocatedSet, courseMap));
+      }
+      // A CONSTANT unit, not the per-section modal credit: the two runs being
+      // compared must measure the same way, and `typicalSH` needs the raw
+      // section, which `mergeDuplicateSections` no longer lines up with.
+      for (const s of all) sat.push(satisfiedOf(s, DEFAULT_UNIT_SH, courseMap));
+      allocatedSet.forEach(k => claimed.add(k));
+    }
+    return { sat, claimed };
+  };
 }
 
 /**

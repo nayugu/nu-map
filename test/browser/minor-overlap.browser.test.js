@@ -124,6 +124,89 @@ describe("minor · the double-counting cap", () => {
     assert.doesNotMatch(text, /over the limit/, "a false violation against an unrelated major");
   });
 
+  // ── The 2× badge on the card ────────────────────────────────────
+  // The row above proves the arithmetic reaches the panel. This proves it
+  // reaches the BOARD, which is a different chain: RelevanceContext has to
+  // allocate from the same placed set the panel does and publish the cap
+  // app-wide, and none of that runs in Node.
+
+  /**
+   * Card text for the board, without opening the graduation panel.
+   *
+   * `search` types into the course bank first, which is the only way to reach
+   * the UNPLACED state: an eligible course the student has not placed lives in
+   * the bank, and the bank does not list the catalog until asked.
+   */
+  async function boardText({ major, minor1, placements = {}, search = null }) {
+    assert.equal(launchError, null, "chromium unavailable");
+    const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
+    await ctx.addInitScript(seed(major, minor1, placements));
+    const page = await ctx.newPage();
+    const errors = [];
+    page.on("pageerror", e => errors.push(String(e?.message ?? e)));
+    await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load", timeout: 60_000 });
+    await page.waitForTimeout(2500);
+    for (let i = 0; i < 6; i++) {
+      const skip = page.getByRole("button", { name: /^Skip$/ }).first();
+      if (await skip.count() && await skip.isVisible().catch(() => false)) {
+        await skip.click().catch(() => {}); await page.waitForTimeout(250);
+      } else break;
+    }
+    if (search) {
+      await page.getByPlaceholder(/search/i).first().fill(search);
+      await page.waitForTimeout(1200);
+    }
+    // Every badge on the page, by its tooltip — the glyph alone ("2×") would
+    // not tell the three states apart.
+    const badges = await page.evaluate(() =>
+      [...document.querySelectorAll("span[aria-label]")]
+        .filter(el => el.textContent.trim() === "2×")
+        .map(el => el.getAttribute("aria-label")));
+    const text = await page.evaluate(() => document.body.innerText);
+    await ctx.close();
+    assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
+    assert.match(text, /CRIM\s*1100/, "the board did not render the placed courses");
+    return badges;
+  }
+
+  test("a placed course counting toward both is badged, and says so", async () => {
+    const badges = await boardText({ major: BACJ, minor1: CJ_MINOR, placements: CRIM });
+    assert.equal(badges.length, 3, `expected one per CRIM course, got ${badges.length}`);
+    for (const b of badges) {
+      assert.match(b, /Counts toward your major and Criminal Justice, Minor/);
+      // The MINOR's numbers, not this course's — 12 of a 10 SH cap.
+      assert.match(b, /12 of 10 SH double-counted/);
+      assert.match(b, /over the 50% limit/, "this pair is over, so every badge says so");
+    }
+  });
+
+  test("an ELIGIBLE course is badged differently from one already counted", async () => {
+    // The third state, and the one the board alone cannot show: a course the
+    // student has not placed. CRIM 1120 is left off the plan and found through
+    // the bank, where it must read as a possibility rather than a fact.
+    const badges = await boardText({ major: BACJ, minor1: CJ_MINOR,
+                                     placements: { CRIM1100: "fall2025", CRIM1110: "fall2025" },
+                                     search: "CRIM 1120" });
+    const would = badges.filter(b => /Would count toward/.test(b));
+    assert.ok(would.length >= 1, `no eligible-state badge among: ${JSON.stringify(badges)}`);
+    // An unplaced course states no figure: nothing is double-counted yet, and
+    // quoting the minor's running total on it would read as if it were.
+    assert.doesNotMatch(would[0], /double-counted/);
+    assert.match(would[0], /Criminal Justice, Minor/);
+  });
+
+  test("the same courses under an unrelated major are not badged at all", async () => {
+    // The control that matters: a badge that appeared here would be telling a
+    // student they are banking overlap credit they are not banking.
+    assert.deepEqual(await boardText({ major: CS_BS, minor1: CJ_MINOR, placements: CRIM }), []);
+  });
+
+  test("no minor selected means no badge, so it cannot leak onto a major", async () => {
+    // Two majors double-count freely at Northeastern — no budget, nothing to
+    // mark. The badge exists only for the overlap that has a cap.
+    assert.deepEqual(await boardText({ major: BACJ, minor1: "", placements: CRIM }), []);
+  });
+
   test("no minor at all draws no row", async () => {
     // `SharedCredit` lives inside `MinorBlock`, so this is really a check that
     // the cap cannot leak onto a major card, where the policy does not apply:
