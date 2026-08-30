@@ -116,6 +116,43 @@ test('prose sections › the DEGREE TOTAL is refused even when it is small', () 
   assert.deepEqual(titles(undergrad), []);
 });
 
+test('prose sections › EVERY phrasing of a degree total is refused', () => {
+  // The hole a surviving mutant exposed. The guard used to carry its own
+  // pattern — "total <unit> required" — and the catalog states a total seven
+  // ways. Two of them leaked and became phantom sections of 42 and 28 SH:
+  //
+  //   "A total of 42 semester hours are required."            -> 42 SH section
+  //   "A minimum of 28 semester hours … beyond the graduate
+  //    degree is required"                                    -> 28 SH section
+  //
+  // The second is the doctoral/advanced-entry form, so the programs that would
+  // have grown a phantom requirement are precisely the smallest degrees in the
+  // catalog. It now asks `statedTotalIn`, the same reader `parseTotalCredits`
+  // uses, so the two lists cannot drift.
+  for (const text of [
+    '96 total semester hours required',
+    'A total of 96 semester hours are required.',
+    '96 overall semester hours required',
+    '96 total semester hours',
+    '96 minimum semester hours required',
+    'A minimum of 96 semester hours beyond the undergraduate degree is required',
+    '96 semester hours required',
+    '96 total credits required',
+  ]) {
+    const root = pane(h2('Program Requirement') + p(text));
+    assert.deepEqual(titles(root), [], `"${text}" is a degree total, not a requirement`);
+  }
+});
+
+test('prose sections › the language sentence is NOT read as a total', () => {
+  // It contains "a total of 12 semester hours", which is one of the total
+  // phrasings — so the refusal above has to stop short of it. What separates
+  // them on an undergraduate page is the credit window: 12 is below the 60 SH
+  // floor of a bachelor's degree, so it cannot be one.
+  const root = pane(h2('BA Language Requirements') + p(LANGUAGE));
+  assert.equal(find(root, 'BA Language Requirements')?.creditsRequired, 12);
+});
+
 test('prose sections › a GPA rule is refused, by the GPA guard alone', () => {
   // Also isolated: a figure present, under the ceiling, no "total … required",
   // no "in the major". This is the only shape in which the GPA guard is

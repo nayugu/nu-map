@@ -1346,6 +1346,55 @@ function requirementsRoot(pageRoot) {
  *        whole page keep the fallbacks; callers parsing one program of several
  *        do not.
  */
+/**
+ * Does this text state a DEGREE TOTAL, and which number is it?
+ *
+ * Split out of `parseTotalCredits` so there is exactly one place that knows how
+ * the catalog phrases a degree total. `proseSectionSH` needs the same knowledge
+ * for the opposite purpose — to REFUSE such a sentence rather than read it — and
+ * it originally hand-rolled its own smaller version. That second opinion was
+ * wrong within a day: it matched "42 total semester hours required" but not
+ * "A total of 42 semester hours are required" and not the doctoral "A minimum of
+ * 28 semester hours … beyond the graduate degree is required", so both became
+ * phantom requirement sections of 42 and 28 SH. Over-demanding refuses valid
+ * plans, and advanced-entry doctoral programs are exactly where the second form
+ * lives. Found by chasing a surviving mutant, not by review.
+ *
+ * The ordering of the patterns is `parseTotalCredits`' own and is documented
+ * there; it is the priority order of how explicitly a phrasing claims to be the
+ * degree total.
+ */
+// How the catalog writes a credit figure and its unit. Module-scope because
+// `statedTotalIn` and `parseTotalCredits`' own "Variable total …" test both
+// build regexes from them, and two copies of "what counts as a semester hour"
+// is the drift this whole refactor exists to remove. UNIT is deliberately
+// "semester hours" or "credits" only — never "quarter hours", which CPS states
+// alongside and which is not the same unit.
+const N = String.raw`(\d+)(?:\s*[-–]\s*\d+)?`;
+const UNIT = String.raw`(?:semester\s+hours?|credits?)`;
+
+function statedTotalIn(text, profile) {
+  const [lo, hi] = profile.creditWindow;
+  const patterns = [
+    [new RegExp(`${N}\\s+total\\s+${UNIT}\\s+required`, 'i'),   'stated-total'],
+    [new RegExp(`a\\s+total\\s+of\\s+${N}\\s+${UNIT}`, 'i'),     'stated-total'],
+    [new RegExp(`${N}\\s+overall\\s+${UNIT}\\s+required`, 'i'),  'stated-overall'],
+    [new RegExp(`${N}\\s+total\\s+${UNIT}`, 'i'),                'stated-total'],
+    [new RegExp(`${N}\\s+minimum\\s+${UNIT}\\s+required`, 'i'),  'stated-minimum'],
+    [new RegExp(`a\\s+minimum\\s+of\\s+${N}\\s+${UNIT}[^.]*?beyond\\s+the\\s+(?:under)?graduate\\s+degree`, 'i'),
+                                                                 'stated-minimum'],
+    [new RegExp(`${N}\\s+${UNIT}\\s+required`, 'i'),             'stated-required'],
+  ];
+  for (const [re, source] of patterns) {
+    const m = text.match(re);
+    if (m) {
+      const n = parseInt(m[1], 10);
+      if (Number.isFinite(n) && n > lo && n < hi) return { value: n, source };
+    }
+  }
+  return null;
+}
+
 export function parseTotalCredits(pageRoot, profile, opts = {}) {
   const [lo, hi] = profile.creditWindow;
   const inWindow = n => Number.isFinite(n) && n > lo && n < hi;
@@ -1388,25 +1437,8 @@ export function parseTotalCredits(pageRoot, profile, opts = {}) {
   //
   // UNIT is deliberately "semester hours" or "credits" only — never "quarter
   // hours", which CPS states alongside and which is not the same unit.
-  const N = String.raw`(\d+)(?:\s*[-–]\s*\d+)?`;
-  const UNIT = String.raw`(?:semester\s+hours?|credits?)`;
-  const patterns = [
-    [new RegExp(`${N}\\s+total\\s+${UNIT}\\s+required`, 'i'),   'stated-total'],
-    [new RegExp(`a\\s+total\\s+of\\s+${N}\\s+${UNIT}`, 'i'),     'stated-total'],
-    [new RegExp(`${N}\\s+overall\\s+${UNIT}\\s+required`, 'i'),  'stated-overall'],
-    [new RegExp(`${N}\\s+total\\s+${UNIT}`, 'i'),                'stated-total'],
-    [new RegExp(`${N}\\s+minimum\\s+${UNIT}\\s+required`, 'i'),  'stated-minimum'],
-    [new RegExp(`a\\s+minimum\\s+of\\s+${N}\\s+${UNIT}[^.]*?beyond\\s+the\\s+(?:under)?graduate\\s+degree`, 'i'),
-                                                                 'stated-minimum'],
-    [new RegExp(`${N}\\s+${UNIT}\\s+required`, 'i'),             'stated-required'],
-  ];
-  for (const [re, source] of patterns) {
-    const m = text.match(re);
-    if (m) {
-      const n = parseInt(m[1], 10);
-      if (inWindow(n)) return { value: n, source };
-    }
-  }
+  const stated = statedTotalIn(text, profile);
+  if (stated) return stated;
 
   // The catalog sometimes states, in the same breath and the same slot, that
   // there IS no fixed number: Biology, PhD—Advanced Entry reads "Variable total
@@ -2176,7 +2208,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
       // so nothing is enumerated wrongly, `minRequirementCount: 1` so nothing
       // draws a checked box.
       if (concHeadings.has(headingIdx)) continue;
-      const sh = proseSectionSH(title, adjacentParas(headingIdx));
+      const sh = proseSectionSH(title, adjacentParas(headingIdx), profile);
       if (sh === null) continue;
       requirementSections.push({
         type: 'SECTION',
@@ -2388,7 +2420,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
  * "Universitywide Requirements" — real, but quantified nowhere on the page —
  * produces no section instead of a 0 SH one that claims to be measured.
  */
-function proseSectionSH(title, paras) {
+function proseSectionSH(title, paras, profile) {
   const text = [title, ...paras].join(' ').replace(/ /g, ' ').replace(/\s+/g, ' ');
   // ── Which guard actually does the work, measured ─────────────────
   //
@@ -2402,11 +2434,25 @@ function proseSectionSH(title, paras) {
   // A subtotal of the major, restating sections already parsed.
   if (/\b(?:in|for|toward)\s+the\s+major\b/i.test(text)) return null;
   // The degree total — the number the free-elective residual is subtracted
-  // FROM. ⚠ This is the guard no arithmetic can replace: an undergraduate total
-  // is ~130 and would fail any plausibility bound, but a graduate certificate
-  // states "12 total semester hours required", which is indistinguishable BY
-  // SIZE from a real 12 SH requirement. Only the phrasing separates them.
-  if (/\btotal\s+(?:semester\s+hours?|credits?)\s+required\b/i.test(text)) return null;
+  // FROM. ⚠ Two things about this guard:
+  //
+  //  1. No arithmetic can replace it. An undergraduate total is ~130 and would
+  //     fail any plausibility bound, but a graduate certificate states "12 total
+  //     semester hours required", indistinguishable BY SIZE from a real 12 SH
+  //     requirement. Only the phrasing separates them.
+  //  2. It asks `statedTotalIn` rather than carrying its own pattern, because a
+  //     second opinion about that phrasing was wrong within a day — see the note
+  //     on that function. The catalog states a total seven ways and this must
+  //     refuse all seven, forever, without anybody remembering to update two
+  //     lists.
+  //
+  // The profile's credit window is what keeps "for a total of 12 semester hours
+  // of language study" from reading as a total on an undergraduate page: 12 is
+  // below the 60 SH floor of a bachelor's degree. On a GRADUATE page that
+  // sentence would be refused, and that is the accepted trade — no graduate
+  // program carries a BA language requirement, and losing a requirement is the
+  // recoverable direction where inventing one is not.
+  if (statedTotalIn(text, profile)) return null;
   // A GPA rule, which parseGpaRule owns. Kept as a backstop, and honestly
   // labelled: it was measured to reject nothing the figure test would not, since
   // every GPA block in the sample states no credit, and CourseLeaf's combined
