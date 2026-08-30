@@ -288,19 +288,64 @@ Facts that follow from this:
     guard costs the fix nothing.
   - A range cell (`9-12`, `9–12`) reads as its **minimum**, and an unparseable
     cell falls back rather than becoming a 0 threshold satisfied by nothing.
-- **The free-elective allowance is the RESIDUAL, in one place.** It was computed
-  three ways: the panel used `generalElectiveSH ?? 0`, so the 976 of 1,071
-  programs that state no figure showed a General Electives section requiring
-  0 SH; `obligationsOf` used `stated ?? residual`; `deriveCells` used the
-  residual always, having measured the stated figure wrong in both directions.
-  All callers now go through `generalElectiveSHOf` / `generalElectiveAllowance`
-  in `core/requirementBinding.js`, and the stated figure survives only as a
-  signal (`general-elective-disagreement`). CHART still takes its residual
-  against its own CELL total — not a fourth rule: a co-requisite pair is one
-  cell and two courses, and mixing the two accountings is what left Industrial
-  Engineering 8 credits short. `demandOf` reads a childless section's
-  `statedSH`; before that it answered a flat 4 SH for all 580 of them, so
-  4,305 of 6,625 SH leaked into free electives.
+- **The free-elective allowance is the RESIDUAL, in one place.** Full account in
+  `docs/general-electives.md`. It was computed three ways: the panel used
+  `generalElectiveSH ?? 0`, so the 976 of 1,071 programs that state no figure
+  showed a General Electives section requiring 0 SH; `obligationsOf` used
+  `stated ?? residual`; `deriveCells` used the residual always, having measured
+  the stated figure wrong in both directions. All callers go through
+  `generalElectiveSHOf` / `generalElectiveAllowance` in
+  `core/requirementBinding.js`, and the stated figure survives only as a signal
+  (`general-elective-disagreement`). ⚠ **That last sentence was false for a year
+  and is worth knowing about**: `allocateMajorWithElectives` still reached for
+  `major.generalElectiveSH ?? 0`, so the PDF export kept printing the very
+  denominator the consolidation claims to have deleted. Core cannot call
+  `requirementBinding` (it would close an import cycle), so the allowance is now
+  a PARAMETER — a caller that wants General Electives must supply it, and one
+  that only wants `allocatedSet` calls `allocateMajorSections` instead.
+- **A section's credit is READ from its courses, never `count × modal credit`.**
+  `demandOf` sized a section as `minRequirementCount × typicalSH(...)`, which is
+  an estimate standing in for a number the catalog states outright, and the
+  residual above turns every under-count into free electives. Mechanical
+  Engineering and Design (Boston) was wrong three ways at once — a 1+5 SH
+  capstone sized 2×1, four 4 SH co-requisite pairs sized 4×2, seven entries
+  five of which are lecture+lab sized 7×4 — so 117 SH of a 139 SH degree left
+  **22 SH of free electives against the registrar's stated 4**. Summing the
+  courses gives 135, and 139−135 = 4 exactly. Rules:
+  1. One walk returns `{req, sat}` per node with `sat` capped at `req`, because
+     `shortfallOf` subtracts them; as two walks in two currencies they agreed
+     only by being wrong the same way.
+  2. **OR takes the MINIMUM branch.** 518 of 3,318 OR nodes differ in credit, so
+     this had to be measured: against the 95 programs that state their own
+     figure, min scores 22 exact against 20 (modal branch) and 16 (max).
+  3. The modal unit survives only where nothing names a credit value — a RANGE,
+     a course missing from the catalog (54 nodes), a section naming no course.
+  4. "Choose N of M" is **unexercised**: `minRequirementCount >= children.length`
+     for all 6,887 sections, with zero nested SECTIONs and zero pick-N
+     concentration options. There is a tripwire test, because a fallback nobody
+     has measured must not quietly start deciding credit.
+  Measured on the 95-program test set: exact 1→22, within 1 SH 2→54, mean
+  |error| 15.08→2.93. It also **collapsed the coreq reconciliation**: CHART took
+  its residual against its own CELL total precisely because `demandOf` counted a
+  pair as one modal-credit course (the Industrial Engineering 8-credit gap), so
+  the two accountings now agree. An A/B of both readings in ONE tree (env hatch,
+  deleted with the measurement) moved 2 of 98 sampled plans, both "same courses,
+  different arrangement", none gained or lost.
+  `demandOf` also reads a childless section's `statedSH`;
+  before that it answered a flat 4 SH for all 580 of them, so 4,305 of 6,625 SH
+  leaked into free electives.
+- **A big free-elective figure is usually a COVERAGE bug, not an arithmetic
+  one.** After the fix above, 51 of 330 Boston undergrad degrees still report
+  >40% free electives — Theatre BA 116/132, Philosophy BA 112/128, Art BA
+  93/130 off **37 SH of parsed requirements against a 130 SH degree**. That is a
+  thin requirement pane, not a sizing error, and no amount of credit arithmetic
+  will close it. Two related gaps, both real and neither modelled: the
+  university-wide **BA language requirement** (elementary 1101/1102 plus
+  intermediate 2101-or-approved, ~12 SH) appears on the general-education page
+  and on **none of the 105 BA program pages**; and all **88 CPS graduate
+  programs ship `totalCreditsRequired: 0`**, so their residual is structurally 0
+  and free electives are not expressible there at all. Check `totalCreditsRequired`
+  and the parsed section count before believing a free-elective number.
 - **`areasubheader` is a sub-run boundary, and it does THREE jobs.** CourseLeaf
   marks a sub-run inside an areaheader group with
   `<span class="courselistcomment areasubheader">` — 1,663 groups on 466 cached
