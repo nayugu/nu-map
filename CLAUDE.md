@@ -660,6 +660,21 @@ expensive failure, so the loop is:
   ones that pay are hostile: malformed specs, stale ids, junk locale shapes,
   hundreds of random gestures. Do not stop at first green — stop when you have
   tried everything you can think of and it still holds.
+  - **"Hostile" is a measurable property, not an intention:
+    `node scripts/mutation-probe.js`.** Break the code on purpose, run the tests,
+    see whether they notice. On its first outing it found four guards that were
+    each deletable with nothing failing — the tests used figures a cruder check
+    caught first, so they asserted the right outcome for the wrong reason — one
+    rule with no test at all, and, by chasing a stubborn survivor, a real bug
+    that review had passed. A test written to guard something and a test that
+    *would have caught it* are different things, and only one of them is checkable.
+  - Two survivors mean two different things and the first guess is usually wrong:
+    a **hole** in the suite, or an **equivalent mutant** that cannot change
+    behaviour. Decide which; the probe marks the known-equivalent ones so a
+    future KILL there is itself a signal.
+  - A **SKIP is the dangerous outcome**, not a neutral one: a refactor moves the
+    anchor, the mutant silently stops testing anything, and the score stays
+    perfect. That is why the probe exits non-zero on a skip.
 - **Verify, never assume.** `subjects` is an array at runtime and an object in
   the scraper. `CS 3500` does not exist. Four core modules were imported by
   nothing at all. Each was found by *checking*, and each would have shipped in
