@@ -76,12 +76,20 @@ test('prose sections › the sentence reaches the reader even when the credit do
 
 // ── The restatements, each of which would double-count ─────────────
 
-test('prose sections › a MAJOR SUBTOTAL is refused', () => {
+// Each of these must be rejected by ITS OWN guard, so every figure below sits
+// under the plausibility ceiling. The first version of these tests used 36 and
+// 130 — both above the ceiling then in force — so they passed no matter what
+// the semantic guards did, and mutation testing duly found that deleting the
+// subtotal and total guards broke nothing. A test that asserts the right
+// outcome for the wrong reason is worse than no test: it reports coverage it
+// does not have.
+
+test('prose sections › a MAJOR SUBTOTAL is refused, by the subtotal guard alone', () => {
   for (const text of [
-    'Complete 36 semester hours in the major.',
-    'Complete 46 semester hours for the major.',
-    '56 semester hours required in the major',
-    'Complete a minimum of 52 semester hours in the major.',
+    'Complete 16 semester hours in the major.',
+    'Complete 12 semester hours for the major.',
+    '20 semester hours required in the major',
+    'Complete a minimum of 18 semester hours in the major.',
   ]) {
     const root = pane(h2('Philosophy Major Credit Requirement') + p(text) + h2('Core') + table('Core'));
     assert.equal(find(root, 'Philosophy Major Credit Requirement'), undefined,
@@ -89,10 +97,18 @@ test('prose sections › a MAJOR SUBTOTAL is refused', () => {
   }
 });
 
-test('prose sections › the DEGREE TOTAL is refused', () => {
-  const root = pane(h2('Program Requirement') + p('130 total semester hours required'));
+test('prose sections › the DEGREE TOTAL is refused even when it is small', () => {
+  // The case that proves size cannot do this job. A graduate certificate really
+  // is 12 semester hours, so its total is indistinguishable BY SIZE from a real
+  // 12 SH requirement — only the phrasing separates them. Without this guard
+  // every certificate in the catalog grows a phantom 12 SH section.
+  const root = pane(h2('Program Credit/GPA Requirements')
+    + p('12 total semester hours required') + p('Minimum 3.000 GPA required'));
   assert.deepEqual(titles(root), [],
     'that is the number the free-elective residual is subtracted FROM');
+
+  const undergrad = pane(h2('Program Requirement') + p('130 total semester hours required'));
+  assert.deepEqual(titles(undergrad), []);
 });
 
 test('prose sections › a GPA rule is refused', () => {
@@ -100,11 +116,15 @@ test('prose sections › a GPA rule is refused', () => {
   assert.deepEqual(titles(root), [], 'parseGpaRule owns this sentence');
 });
 
-test('prose sections › an implausibly large figure is refused', () => {
-  // A subtotal or total whose wording slipped past the tests above must still
-  // not become a requirement. Over-demanding refuses real plans.
-  const root = pane(h2('Something') + p('Complete 96 semester hours of coursework.'));
-  assert.deepEqual(titles(root), []);
+test('prose sections › the ceiling is a backstop, not the mechanism', () => {
+  // It must still reject nonsense…
+  assert.deepEqual(titles(pane(h2('Something') + p('Complete 300 semester hours of coursework.'))), []);
+  // …but it must NOT be what rejects a real requirement. 32 SH focus areas and
+  // 16 SH minor requirements exist in the codeless-section corpus, so a ceiling
+  // tight enough to catch a degree total would silently delete them.
+  const focus = pane(h2('Focus Area') + p('Complete 32 semester hours of focus area coursework.'));
+  assert.equal(find(focus, 'Focus Area')?.creditsRequired, 32,
+    'a large but real prose requirement survives');
 });
 
 // ── Ordering, which is why this was a restructure ──────────────────
@@ -119,6 +139,49 @@ test('prose sections › a prose section keeps its place in the document', () =>
   const ts = titles(root);
   assert.ok(ts.indexOf('BA Language Requirements') > ts.indexOf('Introduction'));
   assert.ok(ts.indexOf('BA Language Requirements') < ts.indexOf('Capstone'), ts.join(' | '));
+});
+
+// ── "not required" can still mean "pick one" ───────────────────────
+//
+// Untested until mutation testing showed that deleting the correction outright
+// broke nothing. The rule decides real credit — 19 programs, up to 24 SH each —
+// so both directions need pinning, not just the one that changed.
+
+const gateway = (heading, prose, options) => pane(
+  h2(heading) + p(prose)
+  + `<ul>${options.map(o => `<li><a href="#${o.replace(/\W/g, '')}">${o}</a></li>`).join('')}</ul>`
+  + options.map(o => `<h2><a name="${o.replace(/\W/g, '')}"></a>${o}</h2>` + table(o)).join(''));
+
+const minOptionsOf = (root) =>
+  parseRequirements(root, UNDERGRAD_PROFILE, {}).concentrations?.minOptions;
+
+test('minOptions › an "Electives Option" beside the concentrations makes the choice mandatory', () => {
+  // Art BA: "A concentration is not required. Students may complete the
+  // electives option IN LIEU OF a concentration." Read as 0, its 20 SH choice
+  // demanded nothing and became free electives.
+  const root = gateway('Concentration or Electives Option',
+    'A concentration is not required. Students may complete the electives option '
+    + 'in lieu of a concentration.',
+    ['Concentration in Art History and Visual Studies', 'Electives Option']);
+  assert.equal(minOptionsOf(root), 1,
+    'one of the listed options must be done, even though no CONCENTRATION is required');
+});
+
+test('minOptions › a genuinely optional concentration keeps its 0', () => {
+  // The 39 programs that score 0 and have no opt-out option in the list. Forcing
+  // these to 1 would demand a concentration nobody has to do.
+  const root = gateway('Concentration',
+    'A concentration is not required.',
+    ['Concentration in Applied AI']);
+  assert.equal(minOptionsOf(root), 0,
+    'no "Electives Option" in the list, so the opt-out is to do none of them');
+});
+
+test('minOptions › a required choice is not weakened by the correction', () => {
+  const root = gateway('Concentrations',
+    'One concentration is required.',
+    ['Concentration in Ethics', 'Electives Option']);
+  assert.equal(minOptionsOf(root), 1, 'already 1; the correction must not touch it');
 });
 
 test('prose sections › headings that own tables are untouched', () => {

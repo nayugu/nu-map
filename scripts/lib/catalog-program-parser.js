@@ -2390,19 +2390,44 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
  */
 function proseSectionSH(title, paras) {
   const text = [title, ...paras].join(' ').replace(/ /g, ' ').replace(/\s+/g, ' ');
-  // A subtotal of the major, the degree total, or a GPA rule: all restatements
-  // of something another reader already owns.
+  // ── Which guard actually does the work, measured ─────────────────
+  //
+  // Over the prose blocks of 30 catalog pages, by the guard that rejects them:
+  // SUBTOTAL 25 · TOTAL 28 · GPA 5 (not one of which carried a figure at all) ·
+  // no figure 78 · the ceiling below 0 · accepted 18. Recorded because the
+  // first version of these tests asserted the right outcomes for the wrong
+  // reason — they used 36 and 130, which the ceiling caught, so the two guards
+  // that carry the load were never exercised and survived being deleted.
+  //
+  // A subtotal of the major, restating sections already parsed.
   if (/\b(?:in|for|toward)\s+the\s+major\b/i.test(text)) return null;
+  // The degree total — the number the free-elective residual is subtracted
+  // FROM. ⚠ This is the guard no arithmetic can replace: an undergraduate total
+  // is ~130 and would fail any plausibility bound, but a graduate certificate
+  // states "12 total semester hours required", which is indistinguishable BY
+  // SIZE from a real 12 SH requirement. Only the phrasing separates them.
   if (/\btotal\s+(?:semester\s+hours?|credits?)\s+required\b/i.test(text)) return null;
+  // A GPA rule, which parseGpaRule owns. Kept as a backstop, and honestly
+  // labelled: it was measured to reject nothing the figure test would not, since
+  // every GPA block in the sample states no credit, and CourseLeaf's combined
+  // heading ("Program Credit/GPA Requirements") is caught by the total guard
+  // above. Left in rather than implying, by its absence, that GPA prose is
+  // handled somewhere it is not.
   if (/\bGPA\b/i.test(text)) return null;
   // "for a total of 12 semester hours", "Complete 8 semester hours of …"
   const m = text.match(/(\d+)\s*(?:semester\s+hours?|credits?)\b/i);
   if (!m) return null;
   const sh = parseInt(m[1], 10);
-  // A plausible single requirement. The ceiling is deliberately well under a
-  // degree: anything larger is a total or a subtotal that got past the tests
-  // above, and over-demanding is the direction that refuses a real plan.
-  return sh > 0 && sh <= 24 ? sh : null;
+  // A sanity backstop against an absurd figure, and nothing more. It was 24,
+  // which was wrong in both directions: it rejected 0 real blocks while being
+  // the thing that made the tests pass, and it would silently drop a large
+  // legitimate prose requirement — the codeless-section corpus already holds a
+  // 16 SH minor requirement and a 32 SH focus area. 60 sits above any single
+  // requirement the corpus states and at the credit window's undergraduate
+  // floor, so it can only ever catch nonsense. It deliberately does NOT try to
+  // catch a small graduate total; size cannot tell those apart, which is why
+  // the TOTAL guard above is phrased on wording instead.
+  return sh > 0 && sh <= 60 ? sh : null;
 }
 
 function concentrationMinOptions(blocks, gateways, concHeadings = new Map()) {

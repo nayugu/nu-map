@@ -230,6 +230,12 @@ function creditsOfSection(allocSection, courseMap, unit) {
   const parts = kids.map(c => creditsOfNode(c, courseMap, unit));
   const min = allocSection?.minRequired ?? allocSection?.total ?? kids.length;
   if (min >= kids.length) {
+    // No `Math.min(req, …)` here, unlike the branch below, and that asymmetry is
+    // load-bearing rather than an oversight: every node type caps its own `sat`
+    // at its own `req`, so Σ sat <= Σ req by induction and a cap would be dead
+    // code — code that implies a hazard the structure has already ruled out.
+    // The pick-N branch needs one because it sums a DIFFERENT subset for each
+    // half (cheapest by req, largest by sat), so its two sums are not aligned.
     return { req: parts.reduce((n, k) => n + k.req, 0),
              sat: parts.reduce((n, k) => n + k.sat, 0) };
   }
