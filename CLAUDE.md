@@ -441,6 +441,37 @@ Facts that follow from this:
   `fetch-nupath`'s 5% rule. They push straight to main unattended.
 - Program discovery uses the **sitemap**; `/azindex/` is `Disallow`ed in
   robots.txt and both scrapers used to violate it.
+- **A minor may double count at most 50% of its credit against a major**
+  (undergraduate catalog § Minors; `src/core/minorOverlap.js`). Two majors
+  double-count freely, and a minor course landing in the degree's GENERAL
+  ELECTIVES is not shared credit — that is the room a minor is meant to occupy —
+  so only a major's requirement-and-concentration claim counts. Three rules:
+  1. The charge is **marginal, not gross**: the minor is allocated twice, once
+     against everything placed and once with the major's courses withheld, and
+     the difference is what the cap applies to. Summing the credit of every
+     course both programs claim over-reports whenever greedy allocation reached
+     for the major's course with a spare non-major one beside it — measured over
+     500 (major, minor) pairs, the two disagree on 4.2% and the gross reading
+     declares 7 violations where 3 are real.
+  2. The denominator is **derived**, because 0 of 173 shipped minors state a
+     `totalCreditsRequired` — Σ `demandOf`, the audit's own figure. It is
+     inflated for the minors whose page prints an elective's MENU as sibling
+     sections (Computer Science derives 52 SH against a page that says 20, and
+     that 20 is currently swallowed into the Credit/GPA row's text), which
+     leaves the cap too GENEROUS. Keep it that way round: a missed warning
+     leaves a student where they were, a false one tells them to take courses
+     they do not owe.
+  3. It **never un-allocates**. The requirement rows and the progress bar are
+     byte-identical with and without it; over the cap a row goes amber and the
+     printed report carries the sentence. Choosing a course to drop in order to
+     respect a percentage is an advising decision, and it would make the audit
+     disagree with the board.
+  Not modelled, deliberately: transfer and advanced-standing credit share the
+  same budget in the policy, but this app has no transfer input and a
+  placed-out course carries no credit, so the figure is a lower bound. The
+  catalog's separate **subset ban** ("a biology major cannot enroll in the
+  biology minor") is also unimplemented — the cap catches the same plans by
+  arithmetic, at 100% overlap.
 
 ## /data search
 
