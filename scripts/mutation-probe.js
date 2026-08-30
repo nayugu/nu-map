@@ -208,6 +208,23 @@ const MUTANTS = [
     from: "  const ask = (set) => { try { return majorClaim(set); } catch { return null; } };",
     to:   "  const ask = (set) => majorClaim(set);", run: [MINOR] },
 
+  // ── majorClaimOf: one owner for "what the majors claim" ─────────
+  // Load-bearing for three callers now — the panel, the board's badge and the
+  // printed report — and the first two MUST agree, because a student can see
+  // both at once.
+  { name: "minor: the concentration is left out of the major's claim", file: OVERLAP,
+    from: "      if (concentration) {",
+    to:   "      if (false) {", run: [MINOR] },
+
+  { name: "minor: the claim reports ONE total instead of per-section credit", file: OVERLAP,
+    from: "      for (const s of all) sat.push(satisfiedOf(s, DEFAULT_UNIT_SH, courseMap));",
+    to:   "      sat.push(all.reduce((n, s) => n + satisfiedOf(s, DEFAULT_UNIT_SH, courseMap), 0));",
+    run: [MINOR] },
+
+  { name: "minor: a junk program entry reaches the allocator", file: OVERLAP,
+    from: "  const list = (programs ?? []).filter(p => p?.data);",
+    to:   "  const list = programs ?? [];", run: [MINOR] },
+
   { name: "minor: a malformed majorClaim is trusted rather than declined", file: OVERLAP,
     from: "    if (!next || !Array.isArray(next.sat) || next.sat.length !== base.sat.length) continue;",
     to:   "    if (!next || !Array.isArray(next.sat)) continue;", run: [MINOR] },
