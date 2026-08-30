@@ -69,8 +69,11 @@ const EPS = 1e-9;
  * The sections of a minor that state requirements.
  *
  * "Required General Electives" is a placeholder the audit generates for majors
- * and never a minor's own requirement. Three callers filtered it inline with
- * three copies of the same string literal; this is that string, once.
+ * and never a minor's own requirement. Four call sites filtered it inline with
+ * four copies of the same string literal — both minor allocations in
+ * `RelevanceContext` and both in `MinorBlock` — and this is that string once
+ * for the minor path. `gradRequirements` keeps its own two copies for the
+ * MAJOR path: this module imports it, so reaching back would close a cycle.
  */
 export function minorRequirementSections(minor) {
   return (minor?.requirementSections ?? []).filter(
