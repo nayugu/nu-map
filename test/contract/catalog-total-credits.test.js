@@ -112,15 +112,51 @@ test('totals › a page with ONLY a subtotal reports nothing, not the subtotal',
                         '84 semester hours required in the major').value, 0);
 });
 
-test('totals › an unqualified subtotal is still taken — the known limitation', () => {
+test('totals › an unqualified subtotal loses to the larger figure beside it', () => {
   // Cultural Anthropology and Health Science, BS prints "94 semester hours
-  // required" and "128 semester hours required" with nothing to tell them
-  // apart, and we take the first. Pinned deliberately: this test records what
-  // the guard does NOT cover, so that closing it later is a visible change
-  // rather than a surprise. 3 degree pages in the catalog are in this state.
+  // required" and "128 semester hours required" with NOTHING to tell them
+  // apart — no "in the major", same phrasing, sibling paragraphs in the same
+  // pane. Taking the first shipped a 94 SH bachelor's degree, and three pages
+  // in the catalog were in that state.
+  //
+  // The rule is the largest in-window match of the winning pattern: a subtotal
+  // is part of a total, so it cannot exceed it.
   assert.equal(totalFor('Cultural Anthropology and Health Science, BS (Boston)',
                         '94 semester hours required',
-                        '128 semester hours required').value, 94);
+                        '128 semester hours required').value, 128);
+});
+
+test('totals › order does not matter for an unqualified subtotal either', () => {
+  assert.equal(totalFor('Combined Major, BS (Boston)',
+                        '128 semester hours required',
+                        '94 semester hours required').value, 128);
+});
+
+test('totals › a STRONGER phrasing still outranks a larger weak one', () => {
+  // Priority ACROSS patterns is untouched — the max applies only within the
+  // first pattern that matches. A page stating its total explicitly must not be
+  // overruled by a bigger number phrased more loosely.
+  const r = totalFor('Combined Major, BS (Boston)',
+                     '128 total semester hours required',
+                     '200 semester hours required');
+  assert.equal(r.value, 128);
+  assert.equal(r.source, 'stated-total');
+});
+
+test('totals › the window still bounds what "largest" can reach', () => {
+  // 400 is outside [60, 250], so it is not a candidate at all. The ceiling is
+  // what keeps "largest" from meaning "largest number on the page".
+  assert.equal(totalFor('Combined Major, BS (Boston)',
+                        '128 semester hours required',
+                        '400 semester hours required').value, 128);
+});
+
+test('totals › a minor is bounded the same way, by its own window', () => {
+  // The minor ceiling is 60, so a degree figure quoted on a minor's page loses
+  // to the minor's own even though it is larger.
+  assert.equal(totalFor('Audiology, Minor',
+                        '15 total semester hours required',
+                        '128 total semester hours required').value, 15);
 });
 
 // ── Which pages are minors ───────────────────────────────────────

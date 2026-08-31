@@ -1457,11 +1457,35 @@ function statedTotalIn(text, profile) {
     [new RegExp(`${N}\\s+${UNIT}\\s+required${NOT_A_SUBTOTAL}`, 'i'),          'stated-required'],
   ];
   for (const [re, source] of patterns) {
-    const m = text.match(re);
-    if (m) {
-      const n = parseInt(m[1], 10);
-      if (Number.isFinite(n) && n > lo && n < hi) return { value: n, source };
-    }
+    // ── The LARGEST in-window match of the first pattern that has one ──
+    //
+    // Priority across patterns is unchanged: a stronger phrasing still beats a
+    // weaker one. What changed is which of SEVERAL matches of the same phrasing
+    // is taken, and it used to be the first — the one printed higher up the
+    // page, which on a combined major is the major's subtotal:
+    //
+    //     Mathematics and Philosophy, BS          "76 … required"  "128 … required"
+    //     Cultural Anthropology and Health Science "94 … required"  "128 … required"
+    //     Cultural Anthropology and Philosophy     "84 … required"  "128 … required"
+    //
+    // Those three shipped as 68–94 SH degrees. The `in the major` lookahead
+    // above cannot help — these pages state the subtotal with no qualifier at
+    // all, which is precisely the limitation this closes.
+    //
+    // MAX rather than LAST, though both give the same answer on every page in
+    // the cache: a subtotal is part of a total, so it cannot exceed it. That is
+    // arithmetic, and it stays true if CourseLeaf ever prints the two the other
+    // way round; "the last one" is a layout habit.
+    //
+    // Measured over 759 cached pages: the winning pattern matches more than
+    // once on 5, and on the 3 above max/last both resolve to the real 128. On
+    // the other 2 every match agrees, so the rule is inert there. The credit
+    // window is what bounds the risk — a number big enough to beat a real
+    // degree total has to be a plausible degree total.
+    const found = [...text.matchAll(new RegExp(re.source, 'gi'))]
+      .map(m => parseInt(m[1], 10))
+      .filter(n => Number.isFinite(n) && n > lo && n < hi);
+    if (found.length) return { value: Math.max(...found), source };
   }
   return null;
 }
