@@ -511,12 +511,38 @@ Facts that follow from this:
      from the major may also count toward this elective section of the minor",
      and that reaches the panel as a catalog note like any other sentence. Only
      one of 173 does. Don't build a second rule engine for it.
-  Not modelled, deliberately: transfer and advanced-standing credit share the
-  same budget in the policy, but this app has no transfer input and a
-  placed-out course carries no credit, so the figure is a lower bound. The
-  catalog's separate **subset ban** ("a biology major cannot enroll in the
-  biology minor") is also unimplemented — the cap catches the same plans by
+  5. **Transfer and advanced standing share the SAME ceiling**, not one each —
+     the policy says "from their major, transfer credit, or advanced standing
+     credit" in one sentence. Both are already per-course in the app, which is
+     what makes them attributable: a **`T` grade** is the transfer/AP/IB/waiver
+     bucket, and a **placed-out** course is placement. `outsideCreditKeys`
+     collects them and `minorShare` withholds them beside the major's. Three
+     rules: 4 SH shared plus 4 SH transferred is 8 against the cap, not two
+     fours; a course that is both is charged once; and transfer credit is
+     **not releasable** — the major can re-label which requirement a course
+     answers, but a course taken at another university cannot be
+     un-transferred. Still missing, and now the only gap: transfer credit the
+     student never enters. Exact for what they tell us, a lower bound for what
+     they do not.
+  The catalog's separate **subset ban** ("a biology major cannot enroll in the
+  biology minor") is unimplemented — the cap catches the same plans by
   arithmetic, at 100% overlap.
+- **An undergraduate program can live at THREE path shapes**, and each one had
+  to be asked for. `/undergraduate/` is the obvious one; CPS uses two siblings
+  of its own, `/professional-studies/bachelors-postbaccalaureate/` (13 degrees)
+  and `/professional-studies/undergraduate-minors/` (**8 minors**). Each was
+  invisible until someone counted what was missing — all 173 shipped minors
+  came from `/undergraduate/`. Nothing downstream needed teaching: the pages
+  title themselves "Biology, Minor", so the minor credit window applies, the
+  slug ends `_minor` and `minorLoader`'s glob finds them. Their totals parse at
+  15–18 SH, exactly the band the CPS page states, which is an independent check
+  on the credit window too.
+  Four collide by exact name with an existing minor (Biology, Creative Writing,
+  Psychology, Sociology) and get **no invented disambiguator**: the picker
+  already groups by `year · college`, so the college separates them, and the
+  college is the catalog's own fact where a "(CPS)" suffix would be ours.
+  Identity is the PATH, so saved plans and share links never depended on the
+  title anyway.
 - **The 2× badge marks major↔minor overlap and NOTHING else**
   (`src/ui/DoubleCountBadge.jsx`), because it is the only double counting in the
   app with a budget attached. Two majors double-count freely, a concentration is
@@ -573,10 +599,18 @@ Facts that follow from this:
   phrasing for years; the reader on the other side of the same knowledge never
   learned it. `NOT_A_SUBTOTAL` is a lookahead, not a rejection, so the pattern
   goes on to find the real figure rather than falling through to a weaker one.
-  ⚠ Three degree pages state their subtotal with NO qualifier ("94 semester
-  hours required" then "128 semester hours required") and are still read wrong;
-  `test/contract/catalog-total-credits.test.js` pins that limitation so closing
-  it later is a visible change.
+  The three pages that state the subtotal with NO qualifier at all ("94 semester
+  hours required" then "128 semester hours required") are closed too, by a
+  second rule: within the first pattern that matches, the **largest in-window**
+  figure wins. MAX rather than LAST — a subtotal is part of a total and cannot
+  exceed it, which is arithmetic, where "the last one printed" is a layout
+  habit. Priority ACROSS patterns is untouched, so an explicit "N total semester
+  hours required" still beats a bigger number phrased loosely, and the credit
+  window is what bounds the risk: to beat a real degree total a number has to
+  be a plausible degree total. Measured over 759 cached pages — the winning
+  pattern matches more than once on 5, max is right on all 5, and degree pages
+  reporting an implausible total went 6 → 1. The one left is Project Management,
+  BS (Online), a CPS degree-completion program whose page really does say 66.
 
 ## /data search
 
