@@ -485,6 +485,25 @@ test("share › transfer credit is NOT releasable, only the major's courses are"
   assert.equal(r.over, false, "4 of an 8 SH minor is exactly the cap");
 });
 
+test("share › releasing a course from the major does not un-transfer it", () => {
+  // The case the previous test misses, and the mutation probe found: a course
+  // that is BOTH claimed by the major AND transferred in. The major can let go
+  // of it — another placed course answers the same requirement — but that is a
+  // decision about labels, and it cannot make a course taken at another
+  // university into Northeastern coursework. It stays charged.
+  //
+  // 12 SH minor, 6 SH cap. Forgiving it would drop the charge from 8 to 4 and
+  // turn a real violation into a pass, so the two readings differ in verdict,
+  // not just in arithmetic.
+  const claim = majorOf(["AA1000", "CC3000"], ["AA1001"]);
+  const placed = new Set([...ALL_THREE, "CC3000"]);
+  const r = minorShare({ minor: THREE, placedSet: placed, majorKeys: claim(placed).claimed,
+                         outsideKeys: new Set(["AA1000"]), courseMap: CM, majorClaim: claim });
+  assert.deepEqual(r.releasedKeys, ["AA1000"], "the major can still let go of it");
+  assert.equal(r.dependentSH, 8, "and it is still charged, because it transferred in");
+  assert.equal(r.over, true);
+});
+
 test("share › omitting outsideKeys leaves the old answer untouched", () => {
   const withNone = minorShare({ minor: THREE, placedSet: new Set(ALL_THREE),
                                 majorKeys: new Set(["AA1000"]), courseMap: CM });
