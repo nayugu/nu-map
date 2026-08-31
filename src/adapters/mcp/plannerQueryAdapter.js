@@ -13,7 +13,86 @@
 // snapshot; tests supply fixtures.
 // ═══════════════════════════════════════════════════════════════════
 
-import { extractEdges } from "../../core/courseModel.js";
+import { extractEdges, coreqPartnersOf } from "../../core/courseModel.js";
+
+/** A corequisite edge, in either of the two shapes the graph uses for one. */
+const isCoreqEdge = e => e?.type === "corequisite" || e?.type === "corequisite-viol";
+
+/**
+ * prereqId → [{ courseId, type, concurrent? }] — "what does taking X unlock".
+ *
+ * Module scope and exported so it can be tested against the live catalog
+ * without standing up the whole query adapter, which needs eight ports. The
+ * closure below memoises one call to it.
+ *
+ * One entry per unlocked COURSE, not per edge. A prerequisite named in two
+ * branches of one OR is two edges differing only in the minGrade this index
+ * does not carry (352 pairs in the live catalog — ACCT 5230 unlocks ACCT 5232
+ * at D- in one branch and C- in the other), so listing edges said the same
+ * course twice. `concurrent` is kept if ANY branch allows it: the question
+ * answered here is "could taking this unlock that", and one permitting branch
+ * is enough.
+ *
+ * ── CORequisites are excluded, and leaving them in said the same class
+ *    twice in one response ──────────────────────────────────────────
+ *
+ * `relationships` also carries a `coreqs` field, so a coreq edge left here came
+ * back in BOTH: ARCH 2330 answered `unlocks: [ARCH2331(corequisite)]` alongside
+ * `coreqs: [ARCH2331]`. Measured over the live catalog, 461 courses had a
+ * corequisite in `unlocks` and **444 of them repeated a class the response had
+ * already named**.
+ *
+ * The details panel reached the same conclusion first, and `unlockedCourses` in
+ * core/courseModel.js records why: a corequisite is a symmetric same-term
+ * relation, not something the course unlocks, and it is answered separately.
+ * This is that decision applied to the other consumer, so a reader of the API
+ * and a reader of the screen are told the same thing.
+ *
+ * With coreqs gone `type` is always "prerequisite", but the field stays —
+ * callers read it, and a key that no longer varies is not a reason to change a
+ * published shape.
+ */
+export function buildUnlocksIndex(courses) {
+  const index = new Map();
+  const seen = new Map();                    // "from|to" → the entry already pushed
+  for (const c of courses ?? []) {
+    if (!c) continue;
+    for (const e of extractEdges(c.id, c.prereqs, c.coreqs)) {
+      if (isCoreqEdge(e)) continue;
+      // A course that names ITSELF as a prerequisite unlocks itself, which is
+      // both meaningless and a third way for one class to appear where it
+      // should not. Six do in the live catalog — SPNS 1101, 1102, 2101, 2102,
+      // 3101 and one more — and `unlockedCourses` has always dropped them, so
+      // this is the panel's rule rather than a new one.
+      if (e.from === e.to) continue;
+      if (!index.has(e.from)) index.set(e.from, []);
+      const key = `${e.from}|${e.to}`;
+      const prev = seen.get(key);
+      if (prev) {
+        if (e.concurrent) prev.concurrent = true;
+        continue;
+      }
+      const entry = { courseId: e.to, type: e.type, ...(e.concurrent && { concurrent: true }) };
+      seen.set(key, entry);
+      index.get(e.from).push(entry);
+    }
+  }
+  return index;
+}
+
+/**
+ * Every corequisite edge in the catalog, for walking a course's whole group.
+ *
+ * `course.coreqs` is only what a course DECLARES, and the relation is
+ * symmetric: 243 of the 262 groups are declared on both sides, but the other 19
+ * are one-sided, so reading the declaration alone showed the partner on one
+ * member and not on the other. 24 courses gain a partner from the walk.
+ */
+export function coreqEdgesOf(courses) {
+  return (courses ?? [])
+    .flatMap(c => (c ? extractEdges(c.id, c.prereqs, c.coreqs) : []))
+    .filter(isCoreqEdge);
+}
 import { resolveConcentration } from "../../core/concentrationResolve.js";
 import { buildCheckRows, detailText } from "../../core/verificationRows.js";
 import { evalPrereqTree } from "../../core/prereqEval.js";
@@ -93,34 +172,20 @@ export function createPlannerQuery(deps) {
   // unlocksIndex: prereqId → [{ courseId, concurrent? }] — the reverse
   // of the prereq edges, i.e. "what does taking X unlock".
 
-  // One entry per unlocked COURSE, not per edge. A prerequisite named in two
-  // branches of one OR is two edges differing only in the minGrade this index
-  // does not carry (352 pairs in the live catalog — ACCT 5230 unlocks ACCT 5232
-  // at D- in one branch and C- in the other), so listing edges said the same
-  // course twice. `concurrent` is kept if ANY branch allows it: the question
-  // answered here is "could taking this unlock that", and one permitting branch
-  // is enough.
+  // Both memoised on first use — see buildUnlocksIndex / coreqEdgesOf above for
+  // why each is shaped the way it is.
   let _unlocksIndex = null;
-  function unlocksIndex() {
-    if (_unlocksIndex) return _unlocksIndex;
-    _unlocksIndex = new Map();
-    const seen = new Map();                  // "from|to|type" → the entry already pushed
-    for (const c of courses) {
-      for (const e of extractEdges(c.id, c.prereqs, c.coreqs)) {
-        if (!_unlocksIndex.has(e.from)) _unlocksIndex.set(e.from, []);
-        const key = `${e.from}|${e.to}|${e.type}`;
-        const prev = seen.get(key);
-        if (prev) {
-          if (e.concurrent) prev.concurrent = true;
-          continue;
-        }
-        const entry = { courseId: e.to, type: e.type, ...(e.concurrent && { concurrent: true }) };
-        seen.set(key, entry);
-        _unlocksIndex.get(e.from).push(entry);
-      }
-    }
-    return _unlocksIndex;
-  }
+  const unlocksIndex = () => (_unlocksIndex ??= buildUnlocksIndex(courses));
+
+  /**
+   * The whole corequisite GROUP a course belongs to, both directions.
+   *
+   * `coreqPartnersOf` walks the component, and it is the same function the
+   * panel's corequisite line uses — so the screen and the API cannot disagree
+   * about who is in a group.
+   */
+  let _coreqEdges = null;
+  const coreqPartners = (id) => coreqPartnersOf(_coreqEdges ??= coreqEdgesOf(courses), id);
 
   // ── Semester helpers ────────────────────────────────────────────
 
@@ -375,9 +440,7 @@ export function createPlannerQuery(deps) {
     if (include.includes("relationships")) {
       out.relationships = {
         unlocks: unlocksIndex().get(id) ?? [],
-        coreqs:  (course.coreqs ?? [])
-          .filter(r => r?.subject && r?.number)
-          .map(r => `${r.subject.toUpperCase()}${r.number}`),
+        coreqs:  coreqPartners(id),
       };
     }
     if (include.includes("links")) {
