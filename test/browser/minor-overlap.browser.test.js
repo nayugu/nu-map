@@ -156,11 +156,12 @@ describe("minor · the double-counting cap", () => {
       await page.getByPlaceholder(/search/i).first().fill(search);
       await page.waitForTimeout(1200);
     }
-    // Every badge on the page, by its tooltip — the glyph alone ("2×") would
-    // not tell the three states apart.
+    // Every badge on the page, by its accessible label — the glyph is a COUNT
+    // ("2×"), so it cannot tell the three states apart on its own. The label
+    // carries the same two sentences the hover card shows.
     const badges = await page.evaluate(() =>
       [...document.querySelectorAll("span[aria-label]")]
-        .filter(el => el.textContent.trim() === "2×")
+        .filter(el => /^\d+×$/.test(el.textContent.trim()))
         .map(el => el.getAttribute("aria-label")));
     const text = await page.evaluate(() => document.body.innerText);
     await ctx.close();
@@ -173,11 +174,48 @@ describe("minor · the double-counting cap", () => {
     const badges = await boardText({ major: BACJ, minor1: CJ_MINOR, placements: CRIM });
     assert.equal(badges.length, 3, `expected one per CRIM course, got ${badges.length}`);
     for (const b of badges) {
-      assert.match(b, /Counts toward your major and Criminal Justice, Minor/);
-      // The MINOR's numbers, not this course's — 12 of a 10 SH cap.
-      assert.match(b, /12 of 10 SH double-counted/);
-      assert.match(b, /over the 50% limit/, "this pair is over, so every badge says so");
+      // One major + one minor = two credentials.
+      assert.match(b, /Counts toward 2 programs/);
+      // This pair is over its cap, so every badge in the shared set says so.
+      assert.match(b, /past the half of its credit/);
     }
+  });
+
+  test("hovering the badge explains what its colour means", async () => {
+    // The colour is the state and a colour cannot say why. The card has to
+    // carry the meaning AND the minor's own figures — 12 SH against a 10 SH
+    // cap — because no single course is the one over the limit.
+    assert.equal(launchError, null, "chromium unavailable");
+    const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
+    await ctx.addInitScript(seed(BACJ, CJ_MINOR, CRIM));
+    const page = await ctx.newPage();
+    const errors = [];
+    page.on("pageerror", e => errors.push(String(e?.message ?? e)));
+    await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load", timeout: 60_000 });
+    await page.waitForTimeout(2500);
+    for (let i = 0; i < 6; i++) {
+      const skip = page.getByRole("button", { name: /^Skip$/ }).first();
+      if (await skip.count() && await skip.isVisible().catch(() => false)) {
+        await skip.click().catch(() => {}); await page.waitForTimeout(250);
+      } else break;
+    }
+
+    const badge = page.locator("span").filter({ hasText: /^\d+×$/ }).first();
+    await badge.waitFor({ state: "visible", timeout: 10_000 });
+    const before = await page.evaluate(() => document.body.innerText);
+    assert.doesNotMatch(before, /double counted/,
+      "the card must not be on screen before anyone hovers");
+
+    await badge.hover();
+    await page.waitForTimeout(400);
+    const after = await page.evaluate(() => document.body.innerText);
+    await ctx.close();
+
+    assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
+    assert.match(after, /Counts toward 2 programs/, "no title in the hover card");
+    assert.match(after, /past the half of its credit/, "the colour's meaning is missing");
+    // The minor, named, with its own budget.
+    assert.match(after, /Criminal Justice, Minor — 12 of 10 SH double counted/);
   });
 
   test("an ELIGIBLE course is badged differently from one already counted", async () => {
@@ -189,10 +227,10 @@ describe("minor · the double-counting cap", () => {
                                      search: "CRIM 1120" });
     const would = badges.filter(b => /Would count toward/.test(b));
     assert.ok(would.length >= 1, `no eligible-state badge among: ${JSON.stringify(badges)}`);
-    // An unplaced course states no figure: nothing is double-counted yet, and
-    // quoting the minor's running total on it would read as if it were.
-    assert.doesNotMatch(would[0], /double-counted/);
-    assert.match(would[0], /Criminal Justice, Minor/);
+    // The unplaced state says "if you take it", never "counts" — the whole
+    // difference between the grey badge and the green one.
+    assert.match(would[0], /haven’t placed this yet/);
+    assert.doesNotMatch(would[0], /both count this course/);
   });
 
   test("the same courses under an unrelated major are not badged at all", async () => {

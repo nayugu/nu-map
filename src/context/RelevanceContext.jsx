@@ -265,18 +265,31 @@ export function RelevanceProvider({ children }) {
       if (!minorCaps.length) return null;
       const roles = courseRole(crs);
       if (!roles) return null;
-      const minorRole = roles.find(r => r.type === "minor");
-      if (!minorRole || !roles.some(r => r.type === "major")) return null;
-      const cap = minorCaps.find(c => c.n === minorRole.n);
-      if (!cap) return null;
+      const majorRoles = roles.filter(r => r.type === "major");
+      if (!majorRoles.length) return null;
+      // EVERY minor, not the first one. A student may hold two, and a course
+      // can sit in both: measured over 2,280 (major, minorA, minorB) shapes it
+      // happens in 3 of them — Computer Science and Music BS with the
+      // Ethnomusicology and Music Composition minors share MUSC 1001/1002.
+      // Rare, and reading only `roles.find(...)` meant the card could report
+      // the first minor as comfortable while the second was over its cap.
+      const mins = roles
+        .filter(r => r.type === "minor")
+        .map(r => minorCaps.find(c => c.n === r.n))
+        .filter(Boolean);
+      if (!mins.length) return null;
       return {
         placed: placedSet.has(courseKey(crs.subject, crs.number)),
-        over: cap.share.over,
-        minorN: minorRole.n,
-        numbered: minorRole.numbered,
-        minorName: cap.name,
-        sh: cap.share.dependentSH,
-        capSH: cap.share.capSH,
+        // Any breached budget colours the badge: the student needs to know a
+        // limit is exceeded, not which of two it was.
+        over: mins.some(m => m.share.over),
+        // How many CREDENTIALS tick this course. A concentration is part of
+        // its major and is already folded into that role, so it never adds one.
+        count: majorRoles.length + mins.length,
+        minors: mins.map(m => ({
+          n: m.n, name: m.name, over: m.share.over,
+          sh: m.share.dependentSH, capSH: m.share.capSH,
+        })),
       };
     };
 

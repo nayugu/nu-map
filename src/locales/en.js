@@ -669,13 +669,18 @@ export const strings = {
   // credit and advanced standing — so this names the part that is not the
   // major. Shown only when there is some; silent in the ordinary case.
   "grad.share.outside":           "{sh} SH of that is transfer or advanced-standing credit, which shares the same limit.",
-  // ── The 2× badge on a course card ───────────────────────────────
-  // Three states, and the difference between the first two is the difference
-  // between a possibility and a fact about the plan. The figures quoted are the
-  // MINOR's, not this course's — no single course is the one over the limit.
-  "relevance.both.eligible":      "Would count toward your major and {name}.",
-  "relevance.both.counted":       "Counts toward your major and {name} — {sh} of {cap} SH double-counted.",
-  "relevance.both.over":          "Counts toward your major and {name} — {sh} of {cap} SH double-counted, over the 50% limit.",
+  // ── The N× badge on a course card, and its hover card ───────────
+  // The number counts credentials; the COLOUR is the state, and these three
+  // strings are what the colour means. Grey = a possibility, green = a fact
+  // about the plan, amber = a limit breached. The figures are the MINOR's, not
+  // the course's — no single course is the one over the limit.
+  "relevance.dc.title.would":     "Would count toward {n} programs",
+  "relevance.dc.title.does":      "Counts toward {n} programs",
+  "relevance.dc.eligible":        "You haven’t placed this yet. Take it and it counts toward your major and the minor below at the same time.",
+  "relevance.dc.counted":         "Your major and the minor below both count this course. Northeastern allows that for up to half a minor’s credit.",
+  "relevance.dc.over":            "This minor is past the half of its credit that may also count toward your major. Add minor coursework your major doesn’t count.",
+  "relevance.dc.budget":          "{name} — {sh} of {cap} SH double counted",
+  "relevance.dc.budget.over":     "{name} — {sh} of {cap} SH double counted, over the limit",
   "grad.conc.search":       "\u2315 search concentrations",
   "grad.minor1.label":      "MINOR 1",
   "grad.minor2.label":      "MINOR 2",
