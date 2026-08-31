@@ -80,3 +80,41 @@ test("sitemap › duplicates collapse after rebuilding, not before", () => {
   );
   assert.equal(parseSitemapPrograms(xml, { ...UG, urlBase: ARCHIVE }).length, 1);
 });
+
+// ── The three path shapes an undergraduate program can live at ──────
+//
+// Northeastern files undergraduate programs under /undergraduate/ — except
+// CPS, which uses two sibling paths of its own. Each one had to be asked for
+// explicitly, and each was invisible until someone counted what was missing:
+// the bachelor's-completion degrees shipped as zero programs, and the eight
+// CPS MINORS shipped as zero of the 173.
+
+test("sitemap › CPS undergraduate minors are their own path shape", () => {
+  const xml = sitemap(
+    "https://catalog.northeastern.edu/professional-studies/undergraduate-minors/biology/",
+    "https://catalog.northeastern.edu/professional-studies/undergraduate-minors/psychology/",
+    // The index page itself is two segments, so minSegments keeps it out.
+    "https://catalog.northeastern.edu/professional-studies/undergraduate-minors/",
+    // A sibling CPS path that is NOT a minor.
+    "https://catalog.northeastern.edu/professional-studies/bachelors-postbaccalaureate/lowell/psychology-bs/",
+  );
+  const got = parseSitemapPrograms(xml, {
+    pathPrefix: "/professional-studies/undergraduate-minors/", minSegments: 3, collegeAt: 0,
+  });
+  assert.deepEqual(got.map(p => p.url.split("/").filter(Boolean).pop()), ["biology", "psychology"]);
+  // `collegeAt: 0` is what puts them beside their ~88 graduate siblings rather
+  // than under a college called "undergraduate-minors".
+  assert.deepEqual([...new Set(got.map(p => p.college))], ["professional-studies"]);
+});
+
+test("sitemap › the undergraduate walk does not reach CPS, and never did", () => {
+  // The reason eight minors were missing rather than mis-filed: nothing in the
+  // /undergraduate/ walk can see them, so adding a prefix was the only fix.
+  const xml = sitemap(
+    "https://catalog.northeastern.edu/professional-studies/undergraduate-minors/biology/",
+    "https://catalog.northeastern.edu/undergraduate/science/biology/biology-minor/",
+  );
+  const got = parseSitemapPrograms(xml, UG);
+  assert.equal(got.length, 1);
+  assert.equal(got[0].college, "science");
+});

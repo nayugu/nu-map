@@ -146,8 +146,35 @@ async function fetchProgramUrls() {
     pathPrefix: '/professional-studies/bachelors-postbaccalaureate/',
     minSegments: 3, collegeAt: 0, urlBase: EDITION ? BASE : '',
   });
-  console.log(`Found ${programs.length} program URLs (+ ${cps.length} CPS bachelor's-completion)`);
-  return [...programs, ...cps];
+  // CPS's undergraduate MINORS are a third path shape again — not under
+  // /undergraduate/ and not under bachelors-postbaccalaureate, but at
+  // /professional-studies/undergraduate-minors/. Eight of them (Biology,
+  // Business, Creative Writing, Healthcare Administration, Information
+  // Technology, Organizational Communication, Psychology, Sociology), and
+  // none had ever been scraped: all 173 shipped minors come from
+  // /undergraduate/, verified against the shipped data.
+  //
+  // Nothing downstream needs teaching about them. Each page titles itself
+  // "Biology, Minor", so `isMinorProgramName` reads the minor credit window,
+  // the folder slugs end in `_minor` and `minorLoader`'s glob picks them up,
+  // and `collegeAt: 0` puts them under the same `professional-studies` slug
+  // their ~88 graduate siblings already use.
+  //
+  // FOUR of the eight collide by exact name with an existing minor — Biology,
+  // Creative Writing, Psychology, Sociology. No disambiguator is invented for
+  // them, and that is deliberate: the minor picker already groups options by
+  // `year · college` (getMinorOptionGroups), so the two Biology minors land
+  // under "Professional Studies" and "Science" respectively. The college is
+  // the catalog's own fact about which is which; a "(CPS)" suffix would be
+  // ours. Identity is the PATH, not the title, so saved plans and share links
+  // are unaffected either way.
+  const cpsMinors = parseSitemapPrograms(xml, {
+    pathPrefix: '/professional-studies/undergraduate-minors/',
+    minSegments: 3, collegeAt: 0, urlBase: EDITION ? BASE : '',
+  });
+  console.log(`Found ${programs.length} program URLs `
+    + `(+ ${cps.length} CPS bachelor's-completion, + ${cpsMinors.length} CPS minors)`);
+  return [...programs, ...cps, ...cpsMinors];
 }
 
 // ── Credit helpers ────────────────────────────────────────────────────────────
