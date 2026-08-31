@@ -24,7 +24,9 @@ import {
   courseEligible,
   countsAsElectiveOnly,
 } from "../core/programEligibility.js";
-import { minorRequirementSections, minorShare, majorClaimOf } from "../core/minorOverlap.js";
+import {
+  minorRequirementSections, minorShare, majorClaimOf, outsideCreditKeys,
+} from "../core/minorOverlap.js";
 
 const EMPTY = new Set();
 const RelevanceContext = createContext({
@@ -149,6 +151,11 @@ export function RelevanceProvider({ children }) {
    * `concentrationResolve` the single owner of that lookup, which is what saved
    * plans and share links depend on.
    */
+  /** Transfer and placement credit — the other two thirds of the 50% budget. */
+  const outsideKeys = useMemo(
+    () => outsideCreditKeys({ placements, grades, placedOut, courseMap }),
+    [placements, grades, placedOut, courseMap]);
+
   const majorClaim = useMemo(() => majorClaimOf([
     { data: majorData,  concentration: conc  && majorData?.concentrations
         ? resolveConcentration(majorData, conc) : null },
@@ -169,7 +176,8 @@ export function RelevanceProvider({ children }) {
       const used = new Set();
       allocateSections(minorRequirementSections(m), placedSet, used, courseMap);
       used.forEach(k => { if (!majorKeys.has(k)) minorKeys.add(k); });
-      const share = minorShare({ minor: m, placedSet, majorKeys, courseMap, majorClaim });
+      const share = minorShare({ minor: m, placedSet, majorKeys, courseMap, majorClaim,
+                                 outsideKeys });
       if (share) minorCaps.push({ n: i + 1, name: m.name ?? "", share });
     }
 
@@ -282,7 +290,7 @@ export function RelevanceProvider({ children }) {
     // is: without them the memo keeps the claim function it closed over, so
     // changing the second major's concentration would leave every card marked
     // against the previous one.
-  }, [majorData, major2Data, minor1Data, minor2Data, conc, conc2, majorClaim,
+  }, [majorData, major2Data, minor1Data, minor2Data, conc, conc2, majorClaim, outsideKeys,
       placedSet, courseMap, workTermCourse, coopProgramOptions]);
 
   return <RelevanceContext.Provider value={value}>{children}</RelevanceContext.Provider>;

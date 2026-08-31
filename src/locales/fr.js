@@ -538,6 +538,7 @@ export const strings = {
   "grad.share.over":              "{sh} SH au-dessus de la limite — cette part de la mineure doit venir de cours que votre majeure ne compte pas",
   "grad.share.policy":            "Northeastern autorise au plus {pct} % des crédits exigés par une mineure à compter aussi pour votre majeure — {cap} des {required} SH exigés par cette mineure.",
   "grad.share.replaceable":       "Votre majeure et votre mineure peuvent être agencées pour que seuls {sh} SH soient comptés deux fois.",
+  "grad.share.outside":           "Sur ce total, {sh} SH proviennent de crédits transférés ou de niveau avancé, soumis à la même limite.",
   "relevance.both.eligible":      "Compterait pour votre majeure et pour {name}.",
   "relevance.both.counted":       "Compte pour votre majeure et pour {name} — {sh} SH sur {cap} comptés deux fois.",
   "relevance.both.over":          "Compte pour votre majeure et pour {name} — {sh} SH sur {cap} comptés deux fois, au-dessus de la limite de 50 %.",

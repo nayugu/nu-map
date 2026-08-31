@@ -538,6 +538,7 @@ export const strings = {
   "grad.share.over":              "한도를 {sh} SH 초과 — 그만큼은 전공이 인정하지 않는 과목으로 부전공을 채워야 합니다",
   "grad.share.policy":            "노스이스턴은 부전공에 필요한 학점의 최대 {pct}%까지 전공에도 인정합니다 — 이 부전공은 {required} SH이며 그중 {cap} SH입니다.",
   "grad.share.replaceable":       "전공과 부전공을 조정하면 중복 인정되는 학점은 {sh} SH뿐입니다.",
+  "grad.share.outside":           "그중 {sh} SH는 편입 학점 또는 선이수 학점이며, 같은 한도가 적용됩니다.",
   "relevance.both.eligible":      "전공과 {name} 모두에 인정될 수 있습니다.",
   "relevance.both.counted":       "전공과 {name} 모두에 인정 — {cap} SH 중 {sh} SH 중복 인정.",
   "relevance.both.over":          "전공과 {name} 모두에 인정 — {cap} SH 중 {sh} SH 중복 인정으로 50% 한도를 초과했습니다.",

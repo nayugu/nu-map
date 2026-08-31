@@ -538,6 +538,7 @@ export const strings = {
   "grad.share.over":              "超出上限 {sh} SH — 这部分辅修必须由专业不计入的课程来完成",
   "grad.share.policy":            "东北大学最多允许辅修所需学分的 {pct}% 同时计入专业 — 本辅修共需 {required} SH，其中 {cap} SH 可重复计入。",
   "grad.share.replaceable":       "你的专业与辅修可以这样安排：只有 {sh} SH 被重复计入。",
+  "grad.share.outside":           "其中 {sh} SH 为转学分或先修学分，同样受此上限约束。",
   "relevance.both.eligible":      "可同时计入你的专业与{name}。",
   "relevance.both.counted":       "同时计入你的专业与{name} — 重复计入 {cap} SH 中的 {sh} SH。",
   "relevance.both.over":          "同时计入你的专业与{name} — 重复计入 {cap} SH 中的 {sh} SH，已超出 50% 上限。",

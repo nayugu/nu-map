@@ -3,7 +3,9 @@
 // ═══════════════════════════════════════════════════════════════════
 import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirements.js";
 import { generalElectiveSHOf } from "./requirementBinding.js";
-import { minorShare, majorClaimOf, MINOR_SHARE_FRACTION } from "./minorOverlap.js";
+import {
+  minorShare, majorClaimOf, outsideCreditKeys, MINOR_SHARE_FRACTION,
+} from "./minorOverlap.js";
 import { resolveTermByDuration, termSpans, computeGrantedAttrs, workTermGrants } from "./specialTermUtils.js";
 import { dropVoidTakes, dropUnearnedTakes } from "./gradeSystem.js";
 import { resolveCompanyLogo } from "./companyLogo.js";
@@ -679,7 +681,8 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   /** Northeastern's 50% cap on double counting a minor, as printed. */
   function shareNoteHtml(prog) {
     const line = _minorShareNote(
-      minorShare({ minor: prog, placedSet, majorKeys: majorClaimedKeys, courseMap, majorClaim }),
+      minorShare({ minor: prog, placedSet, majorKeys: majorClaimedKeys, courseMap, majorClaim,
+                   outsideKeys: outsideCreditKeys({ placements, grades, placedOut, courseMap }) }),
       unitName);
     return line ? `<div class="sec-note">${esc(line)}</div>` : "";
   }

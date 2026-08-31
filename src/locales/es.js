@@ -538,6 +538,7 @@ export const strings = {
   "grad.share.over":              "{sh} SH por encima del límite: esa parte del minor tiene que venir de cursos que tu carrera no cuente",
   "grad.share.policy":            "Northeastern permite que como máximo el {pct}% de los créditos que exige un minor cuente también para tu carrera: {cap} de los {required} SH que exige este minor.",
   "grad.share.replaceable":       "Tu carrera y tu minor pueden organizarse de modo que solo se cuenten dos veces {sh} SH.",
+  "grad.share.outside":           "De eso, {sh} SH son créditos transferidos o de nivel avanzado, sujetos al mismo límite.",
   "relevance.both.eligible":      "Contaría para tu carrera y para {name}.",
   "relevance.both.counted":       "Cuenta para tu carrera y para {name}: {sh} de {cap} SH con doble cómputo.",
   "relevance.both.over":          "Cuenta para tu carrera y para {name}: {sh} de {cap} SH con doble cómputo, por encima del límite del 50%.",

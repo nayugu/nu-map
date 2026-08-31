@@ -665,6 +665,10 @@ export const strings = {
   // has another course for that slot or because the major does — so one
   // sentence covers both rather than explaining our allocator to them.
   "grad.share.replaceable":       "Your major and minor can be arranged so only {sh} SH is counted twice.",
+  // The 50% ceiling covers three sources in one sentence — the major, transfer
+  // credit and advanced standing — so this names the part that is not the
+  // major. Shown only when there is some; silent in the ordinary case.
+  "grad.share.outside":           "{sh} SH of that is transfer or advanced-standing credit, which shares the same limit.",
   // ── The 2× badge on a course card ───────────────────────────────
   // Three states, and the difference between the first two is the difference
   // between a possibility and a fact about the plan. The figures quoted are the

@@ -41,7 +41,8 @@ import {
 } from "../core/gradRequirements.js";
 import { generalElectiveSHOf } from "../core/requirementBinding.js";
 import {
-  minorShare, minorRequirementSections, majorClaimOf, MINOR_SHARE_FRACTION,
+  minorShare, minorRequirementSections, majorClaimOf, outsideCreditKeys,
+  MINOR_SHARE_FRACTION,
 } from "../core/minorOverlap.js";
 import { findNewerMajorVersion, findNewerGradMajorVersion } from "../data/majorLoader.js";
 import { rankOptions } from "../core/searchRank.js";
@@ -1022,14 +1023,25 @@ function SharedCredit({ share }) {
             {t("grad.share.policy", { pct: Math.round(MINOR_SHARE_FRACTION * 100),
                                       cap: fmt(share.capSH), required: fmt(share.requiredSH) })}
           </div>
-          {share.sharedKeys.length > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "2px 8px", marginTop: 4 }}>
-              {share.sharedKeys.map(k => (
+          {[share.sharedKeys, share.outsideKeys].map((keys, i) => keys.length > 0 && (
+            <div key={i} style={{ display: "flex", flexWrap: "wrap", gap: "2px 8px", marginTop: 4 }}>
+              {keys.map(k => (
                 <span key={k} style={{ fontSize: isPhone ? 7.5 : 9, fontWeight: 700,
                                        letterSpacing: 0, color: "var(--text-3)" }}>
                   {courseMap[k]?.code ?? k}
                 </span>
               ))}
+            </div>
+          ))}
+          {/* The same ceiling covers three sources — "from their major,
+              transfer credit, or advanced standing credit" — but "shared with
+              your major" is the wrong sentence to say about a course that was
+              transferred in, so the composition is named when it is not all
+              the major. Silent in the ordinary case. */}
+          {share.outsideSH > 0 && (
+            <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, color: "var(--text-5)",
+                          marginTop: 4 }}>
+              {t("grad.share.outside", { sh: fmt(share.outsideSH) })}
             </div>
           )}
           {/* Only when the greedy allocation reached for a major course a spare
@@ -1427,7 +1439,7 @@ function VerificationPill({ verification, verified, t, isPhone, isMobile }) {
   );
 }
 
-function MinorBlock({ path, onClear, placedSet, doneSet, majorKeys, majorClaim,
+function MinorBlock({ path, onClear, placedSet, doneSet, majorKeys, majorClaim, outsideKeys,
                       label = "MINOR", nameColor }) {
   const { courseMap, majorRequirements, isPhone, isMobile } = useContext(GradCtx);
   const { t } = useLanguage();
@@ -1469,8 +1481,10 @@ function MinorBlock({ path, onClear, placedSet, doneSet, majorKeys, majorClaim,
   // and a limit only reported once the courses are behind them is a limit
   // reported too late to act on.
   const share = useMemo(
-    () => (minor ? minorShare({ minor, placedSet, majorKeys, courseMap, majorClaim }) : null),
-    [minor, placedSet, majorKeys, courseMap, majorClaim]
+    () => (minor
+      ? minorShare({ minor, placedSet, majorKeys, courseMap, majorClaim, outsideKeys })
+      : null),
+    [minor, placedSet, majorKeys, courseMap, majorClaim, outsideKeys]
   );
 
   // Sum using the SAME logic as SectionBlock's display numbers
@@ -2219,6 +2233,17 @@ export default function GradPanel({ wideCatalog = false }) {
   const majorClaimedKeys = useMemo(() => majorClaim(placedSet).claimed,
                                    [majorClaim, placedSet]);
 
+  /**
+   * Transfer and placement credit — the other two thirds of the 50% budget.
+   *
+   * Northeastern's ceiling is on credit "from their major, transfer credit, or
+   * advanced standing credit", one sentence and one budget. Reading only the
+   * major made the figure a lower bound on the registrar's own numerator.
+   */
+  const outsideCredit = useMemo(
+    () => outsideCreditKeys({ placements, grades, placedOut, courseMap }),
+    [placements, grades, placedOut, courseMap]);
+
   const major2DoneSections = useMemo(() => {
     if (!major2Data) return [];
     const { sections, generalElectives } = allocateMajorWithElectives(
@@ -2643,8 +2668,8 @@ export default function GradPanel({ wideCatalog = false }) {
         </MajorCard>}
 
         {/* ── Minor requirement sections — undergrad only ─────── */}
-        {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} majorClaim={majorClaim} label={t("grad.minor1.label")} nameColor={claudePreview?.changed?.has?.("minor1") ? "#fb923c" : undefined} />}
-        {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} majorClaim={majorClaim} label={t("grad.minor2.label")} nameColor={claudePreview?.changed?.has?.("minor2") ? "#fb923c" : undefined} />}
+        {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} majorClaim={majorClaim} outsideKeys={outsideCredit} label={t("grad.minor1.label")} nameColor={claudePreview?.changed?.has?.("minor1") ? "#fb923c" : undefined} />}
+        {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} majorClaim={majorClaim} outsideKeys={outsideCredit} label={t("grad.minor2.label")} nameColor={claudePreview?.changed?.has?.("minor2") ? "#fb923c" : undefined} />}
 
         {/* ── PlusOne — after the minors, matching the selector order above.
                Last of the program cards because it is the only one that is

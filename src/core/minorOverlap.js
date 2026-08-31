@@ -65,9 +65,20 @@
 // do not owe.
 // ═══════════════════════════════════════════════════════════════════
 
-import { allocateSections, allocateMajorSections } from "./gradRequirements.js";
+import { allocateSections, allocateMajorSections, courseKey } from "./gradRequirements.js";
 import { demandOf, satisfiedOf, typicalSH, DEFAULT_UNIT_SH } from "./requirementDemand.js";
 import { specForNode } from "./programEligibility.js";
+import { baseId } from "./repeatInstances.js";
+
+/**
+ * The grade that means "these hours transferred".
+ *
+ * `T` covers transfer, AP, IB and waiver credit — hours earned, no quality
+ * points. Named here rather than written as a literal because this module reads
+ * it for a POLICY reason (the 50% ceiling counts transfer credit against the
+ * minor) that has nothing to do with grade arithmetic.
+ */
+const TRANSFER_GRADE = "T";
 
 /** The policy's fraction. A parameter of Northeastern's rule, not of degrees. */
 export const MINOR_SHARE_FRACTION = 0.5;
@@ -243,12 +254,13 @@ export function majorClaimOf(programs, courseMap = {}) {
  *          denominator, so there is no percentage to report.
  */
 export function minorShare({ minor, placedSet, majorKeys, courseMap = {},
-                             majorClaim = null } = {}) {
+                             majorClaim = null, outsideKeys = null } = {}) {
   const sections = minorRequirementSections(minor);
   if (!sections.length) return null;
 
-  const placed = placedSet instanceof Set ? placedSet : new Set(placedSet ?? []);
-  const major  = majorKeys instanceof Set ? majorKeys : new Set(majorKeys ?? []);
+  const placed  = placedSet instanceof Set ? placedSet : new Set(placedSet ?? []);
+  const major   = majorKeys instanceof Set ? majorKeys : new Set(majorKeys ?? []);
+  const outside = outsideKeys instanceof Set ? outsideKeys : new Set(outsideKeys ?? []);
 
   // One unit per section, computed once: `demandOf` and `satisfiedOf` must be
   // given the SAME unit or their difference stops meaning anything.
@@ -260,8 +272,14 @@ export function minorShare({ minor, placedSet, majorKeys, courseMap = {},
   const claimedSH  = sections.reduce((n, _, i) => n + satisfiedOf(full[i], units[i], courseMap), 0);
   const capSH = requiredSH * MINOR_SHARE_FRACTION;
 
-  const sharedKeys = [...claimed].filter(k => major.has(k)).sort();
-  const sharedSH = sharedKeys.reduce((n, k) => n + (courseMap[k]?.sh ?? 0), 0);
+  // Courses the minor counts that a MAJOR also counts, and courses it counts
+  // that were never Northeastern coursework taken for it. The policy puts both
+  // under one 50% ceiling; they are reported apart because "shared with your
+  // major" is a different sentence to say to a student than "transferred in".
+  const sharedKeys  = [...claimed].filter(k => major.has(k)).sort();
+  const outsideOnly = [...claimed].filter(k => outside.has(k) && !major.has(k)).sort();
+  const sharedSH  = sharedKeys.reduce((n, k) => n + (courseMap[k]?.sh ?? 0), 0);
+  const outsideSH = outsideOnly.reduce((n, k) => n + (courseMap[k]?.sh ?? 0), 0);
 
   /** Credit the minor reaches without the courses in `blocked`. */
   const minorWithout = (blocked) => {
@@ -271,35 +289,80 @@ export function minorShare({ minor, placedSet, majorKeys, courseMap = {},
     return sections.reduce((n, _, i) => n + satisfiedOf(alone[i], units[i], courseMap), 0);
   };
 
-  // Nothing shared → nothing to charge, and the two extra allocations below
+  // Nothing charged → nothing to compute, and the two extra allocations below
   // would only rediscover `claimedSH`.
-  if (!sharedKeys.length) {
-    return { requiredSH, capSH, sharedSH: 0, dependentSH: 0, claimedSH,
+  if (!sharedKeys.length && !outsideOnly.length) {
+    return { requiredSH, capSH, sharedSH: 0, outsideSH: 0, dependentSH: 0, claimedSH,
              uniqueSH: claimedSH, overSH: 0, over: false,
-             sharedKeys: [], releasedKeys: [] };
+             sharedKeys: [], outsideKeys: [], releasedKeys: [] };
   }
 
-  let uniqueSH = minorWithout(major);
+  /** Everything the minor may not pay for itself with. */
+  const charged = new Set([...major, ...outside]);
+
+  let uniqueSH = minorWithout(charged);
   let dependentSH = Math.max(0, claimedSH - uniqueSH);
   let releasedKeys = [];
 
-  if (dependentSH - capSH > EPS && typeof majorClaim === "function") {
+  // Only the MAJOR's courses can be released. Transfer and advanced-standing
+  // credit is not a labelling choice — a course taken elsewhere was taken
+  // elsewhere, whatever the audit decides to do with it.
+  if (dependentSH - capSH > EPS && typeof majorClaim === "function" && sharedKeys.length) {
     releasedKeys = releasableFromMajor(sharedKeys, placed, majorClaim, courseMap);
     if (releasedKeys.length) {
-      const stillClaimed = new Set([...major].filter(k => !releasedKeys.includes(k)));
-      uniqueSH = minorWithout(stillClaimed);
+      const stillCharged = new Set([...charged].filter(
+        k => outside.has(k) || !releasedKeys.includes(k)));
+      uniqueSH = minorWithout(stillCharged);
       dependentSH = Math.max(0, claimedSH - uniqueSH);
     }
   }
 
   const over = dependentSH - capSH > EPS;
   return {
-    requiredSH, capSH, sharedSH, dependentSH, claimedSH, uniqueSH,
+    requiredSH, capSH, sharedSH, outsideSH, dependentSH, claimedSH, uniqueSH,
     overSH: over ? dependentSH - capSH : 0,
     over,
     sharedKeys,
+    outsideKeys: outsideOnly,
     releasedKeys,
   };
+}
+
+/**
+ * Course keys the student did NOT earn as Northeastern coursework for a program.
+ *
+ * Northeastern's 50% ceiling covers three sources in one sentence — "from their
+ * major, transfer credit, or advanced standing credit" — and only the first was
+ * ever measured here, so the figure was a lower bound on the policy's own
+ * numerator. These are the other two, and both are per-course, which is what
+ * makes them attributable to a minor requirement at all:
+ *
+ *   · a `T` grade is the app's transfer/AP/IB/waiver bucket. It earns hours and
+ *     no quality points, and it is deliberately on the grade menu because
+ *     without it "these hours transferred" was unsayable (see gradeSystem.js).
+ *   · a placed-out course is placement — advanced standing by another name.
+ *
+ * Not modelled, and now the only gap left: transfer credit the student never
+ * enters, because nothing forces them to. The figure is exact for what they
+ * told us and a lower bound for what they did not, which is the honest limit of
+ * an input the app cannot verify.
+ *
+ * @returns {Set<string>} canonical course keys
+ */
+export function outsideCreditKeys({ placements = {}, grades = {}, placedOut = [],
+                                    courseMap = {} } = {}) {
+  const keys = new Set();
+  const add = (id) => {
+    const course = courseMap[baseId(id)] ?? courseMap[id];
+    if (course?.subject != null && course?.number != null) {
+      keys.add(courseKey(course.subject, course.number));
+    }
+  };
+  for (const [pid, grade] of Object.entries(grades ?? {})) {
+    if (grade === TRANSFER_GRADE) add(pid);
+  }
+  for (const id of placedOut ?? []) add(id);
+  return keys;
 }
 
 /**

@@ -16,8 +16,10 @@
 //   · INERTNESS — the report must not perturb the audit or its own inputs.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { minorShare, minorRequirementSections, majorClaimOf, MINOR_SHARE_FRACTION }
-  from "../../src/core/minorOverlap.js";
+import {
+  minorShare, minorRequirementSections, majorClaimOf, outsideCreditKeys,
+  MINOR_SHARE_FRACTION,
+} from "../../src/core/minorOverlap.js";
 import { allocateSections, courseKey } from "../../src/core/gradRequirements.js";
 import { _minorShareNote } from "../../src/core/planModel.js";
 
@@ -395,6 +397,102 @@ test("minor share › computing it changes neither the audit nor its own inputs"
 test("minor share › the fraction is the policy's, and the key helper agrees with it", () => {
   assert.equal(MINOR_SHARE_FRACTION, 0.5);
   assert.equal(courseKey("AA", 1000), "AA1000");
+});
+
+// ── Transfer and advanced standing share the same 50% budget ─────
+// "…from their major, transfer credit, or advanced standing credit" is one
+// sentence and one ceiling. Reading only the major made the figure a lower
+// bound on the registrar's own numerator.
+
+test("outside › a T grade and a placed-out course are both outside credit", () => {
+  const cm = { AA1000: course("AA1000"), AA1001: course("AA1001"), BB2000: course("BB2000") };
+  const keys = outsideCreditKeys({
+    grades: { AA1000: "T", AA1001: "A" },   // T is transfer/AP/IB/waiver
+    placedOut: ["BB2000"],                  // placement — advanced standing
+    courseMap: cm,
+  });
+  assert.deepEqual([...keys].sort(), ["AA1000", "BB2000"]);
+});
+
+test("outside › an ordinary grade is not outside credit", () => {
+  for (const g of ["A", "B-", "S", "F", "W", "I", null, undefined]) {
+    const keys = outsideCreditKeys({ grades: { AA1000: g }, courseMap: CM });
+    assert.deepEqual([...keys], [], `grade ${g} was treated as transferred`);
+  }
+});
+
+test("outside › a repeat instance resolves to its base course", () => {
+  // Grades are keyed by placement INSTANCE, and a retake carries a suffix. The
+  // requirement layer only knows base course keys.
+  const keys = outsideCreditKeys({ grades: { "AA1000#2": "T" }, courseMap: CM });
+  assert.deepEqual([...keys], ["AA1000"]);
+});
+
+test("outside › junk ids and unknown courses are skipped, not invented", () => {
+  const keys = outsideCreditKeys({
+    grades: { ZZ9999: "T", "": "T" }, placedOut: [null, undefined, "NOPE1"], courseMap: CM,
+  });
+  assert.deepEqual([...keys], []);
+  assert.deepEqual([...outsideCreditKeys()], [], "no arguments at all");
+});
+
+test("share › transfer credit is charged against the cap like the major is", () => {
+  // 12 SH minor, 6 SH cap. Nothing is shared with the major at all — but two of
+  // the three courses transferred in, so 8 SH of the minor is not its own
+  // coursework and the ceiling is exceeded.
+  const r = minorShare({ minor: THREE, placedSet: new Set(ALL_THREE), majorKeys: new Set(),
+                         outsideKeys: new Set(["AA1000", "AA1001"]), courseMap: CM });
+  assert.deepEqual(r.sharedKeys, [], "nothing is shared with a major here");
+  assert.deepEqual(r.outsideKeys, ["AA1000", "AA1001"]);
+  assert.equal(r.outsideSH, 8);
+  assert.equal(r.dependentSH, 8);
+  assert.equal(r.over, true);
+  assert.equal(r.overSH, 2);
+});
+
+test("share › the two sources share ONE ceiling, they do not each get half", () => {
+  // 4 SH from the major and 4 SH transferred is 8 against a 6 SH cap. Counted
+  // separately each would be inside it, which is the misreading to avoid.
+  const r = minorShare({ minor: THREE, placedSet: new Set(ALL_THREE),
+                         majorKeys: new Set(["AA1000"]),
+                         outsideKeys: new Set(["AA1001"]), courseMap: CM });
+  assert.equal(r.sharedSH, 4);
+  assert.equal(r.outsideSH, 4);
+  assert.equal(r.dependentSH, 8);
+  assert.equal(r.over, true);
+});
+
+test("share › a course both shared AND transferred is charged once", () => {
+  // It is one course and 4 SH of the minor, however many labels it carries.
+  const r = minorShare({ minor: THREE, placedSet: new Set(ALL_THREE),
+                         majorKeys: new Set(["AA1000"]),
+                         outsideKeys: new Set(["AA1000"]), courseMap: CM });
+  assert.deepEqual(r.sharedKeys, ["AA1000"]);
+  assert.deepEqual(r.outsideKeys, [], "not listed twice");
+  assert.equal(r.dependentSH, 4);
+});
+
+test("share › transfer credit is NOT releasable, only the major's courses are", () => {
+  // The major can re-label; a course taken at another university cannot be
+  // un-transferred. The release must not quietly forgive it.
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const claim = majorOf(["AA1000", "CC3000"], ["AA1001"]);
+  const placed = new Set(["AA1000", "AA1001", "CC3000"]);
+  const r = minorShare({ minor: two, placedSet: placed, majorKeys: claim(placed).claimed,
+                         outsideKeys: new Set(["AA1001"]), courseMap: CM, majorClaim: claim });
+  assert.deepEqual(r.releasedKeys, ["AA1000"], "the major's course is still released");
+  assert.equal(r.dependentSH, 4, "and the transferred one is still charged");
+  assert.equal(r.over, false, "4 of an 8 SH minor is exactly the cap");
+});
+
+test("share › omitting outsideKeys leaves the old answer untouched", () => {
+  const withNone = minorShare({ minor: THREE, placedSet: new Set(ALL_THREE),
+                                majorKeys: new Set(["AA1000"]), courseMap: CM });
+  const withEmpty = minorShare({ minor: THREE, placedSet: new Set(ALL_THREE),
+                                 majorKeys: new Set(["AA1000"]), outsideKeys: new Set(),
+                                 courseMap: CM });
+  assert.deepEqual(withNone, withEmpty);
+  assert.equal(withNone.dependentSH, 4);
 });
 
 // ── majorClaimOf: one owner for "what the majors claim" ──────────
