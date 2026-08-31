@@ -179,21 +179,42 @@ const MUTANTS = [
     to:   "  const over = sharedSH - capSH > EPS;", run: [MINOR] },
 
   { name: "minor: a course the major does not claim is counted as shared", file: OVERLAP,
-    from: "  const sharedKeys = [...claimed].filter(k => major.has(k)).sort();",
-    to:   "  const sharedKeys = [...claimed].sort();", run: [MINOR] },
+    from: "  const sharedKeys  = [...claimed].filter(k => major.has(k)).sort();",
+    to:   "  const sharedKeys  = [...claimed].sort();", run: [MINOR] },
 
   { name: "minor: General Electives counts as a minor requirement", file: OVERLAP,
     from: "    section => section && section.title !== \"Required General Electives\"",
     to:   "    section => Boolean(section)", run: [MINOR] },
 
   { name: "minor: the withheld allocation is skipped (unique credit assumed zero)", file: OVERLAP,
-    from: "  let uniqueSH = minorWithout(major);",
+    from: "  let uniqueSH = minorWithout(charged);",
     to:   "  let uniqueSH = 0;", run: [MINOR] },
+
+  // ── Transfer and advanced standing share the same ceiling ───────
+  { name: "minor: transfer credit gets its own budget instead of sharing one", file: OVERLAP,
+    from: "  const charged = new Set([...major, ...outside]);",
+    to:   "  const charged = new Set([...major]);", run: [MINOR] },
+
+  { name: "minor: outside credit is charged even when the major already claims it", file: OVERLAP,
+    from: "  const outsideOnly = [...claimed].filter(k => outside.has(k) && !major.has(k)).sort();",
+    to:   "  const outsideOnly = [...claimed].filter(k => outside.has(k)).sort();", run: [MINOR] },
+
+  { name: "minor: transfer credit becomes releasable like the major's", file: OVERLAP,
+    from: "      const stillCharged = new Set([...charged].filter(\n        k => outside.has(k) || !releasedKeys.includes(k)));",
+    to:   "      const stillCharged = new Set([...charged].filter(\n        k => !releasedKeys.includes(k)));", run: [MINOR] },
+
+  { name: "minor: an ordinary grade counts as transferred", file: OVERLAP,
+    from: "    if (grade === TRANSFER_GRADE) add(pid);",
+    to:   "    if (grade != null) add(pid);", run: [MINOR] },
+
+  { name: "minor: placed-out courses stop counting as advanced standing", file: OVERLAP,
+    from: "  for (const id of placedOut ?? []) add(id);",
+    to:   "", run: [MINOR] },
 
   // ── The major-side release ──────────────────────────────────────
   { name: "minor: the release runs whether or not the cap is exceeded", file: OVERLAP,
-    from: "  if (dependentSH - capSH > EPS && typeof majorClaim === \"function\") {",
-    to:   "  if (typeof majorClaim === \"function\") {", run: [MINOR] },
+    from: "  if (dependentSH - capSH > EPS && typeof majorClaim === \"function\" && sharedKeys.length) {",
+    to:   "  if (typeof majorClaim === \"function\" && sharedKeys.length) {", run: [MINOR] },
 
   { name: "minor: releases are tested one at a time, not accumulated", file: OVERLAP,
     from: "    const without = new Set(placed);\n    for (const r of released) without.delete(r);\n    without.delete(key);",
@@ -230,8 +251,8 @@ const MUTANTS = [
     to:   "    if (!next || !Array.isArray(next.sat)) continue;", run: [MINOR] },
 
   { name: "minor: a course with no credit on record is charged the default 4", file: OVERLAP,
-    from: "  const sharedSH = sharedKeys.reduce((n, k) => n + (courseMap[k]?.sh ?? 0), 0);",
-    to:   "  const sharedSH = sharedKeys.reduce((n, k) => n + (courseMap[k]?.sh ?? 4), 0);",
+    from: "  const sharedSH  = sharedKeys.reduce((n, k) => n + (courseMap[k]?.sh ?? 0), 0);",
+    to:   "  const sharedSH  = sharedKeys.reduce((n, k) => n + (courseMap[k]?.sh ?? 4), 0);",
     run: [MINOR] },
 
   { name: "minor: the printed note announces a breach that is not one", file: MODEL,
