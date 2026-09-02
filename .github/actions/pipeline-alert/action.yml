@@ -72,6 +72,23 @@ runs:
           // failure into silence is worse than no helper.
           const safe = async (fn, fallback) => { try { return await fn(); } catch { return fallback; } };
 
+          // ── Size limits, declared ABOVE every path that uses them ─────────
+          //
+          // A GitHub issue body is capped at 65,536 characters and the API 422s
+          // over it, which for an alert means the failure with the chattiest log
+          // is the one nobody hears about. Bounded twice: per log, then overall.
+          //
+          // Declared here rather than beside the failure body because the
+          // `stale` path below also clips, and a `const` referenced above its
+          // declaration is a TDZ ReferenceError, not a hoist — which in this
+          // file would throw at the top of an alert that is only ever running
+          // because something else has already gone wrong.
+          const MAX_LOG  = 4000;
+          const MAX_BODY = 60000;
+          const clip = (s, n) => s.length <= n
+            ? s
+            : `${s.slice(0, n)}\n…[${s.length - n} more characters — see the run]`;
+
           // ── Which step actually failed ────────────────────────────────────
           // The workflow tees each step to its own log, but only the API knows
           // which one exited non-zero — and that is the first thing a reader
@@ -136,6 +153,32 @@ runs:
             return data.find(i => (i.body || '').includes(MARKER)) || null;
           }, null);
 
+          // Create the label only if it is genuinely missing.
+          //
+          // This was `safe(getLabel, await safe(createLabel, null))`, which has
+          // two bugs in one line. JavaScript evaluates ARGUMENTS before calling,
+          // so the "fallback" ran every single time rather than on failure —
+          // meaning every alert tried to create a label that already existed.
+          // And `safe` could not catch the resulting 422 (see above), so the
+          // second alert of 2026-09-01 died with
+          // `Validation Failed: {"resource":"Label","code":"already_exists"}`
+          // and the third with it. The whole reason this block exists is a
+          // first-run convenience; it must never be able to prevent the alert.
+          //
+          // Above the branches, because the `stale` path opens an issue too and
+          // labels it the same way.
+          await safe(async () => {
+            try {
+              await github.rest.issues.getLabel({ owner, repo, name: LABEL });
+            } catch (e) {
+              if (e.status !== 404) throw e;
+              await github.rest.issues.createLabel({
+                owner, repo, name: LABEL, color: 'b60205',
+                description: 'An unattended data pipeline is failing',
+              });
+            }
+          }, null);
+
           if (state === 'recovered') {
             if (existing) {
               await github.rest.issues.createComment({
@@ -151,20 +194,74 @@ runs:
             return;
           }
 
-          // ── Failure body ─────────────────────────────────────────────────
+          // ── Stale: the pipeline did not fail, it did not RUN ──────────────
           //
-          // A GitHub issue body is capped at 65,536 characters and the API
-          // rejects a longer one with a 422 — which, for an alert, means the
-          // failure that produced an unusually chatty log is exactly the
-          // failure nobody hears about. 40 lines is normally a few kB, but one
-          // stack trace or one dumped JSON row is all it takes, so the size is
-          // bounded twice: per log, then over the whole body.
-          const MAX_LOG   = 4000;
-          const MAX_BODY  = 60000;
-          const clip = (s, n) => s.length <= n
-            ? s
-            : `${s.slice(0, n)}\n…[${s.length - n} more characters — see the run]`;
+          // Every other path here is reached by a workflow reporting on itself,
+          // which cannot cover the failure where no workflow runs at all: a run
+          // cancelled while merely PENDING in the shared concurrency group
+          // (GitHub keeps one pending run and cancels the previous, and a run
+          // cancelled before it starts executes no steps, so it cannot report
+          // anything), a cron GitHub dropped, or a schedule disabled after 60
+          // days of repository inactivity. Silence and health look identical.
+          // data-staleness.yml watches from outside and calls this.
+          //
+          // It never touches an issue that already exists: a real failure alert
+          // carries logs and a failed step, and overwriting that with "it has
+          // not run" would replace the more informative report with the less.
+          if (state === 'stale') {
+            if (existing) return;
+            const detail = lines(checkFirst).join('\n');
+            const staleBody = [
+              MARKER,
+              `## ${pipeline} has stopped running`,
+              '',
+              `**Checked by:** ${runUrl}`,
+              lastMoved
+                ? `**Data last changed:** ${lastMoved.iso} — ${lastMoved.days} day(s) ago.`
+                : '**Data last changed:** never, as far as the API can see.',
+              '',
+              '### What this means',
+              '',
+              'This is not a failed run — it is the ABSENCE of one. Nothing alerted,',
+              'because the alert lives inside the job that did not happen. The site is',
+              'serving whatever the last successful run wrote and looks perfectly',
+              'healthy while going out of date.',
+              '',
+              detail ? `### Check first\n\n${detail}` : '',
+              '',
+              '### General triage',
+              '',
+              '1. Open the workflow in the Actions tab. If the schedule is disabled,',
+              '   GitHub turned it off — 60 days without repository activity does that,',
+              '   and re-enabling is a button.',
+              '2. Look for a run that was CANCELLED rather than failed. All the data',
+              '   workflows share the `nu-map-data` concurrency group, and a run that is',
+              '   cancelled while still pending never executes a step, so it can never',
+              '   report anything about itself.',
+              '3. GitHub drops scheduled runs under load, and delays them by hours',
+              '   routinely — on 2026-09-01 the three data jobs started 5 hours late.',
+              '   One missed cycle is normal; two is not.',
+              '4. Re-run it by hand (`workflow_dispatch`) to close this out. A later',
+              '   success closes this issue by itself.',
+              '',
+              '---',
+              '',
+              '*Opened automatically by the staleness watchdog. It closes itself when the',
+              'pipeline next succeeds.*',
+            ];
+            await github.rest.issues.create({
+              owner, repo,
+              title: `🟠 ${pipeline} has stopped running`,
+              body: clip(staleBody.filter(l => l !== '').join('\n'), MAX_BODY),
+              labels: [LABEL],
+            });
+            return;
+          }
 
+          // ── Failure body ─────────────────────────────────────────────────
+          // 40 lines is normally a few kB, but one stack trace or one dumped
+          // JSON row is all it takes to blow the issue-body limit, so each tail
+          // is clipped (see MAX_LOG above) as well as the finished body.
           const tail = (p, n = 40) => {
             if (!existsSync(p)) return null;
             const t = readFileSync(p, 'utf8').trim().split('\n').slice(-n).join('\n');
@@ -220,29 +317,6 @@ runs:
           const body = clip(bodyParts.filter(l => l !== '').join('\n'), MAX_BODY);
 
           const title = `🔴 ${pipeline} pipeline is failing`;
-
-          // Create the label only if it is genuinely missing.
-          //
-          // This was `safe(getLabel, await safe(createLabel, null))`, which has
-          // two bugs in one line. JavaScript evaluates ARGUMENTS before calling,
-          // so the "fallback" ran every single time rather than on failure —
-          // meaning every alert tried to create a label that already existed.
-          // And `safe` could not catch the resulting 422 (see above), so the
-          // second alert of 2026-09-01 died with
-          // `Validation Failed: {"resource":"Label","code":"already_exists"}`
-          // and the third with it. The whole reason this block exists is a
-          // first-run convenience; it must never be able to prevent the alert.
-          await safe(async () => {
-            try {
-              await github.rest.issues.getLabel({ owner, repo, name: LABEL });
-            } catch (e) {
-              if (e.status !== 404) throw e;
-              await github.rest.issues.createLabel({
-                owner, repo, name: LABEL, color: 'b60205',
-                description: 'An unattended data pipeline is failing',
-              });
-            }
-          }, null);
 
           if (existing) {
             await github.rest.issues.update({

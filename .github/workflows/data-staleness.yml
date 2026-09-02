@@ -1,0 +1,147 @@
+name: Data staleness watchdog
+
+# ═══════════════════════════════════════════════════════════════════════════
+# The one failure the pipelines cannot report: the run that never happened.
+#
+# Every alert in this repository is raised BY the job it is about, from inside
+# `if: failure()`. That covers a job that ran and broke. It cannot cover:
+#
+#   · a run cancelled while PENDING. All three data workflows share the
+#     `nu-map-data` concurrency group; GitHub keeps at most one pending run per
+#     group and cancels the previous one when a third arrives. A run cancelled
+#     before it starts executes no steps, so `if: failure()` never fires — and
+#     `cancelled()` cannot help either, because there is no job to run it in.
+#     On odd months all three of these fire within three hours of each other,
+#     and on 2026-09-01 GitHub delivered them ~5 hours late in a single clump;
+#     the arrangement that avoids the collision is a stagger the scheduler does
+#     not honour.
+#   · a cron GitHub simply dropped, which it does under load.
+#   · a schedule GitHub DISABLED, which it does automatically after 60 days
+#     without repository activity.
+#   · a workflow file renamed or deleted in a refactor.
+#
+# In every one of those the site keeps serving the last good data and looks
+# entirely healthy. Nothing anywhere would say otherwise, so this watches from
+# outside and says it.
+#
+# It measures the last SUCCESSFUL run rather than the age of the data, because
+# a successful run that legitimately found nothing to change would otherwise
+# raise a false alarm — and an alert channel that cries wolf is the one nobody
+# reads on the day it matters. The data age is reported in the issue as
+# context, which is the number a human actually wants.
+# ═══════════════════════════════════════════════════════════════════════════
+
+on:
+  schedule:
+    - cron: "0 5 * * 1"   # Mondays 05:00 UTC, ahead of the test suite at 07:00
+  workflow_dispatch:
+
+permissions:
+  contents: read     # checkout, for the composite action
+  issues: write      # the alert opens an issue
+
+defaults:
+  run:
+    shell: bash
+
+# Never two at once, and never cancel one in flight: two runs could both decide
+# no issue exists and open two.
+concurrency:
+  group: data-staleness
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: ${{ matrix.pipeline }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false     # one stale pipeline must not hide the others
+      matrix:
+        include:
+          # maxAgeDays = one cycle plus about a quarter. A run DELAYED by
+          # GitHub (hours, routinely) is not an alarm; a run MISSED is, because
+          # by then the next one is already the recovery and students have been
+          # reading last cycle's data the whole time. Two cycles of tolerance
+          # was the first draft and is wrong for the bimonthly jobs — it would
+          # let degree requirements sit four months stale without a word.
+          - pipeline: Course data
+            key: courses
+            workflow: update-courses.yml
+            maxAgeDays: 40                     # monthly (31 + 9)
+            dataPaths: public/northeastern/catalog-courses.json
+          - pipeline: Undergraduate program requirements
+            key: majors
+            workflow: update-majors.yml
+            maxAgeDays: 75                     # bimonthly (61 + 14)
+            dataPaths: data/northeastern/programs/undergraduate
+          - pipeline: Graduate program requirements
+            key: grad-majors
+            workflow: update-grad-majors.yml
+            maxAgeDays: 75                     # bimonthly (61 + 14)
+            dataPaths: data/northeastern/programs/graduate
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: When did this pipeline last succeed?
+        id: age
+        uses: actions/github-script@v7
+        env:
+          WORKFLOW: ${{ matrix.workflow }}
+          MAX_AGE_DAYS: ${{ matrix.maxAgeDays }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const workflow = process.env.WORKFLOW;
+            const maxAge   = Number(process.env.MAX_AGE_DAYS);
+
+            // A workflow that no longer exists is the loudest version of this
+            // failure, not an error to swallow: a rename in a refactor stops
+            // every future run, and nothing else in the repository notices.
+            let runs;
+            try {
+              ({ data: runs } = await github.rest.actions.listWorkflowRuns({
+                owner, repo, workflow_id: workflow, status: 'success', per_page: 1,
+              }));
+            } catch (e) {
+              if (e.status !== 404) throw e;
+              core.setOutput('stale', 'true');
+              core.setOutput('detail',
+                `- \`${workflow}\` **does not exist** in this repository. It was renamed or `
+                + `deleted; whatever replaced it is not what this watchdog is looking for, so `
+                + `update .github/workflows/data-staleness.yml as well.`);
+              core.warning(`${workflow} not found`);
+              return;
+            }
+
+            const last = runs.workflow_runs?.[0];
+            if (!last) {
+              core.setOutput('stale', 'true');
+              core.setOutput('detail',
+                `- \`${workflow}\` has **never completed successfully**. If it is new, run it `
+                + `once by hand; if it is not, this is the first thing to look at.`);
+              return;
+            }
+
+            const days = Math.floor((Date.now() - Date.parse(last.created_at)) / 86400000);
+            core.setOutput('stale', days > maxAge ? 'true' : 'false');
+            core.setOutput('detail',
+              `- Last successful run: [${last.created_at.slice(0, 10)}](${last.html_url}) — `
+              + `**${days} days ago**, against a ${maxAge}-day tolerance (one cycle plus a `
+              + `cycle of slack, so one missed run is not an alarm and two are).`);
+            core.info(`${workflow}: last success ${days}d ago (tolerance ${maxAge}d)`);
+
+      - name: Say so
+        if: steps.age.outputs.stale == 'true'
+        uses: ./.github/actions/pipeline-alert
+        with:
+          pipeline: ${{ matrix.pipeline }}
+          key: ${{ matrix.key }}
+          state: stale
+          data-paths: ${{ matrix.dataPaths }}
+          check-first: ${{ steps.age.outputs.detail }}
+
+      - name: Still running
+        if: steps.age.outputs.stale != 'true'
+        run: echo "✅  ${{ matrix.pipeline }} — ${{ steps.age.outputs.detail }}"

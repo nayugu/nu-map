@@ -215,6 +215,29 @@ test("recovery closes the open issue, and does nothing when there is none", asyn
   assert.equal(quiet.named("create").length, 0);
 });
 
+// ── The `stale` state: the run that never happened ──────────────────
+// Raised from outside by data-staleness.yml, because a run cancelled while
+// pending executes no steps and so cannot report anything about itself.
+test("stale opens an issue that says it did not run, not that it failed", async () => {
+  const s = await run({ state: "stale", "check-first": "- last success 96 days ago" });
+  assert.equal(s.named("create").length, 1);
+  const { title, body, labels } = s.named("create")[0].args;
+  assert.match(title, /has stopped running/);
+  assert.doesNotMatch(title, /failing/, "it did not fail — it did not run");
+  assert.match(body, /<!-- pipeline-alert:courses -->/, "must carry the marker so a later success closes it");
+  assert.match(body, /last success 96 days ago/, "the watchdog's finding must reach the reader");
+  assert.deepEqual(labels, ["pipeline-failure"]);
+});
+
+test("stale never overwrites an open failure report", async () => {
+  const s = await run({ state: "stale" }, {
+    listForRepo: () => ({ data: [{ number: 3, body: "<!-- pipeline-alert:courses -->\nwith logs" }] }),
+  });
+  assert.equal(s.named("create").length, 0);
+  assert.equal(s.named("update").length, 0, "a failure report carries logs; staleness carries less");
+  assert.equal(s.named("createComment").length, 0);
+});
+
 test("the issue is found by its marker, so two pipelines never share one", async () => {
   const s = await run({ key: "majors", pipeline: "Program requirements" }, {
     listForRepo: () => ({ data: [{ number: 2, body: "<!-- pipeline-alert:courses -->\nsomeone else's" }] }),
