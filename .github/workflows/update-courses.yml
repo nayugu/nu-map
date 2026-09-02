@@ -210,43 +210,89 @@ jobs:
         run: node scripts/verify-chart.js --all 2>&1 | tee /tmp/chart-verify-log.txt
 
       # ── Commit and push directly to main ──────────────────────────────────────
-      - name: Check for changes
-        id: changes
-        run: git diff --quiet && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
-
+      #
+      # ONE step, and that is a fix rather than tidying. A `Check for changes`
+      # gate used to stand in front of it deciding on `git diff --quiet`, which
+      # is blind to UNTRACKED files — and the first scrape of a new catalog
+      # edition writes nothing BUT untracked files. A run that produced a whole
+      # new edition would have reported "already up-to-date" and thrown it away,
+      # green. Staging is the only honest test of "did this run produce
+      # anything", so staging happens first and decides.
       - name: Commit and push
-        if: steps.changes.outputs.changed == 'true'
         run: |
           git config user.name  "nu-map-bot"
           git config user.email "nu-map-bot@users.noreply.github.com"
 
           DATE=$(date -u '+%Y-%m')
 
-          git add \
-            public/northeastern/catalog-courses.json \
-            public/northeastern/term-history.json \
-            public/northeastern/term-details.json \
-            public/northeastern/offering-summary.json \
-            public/northeastern/ratemyhusky.json \
-            public/northeastern/subjects.json \
-            public/northeastern/change-log.json \
-            public/northeastern/course-equivalences.json \
+          # Staged by AREA with -A, not from a hand-kept list of filenames.
+          # That list is exactly how 2026-08-03 and 2026-09-01 failed: this job
+          # started writing public/northeastern/all-courses.json again when the
+          # Tableau step landed on 2026-08-02, the filename had been dropped
+          # from the list back in May, and every run since died at
+          # `git pull --rebase` with "cannot pull with rebase: You have
+          # unstaged changes" — after a clean 88-minute scrape. -A also stages
+          # deletions and files nobody has thought of yet, which a list cannot.
+          git add -A -- \
+            public/northeastern/ \
             src/core/dataMeta.json \
             src/adapters/northeastern/termWindows.js \
+            data/northeastern/scrape-state.json \
             public/data-meta.json
-          git diff --cached --quiet || git commit -m "data: update courses (catalog + availability) [$DATE]
+
+          # Nothing this run touched may be left behind unnoticed.
+          #
+          # A TRACKED file modified and not staged is unambiguously a dropped
+          # update — the file is already part of the shipped dataset — so it
+          # stops the run HERE, before the commit, naming itself. That is worth
+          # a red run: the alternative is shipping a half-updated dataset (a
+          # fresh catalog beside a stale all-courses.json that merge-nupath
+          # reads), which is wrong information rather than less of it.
+          # Untracked leftovers are only reported; they may be scratch.
+          UNSTAGED=$(git status --porcelain | awk 'substr($0,1,2) != "??" && substr($0,2,1) != " " { print substr($0,4) }')
+          UNTRACKED=$(git status --porcelain | awk 'substr($0,1,2) == "??" { print substr($0,4) }')
+          if [ -n "$UNSTAGED" ]; then
+            echo "::error::This run modified tracked files that no staged path covers. They would be dropped, and 'git pull --rebase' refuses to run at all while they are dirty. Add them to the 'git add' list above, or find out why a script wrote them:"
+            echo "$UNSTAGED"
+            exit 1
+          fi
+          if [ -n "$UNTRACKED" ]; then
+            echo "::warning::Untracked files were left behind and NOT committed:"
+            echo "$UNTRACKED"
+          fi
+
+          if git diff --cached --quiet; then
+            echo "✅  Course data is already up-to-date — nothing to commit."
+            exit 0
+          fi
+
+          git commit -m "data: update courses (catalog + availability) [$DATE]
 
           Triggered by: scheduled run
           Workflow run: ${{ github.run_id }}"
 
-          # Rebase first: the concurrency group should prevent a race, but a
-          # rejected push would discard this run's data entirely.
-          git pull --rebase origin main
-          git push origin main
-
-      - name: No changes detected
-        if: steps.changes.outputs.changed == 'false'
-        run: echo "✅  Course data is already up-to-date — nothing to commit."
+          # Rebase before pushing: the concurrency group should prevent a race,
+          # but a rejected push would discard this run's data entirely.
+          # --autostash so that a stray unstaged file can never again turn a
+          # good scrape into exit 128; after the check above there should be
+          # nothing to stash, and this is the belt to that pair of braces.
+          # Retried because the group is not a guarantee — a human can push
+          # between our pull and our push, and losing a month of data to that
+          # would be absurd.
+          for attempt in 1 2 3; do
+            if git pull --rebase --autostash origin main && git push origin main; then
+              echo "Pushed on attempt $attempt."
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "::warning::push attempt $attempt failed — retrying"
+            # Read from the environment purely so the contract test can drive
+            # this loop without adding 15 seconds to every CI run. Nothing sets
+            # it here, so unattended runs wait the full 15 seconds.
+            sleep "${PUSH_RETRY_DELAY:-15}"
+          done
+          echo "::error::could not push after 3 attempts; this run's data has NOT landed."
+          exit 1
 
       # ── Tell someone ──────────────────────────────────────────────────────────
       #   This job pushes to main with nobody watching. Without these two steps a
