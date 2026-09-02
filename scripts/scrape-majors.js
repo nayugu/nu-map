@@ -91,6 +91,17 @@ function resolveYearFrom(root, url) {
 const WRITE   = process.argv.includes('--write');
 const DRY_RUN = process.argv.includes('--dry-run');
 const URL_ARG = (() => { const i = process.argv.indexOf('--url'); return i >= 0 ? process.argv[i + 1] : null; })();
+// Dump what the parser made of a page, without writing it into the tree.
+//
+// The shared-section rail's runbook (SHARED_RAIL_RUNBOOK, below) tells whoever
+// hits it to open the catalog page and decide, per title, whether the section
+// was renamed, dropped, or is merely parsed differently now — and until this
+// flag there was no way to see the third one. `--dry-run` prints a count, the
+// committed tree holds the PREVIOUS parse, and the only way to look at the
+// current one was to run with `--write` and then undo it. Writing to a file
+// rather than stdout keeps it diffable against the committed record, which is
+// the comparison the adjudication actually needs.
+const JSON_OUT = (() => { const i = process.argv.indexOf('--json'); return i >= 0 ? process.argv[i + 1] : null; })();
 
 /**
  * Reject anything unrecognised instead of ignoring it.
@@ -105,14 +116,20 @@ const URL_ARG = (() => { const i = process.argv.indexOf('--url'); return i >= 0 
   // Flags that take a value are listed separately so their argument is not
   // itself mistaken for an unrecognised one.
   const flags = new Set(['--write', '--dry-run']);
-  const valued = new Set(['--url', '--edition']);
+  const valued = new Set(['--url', '--edition', '--json']);
   const argv = process.argv.slice(2);
   const unknown = argv.filter((a, i) => a.startsWith('--')
     ? !flags.has(a) && !valued.has(a)
     : !valued.has(argv[i - 1]));
   if (unknown.length) {
     console.error(`Unrecognised argument: ${unknown.join(' ')}`);
-    console.error('Usage: [--url <program-url>] [--edition YYYY-YYYY] [--dry-run] [--write]');
+    console.error('Usage: [--url <program-url>] [--edition YYYY-YYYY] [--dry-run] [--write] [--json <file>]');
+    process.exit(2);
+  }
+  // `--json` over the whole sitemap would be a 20 MB dump of what the tree
+  // already holds. It exists to look at ONE page.
+  if (JSON_OUT && !URL_ARG) {
+    console.error('--json is only meaningful with --url: it dumps the parse of a single page.');
     process.exit(2);
   }
 })();
@@ -627,6 +644,15 @@ async function main() {
 
   console.log(`\nResults: ${done} scraped, ${written} written, ${skipped} skipped, ${failed} failed`);
   if (!WRITE && !DRY_RUN && done > 0) console.log('Run with --write to save output files.');
+
+  if (JSON_OUT) {
+    const records = [...pending.values()];
+    writeFileSync(JSON_OUT, JSON.stringify(records.length === 1 ? records[0] : records, null, 2) + '\n');
+    console.log(`Parse of ${records.length} record(s) → ${JSON_OUT}`);
+    for (const r of records) {
+      console.log(`  "${r.name}" sections: ${r.requirementSections.map(s => JSON.stringify(s.title)).join(', ')}`);
+    }
+  }
 
   // The change log is the user-facing "what updated" feed, so it tracks the
   // LIVE catalog. A backfill of seven frozen editions would push seven
