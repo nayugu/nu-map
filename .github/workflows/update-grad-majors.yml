@@ -34,6 +34,22 @@ permissions:
   contents: write
   issues: write        # the failure alert opens/closes an issue
 
+# ── Naming the shell is what turns pipefail on, and it is load-bearing ───────
+#
+# Actions' DEFAULT shell on Linux is `bash -e {0}`, with NO pipefail, so in a
+# step written `node scripts/scrape-grad-majors.js --write | tee log` the step's
+# exit status is TEE's — and tee always succeeds. On 2026-09-01 the sibling
+# undergraduate job proved the cost: its scraper hit a rail, printed "❌
+# Refusing to write", exited 1, and the step was reported GREEN; the run
+# continued over an un-refreshed tree.
+#
+# `shell: bash` selects `bash --noprofile --norc -eo pipefail {0}`. The
+# "Assert the shell fails a broken pipe" step below keeps this from being a
+# claim nobody re-checks.
+defaults:
+  run:
+    shell: bash
+
 jobs:
   update:
     name: Scrape & commit graduate major requirements
@@ -45,6 +61,19 @@ jobs:
     timeout-minutes: 120
 
     steps:
+      # ── The assumption every rail below rests on, checked instead of stated ─
+      # `defaults.run.shell: bash` at the top of this file is the only reason a
+      # refusing scraper fails its step. Remove it and this workflow still looks
+      # correct while enforcing nothing — the 2026-09-01 failure exactly. Under
+      # pipefail the pipeline below exits 3; without it, tee's 0.
+      - name: Assert the shell fails a broken pipe
+        run: |
+          if (exit 3) | tee /dev/null; then
+            echo "::error::pipefail is OFF — a script that exits 1 into 'tee' would report success and every rail in this workflow is disarmed. Restore 'defaults: run: shell: bash'."
+            exit 1
+          fi
+          echo "pipefail is on — a failing script below fails its step."
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -115,7 +144,16 @@ jobs:
           git config user.email "nu-map-bot@users.noreply.github.com"
 
           DATE=$(date -u '+%Y-%m')
-          ADDED=$(grep -oP 'OK\s+' /tmp/grad-majors-log.txt | wc -l | tr -d ' ')
+          # The scraper's own tally, not a guess from the log's prose. The old
+          # `grep -oP 'OK\s+' | wc -l` was wrong twice: it counted the catalog's
+          # POLICY pages ("Thesis Policy", "Student Time Status"), which print
+          # OK and are not programs, and it missed every second program on a
+          # two-variant page, which prints "↳" and no OK. It was also a pipefail
+          # landmine — with the shell fixed above, a log with no matches makes
+          # grep exit 1 and takes the whole commit step with it. `sed` matches
+          # or does not; either way it exits 0.
+          ADDED=$(sed -n 's/^Results: [0-9]* scraped, \([0-9]*\) written.*/\1/p' /tmp/grad-majors-log.txt | tail -1)
+          [ -n "$ADDED" ] || ADDED="an unreported number of"
 
           git add data/northeastern/programs/graduate/
           # The verification verdict lives in each program file, and the report

@@ -34,6 +34,28 @@ permissions:
   contents: write
   issues: write        # the failure alert opens/closes an issue
 
+# ── Naming the shell is what turns pipefail on, and it is load-bearing ───────
+#
+# Actions' DEFAULT shell on Linux is `bash -e {0}` — with NO pipefail. Every
+# step below is written `node scripts/x.js --write 2>&1 | tee /tmp/x-log.txt`,
+# so without this the step's exit status is TEE's, and `tee` always succeeds.
+#
+# That is not a theoretical hole. Counting the refusal paths in the scripts this
+# job runs — scrape-catalog 6, fetch-nupath 3, scrape-availability 3,
+# derive-offering-summary 2, merge-nupath 2, apply-patches 1, build-equivalences
+# 1, verify-chart 1 — NINETEEN `process.exit(1)` guards were being discarded.
+# On 2026-09-01 the sibling majors job proved it: scrape-majors refused to write
+# ("a shared-section adjudication no longer matches"), exited 1, and the step
+# was reported green; the run went on to commit stale data. The comment on the
+# CHART step below claiming "a failure stops the run" was simply false.
+#
+# Writing `shell: bash` selects `bash --noprofile --norc -eo pipefail {0}`.
+# The "Assert the shell fails a broken pipe" step in the job is what stops this
+# from being a claim in a comment — see there.
+defaults:
+  run:
+    shell: bash
+
 jobs:
   update:
     name: Fetch & commit course data
@@ -48,6 +70,21 @@ jobs:
     timeout-minutes: 300
 
     steps:
+      # ── The assumption every rail below rests on, checked instead of stated ─
+      # `defaults.run.shell: bash` at the top of this file is the only reason a
+      # failing `node … | tee log` fails its step. Delete it and this workflow
+      # still looks correct — it just stops enforcing anything, silently, which
+      # is precisely the 2026-09-01 failure. One shell statement settles it:
+      # under pipefail the pipeline below exits 3, without it, tee's 0.
+      # Runs before checkout because it needs nothing and should cost nothing.
+      - name: Assert the shell fails a broken pipe
+        run: |
+          if (exit 3) | tee /dev/null; then
+            echo "::error::pipefail is OFF — a script that exits 1 into 'tee' would report success and every rail in this workflow is disarmed. Restore 'defaults: run: shell: bash'."
+            exit 1
+          fi
+          echo "pipefail is on — a failing script below fails its step."
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:

@@ -47,6 +47,15 @@ concurrency:
 permissions:
   contents: write   # needed to push the updated course data directly to main
 
+# Legacy and manual-only, but it still writes data and pushes to main, so it
+# gets the same shell as the live pipelines: Actions' default `bash -e` has no
+# pipefail, which makes `node fetch-nupath.js | tee log` report tee's success
+# and discards the script's three refusal paths — including the 5% mass-clear
+# guard. See update-courses.yml for the incident this comes from.
+defaults:
+  run:
+    shell: bash
+
 jobs:
   update-nupath:
     name: Fetch & commit NUpath data
@@ -94,8 +103,17 @@ jobs:
           echo "Strategy: $STRATEGY  |  Flags: $FLAGS"
           node scripts/fetch-nupath.js $FLAGS 2>&1 | tee /tmp/nupath-log.txt
 
-          # Count how many nuPath values changed
-          CHANGED=$(grep -oP 'Changed\s*:\s*\K\d+' /tmp/nupath-log.txt | head -1 || echo "0")
+          # Count how many nuPath values changed.
+          #
+          # `grep … | head -1` deliberately avoided: with pipefail now on (see
+          # the top of this file) a grep with several matches is killed by
+          # SIGPIPE when head closes the pipe, the pipeline "fails", and the
+          # `|| echo 0` fallback silently reports zero changes — which would
+          # also skip the patch re-apply below. `sed … | tail -1` reads the
+          # whole stream, so it cannot be signalled, and prints nothing rather
+          # than failing when the line is absent.
+          CHANGED=$(sed -n 's/.*~ Changed *: *\([0-9]*\).*/\1/p' /tmp/nupath-log.txt | tail -1)
+          [ -n "$CHANGED" ] || CHANGED="0"
           echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
           echo "log<<EOF" >> "$GITHUB_OUTPUT"
           cat /tmp/nupath-log.txt >> "$GITHUB_OUTPUT"
