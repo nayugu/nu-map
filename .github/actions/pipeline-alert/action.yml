@@ -59,20 +59,47 @@ runs:
 
           // Anything in here is best-effort. An alert that fails the run it is
           // reporting on would turn one problem into two.
-          const safe = (fn, fallback) => { try { return fn(); } catch { return fallback; } };
+          //
+          // ⚠ `async`, and that is the whole point. This used to be
+          // `(fn, fallback) => { try { return fn(); } catch { return fallback; } }`
+          // — synchronous, while every fn passed to it is an async function. A
+          // rejected promise is not thrown INSIDE the try, so the catch never
+          // saw one: `fn()` returned a pending promise, `safe` returned it
+          // happily, and the rejection surfaced at the caller's `await`, where
+          // nothing was guarding. On 2026-09-01 that took the whole alert down
+          // with "Unhandled error: HttpError: Validation Failed" and neither
+          // majors failure opened an issue. A best-effort helper that turns one
+          // failure into silence is worse than no helper.
+          const safe = async (fn, fallback) => { try { return await fn(); } catch { return fallback; } };
 
           // ── Which step actually failed ────────────────────────────────────
           // The workflow tees each step to its own log, but only the API knows
           // which one exited non-zero — and that is the first thing a reader
           // wants. Without it they are left diffing seven logs by eye.
+          //
+          // Retried, because this asks the API about a run that is STILL
+          // RUNNING — us. On 2026-09-01 the one alert that did get through came
+          // out with no "Failed step" line at all: the jobs endpoint had not yet
+          // recorded the conclusion of the step that had just failed. Three
+          // tries three seconds apart cost nothing on the happy path and are the
+          // difference between a runbook and a link.
           const failedSteps = await safe(async () => {
-            const { data } = await github.rest.actions.listJobsForWorkflowRun({
-              owner, repo, run_id: context.runId, per_page: 100,
-            });
-            return data.jobs
-              .flatMap(j => (j.steps || []).map(s => ({ job: j.name, ...s })))
-              .filter(s => s.conclusion === 'failure')
-              .map(s => `\`${s.name}\``);
+            for (let attempt = 1; attempt <= 3; attempt++) {
+              const { data } = await github.rest.actions.listJobsForWorkflowRun({
+                owner, repo, run_id: context.runId, per_page: 100,
+              });
+              const failed = data.jobs
+                .flatMap(j => (j.steps || []).map(s => ({ job: j.name, ...s })))
+                .filter(s => s.conclusion === 'failure')
+                .map(s => `\`${s.name}\``);
+              if (failed.length) return failed;
+              // Read from the environment purely so the contract test can drive
+              // this loop without spending three seconds per case. Nothing sets
+              // it in the workflows.
+              const waitMs = Number(process.env.ALERT_RETRY_MS ?? 3000);
+              if (attempt < 3) await new Promise(r => setTimeout(r, waitMs));
+            }
+            return [];
           }, []) || [];
 
           // ── When did the data last actually move? ─────────────────────────
@@ -125,10 +152,23 @@ runs:
           }
 
           // ── Failure body ─────────────────────────────────────────────────
+          //
+          // A GitHub issue body is capped at 65,536 characters and the API
+          // rejects a longer one with a 422 — which, for an alert, means the
+          // failure that produced an unusually chatty log is exactly the
+          // failure nobody hears about. 40 lines is normally a few kB, but one
+          // stack trace or one dumped JSON row is all it takes, so the size is
+          // bounded twice: per log, then over the whole body.
+          const MAX_LOG   = 4000;
+          const MAX_BODY  = 60000;
+          const clip = (s, n) => s.length <= n
+            ? s
+            : `${s.slice(0, n)}\n…[${s.length - n} more characters — see the run]`;
+
           const tail = (p, n = 40) => {
             if (!existsSync(p)) return null;
             const t = readFileSync(p, 'utf8').trim().split('\n').slice(-n).join('\n');
-            return t || null;
+            return t ? clip(t, MAX_LOG) : null;
           };
 
           const logSections = lines(logInput).map(p => {
@@ -136,7 +176,7 @@ runs:
             return t ? `<details><summary><code>${p}</code></summary>\n\n\`\`\`\n${t}\n\`\`\`\n</details>` : null;
           }).filter(Boolean);
 
-          const body = [
+          const bodyParts = [
             MARKER,
             `## ${pipeline} failed`,
             '',
@@ -175,18 +215,34 @@ runs:
             '',
             '*Opened automatically. It closes itself when a later run succeeds, so an open',
             'issue here always means the pipeline is still broken right now.*',
-          ].filter(l => l !== '').join('\n');
+          ];
+
+          const body = clip(bodyParts.filter(l => l !== '').join('\n'), MAX_BODY);
 
           const title = `🔴 ${pipeline} pipeline is failing`;
 
+          // Create the label only if it is genuinely missing.
+          //
+          // This was `safe(getLabel, await safe(createLabel, null))`, which has
+          // two bugs in one line. JavaScript evaluates ARGUMENTS before calling,
+          // so the "fallback" ran every single time rather than on failure —
+          // meaning every alert tried to create a label that already existed.
+          // And `safe` could not catch the resulting 422 (see above), so the
+          // second alert of 2026-09-01 died with
+          // `Validation Failed: {"resource":"Label","code":"already_exists"}`
+          // and the third with it. The whole reason this block exists is a
+          // first-run convenience; it must never be able to prevent the alert.
           await safe(async () => {
-            await github.rest.issues.getLabel({ owner, repo, name: LABEL });
-          }, await safe(async () => {
-            await github.rest.issues.createLabel({
-              owner, repo, name: LABEL, color: 'b60205',
-              description: 'An unattended data pipeline is failing',
-            });
-          }, null));
+            try {
+              await github.rest.issues.getLabel({ owner, repo, name: LABEL });
+            } catch (e) {
+              if (e.status !== 404) throw e;
+              await github.rest.issues.createLabel({
+                owner, repo, name: LABEL, color: 'b60205',
+                description: 'An unattended data pipeline is failing',
+              });
+            }
+          }, null);
 
           if (existing) {
             await github.rest.issues.update({

@@ -305,13 +305,23 @@ jobs:
           pipeline: Course data
           key: courses
           state: failed
+          # Every log this job writes, in pipeline order. It used to list six of
+          # ten, and the four it left out included /tmp/chart-verify-log.txt —
+          # the gate that decides whether a month of data is safe to ship. An
+          # alert that omits the failing step's output is a link with extra
+          # words. The action bounds each tail, so length is not a reason to
+          # leave one out.
           logs: |
             /tmp/catalog-log.txt
             /tmp/availability-log.txt
+            /tmp/offering-log.txt
+            /tmp/term-windows-log.txt
+            /tmp/ratemyhusky-log.txt
             /tmp/nupath-log.txt
             /tmp/nupath-merge-log.txt
             /tmp/patches-log.txt
             /tmp/equivalences-log.txt
+            /tmp/chart-verify-log.txt
           data-paths: |
             public/northeastern/catalog-courses.json
             public/northeastern/term-history.json
@@ -342,20 +352,35 @@ jobs:
             public/northeastern/catalog-courses.json
 
       # ── Write run summary ─────────────────────────────────────────────────────
+      # Every log, not three of them — and the `|| echo "(no log)"` on the old
+      # version wrote its apology to stdout rather than to the summary, so a
+      # missing log left a silently empty code fence.
+      #
+      # Tailed, because $GITHUB_STEP_SUMMARY is capped at 1 MiB and the runner
+      # DISCARDS the whole summary when it overflows: ten raw scrape logs is a
+      # plausible way to lose the report entirely. The complete output of every
+      # step is in the run's own log regardless.
       - name: Summary
         if: always()
         run: |
-          echo "## Course Data Update Summary" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "### Catalog scrape" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          cat /tmp/catalog-log.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "(no log)"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          echo "### Term availability scrape" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          cat /tmp/availability-log.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "(no log)"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          echo "### Patches" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          cat /tmp/patches-log.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "(no log)"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "## Course Data Update Summary"
+            echo ""
+            for log in /tmp/catalog-log.txt /tmp/availability-log.txt /tmp/offering-log.txt \
+                       /tmp/term-windows-log.txt /tmp/ratemyhusky-log.txt /tmp/nupath-log.txt \
+                       /tmp/nupath-merge-log.txt /tmp/patches-log.txt /tmp/equivalences-log.txt \
+                       /tmp/chart-verify-log.txt; do
+              name=$(basename "$log")
+              if [ ! -s "$log" ]; then
+                echo "- \`$name\` — no output (the step did not run, or wrote nothing)"
+                continue
+              fi
+              echo "<details><summary><code>$name</code> (last 200 lines)</summary>"
+              echo ""
+              echo '```'
+              tail -n 200 "$log"
+              echo '```'
+              echo "</details>"
+              echo ""
+            done
+          } >> "$GITHUB_STEP_SUMMARY"

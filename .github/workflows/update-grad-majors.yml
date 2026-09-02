@@ -274,11 +274,30 @@ jobs:
           data-paths: |
             data/northeastern/programs/graduate
 
+      # Every log, not just the scrape's — the verification report and the
+      # equivalence rebuild can both fail the run, and neither was visible here.
+      # Tailed, because $GITHUB_STEP_SUMMARY is capped at 1 MiB and the runner
+      # discards the whole summary when it overflows; a full 800-line scrape log
+      # beside two others is a plausible way to lose the report entirely. The
+      # complete output of every step is in the run's own log regardless.
       - name: Summary
         if: always()
         run: |
-          echo "## Graduate Major Requirements Update Summary" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          cat /tmp/grad-majors-log.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "(no log)"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "## Graduate Major Requirements Update Summary"
+            echo ""
+            for log in /tmp/grad-majors-log.txt /tmp/verify-log.txt /tmp/equivalences-log.txt; do
+              name=$(basename "$log")
+              if [ ! -s "$log" ]; then
+                echo "- \`$name\` — no output (the step did not run, or wrote nothing)"
+                continue
+              fi
+              echo "<details><summary><code>$name</code> (last 400 lines)</summary>"
+              echo ""
+              echo '```'
+              tail -n 400 "$log"
+              echo '```'
+              echo "</details>"
+              echo ""
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
