@@ -33,13 +33,12 @@ on:
 # loser's data is silently dropped until the next cycle — two months, for the
 # bimonthly majors jobs.
 #
-# The 06:00/08:00/09:00 stagger expresses the right ORDER (courses before
-# majors, because the majors verifier validates every course reference against
-# the course data — stale courses produce false "unknown course" findings).
-# But a stagger is not a guarantee: update-courses also runs a Banner
-# availability scrape with --prof, one call per section, plus ~700 RateMyHusky
-# requests, and can overrun two hours. This makes the ordering enforced rather
-# than hoped for.
+# ⚠ The group enforces MUTUAL EXCLUSION, not ORDER — this comment used to claim
+# otherwise. It matters less here than for the scheduled jobs, since this one is
+# dispatched by hand, but the sharp edge is the same: GitHub keeps at most one
+# PENDING run per group and cancels the previous when a third arrives. Dispatch
+# this while both majors jobs are queued and one of them disappears without
+# executing a step, and therefore without alerting.
 concurrency:
   group: nu-map-data
   cancel-in-progress: false

@@ -19,13 +19,21 @@ on:
 # loser's data is silently dropped until the next cycle — two months, for the
 # bimonthly majors jobs.
 #
-# The 06:00/08:00/09:00 stagger expresses the right ORDER (courses before
-# majors, because the majors verifier validates every course reference against
-# the course data — stale courses produce false "unknown course" findings).
-# But a stagger is not a guarantee: update-courses also runs a Banner
-# availability scrape with --prof and --restrictions, each one call per section,
-# plus ~700 RateMyHusky requests, and can overrun two hours. This makes the
-# ordering enforced rather than hoped for.
+# ⚠ The group enforces MUTUAL EXCLUSION. It does not enforce ORDER, and this
+# comment used to claim it did. Order follows arrival, and arrival is whenever
+# GitHub gets round to the cron: on 2026-09-01 the 06:00, 08:00 and 09:00 jobs
+# were delivered at 11:02, 12:52 and 13:47. Nothing stops a majors run arriving
+# first, in which case its verifier reads a month-old catalog and reports
+# hundreds of "unknown courses" — a loud, recoverable failure whose cause is
+# named in that pipeline's alert rather than something silent.
+#
+# The stagger is now 06:00 / 12:00 / 15:00 rather than 06:00 / 08:00 / 09:00.
+# Six hours is nearly four times the longest course run measured (88 minutes on
+# 2026-09-01), so the jobs only collide when GitHub's own delivery is hours
+# late — and a collision matters: GitHub keeps at most ONE pending run per
+# concurrency group and cancels the previous when a third arrives, and a run
+# cancelled before it starts executes no steps, so it cannot alert. That is
+# what data-staleness.yml watches for from outside.
 concurrency:
   group: nu-map-data
   cancel-in-progress: false
@@ -63,11 +71,24 @@ jobs:
 
     # A hung job is worse than a failed one: it holds the nu-map-data
     # concurrency group (cancel-in-progress is false), so the majors jobs queue
-    # behind it and nothing reports anything. GitHub's default would let that
-    # run for six hours. The catalog scrape plus a --prof availability pass can
-    # legitimately overrun two hours, so this is generous — it exists to turn a
-    # hang into a failure that alerts, not to bound normal work.
-    timeout-minutes: 300
+    # behind it — and a queued run is a run that a THIRD arrival cancels
+    # outright, before it can execute a step or report anything.
+    #
+    # 180, down from 300. The old value was chosen as "generous" with no
+    # measurement beside it, and generous is the wrong instinct for a number
+    # whose only job is to bound how long this can block the other two.
+    #
+    # Measured, from the Actions API: 14, 16, 17, 16, 88 minutes for runs 1–5
+    # (2026-06-01 … 2026-09-01). The jump is real and expected — 2026-09-01 was
+    # the first run carrying both --prof and --restrictions — so the budget is
+    # set against 88, not against 17. 180 is a little over twice the worst.
+    #
+    # The trade is deliberate: a genuinely slow month now fails and retries next
+    # cycle, where before it would have run on for five hours holding the group.
+    # A month of course data is recoverable and loud; a majors run cancelled
+    # while pending is neither, because a run cancelled before it starts cannot
+    # execute the step that would have reported it.
+    timeout-minutes: 180
 
     steps:
       # ── The assumption every rail below rests on, checked instead of stated ─

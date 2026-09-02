@@ -1,8 +1,9 @@
 name: Update Graduate Major Requirements
 
-# Runs on the 1st of January, March, May, July, September, November at 09:00 UTC.
-# Staggered 1 hour after update-majors.yml (undergrad) to avoid concurrent writes
-# to the repo.
+# Runs on the 1st of January, March, May, July, September, November at 15:00 UTC.
+# Three hours after update-majors.yml (undergrad) — twenty times the longest
+# graduate run measured (8m29s on 2026-09-01) and clear of the undergraduate
+# one (12m04s). It used to be one hour; see the concurrency note below.
 #
 # Scrapes catalog.northeastern.edu graduate degree requirement pages and writes
 # requirements.json files to data/northeastern/programs/graduate/{year}/{college}/{slug}/.
@@ -11,7 +12,7 @@ name: Update Graduate Major Requirements
 
 on:
   schedule:
-    - cron: "0 9 1 1,3,5,7,9,11 *"   # 1st of odd months
+    - cron: "0 15 1 1,3,5,7,9,11 *"   # 1st of odd months
   workflow_dispatch:
 
 # All data workflows share one concurrency group. They each commit straight to
@@ -19,13 +20,20 @@ on:
 # loser's data is silently dropped until the next cycle — two months, for the
 # bimonthly majors jobs.
 #
-# The 06:00/08:00/09:00 stagger expresses the right ORDER (courses before
-# majors, because the majors verifier validates every course reference against
-# the course data — stale courses produce false "unknown course" findings).
-# But a stagger is not a guarantee: update-courses also runs a Banner
-# availability scrape with --prof, one call per section, plus ~700 RateMyHusky
-# requests, and can overrun two hours. This makes the ordering enforced rather
-# than hoped for.
+# ⚠ The group enforces MUTUAL EXCLUSION. It does not enforce ORDER, and this
+# comment used to claim it did. Order follows arrival, and arrival is whenever
+# GitHub gets round to the cron: on 2026-09-01 the 06:00, 08:00 and 09:00 jobs
+# were delivered at 11:02, 12:52 and 13:47 — five hours late, in one clump.
+# Nothing stops this job arriving before update-courses, and if it does, its
+# verifier reads a month-old catalog and reports hundreds of "unknown courses".
+# That is a loud, recoverable failure and the alert's check-first names it.
+#
+# The stagger is now 06:00 / 12:00 / 15:00 rather than 06:00 / 08:00 / 09:00,
+# because a collision is not free: GitHub keeps at most ONE pending run per
+# concurrency group and cancels the previous one when a third arrives, and a
+# run cancelled before it starts executes no steps, so it cannot alert. This
+# job is the third arrival, so it is the one whose lateness cancels a sibling.
+# That is the case data-staleness.yml exists to catch from outside.
 concurrency:
   group: nu-map-data
   cancel-in-progress: false
@@ -288,6 +296,16 @@ jobs:
               failed too before assuming this is graduate-specific.
             - Data fixes belong in the scrape scripts, on **both** the undergraduate and
               graduate paths. A one-off migration is overwritten by the next run.
+            - **`unknownCourses` up across many programs at once** is usually not a
+              majors problem: this job validates every course reference against the
+              course data, so it reads a failed or skipped update-courses run as
+              hundreds of courses that no longer exist. Check that pipeline first.
+              The cron order (courses, then majors) is a hope, not a guarantee —
+              GitHub delivered 06:00/08:00/09:00 as 11:02/12:52/13:47 on 2026-09-01.
+            - **A new catalog EDITION** (a `<year>/` directory that did not exist)
+              makes the ratchet compare each program against the previous edition,
+              tagged "(vs …)". Expect some: NEU restructures degrees between
+              editions. This is the one moment a person is meant to read them.
 
       - name: Report recovery
         if: success()
