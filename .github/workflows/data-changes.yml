@@ -8,8 +8,12 @@ on:
     paths:
       - "data/northeastern/patches/**"
       - "public/northeastern/all-courses.json"
-      - "graduatenu/packages/api/src/major/**"
-      - "graduatenu/packages/api/src/minor/**"
+      - "public/northeastern/catalog-courses.json"
+      # Was `graduatenu/packages/api/src/{major,minor}/**` — the external/
+      # submodules were removed in July 2026 and our scrapers are the sole
+      # source. Program requirements live here now, so a PR that hand-edits one
+      # is exactly the kind this summary was built to make visible.
+      - "data/northeastern/programs/**"
       - "scripts/fetch-courses.js"
       - "scripts/apply-patches.js"
       - "scripts/validate-patches.js"
@@ -82,19 +86,30 @@ jobs:
                 files.map(f => `- \`${f}\``).join('\n') + '\n';
             }
 
+            // Program requirements. The old pathspec pointed at
+            // `graduatenu/packages/api/src/{major,minor}/**`, a submodule
+            // removed in July 2026 — so this section had been matching nothing
+            // at all, and a PR hand-editing a requirements.json (the thing
+            // most worth a second pair of eyes, since the next scrape
+            // overwrites it) produced no summary.
             let majorSection = '';
             const majorChanged = execSync(
-              "git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'graduatenu/packages/api/src/major/**' 'graduatenu/packages/api/src/minor/**' || true",
+              "git diff --name-only origin/${{ github.base_ref }}...HEAD -- 'data/northeastern/programs/**' || true",
               { encoding: 'utf8' }
             ).trim();
 
             if (majorChanged) {
               const files = majorChanged.split('\n').filter(Boolean);
-              majorSection = `### 🎓 Major/minor files changed (${files.length})\n\n` +
-                files.map(f => {
-                  const m = f.match(/\/(major|minor)s\/(.+?)\/parsed/);
-                  return m ? `- ${m[1]}: \`${m[2]}\`` : `- \`${f}\``;
-                }).join('\n') + '\n';
+              majorSection = `### 🎓 Program requirement files changed (${files.length})\n\n` +
+                files.slice(0, 40).map(f => {
+                  // data/northeastern/programs/<tree>/<year>/<college>/<folder>/…
+                  const m = f.match(/programs\/(\w+)\/(\d{4})\/[^/]+\/([^/]+)\//);
+                  return m ? `- ${m[1]} ${m[2]}: \`${m[3]}\`` : `- \`${f}\``;
+                }).join('\n')
+                + (files.length > 40 ? `\n- …and ${files.length - 40} more` : '')
+                + '\n\n⚠ A scheduled scrape overwrites anything hand-edited here. '
+                + 'Data fixes belong in the scrape scripts, on both the undergraduate '
+                + 'and graduate paths.\n';
             }
 
             let courseSection = '';
