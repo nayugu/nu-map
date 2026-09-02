@@ -112,20 +112,73 @@ export function verifyAll() {
 const COUNTERS = ['tablesUnaccounted', 'leakedMarkers', 'unknownCourses',
                   'planUnexplained', 'duplicateSectionTitles', 'impossibleSections', 'zeroTotal'];
 
-export function compareToBaseline(results) {
+// A program id carries the catalog EDITION:
+// `undergraduate/2026/engineering/computer_engineering_bs`.
+const EDITION_ID = /^(.+?)\/(\d{4})\/(.+)$/;
+
+/** tree+college+folder → the newest edition of it the baseline knows. */
+function newestByShape(programs) {
+  const byShape = new Map();
+  for (const [id, entry] of Object.entries(programs ?? {})) {
+    const m = EDITION_ID.exec(id);
+    if (!m) continue;
+    const key = `${m[1]}/${m[3]}`;
+    const year = Number(m[2]);
+    const prev = byShape.get(key);
+    if (!prev || year > prev.year) byShape.set(key, { year, id, entry });
+  }
+  return byShape;
+}
+
+/**
+ * The ratchet: no program may verify WORSE than the baseline says it did.
+ *
+ * ── Why the edition fallback exists ─────────────────────────────────────────
+ *
+ * Because the id carries the year, the first scrape of a new catalog edition
+ * presents every program under an id the baseline has never seen — and the
+ * `!base → continue` that follows meant no level was compared and no counter
+ * was checked. The ratchet switched itself OFF for the single run in which the
+ * parser meets markup nobody has looked at yet, which is the run it exists for.
+ * NEU rolled to the 2027 edition on 2026-09-01, so that run is the next one.
+ *
+ * A program with no entry for its own year is therefore compared against the
+ * newest EARLIER edition of the same college/folder. That is strict on purpose:
+ * across an edition the input changed as well as nothing else, so a difference
+ * may be NEU restructuring a degree rather than us parsing it worse — and
+ * telling those apart is a judgement, which is exactly what should happen once,
+ * by a person, on the roll. Refusing costs a cycle's delay and says so loudly;
+ * shipping an unratcheted edition costs a wrong degree plan and says nothing.
+ *
+ * `base` is a parameter so this can be tested against a fixture rather than
+ * against whatever is committed.
+ */
+export function compareToBaseline(results, base = baseline) {
+  const programs = base?.programs ?? {};
+  const byShape = newestByShape(programs);
   const regressions = [];
+
   for (const r of results) {
-    const base = baseline.programs?.[r.id];
-    if (!base) {
+    let entry = programs[r.id];
+    let against = null;
+
+    if (!entry) {
+      const m = EDITION_ID.exec(r.id);
+      const alt = m ? byShape.get(`${m[1]}/${m[3]}`) : null;
+      if (alt && alt.id !== r.id) { entry = alt.entry; against = alt.id; }
+    }
+    if (!entry) {
       if (r.level === 'review') regressions.push(`NEW program at 'review': ${r.id}`);
       continue;
     }
-    if (LEVELS.indexOf(r.level) > LEVELS.indexOf(base.level)) {
-      regressions.push(`${r.id}: level ${base.level} → ${r.level}`);
+
+    const where = against ? `${r.id} (vs ${against})` : r.id;
+    if (LEVELS.indexOf(r.level) > LEVELS.indexOf(entry.level)) {
+      regressions.push(`${where}: level ${entry.level} → ${r.level}`);
     }
     for (const c of COUNTERS) {
-      const before = base.counters?.[c] ?? 0, after = r.counters?.[c] ?? 0;
-      if (after > before) regressions.push(`${r.id}: ${c} ${before} → ${after}`);
+      const before = entry.counters?.[c] ?? 0, after = r.counters?.[c] ?? 0;
+      if (after > before) regressions.push(`${where}: ${c} ${before} → ${after}`);
     }
   }
   return regressions;
@@ -247,6 +300,13 @@ function main() {
     console.error(`\n❌  ${regressions.length} regression(s) against the baseline:\n`);
     for (const r of regressions.slice(0, 40)) console.error(`   ${r}`);
     if (regressions.length > 40) console.error(`   …and ${regressions.length - 40} more`);
+    if (regressions.some(r => r.includes(' (vs '))) {
+      console.error(`\n    The "(vs …)" lines compare a NEW catalog edition against the previous`);
+      console.error(`    one, because the baseline has no entry for this year. Expect some: NEU`);
+      console.error(`    restructures degrees between editions, and that reads the same as a`);
+      console.error(`    parser regression from here. Read them before accepting them — this is`);
+      console.error(`    the one moment a person is meant to look at a new edition.`);
+    }
     console.error(`\n    If these changes are intended, run:  node scripts/verify-majors.js --update\n`);
     return 1;
   }
