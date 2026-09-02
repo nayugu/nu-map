@@ -132,6 +132,29 @@ jobs:
       - name: Rebuild programs bundle
         run: node scripts/build-programs-bundle.js
 
+      # ── The data must be SHIPPABLE, not merely correct ────────────────────
+      #
+      # `npm run build` is the command Cloudflare Pages runs, and the only thing
+      # that exercises the data-driven parts of the site: the /data search index
+      # fails the build on a generated page carrying no index record, and the AI
+      # surface generates a page per program. A requirements scrape adds and
+      # removes programs, so it moves both.
+      #
+      # Nothing has ever run it against scraped data. A push made with the
+      # default GITHUB_TOKEN triggers no workflow — measured on the three bot
+      # commits on main, zero runs each — so these commits were the one class of
+      # change to main that CI never saw.
+      #
+      # Before the commit, deliberately: data that cannot be built must not be
+      # pushed. The suites go with it, and `test:invariant` in particular, which
+      # is where programs-bundle-fresh checks the artifact the MCP worker serves
+      # against the tree this job just rewrote.
+      - name: Build the site the way Cloudflare will
+        run: npm run build 2>&1 | tee /tmp/build-log.txt
+
+      - name: Suites that assert on data shape
+        run: npm test 2>&1 | tee /tmp/suites-log.txt
+
       # ── Commit and push directly to main ──────────────────────────────────
       # ONE step, and that is a fix rather than tidying. A `Check for changes`
       # gate used to stand in front of it deciding on `git diff --quiet`, which
@@ -254,6 +277,8 @@ jobs:
             /tmp/grad-majors-log.txt
             /tmp/verify-log.txt
             /tmp/equivalences-log.txt
+            /tmp/build-log.txt
+            /tmp/suites-log.txt
           data-paths: |
             data/northeastern/programs/graduate
           check-first: |
@@ -286,7 +311,8 @@ jobs:
           {
             echo "## Graduate Major Requirements Update Summary"
             echo ""
-            for log in /tmp/grad-majors-log.txt /tmp/verify-log.txt /tmp/equivalences-log.txt; do
+            for log in /tmp/grad-majors-log.txt /tmp/verify-log.txt /tmp/equivalences-log.txt \
+                       /tmp/build-log.txt /tmp/suites-log.txt; do
               name=$(basename "$log")
               if [ ! -s "$log" ]; then
                 echo "- \`$name\` — no output (the step did not run, or wrote nothing)"

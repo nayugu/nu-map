@@ -16,14 +16,27 @@ on:
   pull_request:
   workflow_dispatch:
   schedule:
-    - cron: "0 7 * * 1" # Mondays 07:00 UTC — live scrape smoke test
+    - cron: "0 7 * * 1" # Mondays 07:00 UTC — full suite + live scrape smoke test
 
 permissions:
   contents: read
 
+# ── Why the Monday run is no longer live-only ────────────────────────────────
+#
+# Every job here except `live` used to carry `if: github.event_name !=
+# 'schedule'`, on the reasonable assumption that a push run had already covered
+# them. It had not. A push made with the default GITHUB_TOKEN does not trigger
+# any workflow — measured against the three bot commits on main
+# (895930f6dcf, 66ba0498c8d, f3556ea3214): zero workflow runs between them —
+# so the monthly scrape's own commits were the ONE class of change to main that
+# nothing in this file ever ran against. Data is also the input most likely to
+# break the contract suite and the build, since new courses generate new pages.
+#
+# The data workflows now build and run the contract suite themselves, before
+# they commit. This weekly run is the backstop for everything they do not
+# cover, and for anything else that reaches main unobserved.
 jobs:
   unit:
-    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
