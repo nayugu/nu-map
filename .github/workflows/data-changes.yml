@@ -22,9 +22,9 @@ jobs:
       pull-requests: write   # needed to post the summary comment
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: "20"
           cache: "npm"
@@ -45,7 +45,7 @@ jobs:
       # ── Generate summary ──────────────────────────────────────────────────
       - name: Build PR comment
         id: build-comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const { readFileSync, existsSync } = require('fs');
@@ -136,7 +136,7 @@ jobs:
             return body;
 
       - name: Post PR comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const body = `${{ steps.build-comment.outputs.result }}`;
