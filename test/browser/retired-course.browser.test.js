@@ -206,6 +206,21 @@ describe("a retired course in a saved plan", () => {
       `the retired course rendered but the total reads ${total} SH, not 8 — its 4 SH are `
       + "not counted. A card that looks right and still under-counts the degree is the "
       + "failure this change exists to end.");
+
+    // The student must be TOLD. Resolving the course silently would replace one
+    // quiet wrong answer with another: the card would look like any other, and
+    // a course Northeastern no longer teaches would sit in a plan reading as
+    // ordinary. This assertion was missing until someone asked why they had
+    // never seen a retired course — the honest answer being that NO course in
+    // the shipped data carries the flag (0 of 7,966), so the badge, its
+    // tooltip and its eight locales have never rendered in production at all.
+    // On the roll that goes to ~1,070 at once, unattended.
+    // Matched on the badge's own glyph rather than the bare word: "retired"
+    // alone could be satisfied by a tooltip, a filter label or any future copy,
+    // and an assertion that cannot fail is worse than none.
+    assert.match(bodyText, /⚠\s*retired/i,
+      "the course resolved but the ⚠ retired badge is not on screen — the flag "
+      + "CourseCard reads from `course.retired` is not reaching a union record");
   });
 
   test("the rest of the plan survives it", async () => {
