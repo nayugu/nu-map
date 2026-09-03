@@ -175,9 +175,20 @@ test("manifest › matches what the committed corpus actually carries", () => {
     `only ${Object.keys(found).length} shared sections in the corpus — did a scrape drop them?`);
 
   if (!rolling) {
-    assert.deepEqual(
-      Object.keys(SHARED_SECTIONS).sort(), Object.keys(found).sort(),
-      "the manifest and the corpus disagree about WHICH programs carry a shared section");
+    // Named individually rather than as two sorted lists. This runs inside the
+    // data workflows now, so a mismatch stops a monthly pipeline — and a
+    // failure that prints 118 keys twice and leaves you to spot the difference
+    // is how a hard stop becomes a rubber stamp.
+    const orphaned = Object.keys(SHARED_SECTIONS).filter(k => !(k in found));
+    const unclaimed = Object.keys(found).filter(k => !(k in SHARED_SECTIONS));
+    assert.deepEqual(orphaned, [],
+      `these manifest entries name no program in the corpus. Either the page moved (fix the `
+      + `URL) or the program is gone from the catalog (delete the entry — runbook option 3). `
+      + `A typo looks exactly like this and is inert everywhere else, which is why it is `
+      + `caught here:\n  ${orphaned.join("\n  ")}`);
+    assert.deepEqual(unclaimed, [],
+      `these programs carry shared: true but the manifest does not, so the next scrape drops `
+      + `the flag and the degree is charged twice for the same courses:\n  ${unclaimed.join("\n  ")}`);
     for (const k of Object.keys(found)) {
       assert.deepEqual(SHARED_SECTIONS[k], found[k], `${k}: titles differ`);
     }

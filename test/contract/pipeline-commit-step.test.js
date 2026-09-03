@@ -55,7 +55,13 @@ import yaml from "js-yaml";
 
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 
-const WORKFLOWS = ["update-courses.yml", "update-majors.yml", "update-grad-majors.yml"];
+// Every workflow that commits scraped data to main. update-nupath is legacy and
+// manual, but it pushes to main and it carried the same defect — its
+// "Re-apply patches" step rewrites catalog-courses.json, which its commit step
+// did not stage — so it gets driven through the same scenarios rather than
+// trusted to be similar.
+const WORKFLOWS = ["update-courses.yml", "update-majors.yml", "update-grad-majors.yml",
+                   "update-nupath.yml"];
 
 // A tracked file no workflow stages. Scenario 5/6 use it as "the script wrote
 // somewhere nobody declared", which is the shape of every failure above.
@@ -102,9 +108,19 @@ function stagedPaths(script) {
   return m[1].split("\\").map(s => s.trim()).filter(Boolean);
 }
 
+// Each scenario builds a throwaway repo and removes it on the way out — but
+// only if it got that far. An assertion that fails leaves the directory behind,
+// and this file makes nine of them per workflow, so a red run would litter the
+// runner's temp space with git repositories. Swept at exit instead.
+const MADE = [];
+process.on("exit", () => {
+  for (const d of MADE) { try { rmSync(d, { recursive: true, force: true }); } catch { /* gone already */ } }
+});
+
 /** A repo with a bare origin, seeded so every staged path exists. */
 function scratch(paths, extra = []) {
   const dir = mkdtempSync(join(tmpdir(), "numap-commit-step-"));
+  MADE.push(dir);
   git(dir, ["-c", "init.defaultBranch=main", "init", "--bare", "-q", "origin.git"]);
   git(dir, ["clone", "-q", "origin.git", "work"]);
   const work = join(dir, "work");

@@ -118,20 +118,40 @@ jobs:
           cat /tmp/nupath-log.txt >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
 
+      # ── Propagate NUpath into the runtime file ────────────────────────────
+      #   Without this the workflow does not do the job it exists for.
+      #   fetch-nupath writes all-courses.json; the app, the MCP server and the
+      #   worker all load catalog-courses.json. This step is what carries the
+      #   designations across, and it was missing — so the documented escalation
+      #   path for "Tableau's REST and direct-CSV routes both broke" fetched the
+      #   data and left it in a file nothing reads. Same order as
+      #   update-courses.yml: fetch → merge → patches.
+      #   Unconditional, like update-courses.yml, and the pairing is why: the
+      #   merge rewrites catalog-courses.json from all-courses.json, which can
+      #   overwrite a patch that sets nuPath, so patches must be re-applied
+      #   after it. Running merge without patches, or patches without merge,
+      #   is the broken half of that pair. The old `changed != '0'` gate on
+      #   patches made both reachable — `~ Changed: 0` does not mean nothing
+      #   changed, only that nothing was CORRECTED, so a run that only ADDED
+      #   designations skipped the step that carries them to the app.
+      - name: Merge NUpath into catalog-courses
+        run: node scripts/merge-nupath.js --write 2>&1 | tee /tmp/nupath-merge-log.txt
+
       # ── Re-apply manual patches so they're not lost ───────────────────────
       - name: Re-apply patches
-        if: steps.scrape.outputs.changed != '0'
-        run: node scripts/apply-patches.js --write
-
-      # ── Check for actual file changes ─────────────────────────────────────
-      - name: Check for changes
-        id: changes
-        run: |
-          git diff --quiet && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+        run: node scripts/apply-patches.js --write 2>&1 | tee /tmp/patches-log.txt
 
       # ── Commit and push directly to main ──────────────────────────────────
+      #
+      # Same shape as the three scheduled pipelines, and for the same reason:
+      # this one staged `all-courses.json` and `change-log.json` while the
+      # "Re-apply patches" step above rewrites `catalog-courses.json`. That file
+      # was left dirty, and git refuses to rebase at all while anything is —
+      # so this workflow ended in `cannot pull with rebase`, exit 128, after
+      # doing all its work. Exactly the failure the scheduled jobs hit on
+      # 2026-09-01; it was never reported here only because nobody has needed
+      # the escalation path since.
       - name: Commit and push
-        if: steps.changes.outputs.changed == 'true'
         run: |
           git config user.name  "nu-map-bot"
           git config user.email "nu-map-bot@users.noreply.github.com"
@@ -140,28 +160,70 @@ jobs:
           STRATEGY="${{ github.event.inputs.strategy || 'auto' }}"
           DATE=$(date -u '+%Y-%m-%d')
 
-          git add public/northeastern/all-courses.json public/northeastern/change-log.json
+          # By AREA, so a file a step starts writing tomorrow is not dropped.
+          git add -A -- \
+            public/northeastern/ \
+            src/core/dataMeta.json \
+            public/data-meta.json
+
+          UNSTAGED=$(git status --porcelain | awk 'substr($0,1,2) != "??" && substr($0,2,1) != " " { print substr($0,4) }')
+          UNTRACKED=$(git status --porcelain | awk 'substr($0,1,2) == "??" { print substr($0,4) }')
+          if [ -n "$UNSTAGED" ]; then
+            echo "::error::This run modified tracked files that no staged path covers. They would be dropped, and 'git pull --rebase' refuses to run at all while they are dirty:"
+            echo "$UNSTAGED"
+            exit 1
+          fi
+          if [ -n "$UNTRACKED" ]; then
+            echo "::warning::Untracked files were left behind and NOT committed:"
+            echo "$UNTRACKED"
+          fi
+
+          if git diff --cached --quiet; then
+            echo "✅  NUpath data is already up-to-date — nothing to commit."
+            exit 0
+          fi
+
           git commit -m "data: update NUpath designations ($CHANGED changed) [$DATE]
 
           Source: $STRATEGY strategy (Tableau → catalog fallback)
           Triggered by: ${{ github.actor }}
           Workflow run: ${{ github.run_id }}"
 
-          # Rebase first: the concurrency group should prevent a race, but a
-          # rejected push would discard this run's data entirely.
-          git pull --rebase origin main
-          git push origin main
-
-      - name: No changes detected
-        if: steps.changes.outputs.changed == 'false'
-        run: echo "✅  NUpath data is already up-to-date — nothing to commit."
+          for attempt in 1 2 3; do
+            if git pull --rebase --autostash origin main && git push origin main; then
+              echo "Pushed on attempt $attempt."
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "::warning::push attempt $attempt failed — retrying"
+            sleep "${PUSH_RETRY_DELAY:-15}"
+          done
+          echo "::error::could not push after 3 attempts; this run's data has NOT landed."
+          exit 1
 
       # ── Post a summary to the Actions run log ─────────────────────────────
+      # Every log this job writes, not just the fetch's — the merge and the patch
+      # re-apply can both fail the run now, and neither was visible here. Tailed,
+      # because $GITHUB_STEP_SUMMARY is capped at 1 MiB and the runner discards
+      # the whole summary on overflow.
       - name: Summary
         if: always()
         run: |
-          echo "## NUpath Update Summary" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          cat /tmp/nupath-log.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "(no log)"  >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "## NUpath Update Summary"
+            echo ""
+            for log in /tmp/nupath-log.txt /tmp/nupath-merge-log.txt /tmp/patches-log.txt; do
+              name=$(basename "$log")
+              if [ ! -s "$log" ]; then
+                echo "- \`$name\` — no output (the step did not run, or wrote nothing)"
+                continue
+              fi
+              echo "<details><summary><code>$name</code> (last 200 lines)</summary>"
+              echo ""
+              echo '```'
+              tail -n 200 "$log"
+              echo '```'
+              echo "</details>"
+              echo ""
+            done
+          } >> "$GITHUB_STEP_SUMMARY"

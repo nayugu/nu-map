@@ -153,6 +153,8 @@ function main() {
 }
 
 // Run only when invoked as a CLI, not when imported by a test.
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+// `process.argv[1] &&`: with no script path (`node -e`, a REPL, a worker) this
+// otherwise throws on import instead of declining to run. See verify-majors.js.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();
 }

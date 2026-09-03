@@ -29,6 +29,16 @@ name: Data staleness watchdog
 # raise a false alarm — and an alert channel that cries wolf is the one nobody
 # reads on the day it matters. The data age is reported in the issue as
 # context, which is the number a human actually wants.
+#
+# ── Where the chain ends ───────────────────────────────────────────────────
+#
+# Nothing watches this. If the Actions API returns a 500 the job fails red and
+# no issue is opened, because an alarm that alarms about itself is a circle and
+# the generic failure copy ("this pipeline commits straight to main") would be
+# a lie here. That is a deliberate stopping point, not an oversight: the job
+# makes one API call per pipeline and only a non-404 error can fail it. If this
+# ever starts failing regularly, the answer is to make it not fail, not to add
+# a fourth watcher.
 # ═══════════════════════════════════════════════════════════════════════════
 
 on:

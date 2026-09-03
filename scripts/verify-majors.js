@@ -315,4 +315,9 @@ function main() {
   return 0;
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) process.exit(main());
+// `process.argv[1] &&` because there are contexts with no script path — `node -e`,
+// a REPL, a worker — and without it this module THROWS on import rather than
+// declining to run. build-ai-data.js already guards it; these did not, and the
+// failure is confusing (`The "path" argument must be of type string`) at a moment
+// when you are trying to inspect the module, not run it.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) process.exit(main());

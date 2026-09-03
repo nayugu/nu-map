@@ -556,4 +556,6 @@ function main() {
   console.log(`\n✓ wrote ${OUT.replace(ROOT + "/", "")} — ${wire.pairs.length} pairs, ${kb} KB`);
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) main();
+// `process.argv[1] &&`: with no script path (`node -e`, a REPL, a worker) this
+// otherwise throws on import instead of declining to run. See verify-majors.js.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
