@@ -574,16 +574,25 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
                      detail={hoverTitle ? hoverDetail : ""} maxWidth={280} />
         )}
         {course.isCps && <span style={{ fontWeight: 500, fontSize: 8, color: "var(--text-4)", flexShrink: 0 }}>· CPS</span>}
-        {/* Counts toward a major AND a minor. Beside the code rather than with
-            the warning icons on the right: it is an attribute of the course,
-            not a problem with the card. */}
-        <DoubleCountBadge course={course} />
         {multiTake && (
           <span
             title={t("bank.repeat.title").replace("{used}", String(takeCount)).replace("{max}", String(course.repeatMax ?? "∞"))}
             style={{ fontWeight: overTakes ? 700 : 500, fontSize: 9, color: overTakes ? "var(--error)" : "var(--text-4)", flexShrink: 0 }}
           >↻{overTakes ? " ⚠" : ""}</span>
         )}
+        {/* Counts toward a major AND a minor. On the code ROW rather than with
+            the warning icons below — it is an attribute of the course, not a
+            problem with the card — but LAST and pushed to the far end, so it
+            lands in the card's top-right corner and stops interrupting the
+            code. It has to be the final child for `margin-left: auto` to put it
+            in the corner: anything after it would be pushed out there too.
+
+            BOARD cards only. A bank card's top-right corner already belongs to
+            the hover action button, which would sit on top of the badge —
+            including on top of the tap target that opens its hover card, in the
+            one state (an unplaced course that would double count) the badge
+            exists to advertise. */}
+        <DoubleCountBadge course={course} corner={inSem} />
       </div>
 
       {/* Title */}

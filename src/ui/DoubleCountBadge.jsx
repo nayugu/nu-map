@@ -93,8 +93,13 @@ function BudgetLine({ minor }) {
 /**
  * @param {object}  props.course  the catalog course (needs subject + number)
  * @param {boolean} [props.compact]  phone-sized card
+ * @param {boolean} [props.corner]   push to the end of its flex row — the
+ *   planner card's top-right, where nothing else sits. Done with `margin-left:
+ *   auto` rather than absolute positioning on purpose: the code beside it
+ *   ellipsises, and an absolutely-placed badge would be overlapped by a long
+ *   reservation title instead of shortening it.
  */
-export default function DoubleCountBadge({ course, compact = false }) {
+export default function DoubleCountBadge({ course, compact = false, corner = false }) {
   const { doubleCount } = useRelevance();
   const { t } = useLanguage();
   const [hover, setHover] = useState(null);     // anchor rect while shown
@@ -138,12 +143,28 @@ export default function DoubleCountBadge({ course, compact = false }) {
           borderRadius: 3,
           whiteSpace: "nowrap",
           cursor: "help",
-          // Filled once it is a fact about the plan, outlined while it is still
-          // only a possibility — a difference that has to survive at 6.5px on a
-          // phone, which is why it is fill-vs-outline and not two shades.
-          color: dc.placed ? "var(--badge-bg)" : ink,
-          background: dc.placed ? ink : "transparent",
-          border: `1px solid ${ink}`,
+          ...(corner ? { marginLeft: "auto" } : null),
+          // ── The colour is the ink, not the fill ──────────────────
+          // It used to be a solid block of colour with the card's own
+          // background punched out of it, which made it the loudest thing on a
+          // card whose SUBJECT is the course code. Inverted, it reads as a chip
+          // like the SH one beside it — same `--badge-bg`, coloured text — and
+          // the hue still carries the state.
+          //
+          // What that inversion spends is the fill/outline difference, which is
+          // what told "counts toward both" from "would count if you took it".
+          // Hue covers it for the ordinary pair (green vs grey), but NOT for
+          // amber: over the cap both states are amber, and a filled-vs-outlined
+          // amber was the only thing between them.
+          //
+          // So it is fill XOR outline, never both: a fact about the plan is a
+          // chip like the SH one beside it (tint, no border), a possibility is
+          // an empty dashed outline. One shape each, still legible at 6.5px on
+          // a phone, and the ring around the filled state — which was doing no
+          // work once the fill stopped being solid colour — is gone.
+          color: ink,
+          background: dc.placed ? "var(--badge-bg)" : "transparent",
+          border: dc.placed ? "1px solid transparent" : `1px dashed ${ink}`,
         }}
       >{dc.count}×</span>
 
