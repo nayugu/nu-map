@@ -46,6 +46,30 @@
  * Override: BANNER_DELAY_MS=200 node scripts/scrape-availability.js --write
  * Per-section passes: BANNER_PROF_DELAY_MS, BANNER_RESTR_DELAY_MS (250 ms each).
  *
+ * ── INTERRUPTION IS EXPECTED, AND HANDLED WITHOUT A HUMAN ──────────
+ *
+ * The per-section passes are one request per CRN: ~7,000 and ~55 minutes for a
+ * term, ~4 hours to backfill eleven. Over that window a dropped connection, a
+ * sleeping laptop or a rate-limit is the normal case, not an incident. Three
+ * things make it self-healing, and none needs a flag:
+ *
+ *   1. A lost CONNECTION is waited out indefinitely (fetchThroughOutage),
+ *      with capped backoff, and does not count toward the 25 consecutive
+ *      failures that abandon a term. A bad ANSWER from Banner still fails fast.
+ *   2. Raw pages are cached every BANNER_RESTR_FLUSH_EVERY (500) requests, so
+ *      a process KILL — which skips the `finally` — costs at most ~2 minutes.
+ *   3. Re-running RESUMES by default: cached sections are re-parsed, not
+ *      re-fetched. Sound because this pass only ever runs on terms that have
+ *      ENDED, whose Banner pages are frozen. `--no-resume` forces a fresh read.
+ *
+ * So the operator instruction is just: run it again. Nothing else.
+ *
+ *   node scripts/scrape-availability.js --write --restrictions=11
+ *
+ * Banner's `success:true, totalCount:0` flake — which silently skipped whole
+ * terms — is retried up to 3 times with a pause before the term is recorded as
+ * unknown.
+ *
  * The session flow required by Banner SSB:
  *   1. GET /classSearch/getTerms  →  seed session cookies
  *   2. POST /term/search?mode=search  →  activate session for a specific term
@@ -63,7 +87,7 @@ import { knownTermCodes, buildTermHistory, mergePreviousHistory }
                                                     from "./lib/term-history.js";
 import {
   BASE, PAGE_SIZE, sleep, fetchRetry, cookieHeader, updateJar,
-  getTermList, activateTerm, resetForm, fetchPage,
+  getTermList, activateTerm, resetForm, fetchPage, fetchThroughOutage,
 }                                                   from "./lib/banner-session.js";
 import { writeTermCache, readTermCache }             from "./lib/restriction-cache.js";
 
@@ -243,10 +267,37 @@ async function paginateTerm(termCode, onSection) {
   }
 }
 
-async function fetchTermOfferings(termCode) {
-  const part = { offered: new Set(), detail: new Map(), termEnd: null };
-  await paginateTerm(termCode, (s) => accumulateSection(part, s));
-  return part;
+/**
+ * One term's offerings, retrying Banner's empty-answer flake.
+ *
+ * ── The flake, and why a retry belongs here ────────────────────────
+ *
+ * Banner intermittently answers the first page of `searchResults` with
+ * `success:true, totalCount:0` for a term that really has thousands of
+ * sections. The caller already refuses to read that as "nothing offered" —
+ * treating it as unknown instead — and that guard is right: writing `false` for
+ * every course in a semester is the worse failure.
+ *
+ * But for an unattended run "unknown" means the term is SKIPPED, and skipped
+ * silently: it gets no detail, so it gets no restrictions pass either. Measured
+ * today, 202630 and 202560 were both lost that way in runs minutes apart.
+ *
+ * CLAUDE.md records the flake as "observed twice consecutively", so a couple of
+ * retries with a real pause is the proportionate response — long enough to
+ * outlast a transient, short enough that a genuinely empty term does not stall
+ * the run. It still degrades to unknown if every attempt comes back empty,
+ * which keeps the original guarantee intact.
+ */
+async function fetchTermOfferings(termCode, attempts = 3) {
+  for (let i = 1; ; i++) {
+    const part = { offered: new Set(), detail: new Map(), termEnd: null };
+    await paginateTerm(termCode, (s) => accumulateSection(part, s));
+    if (part.offered.size || i >= attempts) return part;
+    const wait = 30_000 * i;
+    console.warn(`  empty answer for ${termCode} (attempt ${i}/${attempts}) — ` +
+                 `Banner's totalCount:0 flake, retrying in ${wait / 1000}s`);
+    await sleep(wait);
+  }
 }
 
 /**
@@ -378,7 +429,10 @@ async function fetchTermProfessors(termCode, detail) {
     const tally = new Map(); // name → { n: sections, e: enrolled }
     for (const [crn, enr] of agg.crns ?? []) {
       try {
-        const res = await fetchRetry(
+        // Same reasoning as the restrictions pass: this is one request per
+        // section over ~30 minutes, so a dropped connection is normal and
+        // waiting beats burning one of the 25 failures that abandon the term.
+        const res = await fetchThroughOutage(
           `${BASE}/searchResults/getFacultyMeetingTimes?term=${termCode}&courseReferenceNumber=${crn}`,
           { headers: { "Cookie": cookieHeader() } }
         );
@@ -489,12 +543,20 @@ async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
   //     so a kill used to discard the whole term;
   //   · `--resume` skips CRNs already cached for this term.
   //
-  // `--resume` is OPT-IN, and must stay that way. The scrape otherwise writes
-  // the cache and never reads it, so that a live run always sees what Banner
-  // says today and a stale cache can never quietly become the source. Resuming
-  // trades that for progress, which is correct for a backfill of terms that
-  // ended years ago and wrong for the monthly job.
-  const resuming = process.argv.includes("--resume");
+  // ── WHY RESUMING IS THE DEFAULT ────────────────────────────────
+  //
+  // The general rule elsewhere is that the scrape writes the cache and never
+  // reads it, so a stale cache cannot quietly become the source. That rule does
+  // not bind here, and the reason is narrow and checkable: this pass runs ONLY
+  // on terms whose last section end date has already passed. A finished term's
+  // Banner pages are frozen — that is the same argument that lets the whole
+  // restriction dataset be fetched once and carried forward.
+  //
+  // So there is nothing to be gained by re-reading a page we already hold for a
+  // completed term, and a great deal to lose: without this, recovering from an
+  // interruption required a human to remember a flag. `--no-resume` forces a
+  // fresh read for the case where Banner's markup itself is suspected.
+  const resuming = !process.argv.includes("--no-resume");
   // The cached pages are re-PARSED rather than merely counted: the derived
   // `std`/`restr` for a course are folded from all of its sections, so a course
   // half of whose sections came from the cache would otherwise be folded from
@@ -546,7 +608,12 @@ async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
           continue;
         }
         try {
-          const res = await fetchRetry(
+          // Waits out a lost connection rather than burning one of the 25
+          // failures that abandon the term. A four-hour backfill over a real
+          // connection WILL see an outage; the only sensible response is to
+          // keep probing, and the page cache below makes the wait cheap to
+          // abandon if the machine is shut down mid-wait.
+          const res = await fetchThroughOutage(
             `${BASE}/searchResults/getRestrictions?term=${termCode}&courseReferenceNumber=${crn}`,
             { headers: { "Cookie": cookieHeader() } }
           );

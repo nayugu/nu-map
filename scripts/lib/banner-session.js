@@ -114,6 +114,71 @@ export async function fetchRetry(url, opts, tries = 4) {
 }
 
 /**
+ * Is this the connection dropping, rather than Banner answering badly?
+ *
+ * The distinction decides whether to WAIT or to give up. `fetch` throws a
+ * TypeError whose `cause.code` carries the real reason; a refused connection,
+ * an unresolvable host or a timeout all mean "no network right now", and
+ * retrying the same request later is exactly right. An HTTP 404 or a parse
+ * failure means Banner answered and the answer was bad, which waiting cannot
+ * fix.
+ */
+export function isNetworkError(err) {
+  const code = err?.cause?.code ?? err?.code ?? "";
+  return [
+    "ECONNREFUSED", "ECONNRESET", "ENOTFOUND", "EAI_AGAIN", "ETIMEDOUT",
+    "EPIPE", "EHOSTUNREACH", "ENETUNREACH", "ENETDOWN", "UND_ERR_CONNECT_TIMEOUT",
+    "UND_ERR_SOCKET", "UND_ERR_HEADERS_TIMEOUT",
+  ].includes(code) || /fetch failed|network|socket hang up/i.test(String(err?.message ?? ""));
+}
+
+/**
+ * fetch that waits out a lost connection instead of failing the run.
+ *
+ * ── Why this exists separately from `fetchRetry` ───────────────────
+ *
+ * A restrictions or instructor pass is one request per section: ~7,000 per term
+ * and ~4 hours for a full backfill. Over that long a window a dropped
+ * connection, a sleeping laptop or a hotel wifi blip is the NORMAL case.
+ * `fetchRetry` gives up after four attempts (~2 minutes), and the caller then
+ * counts it as a section failure — 25 of those in a row and the whole term is
+ * abandoned. So a ten-minute outage used to cost a 55-minute term.
+ *
+ * This retries a NETWORK error indefinitely, with backoff capped so it keeps
+ * probing rather than sleeping for an hour. It does NOT retry a bad answer from
+ * Banner: that is the caller's business, and waiting cannot fix it.
+ *
+ * Unbounded is the right shape for an unattended backfill — there is nothing
+ * better to do than wait, and the alternative is throwing away work already
+ * paid for. Progress is durable regardless, because the caller flushes its page
+ * cache as it goes.
+ *
+ * @param {string} url
+ * @param {RequestInit} [opts]
+ * @param {(msg: string) => void} [onWait]  progress reporter
+ */
+export async function fetchThroughOutage(url, opts, onWait = console.warn) {
+  const BACKOFF = [1_000, 5_000, 15_000, 30_000, 60_000];
+  let attempt = 0;
+  for (;;) {
+    try {
+      return await fetch(url, opts);
+    } catch (err) {
+      if (!isNetworkError(err)) throw err;
+      const wait = BACKOFF[Math.min(attempt, BACKOFF.length - 1)];
+      attempt += 1;
+      // Announced on the first failure and then only occasionally, so an hour
+      // offline does not produce an hour of log.
+      if (attempt === 1 || attempt % 10 === 0) {
+        onWait(`    connection lost (${err?.cause?.code ?? err?.message}) — ` +
+               `retrying every ${wait / 1000}s, attempt ${attempt}`);
+      }
+      await sleep(wait);
+    }
+  }
+}
+
+/**
  * The real term list, and the call that seeds the cookie jar.
  * @returns {Promise<Array<{code: string, description: string}>>}
  */
