@@ -711,6 +711,8 @@ export const strings = {
   "info.restrictions.everySection": "모든 분반",
   "info.restrictions.years":      "({n}개 연도)",
   "info.restrictions.someSections": "({total}개 분반 중 {n}개)",
+  "info.restrictions.more":      "{n}개 더 보기",
+  "info.restrictions.less":      "접기",
   "info.restrictions.source":     "표시된 학기의 Banner Restrictions 탭에서 가져왔습니다. 노스이스턴은 모든 제한이 모든 학생에게 적용되는 것은 아니라고 명시합니다.",
   "info.restrictions.note":       "학사 행정처의 수강 신청 제한으로, 표시된 학기의 Banner에서 읽어온 것입니다. 이후 학기에는 다를 수 있으며, 노스이스턴도 모든 제한이 모든 학생에게 적용되는 것은 아니라고 명시합니다. 이 정보에 의존하기 전에 지도교수에게 확인하세요.",
   "info.restrictions.name.Classes":        "학년",

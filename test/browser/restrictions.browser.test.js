@@ -132,8 +132,47 @@ describe("restrictions · the course card", () => {
     // The season and its year, through the app's own summer wording.
     assert.match(text, /Summer B 2024/,
       "the term must be named, and summers are 'Summer B' not 'Summer 2'");
-    // Coverage: every section, so a fraction would be noise.
-    assert.match(text, /every section · Summer B 2024/);
+    // Coverage: every section, so a fraction would be noise. The TERM leads,
+    // because it heads its group rather than sitting beside the first value.
+    assert.match(text, /Summer B 2024 · every section/);
+  });
+
+  test("a group's values are listed one per line, under their own term", async () => {
+    // The defect this exists for was invisible to all five tests above: the
+    // coverage figure used to sit right-aligned on the FIRST line of a
+    // five-value group, so it read as belonging to bullet one, and the
+    // single-value group beside it rendered with no bullet at all — two
+    // indents for the same thing inside one block. Every assertion passed
+    // while the panel was unreadable, which is what "tests that confirm are
+    // close to worthless" means in practice.
+    const text = await panelFor(SUBJECT, /MEIE\s*4701/);
+    const lines = text.split("\n").map(s => s.trim()).filter(Boolean);
+
+    // Each value owns a line, bulleted — not joined into one run.
+    const bulleted = lines.filter(l => l.startsWith("·"));
+    assert.ok(bulleted.length >= 2, `expected bulleted values, got:\n  ${lines.join("\n  ")}`);
+    assert.ok(bulleted.some(l => /Mechanical Engineering\/Design$/.test(l)),
+      "a value should end its own line rather than run into the next");
+    // The joined form must be gone: two majors separated by the middot on ONE
+    // line is exactly the blob this replaced.
+    assert.ok(!lines.some(l => /Mechanical Engineering · Mechanical/.test(l)),
+      "values are still being joined into a single run");
+
+    // UNIFORM depth: the single-value Fall group is bulleted too, so it cannot
+    // sit at a shallower indent than the five-value Summer B group.
+    assert.ok(bulleted.some(l => /Industrial Engineering$/.test(l)),
+      "the single-value group must be bulleted like every other group");
+
+    // ASSOCIATION: the term heading precedes its own values, so Summer B's
+    // five majors cannot be read under Fall's heading.
+    const iSummer = lines.findIndex(l => /Summer B 2024/.test(l));
+    const iFall   = lines.findIndex(l => /Fall 2024/.test(l));
+    const iMech   = lines.findIndex(l => /Mechanical Engineering\/Physics/.test(l));
+    const iInd    = lines.findIndex(l => /Industrial Engineering/.test(l));
+    assert.ok(iSummer >= 0 && iFall >= 0, "both term headings should render");
+    assert.ok(iSummer < iMech, "Summer B's heading must come before its values");
+    assert.ok(iFall   < iInd,  "Fall's heading must come before its value");
+    assert.ok(iMech   < iFall, "a group's values must not appear after the NEXT group's heading");
   });
 
   test("a restriction that differs BY SEASON shows both readings", async () => {
@@ -150,8 +189,10 @@ describe("restrictions · the course card", () => {
     const text = await panelFor(SUBJECT, /MEIE\s*4701/);
     assert.match(text, /Industrial Engineering/,  "the Fall reading is missing");
     assert.match(text, /Mechanical Engineering/,  "the Summer B reading is missing");
-    assert.match(text, /· Fall 2024/);
-    assert.match(text, /· Summer B 2024/);
+    // Term-first, because it now HEADS its group rather than trailing the
+    // first value.
+    assert.match(text, /Fall 2024 · /);
+    assert.match(text, /Summer B 2024 · /);
   });
 
   test("the Classes row is not duplicated under the standing box", async () => {
@@ -184,6 +225,11 @@ describe("restrictions · the course card", () => {
     // Anchored on labels unique to this block: "Restrictions" alone is too
     // common a word elsewhere on the page to prove absence.
     assert.doesNotMatch(text, /Class standing:/);
-    assert.doesNotMatch(text, /every section ·/);
+    // Must track the term-first heading order. This assertion read
+    // `/every section ·/` while the coverage figure came FIRST; when the term
+    // moved in front of it the pattern stopped matching anything at all and
+    // the control passed for free. A negative assertion that no longer
+    // describes the positive case is not a check.
+    assert.doesNotMatch(text, /· every section/);
   });
 });

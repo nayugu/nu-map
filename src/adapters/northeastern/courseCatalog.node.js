@@ -14,7 +14,7 @@
 import { readFileSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants, stampCoopPrep, stampRestrictions } from "./courseNorm.js";
+import { normalizeCourse, mergeHistoryAndOffering, mergeRetiredUnion, stampCoopVariants, stampCoopPrep, stampRestrictions } from "./courseNorm.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const PUB  = join(ROOT, "public/northeastern");
@@ -70,7 +70,11 @@ export function loadCatalog() {
     }
   }
 
-  const normalized = raw.map(r => normalizeCourse(r, subjectColleges, nuPathSupp)).filter(Boolean);
+  // Courses a frozen edition published that this catalog no longer does. The
+  // MCP server must resolve the same courses the browser can, or Claude reads
+  // a plan as missing a course the student can see on their board.
+  const rawWithRetired = mergeRetiredUnion(raw, readJson(join(PUB, "retired-courses.json")));
+  const normalized = rawWithRetired.map(r => normalizeCourse(r, subjectColleges, nuPathSupp)).filter(Boolean);
 
   const history  = readJson(join(PUB, "term-history.json"));
   const offering = readJson(join(PUB, "offering-summary.json"));

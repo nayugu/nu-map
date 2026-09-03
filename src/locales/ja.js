@@ -712,6 +712,8 @@ export const strings = {
   "info.restrictions.everySection": "全クラス",
   "info.restrictions.years":      "（{n} 年分）",
   "info.restrictions.someSections": "（{total} クラスのうち {n}）",
+  "info.restrictions.more":      "さらに {n} 件表示",
+  "info.restrictions.less":      "折りたたむ",
   "info.restrictions.source":     "表示学期における Banner の Restrictions タブより。ノースイースタン大学は、すべての制限がすべての学生に適用されるわけではないと注記しています。",
   "info.restrictions.note":       "教務課による登録制限で、表示された学期の Banner から読み取ったものです。以降の学期では異なる場合があり、また大学側もすべての制限がすべての学生に適用されるわけではないと注記しています。これに頼る前にアドバイザーにご確認ください。",
   "info.restrictions.name.Classes":        "学年",

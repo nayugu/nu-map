@@ -56,7 +56,7 @@ import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, dirname }                        from "node:path";
 import { fileURLToPath }                           from "node:url";
 
-import { foldKind } from "./lib/restrictions.js";
+import { foldKind, RESTR_AY_WINDOW, withinRestrictionWindow } from "./lib/restrictions.js";
 
 const ROOT    = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DETAILS = resolve(ROOT, "public/northeastern/term-details.json");
@@ -77,7 +77,7 @@ function main() {
 
   const courses = {};
   const usedLabels = {};
-  let entries = 0, hiddenOnly = 0, kindTally = {};
+  let entries = 0, hiddenOnly = 0, kindTally = {}, stale = 0;
 
   let splitKinds = 0;
 
@@ -87,6 +87,12 @@ function main() {
     for (const termCode of Object.keys(byTerm).sort().reverse()) {
       const d = byTerm[termCode];
       if (!d?.restr) continue;
+      // The window is enforced HERE as well as in the scrape, and that is not
+      // belt-and-braces. The page cache accumulates and is never pruned, so a
+      // re-parse walks every term ever captured — including ones the scrape
+      // has since stopped fetching. Without this the window would decay back
+      // open the first time anyone ran reparse-restrictions.js.
+      if (!withinRestrictionWindow(termCode)) { stale += 1; continue; }
       const season = SUFFIX_TYPE[termCode.slice(4)];
 
       const kinds = {};
@@ -118,6 +124,9 @@ function main() {
   }
 
   console.log(`courses with a shown restriction: ${entries}`);
+  if (stale) {
+    console.log(`  dropped ${stale} course-terms older than ${RESTR_AY_WINDOW} academic years`);
+  }
   console.log(`course-terms carrying ONLY hidden kinds (Levels): ${hiddenOnly}`);
   console.log(`kinds whose SECTIONS DISAGREE (kept as separate groups): ${splitKinds}`);
   console.log(`labels referenced: ${Object.keys(usedLabels).length} of ${Object.keys(labels).length}`);
@@ -128,7 +137,14 @@ function main() {
 
   const doc = {
     generated: new Date().toISOString().slice(0, 10),
+    // Recorded so the shrink rail below can tell a deliberate narrowing of the
+    // window from upstream breakage. Same device as ADJUDICATED_EDITION in
+    // shared-sections.js: the declared value is what lets a guard relax once
+    // for a known cause and then tighten again by itself.
+    ayWindow: RESTR_AY_WINDOW,
     note: "Banner section restrictions, per season, each naming the term it was read from. " +
+          `Only the most recent ${RESTR_AY_WINDOW} academic years are kept — a gate a ` +
+          "department set years ago is not evidence about this year's registration. " +
           "See scripts/derive-restrictions.js. `must:Levels` is excluded deliberately.",
     labels: usedLabels,
     courses,
@@ -142,10 +158,28 @@ function main() {
   if (existsSync(OUT)) {
     const prev = JSON.parse(readFileSync(OUT, "utf8"));
     const was = Object.keys(prev.courses ?? {}).length;
+    // A NARROWED window is a declared cause for a shrink, so the rail reports
+    // it and permits it rather than refusing. It cannot be used to smuggle one
+    // through twice: the new file records the window it was built with, so on
+    // the next run `prev.ayWindow` matches and the 20% rule is strict again.
+    // Widening is never a licence — that can only ADD terms, so a shrink
+    // alongside it is still upstream breakage.
+    // An ABSENT `ayWindow` means the previous file was built before the window
+    // existed, i.e. with no bound at all — so introducing one is a narrowing,
+    // and reading it as Infinity is what lets the very first windowed run land.
+    // Defaulting it to RESTR_AY_WINDOW instead would refuse that run forever.
+    const prevWindow = Number.isFinite(prev.ayWindow) ? prev.ayWindow : Infinity;
+    const windowNarrowed = RESTR_AY_WINDOW < prevWindow;
     if (was >= 50 && entries < was * 0.8) {
-      console.error(`\n✖ REFUSING TO WRITE — courses with restrictions fell ${was} → ${entries} (>20%).`);
-      console.error(`  That is a change in upstream shape, not hundreds of lifted restrictions.`);
-      process.exit(1);
+      if (windowNarrowed) {
+        console.warn(`\n⚠ courses fell ${was} → ${entries}, and the recency window narrowed ` +
+          `${Number.isFinite(prevWindow) ? `${prevWindow} →` : "unbounded →"} ` +
+          `${RESTR_AY_WINDOW} academic years. Permitted once, for that reason.`);
+      } else {
+        console.error(`\n✖ REFUSING TO WRITE — courses with restrictions fell ${was} → ${entries} (>20%).`);
+        console.error(`  That is a change in upstream shape, not hundreds of lifted restrictions.`);
+        process.exit(1);
+      }
     }
   }
 

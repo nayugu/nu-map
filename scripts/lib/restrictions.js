@@ -196,3 +196,80 @@ export function foldKind(tally, polarity = "must", totalSections = null) {
   codes.sort((a, b) => b.sections - a.sections || a.code.localeCompare(b.code));
   return { codes, sections, total, unresolved };
 }
+
+// ── THE RECENCY WINDOW ───────────────────────────────────────────
+
+/**
+ * How many ACADEMIC years of restrictions are worth keeping.
+ *
+ * Restrictions are the one field here where age is a defect rather than
+ * evidence. Availability wants all the history it can get — the more Falls we
+ * have seen a course run in, the better the offering probability — but a gate
+ * is a decision a department made for a particular year, and showing a
+ * student a 2023 gate invites them to plan around a rule that may no longer
+ * exist. So this window is deliberately TIGHTER than the availability one.
+ *
+ * Measured in ACADEMIC years because that is the only notion of recency this
+ * repo has (`recentTermCodes` in scrape-availability.js) and because a
+ * department sets its gates for an academic year, not a rolling 12 months. A
+ * second, calendar-based definition would make "recent" mean two different
+ * things inside one scraper.
+ *
+ * Three is the current setting: the AY in progress plus the two behind it.
+ * Today (AY2027) that is Fall 2024 → Summer 2027 and it drops Fall 2023,
+ * Spring 2024 and both 2024 summers — about 16,000 section lookups, or ~2.1 h
+ * of a full backfill.
+ */
+export const RESTR_AY_WINDOW = 3;
+
+/**
+ * The academic year we are currently in, expressed as Banner does: the year the
+ * AY ENDS. September starts a new one.
+ *
+ * @param {Date} [now]
+ */
+export function currentAYEnd(now = new Date()) {
+  return now.getMonth() + 1 >= 9 ? now.getFullYear() + 1 : now.getFullYear();
+}
+
+/**
+ * The oldest AY-end year a restriction may come from.
+ *
+ * `ayCount` is a COUNT of academic years, inclusive of the one in progress, so
+ * 3 → {currentAYEnd-2, -1, current}. Stated that way on purpose: the older
+ * `recentTermCodes(yearsBack)` read as "years back from now" and its inclusive
+ * loop therefore returned yearsBack + 1 academic years — it was documented as
+ * "the last 3 academic years" while actually reaching back four, which is how
+ * the backfill came to be fetching Fall 2023.
+ *
+ * @param {number} [ayCount]
+ * @param {Date} [now]
+ */
+export function oldestAYEnd(ayCount = RESTR_AY_WINDOW, now = new Date()) {
+  const n = Number.isFinite(ayCount) && ayCount >= 1 ? Math.floor(ayCount) : RESTR_AY_WINDOW;
+  return currentAYEnd(now) - (n - 1);
+}
+
+/**
+ * Is this Banner term recent enough for its restrictions to be shown?
+ *
+ * Accepts the synthetic summer codes (202640/202660) as well as real ones —
+ * only the leading AY-end year is read, and the split codes carry the same one
+ * as the merged term they came from.
+ *
+ * A malformed code answers FALSE. Absent or unparseable is not evidence of
+ * recency, and the failure direction matters: admitting a code we cannot date
+ * would let an arbitrarily old term through the one guard that exists to keep
+ * it out, whereas rejecting one costs a restriction we can re-derive from cache
+ * the moment the code is understood.
+ *
+ * @param {string|number} termCode
+ * @param {number} [ayCount]
+ * @param {Date} [now]
+ */
+export function withinRestrictionWindow(termCode, ayCount = RESTR_AY_WINDOW, now = new Date()) {
+  const s = String(termCode ?? "");
+  if (!/^\d{6}$/.test(s)) return false;
+  const ay = Number(s.slice(0, 4));
+  return ay >= oldestAYEnd(ayCount, now) && ay <= currentAYEnd(now);
+}

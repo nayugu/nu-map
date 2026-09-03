@@ -82,7 +82,8 @@ import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname }                         from "path";
 import { fileURLToPath }                            from "url";
 import { parseRestrictions, classesOf }             from "./lib/class-standing.js";
-import { restrictionsOf, tallySection }             from "./lib/restrictions.js";
+import { restrictionsOf, tallySection,
+         RESTR_AY_WINDOW, withinRestrictionWindow } from "./lib/restrictions.js";
 import { knownTermCodes, buildTermHistory, mergePreviousHistory }
                                                     from "./lib/term-history.js";
 import {
@@ -125,12 +126,23 @@ const RESTR_FLUSH_EVERY = parseInt(process.env.BANNER_RESTR_FLUSH_EVERY || "500"
 const STANDARD_SUFFIXES = ["10", "30", "40", "60"];
 
 /**
- * Return Banner term codes for the last `yearsBack` academic years,
+ * Return Banner term codes for the most recent `ayCount` academic years,
  * sorted chronologically (ascending).
- * Today = May 2026 → currentAYEndYear = 2026
- * Returns terms from AY ending 2023 through AY ending 2026.
+ *
+ * `ayCount` is a COUNT of academic years INCLUSIVE of the one in progress, so
+ * today (AY ending 2027) `recentTermCodes(4)` spans AY2024–AY2027, i.e. Fall
+ * 2023 through Summer 2027.
+ *
+ * ⚠ This parameter used to be `yearsBack`, and the inclusive loop below meant
+ * it returned `yearsBack + 1` academic years: the call site passed 3, the
+ * comment said "the last 3 academic years", and the scrape actually reached
+ * back FOUR, to Fall 2023. Renamed rather than re-tuned — the availability
+ * window is unchanged at four AYs, because term-history and the offering
+ * probabilities want all the history they can get. Only the restrictions pass
+ * is narrower; see `RESTR_AY_WINDOW` in lib/restrictions.js for why age is a
+ * defect there and evidence here.
  */
-function recentTermCodes(yearsBack = 3) {
+function recentTermCodes(ayCount = 4) {
   const now = new Date();
   const month = now.getMonth() + 1; // 1-12
   const calYear = now.getFullYear();
@@ -138,7 +150,7 @@ function recentTermCodes(yearsBack = 3) {
   const currentAYEnd = month >= 9 ? calYear + 1 : calYear;
 
   const codes = [];
-  for (let ayEnd = currentAYEnd - yearsBack; ayEnd <= currentAYEnd; ayEnd++) {
+  for (let ayEnd = currentAYEnd - (ayCount - 1); ayEnd <= currentAYEnd; ayEnd++) {
     for (const suffix of STANDARD_SUFFIXES) {
       codes.push(`${ayEnd}${suffix}`);
     }
@@ -756,7 +768,9 @@ async function main() {
     .filter(a => a.startsWith("--term="))
     .flatMap(a => a.slice("--term=".length).split(","))
     .filter(Boolean);
-  const desired = termArgs.length ? termArgs : recentTermCodes(3);
+  // Four academic years, which is what `recentTermCodes(3)` already returned —
+  // see the note on the function. Availability keeps the wider window.
+  const desired = termArgs.length ? termArgs : recentTermCodes(4);
 
   // Merged-summer detection (AY2026+): the 40/60 codes are gone and a single
   // …50 code carries both sessions (split back apart via partOfTerm below).
@@ -962,8 +976,18 @@ async function main() {
     await sleep(30_000);
   }
 
-  // Restriction pass: newest completed terms without restriction data, capped per run.
-  const restrTargets = [...completedTerms]
+  // Restriction pass: newest completed terms without restriction data, capped
+  // per run and bounded by the recency window — a gate a department set three
+  // academic years ago is not evidence about this year's registration, and
+  // fetching it costs ~55 minutes per term. Availability keeps the wider
+  // window; only this pass narrows. See RESTR_AY_WINDOW.
+  const restrEligible = [...completedTerms].filter(tc => withinRestrictionWindow(tc));
+  const restrStale    = [...completedTerms].filter(tc => !withinRestrictionWindow(tc));
+  if (restrStale.length) {
+    console.log(`Restrictions: skipping ${restrStale.length} term(s) older than ` +
+      `${RESTR_AY_WINDOW} academic years — ${restrStale.sort().join(", ")}`);
+  }
+  const restrTargets = restrEligible
     .filter(tc => !termsWithRestr.has(tc))
     .sort()
     .reverse()

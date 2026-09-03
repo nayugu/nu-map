@@ -457,9 +457,65 @@ student rather than only continuing ones. This is the CS 2500 fix.
    `catalog-courses.json`.
 5. **Backfill editions 2022–2025** from the archive, one rail-guarded run per
    edition. ~230 subjects x 400 ms is ~90 s of fetching each.
-6. **Derive the retired union + lifespan index** (§6) and ship them.
+6. ~~**Derive the retired union + lifespan index** (§6) and ship them.~~
+   **DONE, 2026-09-03** — `scripts/derive-retired-union.js` →
+   `public/northeastern/retired-courses.json`, merged by `mergeRetiredUnion`
+   in `courseNorm.js` and read by all three loaders (browser, Node MCP,
+   worker). Step 2b-i½ of `update-courses.yml`, after the scrape so the union
+   is disjoint from retention's rescued courses.
+
+   Done ahead of steps 4–5 deliberately, and the reason is a deadline rather
+   than a preference: **the roll lands on 1 October**, when the monthly scrape
+   first pulls the 2026-2027 catalog, and `course-retention.js:245`
+   (`if (!need.has(key)) { dropped.push(key); continue; }`) then deletes every
+   retired course no shipped program requires. It needs no archive work at
+   all — the "before" side is the snapshot already frozen at
+   `data/northeastern/catalog/editions/2026/`, and the "after" side is live.
+
+   Sized over all 227 subjects (`edition-probe --snapshot --editions 2027
+   --all-subjects`): **974** of our 7,966 courses are absent from live 2027,
+   plus **115** in 10 subjects with no live page at all (DGTR 33, EAI 16,
+   HLS 14, PTH 12, SMT 10, RFA 7, AFRS 6, IS 6, RPT 6, CJS 5) — ~**1,089**
+   retirements. That corroborates CLAUDE.md's independent simulation of the
+   same roll (703 retained + 367 dropped = 1,070) within ~2%, by a different
+   method. Caveat worth keeping: 974 removals against **923 additions** is
+   suspiciously balanced, so some fraction is *renumbering* rather than
+   retirement. That does not change the storage — a renumbered course is still
+   a course a plan can name — but it does mean 1,089 overstates the harm, and
+   it must never become a reason to synthesize a successor (§2).
+
+   What the 367 actually cost was measured in the browser rather than
+   reasoned about (`test/browser/retired-course.browser.test.js`): a plan
+   holding a course the catalog lacks **opens with no error and no recovery
+   screen**, the rest of the board renders, and the course is simply gone —
+   no card, no notice, and `totalSHPlaced` sums
+   `effectiveCourseMap[id]?.sh ?? 0`, so its credits become zero.
+   PlannerContext says it outright: *"unknown ids resolve to 0"*. A **silent
+   subtraction from a degree**, which is degrading to wrong information, not
+   to less.
+
+   Two notes for whoever touches this next:
+   - The derivation reports **0 courses** against the repo today, correctly —
+     the frozen 2026 snapshot *is* the shipped catalog. So the code that
+     matters is exercised by nothing until the roll runs unattended. The pure
+     function is separated from its IO and the roll is **simulated** in
+     `test/unit/retired-union.test.js` against the real 7,966-course snapshot.
+     `mutation-probe.js --only union:` covers it, 5/5 — and it earned its
+     keep immediately, catching that the `retired`/`retiredSince` strip was
+     deletable because the pre-roll snapshot carries neither field, so the
+     assertion guarding it passed trivially.
+   - Retired courses are **not filtered out of search**. That is not an
+     oversight but it is not a decision either: nothing filtered `retired`
+     before this change, so retention's rescued courses are already
+     browsable. Whether ~1,089 extra records is real noise is worth measuring
+     *after* the roll, when there is something to measure. Deciding it now,
+     against an empty file, would be speculation.
 7. **Retirement UI** (§7) — lifespan copy naming the edition, full last-known
-   record, fidelity gating, all 8 locales.
+   record, fidelity gating, all 8 locales. **Partly shipped**: the badge and
+   tooltip exist in all 8 locales and `normalizeCourse` now carries `lifespan`
+   through to the card. Still to do is the *copy* — it says "Northeastern's
+   catalog no longer lists this course" where the lifespan can now say which
+   edition last published it.
 8. **Guards for A**: the union is derived and never hand-edited; a retired
    course never gains a substitute; `fidelity` is respected wherever an empty
    field is read.

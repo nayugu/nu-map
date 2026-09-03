@@ -710,6 +710,8 @@ export const strings = {
   "info.restrictions.everySection": "جميع الشعب",
   "info.restrictions.years":      "({n} سنوات)",
   "info.restrictions.someSections": "({n} من {total} شعبة)",
+  "info.restrictions.more":      "أظهر {n} إضافية",
+  "info.restrictions.less":      "أظهر أقل",
   "info.restrictions.source":     "من تبويب Restrictions في Banner للفصل المذكور. تشير جامعة نورث إيسترن إلى أن القيود لا تنطبق جميعها على كل طالب.",
   "info.restrictions.note":       "قيود التسجيل الصادرة عن دائرة القيد والتسجيل، مقروءة من Banner للفصل المذكور. قد يختلف فصل لاحق، وتشير الجامعة نفسها إلى أن القيود لا تنطبق جميعها على كل طالب — راجع مرشدك الأكاديمي قبل الاعتماد على ذلك.",
   "info.restrictions.name.Classes":        "السنة الدراسية",

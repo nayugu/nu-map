@@ -26,7 +26,7 @@
 // Raw term codes: NEU Banner — YYYY = AY end year; 10=Fall, 30=Spring,
 //                 40=Summer 1, 60=Summer 2  (decoded during normalization)
 // ═══════════════════════════════════════════════════════════════════
-import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants, stampCoopPrep, stampRestrictions } from "./courseNorm.js";
+import { normalizeCourse, mergeHistoryAndOffering, mergeRetiredUnion, stampCoopVariants, stampCoopPrep, stampRestrictions } from "./courseNorm.js";
 
 // Verified RateMyHusky link directory, populated by fetchAll() and read by the
 // URL builders below. Module-level so the singleton adapter can expose
@@ -43,6 +43,23 @@ let ratemyhuskyCourses = new Set();
 let subjectDisplayNames = {};
 
 const LOCAL_URL    = `${import.meta.env.BASE_URL}northeastern/catalog-courses.json`;
+// Courses a frozen edition published that the current catalog no longer does.
+// Built by scripts/derive-retired-union.js and DISJOINT from the catalog above
+// — a key is in one file or the other, never both, which is what makes the
+// merge below an append rather than a reconciliation.
+//
+// Why it has to exist: catalog-courses.json is a single CURRENT snapshot that
+// the monthly scrape REPLACES, so an edition roll deletes courses out from
+// under saved plans. course-retention.js rescues the ones a shipped PROGRAM
+// still requires and deliberately drops the rest — about 367 in the measured
+// 2026→2027 roll. Without this file those resolve to nothing, and the failure
+// is silent rather than loud: `totalSHPlaced` sums `courseMap[id]?.sh ?? 0`,
+// so the card vanishes and the student's credit total quietly drops.
+// Measured in test/browser/retired-course.browser.test.js.
+//
+// Optional like every asset beside it: an absent or failed fetch leaves plans
+// exactly as broken as they are today, never worse.
+const RETIRED_URL  = `${import.meta.env.BASE_URL}northeastern/retired-courses.json`;
 const HISTORY_URL  = `${import.meta.env.BASE_URL}northeastern/term-history.json`;
 const OFFERING_URL = `${import.meta.env.BASE_URL}northeastern/offering-summary.json`;
 const COLLEGES_URL = `${import.meta.env.BASE_URL}northeastern/subject-colleges.json`;
@@ -104,6 +121,10 @@ export default {
     // absent fetch leaves every course unstamped and the card simply shows no
     // restriction block — degrading to less information, never to wrong.
     const restrPromise    = tryFetch(RESTRICTIONS_URL);
+    // Courses a frozen edition published that this catalog no longer does.
+    // Optional like the rest: absent, plans naming a retired course stay as
+    // broken as they are today — the course silently missing — never worse.
+    const retiredPromise  = tryFetch(RETIRED_URL);
 
     // Catalog is required — fetch it first so we can gate the supplemental download.
     let catalogJson;
@@ -122,7 +143,7 @@ export default {
       ? Promise.resolve(null)
       : tryFetch(ALL_COURSES_URL);
 
-    const [allCoursesResult, collegesResult, historyResult, offeringResult, rmhResult, subjectsResult, coopResult, restrResult] = await Promise.allSettled([
+    const [allCoursesResult, collegesResult, historyResult, offeringResult, rmhResult, subjectsResult, coopResult, restrResult, retiredResult] = await Promise.allSettled([
       suppPromise,
       collegesPromise,
       historyPromise,
@@ -131,6 +152,7 @@ export default {
       subjectsPromise,
       coopPromise,
       restrPromise,
+      retiredPromise,
     ]);
 
     // Subject display names — optional, like the RateMyHusky map above: a failed
@@ -157,7 +179,15 @@ export default {
     }
 
     const subjectColleges = collegesResult.status === "fulfilled" ? collegesResult.value : {};
-    const courses = raw.map(r => normalizeCourse(r, subjectColleges, nuPathSupp)).filter(Boolean);
+    // Appended to the RAW rows, so a retired course is normalized by exactly
+    // the same path as a live one and cannot acquire a shape of its own. After
+    // the nuPath coverage gate above on purpose: the union's records are
+    // already-scraped catalog rows carrying whatever nuPath they had, and
+    // letting them move that ratio would decide a 5.8 MB download on the
+    // composition of the retired set.
+    const rawWithRetired = mergeRetiredUnion(
+      raw, retiredResult.status === "fulfilled" ? retiredResult.value : null);
+    const courses = rawWithRetired.map(r => normalizeCourse(r, subjectColleges, nuPathSupp)).filter(Boolean);
 
     // Which courses record a work term, and which PREPARE for one. Shared with
     // the Node and worker loaders — see stampCoopVariants for why all three

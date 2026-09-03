@@ -688,6 +688,70 @@ function termYear(termCode) {
 }
 
 /**
+ * One restriction group's values.
+ *
+ * ── Why a LIST rather than one `·`-joined run ──────────────────────
+ *
+ * MEIE 4701's Summer B group is five near-identical combined majors — "Mechanical
+ * Engr/Bioengineering · Mechanical Engineering · Mechanical Engineering/Design ·
+ * Mechanical Engineering/History · Mechanical Engineering/Physics". Joined into
+ * one run at 10px in a narrow drawer those wrap mid-name, and the reader cannot
+ * see where one major ends and the next begins — which is the one thing the row
+ * exists to tell them.
+ *
+ * ── Why EVERY group is bulleted, including single-value ones ────────
+ *
+ * The first attempt listed only the LONG groups and left short ones inline, on
+ * the measurement that 558 of 941 groups hold exactly one value and a one-item
+ * bullet is noise. That was wrong, and only looking at it rendered showed why:
+ * two layouts inside one block put the inline group's text at a shallower
+ * indent than the listed group's values, so "Industrial Engineering" and
+ * "· Mechanical Engineering" began at different depths under the same kind.
+ * Uniform bulleting costs one line on a single-value group and buys an indent
+ * the eye can follow. Consistency beat the saved line.
+ *
+ * ── Why the tail is DEFERRED, not truncated ────────────────────────
+ *
+ * The distribution has a hard tail: 45 groups carry more than 8 values, and one
+ * carries 57 at 1,337 characters. Fifty-seven bullets is a wall, not a
+ * restriction. But every one of them is a value the registrar published, so the
+ * overflow goes behind a toggle rather than being dropped — less information on
+ * screen, never wrong information. Collapsing to "Mechanical Engineering +4
+ * variants" was considered and refused for the same reason: a student needs to
+ * know *which* variants, and that summary is the one thing it cannot say.
+ */
+function RestrictionValues({ values, t }) {
+  const CAP = 8;
+  const [open, setOpen] = useState(false);
+  const vals   = values ?? [];
+  const shown  = open ? vals : vals.slice(0, CAP);
+  const hidden = vals.length - shown.length;
+
+  return (
+    <div style={{ paddingLeft: 18 }}>
+      {shown.map((v, i) => (
+        // Hanging indent, so a value that still wraps stays visually inside
+        // its own bullet rather than aligning with the next one.
+        <div key={i} style={{ paddingLeft: 7, textIndent: -7 }}>
+          <span style={{ opacity: 0.45 }}>·{" "}</span>{v}
+        </div>
+      ))}
+      {(hidden > 0 || open) && (
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          style={{ background: "none", border: "none", padding: 0, marginTop: 1,
+                   font: "inherit", color: "var(--text-3)", cursor: "pointer",
+                   textDecoration: "underline", textUnderlineOffset: 2 }}
+        >
+          {open ? t("info.restrictions.less") : t("info.restrictions.more", { n: hidden })}
+        </button>
+      )}
+    </div>
+  );
+}
+
+/**
  * Banner's Restrictions pane for one course.
  *
  * ── Grouped by RESTRICTION, not by term ────────────────────────────
@@ -747,27 +811,34 @@ function RestrictionBlock({ restrictions, t, standingShown = false }) {
             <span style={{ opacity: 0.7 }}> {t("info.restrictions.variesBySection")}</span>
           )}
           {k.groups.map((g, gi) => (
-            <div key={gi} style={{ paddingLeft: 8, display: "flex", gap: 6, justifyContent: "space-between" }}>
-              <span>{displayValues(g.codes, labels, k.key).join(" · ")}</span>
-              {/* Coverage per SEASON, pooled across that season's years — see
-                  seasonCoverage. "every section" is the gate; a fraction is the
-                  reserved case, which is 24.6% of observations and the
-                  difference between "you cannot take this" and "one section is
-                  closed to you". */}
-              <span style={{ opacity: 0.7, whiteSpace: "nowrap", textAlign: "right" }}>
-                {g.seasons.map((s, si) => (
-                  <span key={si} style={{ display: "block" }}>
-                    {s.everySection
-                      ? t("info.restrictions.everySection")
-                      : t("info.restrictions.someSections", { n: s.sections, total: s.of })}
-                    {" · "}
-                    {t(SEASON_KEY[s.season] ?? s.season ?? "")}
-                    {s.terms > 1
-                      ? ` ${t("info.restrictions.years", { n: s.terms })}`
-                      : ` ${termYear(s.latestTerm) ?? ""}`}
-                  </span>
-                ))}
-              </span>
+            <div key={gi} style={{ marginTop: gi ? 3 : 1 }}>
+              {/* The TERM heads its own group, rather than sitting to the right
+                  of the first value.
+                  Right-aligned beside a five-value list, one coverage figure
+                  reads as belonging to the first bullet only — measured the
+                  hard way, on MEIE 4701, whose Summer B group is five majors
+                  and whose Fall group is one. Leading with the term also
+                  answers the reader's actual question in the order they ask it:
+                  *when* does this bite, then *on whom*.
+
+                  Coverage is per SEASON, pooled across that season's years —
+                  see seasonCoverage. "every section" is the gate; a fraction is
+                  the reserved case, 24.6% of observations, and the difference
+                  between "you cannot take this" and "one section is closed to
+                  you". */}
+              {g.seasons.map((s, si) => (
+                <div key={si} style={{ paddingLeft: 8, opacity: 0.75 }}>
+                  {t(SEASON_KEY[s.season] ?? s.season ?? "")}
+                  {s.terms > 1
+                    ? ` ${t("info.restrictions.years", { n: s.terms })}`
+                    : ` ${termYear(s.latestTerm) ?? ""}`}
+                  {" · "}
+                  {s.everySection
+                    ? t("info.restrictions.everySection")
+                    : t("info.restrictions.someSections", { n: s.sections, total: s.of })}
+                </div>
+              ))}
+              <RestrictionValues values={displayValues(g.codes, labels, k.key)} t={t} />
             </div>
           ))}
         </div>

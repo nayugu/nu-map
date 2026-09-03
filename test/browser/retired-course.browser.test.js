@@ -111,14 +111,26 @@ describe("a retired course in a saved plan", () => {
     await new Promise((r) => server?.close(r));
   });
 
-  /** Open a seeded plan and return what the page did. */
-  async function open(placements) {
+  /**
+   * Open a seeded plan and return what the page did.
+   *
+   * `union`, when given, is served in place of retired-courses.json. Serving it
+   * by route interception rather than writing the file keeps the repo's real
+   * artifact — which is legitimately EMPTY today, because the frozen 2026
+   * snapshot is still the shipped catalog — out of the test's way. Writing it
+   * would make the test pass by mutating the thing it is checking.
+   */
+  async function open(placements, union = null) {
     assert.equal(launchError, null,
       `chromium unavailable — run \`npx playwright install chromium\`: ${launchError?.message}`);
     assert.ok(live, "no 4 SH CS course in the catalog — the picker needs revisiting");
 
     const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
     await ctx.addInitScript(seed(placements));
+    if (union) {
+      await ctx.route("**/northeastern/retired-courses.json", route =>
+        route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(union) }));
+    }
     const page = await ctx.newPage();
     const errors = [];
     page.on("pageerror", e => errors.push(String(e?.message ?? e)));
@@ -162,6 +174,38 @@ describe("a retired course in a saved plan", () => {
     console.log(`    retired course seeded: total reads ${sh(withDead.bodyText)}`);
     console.log(`    retired course absent: total reads ${sh(alone.bodyText)}`);
     console.log(`    the dead id appears on screen: ${/ZZZZ\s*9999/.test(withDead.bodyText)}`);
+  });
+
+  test("THE FIX — a course in the retired union comes back", async () => {
+    // The inversion of the measurement above, and the only end-to-end proof
+    // that the union is wired to anything. The same plan, the same dead id,
+    // the one difference being that retired-courses.json now carries its
+    // record: the card must render and its credits must count.
+    //
+    // 8 SH is the assertion that matters. A card that draws but contributes
+    // nothing would look fixed and still be short-changing the degree, which
+    // is the exact failure this whole change exists to end.
+    const union = [{
+      subject: "ZZZZ", number: "9999", title: "Retired Course", credits: 4,
+      description: "A course a frozen edition published and the current catalog does not.",
+      scheduleType: "Lecture", nuPath: [], sections: [], prereqs: [], coreqs: [],
+      lifespan: { firstEdition: 2026, lastEdition: 2026, editions: [2026], editionsHeld: 1 },
+    }];
+    const { errors, bodyText } = await open(
+      { [DEAD]: "fall2025", [live.id]: "fall2025" }, union);
+
+    assert.deepEqual(errors, [],
+      `the union's record threw on render:\n  ${errors.join("\n  ")}`);
+    assert.match(bodyText, /ZZZZ\s*9999/,
+      "the retired course is in the union and still did not render — the merge is not reaching the board");
+    // Anchored to the credit readout, not a bare /\b8\b/ — an unanchored digit
+    // matches a course number, a year or a term label, so it would pass with
+    // the total still reading 4 and the whole assertion would be decorative.
+    const total = (bodyText.match(/(\d+)\s*(?:SH|credits?)/i) ?? [])[1];
+    assert.equal(total, "8",
+      `the retired course rendered but the total reads ${total} SH, not 8 — its 4 SH are `
+      + "not counted. A card that looks right and still under-counts the degree is the "
+      + "failure this change exists to end.");
   });
 
   test("the rest of the plan survives it", async () => {

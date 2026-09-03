@@ -711,6 +711,8 @@ export const strings = {
   "info.restrictions.everySection": "todas las secciones",
   "info.restrictions.years":      "({n} años)",
   "info.restrictions.someSections": "({n} de {total} secciones)",
+  "info.restrictions.more":      "ver {n} más",
+  "info.restrictions.less":      "ver menos",
   "info.restrictions.source":     "De la pestaña Restrictions de Banner para el semestre indicado. Northeastern advierte que no todas las restricciones se aplican a todos los estudiantes.",
   "info.restrictions.note":       "Las restricciones de matrícula del registro académico, leídas de Banner para el semestre indicado. Un semestre posterior puede diferir, y Northeastern advierte que no todas las restricciones se aplican a todos los estudiantes: consulta a tu asesor antes de confiar en esto.",
   "info.restrictions.name.Classes":        "Año de estudios",

@@ -876,6 +876,8 @@ export const strings = {
   "info.restrictions.everySection": "every section",
   "info.restrictions.years":      "({n} years)",
   "info.restrictions.someSections": "({n} of {total} sections)",
+  "info.restrictions.more":      "show {n} more",
+  "info.restrictions.less":      "show fewer",
   "info.restrictions.source":     "From Banner’s Restrictions tab for the term shown. Northeastern notes that not all restrictions apply to every student.",
   "info.restrictions.note":       "The registrar’s own enrolment restrictions, read from Banner for the term named. A later term may differ, and Northeastern states that not all restrictions apply to every student — check with your advisor before relying on this.",
   "info.restrictions.name.Classes":        "Class standing",

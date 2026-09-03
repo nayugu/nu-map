@@ -15,6 +15,7 @@ import assert   from "node:assert/strict";
 import {
   parseRestrictions, splitHeading, codeOf, labelOf,
   restrictionsOf, tallySection, foldKind,
+  RESTR_AY_WINDOW, currentAYEnd, oldestAYEnd, withinRestrictionWindow,
 } from "../../scripts/lib/restrictions.js";
 
 // MEIE 4701 §01, term 202710 — the Fall section of the shared ME/IE capstone.
@@ -175,4 +176,97 @@ test("foldKind survives junk without inventing a code", () => {
     assert.ok(Array.isArray(r.codes));
     assert.ok(!r.codes.some(c => !c.code));
   }
+});
+
+// ── The recency window ──────────────────────────────────────────────
+//
+// Restrictions are the one field here where age is a defect rather than
+// evidence, so this window is tighter than the availability one. It is also
+// the only place in the repo with TWO notions of "recent" in one scraper, so
+// the arithmetic is worth pinning down rather than trusting.
+
+test("the academic year rolls over in September, as Banner numbers it", () => {
+  // Banner's YYYY is the year the AY ENDS, so Fall 2026 is 202710.
+  assert.equal(currentAYEnd(new Date("2026-09-01T12:00:00Z")), 2027, "September starts the new AY");
+  assert.equal(currentAYEnd(new Date("2026-08-31T12:00:00Z")), 2026, "August is still the old one");
+  assert.equal(currentAYEnd(new Date("2027-01-15T12:00:00Z")), 2027, "January belongs to the AY it ends");
+  assert.equal(currentAYEnd(new Date("2026-12-31T12:00:00Z")), 2027);
+});
+
+test("the window is a COUNT of academic years, inclusive of the one in progress", () => {
+  // The off-by-one this replaced: `recentTermCodes(3)` looped
+  // `currentAYEnd - 3 … currentAYEnd` inclusive, so it returned FOUR academic
+  // years while its comment claimed three — which is how the backfill came to
+  // be fetching Fall 2023. A count is unambiguous where "years back" was not.
+  const now = new Date("2026-09-03T12:00:00Z");   // AY2027
+  assert.equal(oldestAYEnd(1, now), 2027, "one year is the current AY alone");
+  assert.equal(oldestAYEnd(3, now), 2025);
+  assert.equal(oldestAYEnd(4, now), 2024);
+});
+
+test("the shipped window admits AY2025-27 and rejects AY2024", () => {
+  const now = new Date("2026-09-03T12:00:00Z");
+  const inWindow  = ["202510", "202530", "202540", "202560", "202610", "202630", "202710"];
+  const tooOld    = ["202410", "202430", "202440", "202460", "202360", "201910"];
+  for (const tc of inWindow) {
+    assert.equal(withinRestrictionWindow(tc, RESTR_AY_WINDOW, now), true, `${tc} should be kept`);
+  }
+  for (const tc of tooOld) {
+    assert.equal(withinRestrictionWindow(tc, RESTR_AY_WINDOW, now), false, `${tc} should be dropped`);
+  }
+});
+
+test("the boundary is exact — one AY either side of the cut", () => {
+  const now = new Date("2026-09-03T12:00:00Z");   // AY2027, oldest kept = 2025
+  assert.equal(withinRestrictionWindow("202560", 3, now), true,  "the oldest kept AY's last term");
+  assert.equal(withinRestrictionWindow("202510", 3, now), true,  "the oldest kept AY's first term");
+  assert.equal(withinRestrictionWindow("202460", 3, now), false, "one term older must fall out");
+  // And the window MOVES: the same term ages out a year later.
+  assert.equal(withinRestrictionWindow("202510", 3, new Date("2027-09-03T12:00:00Z")), false,
+    "Fall 2024 must age out once AY2028 begins");
+});
+
+test("the synthetic summer codes are dated by their merged term's AY", () => {
+  // AY2026+ merges the summer sessions into one …50 code, which the scraper
+  // splits back into 202640/202660. Those are OUR codes, not Banner's, and a
+  // window that only understood real ones would silently drop a whole summer.
+  const now = new Date("2026-09-03T12:00:00Z");
+  for (const tc of ["202640", "202650", "202660"]) {
+    assert.equal(withinRestrictionWindow(tc, 3, now), true, `${tc} should be kept`);
+  }
+  assert.equal(withinRestrictionWindow("202450", 3, now), false, "and an old merged code still ages out");
+});
+
+test("a term code we cannot date is REJECTED, never admitted", () => {
+  // The failure direction matters. Admitting an undateable code would let an
+  // arbitrarily old term through the one guard that exists to keep it out;
+  // rejecting one costs a restriction we can re-derive from cache for free the
+  // moment the code is understood. Same asymmetry as `knownTermCodes`.
+  const now = new Date("2026-09-03T12:00:00Z");
+  for (const bad of [null, undefined, "", "20261", "2026100", "abcdef", "20-610",
+                     {}, [], NaN, "202610 ", " 202610"]) {
+    assert.equal(withinRestrictionWindow(bad, 3, now), false,
+      `${JSON.stringify(bad)} must not be treated as recent`);
+  }
+});
+
+test("a nonsense window count falls back to the shipped one rather than admitting everything", () => {
+  const now = new Date("2026-09-03T12:00:00Z");
+  for (const bad of [0, -5, NaN, null, undefined, "three", Infinity]) {
+    const oldest = oldestAYEnd(bad, now);
+    assert.ok(Number.isFinite(oldest), `window ${bad} produced ${oldest}`);
+    // Must not silently become an unbounded window.
+    assert.equal(withinRestrictionWindow("202410", bad, now), false,
+      `window ${bad} let an AY2024 term through`);
+  }
+});
+
+test("a FUTURE term is not 'recent' — the window has an upper edge too", () => {
+  // Banner publishes about a term ahead, and a code beyond the current AY is
+  // either a typo or a term nobody has attended. Either way it is not evidence
+  // about registration, and `completedTerms` already excludes it upstream —
+  // this pins the belt.
+  const now = new Date("2026-09-03T12:00:00Z");   // AY2027
+  assert.equal(withinRestrictionWindow("202810", 3, now), false);
+  assert.equal(withinRestrictionWindow("209910", 3, now), false);
 });

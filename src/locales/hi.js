@@ -711,6 +711,8 @@ export const strings = {
   "info.restrictions.everySection": "सभी सेक्शन",
   "info.restrictions.years":      "({n} वर्ष)",
   "info.restrictions.someSections": "({total} में से {n} सेक्शन)",
+  "info.restrictions.more":      "{n} और दिखाएँ",
+  "info.restrictions.less":      "कम दिखाएँ",
   "info.restrictions.source":     "दर्शाए गए सत्र के लिए Banner के Restrictions टैब से। नॉर्थईस्टर्न बताता है कि सभी प्रतिबंध हर छात्र पर लागू नहीं होते।",
   "info.restrictions.note":       "कुलसचिव कार्यालय के पंजीकरण प्रतिबंध, दर्शाए गए सत्र के लिए Banner से पढ़े गए। बाद का सत्र भिन्न हो सकता है, और नॉर्थईस्टर्न भी बताता है कि सभी प्रतिबंध हर छात्र पर लागू नहीं होते — इस पर भरोसा करने से पहले अपने सलाहकार से पुष्टि करें।",
   "info.restrictions.name.Classes":        "कक्षा स्तर",

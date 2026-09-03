@@ -174,6 +174,30 @@ jobs:
       - name: Derive offering summary
         run: node scripts/derive-offering-summary.js --write 2>&1 | tee /tmp/offering-log.txt
 
+      # ── Step 2b-i½: Re-derive the retired union ───────────────────────────────
+      #   catalog-courses.json is a single CURRENT snapshot and this job REPLACES
+      #   it, so an edition roll deletes courses out from under saved plans.
+      #   course-retention.js (inside the scrape above) rescues the ones a shipped
+      #   PROGRAM tree still requires and deliberately drops the rest — measured at
+      #   ~367 of ~1,089 retirements for the 2026→2027 roll. A student's plan names
+      #   courses too, and it lives in their browser where we cannot enumerate it.
+      #
+      #   This emits the full record of every course a frozen edition published
+      #   that the catalog no longer does, so those plans still resolve. Without
+      #   it the failure is SILENT — the card vanishes and the credit total drops
+      #   with nothing on screen saying why.
+      #
+      #   Must run AFTER the scrape: retention's rescued courses are catalog
+      #   entries, and the union has to be disjoint from them. The script asserts
+      #   that disjointness and refuses to write if it is broken, so this ordering
+      #   is enforced rather than merely documented.
+      #
+      #   Fatal on failure, unlike the two steps around it: a stale union is a
+      #   file students' plans resolve against, and it carries a 20% shrink rail
+      #   of its own, so a refusal here means something is actually wrong.
+      - name: Derive retired union
+        run: node scripts/derive-retired-union.js --write 2>&1 | tee /tmp/retired-union-log.txt
+
       # ── Step 2b-ii: Re-derive when each term starts and ends ──────────────────
       #   The planner decides which semester is "now" — and so which courses
       #   count as completed — from these windows. They are measured from

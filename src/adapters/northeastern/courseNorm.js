@@ -185,7 +185,16 @@ export function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
     // blocks placement, which would turn the untickable row into a refused
     // plan — the same defect in a louder coat. The course stays placeable and
     // schedulable; what changes is that the app can say what it is.
+    //
+    // `lifespan` rides along for the same reason and with the same hazard: an
+    // unlisted field is dropped silently. It is what lets the card name a
+    // catalog EDITION ("last published in the 2025–2026 catalog") instead of
+    // `retiredSince`, which is the day our own scrape first missed the course
+    // — a fact about us, not about the catalog. Only the union carries one;
+    // a course rescued by `course-retention.js` has a date and no lifespan,
+    // so both fields have to survive here and the copy picks whichever it got.
     ...(raw.retired ? { retired: true, retiredSince: raw.retiredSince ?? null } : {}),
+    ...(raw.lifespan ? { lifespan: raw.lifespan } : {}),
   };
 }
 
@@ -329,6 +338,64 @@ export function stampRestrictions(courses, restrJson) {
     c.restrictions = { labels, terms };
   }
   return courses;
+}
+
+/**
+ * Append the retired union to the RAW catalog rows, before normalization.
+ *
+ * ── What this fixes ─────────────────────────────────────────────────
+ *
+ * `catalog-courses.json` is a single CURRENT snapshot and the monthly scrape
+ * REPLACES it, so an edition roll deletes courses out from under saved plans.
+ * `course-retention.js` rescues the ones a shipped PROGRAM tree still requires
+ * and drops the rest — measured at about 367 for the 2026→2027 roll. A plan
+ * naming one of those resolves to nothing, and the failure is SILENT: the card
+ * does not render, and `totalSHPlaced` sums `courseMap[id]?.sh ?? 0`, so the
+ * student's credit total drops with nothing on screen saying why. Verified in
+ * the browser, not assumed — test/browser/retired-course.browser.test.js.
+ *
+ * ── Raw, not normalized ─────────────────────────────────────────────
+ *
+ * Called before `normalizeCourse` so a retired course goes through exactly the
+ * same normalization as a live one and cannot acquire a shape of its own.
+ * `occupantCards` records what a partial record costs — "card rendering reads
+ * several of these without guarding; `color.slice()` was the one that threw" —
+ * so a retired course must be an ORDINARY course that happens to be marked,
+ * which is also why the union stores full records rather than stubs.
+ *
+ * ── Why appending is safe ───────────────────────────────────────────
+ *
+ * The union is disjoint from the catalog by construction and
+ * `derive-retired-union.js` refuses to write if it is not, so this is an
+ * append and never a reconciliation. Nothing here may overwrite a live course:
+ * a key already present is skipped rather than replaced, because if the two
+ * files ever DO disagree the current catalog is the one that is right.
+ *
+ * A retired course carries no sections and may carry no term-history, which
+ * sounds like a new shape for the planner and is not: 3,250 of 7,966 courses
+ * (41%) already have none, and every one is resolvable and schedulable.
+ *
+ * @param {object[]} raw            raw catalog rows, as loaded
+ * @param {object[]|null} retiredJson parsed retired-courses.json
+ * @returns {object[]} raw rows plus the retired ones, marked
+ */
+export function mergeRetiredUnion(raw, retiredJson) {
+  if (!Array.isArray(retiredJson) || !retiredJson.length) return raw;
+  const present = new Set(raw.map(c => `${(c.subject || "").toUpperCase().trim()}${(c.number || "").trim()}`));
+  const add = [];
+  for (const c of retiredJson) {
+    if (!c || typeof c !== "object") continue;
+    const key = `${(c.subject || "").toUpperCase().trim()}${(c.number || "").trim()}`;
+    if (!key || present.has(key)) continue;
+    present.add(key);
+    // `retired: true` is what CourseCard already reads to draw its badge, and
+    // `lifespan` is what lets the copy name a catalog edition instead of the
+    // day our scrape happened to miss the course. Set here rather than stored
+    // in the file so the flag cannot disagree with which file the record
+    // arrived in.
+    add.push({ ...c, retired: true });
+  }
+  return add.length ? [...raw, ...add] : raw;
 }
 
 export function mergeHistoryAndOffering(courses, history, offering) {

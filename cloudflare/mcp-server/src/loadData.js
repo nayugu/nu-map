@@ -6,7 +6,7 @@
 // Loaded once per isolate (module-global promise); ~15 MB of JSON parsed
 // on cold start, cached in memory thereafter.
 
-import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants, stampCoopPrep, stampRestrictions } from "../../../src/adapters/northeastern/courseNorm.js";
+import { normalizeCourse, mergeHistoryAndOffering, mergeRetiredUnion, stampCoopVariants, stampCoopPrep, stampRestrictions } from "../../../src/adapters/northeastern/courseNorm.js";
 import { parseMajorPathParts, resolveInMap } from "../../../src/data/programPaths.js";
 import calendar from "../../../src/adapters/northeastern/calendar.js";
 import attributeSystem from "../../../src/adapters/northeastern/attributeSystem.js";
@@ -30,7 +30,7 @@ async function fetchJson(origin, path) {
 }
 
 async function build(origin) {
-  const [catalogJson, subjectColleges, history, offering, termDetails, bundle, dataMeta, coopJson, restrJson] =
+  const [catalogJson, subjectColleges, history, offering, termDetails, bundle, dataMeta, coopJson, restrJson, retiredJson] =
     await Promise.all([
       fetchJson(origin, "/northeastern/catalog-courses.json"),
       fetchJson(origin, "/northeastern/subject-colleges.json"),
@@ -41,11 +41,17 @@ async function build(origin) {
       fetchJson(origin, "/data-meta.json"),
       fetchJson(origin, "/northeastern/coop-courses.json"),
       fetchJson(origin, "/northeastern/restrictions.json"),
+      fetchJson(origin, "/northeastern/retired-courses.json"),
     ]);
 
   if (!catalogJson) throw new Error(`Could not load catalog from ${origin}`);
   const raw = Array.isArray(catalogJson) ? catalogJson : Object.values(catalogJson).flat();
-  const normalized = raw.map(r => normalizeCourse(r, subjectColleges ?? {}, {})).filter(Boolean);
+  // Courses a frozen edition published that this catalog no longer does —
+  // merged here for the same reason as the stamps below: Claude must resolve
+  // the same courses the browser can, or an audit over MCP reports a plan as
+  // missing a course the student can see on their own board.
+  const rawWithRetired = mergeRetiredUnion(raw, retiredJson);
+  const normalized = rawWithRetired.map(r => normalizeCourse(r, subjectColleges ?? {}, {})).filter(Boolean);
   const courses = mergeHistoryAndOffering(normalized, history, offering);
   // Same stamps the browser applies, so a Claude audit and the panel agree.
   stampCoopVariants(courses, coopJson);
