@@ -103,6 +103,29 @@ describe("deriveRetiredUnion", () => {
     }
   });
 
+  test("a snapshot record already carrying retired/retiredSince is cleaned", () => {
+    // Found by `mutation-probe.js --only union:`, which deleted the strip and
+    // watched every test still pass. The assertion above ("retiredSince is
+    // undefined") looked like it covered this and did not: the 2026 snapshot is
+    // pre-roll, so no record in it carries either field and the check passed
+    // trivially against 7,966 courses.
+    //
+    // It is not hypothetical. `retainReferencedCourses` writes `retired: true`
+    // and `retiredSince` into the courses it rescues INTO the catalog, so the
+    // moment a snapshot is frozen from a post-roll catalog its records carry
+    // both — and a stale scrape date riding beside the lifespan is two
+    // representations of one fact, which is what this file exists to end.
+    const rows = [{
+      subject: "CS", number: "9004", title: "Rescued Once", credits: 4,
+      retired: true, retiredSince: "2026-10-01",
+    }];
+    const [got] = deriveRetiredUnion([], [{ year: 2026, rows }]).retired;
+    assert.equal(got.retiredSince, undefined, "a stale scrape date survived into the union");
+    assert.equal(got.retired, undefined, "a stale retirement boolean survived beside the lifespan");
+    assert.equal(got.title, "Rescued Once", "the strip took the rest of the record with it");
+    assert.equal(got.lifespan.firstEdition, 2026);
+  });
+
   test("multiple editions: the lifespan spans them and the NEWEST record wins", () => {
     // The freshest published description is the least stale thing we can show,
     // so a course carried by two editions must keep the later copy.
