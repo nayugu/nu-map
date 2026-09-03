@@ -64,6 +64,7 @@ import {
   BASE, PAGE_SIZE, sleep, fetchRetry, cookieHeader, updateJar,
   getTermList, activateTerm, resetForm, fetchPage,
 }                                                   from "./lib/banner-session.js";
+import { writeTermCache }                           from "./lib/restriction-cache.js";
 
 const __dirname      = dirname(fileURLToPath(import.meta.url));
 const ROOT           = resolve(__dirname, "..");
@@ -433,7 +434,16 @@ async function fetchTermProfessors(termCode, detail) {
  * is fetched once ever and carried forward. A capstone's gate does not move
  * year to year, which is what makes the older term an acceptable source.
  */
-async function fetchTermRestrictions(termCode, detail) {
+/**
+ * @param {string} termCode  the term to ASK Banner about — for a merged summer
+ *   this is the real `…50` code, not the synthetic 40/60 one.
+ * @param {Map} detail
+ * @param {string} [cacheKey]  the term the pages are FILED under. Must be the
+ *   code `term-details.json` uses, or reparse-restrictions.js cannot match a
+ *   cached page to the course-term it belongs to and the whole capture is
+ *   unusable for precisely the merged summer terms.
+ */
+async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
   await fetchRetry(`${BASE}/term/search?mode=search`, {
     method:  "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded", "Cookie": cookieHeader() },
@@ -443,37 +453,69 @@ async function fetchTermRestrictions(termCode, detail) {
   let calls = 0;
   let gated = 0;
   let consecutiveFailures = 0;
-  for (const agg of detail.values()) {
-    const must = new Map();
-    const not  = new Map();
-    for (const [crn] of agg.crns ?? []) {
-      try {
-        const res = await fetchRetry(
-          `${BASE}/searchResults/getRestrictions?term=${termCode}&courseReferenceNumber=${crn}`,
-          { headers: { "Cookie": cookieHeader() } }
-        );
-        updateJar(res);
-        const { must: mk, not: nk } = classesOf(parseRestrictions(await res.text()));
-        if (mk) { must.set(mk, (must.get(mk) ?? 0) + 1); gated += 1; }
-        if (nk) { not.set(nk, (not.get(nk) ?? 0) + 1); }
-        consecutiveFailures = 0;
-      } catch {
-        // Same rule as the instructor pass: one section failing must not kill the
-        // term, but a long streak means Banner has stopped talking to us. A term
-        // with restriction marks is treated as complete forever after, so partial
-        // data would permanently understate the gates — leave NONE.
-        consecutiveFailures += 1;
-        if (consecutiveFailures >= 25) {
-          for (const a of detail.values()) { delete a.std; delete a.stdNot; }
-          throw new Error(`aborted after ${consecutiveFailures} consecutive failures (${calls} calls in) — no partial data kept`);
-        }
-      }
-      calls += 1;
-      if (calls % 1000 === 0) process.stdout.write(`    …${calls} sections\n`);
-      await sleep(RESTR_DELAY_MS);
+
+  // Every page is kept verbatim so a later parser change costs a re-parse
+  // instead of another 30 minutes per term (reparse-restrictions.js). Held in
+  // memory and written ONCE per term: writing per page would re-serialise the
+  // whole map 7,400 times. The course id travels with it because both questions
+  // the cache exists to answer — do a course's sections agree, does its gate
+  // hold across terms — are per-course, and a CRN alone cannot say.
+  const rawPages   = {};
+  const crnToCourse = {};
+
+  const flushCache = () => {
+    if (!Object.keys(rawPages).length) return;
+    try {
+      const n = writeTermCache(cacheKey, rawPages, crnToCourse);
+      process.stdout.write(`    cached ${Object.keys(rawPages).length} raw pages (${n.pages} total for ${cacheKey})\n`);
+    } catch (err) {
+      // The cache is an optimisation, never the data. A disk problem here must
+      // not lose a 30-minute scrape.
+      console.warn(`    could not write page cache: ${err.message}`);
     }
-    if (must.size) agg.std    = Object.fromEntries([...must].sort());
-    if (not.size)  agg.stdNot = Object.fromEntries([...not].sort());
+  };
+
+  try {
+    for (const [courseId, agg] of detail.entries()) {
+      const must = new Map();
+      const not  = new Map();
+      for (const [crn] of agg.crns ?? []) {
+        try {
+          const res = await fetchRetry(
+            `${BASE}/searchResults/getRestrictions?term=${termCode}&courseReferenceNumber=${crn}`,
+            { headers: { "Cookie": cookieHeader() } }
+          );
+          updateJar(res);
+          const html = await res.text();
+          rawPages[crn]    = html;
+          crnToCourse[crn] = courseId;
+          const { must: mk, not: nk } = classesOf(parseRestrictions(html));
+          if (mk) { must.set(mk, (must.get(mk) ?? 0) + 1); gated += 1; }
+          if (nk) { not.set(nk, (not.get(nk) ?? 0) + 1); }
+          consecutiveFailures = 0;
+        } catch {
+          // Same rule as the instructor pass: one section failing must not kill the
+          // term, but a long streak means Banner has stopped talking to us. A term
+          // with restriction marks is treated as complete forever after, so partial
+          // data would permanently understate the gates — leave NONE.
+          consecutiveFailures += 1;
+          if (consecutiveFailures >= 25) {
+            for (const a of detail.values()) { delete a.std; delete a.stdNot; }
+            throw new Error(`aborted after ${consecutiveFailures} consecutive failures (${calls} calls in) — no partial data kept`);
+          }
+        }
+        calls += 1;
+        if (calls % 1000 === 0) process.stdout.write(`    …${calls} sections\n`);
+        await sleep(RESTR_DELAY_MS);
+      }
+      if (must.size) agg.std    = Object.fromEntries([...must].sort());
+      if (not.size)  agg.stdNot = Object.fromEntries([...not].sort());
+    }
+  } finally {
+    // Kept even on the abort path. Discarding the DERIVED gates is required —
+    // a partial fold understates them permanently — but the raw pages are still
+    // exactly what Banner said, and keeping them makes the retry cheaper.
+    flushCache();
   }
   return { calls, gated };
 }
@@ -758,7 +800,10 @@ async function main() {
     console.log(`\n[${termCode}] fetching class restrictions for ${sections} sections (~${Math.round(sections * perCall / 60000)} min)…`);
     try {
       // Synthetic summer codes must talk to Banner via their real merged term.
-      const { calls, gated } = await fetchTermRestrictions(bannerCodeOf[termCode] ?? termCode, termDetail[termCode] ?? new Map());
+      // Ask Banner under the real code; FILE the pages under the code
+      // term-details uses, which for a merged summer is the synthetic one.
+      const { calls, gated } = await fetchTermRestrictions(
+        bannerCodeOf[termCode] ?? termCode, termDetail[termCode] ?? new Map(), termCode);
       const pct = calls ? (100 * gated / calls).toFixed(1) : "0.0";
       console.log(`  done (${calls} section lookups, ${gated} class-gated — ${pct}%)`);
     } catch (err) {

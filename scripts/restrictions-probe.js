@@ -55,11 +55,12 @@
 // silent-{} failure in (2) above, and it must be loud.
 // ═══════════════════════════════════════════════════════════════════
 
-import { mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync } from "node:fs";
-import { resolve, dirname, join }                                          from "node:path";
-import { fileURLToPath }                                                   from "node:url";
+import { resolve, dirname }                  from "node:path";
+import { fileURLToPath }                     from "node:url";
 
-import { parseRestrictions, coalesceValues } from "./lib/class-standing.js";
+import { parseRestrictions }                 from "./lib/class-standing.js";
+import { readTermCache, writeTermCache, cachedTerms, legacyTerms, CACHE_DIR }
+                                             from "./lib/restriction-cache.js";
 import {
   BASE, getTermList, openTerm, fetchPage, fetchRetry,
   cookieHeader, updateJar, sleep,
@@ -67,7 +68,6 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = resolve(__dirname, "..");
-const CACHE     = resolve(ROOT, ".cache/banner/restrictions");
 
 const DELAY_MS = parseInt(process.env.BANNER_DELAY_MS || "500", 10);
 const RESTR_DELAY_MS = parseInt(process.env.BANNER_RESTR_DELAY_MS || "250", 10);
@@ -132,51 +132,44 @@ export function labelOf(value) {
 }
 
 // ── Cache ────────────────────────────────────────────────────────
-
-const pagePath = (term, crn) => join(CACHE, String(term), `${crn}.html`);
-
-function cacheWrite(term, crn, html) {
-  const p = pagePath(term, crn);
-  mkdirSync(dirname(p), { recursive: true });
-  writeFileSync(p, html);
-}
-
-function cacheRead(term, crn) {
-  const p = pagePath(term, crn);
-  return existsSync(p) ? readFileSync(p, "utf8") : null;
-}
-
-function cachedCrns(term) {
-  const dir = join(CACHE, String(term));
-  if (!existsSync(dir)) return [];
-  return readdirSync(dir).filter(f => f.endsWith(".html")).map(f => f.slice(0, -5));
-}
-
-// ── The CRN → course manifest ────────────────────────────────────
 //
-// A cached page is named by CRN, and a CRN alone does not say which course it
-// belongs to. Without this, `--replay` could answer the kind and vocabulary
-// questions but NOT within-course agreement or cross-term stability — which are
-// the two that actually decide the design. So the mapping is cached beside the
-// pages, and replay is as capable as a live run.
+// One gzipped file per term, shared with the scrape — see lib/restriction-cache.js
+// for why one file beats one-per-page by 30x on size and 7,400x on inode count.
+// The probe wrote its own per-page layout first; that is read transparently and
+// folded in by `reparse-restrictions.js --migrate`.
 //
-// Merged rather than overwritten: a later run with a different sample must not
-// orphan the pages an earlier one cached.
+// The whole term is held in memory for the run and written once at the end:
+// re-serialising a 7,000-entry map per page would be quadratic, and a sampled
+// probe run has nothing to gain from an incremental flush.
 
-const manifestPath = (term) => join(CACHE, String(term), "index.json");
+/** term → { pages, courses }, loaded on first touch. */
+const loaded = new Map();
 
-function manifestRead(term) {
-  const p = manifestPath(term);
-  if (!existsSync(p)) return {};
-  try { return JSON.parse(readFileSync(p, "utf8")); } catch { return {}; }
+function termCache(term) {
+  if (!loaded.has(term)) {
+    const c = readTermCache(term);
+    loaded.set(term, { pages: { ...(c?.pages ?? {}) }, courses: { ...(c?.courses ?? {}) }, dirty: false });
+  }
+  return loaded.get(term);
 }
 
-function manifestMerge(term, pairs) {
-  const p = manifestPath(term);
-  mkdirSync(dirname(p), { recursive: true });
-  const merged = { ...manifestRead(term) };
-  for (const [crn, courseId] of pairs) if (courseId) merged[crn] = courseId;
-  writeFileSync(p, JSON.stringify(merged, null, 0) + "\n");
+const cacheRead   = (term, crn) => termCache(term).pages[crn] ?? null;
+const cachedCrns  = (term)      => Object.keys(termCache(term).pages);
+const manifestOf  = (term)      => termCache(term).courses;
+
+function cacheStore(term, crn, html, courseId) {
+  const c = termCache(term);
+  c.pages[crn] = html;
+  if (courseId) c.courses[crn] = courseId;
+  c.dirty = true;
+}
+
+function cacheFlush(term) {
+  const c = loaded.get(term);
+  if (!c?.dirty) return;
+  const n = writeTermCache(term, c.pages, c.courses);
+  process.stdout.write(`    cache: ${n.pages} pages, ${n.courses} attributed for ${term}\n`);
+  c.dirty = false;
 }
 
 // ── Section inventory ────────────────────────────────────────────
@@ -306,7 +299,7 @@ async function gather(termCode, picked, used) {
   if (REPLAY) {
     const crns = cachedCrns(termCode);
     if (!crns.length) throw new Error(`--replay but nothing cached for ${termCode}`);
-    const manifest = manifestRead(termCode);
+    const manifest = manifestOf(termCode);
     const missing = crns.filter(c => !manifest[c]).length;
     if (missing) {
       process.stdout.write(
@@ -324,14 +317,17 @@ async function gather(termCode, picked, used) {
       let html = cacheRead(termCode, crn);
       if (html == null) {
         html = await fetchRestrictions(termCode, crn);
-        cacheWrite(termCode, crn, html);
         await sleep(RESTR_DELAY_MS);
       }
+      // Stored even on a cache HIT, because the page may have been captured
+      // before the course mapping existed — that is the whole reason 829 of the
+      // first run's pages were unattributable.
+      cacheStore(termCode, crn, html, courseId);
       out.push({ courseId, crn, html });
       if (++n % 100 === 0) process.stdout.write(`    …${n}/${used}\n`);
     }
   }
-  manifestMerge(termCode, out.map(p => [p.crn, p.courseId]));
+  cacheFlush(termCode);
   return out;
 }
 
@@ -564,7 +560,8 @@ async function main() {
   let terms = TERMS;
   if (!terms.length) {
     if (REPLAY) {
-      terms = existsSync(CACHE) ? readdirSync(CACHE).filter(d => /^\d{6}$/.test(d)).sort() : [];
+      // Both layouts, so a cache written before the single-file form still replays.
+      terms = [...new Set([...cachedTerms(), ...legacyTerms()])].sort();
       if (!terms.length) { console.error("--replay with an empty cache and no --term"); process.exit(1); }
     } else {
       const list = await getTermList(30);
@@ -574,7 +571,7 @@ async function main() {
     }
   }
   console.log(`restrictions-probe — terms ${terms.join(", ")}${REPLAY ? "  (replay, no network)" : ""}`);
-  console.log(`cache: ${CACHE}`);
+  console.log(`cache: ${CACHE_DIR}`);
 
   // ── Pick the course list ONCE, across every term ────────────────
   //
