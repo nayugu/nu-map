@@ -6,7 +6,7 @@
 // Loaded once per isolate (module-global promise); ~15 MB of JSON parsed
 // on cold start, cached in memory thereafter.
 
-import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants } from "../../../src/adapters/northeastern/courseNorm.js";
+import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants, stampCoopPrep } from "../../../src/adapters/northeastern/courseNorm.js";
 import { parseMajorPathParts, resolveInMap } from "../../../src/data/programPaths.js";
 import calendar from "../../../src/adapters/northeastern/calendar.js";
 import attributeSystem from "../../../src/adapters/northeastern/attributeSystem.js";
@@ -46,8 +46,9 @@ async function build(origin) {
   const raw = Array.isArray(catalogJson) ? catalogJson : Object.values(catalogJson).flat();
   const normalized = raw.map(r => normalizeCourse(r, subjectColleges ?? {}, {})).filter(Boolean);
   const courses = mergeHistoryAndOffering(normalized, history, offering);
-  // Same stamp the browser applies, so a Claude audit and the panel agree.
+  // Same stamps the browser applies, so a Claude audit and the panel agree.
   stampCoopVariants(courses, coopJson);
+  stampCoopPrep(courses, coopJson);
   const courseMap = {};
   for (const c of courses) courseMap[c.id] = c;
 

@@ -26,7 +26,7 @@
 // Raw term codes: NEU Banner — YYYY = AY end year; 10=Fall, 30=Spring,
 //                 40=Summer 1, 60=Summer 2  (decoded during normalization)
 // ═══════════════════════════════════════════════════════════════════
-import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants } from "./courseNorm.js";
+import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants, stampCoopPrep } from "./courseNorm.js";
 
 // Verified RateMyHusky link directory, populated by fetchAll() and read by the
 // URL builders below. Module-level so the singleton adapter can expose
@@ -153,9 +153,12 @@ export default {
     const subjectColleges = collegesResult.status === "fulfilled" ? collegesResult.value : {};
     const courses = raw.map(r => normalizeCourse(r, subjectColleges, nuPathSupp)).filter(Boolean);
 
-    // Which courses record a work term. Shared with the Node and worker
-    // loaders — see stampCoopVariants for why all three must do this.
-    stampCoopVariants(courses, coopResult.status === "fulfilled" ? coopResult.value : null);
+    // Which courses record a work term, and which PREPARE for one. Shared with
+    // the Node and worker loaders — see stampCoopVariants for why all three
+    // must do this. Both read the same coop-courses.json already fetched here.
+    const coopJson = coopResult.status === "fulfilled" ? coopResult.value : null;
+    stampCoopVariants(courses, coopJson);
+    stampCoopPrep(courses, coopJson);
 
     // Merge Banner availability history + per-term offering detail if present.
     // Both are optional — app works without them.

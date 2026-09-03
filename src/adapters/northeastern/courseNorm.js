@@ -235,6 +235,49 @@ export function stampCoopVariants(courses, coopJson) {
   return courses;
 }
 
+/**
+ * Mark the courses that must be SAT IN before the first work term.
+ *
+ * The inverse of `stampCoopVariants` above: those courses RECORD a co-op, these
+ * PREPARE for one. `derive-coop-courses.js` writes the table as
+ * `coop-courses.json` → `prep`, from the published sample plans intersected
+ * with its own co-op title classification.
+ *
+ * ── Why this is only a note, and never a constraint ────────────────
+ *
+ * Nothing upstream states the rule. `COOP 3945` carries empty `prereqs` and
+ * empty `coreqs`, and the catalog says it nowhere — the only evidence is that
+ * every department that publishes a plan containing the course puts it before
+ * the work term. That is strong enough to tell a student about and far too weak
+ * to refuse a plan over, so `observations` travels with it and the UI quotes
+ * the count rather than asserting a requirement.
+ *
+ * CHART already enforces its own harder version of this from `plan-order.json`
+ * (`coop-prep-cannot-precede-the-coop`); this stamp is what the INTERACTIVE
+ * planner shows, which until now was nothing at all.
+ *
+ * Same three-loader rule as `stampCoopVariants` — browser, Node/dev-MCP and the
+ * Cloudflare worker must all stamp, or a course carries the note on screen and
+ * not over MCP. It rides on `coop-courses.json`, which all three already fetch,
+ * so it costs no new request.
+ *
+ * @param {object[]} courses      normalized Course records
+ * @param {object|null} coopJson  parsed coop-courses.json ({ prep: {...} })
+ * @returns {object[]} the same array
+ */
+export function stampCoopPrep(courses, coopJson) {
+  const table = coopJson?.prep;
+  if (!table || typeof table !== "object") return courses;
+  for (const c of courses) {
+    const p = table[c.id];
+    // A count is the whole point — a note that cannot say how many departments
+    // agree is indistinguishable from a guess, so an entry without one is
+    // skipped rather than shown bare.
+    if (p && Number.isFinite(p.observations)) c.coopPrep = { observations: p.observations };
+  }
+  return courses;
+}
+
 export function mergeHistoryAndOffering(courses, history, offering) {
   if (!history && !offering) return courses;
 

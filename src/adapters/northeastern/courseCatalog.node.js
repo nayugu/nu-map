@@ -14,7 +14,7 @@
 import { readFileSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants } from "./courseNorm.js";
+import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants, stampCoopPrep } from "./courseNorm.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const PUB  = join(ROOT, "public/northeastern");
@@ -75,9 +75,12 @@ export function loadCatalog() {
   const history  = readJson(join(PUB, "term-history.json"));
   const offering = readJson(join(PUB, "offering-summary.json"));
   const courses  = mergeHistoryAndOffering(normalized, history, offering);
-  // Which courses record a work term — the dev MCP server must resolve the
-  // same grants the browser does, or an audit over MCP contradicts the panel.
-  stampCoopVariants(courses, readJson(join(PUB, "coop-courses.json")));
+  // Which courses record a work term, and which PREPARE for one — the dev MCP
+  // server must resolve the same grants and carry the same notes the browser
+  // does, or an audit over MCP contradicts the panel.
+  const coopJson = readJson(join(PUB, "coop-courses.json"));
+  stampCoopVariants(courses, coopJson);
+  stampCoopPrep(courses, coopJson);
 
   const courseMap = {};
   for (const c of courses) courseMap[c.id] = c;
