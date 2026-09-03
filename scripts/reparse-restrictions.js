@@ -33,16 +33,18 @@
 // Exits 0 on a clean report, 1 when a guard trips.
 // ═══════════════════════════════════════════════════════════════════
 
-import { readFileSync, writeFileSync }        from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, dirname }                   from "node:path";
 import { fileURLToPath }                      from "node:url";
 
 import { parseRestrictions, classesOf }       from "./lib/class-standing.js";
+import { restrictionsOf, tallySection }       from "./lib/restrictions.js";
 import { cachedTerms, readTermCache, migrateLegacy, legacyTerms }
                                               from "./lib/restriction-cache.js";
 
 const ROOT    = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DETAILS = resolve(ROOT, "public/northeastern/term-details.json");
+const LABELS  = resolve(ROOT, "public/northeastern/restriction-labels.json");
 
 const WRITE   = process.argv.includes("--write");
 const MIGRATE = process.argv.includes("--migrate");
@@ -70,6 +72,9 @@ function main() {
   let totalChanged = 0, totalCourses = 0;
   const problems = [];
   const caveats  = [];
+  // Code → label, accumulated across every term re-parsed, merged over the
+  // existing file so re-parsing one term does not drop the others' labels.
+  const labels   = {};
 
   for (const term of terms) {
     const cache = readTermCache(term);
@@ -110,25 +115,37 @@ function main() {
       complete += 1;
 
       const must = new Map(), not = new Map();
+      const nextRestr = {};
       for (const crn of crns) {
-        const { must: mk, not: nk } = classesOf(parseRestrictions(pages[crn]));
+        const parsed = parseRestrictions(pages[crn]);
+        // The whole pane. This is the field that actually needs re-deriving:
+        // terms captured before it existed hold only the `Classes` heading, and
+        // re-reading them from Banner is ~30 minutes each.
+        const { blocks, labels: L } = restrictionsOf(parsed);
+        tallySection(blocks, nextRestr);
+        Object.assign(labels, L);
+        const { must: mk, not: nk } = classesOf(parsed);
         if (mk) must.set(mk, (must.get(mk) ?? 0) + 1);
         if (nk) not.set(nk, (not.get(nk) ?? 0) + 1);
       }
       const nextStd    = must.size ? Object.fromEntries([...must].sort()) : undefined;
       const nextStdNot = not.size  ? Object.fromEntries([...not].sort())  : undefined;
+      const nextR      = Object.keys(nextRestr).length ? nextRestr : undefined;
 
       const same = JSON.stringify(d.std)    === JSON.stringify(nextStd)
-                && JSON.stringify(d.stdNot) === JSON.stringify(nextStdNot);
+                && JSON.stringify(d.stdNot) === JSON.stringify(nextStdNot)
+                && JSON.stringify(d.restr)  === JSON.stringify(nextR);
       if (same) { unchanged += 1; continue; }
       changed += 1;
       if (diffs.length < 8) {
+        const kinds = nextR ? Object.keys(nextR).length : 0;
         diffs.push(`${id}: std ${JSON.stringify(d.std)} → ${JSON.stringify(nextStd)}` +
-                   (d.stdNot || nextStdNot ? `, stdNot ${JSON.stringify(d.stdNot)} → ${JSON.stringify(nextStdNot)}` : ""));
+                   `, restr ${d.restr ? Object.keys(d.restr).length : 0} → ${kinds} kinds`);
       }
       if (WRITE) {
         if (nextStd)    d.std    = nextStd;    else delete d.std;
         if (nextStdNot) d.stdNot = nextStdNot; else delete d.stdNot;
+        if (nextR)      d.restr  = nextR;      else delete d.restr;
       }
     }
 
@@ -176,8 +193,15 @@ function main() {
     return;
   }
   if (!totalChanged) { console.log(`\nnothing to write.`); return; }
-  writeFileSync(DETAILS, JSON.stringify(details) + "\n");
+  writeFileSync(DETAILS, JSON.stringify(details, null, 2));
   console.log(`\nwrote ${DETAILS}`);
+  if (Object.keys(labels).length) {
+    let prev = {};
+    if (existsSync(LABELS)) { try { prev = JSON.parse(readFileSync(LABELS, "utf8")); } catch {} }
+    const merged = { ...prev, ...labels };
+    writeFileSync(LABELS, JSON.stringify(merged, null, 1) + "\n");
+    console.log(`wrote ${LABELS} (${Object.keys(merged).length} codes)`);
+  }
 }
 
 main();
