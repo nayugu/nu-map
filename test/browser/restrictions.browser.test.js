@@ -212,28 +212,34 @@ describe("restrictions · the course card", () => {
     assert.ok(bulleted.some(l => /Industrial Engineering$/.test(l)),
       "the single-value group must be bulleted like every other group");
 
-    // ASSOCIATION: a value belongs to the nearest heading ABOVE it, so
-    // Mechanical Engineering cannot be read under a Fall heading.
+    // ASSOCIATION, in Banner's order: sentence → values → the terms those
+    // values were seen in. A value's terms are the next non-bullet lines
+    // BELOW it, so Mechanical Engineering must be followed by Summer terms
+    // and never by a Fall one.
     //
-    // Asserted without assuming the order of the groups. An earlier version
-    // fixed it ("Summer B before Fall") and that was only ever true of the
-    // data at the time: groups sort by total sections, so capturing a second
-    // Fall changed which group leads. Order is a rendering detail; the
-    // heading a value sits under is the property.
-    const headingAbove = (i) => {
-      for (let j = i - 1; j >= 0; j--) if (!lines[j].startsWith("·")) return lines[j];
-      return null;
+    // Asserted without assuming the order of the groups. Two earlier versions
+    // baked in an order — first "Summer B before Fall", then "the term heads
+    // the group" — and both were true only of the layout at the time: groups
+    // sort by total sections, so capturing a second Fall reordered them, and
+    // then the terms moved below the values entirely. Adjacency is the
+    // property; absolute position is a rendering detail.
+    const termsAfter = (i) => {
+      const out = [];
+      for (let j = i + 1; j < lines.length && !lines[j].startsWith("·"); j++) out.push(lines[j]);
+      return out;
     };
     const iMech = lines.findIndex(l => /Mechanical Engineering\/Physics/.test(l));
     assert.ok(iMech > 0, "the Mechanical group did not render");
-    assert.match(headingAbove(iMech) ?? "", /Summer/,
-      "a Mechanical-only group must sit under a Summer heading, not a Fall one");
+    const mechTerms = termsAfter(iMech);
+    assert.ok(mechTerms.length, "the Mechanical group named no term at all");
+    assert.ok(mechTerms.every(l => /Summer/.test(l)),
+      `a Mechanical-only group must name only Summer terms, got: ${mechTerms.join(" | ")}`);
 
-    // And the Fall heading's own first value is the Industrial one.
-    const iFall = lines.findIndex(l => /^Fall /.test(l));
-    assert.ok(iFall >= 0, "a Fall heading should render");
-    assert.match(lines[iFall + 1] ?? "", /^· Industrial Engineering/,
-      "Fall's value must follow Fall's heading directly");
+    // And somewhere there is an Industrial Engineering value whose terms are
+    // the Falls — the advisor's actual case.
+    const fallGroup = lines.some((l, i) =>
+      /^· Industrial Engineering$/.test(l) && termsAfter(i).some(x => /^Fall /.test(x)));
+    assert.ok(fallGroup, "no Industrial Engineering group is attributed to Fall");
   });
 
   test("a restriction that differs BY SEASON shows both readings", async () => {
@@ -268,7 +274,7 @@ describe("restrictions · the course card", () => {
     // became bulleted — the panel would now print "· Junior" / "· Senior" on
     // separate lines, so the pattern could never match whether the row was
     // suppressed or not. A negative assertion has to track the positive form.
-    assert.ok(!restrictionLines(text).some(l => /^Class standing:/.test(l)),
+    assert.ok(!restrictionLines(text).some(l => /following Classes:/.test(l)),
       "the uniform Classes restriction should not repeat the standing box");
     assert.doesNotMatch(text, /Junior · Senior/,
       "the uniform Classes restriction should not repeat the standing box");

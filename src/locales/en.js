@@ -869,7 +869,7 @@ export const strings = {
   "review.btn.tip":               "Add the hours per week and difficulty for the term you took this",
   "course.tooltip.coreq.alone":   "Corequisite partner is not placed; both must be in the plan",
   "course.tooltip.coreq.sep":     "Corequisite must be in the same term",
-  "course.tooltip.retired":       "Northeastern's catalog no longer lists this course. It's kept because your catalog year still requires it — ask your advisor about a substitution.",
+  "course.tooltip.retired":       "Northeastern's catalog no longer lists this course. Ask your advisor about a substitution.",
   // The other kind of retired course: one NO program requires, kept only so a
   // plan that already names it still resolves. The sentence above would be a
   // plain falsehood here, so this states the real reason and names the catalog
@@ -884,8 +884,8 @@ export const strings = {
   "info.standing.min":            "{standing} standing or above",
   "info.standing.note":           "Every section of this course is restricted in Banner. Standing is earned by credits, not by terms elapsed, and Banner notes that not all restrictions apply to every student — check with your advisor.",
   "info.restrictions.title":      "Restrictions",
-  "info.restrictions.kind.must":  "{kind}:",
-  "info.restrictions.kind.not":   "Not open to {kind}:",
+  "info.restrictions.kind.must":  "Must be enrolled in one of the following {kind}:",
+  "info.restrictions.kind.not":   "Cannot be enrolled in one of the following {kind}:",
   "info.restrictions.kind.info":  "{kind}:",
   "info.restrictions.variesBySection": "varies by section",
   "info.restrictions.everySection": "every section",
@@ -894,7 +894,12 @@ export const strings = {
   "info.restrictions.less":      "show fewer",
   "info.restrictions.source":     "From Banner’s Restrictions tab for the term shown. Northeastern notes that not all restrictions apply to every student.",
   "info.restrictions.note":       "The registrar’s own enrolment restrictions, read from Banner for the term named. A later term may differ, and Northeastern states that not all restrictions apply to every student — check with your advisor before relying on this.",
-  "info.restrictions.name.Classes":        "Class standing",
+  // Banner's own nouns, verbatim. These read oddly alone ("Attributes") and
+  // were once softened to "Class standing" / "Student attributes" / "Signature
+  // required" — but the softening is what made them unreadable, because the
+  // heading is only half a sentence. Restored to the registrar's wording, which
+  // works because the FULL sentence is now printed around them.
+  "info.restrictions.name.Classes":        "Classes",
   "info.restrictions.name.Majors":         "Majors",
   "info.restrictions.name.Programs":       "Programs",
   "info.restrictions.name.Concentrations": "Concentrations",
@@ -902,8 +907,10 @@ export const strings = {
   "info.restrictions.name.Colleges":       "Colleges",
   "info.restrictions.name.Departments":    "Departments",
   "info.restrictions.name.Campuses":       "Campuses",
-  "info.restrictions.name.Attributes":     "Student attributes",
-  "info.restrictions.name.Special Approvals": "Signature required",
+  "info.restrictions.name.Attributes":     "Attributes",
+  // Banner prints this one WITHOUT a sentence — just "Special Approvals:" —
+  // so `kind.info` stays a bare label and this keeps the registrar's noun.
+  "info.restrictions.name.Special Approvals": "Special Approvals",
   "info.coopPrep.title":          "Before co-op:",
   "info.coopPrep.body":           "Every one of the {count} published plans that includes this course places it before the first co-op.",
   "info.coopPrep.note":           "Northeastern does not state this as a prerequisite anywhere, so this is read from the departments' own published plans of study. Whether your program requires it before your co-op is a question for your advisor.",

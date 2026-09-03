@@ -875,22 +875,29 @@ function RestrictionBlock({ restrictions, t, standingShown = false }) {
           )}
           {k.groups.map((g, gi) => (
             <div key={gi} style={{ marginTop: gi ? 3 : 1 }}>
-              {/* The TERM heads its own group, rather than sitting to the right
-                  of the first value.
-                  Right-aligned beside a five-value list, one coverage figure
-                  reads as belonging to the first bullet only — measured the
-                  hard way, on MEIE 4701, whose Summer B group is five majors
-                  and whose Fall group is one. Leading with the term also
-                  answers the reader's actual question in the order they ask it:
-                  *when* does this bite, then *on whom*.
+              {/* BANNER'S OWN SHAPE: sentence, then the values, then when.
+                  The registrar prints "Must be enrolled in one of the following
+                  Classes:" followed by an indented list, and copying that is
+                  what makes the polarity legible — our heading used to be the
+                  bare noun ("Class standing:"), which states a topic rather
+                  than a rule and left a reader unable to tell "only these may
+                  enrol" from "these may not".
+
+                  The term lines come AFTER the values, not before, because a
+                  group can span several seasons: heading them produced runs of
+                  two or three term lines with no values under them and the
+                  values stranded below the last one, which read as lines
+                  "without any specification". Values belong to the sentence;
+                  the terms are provenance for the pair.
 
                   Coverage is per SEASON, pooled across that season's years —
                   see seasonCoverage. "every section" is the gate; a fraction is
                   the reserved case, 24.6% of observations, and the difference
                   between "you cannot take this" and "one section is closed to
                   you". */}
+              <RestrictionValues values={displayValues(g.codes, labels, k.key)} t={t} />
               {g.seasons.map((s, si) => (
-                <div key={si} style={{ paddingLeft: 8, opacity: 0.75 }}>
+                <div key={si} style={{ paddingLeft: 18, opacity: 0.6 }}>
                   {t(SEASON_KEY[s.season] ?? s.season ?? "")}
                   {/* Every year this season was observed in, NAMED.
                       It used to read "Fall (3 years)" once a season had more
@@ -910,7 +917,6 @@ function RestrictionBlock({ restrictions, t, standingShown = false }) {
                     : t("info.restrictions.someSections", { n: s.sections, total: s.of })}
                 </div>
               ))}
-              <RestrictionValues values={displayValues(g.codes, labels, k.key)} t={t} />
             </div>
           ))}
         </div>
