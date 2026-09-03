@@ -1476,7 +1476,7 @@ function VerificationPill({ verification, verified, t, isPhone, isMobile }) {
 }
 
 function MinorBlock({ path, onClear, placedSet, doneSet, majorKeys, majorClaim, outsideKeys,
-                      label = "MINOR", nameColor }) {
+                      substitutions, realPlacedSet, label = "MINOR", nameColor }) {
   const { courseMap, majorRequirements, isPhone, isMobile } = useContext(GradCtx);
   const { t } = useLanguage();
   const [minor, setMinor] = useState(null);
@@ -1516,11 +1516,18 @@ function MinorBlock({ path, onClear, placedSet, doneSet, majorKeys, majorClaim, 
   // completed one: it is a statement about the plan the student is building,
   // and a limit only reported once the courses are behind them is a limit
   // reported too late to act on.
+  //
+  // `substitutions` + `realPlacedSet` are what make a substituted course
+  // visible to it: the minor can claim a key the student never placed, paid for
+  // by a course the major claims under its own name, and an intersection of
+  // keys sees nothing (see `originResolver` in core/minorOverlap.js).
   const share = useMemo(
     () => (minor
-      ? minorShare({ minor, placedSet, majorKeys, courseMap, majorClaim, outsideKeys })
+      ? minorShare({ minor, placedSet, majorKeys, courseMap, majorClaim, outsideKeys,
+                     substitutions, realPlacedSet })
       : null),
-    [minor, placedSet, majorKeys, courseMap, majorClaim, outsideKeys]
+    [minor, placedSet, majorKeys, courseMap, majorClaim, outsideKeys,
+     substitutions, realPlacedSet]
   );
 
   // Sum using the SAME logic as SectionBlock's display numbers
@@ -2704,8 +2711,8 @@ export default function GradPanel({ wideCatalog = false }) {
         </MajorCard>}
 
         {/* ── Minor requirement sections — undergrad only ─────── */}
-        {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} majorClaim={majorClaim} outsideKeys={outsideCredit} label={t("grad.minor1.label")} nameColor={claudePreview?.changed?.has?.("minor1") ? "#fb923c" : undefined} />}
-        {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} majorClaim={majorClaim} outsideKeys={outsideCredit} label={t("grad.minor2.label")} nameColor={claudePreview?.changed?.has?.("minor2") ? "#fb923c" : undefined} />}
+        {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} majorClaim={majorClaim} outsideKeys={outsideCredit} substitutions={effectiveSubstitutions} realPlacedSet={realPlacedSet} label={t("grad.minor1.label")} nameColor={claudePreview?.changed?.has?.("minor1") ? "#fb923c" : undefined} />}
+        {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} majorKeys={majorClaimedKeys} majorClaim={majorClaim} outsideKeys={outsideCredit} substitutions={effectiveSubstitutions} realPlacedSet={realPlacedSet} label={t("grad.minor2.label")} nameColor={claudePreview?.changed?.has?.("minor2") ? "#fb923c" : undefined} />}
 
         {/* ── PlusOne — after the minors, matching the selector order above.
                Last of the program cards because it is the only one that is

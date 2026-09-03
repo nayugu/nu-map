@@ -681,7 +681,12 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   /** Northeastern's 50% cap on double counting a minor, as printed. */
   function shareNoteHtml(prog) {
     const line = _minorShareNote(
+      // `substitutions` + `realPlacedSet` together are what let the cap see a
+      // course claimed under two names — without them a substituted plan prints
+      // a budget of zero. Both are already derived above; passing them is the
+      // whole wiring.
       minorShare({ minor: prog, placedSet, majorKeys: majorClaimedKeys, courseMap, majorClaim,
+                   substitutions, realPlacedSet,
                    outsideKeys: outsideCreditKeys({ placements, grades, placedOut, courseMap }) }),
       unitName);
     return line ? `<div class="sec-note">${esc(line)}</div>` : "";

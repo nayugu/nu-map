@@ -254,13 +254,30 @@ export function majorClaimOf(programs, courseMap = {}) {
  *          denominator, so there is no percentage to report.
  */
 export function minorShare({ minor, placedSet, majorKeys, courseMap = {},
-                             majorClaim = null, outsideKeys = null } = {}) {
+                             majorClaim = null, outsideKeys = null,
+                             substitutions = [], realPlacedSet = null } = {}) {
   const sections = minorRequirementSections(minor);
   if (!sections.length) return null;
 
   const placed  = placedSet instanceof Set ? placedSet : new Set(placedSet ?? []);
   const major   = majorKeys instanceof Set ? majorKeys : new Set(majorKeys ?? []);
   const outside = outsideKeys instanceof Set ? outsideKeys : new Set(outsideKeys ?? []);
+
+  // Every question below is "did these two audits claim the SAME COURSE", and
+  // a substitution is precisely a second name for one course — so it is asked
+  // of the real course, never of the key.
+  const { originsOf, familyOf } = substitutionOrigins(substitutions, placed, realPlacedSet);
+  /** Every real course any of these keys could be paid for by. */
+  const originSet = (keys) => new Set([...keys].flatMap(originsOf));
+  /**
+   * Is this key paid for out of `origins`?
+   *
+   * EVERY candidate, not any: with two courses offering to pay for one key the
+   * student can mean either, and charging on the strength of the charged one
+   * invents a violation (see `substitutionOrigins`). Identical to the old test
+   * for the single-candidate case, which is every plan measured.
+   */
+  const paidFrom = (origins) => (k) => originsOf(k).every(o => origins.has(o));
 
   // One unit per section, computed once: `demandOf` and `satisfiedOf` must be
   // given the SAME unit or their difference stops meaning anything.
@@ -276,8 +293,12 @@ export function minorShare({ minor, placedSet, majorKeys, courseMap = {},
   // that were never Northeastern coursework taken for it. The policy puts both
   // under one 50% ceiling; they are reported apart because "shared with your
   // major" is a different sentence to say to a student than "transferred in".
-  const sharedKeys  = [...claimed].filter(k => major.has(k)).sort();
-  const outsideOnly = [...claimed].filter(k => outside.has(k) && !major.has(k)).sort();
+  const majorOrigins   = originSet(major);
+  const outsideOrigins = originSet(outside);
+  const fromMajor   = paidFrom(majorOrigins);
+  const fromOutside = paidFrom(outsideOrigins);
+  const sharedKeys  = [...claimed].filter(fromMajor).sort();
+  const outsideOnly = [...claimed].filter(k => fromOutside(k) && !fromMajor(k)).sort();
   const sharedSH  = sharedKeys.reduce((n, k) => n + (courseMap[k]?.sh ?? 0), 0);
   const outsideSH = outsideOnly.reduce((n, k) => n + (courseMap[k]?.sh ?? 0), 0);
 
@@ -297,10 +318,17 @@ export function minorShare({ minor, placedSet, majorKeys, courseMap = {},
              sharedKeys: [], outsideKeys: [], releasedKeys: [] };
   }
 
-  /** Everything the minor may not pay for itself with. */
-  const charged = new Set([...major, ...outside]);
+  /**
+   * Everything the minor may not pay for itself with — as PLACED KEYS, one
+   * origin at a time. Withholding a substituted course means withholding the
+   * real course AND the virtual key it stands behind: leaving either in the
+   * pool lets the minor re-satisfy itself with the very credit being charged.
+   */
+  const blockedBy = (origins) => new Set([...placed].filter(paidFrom(origins)));
 
-  let uniqueSH = minorWithout(charged);
+  const chargedOrigins = new Set([...majorOrigins, ...outsideOrigins]);
+
+  let uniqueSH = minorWithout(blockedBy(chargedOrigins));
   let dependentSH = Math.max(0, claimedSH - uniqueSH);
   let releasedKeys = [];
 
@@ -308,11 +336,16 @@ export function minorShare({ minor, placedSet, majorKeys, courseMap = {},
   // credit is not a labelling choice — a course taken elsewhere was taken
   // elsewhere, whatever the audit decides to do with it.
   if (dependentSH - capSH > EPS && typeof majorClaim === "function" && sharedKeys.length) {
-    releasedKeys = releasableFromMajor(sharedKeys, placed, majorClaim, courseMap);
+    // Asked in ORIGIN space: the major registered for the real course, so
+    // "can you do without this" has to name that course, and the simulation
+    // has to remove its virtual key too or the major keeps it either way.
+    releasedKeys = releasableFromMajor(
+      [...originSet(sharedKeys)].sort(), placed, majorClaim, courseMap, familyOf);
     if (releasedKeys.length) {
-      const stillCharged = new Set([...charged].filter(
-        k => outside.has(k) || !releasedKeys.includes(k)));
-      uniqueSH = minorWithout(stillCharged);
+      const released = new Set(releasedKeys);
+      const stillCharged = new Set([...chargedOrigins].filter(
+        o => outsideOrigins.has(o) || !released.has(o)));
+      uniqueSH = minorWithout(blockedBy(stillCharged));
       dependentSH = Math.max(0, claimedSH - uniqueSH);
     }
   }
@@ -366,6 +399,114 @@ export function outsideCreditKeys({ placements = {}, grades = {}, placedOut = []
 }
 
 /**
+ * "Which course actually pays for this key?"
+ *
+ * ── Why the cap could not see a substitution ─────────────────────
+ *
+ * `applySubstitutions` puts a VIRTUAL key in the placed set: `{from, to}` means
+ * the student took `from`, and `to` is treated as present so requirement checks
+ * see it. Every audit then allocates over that set indifferently — which is the
+ * point, and which is also how one course comes to be claimed under two
+ * different names. A student whose minor requires A, who never took A, and who
+ * substituted B (a course their major requires) for it, is double counting B;
+ * the minor claims A, the major claims B, and an intersection of KEYS is empty.
+ * Measured on that exact plan before this existed: `dependentSH` 0 against a
+ * real 4 SH of shared credit, and the row said "0 of 4 SH allowed" — silent, in
+ * the direction that permits more overlap than the registrar does.
+ *
+ * The mirror case is the same fact from the other side (the MAJOR substitutes a
+ * course the minor requires), and so is transfer credit: a `T`-graded course
+ * substituted for a minor requirement is still transfer credit, and was
+ * escaping the same ceiling.
+ *
+ * ── A real placement is never a stand-in ─────────────────────────
+ *
+ * The rule is deliberately one-sided: a key is virtual only when the student
+ * did NOT place it themselves. If A is on the board for real, it pays for
+ * itself no matter what else was substituted for it — mapping it to `from`
+ * would charge a course the minor is paying for with its own credit, which is a
+ * FALSE violation, the one direction this module refuses to fail in.
+ *
+ * That is why `realPlacedSet` is required for any mapping to happen at all: the
+ * post-substitution set cannot distinguish a virtual key from a real one, so a
+ * caller that does not say gets the old, permissive answer rather than a guess.
+ * Chains do not arise — `applySubstitutions` reads real placements only, so a
+ * virtual key can never itself be a `from` — but the resolver is written to
+ * stop at one hop regardless, so a malformed list cannot loop.
+ *
+ * ── A key can have MORE THAN ONE candidate, and picking one is wrong ──
+ *
+ * Nothing stops a plan carrying two substitutions with the same target: the
+ * editor dedupes `{from, to}` PAIRS, and a shared or hand-edited plan can carry
+ * anything. Then one requirement key has two courses offering to pay for it and
+ * the student has told us both.
+ *
+ * The first version of this resolved that with `min(from)` — deterministic, and
+ * WRONG in the one direction this module refuses to fail in. Measured on a plan
+ * offering BB2000 (which the major claims) and CC3000 (which nothing claims)
+ * for the same key: the alphabetical pick took BB2000 in BOTH orderings and
+ * declared the minor 8 SH over its cap, when a valid reading of the student's
+ * own plan is 4 SH and comfortably inside it. A false violation, invented by a
+ * tiebreak. That is the same mistake the "greedy-allocation artefact" tests in
+ * this module exist to prevent — a course the student could have paid for
+ * another way is not double counting.
+ *
+ * So candidates are returned as a SET and the charge is marginal, exactly like
+ * `dependentSH` above: a key is charged only when EVERY course that could pay
+ * for it is already charged. One candidate — every real plan — behaves as
+ * before; two agree or the key goes free.
+ *
+ * ── One resolver, two surfaces ───────────────────────────────────
+ *
+ * It is exported because the 2x badge needs the same answer: the board draws
+ * the badge on the REAL course, and without this it asked whether the minor
+ * claimed `BB2000` — which it never does, it claims `AA1000` — so the card the
+ * panel had just charged 4 SH for carried no mark at all. `familyOf` is the
+ * inverse direction the badge needs: real course → every key that stands for
+ * it. Deriving either rule twice is how the panel and the board come to
+ * disagree in front of the one person who can see both. `familyOf` takes ANY
+ * candidate rather than a sole one, so the board can over-mark a two-candidate
+ * key but can never under-mark one the panel charged.
+ *
+ * @param {{from: string, to: string}[]} substitutions
+ * @param {Set<string>} placed      post-substitution keys
+ * @param {?Set<string>} realPlaced what the student actually placed
+ * @returns {{originsOf: (key: string) => string[],
+ *            familyOf: (key: string) => string[]}}
+ */
+export function substitutionOrigins(substitutions, placed, realPlaced) {
+  const placedSet = placed instanceof Set ? placed : new Set(placed ?? []);
+  const candidates = new Map();      // virtual key → real courses offering to pay
+
+  if (Array.isArray(substitutions) && substitutions.length && realPlaced) {
+    const real = realPlaced instanceof Set ? realPlaced : new Set(realPlaced ?? []);
+    for (const sub of substitutions) {
+      const from = sub?.from, to = sub?.to;
+      if (!from || !to || from === to) continue;
+      // The target has to be virtual (not placed for real) and the source has
+      // to be something the student really holds. A virtual key can never pay
+      // for another, so no chain can form and no cycle can loop.
+      if (real.has(to) || !real.has(from) || !placedSet.has(to)) continue;
+      if (!candidates.has(to)) candidates.set(to, new Set());
+      candidates.get(to).add(from);
+    }
+  }
+
+  const family = new Map();          // real course → the keys it stands behind
+  for (const [key, sources] of candidates) {
+    for (const src of sources) {
+      if (!family.has(src)) family.set(src, [src]);
+      family.get(src).push(key);
+    }
+  }
+
+  return {
+    originsOf: (k) => (candidates.has(k) ? [...candidates.get(k)].sort() : [k]),
+    familyOf:  (k) => family.get(k) ?? [k],
+  };
+}
+
+/**
  * The largest set of shared courses the major can do without ALL AT ONCE.
  *
  * Greedy over an independence system: dropping fewer courses can never satisfy
@@ -378,7 +519,8 @@ export function outsideCreditKeys({ placements = {}, grades = {}, placedOut = []
  * course count, and a 5 SH course the major can spare is worth more to the
  * student than a 1 SH lab.
  */
-function releasableFromMajor(sharedKeys, placed, majorClaim, courseMap) {
+function releasableFromMajor(sharedKeys, placed, majorClaim, courseMap,
+                             familyOf = (k) => [k]) {
   // The callback belongs to a caller — the panel's own allocator, a report's,
   // a test's — and this runs inside the graduation audit. A callback that
   // throws must cost the student a slightly stricter figure, not the panel.
@@ -392,8 +534,11 @@ function releasableFromMajor(sharedKeys, placed, majorClaim, courseMap) {
   const released = [];
   for (const key of order) {
     const without = new Set(placed);
-    for (const r of released) without.delete(r);
-    without.delete(key);
+    // A course leaves with every key that stands for it — the real course and
+    // any virtual substitution target it satisfies. Removing one of the two
+    // asks a question about a plan that cannot exist.
+    for (const r of released) for (const k of familyOf(r)) without.delete(k);
+    for (const k of familyOf(key)) without.delete(k);
     const next = ask(without);
     // A different number of sections means the two runs are not comparable —
     // decline rather than compare whatever lines up.

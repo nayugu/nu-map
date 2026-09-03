@@ -18,7 +18,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   minorShare, minorRequirementSections, majorClaimOf, outsideCreditKeys,
-  MINOR_SHARE_FRACTION,
+  substitutionOrigins, MINOR_SHARE_FRACTION,
 } from "../../src/core/minorOverlap.js";
 import { allocateSections, courseKey } from "../../src/core/gradRequirements.js";
 import { _minorShareNote } from "../../src/core/planModel.js";
@@ -512,6 +512,191 @@ test("share › omitting outsideKeys leaves the old answer untouched", () => {
                                  courseMap: CM });
   assert.deepEqual(withNone, withEmpty);
   assert.equal(withNone.dependentSH, 4);
+});
+
+// ── Substitutions ────────────────────────────────────────────────
+// A substitution `{from, to}` puts a VIRTUAL key in the placed set: the student
+// took `from`, and `to` is treated as present so requirement checks see it.
+// Every accounting that asks "did these two programs claim the same course"
+// therefore has to ask it of the REAL course, because the two audits can name
+// one course by two different keys and the overlap disappears.
+
+test("share › substituting a MAJOR course for a minor requirement is double counting", () => {
+  // The case a student hits: the minor requires AA1000, they never took it, and
+  // they substituted BB2000 — which their major requires — for it. One course,
+  // both audits, and the minor's claim is a key that is not on the board.
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const placed = new Set(["AA1001", "BB2000", "AA1000"]);   // AA1000 is the virtual key
+  const r = minorShare({ minor: two, placedSet: placed, majorKeys: new Set(["BB2000"]),
+                         courseMap: CM, realPlacedSet: new Set(["AA1001", "BB2000"]),
+                         substitutions: [{ from: "BB2000", to: "AA1000" }] });
+  assert.equal(r.dependentSH, 4, "the substituted slot is paid for by a major course");
+  assert.ok(r.sharedKeys.includes("AA1000"));
+});
+
+test("share › the MAJOR's substitution is the same fact, seen from the other side", () => {
+  // Mirror image: the student took AA1000 (which the minor requires) and
+  // substituted it for the major's BB2000. The major claims a virtual key now,
+  // and the minor claims the real course.
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const placed = new Set(["AA1000", "AA1001", "BB2000"]);   // BB2000 is the virtual key
+  const r = minorShare({ minor: two, placedSet: placed, majorKeys: new Set(["BB2000"]),
+                         courseMap: CM, realPlacedSet: new Set(["AA1000", "AA1001"]),
+                         substitutions: [{ from: "AA1000", to: "BB2000" }] });
+  assert.equal(r.dependentSH, 4);
+  assert.ok(r.sharedKeys.includes("AA1000"));
+});
+
+test("share › a course the student REALLY placed is never someone else's stand-in", () => {
+  // The precision half. AA1000 is on the board for real AND is the target of a
+  // substitution from BB2000; the minor is paying for it with its own course,
+  // so nothing here is shared. Keying on the substitution list alone would
+  // charge it, which is a false violation — the expensive direction.
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const placed = new Set(["AA1000", "AA1001", "BB2000"]);
+  const r = minorShare({ minor: two, placedSet: placed, majorKeys: new Set(["BB2000"]),
+                         courseMap: CM,
+                         realPlacedSet: new Set(["AA1000", "AA1001", "BB2000"]),
+                         substitutions: [{ from: "BB2000", to: "AA1000" }] });
+  assert.equal(r.dependentSH, 0);
+  assert.equal(r.over, false);
+});
+
+test("share › transfer credit cannot be laundered through a substitution", () => {
+  // The same hole against the other source under the ceiling: a transferred
+  // course substituted for a minor requirement is still transfer credit.
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const placed = new Set(["AA1001", "BB2000", "AA1000"]);
+  const r = minorShare({ minor: two, placedSet: placed, majorKeys: new Set(),
+                         outsideKeys: new Set(["BB2000"]), courseMap: CM,
+                         realPlacedSet: new Set(["AA1001", "BB2000"]),
+                         substitutions: [{ from: "BB2000", to: "AA1000" }] });
+  assert.equal(r.dependentSH, 4);
+  assert.equal(r.outsideSH, 4);
+});
+
+test("share › the release asks the major to give up the REAL course", () => {
+  // The major's fallback has to be tested against the course it actually
+  // registered for. Asked to do without the virtual key it never held, the
+  // major answers "no change" and every shared course looks unreleasable.
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const claim = majorOf(["BB2000", "CC3000"], ["AA1001"]);
+  const placed = new Set(["AA1001", "BB2000", "CC3000", "AA1000"]);
+  const r = minorShare({ minor: two, placedSet: placed, majorKeys: claim(placed).claimed,
+                         courseMap: CM, majorClaim: claim,
+                         realPlacedSet: new Set(["AA1001", "BB2000", "CC3000"]),
+                         substitutions: [{ from: "BB2000", to: "AA1000" }] });
+  // The major can fall back on CC3000, so its BB2000 — and with it the minor's
+  // AA1000 slot — is released; only AA1001 is genuinely shared.
+  assert.equal(r.dependentSH, 4);
+  assert.equal(r.over, false);
+});
+
+test("share › with no substitutions the answer is byte-identical", () => {
+  // The inertness rail. This changes what a substituted plan reports and must
+  // change nothing else — 8 of 10 measured plans carry no substitution at all.
+  const plain = minorShare({ minor: THREE, placedSet: new Set(ALL_THREE),
+                             majorKeys: new Set(["AA1000"]), courseMap: CM });
+  for (const extra of [{ substitutions: [] },
+                       { realPlacedSet: new Set(ALL_THREE) },
+                       { substitutions: [], realPlacedSet: new Set(ALL_THREE) }]) {
+    assert.deepEqual(minorShare({ minor: THREE, placedSet: new Set(ALL_THREE),
+                                  majorKeys: new Set(["AA1000"]), courseMap: CM, ...extra }),
+                     plain);
+  }
+});
+
+// ── The resolver itself, attacked directly ───────────────────────
+// It is exported because the badge needs the same answer as the cap, so its
+// edge cases are worth stating rather than reaching through minorShare.
+
+test("origins › a virtual target resolves to the course that pays for it", () => {
+  const s = substitutionOrigins([{ from: "BB2000", to: "AA1000" }],
+                                new Set(["BB2000", "AA1000"]), new Set(["BB2000"]));
+  assert.deepEqual(s.originsOf("AA1000"), ["BB2000"]);
+  assert.deepEqual(s.originsOf("BB2000"), ["BB2000"]);
+  assert.deepEqual(s.familyOf("BB2000").sort(), ["AA1000", "BB2000"]);
+  assert.deepEqual(s.familyOf("CC3000"), ["CC3000"]);
+});
+
+test("origins › with no real placed set nothing is mapped", () => {
+  // The permissive answer, deliberately: a caller that cannot say which keys
+  // are virtual gets the old behaviour rather than a guess that could invent a
+  // violation. Every shipped caller passes it.
+  const s = substitutionOrigins([{ from: "BB2000", to: "AA1000" }],
+                                new Set(["BB2000", "AA1000"]), null);
+  assert.deepEqual(s.originsOf("AA1000"), ["AA1000"]);
+});
+
+test("origins › junk entries are skipped, never thrown on", () => {
+  const s = substitutionOrigins(
+    [null, undefined, {}, { from: "BB2000" }, { to: "AA1000" },
+     { from: "AA1000", to: "AA1000" },                       // self
+     { from: "CC3000", to: "AA1002" },                       // source not placed
+     { from: "BB2000", to: "BB2001" }],                      // target not placed
+    new Set(["BB2000", "AA1000"]), new Set(["BB2000", "AA1000"]));
+  assert.deepEqual(s.originsOf("AA1000"), ["AA1000"]);
+});
+
+test("origins › two sources for one target are BOTH candidates", () => {
+  // Not a tiebreak. The student offered two courses for one requirement and
+  // either could be the one that pays, so both come back and the charge is
+  // decided by whether they are ALL charged — see the false-violation test
+  // below, which is what the first version of this got wrong.
+  const placed = new Set(["AA1001", "BB2000", "AA1000"]);
+  const real   = new Set(["AA1001", "BB2000"]);
+  const a = substitutionOrigins([{ from: "BB2000", to: "AA1000" },
+                                 { from: "AA1001", to: "AA1000" }], placed, real);
+  const b = substitutionOrigins([{ from: "AA1001", to: "AA1000" },
+                                 { from: "BB2000", to: "AA1000" }], placed, real);
+  assert.deepEqual(a.originsOf("AA1000"), ["AA1001", "BB2000"]);
+  assert.deepEqual(a.originsOf("AA1000"), b.originsOf("AA1000"), "order of entry changed the answer");
+});
+
+test("share › a key ANOTHER course could have paid for is not charged", () => {
+  // The defect the alphabetical tiebreak shipped with, stated as a test.
+  // BB2000 is claimed by the major; CC3000 is claimed by nothing; both are
+  // offered for AA1000. `min(from)` took BB2000 in both orderings and called an
+  // 8 SH plan over a 6 SH cap — a violation invented by sort order.
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const placed = new Set(["AA1001", "BB2000", "CC3000", "AA1000"]);
+  const real   = new Set(["AA1001", "BB2000", "CC3000"]);
+  const r = minorShare({ minor: two, placedSet: placed,
+                         majorKeys: new Set(["BB2000", "AA1001"]), courseMap: CM,
+                         realPlacedSet: real,
+                         substitutions: [{ from: "BB2000", to: "AA1000" },
+                                         { from: "CC3000", to: "AA1000" }] });
+  assert.equal(r.dependentSH, 4, "only AA1001, which the major genuinely claims");
+  assert.equal(r.over, false);
+  assert.deepEqual(r.sharedKeys, ["AA1001"]);
+});
+
+test("share › when EVERY candidate is charged, the key is charged", () => {
+  // The other half: ambiguity is not an escape hatch. Both courses offered for
+  // AA1000 are the major's, so whichever the student meant, the major pays.
+  const two = minor(SECTION("Core", 2, C("AA", 1000), C("AA", 1001)));
+  const placed = new Set(["AA1001", "BB2000", "CC3000", "AA1000"]);
+  const real   = new Set(["AA1001", "BB2000", "CC3000"]);
+  const r = minorShare({ minor: two, placedSet: placed,
+                         majorKeys: new Set(["BB2000", "CC3000"]), courseMap: CM,
+                         realPlacedSet: real,
+                         substitutions: [{ from: "BB2000", to: "AA1000" },
+                                         { from: "CC3000", to: "AA1000" }] });
+  assert.equal(r.dependentSH, 4);
+  assert.deepEqual(r.sharedKeys, ["AA1000"]);
+});
+
+test("origins › a chain cannot form, and a cycle cannot loop", () => {
+  // `applySubstitutions` reads REAL placements only, so a virtual key can never
+  // be a source — but a hand-edited or shared plan can carry anything, and this
+  // must terminate on it.
+  const s = substitutionOrigins(
+    [{ from: "BB2000", to: "AA1000" }, { from: "AA1000", to: "AA1001" },
+     { from: "AA1001", to: "BB2000" }],
+    new Set(["BB2000", "AA1000", "AA1001"]), new Set(["BB2000"]));
+  assert.deepEqual(s.originsOf("AA1000"), ["BB2000"]);
+  // AA1000 is not real, so it cannot pay for AA1001.
+  assert.deepEqual(s.originsOf("AA1001"), ["AA1001"]);
 });
 
 // ── majorClaimOf: one owner for "what the majors claim" ──────────

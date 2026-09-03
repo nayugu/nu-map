@@ -26,6 +26,7 @@ import {
 } from "../core/programEligibility.js";
 import {
   minorRequirementSections, minorShare, majorClaimOf, outsideCreditKeys,
+  substitutionOrigins,
 } from "../core/minorOverlap.js";
 
 const EMPTY = new Set();
@@ -106,12 +107,19 @@ export function RelevanceProvider({ children }) {
    * printed report. Three copies of it existed; this is the second of them
    * folded back in.
    */
-  const placedSet = useMemo(
-    () => derivePlanSets({
-      placements, grades, substitutions: effectiveSubstitutions, placedOut, courseMap,
-      dynSemIdx: SEM_INDEX, curIdx: currentSemIdx,
-      specialTermPl, specialTermTypes: specialTerms?.getTypes() ?? [],
-    }).placedSet,
+  // Both halves of the same derivation: `placedSet` is what satisfies
+  // requirements (substitution targets included) and `realPlacedSet` is what
+  // the student actually placed. The double-counting cap needs both, because
+  // telling a virtual key from a real one is the whole of it.
+  const { placedSet, realPlacedSet } = useMemo(
+    () => {
+      const sets = derivePlanSets({
+        placements, grades, substitutions: effectiveSubstitutions, placedOut, courseMap,
+        dynSemIdx: SEM_INDEX, curIdx: currentSemIdx,
+        specialTermPl, specialTermTypes: specialTerms?.getTypes() ?? [],
+      });
+      return { placedSet: sets.placedSet, realPlacedSet: sets.realPlacedSet };
+    },
     [placements, grades, effectiveSubstitutions, placedOut, courseMap, SEM_INDEX,
      currentSemIdx, specialTermPl, specialTerms]
   );
@@ -165,6 +173,9 @@ export function RelevanceProvider({ children }) {
 
   const value = useMemo(() => {
     const majorKeys = majorClaim(placedSet).claimed;
+    // Real course ↔ the substitution targets it stands behind. Same function
+    // the cap uses, so the badge and the panel cannot answer differently.
+    const subs = substitutionOrigins(effectiveSubstitutions, placedSet, realPlacedSet);
 
     const minorKeys = new Set();
     // Per-minor double-counting state, so the board can mark a card without
@@ -177,7 +188,8 @@ export function RelevanceProvider({ children }) {
       allocateSections(minorRequirementSections(m), placedSet, used, courseMap);
       used.forEach(k => { if (!majorKeys.has(k)) minorKeys.add(k); });
       const share = minorShare({ minor: m, placedSet, majorKeys, courseMap, majorClaim,
-                                 outsideKeys });
+                                 outsideKeys, substitutions: effectiveSubstitutions,
+                                 realPlacedSet });
       if (share) minorCaps.push({ n: i + 1, name: m.name ?? "", share });
     }
 
@@ -218,10 +230,16 @@ export function RelevanceProvider({ children }) {
     // Collect EVERY program the key is allocated to — a course can double-dip
     // across programs (count toward a major and a minor), and be required for
     // one but an elective for another.
+    // A substitution lets one course be claimed under two names, so a program
+    // that allocated the VIRTUAL key allocated this course. Without this the
+    // board drew no badge on the very course the panel had just charged
+    // against the minor's 50% budget — the two surfaces contradicting each
+    // other in front of the one person who can see both.
     const attribute = (key, allocs) => {
       const roles = [];
+      const names = subs.familyOf(key);
       for (let i = 0; i < progs.length; i++) {
-        if (!allocs[i].has(key)) continue;
+        if (!names.some(k => allocs[i].has(k))) continue;
         const c = courseMap[key];
         const kind = c && courseEligible(c, progs[i].split.required) ? "required" : "elective";
         roles.push({ type: progs[i].type, n: progs[i].n, numbered: progs[i].numbered, kind });
@@ -303,8 +321,12 @@ export function RelevanceProvider({ children }) {
     // is: without them the memo keeps the claim function it closed over, so
     // changing the second major's concentration would leave every card marked
     // against the previous one.
+    // `effectiveSubstitutions` and `realPlacedSet` are listed for that same
+    // reason: without them, adding a substitution leaves the badge and the
+    // minor caps measuring the plan as it was before the swap.
   }, [majorData, major2Data, minor1Data, minor2Data, conc, conc2, majorClaim, outsideKeys,
-      placedSet, courseMap, workTermCourse, coopProgramOptions]);
+      placedSet, realPlacedSet, effectiveSubstitutions, courseMap, workTermCourse,
+      coopProgramOptions]);
 
   return <RelevanceContext.Provider value={value}>{children}</RelevanceContext.Provider>;
 }

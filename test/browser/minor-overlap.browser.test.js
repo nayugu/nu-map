@@ -58,7 +58,7 @@ describe("minor · the double-counting cap", () => {
    * live plan on unload, so a reload overwrites anything poked into
    * localStorage first (see coop-grant.browser.test.js).
    */
-  const seed = (major, minor1, placements) => `(${((mj, mn, pl) => {
+  const seed = (major, minor1, placements, substitutions = []) => `(${((mj, mn, pl, sb) => {
     const P = "ncp-";
     localStorage.setItem(P + "plan-index", JSON.stringify([
       { id: "default", name: "T", studentType: "undergrad", parentId: null, lastOpened: Date.now() },
@@ -69,16 +69,17 @@ describe("minor · the double-counting cap", () => {
       entSem: "fall", entYear: 2025, gradSem: "spring", gradYear: 2029,
       currentSemId: "fall2025",
       major: mj, minor1: mn, placements: pl,
-      specialTermPl: {}, semOrders: {}, placedOut: [], substitutions: [],
+      specialTermPl: {}, semOrders: {}, placedOut: [], substitutions: sb,
     }));
     localStorage.setItem(P + "tour-seen", "true");
-  }).toString()})(${JSON.stringify(major)},${JSON.stringify(minor1)},${JSON.stringify(placements)})`;
+  }).toString()})(${JSON.stringify(major)},${JSON.stringify(minor1)},${JSON.stringify(placements)},${JSON.stringify(substitutions)})`;
 
-  async function panelText({ major, minor1, placements = {}, expectMinor = true }) {
+  async function panelText({ major, minor1, placements = {}, substitutions = [],
+                             expectMinor = true }) {
     assert.equal(launchError, null,
       `chromium unavailable — run \`npx playwright install chromium\`: ${launchError?.message}`);
     const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
-    await ctx.addInitScript(seed(major, minor1, placements));
+    await ctx.addInitScript(seed(major, minor1, placements, substitutions));
     const page = await ctx.newPage();
     const errors = [];
     page.on("pageerror", e => errors.push(String(e?.message ?? e)));
@@ -131,6 +132,33 @@ describe("minor · the double-counting cap", () => {
                         "a false violation against an unrelated major");
   });
 
+  // ── Substitutions ───────────────────────────────────────────────
+  // A substitution puts a VIRTUAL key in the placed set, so one course can be
+  // claimed under two names — the minor's requirement key and the major's own
+  // — and an intersection of keys sees nothing. ACCT 1201 is a BACJ
+  // requirement and no part of the minor; substituted for CRIM 1120 it is
+  // double counted, and before the fix the panel reported 8 SH instead of 12
+  // and called the plan comfortable.
+
+  const SUB_PLACE = { CRIM1100: "fall2025", CRIM1110: "fall2025", ACCT1201: "spr2026" };
+  const SUB = [{ from: "ACCT1201", to: "CRIM1120" }];
+
+  test("a major course substituted for a minor requirement is counted", async () => {
+    const text = await panelText({ major: BACJ, minor1: CJ_MINOR,
+                                   placements: SUB_PLACE, substitutions: SUB });
+    assert.match(text, /12\s+of 10 SH allowed/, `substituted credit went uncounted:\n${text.slice(0, 2000)}`);
+    assert.match(text, /2 SH of the minor requirements/);
+  });
+
+  test("the same plan WITHOUT the substitution is 4 SH lighter", async () => {
+    // The control that makes the test above a measurement of the substitution
+    // rather than of the placements: same board, no swap, and the minor's third
+    // requirement simply goes unmet.
+    const text = await panelText({ major: BACJ, minor1: CJ_MINOR, placements: SUB_PLACE });
+    assert.match(text, /8\s+of 10 SH allowed/, `expected only the two CRIM courses:\n${text.slice(0, 2000)}`);
+    assert.doesNotMatch(text, /do not overlap with your major requirements/);
+  });
+
   // ── The 2× badge on the card ────────────────────────────────────
   // The row above proves the arithmetic reaches the panel. This proves it
   // reaches the BOARD, which is a different chain: RelevanceContext has to
@@ -144,10 +172,11 @@ describe("minor · the double-counting cap", () => {
    * the UNPLACED state: an eligible course the student has not placed lives in
    * the bank, and the bank does not list the catalog until asked.
    */
-  async function boardText({ major, minor1, placements = {}, search = null }) {
+  async function boardText({ major, minor1, placements = {}, substitutions = [],
+                             search = null }) {
     assert.equal(launchError, null, "chromium unavailable");
     const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
-    await ctx.addInitScript(seed(major, minor1, placements));
+    await ctx.addInitScript(seed(major, minor1, placements, substitutions));
     const page = await ctx.newPage();
     const errors = [];
     page.on("pageerror", e => errors.push(String(e?.message ?? e)));
@@ -186,6 +215,19 @@ describe("minor · the double-counting cap", () => {
       // This pair is over its cap, so every badge in the shared set says so.
       assert.match(b, /past the half of its credit/);
     }
+  });
+
+  test("the substituting course carries the badge, on the board", async () => {
+    // The other half of the same fact, and the one that keeps the two surfaces
+    // honest: the panel charges ACCT 1201 against the minor's budget, so the
+    // card on the board must say so too. The badge is drawn on the REAL course
+    // — CRIM 1120 is not on the board at all — which is why attribution has to
+    // follow the substitution rather than the key.
+    const badges = await boardText({ major: BACJ, minor1: CJ_MINOR,
+                                     placements: SUB_PLACE, substitutions: SUB });
+    assert.equal(badges.length, 3,
+      `expected CRIM 1100, CRIM 1110 and the substituting ACCT 1201: ${JSON.stringify(badges)}`);
+    for (const b of badges) assert.match(b, /Counts toward 2 programs/);
   });
 
   test("hovering the badge explains what its colour means", async () => {
