@@ -739,7 +739,7 @@ export function specLabel(spec) {
  * section alone, which is the direction to err in: a course some other section
  * might answer is one `mergeForcedCells` may be about to merge anyway.
  */
-function keysNamedElsewhere(sections) {
+export function keysNamedElsewhere(sections) {
   const out = new Set();
   const walk = (n) => {
     if (!n || typeof n !== "object") return;
@@ -765,7 +765,7 @@ function keysNamedElsewhere(sections) {
  * @param {Set<string>} witness   `metadata.planOfStudyCourses`
  * @returns {object[]} the subset of `section.requirements` to emit, possibly empty
  */
-function witnessedSharedNodes(section, elsewhere, witness) {
+export function witnessedSharedNodes(section, elsewhere, witness) {
   const reqs = section?.requirements ?? [];
   if (!reqs.length || !witness.size) return [];
   // A "choose N of M" section's children are OPTIONS. The plan of study takes one
