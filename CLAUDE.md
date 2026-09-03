@@ -8,8 +8,9 @@ updates course data. Two workflows are legacy and easy to mistake for the live p
 | Workflow | Cadence | Role |
 |---|---|---|
 | `update-courses.yml` | Monthly (1st, 06:00 UTC) | **The main pipeline.** Full catalog scrape of all ~130 subjects — titles, descriptions, credits, prereqs/coreqs — plus **NUPath from Tableau** (`fetch-nupath --tableau` → `merge-nupath`), Banner availability, **primary instructors** (`--prof`), **class-standing restrictions** (`--restrictions`) — each one newest completed term per run, cached forever after, one Banner call per section — offering summary, **term windows** (`derive-term-windows`), and manual patches. Pushes directly to main. |
-| `update-majors.yml` | Bimonthly (odd months) | Undergrad program requirements. Scrape → `check-major-integrity` → `verify-majors --report --write` → ratchet → push. |
-| `update-grad-majors.yml` | Bimonthly (odd months) | Graduate program requirements, same four steps. |
+| `update-majors.yml` | Bimonthly (odd months, 12:00 UTC) | Undergrad program requirements. Scrape → `check-major-integrity` → `verify-majors --report --write` → ratchet → build + `npm test` → push. |
+| `update-grad-majors.yml` | Bimonthly (odd months, 15:00 UTC) | Graduate program requirements, same six steps. |
+| `data-staleness.yml` | Weekly (Mondays, 05:00 UTC) | The watchdog for the run that never happened. Every other alert is raised by the job it is about, from inside `if: failure()`, which cannot fire for a run cancelled while merely *pending*, a cron GitHub dropped, or a schedule disabled after 60 days of inactivity. Measures the last **successful run** per pipeline (40 days monthly, 75 bimonthly) — not the age of the data, which would cry wolf on a run that legitimately changed nothing. |
 | `catalog-rotate.yml` | **LEGACY — manual only** | Superseded by the monthly full scrape above. Old design: one subject every 3 days via PR review; its schedule was disabled because GitHub Actions here cannot open PRs. Do not re-enable. |
 | `update-nupath.yml` | **LEGACY — manual only** | Superseded by the Tableau step now inside `update-courses.yml`. Its one remaining use: it installs Playwright, so it is the manual escalation path if Tableau's REST and direct-CSV routes both break. Do not schedule it — it would double-write the same data. |
 
@@ -22,6 +23,28 @@ September 2026 monthly job — verify that run's log.
 
 Facts that follow from this:
 
+- **`defaults: run: shell: bash` in a data workflow is load-bearing.** Actions'
+  default shell is `bash -e` with NO pipefail, and every scrape step is written
+  `node scripts/x.js --write 2>&1 | tee /tmp/x-log.txt` — so the step's status
+  was `tee`'s and **nineteen** `process.exit(1)` rails in the course pipeline
+  alone could not fail a job. On 2026-09-01 scrape-majors printed "Refusing to
+  write", exited 1, and its step was reported green. Each scheduled workflow now
+  opens with a step that proves pipefail is on rather than assuming it. Two
+  consequences worth knowing: the `|| echo "::warning::…"` fallbacks on the
+  non-fatal steps had never run either (a Tableau outage was silent), and any
+  `grep … | head -1` inside `$( )` becomes a SIGPIPE landmine.
+- **A push made with `GITHUB_TOKEN` triggers no workflow.** Measured on the bot
+  commits: zero runs each. So the monthly data was the one class of change to
+  main that CI never saw — hence `npm run build` + `npm test` now run *inside*
+  each data workflow before it commits, and the Monday cron runs the full suite
+  rather than only the live scrape.
+- **The concurrency group enforces mutual exclusion, not order.** Cron delivery
+  drifts by hours (06:00/08:00/09:00 arrived as 11:02/12:52/13:47 on
+  2026-09-01), so majors can precede courses; that reads as a flood of "unknown
+  courses" and is named in the alert. GitHub also keeps at most ONE pending run
+  per group and cancels the previous when a third arrives — and a run cancelled
+  before it starts executes no steps, so it cannot alert. That is what
+  `data-staleness.yml` exists for.
 - NUPath designations, descriptions, and prereqs all refresh **monthly** — do not
   describe them as static, manual, or annually updated.
 - **NUPath has 13 codes, not 12.** 11 competencies, but competency 9 ("Writing
@@ -462,6 +485,25 @@ Facts that follow from this:
 - Both scrapers buffer their whole run and refuse to write if it looks like
   upstream breakage (`scripts/lib/scrape-rails.js`) — same principle as
   `fetch-nupath`'s 5% rule. They push straight to main unattended.
+- **`shared-sections.json` is a hand adjudication of the LIVE catalog, and it
+  carries an edition.** A title it cannot find on the page stops the whole run
+  (`checkSharedSectionsRail`), which is the design — but it means an edition
+  roll costs a re-adjudication: NEU renamed four of them for 2027
+  ("Integrative Course" → "Integrative Requirement Courses", and one capital
+  letter in a minor's heading). Two rules learned doing that one:
+  1. `node scripts/scrape-majors.js --url <page> --json out.json` dumps the
+     current parse. Deciding "renamed vs gone vs parsed differently" without it
+     means running with `--write` and undoing it.
+  2. **Check whether the cross-count still exists before renaming.** Two of the
+     six had stopped: NEU split a section and the duplicate that justified the
+     flag went with it. A name-only comparison is not enough — CS 4120's
+     counterpart is a RANGE pool (`CS 2300–9999`), so the ranges have to be
+     read too. Keeping a stale flag DISCOUNTS a real requirement, which is the
+     unrecoverable direction; removing one merely demands the course.
+  `ADJUDICATED_EDITION` in `scripts/lib/shared-sections.js` records which
+  catalog the titles came from, so the unit test that compares the manifest to
+  the committed corpus relaxes to a structural check while the two are
+  legitimately different editions, and tightens again by itself.
 - Program discovery uses the **sitemap**; `/azindex/` is `Disallow`ed in
   robots.txt and both scrapers used to violate it.
 - **A minor may double count at most 50% of its credit against a major**
