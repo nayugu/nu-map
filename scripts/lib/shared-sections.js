@@ -78,6 +78,35 @@ export const SHARED_SECTIONS = JSON.parse(
   readFileSync(resolve(HERE, 'shared-sections.json'), 'utf8'));
 
 /**
+ * The catalog EDITION these titles were read from.
+ *
+ * ── Why a manifest of titles needs a year on it ─────────────────────
+ *
+ * The manifest is adjudicated against the LIVE catalog; the corpus in this
+ * repository is whatever edition was last scraped. Between rolls they are the
+ * same document and the two can be compared exactly — which is what
+ * test/unit/shared-sections.test.js does, and it is a genuinely useful check
+ * against a hand-added entry naming a section that does not exist.
+ *
+ * At a roll they are two different documents, and comparing them is comparing
+ * a 2027 adjudication against a 2026 corpus. NEU rolled to 2027 on 2026-09-01
+ * and renamed four of these sections in the process ("Integrative Course" →
+ * "Integrative Requirement Courses", and "outside" → "Outside" in a minor's
+ * heading), so the manifest and the corpus now legitimately disagree and no
+ * offline test can tell that apart from a typo.
+ *
+ * Bumping this is what says "these titles describe an edition the corpus has
+ * not caught up with yet". The test relaxes to a structural check while that
+ * is true and tightens back to exact equality by itself once the scrape lands
+ * the new edition — nobody has to remember to re-tighten it.
+ *
+ * The real guard is unaffected either way: `applySharedSections` reports a
+ * title it cannot find, and the scrape rail refuses to write the run. That
+ * check runs against the live catalog, which is the only authority here.
+ */
+export const ADJUDICATED_EDITION = 2027;
+
+/**
  * Apply the manifest to one freshly-built record.
  *
  * @param {object} data   the record, mutated in place

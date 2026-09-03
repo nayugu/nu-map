@@ -14,7 +14,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { applySharedSections, SHARED_SECTIONS } from "../../scripts/lib/shared-sections.js";
+import { applySharedSections, SHARED_SECTIONS, ADJUDICATED_EDITION } from "../../scripts/lib/shared-sections.js";
 import { checkSharedSectionsRail, SHARED_RAIL_RUNBOOK } from "../../scripts/lib/scrape-rails.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "../..");
@@ -124,12 +124,36 @@ test("rail › survives records with no marker at all", () => {
 
 // ── The manifest itself ────────────────────────────────────────────
 
+/** The newest edition actually committed to this repository. */
+function committedEdition() {
+  const years = new Set();
+  for (const dir of ["undergraduate", "graduate"]) {
+    const base = join(ROOT, `data/northeastern/programs/${dir}`);
+    if (!existsSync(base)) continue;
+    for (const y of readdirSync(base)) if (/^\d{4}$/.test(y)) years.add(Number(y));
+  }
+  return Math.max(...years);
+}
+
 test("manifest › matches what the committed corpus actually carries", () => {
   // The manifest was GENERATED from the corpus, so it must still describe it. If a future
   // edit adds an entry by hand, this is what checks the program and title really exist.
+  //
+  // ── Except across an edition roll ─────────────────────────────────
+  // The manifest is adjudicated against the LIVE catalog and the corpus is the last one
+  // SCRAPED, so between rolls they are the same document and this comparison is exact.
+  // At a roll they are two different documents: NEU renamed four of these sections for
+  // 2027 while the corpus was still 2026, and no offline test can tell a legitimate
+  // rename from a typo. `ADJUDICATED_EDITION` records which document the titles came
+  // from; while it is ahead, this checks the half that still holds — every entry names a
+  // program that exists — and the exact comparison comes back by itself when the scrape
+  // lands the new edition. The live check is the scrape rail, and it is unaffected.
+  const corpusEdition = committedEdition();
+  const rolling = ADJUDICATED_EDITION > corpusEdition;
+
   const found = {};
   for (const dir of ["undergraduate", "graduate"]) {
-    const base = join(ROOT, `data/northeastern/programs/${dir}/2026`);
+    const base = join(ROOT, `data/northeastern/programs/${dir}/${corpusEdition}`);
     if (!existsSync(base)) continue;
     for (const col of readdirSync(base)) {
       const cd = join(base, col);
@@ -149,10 +173,34 @@ test("manifest › matches what the committed corpus actually carries", () => {
   }
   assert.ok(Object.keys(found).length > 50,
     `only ${Object.keys(found).length} shared sections in the corpus — did a scrape drop them?`);
-  assert.deepEqual(
-    Object.keys(SHARED_SECTIONS).sort(), Object.keys(found).sort(),
-    "the manifest and the corpus disagree about WHICH programs carry a shared section");
-  for (const k of Object.keys(found)) {
-    assert.deepEqual(SHARED_SECTIONS[k], found[k], `${k}: titles differ`);
+
+  if (!rolling) {
+    assert.deepEqual(
+      Object.keys(SHARED_SECTIONS).sort(), Object.keys(found).sort(),
+      "the manifest and the corpus disagree about WHICH programs carry a shared section");
+    for (const k of Object.keys(found)) {
+      assert.deepEqual(SHARED_SECTIONS[k], found[k], `${k}: titles differ`);
+    }
+    return;
   }
+
+  // Rolling. Titles may legitimately differ; the program must still be real, and an entry
+  // must still name at least one section, or it is doing nothing and should have been
+  // deleted rather than emptied.
+  const corpusPrograms = new Set(Object.keys(found).map(k => k.split("#")[1]));
+  for (const [key, titles] of Object.entries(SHARED_SECTIONS)) {
+    assert.ok(Array.isArray(titles) && titles.length, `${key}: an entry with no titles does nothing`);
+    assert.ok(titles.every(t => typeof t === "string" && t.trim()), `${key}: a title must be a non-empty string`);
+    assert.ok(corpusPrograms.has(key.split("#")[1]) || key.includes(`/${ADJUDICATED_EDITION}/`),
+      `${key}: names a program the corpus has never carried — a typo, or a URL that moved`);
+  }
+});
+
+test("manifest › the adjudicated edition is never behind the corpus", () => {
+  // Behind means the titles describe a catalog OLDER than the one we have scraped, which
+  // is not a state anything reaches honestly: the manifest is read from the live pages.
+  // It would silently disable the exact-comparison branch above, so it is worth naming.
+  assert.ok(ADJUDICATED_EDITION >= committedEdition(),
+    `ADJUDICATED_EDITION (${ADJUDICATED_EDITION}) is older than the committed corpus `
+    + `(${committedEdition()}) — re-adjudicate against the live catalog, or fix the constant`);
 });

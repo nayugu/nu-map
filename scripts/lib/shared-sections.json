@@ -216,9 +216,6 @@
   "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/video-arts-minor/#video_arts_minor": [
     "Required Courses (2)"
   ],
-  "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/communication-studies-design-bs/#communication_studies_and_design_bs_(boston)": [
-    "Integrative Courses"
-  ],
   "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/media-screen-studies-theatre-bs/#media_and_screen_studies_and_theatre_bs_(boston)": [
     "Foundational Courses",
     "Making Theatre"
@@ -251,10 +248,10 @@
     "Biology Capstone"
   ],
   "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-communication-studies-bs-oak/#computer_science_and_communication_studies_bs_(oakland)": [
-    "Integrative Course"
+    "Integrative Requirement Courses"
   ],
   "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-communication-studies-bs/#computer_science_and_communication_studies_bs_(boston)": [
-    "Integrative Course"
+    "Integrative Requirement Courses"
   ],
   "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-design-bs-oak/#computer_science_and_design_bs_(oakland)": [
     "Integrative Requirement"
@@ -306,7 +303,7 @@
     "Integrative Courses"
   ],
   "https://catalog.northeastern.edu/undergraduate/engineering/interdisciplinary-minors/entrepreneurial-engineering-minor/#entrepreneurial_engineering_minor": [
-    "For Undergraduates outside the College of Engineering"
+    "For Undergraduates Outside the College of Engineering"
   ],
   "https://catalog.northeastern.edu/undergraduate/engineering/mechanical-industrial/mechanical-engineering-bioengineering-bsme/#mechanical_engineering_and_bioengineering_bsme_(boston)": [
     "Integrative Courses"
@@ -346,7 +343,7 @@
     "Integrative Course Requirement"
   ],
   "https://catalog.northeastern.edu/undergraduate/science/psychology/psychology-music-bs/#psychology_and_music_bs_(boston)": [
-    "Bridge/Integrative Courses"
+    "Integrative Courses"
   ],
   "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/criminology-criminal-justice/criminal-justice-political-science-bs/#criminal_justice_and_political_science_bs_(boston)": [
     "Due Process",
@@ -361,9 +358,6 @@
   ],
   "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-economics-bs/#history_and_economics_bs_(boston)": [
     "Required Economics Courses"
-  ],
-  "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/human-services-communications-ba/#human_services_and_communication_studies_ba_(boston)": [
-    "Integrative Course"
   ],
   "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/international-affairs/cultural-anthropology-ba/#international_affairs_and_cultural_anthropology_ba_(boston)": [
     "Global Markets"
