@@ -158,6 +158,47 @@ describe("deriveRetiredUnion", () => {
       "removing the only edition naming a course must remove it from the union");
   });
 
+  describe("the missing-edition alarm", () => {
+    // The union is only as complete as the snapshots behind it. A course that
+    // lives in exactly ONE edition — born in 2027, gone in 2028 — is resolvable
+    // only if a 2027 snapshot exists, and if that capture is missed it becomes
+    // permanently unresolvable with nothing recording the loss. The archive is
+    // no fallback: it lags and has already skipped 2025-2026 entirely.
+    //
+    // `unseen` is the detector, and it needs no network and no edition field on
+    // the catalog (there is none): a snapshot of edition N holds ALL of N, so a
+    // current catalog holding courses in no snapshot has rolled past the newest
+    // capture. Tested here because it is false for the whole of the repo's
+    // present state and would otherwise first run during the roll it warns about.
+
+    test("quiet while the catalog matches a frozen edition", () => {
+      const { unseen } = deriveRetiredUnion(SNAPSHOT, [{ year: 2026, rows: SNAPSHOT }]);
+      assert.deepEqual(unseen, [],
+        "the shipped catalog IS the 2026 snapshot, so nothing in it can be unseen");
+    });
+
+    test("fires when the catalog has rolled past the newest snapshot", () => {
+      // What Oct 1 looks like: the roll removes courses AND adds 923 new ones.
+      // The additions are the signal — removals alone are ordinary retirement.
+      const { catalog } = simulateRoll(1089);
+      const { unseen } = deriveRetiredUnion(catalog, [{ year: 2026, rows: SNAPSHOT }]);
+      assert.deepEqual(unseen, ["ZZZZ9001"],
+        "the new course exists in no frozen edition, so the catalog has rolled past 2026 "
+        + "and this edition needs freezing before the NEXT roll");
+    });
+
+    test("silenced again once the new edition is frozen", () => {
+      // The alarm must be answerable, or it becomes permanent noise that gets
+      // filtered out — which is how the alert that matters goes unread.
+      const { catalog } = simulateRoll(1089);
+      const { unseen } = deriveRetiredUnion(catalog, [
+        { year: 2026, rows: SNAPSHOT },
+        { year: 2027, rows: catalog },
+      ]);
+      assert.deepEqual(unseen, [], "freezing the current edition must clear the warning");
+    });
+  });
+
   test("a revived course leaves the union", () => {
     // NEU does un-retire courses. A stale entry would offer a student a course
     // that is currently in the catalog, from the file that says it is gone.

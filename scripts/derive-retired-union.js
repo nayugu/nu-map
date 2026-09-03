@@ -176,7 +176,16 @@ export function deriveRetiredUnion(catalog, snapshots) {
     });
   }
   retired.sort((a, b) => (keyOfCourse(a) < keyOfCourse(b) ? -1 : 1));
-  return { retired, perEdition, current };
+
+  // Courses the current catalog holds that appear in NO frozen snapshot. A
+  // snapshot of edition N contains all of edition N, so a non-empty answer
+  // means the live catalog has rolled past our newest capture. Computed here
+  // rather than in main() so it is testable: the condition is false for the
+  // whole of the repo's current state and would otherwise be first exercised
+  // by the roll itself. See the caller for why it warns instead of refusing.
+  const unseen = [...current].filter(k => !held.has(k));
+
+  return { retired, perEdition, current, unseen };
 }
 
 function main() {
@@ -205,7 +214,7 @@ function main() {
   console.log(`  current catalog: ${catalog.length} courses`);
   console.log(`  frozen editions: ${editions.map(e => e.year).join(", ")}\n`);
 
-  const { retired, perEdition, current } = deriveRetiredUnion(catalog, snapshots);
+  const { retired, perEdition, current, unseen } = deriveRetiredUnion(catalog, snapshots);
   for (const [year, n] of Object.entries(perEdition)) console.log(`  ${year}: ${n} courses`);
 
   // ── Rails ──────────────────────────────────────────────────────────
@@ -234,6 +243,36 @@ function main() {
 
   console.log(`\n  retired union: ${retired.length} courses (was ${prevN})`);
   if (top.length) console.log(`  largest subjects: ${top.map(([s, n]) => `${s}(${n})`).join(" ")}`);
+
+  // ── Is an edition about to be lost? ────────────────────────────────
+  //
+  // The union is only as complete as the snapshots behind it. A course that
+  // lived in exactly ONE edition — born in the 2027 catalog, gone in the 2028
+  // one — is resolvable only if a 2027 snapshot exists. Miss that capture and
+  // it becomes permanently unresolvable for every student who took it, with
+  // nothing anywhere recording the loss. The archive is not a safety net:
+  // it lags, and it has already skipped 2025-2026 entirely.
+  //
+  // Detected without a network call and without an edition field on the
+  // catalog (there isn't one): a snapshot of edition N contains ALL of edition
+  // N, so if the current catalog holds courses that appear in NO snapshot, the
+  // live catalog has rolled past our newest frozen edition.
+  //
+  // A warning rather than a refusal, deliberately. It is TRUE for the whole
+  // year between a roll and the next capture, and the union stays correct that
+  // entire time — the loss only happens at the FOLLOWING roll. Failing here
+  // would break the monthly job every month for a year over a deadline eleven
+  // months away, which is the crying-wolf failure that gets an alarm ignored.
+  if (unseen.length) {
+    const newest = Math.max(...editions.map(e => e.year));
+    console.log(
+      `\n  ::warning::The live catalog holds ${unseen.length} course(s) in NO frozen edition, `
+      + `so it has rolled past ${newest} — the newest snapshot on disk.`);
+    console.log(
+      `             Freeze the current catalog to ${EDITIONS_DIR}/<year>/ before the NEXT roll. `
+      + `Any course unique to this edition is unresolvable once the catalog is replaced again, `
+      + `and the archive cannot be relied on to have it (2025-2026 exists nowhere as HTML).`);
+  }
 
   if (!WRITE) {
     console.log(`\n  (report only — pass --write to update ${OUT})`);
