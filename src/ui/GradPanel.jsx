@@ -1035,13 +1035,18 @@ function SharedCredit({ share }) {
         <span style={{ fontSize: 8, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
       </div>
 
-      {/* A caption for the bar, and NO figure beside it. The figure was "16.5
-          of 23 SH" — credit that counts once the cap is applied — a number
-          that appears nowhere else in the app: not on the minor's progress bar
-          directly above (which counts all 23), not in the policy sentence, not
-          on any requirement row. It needed a paragraph to explain and sat where
-          a student wants one fact. The bar carries the proportion; the amber
-          line below carries the number worth acting on. */}
+      {/* The caption EARNS its line. Under a header that says "Double
+          counting", a green bar is read as the double-counted amount — and
+          then a green bar past the half-way point reads as a broken rule. It
+          is not: the green is everything counting toward the minor, and only
+          the shared part of it is capped. Saying so is what the caption is
+          for, and dropping it was the change that made the bar unreadable.
+
+          No FIGURE beside it, though: it read "16.5 of 23 SH", credit that
+          counts once the cap is applied, and that number appears nowhere else
+          in the app — not on the minor's progress bar directly above (which
+          counts all 23), not in the policy sentence, not on any requirement
+          row. */}
       <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                     fontSize: isPhone ? 8 : 9.5, fontWeight: 600, color: "var(--text-4)",
                     marginBottom: 4 }}>

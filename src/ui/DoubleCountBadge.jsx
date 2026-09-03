@@ -80,12 +80,9 @@ function BudgetLine({ minor }) {
                     lineHeight: 1.35 }}>
         {name || minor.name}
       </div>
-      {/* NO figure line. It read "16.5 of 23 SH" — credit that counts once the
-          cap is applied — and that number appears nowhere else in the app: not
-          on the minor's progress bar (which counts all 23), not in the policy
-          sentence, not on any requirement row. A derived quantity needing a
-          paragraph of explanation, printed where a student wants one fact. The
-          bar carries the proportion and the amber line carries the number that
+      {/* No figure line: it read "16.5 of 23 SH", credit that counts once the
+          cap is applied, and that number appears nowhere else in the app. The
+          bar carries the proportion; the amber line carries the number that
           can be acted on. */}
       <div style={{ marginTop: 3 }}>
         <ShareMeter {...seg} height={4} />

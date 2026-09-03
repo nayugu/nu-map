@@ -42,8 +42,27 @@
 // number is one `minorShare` already returns:
 //
 //   ▓ counts   own + shared: everything that counts     → green
-//   ░ over     double counted past the cap             → amber HATCHING
+//   ░ over     double counted past the cap             → amber
 //   ┈ to go    not yet satisfied                       → the empty track
+//
+// ── Green can exceed half, and that is not a bug ─────────────────
+//
+// It looks like one. On a 23 SH minor with 11.5 SH double counted — exactly
+// the 50% ceiling — plus 5 SH of its own, the green runs to 72% of a bar in
+// a section headed "Double counting", and the obvious reading is "72%
+// double counted", i.e. a rule being broken.
+//
+// The cap binds the SHARED credit only; a minor's own credit is unlimited,
+// so the green legitimately passes half. A version drawing only the shared
+// credit was built to make that impossible by construction, and it was
+// worse: it threw away the answer to the question a student actually has —
+// how much of this minor do I have — to protect against a misreading of a
+// question they were not asking. The fix is the CAPTION above the bar
+// saying what the green is, not a smaller bar.
+//
+// What must never come back is a legend entry naming only PART of the
+// green: "11.5 counts toward both" under a 16.5-wide band is what made the
+// bar look like it was double counting 72%.
 //
 // `own` and `shared` are drawn as ONE green band. They were two, split by a
 // hairline, with the split named in the legend — and the answer to "how much
@@ -74,12 +93,6 @@ export default function ShareMeter({ required, own, shared, excess, height = 5 }
     <div style={{ display: "flex", height, borderRadius: height / 2,
                   background: "var(--border-2)", overflow: "hidden" }}>
       <div style={{ width: pct(own + shared), background: "var(--success-bar)" }} />
-      {/* A hairline of track between the two, so the amber is legibly a
-          DIFFERENT kind of thing rather than more fill. Credit that does not
-          count should not look like progress that does. */}
-      {excess > 0 && (own + shared) > 0 && (
-        <div style={{ width: 1, flexShrink: 0, background: "var(--border-2)" }} />
-      )}
       <div style={{ width: pct(excess), background: "var(--warn-badge-text)" }} />
     </div>
   );

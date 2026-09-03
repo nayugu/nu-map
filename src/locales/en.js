@@ -656,14 +656,14 @@ export const strings = {
   // rather than a verdict: the plan is not refused, and the way out is more
   // minor coursework the major does not claim.
   "grad.share.title":             "Double counting",
-  // The bar under this label measures the MINOR, not the cap, so the figure is
-  // the honest completion number: how much of the minor's requirement actually
-  // counts once credit past the ceiling is removed. Scaling to the ceiling
-  // instead answered a question about our arithmetic, and contradicted the
-  // progress bar directly above it.
+  // The caption over the bar, and the whole reason the bar is legible: the
+  // green is everything counting toward the MINOR, not the double-counted
+  // part, which is why it may pass half without any rule being broken. Under
+  // a header reading "Double counting" that has to be said out loud.
   "grad.share.scope":             "Counts toward this minor",
-  // The bar's bands, in the expanded detail. Two shades of green because both
-  // count; grey because that credit does not.
+  // The ONE band worth naming. The green is everything that counts toward the
+  // minor, which the caption above the bar states; a second entry naming only
+  // the shared part of that green would be a lie about the band.
   "grad.share.legend.over":       "past the limit, doesn’t count",
   // DIRECTION MATTERS, and this had it backwards. The rule limits how much of
   // the MINOR courses from the major may fulfil — not how much of the minor
