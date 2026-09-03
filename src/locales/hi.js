@@ -626,6 +626,8 @@ export const strings = {
   "course.badge.prereq":          "! पूर्व आ.",
   "course.badge.prereq.order":    "! क्रम",
   "course.badge.coreq.alone":     "! सह-आ.",
+  "course.badge.retired":         "⚠ बंद",
+  "course.tooltip.retired":       "नॉर्थईस्टर्न की कोर्स सूची में यह कोर्स अब नहीं है। आपके कैटलॉग वर्ष में यह अभी भी आवश्यक है, इसलिए इसे रखा गया है — विकल्प के लिए अपने सलाहकार से बात करें।",
   "course.badge.coreq.sep":       "⚡ सह-आ.",
   "course.tooltip.prereq.order":  "पूर्वापेक्षा उसी या बाद के सेमेस्टर में है",
   "course.tooltip.prereq.missing":"पूर्वापेक्षा अभी योजना में नहीं रखी गई है",

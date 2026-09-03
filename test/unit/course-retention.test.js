@@ -550,6 +550,90 @@ test("orchestrator › a failed subject is passed through to the judgement", () 
 const SCRAPER = readFileSync(
   fileURLToPath(new URL("../../scripts/scrape-catalog.js", import.meta.url)), "utf8");
 
+// ── What the marker must and must not do in the app ────────────────
+//
+// Source-level, and that is the honest level available: nothing in Node
+// evaluates a React component body, `test:boot` proves the app mounts but
+// cannot manufacture a retired course, and the committed catalog contains none
+// until the next scrape runs. So these pin the DECISIONS, which is what a
+// refactor actually breaks. The data half is checked for real by
+// test/invariant/catalog-covers-programs.test.js.
+
+const CARD = readFileSync(
+  fileURLToPath(new URL("../../src/ui/CourseCard.jsx", import.meta.url)), "utf8");
+const NORM = readFileSync(
+  fileURLToPath(new URL("../../src/adapters/northeastern/courseNorm.js", import.meta.url)), "utf8");
+
+test("marker › retirement never reaches the offering verdict", () => {
+  // THE rule. `offered`/`probability` feed CHART, and a probability of 0 is
+  // the only value that blocks a placement — so routing retirement through
+  // them converts an untickable requirement row into a REFUSED plan, and
+  // destroys the reason the course was retained: that this student, on this
+  // catalog year, can still satisfy the requirement with it.
+  const offering = readFileSync(
+    fileURLToPath(new URL("../../src/adapters/northeastern/courseOffering.js", import.meta.url)), "utf8");
+  const stats = readFileSync(
+    fileURLToPath(new URL("../../src/adapters/northeastern/offeringStats.js", import.meta.url)), "utf8");
+  assert.doesNotMatch(offering, /\bretired\b/,
+    "courseOffering consults the retirement marker, so a retired course now blocks placement");
+  assert.doesNotMatch(stats, /\bretired\b/,
+    "offeringStats consults the retirement marker, so a retired course now blocks placement");
+});
+
+test("marker › the flag is carried through normalisation", () => {
+  // `normalizeCourse` builds an EXPLICIT object, so an unlisted field is
+  // dropped in silence — and the consequence is a wrong badge, not a missing
+  // one: `effectiveOffered` returns `{ offered: true, source: "no-data" }` for
+  // a course with no term history, so a stripped flag reads as OFFERED in
+  // every term and CHART schedules a dead course.
+  assert.match(NORM, /raw\.retired \? \{ retired: true/,
+    "the marker is no longer carried through normalizeCourse, so it exists in the JSON and "
+    + "nowhere in the app");
+});
+
+test("marker › the card shows it WITHOUT waiting for a placement", () => {
+  // `notOffered` is gated on `inSem` because a seasonal probability is a
+  // question about a term. Retirement is not: a student picks a course out of
+  // the bank, so a warning that only appears after placement arrives after the
+  // decision it was meant to inform.
+  const decl = CARD.match(/const retired = [^;]+;/);
+  assert.ok(decl, "the card no longer derives `retired`");
+  assert.doesNotMatch(decl[0], /inSem|semOffType/,
+    "the retirement mark is now gated on placement, so it is invisible in the bank — which is "
+    + "where the course gets chosen");
+  assert.match(decl[0], /course\?\.retired/, "must tolerate a missing course object");
+});
+
+test("marker › BOTH of the card's render paths account for it", () => {
+  // The card renders a compact single glyph when narrow and a full badge row
+  // otherwise. A mark added to one path only is invisible at half the widths,
+  // and which half is a styling detail nobody re-checks.
+  assert.match(CARD, /\{retired && \(/, "the full badge row has no retired badge");
+  assert.match(CARD, /\(retired \|\| notOffered\) \? "⚠"/,
+    "the compact glyph path ignores retirement");
+  const gates = CARD.match(/\(isViolated \|\| notOffered \|\| coreqViol \|\| retired\)/g) ?? [];
+  assert.equal(gates.length, 3,
+    `${gates.length} of the card's 3 warning gates include \`retired\` — a gate that omits it `
+    + `hides the badge or mis-sizes the row around it`);
+});
+
+test("marker › the student-facing copy quotes no scrape timestamp", () => {
+  // `retiredSince` is the day OUR scrape first failed to find the course, not
+  // a day NEU announced anything. Rendering it would dress a scrape timestamp
+  // as a registrar fact, which is the confidently-wrong direction.
+  //
+  // Comments are stripped first, because the block deliberately EXPLAINS why
+  // it does not render the date — and a scan of raw text cannot tell an
+  // explanation from the thing it warns against. (This test failed on its own
+  // rationale, which is the second time that shape has come up here: a
+  // contract test once counted a `tee` inside a comment.)
+  const raw = CARD.slice(CARD.indexOf("{retired && ("), CARD.indexOf("{notOffered && ("));
+  const badge = raw.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+  assert.match(badge, /course\.badge\.retired/, "the slice no longer contains the badge");
+  assert.doesNotMatch(badge, /retiredSince/,
+    "the card renders retiredSince, which is our scrape date masquerading as a catalog date");
+});
+
 test("wiring › retention is applied strictly AFTER the shrink rail", () => {
   // Load-bearing in both directions, and silent if reversed.
   //

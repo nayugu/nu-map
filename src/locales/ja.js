@@ -627,6 +627,8 @@ export const strings = {
   "course.badge.prereq":          "! 先修",
   "course.badge.prereq.order":    "! 順序",
   "course.badge.coreq.alone":     "! 同修",
+  "course.badge.retired":         "⚠ 廃止",
+  "course.tooltip.retired":       "この科目はノースイースタンのカタログに掲載されなくなりました。あなたのカタログ年度では今も必修のため保持しています。代替科目についてはアドバイザーにご相談ください。",
   "course.badge.coreq.sep":       "⚡ 同修",
   "course.tooltip.prereq.order":  "先修科目が同じまたは後の学期にあります",
   "course.tooltip.prereq.missing":"先修科目がプランに未配置です",

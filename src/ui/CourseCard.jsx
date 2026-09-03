@@ -261,8 +261,33 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
     notOffered = !offering.offered(course, semOffType, offeredOverrides[course.id]);
   }
 
+  // ── Retired from the catalog, still required by an older edition ─────────
+  //
+  // The scrape keeps a course NEU has removed while some shipped program
+  // edition still requires it, because a degree is locked to the catalog year
+  // the student entered under (scripts/lib/course-retention.js). This is what
+  // stops that kindness from reading as an offer.
+  //
+  // Three deliberate differences from `notOffered`:
+  //
+  //   · it is NOT gated on `inSem`. A student picks a course out of the bank,
+  //     so the bank is where the mark is worth the most; a warning that only
+  //     appears after placement arrives after the decision.
+  //   · it does not consult `offering.offered`, and must not. That verdict
+  //     feeds CHART, and a probability of 0 is the only value that blocks a
+  //     placement — routing retirement through it would turn an untickable
+  //     requirement row into a REFUSED plan, and defeat the point of keeping
+  //     the course, which is that this student can still satisfy the
+  //     requirement with it.
+  //   · it outranks `notOffered` on the border, because "NEU no longer lists
+  //     this" is a fact and "may not run in Summer B" is a rate. Below
+  //     `coreqViol`, which is a hard same-term constraint on a plan that
+  //     otherwise cannot be registered at all.
+  const retired = !!course?.retired;
+
   let borderColor = isCardHov ? "var(--active)" : "var(--border-card)";
   if (coreqViol)                                                borderColor = "var(--warn-bright)";  // always wins
+  else if (retired)                                             borderColor = "var(--warn-bright)";
   else if (notOffered)                                          borderColor = "var(--warn-bright)";
   else if (isConn && relType === "corequisite" && coreqViol)    borderColor = "var(--warn-bright)";
   // Connected (prereq/coreq) rims keep the vibrant relation colour but at reduced
@@ -419,12 +444,12 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
       >
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: stripeColor, borderRadius: "3px 0 0 3px" }} />
         {/* Shrink code + SH when a warning icon is present so code is always readable */}
-        <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 8 : 10, fontWeight: 800, color: codeColor, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        <span style={{ fontSize: (isViolated || notOffered || coreqViol || retired) ? 8 : 10, fontWeight: 800, color: codeColor, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {/* Phone: this row is the whole card, so for a placeholder it is the
               one chance to say what the slot is — translated, as on desktop. */}
           {course.isReservation ? (title || course.code) : course.code}
         </span>
-        <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 7 : 10, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 3px", flexShrink: 0 }}>
+        <span style={{ fontSize: (isViolated || notOffered || coreqViol || retired) ? 7 : 10, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 3px", flexShrink: 0 }}>
           {shOverrides[course.id] ?? course.sh}
         </span>
         <DoubleCountBadge course={course} compact />
@@ -436,7 +461,7 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
             grade={grades[course.id]} setGrade={setGrade} t={t}
                      pop={gradePop} setPop={closeGradePop} compact />
         )}
-        {(isViolated || notOffered || coreqViol) && (
+        {(isViolated || notOffered || coreqViol || retired) && (
           isViolated && violationType === "order" ? (
             <span title={t("course.tooltip.prereq.order")}
               style={{ fontSize: 7, fontWeight: 700, color: "var(--error-bg)", background: "var(--error-text)", borderRadius: 3, padding: "1px 3px", lineHeight: 1, flexShrink: 0 }}>
@@ -444,7 +469,11 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
             </span>
           ) : (
             <span style={{ fontSize: 11, color: isViolated ? "var(--error-text)" : "var(--warn)", flexShrink: 0 }}>
-              {isViolated ? "!" : notOffered ? "⚠" : "⚡"}
+              {/* Retired shares the ⚠ glyph with the availability warning: the
+                  compact card has room for one character, and "something is
+                  wrong with when you can take this" is the right reading of
+                  both. The full badge row below distinguishes them. */}
+              {isViolated ? "!" : (retired || notOffered) ? "⚠" : "⚡"}
             </span>
           )
         )}
@@ -673,6 +702,16 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           <span title={t("course.tooltip.coreq.sep")}
             style={{ fontSize: 9, fontWeight: 700, color: "var(--warn)", background: "var(--warn-bg)", border: "1px solid var(--warn-bright)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
             {t("course.badge.coreq.sep")}
+          </span>
+        )}
+        {retired && (
+          // No date in the copy on purpose: `retiredSince` is the day OUR
+          // scrape first failed to find the course, not a day NEU announced
+          // anything, and quoting it to a student would dress a scrape
+          // timestamp as a registrar fact.
+          <span title={t("course.tooltip.retired")}
+            style={{ fontSize: 9, fontWeight: 700, color: "var(--warn)", background: "var(--warn-bg)", border: "1px solid var(--warn-bright)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
+            {t("course.badge.retired")}
           </span>
         )}
         {notOffered && (() => {

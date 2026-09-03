@@ -626,6 +626,8 @@ export const strings = {
   "course.badge.prereq":          "! 선수",
   "course.badge.prereq.order":    "! 순서",
   "course.badge.coreq.alone":     "! 동시",
+  "course.badge.retired":         "⚠ 폐지",
+  "course.tooltip.retired":       "이 과목은 노스이스턴 카탈로그에 더 이상 없습니다. 학생의 카탈로그 연도에서는 여전히 요구하므로 보존해 두었습니다 — 대체 과목은 지도교수와 상담하세요.",
   "course.badge.coreq.sep":       "⚡ 동시",
   "course.tooltip.prereq.order":  "선수 과목이 같은 학기 또는 이후 학기에 있습니다",
   "course.tooltip.prereq.missing":"선수 과목이 계획에 배치되지 않았습니다",

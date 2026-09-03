@@ -907,6 +907,8 @@ export const strings = {
   "course.badge.prereq":          "! \u5148\u4fee",
   "course.badge.prereq.order":    "! \u987a\u5e8f",
   "course.badge.coreq.alone":     "! \u540c\u4fee",
+  "course.badge.retired":         "⚠ 已停开",
+  "course.tooltip.retired":       "东北大学课程目录中已无此课程。因你所属的目录年份仍要求此课程，故仍予保留 — 请咨询导师了解替代方案。",
   "course.badge.coreq.sep":       "\u26a1 \u540c\u4fee",
   "course.tooltip.prereq.order":  "\u5148\u4fee\u8bfe\u7a0b\u5728\u540c\u4e00\u6216\u66f4\u665a\u7684\u5b66\u671f",
   "course.tooltip.prereq.missing":"\u5148\u4fee\u8bfe\u7a0b\u5c1a\u672a\u52a0\u5165\u8ba1\u5212",
