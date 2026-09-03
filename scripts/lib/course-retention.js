@@ -257,3 +257,93 @@ export function retainReferencedCourses({ scraped, previous, referenced, failedS
 
   return { courses: [...courses, ...retained], retained, revived, dropped };
 }
+
+/**
+ * The whole retention step, as one call.
+ *
+ * ── Why the orchestration lives here and not in the scraper ─────────
+ *
+ * Inline in scrape-catalog.js, this code was reachable ONLY by a full network
+ * scrape: `--dry-run` and `--subject` set PARTIAL and skip the write branch
+ * entirely, and `--rotate`/`--subjects` exit before it. So the one way to find
+ * out whether it ran was to spend 29 minutes and see. A missing `readdirSync`
+ * in the import list survived `node --check` for exactly that reason, and the
+ * next such slip would surface as a throw at minute 29 of an unattended job.
+ *
+ * Here it is one function with injected io, so every branch — including the
+ * failure branches, which are the ones that matter — is exercised in
+ * milliseconds. The caller does the printing.
+ *
+ * Total by construction: on ANY failure it returns the scrape unchanged with a
+ * warning line. Retention is a data-quality improvement and must never become
+ * a new reason for the monthly job to write nothing.
+ *
+ * @param {object} args
+ * @param {object[]} args.scraped        this run's courses
+ * @param {string} args.catalogPath      the committed snapshot
+ * @param {string[]} args.programRoots
+ * @param {Set<string>} args.failedSubjects
+ * @param {object} args.io               { exists, readdir, readFile, courseKeysOf }
+ * @param {string} [args.now]
+ * @returns {{courses: object[], lines: string[], ok: boolean}}
+ */
+export function applyEditionRetention({ scraped, catalogPath, programRoots, failedSubjects, io, now }) {
+  const lines = [];
+  // Normalised once, up front: every early return below hands this back, and
+  // `{ courses: undefined }` from one of them is a silent way to write an empty
+  // catalog. (Found by feeding this function `{}`.)
+  const fresh = Array.isArray(scraped) ? scraped : [];
+  const bail = msg => {
+    lines.push(`⚠  Edition retention skipped (${msg}) — writing the scrape as-is. `
+      + `Older program editions may be left with unresolvable course references.`);
+    return { courses: fresh, lines, ok: false };
+  };
+
+  try {
+    if (!io?.exists?.(catalogPath)) {
+      // No committed snapshot means there is nothing to retain FROM. Not a
+      // failure: it is the first run in a fresh clone.
+      lines.push("No committed catalog yet — nothing to retain.");
+      return { courses: fresh, lines, ok: true };
+    }
+
+    const { keys, programs, unreadable } = referencedCourseKeys(programRoots, io);
+    if (unreadable) {
+      lines.push(`⚠  ${unreadable} program file(s)/directory(ies) unreadable — `
+        + `their courses are not protected this run.`);
+    }
+    if (!programs) {
+      // A legitimate state: a clone that has never run the majors scrape. It
+      // means there is nothing to protect, NOT that protection failed.
+      lines.push("No program requirements on disk — nothing to retain.");
+      return { courses: fresh, lines, ok: true };
+    }
+
+    const previous = JSON.parse(io.readFile(catalogPath));
+    const { courses, retained, revived, dropped } = retainReferencedCourses({
+      scraped: fresh, previous, referenced: keys, failedSubjects, now,
+    });
+
+    lines.push(`Edition retention: ${programs} programs reference ${keys.size} courses.`);
+    if (retained.length) {
+      const bySubject = new Map();
+      for (const c of retained) bySubject.set(c.subject, (bySubject.get(c.subject) ?? 0) + 1);
+      const top = [...bySubject].sort((a, b) => b[1] - a[1]).slice(0, 8)
+        .map(([s, n]) => `${s}×${n}`).join(", ");
+      lines.push(`  Kept ${retained.length} retired course(s) still required by a shipped `
+        + `edition: ${top}${bySubject.size > 8 ? ", …" : ""}`);
+    }
+    if (revived.length) {
+      lines.push(`  ${revived.length} previously-retired course(s) are back in the catalog: `
+        + `${revived.slice(0, 8).join(", ")}${revived.length > 8 ? ", …" : ""}`);
+    }
+    if (dropped.length) {
+      // The growth bound, made visible: absent from the catalog AND named by
+      // no edition we ship.
+      lines.push(`  Dropped ${dropped.length} course(s) no shipped edition requires.`);
+    }
+    return { courses, lines, ok: true };
+  } catch (err) {
+    return bail(err?.message ?? String(err));
+  }
+}

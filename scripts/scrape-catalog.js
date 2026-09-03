@@ -35,9 +35,7 @@ import { parseDescriptionGpaGate } from "../src/adapters/northeastern/gpaGate.js
 import { parseDescriptionPrereq } from "../src/adapters/northeastern/descriptionPrereq.js";
 import { mergeDescriptionCoreqs } from "../src/adapters/northeastern/descriptionCoreq.js";
 import { courseKeysOf } from "./lib/major-verify.js";
-import {
-  activeCourseCount, referencedCourseKeys, retainReferencedCourses,
-} from "./lib/course-retention.js";
+import { activeCourseCount, applyEditionRetention } from "./lib/course-retention.js";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
@@ -819,55 +817,27 @@ if (PARTIAL) {
   // Everything here degrades to "write what we scraped", never to a refusal:
   // this is a data-quality improvement, and it must not become a new way for
   // an unattended monthly job to write nothing.
-  if (existsSync(CATALOG_OUT)) {
-    try {
-      const { keys, programs, unreadable } = referencedCourseKeys(PROGRAM_ROOTS, {
+  // Orchestration lives in the module, with injected io, because inline here it
+  // was reachable ONLY by a full network scrape — every partial mode skips this
+  // branch — so its failure branches could not be exercised in under 29
+  // minutes. See applyEditionRetention's docblock.
+  {
+    const { courses, lines } = applyEditionRetention({
+      scraped: out,
+      catalogPath: CATALOG_OUT,
+      programRoots: PROGRAM_ROOTS,
+      failedSubjects,
+      io: {
         exists: existsSync,
         readdir: p => readdirSync(p, { withFileTypes: true }),
         readFile: p => readFileSync(p, "utf8"),
         courseKeysOf,
-        warn: msg => console.warn(`  ⚠  ${msg}`),
-      });
-      if (unreadable) {
-        console.warn(`\n  ⚠  ${unreadable} program file(s)/directory(ies) unreadable — `
-          + `their courses are not protected this run.`);
-      }
-      if (!programs) {
-        // No trees on disk is a legitimate state (a fresh clone that has never
-        // run the majors scrape), and it means there is nothing to protect.
-        console.log(`\n  No program requirements on disk — nothing to retain.`);
-      } else {
-        const { courses, retained, revived, dropped } = retainReferencedCourses({
-          scraped: out,
-          previous: JSON.parse(readFileSync(CATALOG_OUT, "utf8")),
-          referenced: keys,
-          failedSubjects,
-          now: new Date().toISOString().slice(0, 10),
-        });
-        out = courses;
-        console.log(`\n  Edition retention: ${programs} programs reference ${keys.size} courses.`);
-        if (retained.length) {
-          const bySubject = new Map();
-          for (const c of retained) bySubject.set(c.subject, (bySubject.get(c.subject) ?? 0) + 1);
-          const top = [...bySubject].sort((a, b) => b[1] - a[1]).slice(0, 8)
-            .map(([s, n]) => `${s}×${n}`).join(", ");
-          console.log(`    Kept ${retained.length} retired course(s) still required by a shipped `
-            + `edition: ${top}${bySubject.size > 8 ? ", …" : ""}`);
-        }
-        if (revived.length) {
-          console.log(`    ${revived.length} previously-retired course(s) are back in the catalog: `
-            + `${revived.slice(0, 8).join(", ")}${revived.length > 8 ? ", …" : ""}`);
-        }
-        if (dropped.length) {
-          // The growth bound, made visible. These are genuinely gone: absent
-          // from the catalog AND named by no edition we ship.
-          console.log(`    Dropped ${dropped.length} course(s) no shipped edition requires.`);
-        }
-      }
-    } catch (err) {
-      console.warn(`\n  ⚠  Edition retention skipped (${err.message}) — writing the scrape as-is. `
-        + `Older program editions may be left with unresolvable course references.`);
-    }
+      },
+      now: new Date().toISOString().slice(0, 10),
+    });
+    out = courses;
+    if (lines.length) console.log("");
+    for (const line of lines) console.log(`  ${line}`);
   }
 
   writeFileSync(CATALOG_OUT, JSON.stringify(out, null, 0), "utf8");

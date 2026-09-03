@@ -24,6 +24,7 @@ import {
   activeCourseCount,
   referencedCourseKeys,
   retainReferencedCourses,
+  applyEditionRetention,
 } from "../../scripts/lib/course-retention.js";
 
 const course = (subject, number, extra = {}) => ({ subject, number, title: `${subject} ${number}`, ...extra });
@@ -388,6 +389,156 @@ test("union › the input arrays are not mutated", () => {
   assert.equal(JSON.stringify(previous), snapshot);
 });
 
+// ── The orchestrator ───────────────────────────────────────────────
+//
+// This is the code that used to be inline in scrape-catalog.js, where the ONLY
+// way to reach it was a 29-minute full network scrape (every partial mode skips
+// the write branch). A missing `readdirSync` in the import list survived
+// `node --check` there. So each of these cases is a branch that previously
+// could not be run at all.
+
+const CATALOG = "/catalog.json";
+
+/** io over an in-memory filesystem, with an optional injected fault. */
+function orchIo(files, fault = {}) {
+  const base = fakeIo(files, fault);
+  return {
+    ...base,
+    exists: p => p === CATALOG ? CATALOG in files : base.exists(p),
+    readFile: p => {
+      if (fault.readFileThrowsAt === p) throw new Error("EIO");
+      return p in files ? files[p] : base.readFile(p);
+    },
+  };
+}
+
+const TREE = {
+  "p/2026/arts/theatre_ba/requirements.json": JSON.stringify({ keys: ["THTR1101", "DGTR5000"] }),
+};
+
+test("orchestrator › the happy path retains and reports", () => {
+  const files = {
+    ...TREE,
+    [CATALOG]: JSON.stringify([course("THTR", "1101"), course("DGTR", "5000")]),
+  };
+  const out = applyEditionRetention({
+    scraped: [course("THTR", "1101")],
+    catalogPath: CATALOG, programRoots: ["p"], failedSubjects: new Set(),
+    io: orchIo(files), now: NOW,
+  });
+  assert.equal(out.ok, true);
+  assert.equal(out.courses.length, 2);
+  assert.ok(out.lines.some(l => /1 programs reference 2 courses/.test(l)));
+  assert.ok(out.lines.some(l => /Kept 1 retired course/.test(l)), out.lines.join("|"));
+});
+
+test("orchestrator › no committed catalog is not a failure", () => {
+  // A fresh clone. There is nothing to retain FROM.
+  const out = applyEditionRetention({
+    scraped: [course("THTR", "1101")],
+    catalogPath: CATALOG, programRoots: ["p"], failedSubjects: new Set(),
+    io: orchIo({ ...TREE }), now: NOW,
+  });
+  assert.equal(out.ok, true);
+  assert.deepEqual(out.courses.map(keyOfCourse), ["THTR1101"]);
+  assert.ok(out.lines.some(l => /nothing to retain/.test(l)));
+});
+
+test("orchestrator › no program trees is not a failure either", () => {
+  // A clone that has never run the majors scrape. Nothing to protect is a
+  // different fact from "protection failed", and conflating them would either
+  // cry wolf on a fresh clone or hide a real breakage.
+  const out = applyEditionRetention({
+    scraped: [course("THTR", "1101")],
+    catalogPath: CATALOG, programRoots: ["p"], failedSubjects: new Set(),
+    io: orchIo({ [CATALOG]: JSON.stringify([course("DGTR", "5000")]) }), now: NOW,
+  });
+  assert.equal(out.ok, true);
+  assert.deepEqual(out.courses.map(keyOfCourse), ["THTR1101"]);
+  assert.ok(out.lines.some(l => /No program requirements on disk/.test(l)));
+});
+
+test("orchestrator › a corrupt committed catalog degrades, it does not throw", () => {
+  // THE branch that mattered and could not be reached. A throw here aborts the
+  // scrape after 29 minutes of network work, with nothing written.
+  const out = applyEditionRetention({
+    scraped: [course("THTR", "1101")],
+    catalogPath: CATALOG, programRoots: ["p"],
+    failedSubjects: new Set(),
+    io: orchIo({ ...TREE, [CATALOG]: "{{{ not json" }), now: NOW,
+  });
+  assert.equal(out.ok, false);
+  assert.deepEqual(out.courses.map(keyOfCourse), ["THTR1101"], "the scrape survives intact");
+  assert.ok(out.lines.some(l => /Edition retention skipped/.test(l)));
+  assert.ok(out.lines.some(l => /unresolvable course references/.test(l)),
+    "the warning must say what was lost, or it reads as routine");
+});
+
+test("orchestrator › an unreadable catalog file degrades", () => {
+  const out = applyEditionRetention({
+    scraped: [course("THTR", "1101")],
+    catalogPath: CATALOG, programRoots: ["p"], failedSubjects: new Set(),
+    io: orchIo({ ...TREE, [CATALOG]: "[]" }, { readFileThrowsAt: CATALOG }), now: NOW,
+  });
+  assert.equal(out.ok, false);
+  assert.deepEqual(out.courses.map(keyOfCourse), ["THTR1101"]);
+});
+
+test("orchestrator › a partly-unreadable tree retains what it can AND says so", () => {
+  const files = {
+    "p/a/requirements.json": "{ broken",
+    "p/b/requirements.json": JSON.stringify({ keys: ["DGTR5000"] }),
+    [CATALOG]: JSON.stringify([course("DGTR", "5000")]),
+  };
+  const out = applyEditionRetention({
+    scraped: [], catalogPath: CATALOG, programRoots: ["p"], failedSubjects: new Set(),
+    io: orchIo(files), now: NOW,
+  });
+  assert.equal(out.ok, true);
+  assert.equal(out.courses.length, 1, "the readable half still protected its course");
+  assert.ok(out.lines.some(l => /unreadable/.test(l) && /not protected/.test(l)),
+    "silently retaining less is the dangerous outcome — it must be reported");
+});
+
+test("orchestrator › a broken io object degrades rather than throwing", () => {
+  // Defence against a caller mistake, which is precisely how this broke before:
+  // `readdirSync` was not imported, so `io.readdir` threw at minute 29.
+  for (const io of [null, undefined, {}, { exists: () => { throw new Error("boom"); } },
+                    { exists: () => true, readdir: () => { throw new Error("boom"); } }]) {
+    const out = applyEditionRetention({
+      scraped: [course("THTR", "1101")],
+      catalogPath: CATALOG, programRoots: ["p"], failedSubjects: new Set(), io, now: NOW,
+    });
+    assert.deepEqual(out.courses.map(keyOfCourse), ["THTR1101"], JSON.stringify(io));
+  }
+});
+
+test("orchestrator › junk arguments return the scrape, never undefined", () => {
+  for (const args of [{}, { scraped: null }, { scraped: "nope" }]) {
+    const out = applyEditionRetention(args);
+    assert.ok(Array.isArray(out.courses), JSON.stringify(args));
+    assert.ok(Array.isArray(out.lines));
+  }
+});
+
+test("orchestrator › a failed subject is passed through to the judgement", () => {
+  // The caller's failedSubjects set has to actually reach retainReferencedCourses;
+  // dropping it on the floor here would re-open the slander bug at the only
+  // layer that knows which subjects failed.
+  const files = {
+    ...TREE,
+    [CATALOG]: JSON.stringify([course("THTR", "1101"), course("DGTR", "5000")]),
+  };
+  const out = applyEditionRetention({
+    scraped: [course("THTR", "1101")],
+    catalogPath: CATALOG, programRoots: ["p"],
+    failedSubjects: new Set(["DGTR"]),
+    io: orchIo(files), now: NOW,
+  });
+  assert.equal(out.courses.length, 1, "DGTR is the caller's to rescue, unmarked");
+  assert.ok(!out.lines.some(l => /Kept 1 retired/.test(l)));
+});
+
 // ── How the caller wires it up ─────────────────────────────────────
 //
 // Two properties of scrape-catalog.js that the pure functions above cannot
@@ -409,7 +560,7 @@ test("wiring › retention is applied strictly AFTER the shrink rail", () => {
   //                     non-retired courses on the COMMITTED side or it goes
   //                     on refusing every month forever.
   const rail = SCRAPER.indexOf("Refusing to write:");
-  const retention = SCRAPER.indexOf("retainReferencedCourses({");
+  const retention = SCRAPER.indexOf("applyEditionRetention({");
   // Anchored to the write that FOLLOWS retention: --rotate and --subjects
   // write the same file earlier in this script, so a bare indexOf finds one of
   // those and the assertion becomes a coin toss.
@@ -462,7 +613,7 @@ test("wiring › the partial paths still cannot judge a retirement", () => {
   // is excluded by PARTIAL.
   const rotate = SCRAPER.indexOf("await runRotate();");
   const subjects = SCRAPER.indexOf("await runSubjects(SUBJECTS);");
-  const retention = SCRAPER.indexOf("retainReferencedCourses({");
+  const retention = SCRAPER.indexOf("applyEditionRetention({");
   assert.ok(rotate > 0 && subjects > 0);
   assert.match(SCRAPER.slice(rotate, rotate + 120), /process\.exit\(0\)/,
     "--rotate no longer short-circuits, so it would reach retention with one subject of evidence");

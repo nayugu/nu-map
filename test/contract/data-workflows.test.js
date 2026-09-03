@@ -195,16 +195,37 @@ test("the CHART gate runs the corpus, not a sample", () => {
     "a covering sample proves the absence of a regression only in what it covered");
 });
 
-test("no workflow waves the catalog past its shrink floor", () => {
+test("no UNATTENDED run can wave the catalog past its shrink floor", () => {
   // `--accept-shrink` exists so that a human handling a catalog EDITION ROLL
   // does not have to edit the scraper or delete data to get past the 2% floor.
   // From inside a single run, "the edition rolled" and "the markup changed"
-  // are indistinguishable — so an unattended job must stop and ask. A workflow
-  // carrying this flag would turn the last line of defence into a comment.
+  // are indistinguishable — so an unattended job must stop and ask.
+  //
+  // ── This test used to assert something stricter, and slightly wrong ──
+  //
+  // It required the string to be absent from every workflow, which is a PROXY
+  // for the real property and it forbade the one case that makes the guard
+  // usable: a manual dispatch, where a person HAS looked at the per-subject
+  // counts. Under the old rule the refusal's own instruction ("re-run with
+  // --accept-shrink") could not be followed in CI at all, and the documented
+  // exit to a hard stop was a 29-minute local scrape and a hand push.
+  //
+  // So the property is now stated directly: the flag may be reached only
+  // through `github.event.inputs`, which is EMPTY on a schedule. A cron
+  // therefore cannot arm it even by accident, while an operator can.
   for (const f of [...PIPEFAIL, "catalog-rotate.yml"]) {
     for (const r of runs(load(f))) {
-      assert.ok(!r.includes("--accept-shrink"),
-        `${f} passes --accept-shrink; that decision belongs to a person looking at the diff`);
+      if (!r.includes("--accept-shrink")) continue;
+      assert.match(r, /github\.event\.inputs\./,
+        `${f} passes --accept-shrink unconditionally; that decision belongs to a person `
+        + `looking at the diff, so it must be gated on a workflow_dispatch input`);
+      // Gated on an input is not enough on its own — the gate has to be the
+      // thing that adds the flag, not a sibling condition that reads an input
+      // and ignores it.
+      const gate = r.slice(0, r.indexOf("--accept-shrink"));
+      assert.match(gate, /if \[ "\$\{\{ github\.event\.inputs\.\w+ \}\}" = "true" \]/,
+        `${f}: --accept-shrink is not inside a test of the dispatch input that supposedly `
+        + `guards it`);
     }
   }
 });
@@ -385,6 +406,45 @@ test("watchdog: an API failure fails the job rather than reporting health", asyn
   // ask. A 500 has to surface as a red run.
   const err = Object.assign(new Error("Server Error"), { status: 500 });
   await assert.rejects(() => checkAge({ error: err }), /Server Error/);
+});
+
+// ── The one documented way past a hard stop ─────────────────────────
+//
+// The catalog scrape refuses to write a catalog >2% smaller than the committed
+// one, and once a year that refusal is WRONG — an edition roll retires whole
+// subjects. The flag that gets past it must be reachable by an operator and
+// unreachable by a cron, because from inside a single run "the edition rolled"
+// and "the markup changed" are indistinguishable and only one of them should
+// land unattended.
+test("accept-shrink is reachable from a dispatch and impossible on a schedule", () => {
+  const doc = load("update-courses.yml");
+  const input = triggers(doc).workflow_dispatch?.inputs?.accept_shrink;
+  assert.ok(input, "the refusal tells the operator to re-run with --accept-shrink; without a "
+    + "dispatch input the only way to do that is a 29-minute local scrape and a hand push, and "
+    + "what people do instead is edit the guard");
+  assert.equal(input.type, "boolean");
+  assert.equal(input.default, false, "a default of true would arm it on every manual run");
+  assert.match(String(input.description), /roll/i, "the description must say what it is FOR");
+
+  const scrape = steps(doc).find(s => s.name === "Scrape catalog");
+  assert.ok(scrape, "the catalog scrape step was renamed");
+  assert.match(scrape.run, /github\.event\.inputs\.accept_shrink/,
+    "the flag must be gated on the dispatch input");
+  assert.doesNotMatch(scrape.run, /scrape-catalog\.js[^|\n]*--accept-shrink/,
+    "--accept-shrink is hardcoded into the command, so every scheduled run would silently "
+    + "accept an arbitrary catalog shrink — which is the failure the guard exists for");
+  assert.match(scrape.run, /::warning::/,
+    "a run that accepts a shrink must say so in the log, or the one line of evidence that it "
+    + "happened is a boolean in the dispatch form nobody re-reads");
+});
+
+test("no OTHER data workflow can accept a shrink at all", () => {
+  // Only the courses pipeline writes the course catalog. If this flag ever
+  // appears elsewhere it is cargo-culted, and it would be inert at best.
+  for (const f of PIPEFAIL.filter(x => x !== "update-courses.yml")) {
+    assert.doesNotMatch(raw(f), /accept[-_]shrink/,
+      `${f} references --accept-shrink but does not scrape the course catalog`);
+  }
 });
 
 // ── The scheduled order these files describe ────────────────────────

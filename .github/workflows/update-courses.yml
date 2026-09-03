@@ -13,6 +13,15 @@ on:
   schedule:
     - cron: "0 6 1 * *"   # 06:00 UTC on the 1st of every month
   workflow_dispatch:
+    inputs:
+      accept_shrink:
+        description: >-
+          Catalog EDITION ROLL only: accept a catalog >2% smaller than the
+          committed one. Check the per-subject counts in the refused run's log
+          first — two-sided churn (subjects retiring AND appearing) is a roll,
+          a uniform collapse is upstream breakage.
+        type: boolean
+        default: false
 
 # All data workflows share one concurrency group. They each commit straight to
 # main, so two running at once means two pushes from stale checkouts and the
@@ -125,8 +134,26 @@ jobs:
         run: npm ci --ignore-scripts
 
       # ── Step 1: Scrape catalog.northeastern.edu ───────────────────────────────
+      #
+      # `--accept-shrink` is reachable ONLY from a manual dispatch, and that is the
+      # whole design rather than an oversight. From inside a single run "the catalog
+      # edition rolled" and "the markup changed" are indistinguishable, so a
+      # SCHEDULED run must still stop and alert — `github.event.inputs` is empty on a
+      # cron, so the flag cannot appear there even by accident.
+      #
+      # What it buys is that the refusal's own instruction ("re-run with
+      # --accept-shrink") is executable from the Actions UI. Without an input it was
+      # not: the only way past a hard stop was a 29-minute local scrape and a hand
+      # push, and "what people do when a hard stop has no documented exit" is edit
+      # the guard or delete data. Same reasoning as the flag itself.
       - name: Scrape catalog
-        run: node scripts/scrape-catalog.js --write 2>&1 | tee /tmp/catalog-log.txt
+        run: |
+          ARGS="--write"
+          if [ "${{ github.event.inputs.accept_shrink }}" = "true" ]; then
+            ARGS="$ARGS --accept-shrink"
+            echo "::warning::--accept-shrink was requested. This run may write a catalog materially smaller than the committed one; it is only correct if the per-subject counts show an edition roll."
+          fi
+          node scripts/scrape-catalog.js $ARGS 2>&1 | tee /tmp/catalog-log.txt
 
       # ── Step 2: Fetch term availability from nubanner.neu.edu ─────────────────
       #   Writes term-history.json (offered?) + term-details.json (enrollment/schedule).
