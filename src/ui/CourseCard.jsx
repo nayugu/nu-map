@@ -713,16 +713,35 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
             {t("course.badge.coreq.sep")}
           </span>
         )}
-        {retired && (
-          // No date in the copy on purpose: `retiredSince` is the day OUR
-          // scrape first failed to find the course, not a day NEU announced
-          // anything, and quoting it to a student would dress a scrape
-          // timestamp as a registrar fact.
-          <span title={t("course.tooltip.retired")}
-            style={{ fontSize: 9, fontWeight: 700, color: "var(--warn)", background: "var(--warn-bg)", border: "1px solid var(--warn-bright)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
-            {t("course.badge.retired")}
-          </span>
-        )}
+        {retired && (() => {
+          // TWO populations wear this badge, and one sentence cannot be true of
+          // both. Which one a course belongs to is decidable from the record:
+          //
+          //   `retiredSince` only  → rescued by course-retention.js because a
+          //     shipped program edition still REQUIRES it. "Your catalog year
+          //     still requires it" is exactly right.
+          //   `lifespan`           → from the retired union: required by
+          //     nothing, kept only so a saved plan naming it still resolves.
+          //     The same sentence is FALSE, and it is false on a card any
+          //     student can reach through search. 367 courses on the 2027 roll.
+          //
+          // Still no date in either: `retiredSince` is the day OUR scrape first
+          // failed to find the course, not a day NEU announced anything, and
+          // quoting it would dress a scrape timestamp as a registrar fact. The
+          // lifespan is the honest version of the same instinct — it names the
+          // catalog EDITION that last published the course, which is the
+          // registrar's own fact and the thing an advisor can act on.
+          const span = course?.lifespan;
+          const tip = span?.lastEdition
+            ? t("course.tooltip.retiredUnion", { edition: `${span.lastEdition - 1}–${span.lastEdition}` })
+            : t("course.tooltip.retired");
+          return (
+            <span title={tip}
+              style={{ fontSize: 9, fontWeight: 700, color: "var(--warn)", background: "var(--warn-bg)", border: "1px solid var(--warn-bright)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
+              {t("course.badge.retired")}
+            </span>
+          );
+        })()}
         {notOffered && (() => {
           // Build a probability hint from termHistory if available
           const hist    = course.termHistory ?? {};

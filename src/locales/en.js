@@ -873,6 +873,11 @@ export const strings = {
   "course.tooltip.coreq.alone":   "Corequisite partner is not placed; both must be in the plan",
   "course.tooltip.coreq.sep":     "Corequisite must be in the same term",
   "course.tooltip.retired":       "Northeastern's catalog no longer lists this course. It's kept because your catalog year still requires it — ask your advisor about a substitution.",
+  // The other kind of retired course: one NO program requires, kept only so a
+  // plan that already names it still resolves. The sentence above would be a
+  // plain falsehood here, so this states the real reason and names the catalog
+  // EDITION that last published it — the registrar's fact, not our scrape date.
+  "course.tooltip.retiredUnion":  "Northeastern last published this course in the {edition} catalog. No current program requires it; it's kept here because your plan does — ask your advisor about a substitution.",
   "course.star.save":             "Save course",
   "course.star.remove":           "Remove from saved",
   "course.tooltip.variable-sh":   "Variable credit: {min}–{max} {unit} (click to set)",

@@ -293,5 +293,30 @@ describe("a real retired course from the shipped union", () => {
     assert.match(bodyText, new RegExp(`${subject.subject}\\s*${subject.number}`),
       `${id} is in the shipped union and did not render`);
     assert.match(bodyText, /⚠\s*retired/i, `${id} rendered without the retired badge`);
+
+    // The tooltip must be the UNION one, not the retention one. The retention
+    // sentence — "your catalog year still requires it" — is a plain falsehood
+    // about a union course, which is required by nothing, and it was shipping
+    // on all 367 of them until this branch existed. Read off the title
+    // attribute rather than the body text, since a tooltip is not rendered
+    // text and `innerText` cannot see it.
+    const tip = await page0Title(browser, port, id);
+    assert.ok(/No current program requires it/i.test(tip),
+      `${id} shows the RETENTION tooltip, which claims a program requires it: "${tip}"`);
+    assert.ok(/2025–2026/.test(tip),
+      `${id} should name the catalog edition that last published it, got: "${tip}"`);
   });
 });
+
+/** The `title` of the retired badge on a freshly opened plan holding `id`. */
+async function page0Title(browser, port, id) {
+  const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
+  await ctx.addInitScript(seed({ [id]: "fall2025" }));
+  const page = await ctx.newPage();
+  await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load", timeout: 60_000 });
+  await page.waitForTimeout(4000);
+  const tip = await page.getAttribute("span[title*='catalog']", "title").catch(() => null);
+  await page.close();
+  await ctx.close();
+  return tip ?? "";
+}

@@ -632,6 +632,7 @@ export const strings = {
   "course.badge.coreq.alone":     "! correq",
   "course.badge.retired":         "⚠ retirado",
   "course.tooltip.retired":       "El catálogo de Northeastern ya no incluye este curso. Se conserva porque el año de catálogo que te corresponde aún lo exige; consulta a tu asesor sobre una sustitución.",
+  "course.tooltip.retiredUnion":  "Northeastern publicó este curso por última vez en el catálogo {edition}. Ningún programa actual lo exige; se conserva aquí porque tu plan sí lo incluye. Consulta a tu asesor sobre una sustitución.",
   "course.badge.coreq.sep":       "⚡ correq",
   "course.tooltip.prereq.order":  "El prerrequisito está en el mismo semestre o en uno posterior",
   "course.tooltip.prereq.missing":"Prerrequisito aún no colocado en el plan",
