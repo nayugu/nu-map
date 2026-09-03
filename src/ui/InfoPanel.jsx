@@ -635,6 +635,19 @@ function CourseInfo({ selCourse, navTo }) {
           {t("info.standing.min", { standing: t(`standing.${selCourse.offering.std}`) })}
         </div>
       )}
+      {/* Co-op prep. Nothing upstream states this rule — COOP 3945 carries empty
+          prereqs and empty coreqs — so the only evidence is that every department
+          publishing a plan with this course puts it before the work term. That is
+          quoted as a COUNT rather than asserted as a requirement, and it is
+          deliberately not a warning colour: a student whose program does not
+          require it has done nothing wrong. See stampCoopPrep in courseNorm.js. */}
+      {Number.isFinite(selCourse.coopPrep?.observations) && (
+        <div title={t("info.coopPrep.note")}
+             style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 4, padding: "4px 8px", marginTop: 4, lineHeight: "calc(1.9 * var(--lh-scale, 1))" }}>
+          <span style={{ color: "var(--text-3)", fontWeight: 700 }}>{t("info.coopPrep.title")} </span>
+          {t("info.coopPrep.body", { count: selCourse.coopPrep.observations })}
+        </div>
+      )}
     </div>
   );
 }
