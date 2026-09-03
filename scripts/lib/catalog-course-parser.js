@@ -69,20 +69,11 @@ import { mergeDescriptionCoreqs } from "../../src/adapters/northeastern/descript
 /** CourseLeaf renders hard spaces in title and body text as U+00A0. */
 const NBSP = / /g;
 
-/**
- * The first edition whose course pages publish prerequisites, corequisites and
- * NUPath attributes. Editions strictly below this are `descriptive` fidelity.
- *
- * Stored as the END year, matching the data/northeastern/programs/<year>/
- * convention: the 2021-2022 edition is 2022.
- */
-export const FIRST_FULL_FIDELITY_EDITION = 2022;
-
-/** `full` when an edition publishes prereqs/coreqs/NUPath, else `descriptive`. */
-export function fidelityOfEdition(year) {
-  if (!Number.isFinite(year)) return "full";           // live scrape declares no edition
-  return year >= FIRST_FULL_FIDELITY_EDITION ? "full" : "descriptive";
-}
+// Re-exported, not defined here. They live in catalog-fidelity.js because this
+// module imports node-html-parser and the unit/invariant CI jobs run with no
+// `npm ci` — anything reaching fidelity through this file drags an uninstalled
+// package into a dependency-free job. Existing callers are unaffected.
+export { FIRST_FULL_FIDELITY_EDITION, fidelityOfEdition } from "./catalog-fidelity.js";
 
 /**
  * Parse one subject page into course records.

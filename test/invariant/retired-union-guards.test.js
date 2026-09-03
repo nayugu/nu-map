@@ -15,7 +15,10 @@ import { join } from "node:path";
 
 import { deriveRetiredUnion } from "../../scripts/derive-retired-union.js";
 import { keyOfCourse } from "../../scripts/lib/course-retention.js";
-import { FIRST_FULL_FIDELITY_EDITION } from "../../scripts/lib/catalog-course-parser.js";
+// catalog-fidelity, NOT catalog-course-parser: the parser imports
+// node-html-parser and this job runs with no `npm ci`. test-suite-deps caught
+// exactly that when this test first landed.
+import { FIRST_FULL_FIDELITY_EDITION } from "../../scripts/lib/catalog-fidelity.js";
 
 const ROOT = new URL("../../", import.meta.url).pathname;
 const EDITIONS = join(ROOT, "data/northeastern/catalog/editions");

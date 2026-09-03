@@ -87,7 +87,7 @@ import { readFileSync, writeFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 import { keyOfCourse } from "./lib/course-retention.js";
-import { fidelityOfEdition } from "./lib/catalog-course-parser.js";
+import { fidelityOfEdition } from "./lib/catalog-fidelity.js";
 
 const EDITIONS_DIR = "data/northeastern/catalog/editions";
 const CATALOG      = "public/northeastern/catalog-courses.json";
