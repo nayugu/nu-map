@@ -1,0 +1,502 @@
+{
+ "generated": "2026-09-03",
+ "source": "catalog course titles",
+ "note": "Courses recorded by placing a work term rather than by being placed. See docs/coop-design.md.",
+ "count": 92,
+ "byFlags": {
+  "full/domestic": 37,
+  "half/domestic": 20,
+  "full/abroad": 20,
+  "half/abroad": 15
+ },
+ "byKind": {
+  "coop": 87,
+  "intern": 5
+ },
+ "courses": {
+  "ARTE6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "BINF6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "BINF6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "BINF6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "BIOT6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "BIOT6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "BIOT6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "BIOT6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "BUSN6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "BUSN6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "BUSN6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "BUSN6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "CNET6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "COOP3945": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "COOP3946": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "COOP3947": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "COOP3948": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "COOP3949": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "intern"
+  },
+  "COP3944": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "COP3945": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "COP4946": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "COP5002": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "intern"
+  },
+  "COP6945": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "COP6946": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "CRIM6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "CRIM6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "CRIM6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "CRIM6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "CS6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "CS6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "CS6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "CS6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "CS8948": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "CS8949": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "ECON6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "ECON6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "ECON6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "ECON6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "EEAM6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "EEAM6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "EEAM6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "EEAM6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "EEBA2945": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "intern"
+  },
+  "EEBA2948": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "intern"
+  },
+  "EESC6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "EESC6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "EESC6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "ENCP6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "ENCP6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "ENCP6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "ENCP6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "ENGL6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "ENGL6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "ENGL6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "ENGL6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "ENVR6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "ENVR6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "HIST6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "HIST6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "HIST6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "HIST6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "HLTH6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "INSH6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "JRNL6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "LAW7954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "LAW7955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "LAW7956": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "LAW7957": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "LAW7964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "LAW7965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "LAW7966": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "LAW7967": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "MATH6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "MATH6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "MATH6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "MATH6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "MUSI6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "NRSG6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "PHMD6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "PHSC6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "POLS6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "POLS6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "POLS6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "POLS6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "PPUA6861": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "intern"
+  },
+  "PPUA6954": {
+   "abroad": false,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "PPUA6955": {
+   "abroad": true,
+   "halfTime": true,
+   "kind": "coop"
+  },
+  "PPUA6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "PPUA6965": {
+   "abroad": true,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "PT6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "SLPA6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  },
+  "SUEN6964": {
+   "abroad": false,
+   "halfTime": false,
+   "kind": "coop"
+  }
+ },
+ "prepCount": 7,
+ "prep": {
+  "BUSN1103": {
+   "observations": 11
+  },
+  "CS1210": {
+   "observations": 84
+  },
+  "EEAM2000": {
+   "observations": 104
+  },
+  "EESC2000": {
+   "observations": 78
+  },
+  "EESH2000": {
+   "observations": 79
+  },
+  "ENCP2000": {
+   "observations": 141
+  },
+  "HSCI2000": {
+   "observations": 29
+  }
+ }
+}
