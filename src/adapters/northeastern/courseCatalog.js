@@ -26,7 +26,7 @@
 // Raw term codes: NEU Banner — YYYY = AY end year; 10=Fall, 30=Spring,
 //                 40=Summer 1, 60=Summer 2  (decoded during normalization)
 // ═══════════════════════════════════════════════════════════════════
-import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants, stampCoopPrep } from "./courseNorm.js";
+import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants, stampCoopPrep, stampRestrictions } from "./courseNorm.js";
 
 // Verified RateMyHusky link directory, populated by fetchAll() and read by the
 // URL builders below. Module-level so the singleton adapter can expose
@@ -71,6 +71,7 @@ const ALL_COURSES_URL = `${import.meta.env.BASE_URL}northeastern/all-courses.jso
 // back to granting COOP 3945, which is exactly the behaviour before this file
 // existed.
 const COOP_URL = `${import.meta.env.BASE_URL}northeastern/coop-courses.json`;
+const RESTRICTIONS_URL = `${import.meta.env.BASE_URL}northeastern/restrictions.json`;
 
 // ── Fetch ────────────────────────────────────────────────────────
 
@@ -99,6 +100,10 @@ export default {
     const rmhPromise      = tryFetch(RATEMYHUSKY_URL);
     const subjectsPromise = tryFetch(SUBJECTS_URL);
     const coopPromise     = tryFetch(COOP_URL);
+    // Banner section restrictions. Optional like the two above: a failed or
+    // absent fetch leaves every course unstamped and the card simply shows no
+    // restriction block — degrading to less information, never to wrong.
+    const restrPromise    = tryFetch(RESTRICTIONS_URL);
 
     // Catalog is required — fetch it first so we can gate the supplemental download.
     let catalogJson;
@@ -117,7 +122,7 @@ export default {
       ? Promise.resolve(null)
       : tryFetch(ALL_COURSES_URL);
 
-    const [allCoursesResult, collegesResult, historyResult, offeringResult, rmhResult, subjectsResult, coopResult] = await Promise.allSettled([
+    const [allCoursesResult, collegesResult, historyResult, offeringResult, rmhResult, subjectsResult, coopResult, restrResult] = await Promise.allSettled([
       suppPromise,
       collegesPromise,
       historyPromise,
@@ -125,6 +130,7 @@ export default {
       rmhPromise,
       subjectsPromise,
       coopPromise,
+      restrPromise,
     ]);
 
     // Subject display names — optional, like the RateMyHusky map above: a failed
@@ -159,6 +165,7 @@ export default {
     const coopJson = coopResult.status === "fulfilled" ? coopResult.value : null;
     stampCoopVariants(courses, coopJson);
     stampCoopPrep(courses, coopJson);
+    stampRestrictions(courses, restrResult.status === "fulfilled" ? restrResult.value : null);
 
     // Merge Banner availability history + per-term offering detail if present.
     // Both are optional — app works without them.

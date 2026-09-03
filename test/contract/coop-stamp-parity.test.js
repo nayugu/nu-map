@@ -35,7 +35,11 @@ const LOADERS = [
 
 // Every stamp that must reach all of them. Add a row here when adding a stamp;
 // that is the whole point of the file.
-const STAMPS = ["stampCoopVariants", "stampCoopPrep"];
+//
+// `stampRestrictions` is the case it was written for: it was added a day later
+// by someone (me) editing one loader at a time, and this list is what made the
+// other two impossible to forget.
+const STAMPS = ["stampCoopVariants", "stampCoopPrep", "stampRestrictions"];
 
 const src = (p) => readFileSync(resolve(ROOT, p), "utf8");
 

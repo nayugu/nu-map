@@ -278,6 +278,50 @@ export function stampCoopPrep(courses, coopJson) {
   return courses;
 }
 
+/**
+ * Mark courses with the registrar's own enrolment restrictions.
+ *
+ * This is Banner's Restrictions pane — the tab a student opens from the
+ * schedule to find out whether they may register. `scripts/derive-restrictions.js`
+ * builds the table from the per-section tallies the scrape stores.
+ *
+ * ── Shape, and why it is per SEASON ────────────────────────────────
+ *
+ *   c.restrictions = {
+ *     labels: { "must:Majors|INDE": "Industrial Engineering", … },   // shared
+ *     seasons: { fall: { term, sections, kinds: { "must:Majors": [[code, n], …] } } }
+ *   }
+ *
+ * MEIE 4701 is one course whose sections are partitioned by major AND by
+ * season: Industrial-only in Fall, Mechanical-only in Summer 2. A single-term
+ * view shows one and hides the other, which leaves an IE student reading
+ * "offered Summer 1, Summer 2, Fall" with no way to know Summer 2 is closed to
+ * them. Each season therefore names the term it was READ from — this asserts
+ * what Banner said in a specific term, never that the term is representative.
+ *
+ * `labels` is attached per course rather than kept in a module-level map so the
+ * MCP adapters and the panel read one object and cannot disagree about a gloss.
+ * It is the same object by reference for every course, so it costs one copy.
+ *
+ * Same three-loader rule as the stamps above; `coop-stamp-parity.test.js`
+ * enforces it.
+ *
+ * @param {object[]} courses      normalized Course records
+ * @param {object|null} restrJson parsed restrictions.json ({ labels, courses })
+ * @returns {object[]} the same array
+ */
+export function stampRestrictions(courses, restrJson) {
+  const table = restrJson?.courses;
+  if (!table || typeof table !== "object") return courses;
+  const labels = restrJson.labels && typeof restrJson.labels === "object" ? restrJson.labels : {};
+  for (const c of courses) {
+    const seasons = table[c.id];
+    if (!seasons || typeof seasons !== "object" || !Object.keys(seasons).length) continue;
+    c.restrictions = { labels, seasons };
+  }
+  return courses;
+}
+
 export function mergeHistoryAndOffering(courses, history, offering) {
   if (!history && !offering) return courses;
 

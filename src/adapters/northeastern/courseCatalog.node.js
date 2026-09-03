@@ -14,7 +14,7 @@
 import { readFileSync, statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants, stampCoopPrep } from "./courseNorm.js";
+import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants, stampCoopPrep, stampRestrictions } from "./courseNorm.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const PUB  = join(ROOT, "public/northeastern");
@@ -81,6 +81,9 @@ export function loadCatalog() {
   const coopJson = readJson(join(PUB, "coop-courses.json"));
   stampCoopVariants(courses, coopJson);
   stampCoopPrep(courses, coopJson);
+  // Banner section restrictions — the dev MCP server must report the same
+  // restrictions the panel shows, or an audit contradicts the card.
+  stampRestrictions(courses, readJson(join(PUB, "restrictions.json")));
 
   const courseMap = {};
   for (const c of courses) courseMap[c.id] = c;
