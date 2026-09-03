@@ -304,9 +304,14 @@ export function RelevanceProvider({ children }) {
         // How many CREDENTIALS tick this course. A concentration is part of
         // its major and is already folded into that role, so it never adds one.
         count: majorRoles.length + mins.length,
+        // The hover card draws the same meter as the panel, so it needs the
+        // same four numbers — `shareSegments` derives the bands from these.
+        // `sh` stays for the aria-label and for anything reading the old shape.
         minors: mins.map(m => ({
           n: m.n, name: m.name, over: m.share.over,
           sh: m.share.dependentSH, capSH: m.share.capSH,
+          dependentSH: m.share.dependentSH, claimedSH: m.share.claimedSH,
+          requiredSH: m.share.requiredSH,
         })),
       };
     };

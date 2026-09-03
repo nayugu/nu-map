@@ -20,9 +20,13 @@
 // earlier version encoded both in colour and could not express "three
 // programs, all within budget" without inventing a fourth hue.
 //
-//   grey outline   eligible — not placed. Taking it WOULD count more than once.
-//   green filled   counted — every audit named below already claims it.
-//   amber filled   over — one of those minors is past its 50% cap.
+//   grey dashed    eligible — not placed. Taking it WOULD count more than once.
+//   green chip     counted — every audit named below already claims it.
+//   amber chip     over — one of those minors is past its 50% cap.
+//
+// Fill XOR outline, never both: a fact about the plan is a tinted chip like the
+// SH one beside it, a possibility is an empty dashed outline. Hue alone cannot
+// carry that difference, because over the cap BOTH states are amber.
 //
 // Traffic-light rather than a house hue. This was purple for a while, chosen
 // because purple was the one colour the app had not spent — which optimised for
@@ -47,7 +51,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { useState } from "react";
 import HoverCard from "./HoverCard.jsx";
-import ShareMeter from "./ShareMeter.jsx";
+import ShareMeter, { shareSegments } from "./ShareMeter.jsx";
 import { useRelevance } from "../context/RelevanceContext.jsx";
 import { useLanguage }  from "../context/LanguageContext.jsx";
 import { useTranslatedText } from "../context/TranslationContext.jsx";
@@ -69,23 +73,45 @@ const fmt = (sh) => (Number.isInteger(sh) ? String(sh) : sh.toFixed(1));
 function BudgetLine({ minor }) {
   const { t } = useLanguage();
   const name = useTranslatedText(minor.name ?? null);
-  const ink  = minor.over ? "var(--warn-badge-text)" : "var(--text-2)";
+  const seg = shareSegments(minor);
   return (
     <div style={{ marginTop: 7 }}>
       <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-3)",
                     lineHeight: 1.35 }}>
         {name || minor.name}
       </div>
+      {/* Neutral, even over the cap. With two minors on one card the old
+          version put five amber elements in front of the student — a heading,
+          two figures and two bars — for one fact, and amber is this app's
+          "something is wrong". The bar carries the composition; the sentence
+          at the foot carries the consequence, and it is the only colour here. */}
       <div style={{ display: "flex", alignItems: "baseline", gap: 4, margin: "1px 0 3px" }}>
-        <span style={{ fontSize: 12.5, fontWeight: 700, color: ink, letterSpacing: 0 }}>
-          {fmt(minor.sh)}
+        <span style={{ fontSize: 12.5, fontWeight: 700, color: "var(--text-2)",
+                       letterSpacing: 0 }}>
+          {fmt(seg.counts)}
         </span>
         <span style={{ fontSize: 11, color: "var(--text-5)" }}>
-          {t("grad.share.cap", { cap: fmt(minor.capSH) })}
+          {t("grad.share.of", { required: fmt(minor.requiredSH) })}
         </span>
       </div>
-      <ShareMeter used={minor.sh} cap={minor.capSH} over={minor.over}
-                  color="var(--warn-badge-text)" height={4} />
+      <ShareMeter {...seg} height={4} />
+      {/* The same named bands as the panel row. Without them a full green bar
+          means either "nothing is double counted" or "half of this minor is",
+          since credit inside the cap still counts. */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "1px 9px", marginTop: 3 }}>
+        {[[seg.own,    "var(--success-bar)", "grad.share.legend.own"],
+          [seg.shared, "var(--success-bar)", "grad.share.legend.shared"],
+          [seg.excess, "var(--warn-badge-text)",      "grad.share.legend.over"]]
+          .filter(([sh]) => sh > 0)
+          .map(([sh, bg, key]) => (
+            <span key={key} style={{ display: "flex", alignItems: "center", gap: 3,
+                                     fontSize: 10, color: "var(--text-5)" }}>
+              <span style={{ width: 6, height: 6, borderRadius: 2, background: bg,
+                             flexShrink: 0 }} />
+              {fmt(sh)} {t(key)}
+            </span>
+          ))}
+      </div>
     </div>
   );
 }
@@ -173,23 +199,29 @@ export default function DoubleCountBadge({ course, compact = false, corner = fal
           one number that is about THIS student. The order is inverted now: the
           state, then each minor's budget, then the rule in the dimmest ink — a
           student who already knows the rule never has to read past the meter,
-          and one who doesn't still finds it. The title keeps its colour (it
-          carries the state) but drops to the body's size; at headline weight it
-          was the loudest thing in the card and the least informative. */}
+          and one who doesn't still finds it. The title drops to the body's
+          size; at headline weight it was the loudest thing in the card and the
+          least informative. */}
       {hover && (
         <HoverCard rect={hover} maxWidth={260}>
-          <div style={{ fontSize: 12.5, fontWeight: 700, color: ink, lineHeight: 1.35 }}>
+          {/* The heading is a COUNT of credentials, not a verdict, so it is
+              neutral. It used to take the badge's ink, which made the whole
+              card amber the moment one minor was over — announcing a fault
+              where the headline fact ("this counts toward three programs") is
+              good news. */}
+          <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--text-2)",
+                        lineHeight: 1.35 }}>
             {title}
           </div>
           {dc.minors.map(m => <BudgetLine key={m.n} minor={m} />)}
-          {/* One step brighter over the cap: that sentence stops being the rule
-              and becomes the way out ("Add minor coursework your major doesn't
-              count"), which is the most useful line in the card. Not the warn
-              colour — four lines of amber under an amber heading is a shout,
-              and the meter has already said it. */}
+          {/* THE one coloured element. Over the cap this sentence stops being
+              the rule and becomes the way out ("Add minor coursework your major
+              doesn't count") — the only line here a student can act on, and the
+              only thing worth spending the warning colour on. Everything above
+              it is a fact about a benefit and stays neutral. */}
           <div style={{ marginTop: 7, paddingTop: 6, borderTop: "1px solid var(--border-2)",
                         fontSize: 11.5, lineHeight: 1.45,
-                        color: dc.over ? "var(--text-4)" : "var(--text-5)" }}>
+                        color: dc.over ? ink : "var(--text-5)" }}>
             {meaning}
           </div>
         </HoverCard>

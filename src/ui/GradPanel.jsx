@@ -12,7 +12,7 @@ import { createPortal } from "react-dom";
 import VerificationPopover from "./VerificationPopover.jsx";
 import { usePlanner }         from "../context/PlannerContext.jsx";
 import SamplePlanOffer       from "./SamplePlanOffer.jsx";
-import ShareMeter            from "./ShareMeter.jsx";
+import ShareMeter, { shareSegments } from "./ShareMeter.jsx";
 import PlusOneBlock          from "./PlusOneBlock.jsx";
 import { usePort }             from "../context/InstitutionContext.jsx";
 import { IAttributeSystem }   from "../ports/IAttributeSystem.js";
@@ -964,21 +964,26 @@ function GpaRules({ program, programKind = "major" }) {
 // silently dropping a course from a requirement it genuinely satisfies would
 // make the audit disagree with the board.
 //
-// SHAPE. This is a budget, so it is drawn as one, in the same two-part idiom
-// the card's own progress bar above it already uses: a figures line, then a
-// track. Three things were confusing about the earlier row and each is fixed
-// by that rather than by more words:
+// SHAPE. Four elements, in the same idiom as the card's own progress bar
+// above: a figures line, a track, the bands named, and one sentence. Each
+// answers something the earlier versions of this row got wrong:
 //   1. `12 /8 SH` reads as a fraction of a total, and a fraction above 1 reads
-//      as a bug. The cap is not a total — it is a ceiling — so the figure now
-//      SAYS so ("12 of 8 SH allowed") and the track shows the ceiling as a
-//      tick the fill runs past. Over-limit is then legible before any word is
-//      read, and without relying on the amber alone.
-//   2. "also counts toward your major" is a fragment with no subject, sitting
-//      where a label belongs; it is a noun phrase now ("shared with your
-//      major") and the number is what it is a quantity OF.
+//      as a bug. The figure is the honest completion number now — how much of
+//      the minor's requirement actually counts — and the track is scaled to
+//      the MINOR rather than to the ceiling, so it stops contradicting the
+//      progress bar directly above it. See `ShareMeter` for why.
+//   2. "also counts toward your major" was a fragment with no subject sitting
+//      where a label belongs; it is a noun phrase now and the number is what
+//      it is a quantity OF.
 //   3. The amber sentence restated the arithmetic the figures already give.
 //      It states only the CONSEQUENCE now — the credit that has to come from
-//      somewhere else — because that is the part the student can act on.
+//      somewhere else — because that is the part the student can act on, and
+//      it is the ONLY coloured thing here. Double counting is a benefit; the
+//      whole block used to be drawn in the app's "something is broken" colour.
+//   4. The bands are named under the bar rather than hidden in the expanded
+//      detail, because credit inside the cap still counts: without the names,
+//      "nothing is double counted" and "half of this minor is" are the same
+//      full green bar and the same figure.
 // The expanded detail labels its two course lists: they carry different
 // meanings (shared with the major / transferred in) and rendered identically.
 function SharedCredit({ share }) {
@@ -994,6 +999,18 @@ function SharedCredit({ share }) {
   // one figure here that can carry a .5.
   const fmt = (sh) => (Number.isInteger(sh) ? String(sh) : sh.toFixed(1));
   const color = share.over ? REL_STYLE["corequisite-viol"].color : "var(--text-5)";
+  const seg = shareSegments(share);
+
+  // The bands, named, directly under the bar. NOT hidden in the expanded
+  // detail: without it the collapsed row cannot tell "nothing is double
+  // counted" from "half of this minor is" — both read as a full green bar and
+  // the same figure, because credit inside the cap still counts. The figure
+  // answers "is my minor done"; this answers "what is it standing on".
+  const legend = [
+    [seg.own,    "var(--success-bar)", "grad.share.legend.own"],
+    [seg.shared, "var(--success-bar)", "grad.share.legend.shared"],
+    [seg.excess, "var(--warn-badge-text)",      "grad.share.legend.over"],
+  ];
 
   const lists = [
     [share.sharedKeys,  "grad.share.list.shared"],
@@ -1012,7 +1029,9 @@ function SharedCredit({ share }) {
         <span style={{ fontSize: 8, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
       </div>
 
-      {/* Figures line: what is shared, and how much sharing is allowed. */}
+      {/* Figures line. NEUTRAL, always: the colour budget for this block is one
+          element, and it is spent on the sentence below — the only part a
+          student can act on. */}
       <div style={{ display: "flex", gap: 6, alignItems: "baseline", marginBottom: 4 }}>
         <span style={{ flexShrink: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis",
                        whiteSpace: "nowrap", fontSize: isPhone ? 8 : 9.5, fontWeight: 600,
@@ -1021,21 +1040,33 @@ function SharedCredit({ share }) {
         </span>
         <span style={{ flex: 1 }} />
         <span style={{ flexShrink: 0, fontSize: isPhone ? 8.5 : 10, fontWeight: 700,
-                       color: share.over ? color : "var(--text-2)", letterSpacing: 0,
-                       whiteSpace: "nowrap" }}>
-          {fmt(share.dependentSH)}{" "}
-          {/* A real space, not just the margin: the two spans are one phrase
-              and `innerText` is what the browser test — and a student's
-              clipboard — sees. */}
+                       color: "var(--text-2)", letterSpacing: 0, whiteSpace: "nowrap" }}>
+          {fmt(seg.counts)}{" "}
+          {/* A real space, not just a margin: the two spans are one phrase and
+              `innerText` is what the browser test — and a student's clipboard
+              — sees. */}
           <span style={{ fontSize: isPhone ? 6.5 : 8, fontWeight: 500, color: "var(--text-5)" }}>
-            {t("grad.share.cap", { cap: fmt(share.capSH) })}
+            {t("grad.share.of", { required: fmt(share.requiredSH) })}
           </span>
         </span>
       </div>
 
       {/* The track, shared with the 2× badge's hover card so the two surfaces
           cannot drift — a student can have both open at once. */}
-      <ShareMeter used={share.dependentSH} cap={share.capSH} over={share.over} color={color} />
+      <ShareMeter {...seg} />
+
+      {/* Only bands that carry credit — an empty swatch explains nothing and
+          costs a line in a column this narrow. */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "1px 9px", marginTop: 4 }}>
+        {legend.filter(([sh]) => sh > 0).map(([sh, bg, key]) => (
+          <span key={key} style={{ display: "flex", alignItems: "center", gap: 3,
+                                   fontSize: isPhone ? 7 : 8.5, color: "var(--text-5)" }}>
+            <span style={{ width: 6, height: 6, borderRadius: 2, background: bg,
+                           flexShrink: 0 }} />
+            {fmt(sh)} {t(key)}
+          </span>
+        ))}
+      </div>
 
       {share.over && (
         <div style={{ display: "flex", gap: 4, fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4,

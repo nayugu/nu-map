@@ -1,58 +1,103 @@
 // ═══════════════════════════════════════════════════════════════════
-// SHARE METER — one drawing of "how much of a minor's credit is double
-// counted, against how much may be".
+// SHARE METER — what a minor's credit is PAID FOR WITH.
 //
-// Two surfaces show that budget: the minor card's `Double counting` row
+// Two surfaces draw it: the minor card's `Double counting` row
 // (GradPanel → SharedCredit) and the 2× badge's hover card
 // (DoubleCountBadge → BudgetLine). A student can have both open at once, so
 // they have to be the same picture — this is that picture, once.
 //
-// ── Why a meter at all ───────────────────────────────────────────
+// ── Why it is not a warning meter ────────────────────────────────
 //
-// The figures alone were read wrong. A cap is a CEILING, not a total, so
-// `12 / 8 SH` looks like a fraction above one, i.e. like a bug, and the eye
-// has to do the subtraction to find out whether that is bad. Here the TRACK
-// is the allowance: under the cap the fill stops short of the end, over it
-// the fill runs past the ceiling in the warning colour. The overage is the
-// only coloured thing, because staying under a limit is not an achievement
-// and must not read like one.
+// The first version drew the CAP: a track scaled to the ceiling, neutral up
+// to it, amber past it. That framing is wrong, and it was wrong in a way a
+// student feels. Double counting is a BENEFIT — courses counting toward two
+// credentials at once is free credit, and the cap is a limit on a good
+// thing. Drawing it in the app's "something is broken" colour made the good
+// news look like a fault, and it spent that colour five times over on one
+// hover card: the heading, two figures and two bars.
 //
-// The track is scaled to whichever of the two is larger. That is what makes
-// "the track is your allowance" true in the ordinary case while still leaving
-// somewhere for an overage to be drawn.
+// What is genuinely bad is the TAIL — credit the student believes they have
+// banked toward the minor that Northeastern will not accept, so the minor is
+// not as finished as the card above says.
+//
+// That band is amber, and grey was tried first. Both were rendered and
+// compared, and grey lost on a property the argument for it missed: the band
+// is SMALL — 2 SH of a 20 SH minor is a tenth of the bar — and a small grey
+// segment against the grey empty track beside it is nearly invisible. The one
+// thing in the picture that needs acting on was the one thing you could not
+// see. Amber now appears exactly twice, here and in the sentence below the
+// bar, and both are the same fact, so it reads as one signal rather than the
+// five the old card had. Amber next to green is the worst pair for red/green
+// colour blindness, which is survivable only because colour is never the sole
+// channel here: every band is labelled with its own figure and the sentence
+// states the number in words.
+//
+// ── The track is the MINOR, not the cap ──────────────────────────
+//
+// Scaling to the ceiling answered "how much of my allowance have I spent",
+// which is a question about our arithmetic. Scaling to the minor's own
+// requirement answers "is my minor done, and what is it standing on" — and
+// it stops this bar contradicting the progress bar directly above it, which
+// counts the same credit without applying the cap. Four segments, and every
+// number is one `minorShare` already returns:
+//
+//   ▓ own      credit only the minor counts            → green
+//   ▒ shared   counts toward both, inside the cap      → the same green
+//   ░ over     double counted past the cap             → amber, does not count
+//   ┈ to go    not yet satisfied                       → the empty track
+//
+// Both counting bands are the SAME green — `--success-bar`, the one the
+// requirement rows and every progress bar in the panel already use — because
+// they mean the same thing: this credit counts. A half-opacity second shade
+// was tried and read as a duller, different green, which is a distinction
+// about our bookkeeping wearing the colour of a distinction about the
+// student's progress. The split between them is a hairline of the track
+// instead, so "some of this leans on the major" is visible without inventing
+// a colour, and the legend below the bar carries the two figures.
 // ═══════════════════════════════════════════════════════════════════
 
 /**
- * @param {number}  props.used    credit counted toward both (`dependentSH`)
- * @param {number}  props.cap     the ceiling (`capSH`)
- * @param {boolean} props.over    past the ceiling
- * @param {string}  props.color   the warning ink, supplied by the caller so
- *                                each surface keeps its own badge/text token
- * @param {number}  [props.height]
+ * @param {number} props.required  the minor's own requirement — the track
+ * @param {number} props.own       credit only the minor claims
+ * @param {number} props.shared    credit counted toward both, within the cap
+ * @param {number} props.excess    credit double counted beyond the cap
+ * @param {number} [props.height]
  */
-export default function ShareMeter({ used, cap, over, color, height = 5 }) {
-  // A minor with a 0 SH cap has nothing to divide by.
-  const span   = Math.max(cap, used) || 1;
-  const capPct = Math.min(100, (cap / span) * 100);
-  const usedPct = Math.min(100, (used / span) * 100);
+export default function ShareMeter({ required, own, shared, excess, height = 5 }) {
+  // A minor with no derivable requirement has no track to draw on. Callers
+  // already refuse that case; this keeps a 0 from dividing.
+  const span = required > 0 ? required : 1;
+  const pct = (sh) => `${Math.max(0, Math.min(span, sh ?? 0)) / span * 100}%`;
 
   return (
-    <div style={{ position: "relative", height, borderRadius: height / 2,
+    <div style={{ display: "flex", height, borderRadius: height / 2,
                   background: "var(--border-2)", overflow: "hidden" }}>
-      {/* `--text-4` rather than `--text-5`: the dimmest ink is a shade off the
-          track's own colour in the dark theme (#4e5662 on #30363d) and the
-          fill disappeared into it. */}
-      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0,
-                    width: `${usedPct}%`, background: "var(--text-4)" }} />
-      {over && (
-        <div style={{ position: "absolute", left: `${capPct}%`, top: 0, bottom: 0,
-                      width: `${Math.max(0, usedPct - capPct)}%`, background: color }} />
+      <div style={{ width: pct(own), background: "var(--success-bar)" }} />
+      {own > 0 && shared > 0 && (
+        <div style={{ width: 2, flexShrink: 0, background: "var(--border-2)" }} />
       )}
-      {/* The ceiling itself, drawn over the fill. Only meaningful when the fill
-          runs past it — under the cap it sits at the end of the track, which is
-          already where the allowance ends. */}
-      <div style={{ position: "absolute", left: `calc(${capPct}% - 1px)`, top: -1, bottom: -1,
-                    width: 2, background: "var(--text-2)" }} />
+      <div style={{ width: pct(shared), background: "var(--success-bar)" }} />
+      <div style={{ width: pct(excess), background: "var(--warn-badge-text)" }} />
     </div>
   );
+}
+
+/**
+ * The four segment sizes, from a `minorShare` result.
+ *
+ * Both surfaces need them and the arithmetic is easy to get subtly wrong —
+ * `dependentSH` is the part of the CLAIMED credit that leans on the major, so
+ * the allowed share is `min(dependent, cap)` and never the cap itself.
+ */
+export function shareSegments(share) {
+  const shared = Math.min(share.dependentSH, share.capSH);
+  const excess = Math.max(0, share.dependentSH - share.capSH);
+  return {
+    required: share.requiredSH,
+    own:      Math.max(0, share.claimedSH - share.dependentSH),
+    shared,
+    excess,
+    /** What actually counts toward the minor — the honest completion figure. */
+    counts:   Math.max(0, share.claimedSH - excess),
+  };
 }

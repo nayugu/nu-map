@@ -656,13 +656,18 @@ export const strings = {
   // rather than a verdict: the plan is not refused, and the way out is more
   // minor coursework the major does not claim.
   "grad.share.title":             "Double counting",
-  // The label of a BUDGET, so it is a noun phrase, not the verb phrase this
-  // used to be ("also counts toward your major") — the figure beside it is a
-  // quantity of the thing named here. `cap` renders next to that figure and
-  // has to say "allowed": the cap is a ceiling, not a total, so "12 / 8" read
-  // as a broken fraction where "12 of 8 SH allowed" reads as the fact.
-  "grad.share.scope":             "Shared with your major",
-  "grad.share.cap":               "of {cap} SH allowed",
+  // The bar under this label measures the MINOR, not the cap, so the figure is
+  // the honest completion number: how much of the minor's requirement actually
+  // counts once credit past the ceiling is removed. Scaling to the ceiling
+  // instead answered a question about our arithmetic, and contradicted the
+  // progress bar directly above it.
+  "grad.share.scope":             "Counts toward this minor",
+  "grad.share.of":                "of {required} SH",
+  // The bar's bands, in the expanded detail. Two shades of green because both
+  // count; grey because that credit does not.
+  "grad.share.legend.own":        "only this minor",
+  "grad.share.legend.shared":     "counts toward both",
+  "grad.share.legend.over":       "past the limit, doesn’t count",
   // The consequence only. The meter beside it already gives the arithmetic,
   // and this is the half a student can act on.
   "grad.share.over":              "{sh} SH of the minor requirements have to come from courses that do not overlap with your major requirements.",
