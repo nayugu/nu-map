@@ -36,7 +36,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -70,8 +70,13 @@ function loadScript(inputs) {
   }
   const leftover = src.match(/\$\{\{[^}]*\}\}/);
   assert.equal(leftover, null, `unfilled workflow expression in the script: ${leftover?.[0]}`);
+  // `core` is a global in actions/github-script and the script uses it, so the
+  // harness must supply it — otherwise a branch that only logs would throw
+  // ReferenceError here while working in production, and the test would be
+  // lying in the more dangerous direction.
   // eslint-disable-next-line no-new-func
-  return new Function("github", "context", "require", `return (async () => {\n${src}\n})();`);
+  return new Function("github", "context", "require", "core",
+    `return (async () => {\n${src}\n})();`);
 }
 
 /** A github stub that records every call and can be told to fail. */
@@ -124,7 +129,12 @@ const INPUTS = {
 
 const run = async (inputs, overrides) => {
   const s = stubGithub(overrides);
-  await loadScript({ ...INPUTS, ...inputs })(s.github, CONTEXT, require);
+  s.warnings = [];
+  const core = {
+    warning: (m) => s.warnings.push(String(m)),
+    info: () => {}, notice: () => {}, error: () => {}, setOutput: () => {},
+  };
+  await loadScript({ ...INPUTS, ...inputs })(s.github, CONTEXT, require, core);
   return s;
 };
 
@@ -227,6 +237,35 @@ test("stale opens an issue that says it did not run, not that it failed", async 
   assert.match(body, /<!-- pipeline-alert:courses -->/, "must carry the marker so a later success closes it");
   assert.match(body, /last success 96 days ago/, "the watchdog's finding must reach the reader");
   assert.deepEqual(labels, ["pipeline-failure"]);
+});
+
+test("stale stays quiet when it cannot tell whether one is already open", async () => {
+  // A weekly watchdog that duplicates itself on a transient 403 becomes noise,
+  // and staleness is measured in weeks — nothing is lost by looking again.
+  const s = await run({ state: "stale" }, {
+    listForRepo: () => { throw httpError(403, "Forbidden"); },
+  });
+  assert.equal(s.named("create").length, 0);
+  assert.ok(s.warnings.some(w => /cannot tell|already reported/i.test(w)),
+    "it must say why it did nothing");
+});
+
+test("a FAILURE still speaks up when it cannot tell — being heard beats being tidy", async () => {
+  const s = await run({ state: "failed" }, {
+    listForRepo: () => { throw httpError(403, "Forbidden"); },
+  });
+  assert.equal(s.named("create").length, 1,
+    "a duplicate failure issue is a far smaller cost than a silent broken pipeline");
+});
+
+test("a log path that cannot be read does not take the alert down", async () => {
+  // `logs:` pointing at a directory (or a dangling symlink) throws from
+  // readFileSync, and the body is built outside `safe`.
+  const dir = mkdtempSync(join(tmpdir(), "numap-alert-dir-"));
+  const s = await run({ logs: dir });
+  assert.equal(s.named("create").length, 1);
+  assert.match(s.named("create")[0].args.body, /could not be read/);
+  rmSync(dir, { recursive: true, force: true });
 });
 
 test("stale never overwrites an open failure report", async () => {

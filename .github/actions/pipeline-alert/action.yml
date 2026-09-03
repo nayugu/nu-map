@@ -146,12 +146,18 @@ runs:
           // ── Recovery: close the open issue rather than leave it to rot ────
           // An alert channel nobody trusts is worse than none. If failures pile
           // up as stale open issues, the next real one is ignored.
-          const existing = await safe(async () => {
+          // `LOOKUP_FAILED` rather than null, because "there is no open issue"
+          // and "we could not find out" call for different answers below, and
+          // collapsing them means a transient 403 opens a duplicate.
+          const LOOKUP_FAILED = Symbol('lookup failed');
+          const found = await safe(async () => {
             const { data } = await github.rest.issues.listForRepo({
               owner, repo, state: 'open', labels: LABEL, per_page: 100,
             });
             return data.find(i => (i.body || '').includes(MARKER)) || null;
-          }, null);
+          }, LOOKUP_FAILED);
+          const lookupFailed = found === LOOKUP_FAILED;
+          const existing = lookupFailed ? null : found;
 
           // Create the label only if it is genuinely missing.
           //
@@ -210,6 +216,15 @@ runs:
           // not run" would replace the more informative report with the less.
           if (state === 'stale') {
             if (existing) return;
+            // Could not tell whether one is already open. A failure alert
+            // duplicating itself is a cost worth paying to be heard; a WEEKLY
+            // watchdog duplicating itself is just noise, and it will look again
+            // in seven days. Staleness is measured in weeks — nothing is lost.
+            if (lookupFailed) {
+              core.warning('Could not list issues, so cannot tell whether this is already '
+                + 'reported. Not opening one — the next weekly run will try again.');
+              return;
+            }
             const detail = lines(checkFirst).join('\n');
             const staleBody = [
               MARKER,
@@ -262,10 +277,19 @@ runs:
           // 40 lines is normally a few kB, but one stack trace or one dumped
           // JSON row is all it takes to blow the issue-body limit, so each tail
           // is clipped (see MAX_LOG above) as well as the finished body.
+          // try/catch and not just existsSync: a path that is a directory, a
+          // dangling symlink, or unreadable throws from readFileSync, and this
+          // runs OUTSIDE `safe` while building the body. One bad entry in the
+          // `logs:` list would take down the whole alert — which is the failure
+          // this action spent 2026-09-01 demonstrating in a different form.
           const tail = (p, n = 40) => {
             if (!existsSync(p)) return null;
-            const t = readFileSync(p, 'utf8').trim().split('\n').slice(-n).join('\n');
-            return t ? clip(t, MAX_LOG) : null;
+            try {
+              const t = readFileSync(p, 'utf8').trim().split('\n').slice(-n).join('\n');
+              return t ? clip(t, MAX_LOG) : null;
+            } catch (e) {
+              return `(could not be read: ${e.code ?? e.message})`;
+            }
           };
 
           const logSections = lines(logInput).map(p => {
