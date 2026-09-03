@@ -1126,6 +1126,28 @@ function allocateNodeInner(node, placedSet, used, originalUsed, courseMap, poolC
             return sum + (c?.sh ?? 4);
           }, 0);
         }
+        // An `atMostOne` OR contributes ONE alternative's credit, because the
+        // registrar says so — it is a REFERENCED MENU folded into this pool
+        // (see scripts/lib/referenced-menus.js), and the page allows one
+        // course from it in place of one of the pool's own.
+        //
+        // ⚠ This is deliberately NOT the general rule for an OR, and that was
+        // measured rather than assumed. `collectAllocated` below commits one
+        // branch, so for every OR child the pool's `satSh` and its
+        // `allocatedCourses` disagree — a real defect, 190 such nodes on 101
+        // pages. But making the general fix breaks FOUR sections outright:
+        // History BA § Historical Research and Writing is a 5 SH pool over one
+        // OR holding exactly 5 SH of courses, so "pick one" can never reach the
+        // threshold and the section becomes impossible to complete. There, the
+        // OR is the pool's own course list rather than a set of alternatives.
+        // Both readings are live in the corpus and nothing in the node tells
+        // them apart, so only the node that positively CARRIES the constraint
+        // gets it. `requirement-credit-corpus.test.js` is what caught the
+        // over-broad version; don't widen this without re-running it.
+        if (node.type === 'OR' && node.atMostOne) {
+          return [...(node.allocatedCourses ?? [])]
+            .reduce((sum, key) => sum + (courseMap[key]?.sh ?? 4), 0);
+        }
         if (node.children && node.children.length > 0) {
           return node.children.reduce((sum, child) => sum + sumSatisfiedCredits(child), 0);
         }
@@ -1304,6 +1326,10 @@ function allocateNodeInner(node, placedSet, used, originalUsed, courseMap, poolC
 
       return {
         type: 'OR',
+        // Carried onto the RESULT, not just read off the spec: an enclosing
+        // pool sizes its credit from the allocated tree, so a constraint that
+        // stays behind on the spec node is a constraint the pool never sees.
+        ...(node.atMostOne ? { atMostOne: true } : {}),
         sat: !!satisfiedChild,
         satCount: satisfiedChild ? 1 : 0,
         total: children.length,

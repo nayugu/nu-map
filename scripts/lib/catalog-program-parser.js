@@ -38,6 +38,7 @@
  */
 
 import { parse as parseHTML } from 'node-html-parser';
+import { assertReferencesAdjudicated, menuForHeading, foldOf } from './referenced-menus.js';
 
 // ── Profiles ─────────────────────────────────────────────────────────────────
 //
@@ -2179,6 +2180,31 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
     if (owners.has(i) && looksLikeConcentration(b.text)) concHeadings.set(i, undefined);
   }
 
+  // ── Headings that are a MENU another section points at ──────────────
+  //
+  // A cross-reference row ("… (see below)") means some heading below is a
+  // course list rather than a requirement. Every such row must be adjudicated
+  // — an unclaimed one stops the scrape rather than shipping either eight
+  // phantom requirement sections or a deleted real one. See
+  // `scripts/lib/referenced-menus.js` for why this is a hand table.
+  //
+  // The rail reads the raw table text, not the parsed notes, so it fires even
+  // when the row is one the note partition would not have kept.
+  assertReferencesAdjudicated(
+    blocks.filter(b => b.kind === 'table')
+      .flatMap(b => b.el.querySelectorAll('span.courselistcomment').map(s => s.text)),
+    { url: ctx.url ?? '' },
+  );
+  const menuHeadings = new Map();    // heading index → adjudication entry
+  for (let i = 0; i < blocks.length; i++) {
+    const b = blocks[i];
+    if (b.kind !== 'heading' || concHeadings.has(i) || !owners.has(i)) continue;
+    const entry = menuForHeading(b.text);
+    if (entry) menuHeadings.set(i, entry);
+  }
+  /** Folded menu nodes waiting for the section whose note points at them. */
+  const pendingMenus = [];
+
   const requirementSections  = [];
   const concentrationOptions = [];
   const usedSectionTitles    = new Set();
@@ -2329,6 +2355,32 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
       continue;
     }
 
+    if (menuHeadings.has(headingIdx)) {
+      // ── A MENU, not a requirement ───────────────────────────────────
+      //
+      // Its `areaheader` groups are the areas of ONE list, so they fold into
+      // the pool that points at this heading rather than becoming sections.
+      // The tables are still marked consumed, so `tablesConsumed ===
+      // tablesOnPage` keeps meaning what it means — a menu is read, not
+      // dropped, and the coverage check must not be able to pass by ignoring
+      // it. Notes ride along to the host: the area headings are the only
+      // place the page names them once the sections are gone.
+      const entry = menuHeadings.get(headingIdx);
+      const areas = [];
+      const menuNotes = [];
+      for (const tb of tableBlocks) {
+        consumed.add(tb);
+        for (const s of parseTable(tb.el, title, profile)) {
+          for (const n of s.notes ?? []) if (!menuNotes.includes(n)) menuNotes.push(n);
+          const courses = s.requirements ?? [];
+          if (courses.length) areas.push({ title: s.title, courses });
+        }
+      }
+      const node = foldOf(entry, areas);
+      if (node) pendingMenus.push({ entry, node, title, notes: menuNotes });
+      continue;
+    }
+
     if (concHeadings.has(headingIdx)) {
       // A concentration flattens its tables' sections into one requirement
       // list, so a note attached to a discarded section wrapper would be lost
@@ -2364,6 +2416,39 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
         s.title = uniquify(s.title, usedSectionTitles, sectionCollisions);
         requirementSections.push(s);
       }
+    }
+  }
+
+  // ── Fold each menu into the pool that points at it ──────────────────
+  //
+  // The host is the section carrying the cross-reference row as a note, NOT a
+  // heading title or an index: those are the two anchors this file is already
+  // documented as unable to keep (`mergeDuplicateSections` concatenates
+  // arrays, `_CHOOSE` rebuilds nodes, `uniquify` renames titles), while the
+  // note travels attached to the section itself.
+  //
+  // Only a POOL can absorb the menu — an XOM's `courses` are its alternatives
+  // and so are a bare OR's, and in both cases one more alternative is exactly
+  // what "or one course from the list" means. Anything else is left alone and
+  // reported: not folding costs the student credit for a menu course, which is
+  // recoverable and visible, where guessing at the shape of an unknown host
+  // could add a requirement nobody owes.
+  for (const menu of pendingMenus) {
+    const host = requirementSections.find(s =>
+      (s.notes ?? []).some(n => menu.entry.reference.test(String(n).replace(/\s+/g, ' ').trim())));
+    const pool = host?.requirements?.length === 1
+      && (host.requirements[0].type === 'XOM' || host.requirements[0].type === 'OR')
+      ? host.requirements[0] : null;
+    if (!pool) {
+      warnings.push(`referenced menu "${menu.title}" found no pool to fold into` +
+        (host ? ` (host "${host.title}" is not a single pool)` : ' (no host section carries its reference row)'));
+      continue;
+    }
+    pool.courses = [...(pool.courses ?? []), menu.node];
+    // The area names are the menu's own headings; without them the list
+    // reaches the student as one anonymous run of ~90 courses.
+    if (menu.notes.length) {
+      host.notes = [...(host.notes ?? []), ...menu.notes.filter(n => !(host.notes ?? []).includes(n))];
     }
   }
 

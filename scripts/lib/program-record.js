@@ -50,8 +50,11 @@ export function slugify(str) {
  * Parsing is synchronous and fetching is not, so this parses once to discover
  * the links, fetches them, then parses again with them resolved.
  */
-async function parseResolvingExternals(root, { profile, fetchPage, panes }) {
-  const first = parseRequirements(root, profile, { panes });
+async function parseResolvingExternals(root, { profile, fetchPage, panes, url }) {
+  // `url` is carried only so a rail that stops the run can name the page it
+  // stopped on — an unadjudicated cross-reference (see referenced-menus.js)
+  // is read by a person, and "this page" is not an address.
+  const first = parseRequirements(root, profile, { panes, url });
   const pending = (first.pendingExternal ?? []).slice(0, MAX_EXTERNAL_CONCENTRATIONS);
   if (!pending.length) return first;
 
@@ -63,7 +66,7 @@ async function parseResolvingExternals(root, { profile, fetchPage, panes }) {
     catch { /* a missing concentration page must not fail the program */ }
   }
   return parseRequirements(root, profile, {
-    panes, resolveExternal: u => resolved.get(u) ?? null,
+    panes, url, resolveExternal: u => resolved.get(u) ?? null,
   });
 }
 
@@ -216,7 +219,7 @@ async function buildOne(root, url, pageName, group, deps) {
           footnotes,
           tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
           unconsumedHeadings, titleCollisions, panesParsed } =
-    await parseResolvingExternals(root, { profile, fetchPage: deps.fetchPage, panes: paneEls });
+    await parseResolvingExternals(root, { profile, fetchPage: deps.fetchPage, panes: paneEls, url });
 
   // A program can be entirely concentrations: Philosophy BA's whole major is
   // five mutually-exclusive options and has no base requirement section.

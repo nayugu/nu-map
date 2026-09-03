@@ -612,6 +612,73 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
   are indifferent to nesting; `witnessedSharedNodes` degrades to "not
   witnessable"). **Enumerate the consumers of a node shape before introducing a
   new one** — not doing that cost three iterations and two sweeps here.
+- **A referenced MENU is not a requirement, and the page says so somewhere
+  else.** `<h2>Khoury Meaningful Minors</h2>` owns one table whose eight
+  `areaheader` groups are colleges, and the parser owns every heading that owns
+  a table — so all eight shipped as requirement sections at
+  `minRequirementCount: 1`, i.e. "take one course from each of eight colleges".
+  What the page actually says is three sections earlier, in a row of the
+  Computer Science Electives pool: "One course from Khoury meaningful minors
+  list **(see below)**". Measured with the app's own `demandOf`: Computer
+  Science, Minor 52 SH derived against a stated 20, Data Science, Minor 45 —
+  29 and 27 SH of it phantom. That is not cosmetic, because `minorOverlap.js`
+  derives the 50% double-count ceiling from Σ `demandOf`, so the CS minor's cap
+  was 26 SH against a 20 SH minor. Now 23 and 17.
+  `scripts/lib/referenced-menus.js` is a **hand adjudication with a hard rail**,
+  and the measurement is what makes that the right shape rather than the lazy
+  one: across the 1,386 cached LIVE program pages exactly **two** carry a
+  cross-reference row, and both obvious rules fail on the pair —
+  1. **Match the menu by TITLE** and you miss one of the two cases you derived
+     it from: the CS page says "Khoury meaningful minors list", the DS page says
+     "Meaningful minor list", the heading says "Khoury Meaningful Minors".
+  2. **Take the NEXT heading** is true on both pages and is a guess. Getting it
+     wrong DELETES a requirement section, so the student is never shown
+     something they owe — the direction that does not recover.
+  So detection is automatic (`CROSS_REFERENCE`, deliberately broad) and the
+  decision is by hand: an unclaimed cross-reference is a **hard scrape
+  failure**, exactly like an unadjudicated pane. Do not add a fallback — a
+  fallback here either invents eight requirements or deletes a real one.
+  Four more things are load-bearing:
+  - The host is the section **carrying the reference row as a note**, never a
+    title or an index. Those are the two anchors this file is already
+    documented as unable to keep, and the note travels with the section
+    through `mergeDuplicateSections`, `_CHOOSE` and `uniquify` for free.
+  - The fold is `OR` over one labelled `OR` per area, carrying **`atMostOne`**,
+    so the menu contributes at most one course however many of its courses the
+    student took — which is what the page allows and what the DS page states
+    outright. Only a POOL (an `XOM`, or a bare `OR`) can absorb it; any other
+    host is left alone and reported, because not folding merely costs credit
+    for a menu course where guessing could add a requirement nobody owes.
+  - **`atMostOne` is a flag on ONE node, and it is NOT the general rule for an
+    `OR` inside a credit pool** — that was tried first and reverted, and the
+    reason is worth keeping. `allocateNode` commits one branch of an OR into
+    `allocatedCourses`, but `sumSatisfiedCredits` recurses into every satisfied
+    alternative, so a pool's credit and its allocation disagree on **310 of
+    1,410 pools (22%)**, in both directions. Making them agree globally makes
+    **four sections impossible to complete**: History BA § Historical Research
+    and Writing is a 5 SH pool over ONE OR holding exactly 5 SH, so "pick one"
+    can never reach the threshold — there the OR is the pool's own course list,
+    not a set of alternatives. Both readings are live and nothing in the node
+    tells them apart, so only a node that positively carries the constraint may
+    impose it. `requirement-credit-corpus.test.js` is what caught the
+    over-broad version, and stays the guard. **The 310 are a real open defect
+    needing their own measurement** — not something to smuggle into a parser
+    fix. And note the flag has to be copied onto the ALLOCATED node too: a
+    constraint left behind on the spec is one the enclosing pool never sees.
+  - The menu's tables are still marked **consumed**, so
+    `tablesConsumed === tablesOnPage` goes on meaning what it means. A menu is
+    read, not dropped.
+  - Like `shared-sections.js` it carries an `ADJUDICATED_EDITION`: the patterns
+    were read off a specific catalog, so a roll costs a re-adjudication and the
+    rail's message names the edition.
+  ⚠ **Still open on these two pages** and deliberately not fixed here, because
+  it is a different mechanism with a corpus-wide blast radius: Data Science
+  Electives says "Complete two of the following" and ships
+  `minRequirementCount: 1`. `commitChooseGroup`'s `chooseItems.length <= 2`
+  shortcut collapses a 2-of-2 into an `OR`. The count is only 2 because the
+  cross-reference row is one of "the following" and yields no course node — so
+  folding earlier, inside `parseTable`, would fix it by arithmetic. Changing
+  that shortcut needs its own measurement over the whole corpus.
 - Concentrations are found through the page's **anchor graph**, not heading
   text — wording varies far too much. A concentration's title is its only
   identity across saved plans, share links and MCP `SET_CONCENTRATION`, so
@@ -666,16 +733,20 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
   2. The denominator is **derived** — Σ `demandOf`, the audit's own figure —
      because 169 of 181 minor pages state no total at all. The 12 that do are
      the only place it can be checked, and it holds: **derived equals stated
-     exactly on 9 of 10** minors where both numbers exist. The tenth is Computer
+     exactly on 9 of 10** minors where both numbers exist. The tenth was Computer
      Science, Minor, 52 SH derived against a page that says 20, because eight of
-     its ten parsed sections are the colleges making up the "Khoury meaningful
+     its ten parsed sections were the colleges making up the "Khoury meaningful
      minors list" — one elective's MENU parsed as siblings of the requirement it
      belongs to (the Data Science MSAlign defect, in the section parse).
-     Do **not** "fix" that by preferring `totalCreditsRequired`: the denominator
-     would become the registrar's 20 while the numerator went on being counted
-     against the same inflated sections, which is two accountings either side of
-     one subtraction. Left alone the cap is too GENEROUS on that one minor,
-     which is the survivable direction.
+     **Fixed Sept 2026 in the parser, which is where it always belonged**; see
+     *A referenced MENU is not a requirement* below. 52 → 23 SH against a stated
+     20, and Data Science, Minor 45 → 17.
+     Do **not** "fix" the residual by preferring `totalCreditsRequired`: the
+     denominator would become the registrar's 20 while the numerator went on
+     being counted against our own sections, which is two accountings either
+     side of one subtraction. An inflated denominator makes the cap too
+     GENEROUS, which is the survivable direction — so the repair belongs in the
+     parse, never in the subtraction.
   3. It **never un-allocates**. The requirement rows and the progress bar are
      byte-identical with and without it; over the cap a row goes amber and the
      printed report carries the sentence. Choosing a course to drop in order to

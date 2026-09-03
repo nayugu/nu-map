@@ -1,8 +1,8 @@
 {
   "name": "Data Science, Minor",
   "metadata": {
-    "verified": true,
-    "lastEdited": "8/21/2026",
+    "verified": false,
+    "lastEdited": "9/3/2026",
     "branch": "main",
     "tablesPresent": 3,
     "tablesConsumed": 3,
@@ -12,42 +12,7 @@
     "panes": [
       "minorrequirementstextcontainer"
     ],
-    "planOfStudyCourses": [],
-    "verification": {
-      "level": "verified",
-      "kind": "minor",
-      "score": 0.98,
-      "checkedAt": "2026-08-22",
-      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/data-science/data-science-minor/",
-      "sourcesAvailable": [
-        "requirement-tables",
-        "course-catalog"
-      ],
-      "counters": {
-        "tablesUnaccounted": 0,
-        "leakedMarkers": 0,
-        "unenumeratedSections": 0,
-        "duplicateSectionTitles": 0,
-        "duplicateConcentrationTitles": 0,
-        "zeroTotal": 1,
-        "unknownCourses": 0,
-        "planUnexplained": 0,
-        "impossibleSections": 0
-      },
-      "discrepancies": [
-        {
-          "check": "missing-total-credits",
-          "severity": "info",
-          "message": "the catalog page states no total credit requirement",
-          "detail": [
-            {
-              "key": "noTotal"
-            }
-          ],
-          "overflow": 0
-        }
-      ]
-    }
+    "planOfStudyCourses": []
   },
   "totalCreditsRequired": 0,
   "yearVersion": 2026,
@@ -145,6 +110,274 @@
               "idRangeStart": 2010,
               "idRangeEnd": 4989,
               "exceptions": []
+            },
+            {
+              "type": "OR",
+              "atMostOne": true,
+              "courses": [
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 3451
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 5100
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 5110
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 5120
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 5330
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 6100
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "GSND",
+                      "classId": 5110
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "GSND",
+                      "classId": 6350
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "JRNL",
+                      "classId": 3700
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "JRNL",
+                      "classId": 5500
+                    }
+                  ],
+                  "label": "Arts, Media and Design"
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "HINF",
+                      "classId": 5101
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "HINF",
+                      "classId": 5102
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "HINF",
+                      "classId": 5300
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "HINF",
+                      "classId": 5301
+                    }
+                  ],
+                  "label": "Bouvé Health Sciences"
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "FINA",
+                      "classId": 4335
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "FINA",
+                      "classId": 4350
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "FINA",
+                      "classId": 4390
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "MISM",
+                      "classId": 2510
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "MISM",
+                      "classId": 3403
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "MISM",
+                      "classId": 3501
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "MISM",
+                      "classId": 3515
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "MKTG",
+                      "classId": 3401
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "MKTG",
+                      "classId": 3501
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "SCHM",
+                      "classId": 2301
+                    }
+                  ],
+                  "label": "D'Amore-McKim—Business"
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CY",
+                      "classId": 5010
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CY",
+                      "classId": 5200
+                    }
+                  ],
+                  "label": "Computer and Information Science"
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CIVE",
+                      "classId": 3464
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "EECE",
+                      "classId": 5639
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "EECE",
+                      "classId": 5642
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "EECE",
+                      "classId": 5644
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "IE",
+                      "classId": 5640
+                    }
+                  ],
+                  "label": "Engineering"
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "BINF",
+                      "classId": 6308
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "BINF",
+                      "classId": 6309
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ENVR",
+                      "classId": 2500
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "MATH",
+                      "classId": 2331
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "MATH",
+                      "classId": 2341
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "MATH",
+                      "classId": 3081
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "MATH",
+                      "classId": 4581
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PSYC",
+                      "classId": 2320
+                    }
+                  ],
+                  "label": "Science"
+                },
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ECON",
+                      "classId": 2350
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ECON",
+                      "classId": 2560
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ECON",
+                      "classId": 3916
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "PHIL",
+                      "classId": 2001
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "POLS",
+                      "classId": 2400
+                    }
+                  ],
+                  "label": "Social Science and Humanities"
+                }
+              ]
             }
           ]
         }
@@ -155,310 +388,6 @@
         "DS 2010 to DS 4989",
         "Meaningful minor list (see below)"
       ]
-    },
-    {
-      "type": "SECTION",
-      "title": "Arts, Media and Design",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 3451
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 5100
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 5110
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 5120
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 5330
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 6100
-            },
-            {
-              "type": "COURSE",
-              "subject": "GSND",
-              "classId": 5110
-            },
-            {
-              "type": "COURSE",
-              "subject": "GSND",
-              "classId": 6350
-            },
-            {
-              "type": "COURSE",
-              "subject": "JRNL",
-              "classId": 3700
-            },
-            {
-              "type": "COURSE",
-              "subject": "JRNL",
-              "classId": 5500
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Bouvé Health Sciences",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "HINF",
-              "classId": 5101
-            },
-            {
-              "type": "COURSE",
-              "subject": "HINF",
-              "classId": 5102
-            },
-            {
-              "type": "COURSE",
-              "subject": "HINF",
-              "classId": 5300
-            },
-            {
-              "type": "COURSE",
-              "subject": "HINF",
-              "classId": 5301
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "D'Amore-McKim—Business",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "FINA",
-              "classId": 4335
-            },
-            {
-              "type": "COURSE",
-              "subject": "FINA",
-              "classId": 4350
-            },
-            {
-              "type": "COURSE",
-              "subject": "FINA",
-              "classId": 4390
-            },
-            {
-              "type": "COURSE",
-              "subject": "MISM",
-              "classId": 2510
-            },
-            {
-              "type": "COURSE",
-              "subject": "MISM",
-              "classId": 3403
-            },
-            {
-              "type": "COURSE",
-              "subject": "MISM",
-              "classId": 3501
-            },
-            {
-              "type": "COURSE",
-              "subject": "MISM",
-              "classId": 3515
-            },
-            {
-              "type": "COURSE",
-              "subject": "MKTG",
-              "classId": 3401
-            },
-            {
-              "type": "COURSE",
-              "subject": "MKTG",
-              "classId": 3501
-            },
-            {
-              "type": "COURSE",
-              "subject": "SCHM",
-              "classId": 2301
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Computer and Information Science",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CY",
-              "classId": 5010
-            },
-            {
-              "type": "COURSE",
-              "subject": "CY",
-              "classId": 5200
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Engineering",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CIVE",
-              "classId": 3464
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5639
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5642
-            },
-            {
-              "type": "COURSE",
-              "subject": "EECE",
-              "classId": 5644
-            },
-            {
-              "type": "COURSE",
-              "subject": "IE",
-              "classId": 5640
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Science",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "BINF",
-              "classId": 6308
-            },
-            {
-              "type": "COURSE",
-              "subject": "BINF",
-              "classId": 6309
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 2500
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 2331
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 2341
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 3081
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 4581
-            },
-            {
-              "type": "COURSE",
-              "subject": "PSYC",
-              "classId": 2320
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Social Science and Humanities",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2350
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 2560
-            },
-            {
-              "type": "COURSE",
-              "subject": "ECON",
-              "classId": 3916
-            },
-            {
-              "type": "COURSE",
-              "subject": "PHIL",
-              "classId": 2001
-            },
-            {
-              "type": "COURSE",
-              "subject": "POLS",
-              "classId": 2400
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
   ],
   "gpaRequirements": [
