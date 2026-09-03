@@ -265,6 +265,59 @@ async function reportLifespan(courseKey, years) {
   }
 }
 
+// ── snapshot provenance ───────────────────────────────────────────────────────
+/**
+ * Which edition is a frozen snapshot actually a copy of?
+ *
+ * A snapshot on disk carries no edition banner — the scrape never recorded one —
+ * so `data/northeastern/catalog/editions/<year>/` asserts its year by a filename
+ * and a manifest, both of them written by hand. That is a label, not evidence,
+ * and mislabelling one is unrecoverable: the whole point of the tree is to hold
+ * the only copy of an edition nobody can re-fetch.
+ *
+ * This compares the snapshot's course SET against each named edition and reports
+ * the symmetric difference per subject. A snapshot of edition N should differ
+ * from both its neighbours; matching one of them exactly is the finding.
+ */
+async function reportSnapshot(path, years, slugs) {
+  const { readFileSync } = await import("node:fs");
+  const rows = JSON.parse(readFileSync(path, "utf8"));
+  const snap = new Set(rows.map(keyOf));
+  console.log(`\nSNAPSHOT PROVENANCE — ${path}`);
+  console.log(`  ${rows.length} courses; comparing the ${slugs.join(", ")} subset against each edition\n`);
+
+  const subset = new Set([...snap].filter(k => slugs.some(s => k.startsWith(s.toUpperCase()))));
+  console.log(`  snapshot subset: ${subset.size} courses`);
+  console.log("\n  edition  shared  only-snapshot  only-edition  verdict");
+  for (const year of years) {
+    const live = new Set();
+    let missingPages = 0;
+    for (const slug of slugs) {
+      const got = await subjectFor(year, slug);
+      if (!got) { missingPages++; continue; }
+      for (const c of got.courses) live.add(keyOf(c));
+    }
+    // An unparsed era yields an empty set, which would read as "shares nothing"
+    // — the same false-absence trap reportLifespan guards. Say so instead.
+    if (fidelityOfEdition(year) === "descriptive" || live.size === 0) {
+      console.log(`  ${year}     — unreadable by the current parser; not evidence`);
+      continue;
+    }
+    const shared = [...subset].filter(k => live.has(k)).length;
+    const onlySnap = [...subset].filter(k => !live.has(k));
+    const onlyEd = [...live].filter(k => !subset.has(k));
+    const verdict = onlySnap.length === 0 && onlyEd.length === 0
+      ? "IDENTICAL — the snapshot IS this edition"
+      : `differs by ${onlySnap.length + onlyEd.length}`;
+    console.log(`  ${year}     ${String(shared).padStart(6)}  ${String(onlySnap.length).padStart(13)}  ${String(onlyEd.length).padStart(12)}  ${verdict}`);
+    if (onlySnap.length) console.log(`             only-snapshot: ${onlySnap.slice(0, 14).join(" ")}${onlySnap.length > 14 ? " …" : ""}`);
+    if (onlyEd.length)   console.log(`             only-edition:  ${onlyEd.slice(0, 14).join(" ")}${onlyEd.length > 14 ? " …" : ""}`);
+    if (missingPages)    console.log(`             (${missingPages} subject page(s) absent in this edition)`);
+  }
+  console.log("\n  Reading it: the snapshot's own edition should appear in NEITHER column as");
+  console.log("  a match. If a probed edition comes back IDENTICAL, the label is wrong.");
+}
+
 // ── main ──────────────────────────────────────────────────────────────────────
 async function main() {
   const live = await resolveLiveYear();
@@ -281,14 +334,22 @@ async function main() {
   console.log(`editions: ${years.join(", ")}`);
   console.log(`subjects: ${slugs.length > 12 ? slugs.length + " (all)" : slugs.join(", ")}`);
 
+  if (has("--snapshot")) {
+    // `--snapshot` takes an optional path, so a following FLAG is not the value.
+    const given = val("--snapshot");
+    const path = given && !given.startsWith("--")
+      ? given
+      : "data/northeastern/catalog/editions/2026/catalog-courses.json";
+    await reportSnapshot(path, years, slugs);
+  }
   if (has("--course"))   await reportLifespan(val("--course"), years);
   if (has("--fidelity")) await reportFidelity(years, slugs);
   if (has("--drift")) {
     if (years.length < 2) throw new Error("--drift needs at least two --editions");
     for (let i = 0; i < years.length - 1; i++) await reportDrift(years[i], years[i + 1], slugs);
   }
-  if (!has("--course") && !has("--fidelity") && !has("--drift")) {
-    console.log("\nnothing asked. try --fidelity, --drift, or --course CS2500");
+  if (!has("--course") && !has("--fidelity") && !has("--drift") && !has("--snapshot")) {
+    console.log("\nnothing asked. try --fidelity, --drift, --course CS2500, or --snapshot");
   }
 }
 
