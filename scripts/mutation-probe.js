@@ -378,9 +378,21 @@ const MUTANTS = [
     from: "    if (current.has(key)) continue;          // still published — not retired",
     to:   "", run: [RETUNION_TEST] },
 
+  // Isolated to the RECORD: `from` is still updated, so fidelity stays correct
+  // and this can only be killed by a test that checks which edition's copy of
+  // the course survived. A cruder mutant that dropped both would die for the
+  // wrong reason and tell us nothing about that.
   { name: "union: the OLDEST edition's record wins, not the newest", file: RETUNION,
-    from: "      if (prior) { prior.record = c; prior.editions.add(year); }",
-    to:   "      if (prior) { prior.editions.add(year); }", run: [RETUNION_TEST] },
+    from: "      if (prior) { prior.record = c; prior.from = year; prior.editions.add(year); }",
+    to:   "      if (prior) { prior.from = year; prior.editions.add(year); }", run: [RETUNION_TEST] },
+
+  { name: "union: fidelity is taken from the span's START, not the record's edition", file: RETUNION,
+    from: "        fidelity: fidelityOfEdition(from),",
+    to:   "        fidelity: fidelityOfEdition(years[0]),", run: [RETUNION_TEST] },
+
+  { name: "union: every record is assumed full fidelity", file: RETUNION,
+    from: "        fidelity: fidelityOfEdition(from),",
+    to:   "        fidelity: \"full\",", run: [RETUNION_TEST] },
 
   { name: "union: editions are used in directory order, unsorted", file: RETUNION,
     from: "  const ordered = [...snapshots].sort((a, b) => a.year - b.year);",

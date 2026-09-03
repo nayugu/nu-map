@@ -95,7 +95,7 @@ describe("deriveRetiredUnion", () => {
     const { retired } = deriveRetiredUnion(catalog, [{ year: 2026, rows: SNAPSHOT }]);
     for (const c of retired) {
       assert.deepEqual(c.lifespan,
-        { firstEdition: 2026, lastEdition: 2026, editions: [2026], editionsHeld: 1 },
+        { firstEdition: 2026, lastEdition: 2026, editions: [2026], editionsHeld: 1, fidelity: "full" },
         `${keyOfCourse(c)} carries a lifespan that does not match the one edition on disk`);
       assert.equal(c.retiredSince, undefined,
         "retiredSince is the day OUR scrape missed the course — a fact about us, not the catalog");
@@ -140,10 +140,39 @@ describe("deriveRetiredUnion", () => {
 
     assert.equal(byKey.get("CS9001").title, "New Title", "the older record overwrote the newer one");
     assert.deepEqual(byKey.get("CS9001").lifespan,
-      { firstEdition: 2026, lastEdition: 2027, editions: [2026, 2027], editionsHeld: 2 });
+      { firstEdition: 2026, lastEdition: 2027, editions: [2026, 2027], editionsHeld: 2, fidelity: "full" });
     assert.deepEqual(byKey.get("CS9002").lifespan,
-      { firstEdition: 2026, lastEdition: 2026, editions: [2026], editionsHeld: 2 },
+      { firstEdition: 2026, lastEdition: 2026, editions: [2026], editionsHeld: 2, fidelity: "full" },
       "a course present in only the older edition must not claim the newer one");
+  });
+
+  test("fidelity comes from the edition that supplied the RECORD", () => {
+    // The shipped data cannot exercise this: every frozen edition on disk is
+    // `full`, so the invariant suite's fidelity guard is a tripwire rather than
+    // a test. This is where the descriptive branch is actually run.
+    //
+    // It matters because a pre-2022 page publishes title + credits +
+    // description and nothing else — no Prerequisite(s) line exists at all. A
+    // record from one has `prereqs: []` meaning "unpublished", never "none",
+    // and a consumer that cannot tell the difference will schedule a course
+    // before what it requires.
+    const old2020 = [{ subject: "CS", number: "9100", title: "Only In 2020", credits: 4, prereqs: [] }];
+    const { retired } = deriveRetiredUnion([], [{ year: 2020, rows: old2020 }]);
+    assert.equal(retired[0].lifespan.fidelity, "descriptive",
+      "a record from a pre-2022 edition must be marked descriptive, or its empty "
+      + "prereqs read as a fact about the course rather than about the page");
+
+    // And the record's OWN edition decides it, not the newest one held. A
+    // course carried by both a descriptive and a full edition takes the full
+    // record, so it is `full`; taking the span's start would mislabel it.
+    const new2023 = [{ subject: "CS", number: "9100", title: "Still Here", credits: 4, prereqs: [] }];
+    const both = deriveRetiredUnion([], [
+      { year: 2020, rows: old2020 }, { year: 2023, rows: new2023 },
+    ]).retired[0];
+    assert.equal(both.title, "Still Here", "the newer record should have won");
+    assert.equal(both.lifespan.firstEdition, 2020, "the span still starts at the older edition");
+    assert.equal(both.lifespan.fidelity, "full",
+      "fidelity describes the RECORD we kept, not the earliest edition the course appeared in");
   });
 
   test("self-pruning: dropping an edition drops its exclusive courses", () => {
