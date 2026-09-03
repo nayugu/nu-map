@@ -16,6 +16,7 @@ import { ISpecialTerms }            from "../ports/ISpecialTerms.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
 import { unlockedCourses, coreqPartnersOf } from "../core/courseModel.js";
+import { groupRestrictions, displayValues } from "../core/restrictionView.js";
 import { conditionStatus } from "../core/prereqConditions.js";
 // Pure core, like prereqConditions beside it — the codes and their ordering, never
 // the display names: those are localized and come from `t`.
@@ -641,6 +642,17 @@ function CourseInfo({ selCourse, navTo }) {
           quoted as a COUNT rather than asserted as a requirement, and it is
           deliberately not a warning colour: a student whose program does not
           require it has done nothing wrong. See stampCoopPrep in courseNorm.js. */}
+      {/* Banner's Restrictions pane, per season, each naming the term it was
+          read from. Information, not a violation — we do not know the student's
+          major, college or campus, so a warning colour here would accuse people
+          we cannot assess, exactly as the standing box above reasons. Coverage
+          is printed whenever a restriction is on SOME sections and not all,
+          because "3 of 21" (there is a way in) and "21 of 21" (there is not)
+          are opposite advice. See scripts/derive-restrictions.js. */}
+      {selCourse.restrictions && (
+        <RestrictionBlock restrictions={selCourse.restrictions} t={t}
+                          standingShown={!!STANDING_NAMES[selCourse.offering?.std]} />
+      )}
       {Number.isFinite(selCourse.coopPrep?.observations) && (
         <div title={t("info.coopPrep.note")}
              style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 4, padding: "4px 8px", marginTop: 4, lineHeight: "calc(1.9 * var(--lh-scale, 1))" }}>
@@ -648,6 +660,120 @@ function CourseInfo({ selCourse, navTo }) {
           {t("info.coopPrep.body", { count: selCourse.coopPrep.observations })}
         </div>
       )}
+    </div>
+  );
+}
+
+// The season labels the rest of the app already uses (ClaudePanel L185,
+// ChartExplainer L34). Reused rather than adding `sem.*` keys, so a summer
+// cannot read "Summer 2" here and "Summer B" three panels over — CLAUDE.md
+// fixes that wording repo-wide.
+const SEASON_KEY = {
+  fall: "claude.sem.fall", spring: "claude.sem.spring",
+  sumA: "claude.sem.sum1", sumB: "claude.sem.sum2",
+};
+
+/**
+ * Banner term code → calendar year.
+ *
+ * YYYY is the ACADEMIC year's end, so Fall belongs to the previous calendar
+ * year and everything else to YYYY. Checked against Banner's own descriptions:
+ * 202510 is "Fall 2024", 202530 is "Spring 2025", 202460 is "Summer 2 2024".
+ * Getting this backwards would date every Fall restriction a year late.
+ */
+function termYear(termCode) {
+  const y = Number(String(termCode ?? "").slice(0, 4));
+  if (!Number.isFinite(y)) return null;
+  return String(termCode).slice(4) === "10" ? y - 1 : y;
+}
+
+/**
+ * Banner's Restrictions pane for one course.
+ *
+ * ── Grouped by RESTRICTION, not by term ────────────────────────────
+ *
+ * `groupRestrictions` does the inversion and the reasoning lives there. What it
+ * buys visually: a course restricted identically every term reads as one line
+ * instead of eleven, and a course whose restriction actually MOVES gets a
+ * second line — so difference is loud rather than buried in repetition.
+ *
+ * Section groups are never unioned. Measured: 45 of 344 courses have a kind
+ * whose sections disagree, and ARCH 5115 has three distinct program groups in
+ * one term. Merging them would tell a BS-ARCH student that any of five
+ * programmes may register, and never that exactly one section is open to them.
+ *
+ * ── Falling back to Banner's own words ─────────────────────────────
+ *
+ * `t()` returns the KEY when a translation is missing, which would print
+ * `info.restrictions.name.Majors` on screen. An unrecognised kind therefore
+ * falls back to Banner's own English noun — worse than a translation, far
+ * better than a raw key or a dropped restriction.
+ */
+function RestrictionBlock({ restrictions, t, standingShown = false }) {
+  const { labels = {}, terms } = restrictions ?? {};
+  const view = groupRestrictions(terms);
+
+  // The standing box directly above already says "Junior standing or above",
+  // so repeating `Class standing: Junior · Senior` here is the same fact twice
+  // in adjacent boxes. Dropped ONLY when this row adds nothing to it: one
+  // group, on every section, in every season observed. If standing varies by
+  // section or by season — ARCH 5115 is JR|SR on 2 of 5 sections and GR on 1 —
+  // this row carries strictly more than the folded floor and stays.
+  const kinds = view.kinds.filter(k => {
+    if (!standingShown || k.key !== "must:Classes") return true;
+    return k.variesBySection
+        || k.groups.length > 1
+        || k.groups[0].seasons.some(s => !s.everySection);
+  });
+  if (!kinds.length) return null;
+
+  /** Translate, or fall back to the registrar's own word. */
+  const orRaw = (key, raw) => { const s = t(key); return s === key ? raw : s; };
+
+  return (
+    <div style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 4, padding: "4px 8px", marginTop: 4, lineHeight: "calc(1.9 * var(--lh-scale, 1))" }}>
+      <div title={t("info.restrictions.note")}>
+        <span style={{ color: "var(--text-3)", fontWeight: 700 }}>{t("info.restrictions.title")}</span>
+      </div>
+
+      {kinds.map(k => (
+        <div key={k.key} style={{ marginTop: 2 }}>
+          <span style={{ fontWeight: 600, color: k.polarity === "not" ? "var(--error)" : "var(--text-3)" }}>
+            {t(`info.restrictions.kind.${k.polarity}`, {
+              kind: orRaw(`info.restrictions.name.${k.kind}`, k.kind),
+            })}
+          </span>
+          {k.variesBySection && (
+            <span style={{ opacity: 0.7 }}> {t("info.restrictions.variesBySection")}</span>
+          )}
+          {k.groups.map((g, gi) => (
+            <div key={gi} style={{ paddingLeft: 8, display: "flex", gap: 6, justifyContent: "space-between" }}>
+              <span>{displayValues(g.codes, labels, k.key).join(" · ")}</span>
+              {/* Coverage per SEASON, pooled across that season's years — see
+                  seasonCoverage. "every section" is the gate; a fraction is the
+                  reserved case, which is 24.6% of observations and the
+                  difference between "you cannot take this" and "one section is
+                  closed to you". */}
+              <span style={{ opacity: 0.7, whiteSpace: "nowrap", textAlign: "right" }}>
+                {g.seasons.map((s, si) => (
+                  <span key={si} style={{ display: "block" }}>
+                    {s.everySection
+                      ? t("info.restrictions.everySection")
+                      : t("info.restrictions.someSections", { n: s.sections, total: s.of })}
+                    {" · "}
+                    {t(SEASON_KEY[s.season] ?? s.season ?? "")}
+                    {s.terms > 1
+                      ? ` ${t("info.restrictions.years", { n: s.terms })}`
+                      : ` ${termYear(s.latestTerm) ?? ""}`}
+                  </span>
+                ))}
+              </span>
+            </div>
+          ))}
+        </div>
+      ))}
+
+      <div style={{ opacity: 0.7, marginTop: 2 }}>{t("info.restrictions.source")}</div>
     </div>
   );
 }

@@ -321304,7 +321304,18 @@
           1,
           31
         ]
-      ]
+      ],
+      "restr": {
+        "must:Levels": {
+          "UG": 1
+        },
+        "must:Classes": {
+          "JR|SR": 1
+        },
+        "must:Majors": {
+          "INDE": 1
+        }
+      }
     },
     "202540": {
       "sections": 2,

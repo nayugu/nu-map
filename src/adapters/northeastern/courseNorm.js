@@ -289,15 +289,21 @@ export function stampCoopPrep(courses, coopJson) {
  *
  *   c.restrictions = {
  *     labels: { "must:Majors|INDE": "Industrial Engineering", … },   // shared
- *     seasons: { fall: { term, sections, kinds: { "must:Majors": [[code, n], …] } } }
+ *     terms: [{ term, season, sections,
+ *               kinds: { "must:Majors": [[[codes], sections], …] } }, …]
  *   }
  *
- * MEIE 4701 is one course whose sections are partitioned by major AND by
- * season: Industrial-only in Fall, Mechanical-only in Summer 2. A single-term
- * view shows one and hides the other, which leaves an IE student reading
- * "offered Summer 1, Summer 2, Fall" with no way to know Summer 2 is closed to
- * them. Each season therefore names the term it was READ from — this asserts
- * what Banner said in a specific term, never that the term is representative.
+ * One entry per TERM, newest first, and within each kind one group per distinct
+ * set of codes. Both levels matter and both were folded away in earlier drafts:
+ * MEIE 4701 is Industrial-only in Fall and Mechanical-only in Summer B, so
+ * keeping one term hides the other; and ARCH 5115 has three different program
+ * groups across five sections in a single term, so unioning them tells a
+ * BS-ARCH student that any of five programmes may register and never that
+ * exactly one section is open to them.
+ *
+ * `src/core/restrictionView.js` inverts this into something readable. The
+ * storage stays faithful to what Banner said; the grouping is a display
+ * decision and lives with the display.
  *
  * `labels` is attached per course rather than kept in a module-level map so the
  * MCP adapters and the panel read one object and cannot disagree about a gloss.
@@ -315,9 +321,12 @@ export function stampRestrictions(courses, restrJson) {
   if (!table || typeof table !== "object") return courses;
   const labels = restrJson.labels && typeof restrJson.labels === "object" ? restrJson.labels : {};
   for (const c of courses) {
-    const seasons = table[c.id];
-    if (!seasons || typeof seasons !== "object" || !Object.keys(seasons).length) continue;
-    c.restrictions = { labels, seasons };
+    const terms = table[c.id];
+    // An ARRAY specifically: an earlier draft keyed by season and the component
+    // then had to guess which shape it held, which is how the block silently
+    // rendered nothing. One shape, asserted here.
+    if (!Array.isArray(terms) || !terms.length) continue;
+    c.restrictions = { labels, terms };
   }
   return courses;
 }

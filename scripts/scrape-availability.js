@@ -780,16 +780,38 @@ async function main() {
   // can: a scraped term yields hundreds of gated courses, and a term with none would
   // mean Banner published no restriction at all that semester.
   //
-  // The marker is `restr`, NOT `std`. Terms scraped before the whole pane was
-  // captured carry `std` and no `restr`, and they hold only the `Classes`
-  // heading — so treating `std` as "done" would leave them permanently missing
-  // Majors, Colleges and the rest. Requiring `restr` re-reads those terms once,
-  // which is the intended one-time cost of widening the parser.
+  // The restriction marker is `restr`, NOT `std`: terms scraped before the
+  // whole pane was captured carry `std` and hold only the `Classes` heading, so
+  // treating `std` as "done" would leave them permanently missing Majors,
+  // Colleges and the rest.
+  //
+  // And it is a COVERAGE test, not a presence test. `reparse-restrictions.js`
+  // can legitimately write `restr` for a subset of a term — the courses whose
+  // sections are wholly in the page cache — and a presence test then reads that
+  // term as finished. Measured: 202510 had `restr` on 263 of its 2,455 courses
+  // (10.7%) after a re-parse from a sampled cache, which would have pinned it
+  // at 19% page coverage forever.
+  //
+  // 90% is safe because 99% of sections carry at least one restriction (almost
+  // always `Levels`), so a fully captured term reaches essentially 100% —
+  // 202460 measured 368 of 369 courses. A term below the threshold is read as
+  // partially captured and re-read in full.
+  const RESTR_DONE_SHARE = 0.9;
   const termsWithRestr = new Set();
+  const restrSeen = {};   // termCode → { withRestr, courses }
   for (const byTerm of Object.values(prevDetails)) {
     for (const [tc, d] of Object.entries(byTerm)) {
       if (d.prof) termsWithProf.add(tc);
-      if (d.restr) termsWithRestr.add(tc);
+      const slot = (restrSeen[tc] ??= { withRestr: 0, courses: 0 });
+      slot.courses += 1;
+      if (d.restr) slot.withRestr += 1;
+    }
+  }
+  for (const [tc, { withRestr, courses }] of Object.entries(restrSeen)) {
+    if (courses > 0 && withRestr / courses >= RESTR_DONE_SHARE) termsWithRestr.add(tc);
+    else if (withRestr > 0) {
+      console.log(`[${tc}] restrictions only ${withRestr}/${courses} courses ` +
+        `(${(100 * withRestr / courses).toFixed(1)}%) — treating as INCOMPLETE, will re-read`);
     }
   }
   // Accumulated across every term read this run, then merged over the previous

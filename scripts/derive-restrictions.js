@@ -6,25 +6,38 @@
 // app fetches. term-details.json is 8.8 MB and Node-only; this is what the
 // browser gets.
 //
-// ── ONE ENTRY PER SEASON, each naming its own term ─────────────────
+// ── EVERY TERM, AND EVERY SECTION GROUP ────────────────────────────
 //
-// The obvious fold — keep only the most recent term — was rejected because it
-// destroys the case advising actually raised. MEIE 4701 is one course whose
-// sections are partitioned by major AND by season:
+// A restriction is a property of a SECTION in a SEMESTER, and this file went
+// through two lossy folds before arriving at that. Both are recorded because
+// both are tempting:
 //
-//   Fall      Majors: IEBA, IECS, INDE     (Industrial only)
-//   Summer 2  Majors: MEBE, MECE, MEDS, MEHI, MEPH   (Mechanical only)
+// 1. One entry per SEASON, keeping the most recent term. Loses cross-semester
+//    variation entirely — Fall 2024 and Fall 2025 can differ and only one
+//    would ever be shown.
 //
-// A single-term view shows one of those and hides the other, so an IE student
-// reading "offered Summer 1, Summer 2, Fall" still has no way to know Summer 2
-// is closed to them. Per season, each labelled with the term it was READ from,
-// shows the difference without asserting anything about years we did not look
-// at.
+// 2. UNIONING the section groups within a term. This one was worse, because it
+//    is not merely incomplete, it MISLEADS. Measured: 98 course-term-kinds have
+//    sections that disagree. ARCH 5115 in 202510 has five sections and three
+//    distinct program groups —
 //
-// This is deliberately NOT a stability claim. It says "in Fall 2024 this was
-// the restriction", not "Fall is always like this" — an earlier design tried to
-// report a frequency ("every Fall, 3 of 3") and it was both unproducible from
-// the terms we have and measuring seasonal structure as though it were drift.
+//      1 section   MARCH-ARCH2
+//      1 section   BS-ARCH or BS-ARCS
+//      2 sections  MARCH-ARCH3 or MARCH-ARCH3A
+//      1 section   no program restriction
+//
+//    unioned, that reads "MARCH-ARCH3 (2 of 5), MARCH-ARCH2 (1 of 5), BS-ARCH
+//    (1 of 5)…", which sounds like any of them may take some section and never
+//    tells a BS-ARCH student that exactly ONE section is open to them.
+//
+// So: every term we have data for, and within each, every distinct section
+// group with its own count. That is the stored tally essentially verbatim —
+// this file got simpler by giving up on folding, not more complex.
+//
+// It makes no stability claim. Each entry names the term it was read from and
+// says nothing about a term we did not read. An early design reported a
+// frequency ("every Fall, 3 of 3"); that was unproducible from the terms we
+// hold and was measuring seasonal structure as though it were drift.
 //
 // ── WHAT IS DROPPED, and why ───────────────────────────────────────
 //
@@ -66,39 +79,47 @@ function main() {
   const usedLabels = {};
   let entries = 0, hiddenOnly = 0, kindTally = {};
 
+  let splitKinds = 0;
+
   for (const [courseId, byTerm] of Object.entries(details)) {
-    const perSeason = {};
-    for (const [termCode, d] of Object.entries(byTerm)) {
+    const terms = [];
+    // Newest term first — that is the order a student reads them in.
+    for (const termCode of Object.keys(byTerm).sort().reverse()) {
+      const d = byTerm[termCode];
       if (!d?.restr) continue;
       const season = SUFFIX_TYPE[termCode.slice(4)];
-      if (!season) continue;
-      // The most recent term of this season wins; term codes sort chronologically.
-      if (perSeason[season] && perSeason[season].term >= termCode) continue;
 
       const kinds = {};
       for (const [key, tally] of Object.entries(d.restr)) {
         if (HIDDEN.has(key)) continue;
-        const polarity = key.slice(0, key.indexOf(":"));
-        const { codes } = foldKind(tally, polarity, d.sections);
-        if (!codes.length) continue;
-        // `[code, sections]` pairs rather than objects: this ships to the
-        // browser, and 892 entries of {"code":…,"sections":…} is a lot of
-        // repeated key names for no gain.
-        kinds[key] = codes.map(c => [c.code, c.sections]);
-        for (const c of codes) {
-          const lk = `${key}|${c.code}`;
-          if (labels[lk]) usedLabels[lk] = labels[lk];
+        // Every distinct section group, NOT a union. `[codes, sections]` pairs,
+        // biggest group first: an object per group would repeat two key names
+        // across thousands of entries for no gain in a shipped asset.
+        const groups = Object.entries(tally)
+          .filter(([, n]) => Number.isFinite(n) && n > 0)
+          .map(([setKey, n]) => [setKey.split("|").filter(Boolean), n])
+          .filter(([codes]) => codes.length)
+          .sort((a, b) => b[1] - a[1] || a[0].join().localeCompare(b[0].join()));
+        if (!groups.length) continue;
+        if (groups.length > 1) splitKinds += 1;
+        kinds[key] = groups;
+        for (const [codes] of groups) {
+          for (const code of codes) {
+            const lk = `${key}|${code}`;
+            if (labels[lk]) usedLabels[lk] = labels[lk];
+          }
         }
         kindTally[key] = (kindTally[key] ?? 0) + 1;
       }
       if (!Object.keys(kinds).length) { hiddenOnly += 1; continue; }
-      perSeason[season] = { term: termCode, sections: d.sections ?? null, kinds };
+      terms.push({ term: termCode, season: season ?? null, sections: d.sections ?? null, kinds });
     }
-    if (Object.keys(perSeason).length) { courses[courseId] = perSeason; entries += 1; }
+    if (terms.length) { courses[courseId] = terms; entries += 1; }
   }
 
   console.log(`courses with a shown restriction: ${entries}`);
   console.log(`course-terms carrying ONLY hidden kinds (Levels): ${hiddenOnly}`);
+  console.log(`kinds whose SECTIONS DISAGREE (kept as separate groups): ${splitKinds}`);
   console.log(`labels referenced: ${Object.keys(usedLabels).length} of ${Object.keys(labels).length}`);
   console.log(`\nby kind:`);
   for (const [k, n] of Object.entries(kindTally).sort((a, b) => b[1] - a[1])) {
