@@ -149,6 +149,52 @@ for (const f of ALERTING) {
   });
 }
 
+// ── Composite-action inputs, which GitHub does not validate ─────────
+//
+// A misspelled `with:` key on a composite action is not an error: the action
+// simply receives the default for the input nobody set, and the misspelled one
+// is ignored. `data-paths` written as `dataPaths` would silently drop the "data
+// last changed" line — and this is the one action whose output nobody reads
+// until something is already broken.
+test("every input passed to pipeline-alert is one the action declares", () => {
+  const action = yaml.load(readFileSync(join(ROOT, ".github/actions/pipeline-alert/action.yml"), "utf8"));
+  const declared = new Set(Object.keys(action.inputs));
+  const required = Object.entries(action.inputs).filter(([, v]) => v.required).map(([k]) => k);
+  const STATES = new Set(["failed", "recovered", "stale"]);
+
+  let callers = 0;
+  for (const f of [...ALERTING, "data-staleness.yml"]) {
+    for (const s of steps(load(f))) {
+      if (s.uses !== "./.github/actions/pipeline-alert") continue;
+      callers++;
+      for (const key of Object.keys(s.with ?? {})) {
+        assert.ok(declared.has(key), `${f}: passes '${key}', which the action does not declare`);
+      }
+      for (const key of required) {
+        assert.ok(s.with?.[key], `${f}: does not pass required input '${key}'`);
+      }
+      // The script branches on exactly three states and treats anything else
+      // as a failure report, so a typo here would file a "pipeline failed"
+      // issue for a recovery.
+      assert.ok(STATES.has(s.with.state), `${f}: state '${s.with.state}' is not one the script handles`);
+    }
+  }
+  assert.ok(callers >= 7, `only ${callers} alert call sites found — did they stop being wired?`);
+});
+
+// ── The CHART gate keeps its verdict flag ───────────────────────────
+test("the CHART gate runs the corpus, not a sample", () => {
+  // Without --all the script runs a covering sample and exits 3 — which under
+  // pipefail now FAILS the run, so dropping the flag to save time would look
+  // like a broken pipeline rather than a weaker gate. Worth pinning anyway,
+  // because CLAUDE.md records it as a standing temptation and because a sample
+  // is designed to look like a real verification.
+  const step = steps(load("update-courses.yml")).find(s => (s.run ?? "").includes("verify-chart.js"));
+  assert.ok(step, "update-courses no longer verifies CHART at all");
+  assert.match(step.run, /verify-chart\.js\s+--all\b/,
+    "a covering sample proves the absence of a regression only in what it covered");
+});
+
 // ── The watchdog must be talking about the same pipelines ───────────
 test("data-staleness: every leg names a real workflow and shares its alert identity", () => {
   const doc = load("data-staleness.yml");
