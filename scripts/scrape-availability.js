@@ -60,6 +60,10 @@ import { fileURLToPath }                            from "url";
 import { parseRestrictions, classesOf }             from "./lib/class-standing.js";
 import { knownTermCodes, buildTermHistory, mergePreviousHistory }
                                                     from "./lib/term-history.js";
+import {
+  BASE, PAGE_SIZE, sleep, fetchRetry, cookieHeader, updateJar,
+  getTermList, activateTerm, resetForm, fetchPage,
+}                                                   from "./lib/banner-session.js";
 
 const __dirname      = dirname(fileURLToPath(import.meta.url));
 const ROOT           = resolve(__dirname, "..");
@@ -70,8 +74,6 @@ const COLLEGES_OUT   = resolve(ROOT, "public/northeastern/subject-colleges.json"
 const CHANGE_LOG     = resolve(ROOT, "public/northeastern/change-log.json");
 const CHANGE_LOG_MAX = 600;
 
-const BASE      = "https://nubanner.neu.edu/StudentRegistrationSsb/ssb";
-const PAGE_SIZE = 500;
 const DELAY_MS  = parseInt(process.env.BANNER_DELAY_MS || "500", 10);
 // Instructor fetches are one light request per SECTION (Banner strips faculty
 // from the bulk search feed), so they get their own, tighter pacing.
@@ -109,90 +111,11 @@ function recentTermCodes(yearsBack = 3) {
   return codes.sort(); // lexicographic = chronological for Banner codes
 }
 
-// ── Cookie jar ───────────────────────────────────────────────────
-
-let jar = {};
-
-function parseCookies(raw) {
-  if (!raw) return {};
-  const headers = Array.isArray(raw) ? raw : [raw];
-  const out = {};
-  for (const h of headers) {
-    const [pair] = h.split(";");
-    const eq = pair.indexOf("=");
-    if (eq === -1) continue;
-    const name = pair.slice(0, eq).trim();
-    const val  = pair.slice(eq + 1).trim();
-    if (name) out[name] = val;
-  }
-  return out;
-}
-
-function cookieHeader() {
-  return Object.entries(jar).map(([k, v]) => `${k}=${v}`).join("; ");
-}
-
-function updateJar(res) {
-  const raw = res.headers.get("set-cookie");
-  if (raw) Object.assign(jar, parseCookies(raw));
-}
-
-// ── Banner SSB requests ──────────────────────────────────────────
-
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-/**
- * fetch with backoff retries for transient network refusals. Banner rate-
- * limits sustained request volume (observed: connection refusals after ~7k
- * rapid instructor lookups) — waiting out the window recovers it.
- */
-async function fetchRetry(url, opts, tries = 4) {
-  for (let i = 0; ; i++) {
-    try { return await fetch(url, opts); }
-    catch (err) {
-      if (i >= tries - 1) throw err;
-      const wait = [5_000, 30_000, 90_000][i] ?? 90_000;
-      console.warn(`    network refusal — backing off ${wait / 1000}s (attempt ${i + 2}/${tries})`);
-      await sleep(wait);
-    }
-  }
-}
-
-async function getTermList(max = 30) {
-  const url = `${BASE}/classSearch/getTerms?searchTerm=&offset=1&max=${max}`;
-  const res = await fetch(url);
-  updateJar(res);
-  if (!res.ok) throw new Error(`getTerms HTTP ${res.status}`);
-  return await res.json(); // [{ code, description }, ...]
-}
-
-async function activateTerm(termCode) {
-  const res = await fetch(`${BASE}/term/search?mode=search`, {
-    method:  "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded", "Cookie": cookieHeader() },
-    body:    `term=${termCode}&studyPath=&studyPathText=&startDatepicker=&endDatepicker=`,
-  });
-  updateJar(res);
-  if (!res.ok) throw new Error(`term/search HTTP ${res.status} for ${termCode}`);
-}
-
-async function resetForm() {
-  const res = await fetch(`${BASE}/classSearch/resetDataForm`, {
-    method:  "POST",
-    headers: { "Cookie": cookieHeader() },
-  });
-  updateJar(res);
-}
-
-async function fetchPage(termCode, offset) {
-  const url = `${BASE}/searchResults/searchResults` +
-    `?txt_term=${termCode}&pageOffset=${offset}&pageMaxSize=${PAGE_SIZE}` +
-    `&sortColumn=subjectDescription&sortDirection=asc`;
-  const res = await fetch(url, { headers: { "Cookie": cookieHeader() } });
-  updateJar(res);
-  if (!res.ok) throw new Error(`searchResults HTTP ${res.status}`);
-  return await res.json();
-}
+// The Banner SSB session — the cookie jar, the handshake and the paged section
+// feed — lives in lib/banner-session.js, shared with restrictions-probe.js.
+// It was duplicated here until 2026-09-03; two copies of a stateful handshake
+// is how a fix lands in one Banner client and not the other, exactly as a
+// byte-identical `scrapeProgram` did across the two program scrapers.
 
 // ── Section-detail helpers ───────────────────────────────────────
 

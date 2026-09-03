@@ -52,7 +52,14 @@
 
 export const BASE = "https://nubanner.neu.edu/StudentRegistrationSsb/ssb";
 
-const PAGE_SIZE = 500;
+/**
+ * Banner's page size for `searchResults`.
+ *
+ * Exported because callers page by it themselves: the offset they advance has
+ * to be the size the server actually used, and a second copy of this number
+ * would desynchronise pagination the moment either changed.
+ */
+export const PAGE_SIZE = 500;
 
 // ── Cookie jar ───────────────────────────────────────────────────
 
