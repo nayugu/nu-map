@@ -116,9 +116,11 @@ describe("a retired course in a saved plan", () => {
    *
    * `union`, when given, is served in place of retired-courses.json. Serving it
    * by route interception rather than writing the file keeps the repo's real
-   * artifact — which is legitimately EMPTY today, because the frozen 2026
-   * snapshot is still the shipped catalog — out of the test's way. Writing it
-   * would make the test pass by mutating the thing it is checking.
+   * artifact out of the test's way — writing it would make the test pass by
+   * mutating the very thing it is checking. The synthetic union also keeps
+   * these cases stable: a REAL retirement can be rescued by course-retention
+   * or revived in a later edition, and then they would pass for reasons
+   * unrelated to what they check. The suite below covers the real artifact.
    */
   async function open(placements, union = null) {
     assert.equal(launchError, null,
@@ -232,5 +234,64 @@ describe("a retired course in a saved plan", () => {
     assert.match(bodyText, live.pattern,
       `${live.id} was seeded beside a retired course and is not on the board — `
       + "one dead id emptied the plan");
+  });
+});
+
+// ── Against the REAL shipped data ───────────────────────────────────
+//
+// Everything above serves a SYNTHETIC union by route interception, which
+// proves the wiring but not the artifact. This one intercepts nothing: it
+// seeds a course from the union `derive-retired-union.js` actually wrote and
+// asserts the app resolves and badges it.
+//
+// The distinction earned its place. For the whole of this feature's life the
+// shipped catalog contained ZERO retired courses, so every green test was
+// green against data that could not exercise the path — and nobody noticed
+// until someone asked to be shown one.
+describe("a real retired course from the shipped union", () => {
+  let browser, server, port, launchError = null;
+  const union = JSON.parse(readFileSync(
+    new URL("../../public/northeastern/retired-courses.json", import.meta.url), "utf8"));
+  // 4 SH or more so the board gives it its own card rather than folding it
+  // into the collapsed "other credits" group where this could not see it.
+  const subject = union.find(c => (c.credits ?? 0) >= 4);
+
+  before(async () => {
+    await ensureBuild();
+    ({ server, port } = await serveDist());
+    try {
+      const { chromium } = await import("playwright");
+      browser = await chromium.launch();
+    } catch (e) { launchError = e; }
+  });
+  after(async () => {
+    await browser?.close();
+    await new Promise((r) => server?.close(r));
+  });
+
+  test("it resolves, counts, and says it is retired", async () => {
+    assert.equal(launchError, null, "chromium unavailable");
+    // An empty union is the state this whole feature was invisible in. It is a
+    // legitimate state (before an edition roll) but it must not read as a pass.
+    assert.ok(subject,
+      "retired-courses.json holds no course of 4 SH or more — if the union is "
+      + "empty this test proves nothing and should be understood as unrun");
+
+    const id = `${subject.subject}${subject.number}`;
+    const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
+    await ctx.addInitScript(seed({ [id]: "fall2025" }));
+    const page = await ctx.newPage();
+    const errors = [];
+    page.on("pageerror", e => errors.push(String(e?.message ?? e)));
+    await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load", timeout: 60_000 });
+    await page.waitForTimeout(4000);
+    const bodyText = await page.evaluate(() => document.body?.innerText ?? "");
+    await page.close();
+    await ctx.close();
+
+    assert.deepEqual(errors, [], `${id} threw on render:\n  ${errors.join("\n  ")}`);
+    assert.match(bodyText, new RegExp(`${subject.subject}\\s*${subject.number}`),
+      `${id} is in the shipped union and did not render`);
+    assert.match(bodyText, /⚠\s*retired/i, `${id} rendered without the retired badge`);
   });
 });
