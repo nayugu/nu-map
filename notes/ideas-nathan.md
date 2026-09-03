@@ -50,3 +50,31 @@ The work, roughly in order:
 
 ⚠ Verify against the September 2026 monthly run either way — that is when the
 instructor fetch for a synthetic summer term first runs for real.
+---
+
+## Ask the registrar: is the minor cap on CREDITS or on COURSES?
+
+The catalog sentence is credits — "a maximum of 50% of the credits required
+for a minor" — and `core/minorOverlap.js` implements exactly that, floored to
+a whole credit and spent in whole courses.
+
+The simpler rule, and the one a student actually reasons with: **count the
+courses of ≥3 SH the minor requires, halve it, round down — that many may
+double count.** It is easier to explain, easier to check by hand, and needs no
+subset-sum.
+
+It is NOT equivalent, and it is the more generous of the two, which is why it
+cannot be adopted on our own authority:
+
+| | credit rule (shipped) | course rule |
+|---|---|---|
+| CS minor, 23 SH ≈ 6 courses | 11 SH | 3 courses ≈ 12 SH |
+
+So the course rule would let the app permit something the registrar's own
+sentence does not. One question settles it — *do you count credits or courses
+when you apply the 50% minor rule?* — and if the answer is courses, the
+simpler rule wins outright and a good deal of arithmetic comes out.
+
+Worth asking alongside the official-status conversation; see
+`docs/` and the § Minors sweep in `scripts/minor-share-probe.js` for the
+numbers to put in front of them.
