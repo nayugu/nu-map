@@ -668,14 +668,22 @@ export const strings = {
   "grad.share.legend.own":        "only this minor",
   "grad.share.legend.shared":     "counts toward both",
   "grad.share.legend.over":       "past the limit, doesn’t count",
-  // The consequence only. The meter beside it already gives the arithmetic,
-  // and this is the half a student can act on.
-  "grad.share.over":              "{sh} SH of the minor requirements have to come from courses that do not overlap with your major requirements.",
+  // DIRECTION MATTERS, and this had it backwards. The rule limits how much of
+  // the MINOR courses from the major may fulfil — not how much of the minor
+  // may count toward the major. Stated the wrong way round, the clause about
+  // the major is followed by a consequence about the minor and reads as a non
+  // sequitur. One subject throughout: this minor, and what may fill it.
+  //
+  // A FACT, not an instruction. "{sh} SH have to come from courses that do not
+  // overlap" is misleading for a student who has already satisfied every
+  // requirement row — nothing has to come from anywhere, they have done the
+  // work, and {sh} SH of it simply does not count.
+  "grad.share.over":              "At most half of this minor can be filled by courses that also count toward your major, so {sh} SH does not count toward the minor.",
   // The two lists of course codes carry different meanings and used to render
   // identically, one after the other, unlabelled.
   "grad.share.list.shared":       "Counted toward both",
   "grad.share.list.outside":      "Transfer or advanced standing",
-  "grad.share.policy":            "Northeastern lets at most {pct}% of the credit a minor requires also count toward your major — {cap} of the {required} SH this minor requires.",
+  "grad.share.policy":            "At most {pct}% of a minor can be filled by courses that also count toward your major — {cap} of the {required} SH this minor requires.",
   // Shown when the courses listed above carry more credit than the figure. Both
   // ways that happens are the same fact for a student — some of this overlap is
   // avoidable with the courses already on the board, either because the minor
@@ -697,7 +705,7 @@ export const strings = {
   // this sentence now — specific first, rule last.
   "relevance.dc.eligible":        "You haven’t placed this yet. Take it and it counts toward your major and this minor at the same time.",
   "relevance.dc.counted":         "Your major and this minor both count this course. Northeastern allows that for up to half a minor’s credit.",
-  "relevance.dc.over":            "This minor is past the half of its credit that may also count toward your major. Add minor coursework your major doesn’t count.",
+  "relevance.dc.over":            "At most half of a minor can be filled by courses that also count toward your major. The credit past that half does not count toward the minor.",
   // The budget line is drawn now, not written: the minor's name, its figure and
   // the same meter the graduation panel uses. `grad.share.cap` carries the
   // "of {cap} SH allowed" half — one phrase for one fact, on both surfaces.

@@ -127,9 +127,12 @@ describe("minor · the double-counting cap", () => {
     assert.match(text, /10\s+of 20 SH/, `figure missing from:\n${text.slice(0, 2000)}`);
     assert.match(text, /10 counts toward both/, "the shared band is not named");
     assert.match(text, /2 past the limit/, "the excess band is not named");
-    assert.match(text, /2 SH of the minor requirements/, "the overage is not stated");
-    assert.match(text, /do not overlap with your major requirements/,
-                 "the way out is not stated");
+    // A FACT, not an instruction. "2 SH have to come from courses that do not
+    // overlap" is misleading for the student who has already satisfied every
+    // requirement row: nothing has to come from anywhere, they have done the
+    // work — 2 SH of it simply does not count.
+    assert.match(text, /2 SH does not count toward the minor/,
+                 "the consequence is not stated");
   });
 
   test("the same minor under an unrelated major shares nothing", async () => {
@@ -147,7 +150,7 @@ describe("minor · the double-counting cap", () => {
     // Keyed on the amber sentence itself, which is the only thing the over-cap
     // state adds — a phrase that no longer appears anywhere would make this
     // pass for free.
-    assert.doesNotMatch(text, /do not overlap with your major requirements/,
+    assert.doesNotMatch(text, /does not count toward the minor/,
                         "a false violation against an unrelated major");
   });
 
@@ -168,7 +171,7 @@ describe("minor · the double-counting cap", () => {
     assert.match(text, /Double counting/, "the row is missing entirely");
     assert.match(text, /10\s+of 20 SH/, `substituted credit went uncounted:\n${text.slice(0, 2000)}`);
     assert.match(text, /2 past the limit/, "the substituted course was not charged");
-    assert.match(text, /2 SH of the minor requirements/);
+    assert.match(text, /2 SH does not count toward the minor/);
   });
 
   test("the same plan WITHOUT the substitution is 4 SH lighter", async () => {
@@ -179,7 +182,7 @@ describe("minor · the double-counting cap", () => {
     assert.match(text, /Double counting/, "the row is missing entirely");
     assert.match(text, /8\s+of 20 SH/, `expected only the two CRIM courses:\n${text.slice(0, 2000)}`);
     assert.doesNotMatch(text, /past the limit/, "nothing is over without the substitution");
-    assert.doesNotMatch(text, /do not overlap with your major requirements/);
+    assert.doesNotMatch(text, /does not count toward the minor/);
   });
 
   // ── The 2× badge on the card ────────────────────────────────────
@@ -236,7 +239,7 @@ describe("minor · the double-counting cap", () => {
       // One major + one minor = two credentials.
       assert.match(b, /Counts toward 2 programs/);
       // This pair is over its cap, so every badge in the shared set says so.
-      assert.match(b, /past the half of its credit/);
+      assert.match(b, /credit past that half does not count toward the minor/);
     }
   });
 
@@ -277,7 +280,7 @@ describe("minor · the double-counting cap", () => {
     const before = await page.evaluate(() => document.body.innerText);
     // Keyed on text only the hover card carries — the badge itself is just
     // "2×", and the graduation panel is not open in this test.
-    assert.doesNotMatch(before, /past the half of its credit/,
+    assert.doesNotMatch(before, /credit past that half does not count toward the minor/,
       "the card must not be on screen before anyone hovers");
 
     await badge.hover();
@@ -287,7 +290,7 @@ describe("minor · the double-counting cap", () => {
 
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
     assert.match(after, /Counts toward 2 programs/, "no title in the hover card");
-    assert.match(after, /past the half of its credit/, "the colour's meaning is missing");
+    assert.match(after, /credit past that half does not count toward the minor/, "the colour's meaning is missing");
     // The minor, named, with its own budget — the same phrasing and the same
     // meter as the graduation panel's row (`grad.share.cap`).
     assert.match(after, /Criminal Justice, Minor\s+10\s+of 20 SH/);
