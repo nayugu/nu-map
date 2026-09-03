@@ -32,6 +32,7 @@
  * 400 ms and must never be what you get for forgetting a flag; --all-subjects
  * is opt-in and needs a reason, same rule as verify-chart --all.
  */
+import { existsSync, readdirSync } from "node:fs";
 import { parse as parseHTML } from "node-html-parser";
 import { parseSubjectPage, fidelityOfEdition } from "./lib/catalog-course-parser.js";
 import { parseCatalogEdition } from "./lib/catalog-program-parser.js";
@@ -390,9 +391,77 @@ async function main() {
     if (years.length < 2) throw new Error("--drift needs at least two --editions");
     for (let i = 0; i < years.length - 1; i++) await reportDrift(years[i], years[i + 1], slugs);
   }
-  if (!has("--course") && !has("--fidelity") && !has("--drift") && !has("--snapshot")) {
-    console.log("\nnothing asked. try --fidelity, --drift, --course CS2500, or --snapshot");
+  if (has("--coverage")) reportCoverage(live);
+  if (!has("--course") && !has("--fidelity") && !has("--drift") && !has("--snapshot")
+      && !has("--coverage")) {
+    console.log("\nnothing asked. try --fidelity, --drift, --course CS2500, --snapshot, or --coverage");
   }
+}
+
+/**
+ * Do we hold the edition NEU is currently publishing?
+ *
+ * ── The hole this closes ────────────────────────────────────────────
+ *
+ * `data-staleness.yml` measures the last SUCCESSFUL RUN per pipeline, and that
+ * is the right primary signal — CLAUDE.md explains why it is not data age,
+ * which would cry wolf on a run that legitimately changed nothing.
+ *
+ * But it cannot see a run that succeeded and wrote nothing. On 2026-09-01
+ * scrape-majors printed "Refusing to write", exited 1, and its step was
+ * reported GREEN, because Actions' default shell has no pipefail and the step's
+ * status was `tee`'s. The pipefail guard now at the top of every data workflow
+ * fixes that going forward — but the damage is already recorded: that run
+ * counts as a success, so the 75-day clock restarted on a run that produced
+ * nothing, and the majors trees sat two months stale with nothing to say so.
+ * They were found by hand, on 2026-09-03, only because someone asked why no
+ * course had ever been marked retired.
+ *
+ * This is the check that would have caught it, and it is deliberately a
+ * DIFFERENT KIND of signal rather than a second staleness clock: it compares
+ * what NEU is publishing against what is on disk. "We have no program tree for
+ * the edition the university is currently teaching" is unambiguous. It cannot
+ * cry wolf on a quiet month, because a quiet month does not roll the edition.
+ *
+ * One HTTP request — the live year is already resolved for every other mode.
+ *
+ * Exits non-zero when something is missing, so a workflow step can use it.
+ */
+function reportCoverage(live) {
+  const yearsUnder = (dir) => existsSync(dir)
+    ? readdirSync(dir).filter(n => /^\d{4}$/.test(n)).map(Number).sort((a, b) => a - b)
+    : [];
+
+  // The DIRECTORY is `graduate`. CLAUDE.md's `grad/2026/…` is the program-id
+  // prefix a saved plan stores, not the path — reading it as a path made this
+  // check report a false "(none)" for the graduate tree the first time it ran.
+  const trees = {
+    "undergraduate programs": "data/northeastern/programs/undergraduate",
+    "graduate programs":      "data/northeastern/programs/graduate",
+    "frozen course editions": "data/northeastern/catalog/editions",
+  };
+
+  console.log(`\nEDITION COVERAGE — NEU is publishing ${live}\n`);
+  const missing = [];
+  for (const [label, dir] of Object.entries(trees)) {
+    const held = yearsUnder(dir);
+    const has  = held.includes(live);
+    console.log(`  ${label.padEnd(24)} ${held.length ? held.join(", ") : "(none)"}`
+      + `   ${has ? "✓ has " + live : "✗ MISSING " + live}`);
+    if (!has) missing.push(label);
+  }
+
+  if (!missing.length) {
+    console.log(`\n  Every tree carries the live edition.`);
+    return;
+  }
+  console.log(`\n  ::warning::No ${live} data for: ${missing.join("; ")}.`);
+  console.log(`  A student entering under the ${live - 1}-${live} catalog has no requirements`);
+  console.log(`  of their own year. The pipelines that produce these push straight to main`);
+  console.log(`  and refuse to write when a rail trips, so a missing edition means a refusal`);
+  console.log(`  nobody answered — check the workflow runs, then re-run with the documented`);
+  console.log(`  exit (--accept-shrink for courses; see docs/catalog-editions-design.md).`);
+  process.exitCode = 1;
 }
 
 /** Every subject slug an edition's index page links to. */
