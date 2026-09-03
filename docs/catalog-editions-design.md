@@ -513,9 +513,42 @@ student rather than only continuing ones. This is the CS 2500 fix.
 7. **Retirement UI** (§7) — lifespan copy naming the edition, full last-known
    record, fidelity gating, all 8 locales. **Partly shipped**: the badge and
    tooltip exist in all 8 locales and `normalizeCourse` now carries `lifespan`
-   through to the card. Still to do is the *copy* — it says "Northeastern's
-   catalog no longer lists this course" where the lifespan can now say which
-   edition last published it.
+   through to the card.
+
+   ⚠ **BLOCKER — the tooltip is FALSE for union courses, and this ships the
+   moment the roll lands.** There are two populations of retired course and
+   one string:
+
+   > "Northeastern's catalog no longer lists this course. It's kept because
+   > **your catalog year still requires it** — ask your advisor about a
+   > substitution."
+
+   - a **retention** rescue (~703 on the measured roll) is kept precisely
+     because a shipped program edition requires it. True.
+   - a **union** course (~367) is required by nothing. It is kept only so a
+     saved plan that already names it still resolves. The sentence is false,
+     and since nothing filters `retired` out of search, it is false on a card
+     any student can browse to.
+
+   Two things follow, and they are separate decisions:
+   1. **The copy must distinguish them**, which is decidable from the record
+      itself: a union course carries `lifespan`, a retention rescue carries
+      `retiredSince`. With the lifespan the union case can also do what §7
+      wanted anyway — name the edition ("last published in the 2025–2026
+      catalog") instead of a date that is a fact about our scrape.
+   2. **A union course arguably does not belong in SEARCH at all.** This was
+      deferred as "measure the noise after the roll", and the copy bug sharpens
+      it into a correctness question rather than a volume one: a retention
+      rescue is required by a program, so a student may legitimately need to
+      add it, whereas a union course is required by nothing and exists solely
+      to resolve a plan that ALREADY names it. Offering it as something to add
+      is offering a course NEU no longer teaches and no program wants. Note
+      this does not by itself fix (1) — a student holding one in their plan
+      still sees the tooltip.
+
+   Not fixed in the same pass only because a partner session held all eight
+   locale files uncommitted; staging them would have swept their work into this
+   change. **Do not ship the union to production before (1).**
 8. **Guards for A**: the union is derived and never hand-edited; a retired
    course never gains a substitute; `fidelity` is respected wherever an empty
    field is read.
