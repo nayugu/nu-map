@@ -1006,10 +1006,16 @@ function SharedCredit({ share }) {
   // counted" from "half of this minor is" — both read as a full green bar and
   // the same figure, because credit inside the cap still counts. The figure
   // answers "is my minor done"; this answers "what is it standing on".
+  //
+  // ONE entry: the amber. It had three, and a green swatch labelled "11.5
+  // counts toward both" sat under a green band 16.5 wide — so the swatch
+  // claimed the whole band and the bar appeared to double count 72% of a minor
+  // whose limit is 50%. A legend entry that names PART of a band is a lie
+  // about the band. The green band means one thing, "this counts toward the
+  // minor", and the figure beside it already says how much; which courses are
+  // shared, and the ceiling itself, are in the expanded detail by name.
   const legend = [
-    [seg.own,    "var(--success-bar)", "grad.share.legend.own"],
-    [seg.shared, "var(--success-bar)", "grad.share.legend.shared"],
-    [seg.excess, "var(--warn-badge-text)",      "grad.share.legend.over"],
+    [seg.excess, "var(--warn-badge-text)", "grad.share.legend.over"],
   ];
 
   const lists = [
@@ -1029,26 +1035,17 @@ function SharedCredit({ share }) {
         <span style={{ fontSize: 8, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
       </div>
 
-      {/* Figures line. NEUTRAL, always: the colour budget for this block is one
-          element, and it is spent on the sentence below — the only part a
-          student can act on. */}
-      <div style={{ display: "flex", gap: 6, alignItems: "baseline", marginBottom: 4 }}>
-        <span style={{ flexShrink: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis",
-                       whiteSpace: "nowrap", fontSize: isPhone ? 8 : 9.5, fontWeight: 600,
-                       color: "var(--text-4)" }}>
-          {t("grad.share.scope")}
-        </span>
-        <span style={{ flex: 1 }} />
-        <span style={{ flexShrink: 0, fontSize: isPhone ? 8.5 : 10, fontWeight: 700,
-                       color: "var(--text-2)", letterSpacing: 0, whiteSpace: "nowrap" }}>
-          {fmt(seg.counts)}{" "}
-          {/* A real space, not just a margin: the two spans are one phrase and
-              `innerText` is what the browser test — and a student's clipboard
-              — sees. */}
-          <span style={{ fontSize: isPhone ? 6.5 : 8, fontWeight: 500, color: "var(--text-5)" }}>
-            {t("grad.share.of", { required: fmt(share.requiredSH) })}
-          </span>
-        </span>
+      {/* A caption for the bar, and NO figure beside it. The figure was "16.5
+          of 23 SH" — credit that counts once the cap is applied — a number
+          that appears nowhere else in the app: not on the minor's progress bar
+          directly above (which counts all 23), not in the policy sentence, not
+          on any requirement row. It needed a paragraph to explain and sat where
+          a student wants one fact. The bar carries the proportion; the amber
+          line below carries the number worth acting on. */}
+      <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                    fontSize: isPhone ? 8 : 9.5, fontWeight: 600, color: "var(--text-4)",
+                    marginBottom: 4 }}>
+        {t("grad.share.scope")}
       </div>
 
       {/* The track, shared with the 2× badge's hover card so the two surfaces

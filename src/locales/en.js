@@ -662,11 +662,8 @@ export const strings = {
   // instead answered a question about our arithmetic, and contradicted the
   // progress bar directly above it.
   "grad.share.scope":             "Counts toward this minor",
-  "grad.share.of":                "of {required} SH",
   // The bar's bands, in the expanded detail. Two shades of green because both
   // count; grey because that credit does not.
-  "grad.share.legend.own":        "only this minor",
-  "grad.share.legend.shared":     "counts toward both",
   "grad.share.legend.over":       "past the limit, doesn’t count",
   // DIRECTION MATTERS, and this had it backwards. The rule limits how much of
   // the MINOR courses from the major may fulfil — not how much of the minor

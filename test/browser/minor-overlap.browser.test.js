@@ -124,9 +124,9 @@ describe("minor · the double-counting cap", () => {
     // ceiling. The bar measures the MINOR, not the cap: 10 SH of it counts and
     // the 2 SH past the ceiling does not, so the minor is 10 of 20 done — not
     // the 12 of 20 its own progress bar shows.
-    assert.match(text, /10\s+of 20 SH/, `figure missing from:\n${text.slice(0, 2000)}`);
-    assert.match(text, /10 counts toward both/, "the shared band is not named");
-    assert.match(text, /2 past the limit/, "the excess band is not named");
+    // The excess is the only figure the collapsed row prints, and it encodes
+    // the whole arithmetic: 12 SH double counted against a 10 SH ceiling.
+    assert.match(text, /2 past the limit/, `the excess is missing from:\n${text.slice(0, 2000)}`);
     // A FACT, not an instruction. "2 SH have to come from courses that do not
     // overlap" is misleading for the student who has already satisfied every
     // requirement row: nothing has to come from anywhere, they have done the
@@ -141,12 +141,13 @@ describe("minor · the double-counting cap", () => {
     // violation, which would tell a student to take courses they do not owe.
     const text = await panelText({ major: CS_BS, minor1: CJ_MINOR, placements: CRIM });
     assert.match(text, /Double counting/, "the row should still show the budget");
-    // Everything the minor claims is its own, so the bar is one green band and
-    // the shared one is absent entirely. Keyed on the BANDS, not the figure:
-    // credit inside the cap still counts, so the figure alone cannot tell
-    // "nothing shared" from "half of it shared".
-    assert.match(text, /12 only this minor/, `expected an unshared minor, got:\n${text.slice(0, 2000)}`);
-    assert.doesNotMatch(text, /counts toward both/, "a false share against an unrelated major");
+    // Every one of the 12 SH placed counts, so the figure is the whole of it
+    // and no amber band exists. The collapsed row cannot say more than that:
+    // credit inside the cap counts like any other, so "nothing is shared" and
+    // "some is shared, within the limit" are deliberately the same picture.
+    // That the courses are not shared AT ALL is proved on the board instead,
+    // by the badge test below that expects no badge.
+    assert.doesNotMatch(text, /past the limit/, "a false share against an unrelated major");
     // Keyed on the amber sentence itself, which is the only thing the over-cap
     // state adds — a phrase that no longer appears anywhere would make this
     // pass for free.
@@ -169,8 +170,8 @@ describe("minor · the double-counting cap", () => {
     const text = await panelText({ major: BACJ, minor1: CJ_MINOR,
                                    placements: SUB_PLACE, substitutions: SUB });
     assert.match(text, /Double counting/, "the row is missing entirely");
-    assert.match(text, /10\s+of 20 SH/, `substituted credit went uncounted:\n${text.slice(0, 2000)}`);
-    assert.match(text, /2 past the limit/, "the substituted course was not charged");
+    assert.match(text, /2 past the limit/,
+                 `the substituted course was not charged:\n${text.slice(0, 2000)}`);
     assert.match(text, /2 SH does not count toward the minor/);
   });
 
@@ -180,8 +181,8 @@ describe("minor · the double-counting cap", () => {
     // requirement simply goes unmet.
     const text = await panelText({ major: BACJ, minor1: CJ_MINOR, placements: SUB_PLACE });
     assert.match(text, /Double counting/, "the row is missing entirely");
-    assert.match(text, /8\s+of 20 SH/, `expected only the two CRIM courses:\n${text.slice(0, 2000)}`);
-    assert.doesNotMatch(text, /past the limit/, "nothing is over without the substitution");
+    assert.doesNotMatch(text, /past the limit/,
+                        `nothing is over without the substitution:\n${text.slice(0, 2000)}`);
     assert.doesNotMatch(text, /does not count toward the minor/);
   });
 
@@ -293,7 +294,7 @@ describe("minor · the double-counting cap", () => {
     assert.match(after, /credit past that half does not count toward the minor/, "the colour's meaning is missing");
     // The minor, named, with its own budget — the same phrasing and the same
     // meter as the graduation panel's row (`grad.share.cap`).
-    assert.match(after, /Criminal Justice, Minor\s+10\s+of 20 SH/);
+    assert.match(after, /Criminal Justice, Minor\s+2 past the limit/);
   });
 
   test("an ELIGIBLE course is badged differently from one already counted", async () => {

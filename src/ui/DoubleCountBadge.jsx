@@ -80,28 +80,20 @@ function BudgetLine({ minor }) {
                     lineHeight: 1.35 }}>
         {name || minor.name}
       </div>
-      {/* Neutral, even over the cap. With two minors on one card the old
-          version put five amber elements in front of the student — a heading,
-          two figures and two bars — for one fact, and amber is this app's
-          "something is wrong". The bar carries the composition; the sentence
-          at the foot carries the consequence, and it is the only colour here. */}
-      <div style={{ display: "flex", alignItems: "baseline", gap: 4, margin: "1px 0 3px" }}>
-        <span style={{ fontSize: 12.5, fontWeight: 700, color: "var(--text-2)",
-                       letterSpacing: 0 }}>
-          {fmt(seg.counts)}
-        </span>
-        <span style={{ fontSize: 11, color: "var(--text-5)" }}>
-          {t("grad.share.of", { required: fmt(minor.requiredSH) })}
-        </span>
+      {/* NO figure line. It read "16.5 of 23 SH" — credit that counts once the
+          cap is applied — and that number appears nowhere else in the app: not
+          on the minor's progress bar (which counts all 23), not in the policy
+          sentence, not on any requirement row. A derived quantity needing a
+          paragraph of explanation, printed where a student wants one fact. The
+          bar carries the proportion and the amber line carries the number that
+          can be acted on. */}
+      <div style={{ marginTop: 3 }}>
+        <ShareMeter {...seg} height={4} />
       </div>
-      <ShareMeter {...seg} height={4} />
-      {/* The same named bands as the panel row. Without them a full green bar
-          means either "nothing is double counted" or "half of this minor is",
-          since credit inside the cap still counts. */}
+      {/* The one band that needs naming: the credit that counts toward
+          nothing. Same single entry as the panel row. */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "1px 9px", marginTop: 3 }}>
-        {[[seg.own,    "var(--success-bar)", "grad.share.legend.own"],
-          [seg.shared, "var(--success-bar)", "grad.share.legend.shared"],
-          [seg.excess, "var(--warn-badge-text)",      "grad.share.legend.over"]]
+        {[[seg.excess, "var(--warn-badge-text)", "grad.share.legend.over"]]
           .filter(([sh]) => sh > 0)
           .map(([sh, bg, key]) => (
             <span key={key} style={{ display: "flex", alignItems: "center", gap: 3,

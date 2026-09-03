@@ -41,19 +41,20 @@
 // counts the same credit without applying the cap. Four segments, and every
 // number is one `minorShare` already returns:
 //
-//   ▓ own      credit only the minor counts            → green
-//   ▒ shared   counts toward both, inside the cap      → the same green
-//   ░ over     double counted past the cap             → amber, does not count
+//   ▓ counts   own + shared: everything that counts     → green
+//   ░ over     double counted past the cap             → amber HATCHING
 //   ┈ to go    not yet satisfied                       → the empty track
 //
-// Both counting bands are the SAME green — `--success-bar`, the one the
-// requirement rows and every progress bar in the panel already use — because
-// they mean the same thing: this credit counts. A half-opacity second shade
-// was tried and read as a duller, different green, which is a distinction
-// about our bookkeeping wearing the colour of a distinction about the
-// student's progress. The split between them is a hairline of the track
-// instead, so "some of this leans on the major" is visible without inventing
-// a colour, and the legend below the bar carries the two figures.
+// `own` and `shared` are drawn as ONE green band. They were two, split by a
+// hairline, with the split named in the legend — and the answer to "how much
+// of this minor is only mine" is not a question a student asked. Both bands
+// mean the same thing, this credit counts, so they look the same; which
+// courses are shared is in the expanded detail, by name.
+//
+// The green is `--success-bar`, the token the requirement rows and every
+// progress bar in the panel already use — a second, duller green for the
+// shared part was tried and read as a distinction about our bookkeeping
+// wearing the colour of one about the student's progress.
 // ═══════════════════════════════════════════════════════════════════
 
 /**
@@ -72,11 +73,13 @@ export default function ShareMeter({ required, own, shared, excess, height = 5 }
   return (
     <div style={{ display: "flex", height, borderRadius: height / 2,
                   background: "var(--border-2)", overflow: "hidden" }}>
-      <div style={{ width: pct(own), background: "var(--success-bar)" }} />
-      {own > 0 && shared > 0 && (
-        <div style={{ width: 2, flexShrink: 0, background: "var(--border-2)" }} />
+      <div style={{ width: pct(own + shared), background: "var(--success-bar)" }} />
+      {/* A hairline of track between the two, so the amber is legibly a
+          DIFFERENT kind of thing rather than more fill. Credit that does not
+          count should not look like progress that does. */}
+      {excess > 0 && (own + shared) > 0 && (
+        <div style={{ width: 1, flexShrink: 0, background: "var(--border-2)" }} />
       )}
-      <div style={{ width: pct(shared), background: "var(--success-bar)" }} />
       <div style={{ width: pct(excess), background: "var(--warn-badge-text)" }} />
     </div>
   );
@@ -90,14 +93,10 @@ export default function ShareMeter({ required, own, shared, excess, height = 5 }
  * the allowed share is `min(dependent, cap)` and never the cap itself.
  */
 export function shareSegments(share) {
-  const shared = Math.min(share.dependentSH, share.capSH);
-  const excess = Math.max(0, share.dependentSH - share.capSH);
   return {
     required: share.requiredSH,
     own:      Math.max(0, share.claimedSH - share.dependentSH),
-    shared,
-    excess,
-    /** What actually counts toward the minor — the honest completion figure. */
-    counts:   Math.max(0, share.claimedSH - excess),
+    shared:   Math.min(share.dependentSH, share.capSH),
+    excess:   Math.max(0, share.dependentSH - share.capSH),
   };
 }
