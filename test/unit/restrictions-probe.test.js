@@ -13,7 +13,8 @@ import test          from "node:test";
 import assert        from "node:assert/strict";
 
 import { parseRestrictions }                        from "../../scripts/lib/class-standing.js";
-import { splitHeading, codeOf, labelOf, chooseCrns, analyse, coalesceValues, decodeEntities }
+import { splitHeading, codeOf, labelOf, chooseCrns, crnsForCourses, analyse,
+         coalesceValues, decodeEntities }
                                                     from "../../scripts/restrictions-probe.js";
 
 // ── Heading grammar ─────────────────────────────────────────────────
@@ -256,6 +257,51 @@ test("chooseCrns is deterministic", () => {
   const b = chooseCrns(build(), 40);
   assert.deepEqual([...a.picked.keys()], [...b.picked.keys()]);
   assert.equal(a.used, b.used);
+});
+
+test("chooseCrns honours an `allowed` restriction", () => {
+  const byCourse = new Map();
+  for (let i = 0; i < 60; i++) byCourse.set(`S${1000 + i}`, [`a${i}`, `b${i}`]);
+  const allowed = new Set(["S1000", "S1005", "S1010"]);
+  const { picked } = chooseCrns(byCourse, 100, allowed);
+  assert.deepEqual([...picked.keys()].sort(), ["S1000", "S1005", "S1010"],
+    "must not sample a course outside the intersection");
+});
+
+test("crnsForCourses asks every term for the SAME courses", () => {
+  // The fix for the 30-course cross-term base: the list is chosen once, and
+  // each term expands it against its own inventory.
+  const list = ["A1000", "B2000", "C3000"];
+  const termA = new Map([["A1000", ["a1", "a2"]], ["B2000", ["b1"]], ["C3000", ["c1"]]]);
+  const termB = new Map([["A1000", ["x9"]],       ["B2000", ["y8", "y7"]], ["C3000", ["z6"]]]);
+
+  const A = crnsForCourses(list, termA);
+  const B = crnsForCourses(list, termB);
+  assert.deepEqual([...A.picked.keys()], [...B.picked.keys()],
+    "the two terms must cover an identical course set");
+  assert.equal(A.used, 4);
+  assert.equal(B.used, 4);
+  // CRNs differ per term, which is the whole point of comparing them.
+  assert.notDeepEqual(A.picked.get("A1000"), B.picked.get("A1000"));
+});
+
+test("a course missing from one term is skipped, not an error", () => {
+  // A course can simply not run in a term. That is not a failure and must not
+  // abort the run — it just cannot contribute to cross-term agreement.
+  const list = ["A1000", "GONE", "C3000"];
+  const term = new Map([["A1000", ["a1"]], ["C3000", ["c1"]]]);
+  const { picked, used } = crnsForCourses(list, term);
+  assert.deepEqual([...picked.keys()], ["A1000", "C3000"]);
+  assert.equal(used, 2);
+  assert.doesNotThrow(() => crnsForCourses(list, new Map()));
+  assert.equal(crnsForCourses(list, new Map()).used, 0);
+});
+
+test("crnsForCourses caps per course so one big lecture cannot eat the budget", () => {
+  const list = ["BIG"];
+  const term = new Map([["BIG", Array.from({ length: 30 }, (_, i) => `c${i}`)]]);
+  assert.equal(crnsForCourses(list, term).used, 8);
+  assert.equal(crnsForCourses(list, term, 3).used, 3);
 });
 
 test("chooseCrns survives degenerate inputs", () => {

@@ -59,7 +59,7 @@ import { mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync } from 
 import { resolve, dirname, join }                                          from "node:path";
 import { fileURLToPath }                                                   from "node:url";
 
-import { parseRestrictions } from "./lib/class-standing.js";
+import { parseRestrictions, coalesceValues } from "./lib/class-standing.js";
 import {
   BASE, getTermList, openTerm, fetchPage, fetchRetry,
   cookieHeader, updateJar, sleep,
@@ -115,54 +115,10 @@ export function splitHeading(head) {
   return null;
 }
 
-/**
- * Coalesce Banner's `detail-popup-indentation` spans into logical values.
- *
- * ── MEASURED, and a real defect in `parseRestrictions` ─────────────
- *
- * Banner emits one value per span EXCEPT that it splits a label at its commas:
- *
- *     <span …>Toronto</span>  <span …> Canada (TOR)</span>
- *     <span …>Politics</span> <span …> Phil &amp; Econ/Bus Adm (PPBA)</span>
- *
- * Those are ONE campus and ONE major. `parseRestrictions` returns each span as
- * its own value, which inflates every value count and invents a codeless
- * phantom ("Toronto", "Politics") beside a mislabelled real one ("Canada (TOR)").
- *
- * It has been latent because Classes labels never contain a comma, and it does
- * NOT corrupt the shipped `std` data: `standingKey` extracts `(XX)` per value
- * and unions, so the codeless fragment is simply dropped. But it makes any
- * other kind unreadable, so it must be fixed in the parser before a widened
- * scrape stores anything.
- *
- * Rule: a value continues until the span that carries a trailing `(CODE)`.
- * A run that ends without one is emitted as-is — that is the `Special Approvals`
- * case ("Advisor's Signature"), which legitimately has no code.
- *
- * @param {string[]} spans
- * @returns {string[]} logical values
- */
-export function coalesceValues(spans) {
-  const out = [];
-  let buf = [];
-  for (const raw of spans ?? []) {
-    const s = decodeEntities(String(raw ?? "")).trim();
-    if (!s) continue;
-    buf.push(s);
-    if (/\([A-Za-z0-9._-]{1,12}\)$/.test(s)) { out.push(buf.join(", ")); buf = []; }
-  }
-  if (buf.length) out.push(buf.join(", "));
-  return out;
-}
-
-/** Banner double-escapes into JSON; `D&#39;Amore` and `&amp;` both occur. */
-export function decodeEntities(s) {
-  return String(s ?? "")
-    .replace(/&#(\d+);/g, (_, d) => String.fromCharCode(+d))
-    .replace(/&quot;/g, '"').replace(/&#x27;|&apos;/g, "'")
-    .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
-    .replace(/&amp;/g, "&");
-}
+// `coalesceValues` and `decodeEntities` were prototyped here and now live in
+// lib/class-standing.js beside the parser they fix, so both paths share one
+// definition. Re-exported because the probe's own test imports them from here.
+export { coalesceValues, decodeEntities } from "./lib/class-standing.js";
 
 /** The parenthesised code in a Banner restriction value, or null. */
 export function codeOf(value) {
@@ -194,6 +150,33 @@ function cachedCrns(term) {
   const dir = join(CACHE, String(term));
   if (!existsSync(dir)) return [];
   return readdirSync(dir).filter(f => f.endsWith(".html")).map(f => f.slice(0, -5));
+}
+
+// ── The CRN → course manifest ────────────────────────────────────
+//
+// A cached page is named by CRN, and a CRN alone does not say which course it
+// belongs to. Without this, `--replay` could answer the kind and vocabulary
+// questions but NOT within-course agreement or cross-term stability — which are
+// the two that actually decide the design. So the mapping is cached beside the
+// pages, and replay is as capable as a live run.
+//
+// Merged rather than overwritten: a later run with a different sample must not
+// orphan the pages an earlier one cached.
+
+const manifestPath = (term) => join(CACHE, String(term), "index.json");
+
+function manifestRead(term) {
+  const p = manifestPath(term);
+  if (!existsSync(p)) return {};
+  try { return JSON.parse(readFileSync(p, "utf8")); } catch { return {}; }
+}
+
+function manifestMerge(term, pairs) {
+  const p = manifestPath(term);
+  mkdirSync(dirname(p), { recursive: true });
+  const merged = { ...manifestRead(term) };
+  for (const [crn, courseId] of pairs) if (courseId) merged[crn] = courseId;
+  writeFileSync(p, JSON.stringify(merged, null, 0) + "\n");
 }
 
 // ── Section inventory ────────────────────────────────────────────
@@ -236,10 +219,12 @@ async function inventory(termCode) {
  * their sections, so within-course agreement is measurable), half uniform.
  * Deterministic given the inventory — no RNG, so two runs compare cleanly.
  */
-export function chooseCrns(byCourse, budget) {
-  const multi = [...byCourse.entries()].filter(([, c]) => c.length >= 2)
+export function chooseCrns(byCourse, budget, allowed = null) {
+  const ok    = (id) => !allowed || allowed.has(id);
+  const multi = [...byCourse.entries()].filter(([id, c]) => c.length >= 2 && ok(id))
     .sort((a, b) => a[0].localeCompare(b[0]));
-  const all   = [...byCourse.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+  const all   = [...byCourse.entries()].filter(([id]) => ok(id))
+    .sort((a, b) => a[0].localeCompare(b[0]));
 
   const picked = new Map();  // courseId → crns
   let used = 0;
@@ -268,6 +253,40 @@ export function chooseCrns(byCourse, budget) {
   return { picked, used };
 }
 
+/**
+ * Expand a fixed course list into one term's CRNs.
+ *
+ * ── WHY a fixed list, and not `chooseCrns` per term ────────────────
+ *
+ * Cross-term agreement is the number that decides whether a restriction may
+ * ever be carried forward, and the first run measured it over **30 courses**
+ * out of ~500 sampled per term. The sampler strided each term's inventory
+ * independently, so the two samples barely intersected — and worse, the
+ * intersection was an accident of striding rather than a chosen set, so it was
+ * not even a fair sample of the overlap.
+ *
+ * Picking the courses ONCE and asking every term for those same courses turns
+ * the cross-term base from a by-product into the design. Sections still differ
+ * per term (different CRNs, possibly different counts), which is exactly what
+ * we want to compare.
+ *
+ * @param {string[]} courseIds        the chosen list, same for every term
+ * @param {Map<string,string[]>} byCourse  that term's inventory
+ * @param {number} perCourseCap
+ */
+export function crnsForCourses(courseIds, byCourse, perCourseCap = 8) {
+  const picked = new Map();
+  let used = 0;
+  for (const id of courseIds) {
+    const crns = byCourse.get(id);
+    if (!crns?.length) continue;          // not offered this term — not an error
+    const take = crns.slice(0, perCourseCap);
+    picked.set(id, take);
+    used += take.length;
+  }
+  return { picked, used };
+}
+
 // ── Fetch ────────────────────────────────────────────────────────
 
 async function fetchRestrictions(termCode, crn) {
@@ -283,23 +302,20 @@ async function fetchRestrictions(termCode, crn) {
  * Gather `{courseId, crn, html}` for one term, from cache when present.
  * In `--replay` the cache IS the sample — no inventory call, no network.
  */
-async function gather(termCode) {
+async function gather(termCode, picked, used) {
   if (REPLAY) {
     const crns = cachedCrns(termCode);
     if (!crns.length) throw new Error(`--replay but nothing cached for ${termCode}`);
-    // Course identity is not in the cache; replay answers the kind/vocabulary
-    // questions, and the per-course ones are reported as unavailable.
-    return crns.map(crn => ({ courseId: null, crn, html: cacheRead(termCode, crn) }));
+    const manifest = manifestRead(termCode);
+    const missing = crns.filter(c => !manifest[c]).length;
+    if (missing) {
+      process.stdout.write(
+        `    ${missing} of ${crns.length} cached pages predate the manifest — ` +
+        `their course identity is unknown, so they count only toward the kind histogram\n`
+      );
+    }
+    return crns.map(crn => ({ courseId: manifest[crn] ?? null, crn, html: cacheRead(termCode, crn) }));
   }
-
-  process.stdout.write(`  inventory ${termCode}…\n`);
-  const byCourse = await inventory(termCode);
-  const { picked, used } = chooseCrns(byCourse, SAMPLE);
-  const courses = byCourse.size;
-  process.stdout.write(
-    `    ${courses} courses, ${[...byCourse.values()].reduce((a, c) => a + c.length, 0)} sections` +
-    ` → sampling ${used} CRNs across ${picked.size} courses\n`
-  );
 
   const out = [];
   let n = 0;
@@ -315,6 +331,7 @@ async function gather(termCode) {
       if (++n % 100 === 0) process.stdout.write(`    …${n}/${used}\n`);
     }
   }
+  manifestMerge(termCode, out.map(p => [p.crn, p.courseId]));
   return out;
 }
 
@@ -339,12 +356,11 @@ export function analyse(termCode, pages) {
       const split = splitHeading(head);
       if (!split) { unknownHeadings.set(head, (unknownHeadings.get(head) ?? 0) + 1); continue; }
       const key = `${split.kind}|${split.polarity}`;
-      const slot = kinds.get(key) ?? { pages: 0, values: new Map(), sizes: [], rawSizes: [] };
+      const slot = kinds.get(key) ?? { pages: 0, values: new Map(), sizes: [] };
       slot.pages += 1;
-      // Both counts, so the report can show how much the comma-split inflated
-      // the naive one — that difference IS the parser defect, quantified.
-      const values = coalesceValues(parsed[head]);
-      slot.rawSizes.push(parsed[head].length);
+      // Already logical values — parseRestrictions coalesces the comma-split
+      // spans now (verified byte-identical for classesOf over 1,027 pages).
+      const values = parsed[head];
       slot.sizes.push(values.length);
       const codes = [];
       for (const v of values) {
@@ -384,27 +400,16 @@ function reportTerm(a) {
   console.log(`\n  KIND HISTOGRAM  (the question this probe exists for)`);
   const rows = [...a.kinds.entries()].sort((x, y) => y[1].pages - x[1].pages);
   const POL = { must: "must  ", not: "CANNOT", info: "info  " };
-  let inflated = 0;
   for (const [key, slot] of rows) {
     const [kind, polarity] = key.split("|");
     const sizes = slot.sizes.slice().sort((p, q) => p - q);
     const med = sizes[Math.floor(sizes.length / 2)];
-    const rawTot = slot.rawSizes.reduce((x, y) => x + y, 0);
-    const tot    = slot.sizes.reduce((x, y) => x + y, 0);
-    inflated += rawTot - tot;
     console.log(
       `    ${POL[polarity] ?? polarity} ${kind.padEnd(18)}` +
       ` ${String(slot.pages).padStart(5)} sections (${pct(slot.pages, n).padStart(6)})` +
       `  ${String(slot.values.size).padStart(4)} distinct codes` +
-      `  values/block med ${med}, max ${sizes[sizes.length - 1]}` +
-      (rawTot > tot ? `   [${rawTot - tot} comma-split spans coalesced]` : "")
+      `  values/block med ${med}, max ${sizes[sizes.length - 1]}`
     );
-  }
-  if (inflated) {
-    console.log(`\n  ⚠ parseRestrictions over-counted ${inflated} values on this sample by`);
-    console.log(`    splitting labels at their commas. Must be fixed before any widened`);
-    console.log(`    scrape stores a non-Classes kind. (Shipped \`std\` is unaffected —`);
-    console.log(`    standingKey drops the codeless fragment.)`);
   }
 
   console.log(`\n  CODE VOCABULARY  (is a mapping table feasible?)`);
@@ -444,7 +449,10 @@ function reportTerm(a) {
                 `  — of which ${partial} have some section with no restriction at all`);
     differEx.forEach(e => console.log(`      ≠ ${e}`));
   } else {
-    console.log(`\n  WITHIN-COURSE AGREEMENT — unavailable (no multi-section course sampled${REPLAY ? "; --replay loses course identity" : ""})`);
+    const why = a.perPage.every(p => !p.courseId)
+      ? "these cached pages predate the CRN→course manifest, so re-run live once to populate it"
+      : "no multi-section course was sampled";
+    console.log(`\n  WITHIN-COURSE AGREEMENT — unavailable (${why})`);
   }
 
   if (a.unknownHeadings.size) {
@@ -497,6 +505,55 @@ function reportCrossTerm(analyses) {
   console.log(`    changed:                ${differ} (${pct(differ, shared.length)})` +
               `  — ${appeared} appeared from nothing, ${vanished} disappeared entirely`);
   ex.forEach(e => console.log(`      Δ ${e}`));
+
+  // ── PER-KIND stability ─────────────────────────────────────────
+  //
+  // The aggregate above conflates kinds, and the design question is per kind:
+  // a `Colleges` gate that never moves could be carried forward while a
+  // `Concentrations` one that rotates every term cannot. Reading that off two
+  // hand-picked examples is exactly the confident-and-wrong failure, so it is
+  // counted here.
+  //
+  // Denominator is courses carrying the kind in EITHER term, so a kind that
+  // appears in one term and not the other counts as a change — that is a real
+  // instability, not a missing observation, because both terms were read.
+  const kindOfPage = (a) => {
+    const m = new Map();   // courseId → Map<kindKey, Set<codeString>>
+    for (const p of a.perPage) {
+      if (!p.courseId) continue;
+      if (!m.has(p.courseId)) m.set(p.courseId, new Map());
+      const per = m.get(p.courseId);
+      for (const b of p.blocks) {
+        const k = `${b.polarity}:${b.kind}`;
+        if (!per.has(k)) per.set(k, new Set());
+        for (const c of b.codes) per.get(k).add(c);
+      }
+    }
+    return m;
+  };
+  const KA = kindOfPage(withIds[0]), KB = kindOfPage(withIds[1]);
+  const perKind = new Map();
+  for (const id of shared) {
+    const a = KA.get(id) ?? new Map(), b = KB.get(id) ?? new Map();
+    for (const k of new Set([...a.keys(), ...b.keys()])) {
+      const va = [...(a.get(k) ?? [])].sort().join("+");
+      const vb = [...(b.get(k) ?? [])].sort().join("+");
+      const slot = perKind.get(k) ?? { n: 0, same: 0, gone: 0 };
+      slot.n += 1;
+      if (va === vb) slot.same += 1;
+      if (!va || !vb) slot.gone += 1;
+      perKind.set(k, slot);
+    }
+  }
+  if (perKind.size) {
+    console.log(`\n  PER-KIND STABILITY  (denominator = courses carrying the kind in EITHER term)`);
+    for (const [k, s] of [...perKind].sort((x, y) => y[1].n - x[1].n)) {
+      console.log(`    ${k.padEnd(34)} ${String(s.same).padStart(3)}/${String(s.n).padStart(3)} identical` +
+                  ` (${pct(s.same, s.n).padStart(6)})` +
+                  (s.gone ? `   ${s.gone} present in only one term` : ""));
+    }
+  }
+
   console.log(`\n  This is the figure that decides whether a restriction may ever GATE.`);
   console.log(`  A restriction that changes term to term cannot be carried forward.`);
 }
@@ -519,9 +576,44 @@ async function main() {
   console.log(`restrictions-probe — terms ${terms.join(", ")}${REPLAY ? "  (replay, no network)" : ""}`);
   console.log(`cache: ${CACHE}`);
 
+  // ── Pick the course list ONCE, across every term ────────────────
+  //
+  // See crnsForCourses: striding each term independently left the cross-term
+  // base at 30 courses of ~500, and made that overlap an accident of striding
+  // rather than a chosen sample. Inventory every term first, restrict to the
+  // courses ALL of them offer, stratify once over that intersection, then ask
+  // each term for the same courses.
+  const inventories = new Map();
+  let sharedPick = null;
+
+  if (!REPLAY) {
+    for (const t of terms) {
+      process.stdout.write(`  inventory ${t}…\n`);
+      const byCourse = await inventory(t);
+      inventories.set(t, byCourse);
+      process.stdout.write(
+        `    ${byCourse.size} courses, ` +
+        `${[...byCourse.values()].reduce((a, c) => a + c.length, 0)} sections\n`
+      );
+    }
+    const first = inventories.get(terms[0]);
+    let allowed = null;
+    if (terms.length > 1) {
+      allowed = new Set([...first.keys()].filter(id =>
+        terms.every(t => inventories.get(t).has(id))));
+      process.stdout.write(`  courses offered in ALL ${terms.length} terms: ${allowed.size}\n`);
+      if (!allowed.size) throw new Error("no course is offered in every requested term");
+    }
+    sharedPick = [...chooseCrns(first, SAMPLE, allowed).picked.keys()];
+    process.stdout.write(`  sampling the same ${sharedPick.length} courses in every term\n`);
+  }
+
   const analyses = [];
   for (const t of terms) {
-    const pages = await gather(t);
+    let picked = new Map(), used = 0;
+    if (!REPLAY) ({ picked, used } = crnsForCourses(sharedPick, inventories.get(t)));
+    if (!REPLAY) process.stdout.write(`  ${t}: ${used} CRNs across ${picked.size} courses\n`);
+    const pages = await gather(t, picked, used);
     const a = analyse(t, pages);
     reportTerm(a);
     analyses.push(a);
