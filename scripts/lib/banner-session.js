@@ -20,26 +20,15 @@
 // Banner session per process — the endpoints are rate-limited hard enough that
 // two concurrent sessions are never wanted — and making it a factory would
 // force every call site in scrape-availability.js to thread a handle through
-// for no behavioural gain. `resetSession()` exists for tests.
+// for no behavioural gain.
 //
-// ── OUTSTANDING: scrape-availability.js still has its own copy ─────
+// ── WHY `ensureSession` EXISTS ─────────────────────────────────────
 //
-// This module was extracted for restrictions-probe.js, which needed the same
-// handshake. `scrape-availability.js` lines ~112-195 still carry a
-// byte-equivalent copy and MUST be migrated to import from here — the two
-// paths drifting is exactly how `scrapeProgram` ended up duplicated across the
-// two program scrapers, which is how a data fix lands in one path and not the
-// other (see CLAUDE.md → Major/minor requirements).
-//
-// It was not done in the same change deliberately: that file is the live
-// scraper, it pushes to main unattended, and the change that widens the
-// restrictions parser has to touch it anyway. One careful edit, verified
-// against a real scrape, beats two.
-//
-// One difference already exists and is the reason `ensureSession` is here:
-// the scraper happens to call `getTermList()` early in `main()`, so it seeds
-// the jar by luck rather than by contract. The probe did not, and Banner
-// answered `success:true, totalCount:0` for a term with 6,699 sections.
+// `scrape-availability.js` seeds the jar by luck rather than by contract: it
+// happens to call `getTermList()` early in `main()`. `restrictions-probe.js`
+// did not, and Banner accepted the activation POST, returned 200, and then
+// answered `success:true, totalCount:0` for a term with 6,699 sections. So the
+// seeding is now explicit and idempotent instead of incidental.
 //
 // ── WHY `fetchRetry` IS SEPARATE from the plain calls ──────────────
 //
@@ -73,7 +62,7 @@ let jar = {};
  * @param {string|string[]|null} raw
  * @returns {Record<string,string>}
  */
-export function parseCookies(raw) {
+function parseCookies(raw) {
   if (!raw) return {};
   const headers = Array.isArray(raw) ? raw : [raw];
   const out = {};
@@ -98,9 +87,6 @@ export function updateJar(res) {
   const raw = res.headers.get("set-cookie");
   if (raw) Object.assign(jar, parseCookies(raw));
 }
-
-/** Drop the session. For tests, and for a client that wants a clean handshake. */
-export function resetSession() { jar = {}; }
 
 // ── Requests ─────────────────────────────────────────────────────
 

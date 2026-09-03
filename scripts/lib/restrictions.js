@@ -85,8 +85,10 @@ export function labelOf(value) {
 /**
  * The storage key for a kind. `must:Majors`, `not:Classes`, `info:Special Approvals`.
  * Stable across Banner rewording of the sentence around the noun.
+ * Not exported: `restrictionsOf` is the only caller, and the key format is an
+ * implementation detail of the stored shape rather than a public contract.
  */
-export const paneKey = (kind, polarity) => `${polarity}:${kind}`;
+const paneKey = (kind, polarity) => `${polarity}:${kind}`;
 
 /**
  * Fold one parsed page into `{ key: [codes] }` plus the labels it used.

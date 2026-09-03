@@ -13,7 +13,7 @@
 import { test } from "node:test";
 import assert   from "node:assert/strict";
 import {
-  parseRestrictions, splitHeading, codeOf, labelOf, paneKey,
+  parseRestrictions, splitHeading, codeOf, labelOf,
   restrictionsOf, tallySection, foldKind,
 } from "../../scripts/lib/restrictions.js";
 
@@ -94,7 +94,15 @@ test("codes and labels split at the trailing parenthesis only", () => {
   assert.equal(labelOf("Engineering (Boston) (EN)"), "Engineering (Boston)");
   assert.equal(codeOf("Business Admin and Law (BALW)"), "BALW");
   assert.equal(codeOf("Advisor's Signature"), null);
-  assert.equal(paneKey("Majors", "not"), "not:Majors");
+});
+
+test("the storage key is `polarity:Kind`", () => {
+  // Asserted through the public surface rather than the internal helper: the
+  // key format IS the stored shape, so what matters is what restrictionsOf
+  // emits, not how it builds it.
+  const page = `<span class="status-bold">Cannot be enrolled in one of the following Majors:</span>
+    <span class="detail-popup-indentation">Computer Science (CSCI)</span>`;
+  assert.deepEqual(Object.keys(restrictionsOf(parseRestrictions(page)).blocks), ["not:Majors"]);
 });
 
 // ── Per-section tally ───────────────────────────────────────────────

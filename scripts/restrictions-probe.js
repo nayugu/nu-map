@@ -8,51 +8,49 @@
 // else NEU publishes — is parsed and discarded. The HTTP cost is already sunk;
 // the loss is a nine-line filter.
 //
-// Nobody has ever looked at the discarded part, so before widening the scrape
-// we do not know:
+// It answers two questions, and deliberately no longer more than that:
 //
-//   1. which restriction KINDS this registrar actually uses, or at what rate;
-//   2. whether `parseRestrictions` even works on them (it has only ever been
-//      exercised against Classes — a kind that renders differently returns {}
-//      SILENTLY, which is the worst possible failure here);
-//   3. the code vocabulary per kind, which decides whether a Banner-code →
-//      programId mapping is a 15-entry hand table or an open-ended problem;
-//   4. whether a restriction is stable ACROSS SECTIONS and ACROSS TERMS, which
-//      is the only thing that could ever license gating on one.
+//   1. which restriction KINDS this registrar uses, at what rate, with what
+//      code vocabulary — the input to anything that stores or displays them;
+//   2. whether `parseRestrictions` actually works on them. It had only ever
+//      been exercised against Classes, and a kind rendered with different
+//      markup returns {} SILENTLY, which is the worst failure available here:
+//      the probe would report that the kind does not exist.
 //
-// This script answers those four and writes nothing outside the cache. It runs
-// `parseRestrictions` UNCHANGED — the point is to measure the parser we have,
-// not a better one.
+// It runs `parseRestrictions` UNCHANGED — the point is to measure the parser we
+// have, not a better one — and writes nothing outside the page cache.
 //
-// ── SAMPLING IS STRATIFIED, on purpose ─────────────────────────────
+// ── WHAT WAS REMOVED, and why ──────────────────────────────────────
 //
-// A uniform CRN sample answers (1) and (3) but is nearly useless for (4):
-// 71.8% of fully-gated course-terms in the corpus have exactly one section, so
-// a uniform draw is mostly singletons and "every section agrees" is a census of
-// one. So half the budget goes to courses with >= 2 sections, taking ALL of
-// their sections, and half to a uniform draw for breadth. Same reasoning as
-// chart-sample.js: selecting for the rare stratum is what buys detection power.
+// This file also carried cross-term and within-course stability analysis, a
+// stratified sampler and a shared-course-list flow to feed them. All of it was
+// built to answer a question nobody asked — whether a restriction could be
+// carried forward and gated on — and its headline figure was wrong anyway: it
+// compared 202510 against 202530, which are Fall and SPRING, so it measured
+// seasonal structure and reported it as instability.
 //
-// ── THE CACHE IS THE POINT, almost as much as the numbers ──────────
+// None of those numbers ever changed a line of shipped code. The comma-split
+// parser defect, which did, was found by the first 40-page run. Removed rather
+// than fixed, because the display stores per-section tallies and reads coverage
+// from them directly — it needs no statistics from here.
 //
-// Every page fetched is written to .cache/banner/restrictions/<term>/<crn>.html.
-// `--replay` then re-runs the whole analysis with zero Banner traffic. There is
-// no raw Banner cache anywhere else in this repo, which is why widening the
-// parser currently costs a ~30-minute re-fetch per term. This makes the SECOND
-// question about restrictions free.
+// ── THE CACHE ──────────────────────────────────────────────────────
+//
+// Pages go to .cache/banner/restrictions/<term>.json.gz (lib/restriction-cache.js),
+// shared with the scrape. `--replay` re-runs the analysis with zero Banner
+// traffic, which is what makes the next parser question cheap.
 //
 // ── USAGE ──────────────────────────────────────────────────────────
 //
-//   node scripts/restrictions-probe.js                     newest completed term
+//   node scripts/restrictions-probe.js                  newest completed term
 //   node scripts/restrictions-probe.js --term=202530
-//   node scripts/restrictions-probe.js --terms=202510,202530   cross-term
 //   node scripts/restrictions-probe.js --sample=400
-//   node scripts/restrictions-probe.js --replay            cache only, no network
-//   node scripts/restrictions-probe.js --dump=20           print raw page samples
+//   node scripts/restrictions-probe.js --replay         cache only, no network
+//   node scripts/restrictions-probe.js --dump=20        print raw page samples
 //
-// Exits 0 on a clean run. Exits 3 if any sampled page failed to parse into at
-// least one heading while its raw HTML clearly contained one — that is the
-// silent-{} failure in (2) above, and it must be loud.
+// Exits 0 on a clean run. Exits 3 if a sampled page failed to parse into any
+// heading while its raw HTML clearly contained one — failure (2) above, and it
+// must be loud.
 // ═══════════════════════════════════════════════════════════════════
 
 import { resolve, dirname }                  from "node:path";
@@ -87,49 +85,16 @@ const DUMP    = parseInt(flag("dump", "0"), 10);
 const TERMS   = String(flag("terms", flag("term", "")) || "")
   .split(",").map(s => s.trim()).filter(Boolean);
 
-// ── Heading grammar ──────────────────────────────────────────────
+// The heading grammar, the code reader and the label reader were prototyped
+// here and now live in lib/restrictions.js beside the fold that uses them, so
+// the probe and the scrape cannot come to disagree about what a heading means.
 //
-// Banner writes "Must be enrolled in one of the following Majors:" and
-// "Cannot be enrolled in one of the following Classes:". We want the KIND
-// (the trailing noun) and the POLARITY separately — the kind is what we are
-// cataloguing, and the polarity flips the fold (a positive unions across
-// sections, a negative only binds when every section carries it).
-
-/**
- * @returns {{kind: string, polarity: "must"|"not"|"info"}|null}
- *
- * `info` is for a heading that carries no enrolment verb at all — measured:
- * "Special Approvals:" with the value "Advisor's Signature", on 15% of the
- * first sample. It is not a gate on who may enrol, it is a statement that a
- * human has to sign, so folding it in with must/not would be a category error.
- * It is also the registrar's own machine-readable "check with your advisor".
- */
-export function splitHeading(head) {
-  const s = String(head ?? "").trim();
-  const m = /^(Must|Cannot|May not)\b.*?following\s+(.+?):$/i.exec(s);
-  if (m) return { kind: m[2].trim(), polarity: /^Must/i.test(m[1]) ? "must" : "not" };
-  // A bare "Noun:" heading. parseRestrictions already required the colon, so
-  // this is the shape every non-gate heading takes.
-  const bare = /^([A-Z][A-Za-z /&'-]*):$/.exec(s);
-  if (bare) return { kind: bare[1].trim(), polarity: "info" };
-  return null;
-}
-
-// `coalesceValues` and `decodeEntities` were prototyped here and now live in
-// lib/class-standing.js beside the parser they fix, so both paths share one
-// definition. Re-exported because the probe's own test imports them from here.
-export { coalesceValues, decodeEntities } from "./lib/class-standing.js";
-
-/** The parenthesised code in a Banner restriction value, or null. */
-export function codeOf(value) {
-  const m = /\(\s*([A-Za-z0-9._-]{1,12})\s*\)\s*$/.exec(String(value ?? "").trim());
-  return m ? m[1].toUpperCase() : null;
-}
-
-/** A value's human label, with the trailing code stripped. */
-export function labelOf(value) {
-  return String(value ?? "").replace(/\s*\([A-Za-z0-9._-]{1,12}\)\s*$/, "").trim();
-}
+// Imported AND re-exported, which is not redundant: `export … from` is a
+// re-export and does NOT bind the name in this module's scope, so `analyse`
+// below threw `splitHeading is not defined` until the import was added.
+import { splitHeading, codeOf, labelOf } from "./lib/restrictions.js";
+export { splitHeading, codeOf, labelOf, coalesceValues, decodeEntities }
+  from "./lib/restrictions.js";
 
 // ── Cache ────────────────────────────────────────────────────────
 //
@@ -208,74 +173,29 @@ async function inventory(termCode) {
 }
 
 /**
- * Choose which CRNs to fetch: half the budget on multi-section courses (all
- * their sections, so within-course agreement is measurable), half uniform.
- * Deterministic given the inventory — no RNG, so two runs compare cleanly.
+ * Choose which CRNs to fetch: a uniform stride over the term's courses, one
+ * section each. Deterministic — no RNG, so two runs compare cleanly.
+ *
+ * Uniform, NOT stratified. An earlier version put half the budget on courses
+ * with >= 2 sections so that within-course agreement could be measured; that
+ * analysis is gone, and for the prevalence figures this file now reports the
+ * stratification was actively wrong. Over-sampling large courses biases every
+ * "X% of sections carry this kind" number toward whatever large courses do.
+ *
+ * One CRN per course rather than per section for the same reason: a 21-section
+ * course would otherwise contribute 21 near-identical pages and pull the
+ * histogram toward itself.
  */
-export function chooseCrns(byCourse, budget, allowed = null) {
-  const ok    = (id) => !allowed || allowed.has(id);
-  const multi = [...byCourse.entries()].filter(([id, c]) => c.length >= 2 && ok(id))
-    .sort((a, b) => a[0].localeCompare(b[0]));
-  const all   = [...byCourse.entries()].filter(([id]) => ok(id))
-    .sort((a, b) => a[0].localeCompare(b[0]));
-
-  const picked = new Map();  // courseId → crns
-  let used = 0;
-
-  // Stratum A — multi-section courses, spread across the alphabet by striding
-  // rather than taking the first N (ARCH/ARTG would otherwise dominate).
-  const half = Math.floor(budget / 2);
-  if (multi.length) {
-    const stride = Math.max(1, Math.floor(multi.length / Math.max(1, half / 3)));
-    for (let i = 0; i < multi.length && used < half; i += stride) {
-      const [id, crns] = multi[i];
-      const take = crns.slice(0, 8);   // a 21-section course would eat the budget
-      picked.set(id, take);
-      used += take.length;
-    }
-  }
-
-  // Stratum B — uniform breadth, one CRN per course.
-  const strideB = Math.max(1, Math.floor(all.length / Math.max(1, budget - used)));
-  for (let i = 0; i < all.length && used < budget; i += strideB) {
-    const [id, crns] = all[i];
-    if (picked.has(id)) continue;
-    picked.set(id, [crns[0]]);
-    used += 1;
-  }
-  return { picked, used };
-}
-
-/**
- * Expand a fixed course list into one term's CRNs.
- *
- * ── WHY a fixed list, and not `chooseCrns` per term ────────────────
- *
- * Cross-term agreement is the number that decides whether a restriction may
- * ever be carried forward, and the first run measured it over **30 courses**
- * out of ~500 sampled per term. The sampler strided each term's inventory
- * independently, so the two samples barely intersected — and worse, the
- * intersection was an accident of striding rather than a chosen set, so it was
- * not even a fair sample of the overlap.
- *
- * Picking the courses ONCE and asking every term for those same courses turns
- * the cross-term base from a by-product into the design. Sections still differ
- * per term (different CRNs, possibly different counts), which is exactly what
- * we want to compare.
- *
- * @param {string[]} courseIds        the chosen list, same for every term
- * @param {Map<string,string[]>} byCourse  that term's inventory
- * @param {number} perCourseCap
- */
-export function crnsForCourses(courseIds, byCourse, perCourseCap = 8) {
+export function chooseCrns(byCourse, budget) {
+  const all = [...byCourse.entries()].sort((a, b) => a[0].localeCompare(b[0]));
   const picked = new Map();
   let used = 0;
-  for (const id of courseIds) {
-    const crns = byCourse.get(id);
-    if (!crns?.length) continue;          // not offered this term — not an error
-    const take = crns.slice(0, perCourseCap);
-    picked.set(id, take);
-    used += take.length;
+  const stride = Math.max(1, Math.floor(all.length / Math.max(1, budget)));
+  for (let i = 0; i < all.length && used < budget; i += stride) {
+    const [id, crns] = all[i];
+    if (!crns?.length) continue;
+    picked.set(id, [crns[0]]);
+    used += 1;
   }
   return { picked, used };
 }
@@ -416,41 +336,6 @@ function reportTerm(a) {
     console.log(`    ${kind} (${polarity}): ${slot.values.size} codes — ${shown}${top.length > 8 ? ", …" : ""}`);
   }
 
-  // (4a) within-course agreement, the stratum A payoff
-  const byCourse = new Map();
-  for (const p of a.perPage) {
-    if (!p.courseId) continue;
-    if (!byCourse.has(p.courseId)) byCourse.set(p.courseId, []);
-    byCourse.get(p.courseId).push(p);
-  }
-  const multi = [...byCourse.entries()].filter(([, ps]) => ps.length >= 2);
-  if (multi.length) {
-    const sig = (p) => p.blocks.map(b => `${b.polarity}:${b.kind}=${b.codes.join("+")}`).sort().join(" | ");
-    let same = 0, differ = 0, partial = 0;
-    const differEx = [];
-    for (const [id, ps] of multi) {
-      const sigs = new Set(ps.map(sig));
-      const anyEmpty = ps.some(p => !p.blocks.length);
-      const allEmpty = ps.every(p => !p.blocks.length);
-      if (sigs.size === 1) same += 1;
-      else {
-        differ += 1;
-        if (anyEmpty && !allEmpty) partial += 1;
-        if (differEx.length < 6) differEx.push(`${id}: ${[...sigs].map(s => s || "(none)").join("   ≠   ")}`);
-      }
-    }
-    console.log(`\n  WITHIN-COURSE AGREEMENT  (${multi.length} courses with >= 2 sections sampled)`);
-    console.log(`    all sections identical: ${same} (${pct(same, multi.length)})`);
-    console.log(`    sections DISAGREE:      ${differ} (${pct(differ, multi.length)})` +
-                `  — of which ${partial} have some section with no restriction at all`);
-    differEx.forEach(e => console.log(`      ≠ ${e}`));
-  } else {
-    const why = a.perPage.every(p => !p.courseId)
-      ? "these cached pages predate the CRN→course manifest, so re-run live once to populate it"
-      : "no multi-section course was sampled";
-    console.log(`\n  WITHIN-COURSE AGREEMENT — unavailable (${why})`);
-  }
-
   if (a.unknownHeadings.size) {
     console.log(`\n  HEADINGS THE GRAMMAR DID NOT RECOGNISE`);
     for (const [h, c] of [...a.unknownHeadings].sort((x, y) => y[1] - x[1]).slice(0, 10))
@@ -461,97 +346,6 @@ function reportTerm(a) {
     console.log(`\n  ⚠ SILENT PARSE FAILURES: ${a.unparsed} pages contain "following …:" but parsed to {}`);
     a.unparsedEx.forEach(e => console.log(`      CRN ${e.crn}: ${e.snippet}`));
   }
-}
-
-/** (4b) cross-term stability — the number that decides whether anything may gate. */
-function reportCrossTerm(analyses) {
-  const withIds = analyses.filter(a => a.perPage.some(p => p.courseId));
-  if (withIds.length < 2) {
-    console.log(`\n══ CROSS-TERM STABILITY ══\n  unavailable — need >= 2 terms with course identity`);
-    return;
-  }
-  const sigOf = (a) => {
-    const m = new Map();
-    for (const p of a.perPage) {
-      if (!p.courseId) continue;
-      const s = p.blocks.map(b => `${b.polarity}:${b.kind}=${b.codes.join("+")}`).sort().join(" | ");
-      if (!m.has(p.courseId)) m.set(p.courseId, new Set());
-      m.get(p.courseId).add(s);
-    }
-    return m;
-  };
-  const [A, B] = withIds.map(sigOf);
-  const shared = [...A.keys()].filter(id => B.has(id));
-  let same = 0, differ = 0, appeared = 0, vanished = 0;
-  const ex = [];
-  for (const id of shared) {
-    const a = [...A.get(id)].sort().join(" ;; ");
-    const b = [...B.get(id)].sort().join(" ;; ");
-    if (a === b) same += 1;
-    else {
-      differ += 1;
-      if (!a.replace(/[\s;]/g, "") && b.replace(/[\s;]/g, "")) appeared += 1;
-      if (a.replace(/[\s;]/g, "") && !b.replace(/[\s;]/g, "")) vanished += 1;
-      if (ex.length < 8) ex.push(`${id}: [${withIds[0].termCode}] ${a || "(none)"}   →   [${withIds[1].termCode}] ${b || "(none)"}`);
-    }
-  }
-  console.log(`\n══ CROSS-TERM STABILITY  (${withIds[0].termCode} vs ${withIds[1].termCode}) ══`);
-  console.log(`  courses sampled in both terms: ${shared.length}`);
-  console.log(`    identical restrictions: ${same} (${pct(same, shared.length)})`);
-  console.log(`    changed:                ${differ} (${pct(differ, shared.length)})` +
-              `  — ${appeared} appeared from nothing, ${vanished} disappeared entirely`);
-  ex.forEach(e => console.log(`      Δ ${e}`));
-
-  // ── PER-KIND stability ─────────────────────────────────────────
-  //
-  // The aggregate above conflates kinds, and the design question is per kind:
-  // a `Colleges` gate that never moves could be carried forward while a
-  // `Concentrations` one that rotates every term cannot. Reading that off two
-  // hand-picked examples is exactly the confident-and-wrong failure, so it is
-  // counted here.
-  //
-  // Denominator is courses carrying the kind in EITHER term, so a kind that
-  // appears in one term and not the other counts as a change — that is a real
-  // instability, not a missing observation, because both terms were read.
-  const kindOfPage = (a) => {
-    const m = new Map();   // courseId → Map<kindKey, Set<codeString>>
-    for (const p of a.perPage) {
-      if (!p.courseId) continue;
-      if (!m.has(p.courseId)) m.set(p.courseId, new Map());
-      const per = m.get(p.courseId);
-      for (const b of p.blocks) {
-        const k = `${b.polarity}:${b.kind}`;
-        if (!per.has(k)) per.set(k, new Set());
-        for (const c of b.codes) per.get(k).add(c);
-      }
-    }
-    return m;
-  };
-  const KA = kindOfPage(withIds[0]), KB = kindOfPage(withIds[1]);
-  const perKind = new Map();
-  for (const id of shared) {
-    const a = KA.get(id) ?? new Map(), b = KB.get(id) ?? new Map();
-    for (const k of new Set([...a.keys(), ...b.keys()])) {
-      const va = [...(a.get(k) ?? [])].sort().join("+");
-      const vb = [...(b.get(k) ?? [])].sort().join("+");
-      const slot = perKind.get(k) ?? { n: 0, same: 0, gone: 0 };
-      slot.n += 1;
-      if (va === vb) slot.same += 1;
-      if (!va || !vb) slot.gone += 1;
-      perKind.set(k, slot);
-    }
-  }
-  if (perKind.size) {
-    console.log(`\n  PER-KIND STABILITY  (denominator = courses carrying the kind in EITHER term)`);
-    for (const [k, s] of [...perKind].sort((x, y) => y[1].n - x[1].n)) {
-      console.log(`    ${k.padEnd(34)} ${String(s.same).padStart(3)}/${String(s.n).padStart(3)} identical` +
-                  ` (${pct(s.same, s.n).padStart(6)})` +
-                  (s.gone ? `   ${s.gone} present in only one term` : ""));
-    }
-  }
-
-  console.log(`\n  This is the figure that decides whether a restriction may ever GATE.`);
-  console.log(`  A restriction that changes term to term cannot be carried forward.`);
 }
 
 // ── Main ─────────────────────────────────────────────────────────
@@ -573,49 +367,24 @@ async function main() {
   console.log(`restrictions-probe — terms ${terms.join(", ")}${REPLAY ? "  (replay, no network)" : ""}`);
   console.log(`cache: ${CACHE_DIR}`);
 
-  // ── Pick the course list ONCE, across every term ────────────────
-  //
-  // See crnsForCourses: striding each term independently left the cross-term
-  // base at 30 courses of ~500, and made that overlap an accident of striding
-  // rather than a chosen sample. Inventory every term first, restrict to the
-  // courses ALL of them offer, stratify once over that intersection, then ask
-  // each term for the same courses.
-  const inventories = new Map();
-  let sharedPick = null;
-
-  if (!REPLAY) {
-    for (const t of terms) {
-      process.stdout.write(`  inventory ${t}…\n`);
-      const byCourse = await inventory(t);
-      inventories.set(t, byCourse);
-      process.stdout.write(
-        `    ${byCourse.size} courses, ` +
-        `${[...byCourse.values()].reduce((a, c) => a + c.length, 0)} sections\n`
-      );
-    }
-    const first = inventories.get(terms[0]);
-    let allowed = null;
-    if (terms.length > 1) {
-      allowed = new Set([...first.keys()].filter(id =>
-        terms.every(t => inventories.get(t).has(id))));
-      process.stdout.write(`  courses offered in ALL ${terms.length} terms: ${allowed.size}\n`);
-      if (!allowed.size) throw new Error("no course is offered in every requested term");
-    }
-    sharedPick = [...chooseCrns(first, SAMPLE, allowed).picked.keys()];
-    process.stdout.write(`  sampling the same ${sharedPick.length} courses in every term\n`);
-  }
-
   const analyses = [];
   for (const t of terms) {
     let picked = new Map(), used = 0;
-    if (!REPLAY) ({ picked, used } = crnsForCourses(sharedPick, inventories.get(t)));
-    if (!REPLAY) process.stdout.write(`  ${t}: ${used} CRNs across ${picked.size} courses\n`);
+    if (!REPLAY) {
+      process.stdout.write(`  inventory ${t}…\n`);
+      const byCourse = await inventory(t);
+      ({ picked, used } = chooseCrns(byCourse, SAMPLE));
+      process.stdout.write(
+        `    ${byCourse.size} courses, ` +
+        `${[...byCourse.values()].reduce((a, c) => a + c.length, 0)} sections` +
+        ` → sampling ${used} CRNs across ${picked.size} courses\n`
+      );
+    }
     const pages = await gather(t, picked, used);
     const a = analyse(t, pages);
     reportTerm(a);
     analyses.push(a);
   }
-  if (analyses.length >= 2) reportCrossTerm(analyses);
 
   if (DUMP) {
     console.log(`\n══ RAW PAGES (${DUMP}) ══`);
