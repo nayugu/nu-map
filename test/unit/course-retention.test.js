@@ -16,6 +16,8 @@
 // ═══════════════════════════════════════════════════════════════════
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import {
   normalizeKey,
   keyOfCourse,
@@ -384,6 +386,91 @@ test("union › the input arrays are not mutated", () => {
     scraped: [], previous, referenced: new Set(["DGTR5000"]), now: NOW,
   });
   assert.equal(JSON.stringify(previous), snapshot);
+});
+
+// ── How the caller wires it up ─────────────────────────────────────
+//
+// Two properties of scrape-catalog.js that the pure functions above cannot
+// hold on their own, and that have no seam to drive them through: the module
+// is called from the middle of a 700-line top-level script whose inputs are a
+// live network scrape. What is worth protecting is the DECISION, and both
+// decisions are visible in the source.
+
+const SCRAPER = readFileSync(
+  fileURLToPath(new URL("../../scripts/scrape-catalog.js", import.meta.url)), "utf8");
+
+test("wiring › retention is applied strictly AFTER the shrink rail", () => {
+  // Load-bearing in both directions, and silent if reversed.
+  //
+  //   before the rail → the union inflates the count past the 98% floor, so an
+  //                     edition roll sails through the one guard whose entire
+  //                     purpose is to make an operator look at it;
+  //   after the rail  → correct, and the rail additionally has to count only
+  //                     non-retired courses on the COMMITTED side or it goes
+  //                     on refusing every month forever.
+  const rail = SCRAPER.indexOf("Refusing to write:");
+  const retention = SCRAPER.indexOf("retainReferencedCourses({");
+  // Anchored to the write that FOLLOWS retention: --rotate and --subjects
+  // write the same file earlier in this script, so a bare indexOf finds one of
+  // those and the assertion becomes a coin toss.
+  const write = SCRAPER.indexOf("writeFileSync(CATALOG_OUT,", retention);
+  assert.ok(rail > 0 && retention > 0 && write > 0, "anchors moved — re-read this test");
+  assert.ok(rail < retention,
+    "retention now runs BEFORE the shrink rail, which disarms the rail on exactly the "
+    + "edition roll it exists to catch");
+  assert.ok(retention < write, "retention must happen before the snapshot is written");
+});
+
+test("wiring › the shrink rail counts only non-retired courses on BOTH sides", () => {
+  assert.match(SCRAPER, /const prevCount = activeCourseCount\(/,
+    "the committed side counts retained courses again — next month's identical scrape "
+    + "then reads as a ~700-course shrink and the run refuses, every month, forever");
+  assert.match(SCRAPER, /const liveCount = activeCourseCount\(out\)/,
+    "the scraped side must use the same counter, so the comparison stays like-for-like "
+    + "if retention is ever moved");
+  assert.doesNotMatch(SCRAPER, /prevCount > 0 && out\.length < floor/,
+    "the rail compares raw lengths again");
+});
+
+test("wiring › both partial-merge paths clear a stale retirement marker", () => {
+  // `merged = { ...prev, … }` spreads the previous entry wholesale, so a
+  // revived course keeps `retired: true` — and that is not cosmetic:
+  // activeCourseCount excludes retired courses, so a live course badged as
+  // gone under-counts the shrink rail too.
+  //
+  // There are TWO near-identical merges (runRotate and runSubjects) and there
+  // have been since before this change, so a fix that lands in one is a fix
+  // that is half-applied. That is the hazard CLAUDE.md names for the two
+  // scrapeProgram copies, and this is what makes it checkable.
+  const merges = SCRAPER.split(/const merged = \{/).slice(1);
+  assert.equal(merges.length, 2,
+    `expected 2 partial-merge blocks, found ${merges.length} — if a third was added it needs `
+    + `the same marker reset; if they were unified, simplify this test`);
+  for (const [i, body] of merges.entries()) {
+    const block = body.slice(0, body.indexOf("};"));
+    assert.match(block, /retired: undefined, retiredSince: undefined/,
+      `partial-merge block ${i + 1} spreads ...prev without clearing the retirement marker, `
+      + `so a course NEU brought back stays badged as gone`);
+  }
+});
+
+test("wiring › the partial paths still cannot judge a retirement", () => {
+  // --rotate and --subjects scrape ONE subject, so they have no evidence about
+  // any other, and --dry-run/--subject write nothing. They must never reach
+  // retention: doing so would retire the entire rest of the catalog. Both
+  // short-circuit with process.exit(0) before the write guard, and the third
+  // is excluded by PARTIAL.
+  const rotate = SCRAPER.indexOf("await runRotate();");
+  const subjects = SCRAPER.indexOf("await runSubjects(SUBJECTS);");
+  const retention = SCRAPER.indexOf("retainReferencedCourses({");
+  assert.ok(rotate > 0 && subjects > 0);
+  assert.match(SCRAPER.slice(rotate, rotate + 120), /process\.exit\(0\)/,
+    "--rotate no longer short-circuits, so it would reach retention with one subject of evidence");
+  assert.match(SCRAPER.slice(subjects, subjects + 120), /process\.exit\(0\)/,
+    "--subjects no longer short-circuits, so it would reach retention with a subset of evidence");
+  assert.ok(rotate < retention && subjects < retention);
+  assert.match(SCRAPER, /const PARTIAL = DRY_RUN \|\| SUBJECT \|\| SUBJECTS;/,
+    "PARTIAL no longer covers the write-nothing modes");
 });
 
 test("union › retention is idempotent across runs", () => {

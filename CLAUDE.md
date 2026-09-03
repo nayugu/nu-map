@@ -165,6 +165,52 @@ Facts that follow from this:
 - The runtime file is `public/northeastern/catalog-courses.json` (browser app,
   Node MCP server, and Cloudflare worker all load it). `all-courses.json` is the
   scrape intermediate; `merge-nupath.js` backfills nuPath from it at build time.
+- **Program requirements are edition-partitioned and the course catalog is NOT,
+  so a retired course is kept while an older edition still requires it.**
+  A degree is locked to the catalog year the student entered under, so
+  `data/northeastern/programs/<tree>/<year>/…` carries one requirements.json per
+  program per edition, both editions ship, and the program id a saved plan
+  stores has the year inside it (`grad/2026/…`) — so no old tree can be dropped
+  without breaking every saved plan and share link. `catalog-courses.json` is a
+  single CURRENT snapshot and is REPLACED, not merged, so the first full scrape
+  after a roll deleted every retired course while the frozen tree went on
+  requiring them: measured on the live 2027 roll, **3,660 dangling references
+  across 579 of 651 programs**, each one a requirement row a student can never
+  tick off. `scripts/lib/course-retention.js` unions them back, and five things
+  about it are load-bearing:
+  1. It keeps only what a SHIPPED edition names, so it is self-pruning by
+     construction rather than by a cleanup step — drop the 2026 tree and the
+     next scrape drops its courses. Simulated on the real roll: 703 retained,
+     367 dropped, dangling 706 → 3 (the 3 being NEU's own inconsistency).
+  2. **A course whose subject FAILED to load is never retired.** Absent because
+     the page timed out is not the same fact as absent because it is gone — the
+     same distinction `knownTermCodes` enforces — and the scraper already
+     rescues those unmarked, so retaining them here would duplicate the entry
+     AND slander a live course.
+  3. **Retention runs strictly AFTER the 2% shrink rail, and the rail counts
+     only non-retired courses on BOTH sides.** Before the rail, the union
+     inflates the count past the floor and an edition roll sails through the one
+     guard that exists to make an operator look at it. And a rail that counts
+     retained courses on the committed side compares next month's identical
+     7,762-course scrape against 8,462 and refuses the run *every month
+     forever*, for a catalog that never changed.
+  4. Only COURSE nodes are protected. A RANGE names no course and is satisfied
+     by whatever exists, so retaining a dead course to fill one would offer a
+     student a course NEU no longer teaches; an `exceptions` entry is a course a
+     range EXCLUDES.
+  5. `--rotate`/`--subjects` must clear `retired` when a course reappears —
+     their merges spread `...prev` wholesale, and a live course badged as gone
+     under-counts the shrink rail too. There are **two** near-identical merges
+     in `scrape-catalog.js`, so that fix is only half-applied if it lands in one.
+  The permanent guarantee is `test/invariant/catalog-covers-programs.test.js`:
+  the build refuses to ship a program tree the course list cannot satisfy. It is
+  a NAMED allowlist, not a count — a count of three passes while three
+  *different* courses dangle, which is the failure it exists for. This bug has a
+  period of one year, which is why it cannot be held by anyone remembering it.
+- A retained course is not a new shape for the app: **3,250 of 7,966 courses
+  (41%) already carry no term-history and no sections**, and every one is
+  already resolvable and schedulable. That measurement is why retention was
+  safe to ship without touching the planner.
 - Data fixes must live in the scrape scripts (both undergrad and grad paths),
   never in one-off migrations — the next scheduled scrape overwrites anything else.
 - The legacy `external/` git submodules (graduatenu, nu-courses, searchneu) were

@@ -24,7 +24,7 @@
  * Set CATALOG_DELAY_MS env variable to override.
  */
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { parse as parseHTML } from "node-html-parser";
@@ -34,6 +34,10 @@ import { extractConcurrentCourses, parsePrereqText, parseCoreqText, hasPrereqSig
 import { parseDescriptionGpaGate } from "../src/adapters/northeastern/gpaGate.js";
 import { parseDescriptionPrereq } from "../src/adapters/northeastern/descriptionPrereq.js";
 import { mergeDescriptionCoreqs } from "../src/adapters/northeastern/descriptionCoreq.js";
+import { courseKeysOf } from "./lib/major-verify.js";
+import {
+  activeCourseCount, referencedCourseKeys, retainReferencedCourses,
+} from "./lib/course-retention.js";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
@@ -45,6 +49,12 @@ const STATE_PATH      = resolve(ROOT, "data/northeastern/scrape-state.json");
 const PUBLIC_STATE_PATH = resolve(ROOT, "public/northeastern/scrape-state.json"); // served to dev portal
 const CHANGE_LOG_PATH = resolve(ROOT, "public/northeastern/change-log.json");
 const SUBJECTS_OUT    = resolve(ROOT, "public/northeastern/subjects.json"); // code → display name
+// The shipped program trees, read to decide which retired courses an audit we
+// still publish cannot be performed without. See lib/course-retention.js.
+const PROGRAM_ROOTS   = [
+  resolve(ROOT, "data/northeastern/programs/undergraduate"),
+  resolve(ROOT, "data/northeastern/programs/graduate"),
+];
 const CHANGE_LOG_MAX  = 600; // keep last 600 run entries
 const BASE_URL      = "https://catalog.northeastern.edu";
 const INDEX_URL     = `${BASE_URL}/course-descriptions/`;
@@ -396,6 +406,13 @@ async function runRotate() {
       // Existing course — overlay catalog fields, preserve sections/terms
       const merged = {
         ...prev,
+        // A course the catalog just listed is in the CURRENT catalog, so a
+        // retirement marker spread in from `prev` is stale — and a stale one
+        // is not cosmetic: `activeCourseCount` excludes retired courses, so a
+        // revived course badged as gone under-counts the shrink rail as well
+        // as lying to every other reader. Spreading `undefined` clears the
+        // keys on write, the same trick repeatability uses below.
+        retired: undefined, retiredSince: undefined,
         title:        cat.title        || prev.title,
         credits:      cat.credits != null ? cat.credits : prev.credits,
         // creditsMax: set when catalog shows a range, clear when fixed-credit, preserve existing if cat has no data
@@ -549,6 +566,11 @@ async function runSubjects(subjectCodes) {
       } else {
         const merged = {
           ...prev,
+          // Stale retirement marker — see the identical note in runRotate.
+          // (These two merges are near-duplicates and have been since before
+          // this change; a fix has to land in both, which is exactly the
+          // hazard CLAUDE.md names for the two scrapeProgram copies.)
+          retired: undefined, retiredSince: undefined,
           title:        cat.title        || prev.title,
           credits:      cat.credits != null ? cat.credits : prev.credits,
           ...(cat.creditsMax !== undefined
@@ -745,19 +767,31 @@ if (PARTIAL) {
   //
   // It is bounded, not a switch-off: below 90% it refuses regardless, because
   // no roll loses a tenth of the catalog and a habit is not a decision.
+  //
+  // ── And it counts the CURRENT catalog on both sides ─────────────────────
+  //
+  // Retention (below) unions retired courses an older program edition still
+  // requires into this file, so the committed snapshot is a superset of the
+  // catalog it was scraped from. Counting those on the committed side makes
+  // the rail unsatisfiable: next month's identical 7,762-course scrape reads
+  // as a ~700-course shrink and the run refuses, every month, for a catalog
+  // that never changed. `activeCourseCount` excludes them on both sides —
+  // applied to `out` as well, where it is a no-op today only because
+  // retention runs after this guard.
   if (existsSync(CATALOG_OUT)) {
     try {
-      const prevCount = JSON.parse(readFileSync(CATALOG_OUT, "utf8")).length;
+      const prevCount = activeCourseCount(JSON.parse(readFileSync(CATALOG_OUT, "utf8")));
       const floor = Math.floor(prevCount * 0.98);
       const hardFloor = Math.floor(prevCount * 0.90);
-      if (prevCount > 0 && out.length < floor) {
-        if (ACCEPT_SHRINK && out.length >= hardFloor) {
-          console.warn(`\n⚠  ${out.length} courses vs ${prevCount} committed (floor ${floor}) — `
+      const liveCount = activeCourseCount(out);
+      if (prevCount > 0 && liveCount < floor) {
+        if (ACCEPT_SHRINK && liveCount >= hardFloor) {
+          console.warn(`\n⚠  ${liveCount} courses vs ${prevCount} committed (floor ${floor}) — `
             + `accepted because --accept-shrink was passed.`);
-          console.warn(`    Writing a catalog ${prevCount - out.length} courses smaller than the `
+          console.warn(`    Writing a catalog ${prevCount - liveCount} courses smaller than the `
             + `committed one. This is only correct if you have checked that the drop is real.\n`);
         } else {
-          console.error(`\n❌  Refusing to write: ${out.length} courses vs ${prevCount} committed (floor ${floor}).`);
+          console.error(`\n❌  Refusing to write: ${liveCount} courses vs ${prevCount} committed (floor ${floor}).`);
           console.error(`    The catalog is likely unreachable or its markup changed — nothing was written.`);
           if (ACCEPT_SHRINK) {
             console.error(`    --accept-shrink was passed and is NOT enough: this run is below the `
@@ -773,6 +807,67 @@ if (PARTIAL) {
         }
       }
     } catch { /* ignore */ }
+  }
+
+  // ── Retain retired courses an older program edition still requires ──────
+  //
+  // Strictly AFTER the rail above, and that order is load-bearing in both
+  // directions — see the rail's own note, and lib/course-retention.js for why
+  // this exists at all (3,660 dangling references across 579 of 651 programs
+  // on the 2027 roll, each one a requirement row a student can never tick).
+  //
+  // Everything here degrades to "write what we scraped", never to a refusal:
+  // this is a data-quality improvement, and it must not become a new way for
+  // an unattended monthly job to write nothing.
+  if (existsSync(CATALOG_OUT)) {
+    try {
+      const { keys, programs, unreadable } = referencedCourseKeys(PROGRAM_ROOTS, {
+        exists: existsSync,
+        readdir: p => readdirSync(p, { withFileTypes: true }),
+        readFile: p => readFileSync(p, "utf8"),
+        courseKeysOf,
+        warn: msg => console.warn(`  ⚠  ${msg}`),
+      });
+      if (unreadable) {
+        console.warn(`\n  ⚠  ${unreadable} program file(s)/directory(ies) unreadable — `
+          + `their courses are not protected this run.`);
+      }
+      if (!programs) {
+        // No trees on disk is a legitimate state (a fresh clone that has never
+        // run the majors scrape), and it means there is nothing to protect.
+        console.log(`\n  No program requirements on disk — nothing to retain.`);
+      } else {
+        const { courses, retained, revived, dropped } = retainReferencedCourses({
+          scraped: out,
+          previous: JSON.parse(readFileSync(CATALOG_OUT, "utf8")),
+          referenced: keys,
+          failedSubjects,
+          now: new Date().toISOString().slice(0, 10),
+        });
+        out = courses;
+        console.log(`\n  Edition retention: ${programs} programs reference ${keys.size} courses.`);
+        if (retained.length) {
+          const bySubject = new Map();
+          for (const c of retained) bySubject.set(c.subject, (bySubject.get(c.subject) ?? 0) + 1);
+          const top = [...bySubject].sort((a, b) => b[1] - a[1]).slice(0, 8)
+            .map(([s, n]) => `${s}×${n}`).join(", ");
+          console.log(`    Kept ${retained.length} retired course(s) still required by a shipped `
+            + `edition: ${top}${bySubject.size > 8 ? ", …" : ""}`);
+        }
+        if (revived.length) {
+          console.log(`    ${revived.length} previously-retired course(s) are back in the catalog: `
+            + `${revived.slice(0, 8).join(", ")}${revived.length > 8 ? ", …" : ""}`);
+        }
+        if (dropped.length) {
+          // The growth bound, made visible. These are genuinely gone: absent
+          // from the catalog AND named by no edition we ship.
+          console.log(`    Dropped ${dropped.length} course(s) no shipped edition requires.`);
+        }
+      }
+    } catch (err) {
+      console.warn(`\n  ⚠  Edition retention skipped (${err.message}) — writing the scrape as-is. `
+        + `Older program editions may be left with unresolvable course references.`);
+    }
   }
 
   writeFileSync(CATALOG_OUT, JSON.stringify(out, null, 0), "utf8");

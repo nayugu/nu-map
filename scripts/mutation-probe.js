@@ -57,6 +57,8 @@ const OVERLAP = "src/core/minorOverlap.js";
 const MODEL   = "src/core/planModel.js";
 const COURSE  = "src/core/courseModel.js";
 const DESCCOREQ = "src/adapters/northeastern/descriptionCoreq.js";
+const RETAIN  = "scripts/lib/course-retention.js";
+const SCRAPER = "scripts/scrape-catalog.js";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
@@ -66,6 +68,7 @@ const UNITDEMAND = "cd test/unit      && node --test engine-demand.test.js engin
 const MINOR      = "cd test/unit      && node --test minor-overlap.test.js";
 const UNLOCKS      = "cd test/unit      && node --test unlocked-courses.test.js";
 const DESCOREQ_TEST = "cd test/unit      && node --test description-coreq.test.js";
+const RETAIN_TEST   = "cd test/unit      && node --test course-retention.test.js";
 
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
@@ -300,6 +303,68 @@ const MUTANTS = [
   { name: "total: the shared reader loses the doctoral form", file: PARSER,
     from: "    [new RegExp(`a\\\\s+minimum\\\\s+of\\\\s+${N}\\\\s+${UNIT}[^.]*?beyond\\\\s+the\\\\s+(?:under)?graduate\\\\s+degree`, 'i'),",
     to:   "    [new RegExp(`__never_matches__`, 'i'),", run: [MAJORPARSE, PROSE] },
+
+  // ── Course retention across a catalog edition roll ──────────────
+  //
+  // This module runs inside an unattended job that REPLACES the course
+  // catalog, so each mutant below is a way it could do damage rather than
+  // merely be wrong: slander a live course, unbound the file's growth, or
+  // disarm the shrink rail that makes an operator look at a roll at all.
+
+  { name: "retain: the shrink rail counts retained courses too", file: RETAIN,
+    from: "  return courses.filter(c => c && typeof c === \"object\" && !c.retired).length;",
+    to:   "  return courses.filter(c => c && typeof c === \"object\").length;", run: [RETAIN_TEST] },
+
+  { name: "retain: a failed subject is retired like any other absence", file: RETAIN,
+    from: "    if (failed.has(String(c.subject ?? \"\").replace(/\\s+/g, \"\").toUpperCase())) continue;",
+    to:   "", run: [RETAIN_TEST] },
+
+  { name: "retain: everything absent is kept, referenced or not", file: RETAIN,
+    from: "    if (!need.has(key)) { dropped.push(key); continue; }",
+    to:   "", run: [RETAIN_TEST] },
+
+  { name: "retain: retiredSince is re-dated on every run", file: RETAIN,
+    from: "      retiredSince: typeof c.retiredSince === \"string\" && c.retiredSince ? c.retiredSince : stamp,",
+    to:   "      retiredSince: stamp,", run: [RETAIN_TEST] },
+
+  { name: "retain: a revived course keeps its retirement marker", file: RETAIN,
+    from: "    if (c && typeof c === \"object\" && (c.retired || c.retiredSince)) {",
+    to:   "    if (false) {", run: [RETAIN_TEST] },
+
+  { name: "retain: duplicate keys in the snapshot duplicate the entry", file: RETAIN,
+    from: "    if (seen.has(key)) continue;",
+    to:   "", run: [RETAIN_TEST] },
+
+  { name: "retain: a malformed tree key protects a fictional course", file: RETAIN,
+    from: "          const m = /^([A-Za-z]+)\\s*([0-9][0-9A-Za-z]*)$/.exec(String(raw ?? \"\").trim());\n          const key = m ? normalizeKey(m[1], m[2]) : null;",
+    to:   "          const key = String(raw ?? \"\").trim().toUpperCase() || null;", run: [RETAIN_TEST] },
+
+  { name: "retain: an unreadable requirements.json fails the scrape", file: RETAIN,
+    from: "      let program;\n      try {\n        program = JSON.parse(io.readFile(path));\n      } catch {\n        unreadable++;\n        io.warn?.(`could not read ${path} — its courses are not protected this run`);\n        continue;\n      }",
+    to:   "      const program = JSON.parse(io.readFile(path));", run: [RETAIN_TEST] },
+
+  { name: "retain: a half-key is accepted as a key", file: RETAIN,
+    from: "  return s && n ? `${s}${n}` : null;",
+    to:   "  return `${s}${n}`;", run: [RETAIN_TEST] },
+
+  // The wiring, which the pure functions cannot hold on their own.
+  { name: "retain/wiring: the rail counts the committed file raw again", file: SCRAPER,
+    from: "      const prevCount = activeCourseCount(JSON.parse(readFileSync(CATALOG_OUT, \"utf8\")));",
+    to:   "      const prevCount = JSON.parse(readFileSync(CATALOG_OUT, \"utf8\")).length;",
+    run: [RETAIN_TEST] },
+
+  { name: "retain/wiring: the rail compares raw lengths again", file: SCRAPER,
+    from: "      const liveCount = activeCourseCount(out);\n      if (prevCount > 0 && liveCount < floor) {",
+    to:   "      const liveCount = out.length;\n      if (prevCount > 0 && out.length < floor) {",
+    run: [RETAIN_TEST] },
+
+  { name: "retain/wiring: runRotate keeps a stale retirement marker", file: SCRAPER,
+    from: "        retired: undefined, retiredSince: undefined,\n        title:        cat.title        || prev.title,",
+    to:   "        title:        cat.title        || prev.title,", run: [RETAIN_TEST] },
+
+  { name: "retain/wiring: runSubjects keeps a stale retirement marker", file: SCRAPER,
+    from: "          retired: undefined, retiredSince: undefined,\n          title:        cat.title        || prev.title,",
+    to:   "          title:        cat.title        || prev.title,", run: [RETAIN_TEST] },
 ];
 
 const argv = process.argv.slice(2);
