@@ -143,14 +143,46 @@ test("descriptionCoreq › live catalog › exactly the known sentences are read
     assert.ok(after >= before, `${id} lost a corequisite`);
   }
 
-  // The four PHYS lecture/lab/seminar triples, and nothing else in 7,966 courses.
-  assert.deepEqual(gained.sort(), [
-    "PHYS1152", "PHYS1153", "PHYS1156", "PHYS1157",
-    "PHYS1172", "PHYS1173", "PHYS1176", "PHYS1177",
-  ]);
-  // 16 refs across 8 courses, one of which (PHYS 1157 → PHYS 1155) the
-  // labelled field already carried.
-  assert.equal(added, 15);
+  // ── This assertion INVERTED on 2026-09-03, and the inversion is success ──
+  //
+  // It used to require that exactly the four PHYS lecture/lab/seminar triples
+  // GAIN coreqs here, and that 15 refs were added. That measured the runtime
+  // stopgap doing work: the shipped catalog carried only the LABELLED coreqs,
+  // and `courseNorm.js` re-read the description on load to recover the rest.
+  //
+  // The scraper is the canonical caller of the same reader
+  // (`catalog-course-parser.js` → `mergeDescriptionCoreqs` at capture time),
+  // and the first scrape to include it landed with the 2027 edition roll. The
+  // links are now IN the data, so re-reading adds nothing and `gained` is
+  // empty. That is the stopgap becoming redundant, exactly as intended.
+  //
+  // The trap in relaxing it: "gains nothing" is ALSO true of a catalog where
+  // these coreqs were deleted outright — which is the failure this test exists
+  // for, and the expensive one, since PHYS 1152 carries no labelled
+  // Corequisite(s) line at all and the sentence is the only thing tying the lab
+  // to its own triple. So presence is asserted directly, and idempotence is
+  // asserted beside it rather than in place of it.
+  assert.deepEqual(gained.sort(), [],
+    "the description reader added corequisites the SCRAPE should already have "
+    + "baked in — the canonical path in catalog-course-parser.js has regressed");
+
+  const coreqIds = (subject, number) => {
+    const c = courses.find(x => x.subject === subject && String(x.number) === number);
+    assert.ok(c, `${subject} ${number} is missing from the catalog entirely`);
+    return (c.coreqs ?? []).map(r => `${r.subject}${r.number}`).sort();
+  };
+  // The four triples, each member naming the other two. PHYS 1157's link to
+  // 1155 is the one the labelled field also carried; every other ref here
+  // exists ONLY because the description sentence was read.
+  assert.deepEqual(coreqIds("PHYS", "1152"), ["PHYS1151", "PHYS1153"]);
+  assert.deepEqual(coreqIds("PHYS", "1153"), ["PHYS1151", "PHYS1152"]);
+  assert.deepEqual(coreqIds("PHYS", "1156"), ["PHYS1155", "PHYS1157"]);
+  assert.deepEqual(coreqIds("PHYS", "1157"), ["PHYS1155", "PHYS1156"]);
+  assert.deepEqual(coreqIds("PHYS", "1172"), ["PHYS1171", "PHYS1173"]);
+  assert.deepEqual(coreqIds("PHYS", "1173"), ["PHYS1171", "PHYS1172"]);
+  assert.deepEqual(coreqIds("PHYS", "1176"), ["PHYS1175", "PHYS1177"]);
+  assert.deepEqual(coreqIds("PHYS", "1177"), ["PHYS1175", "PHYS1176"]);
+  assert.equal(added, 0, "nothing should be left for the runtime reader to add");
 });
 
 test("descriptionCoreq › live catalog › every triple is a complete group", () => {
