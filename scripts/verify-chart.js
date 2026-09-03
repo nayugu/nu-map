@@ -85,6 +85,25 @@ function degreePrograms() {
         const rf = join(cd, key, "requirements.json");
         if (!existsSync(rf)) continue;
         const data = JSON.parse(readFileSync(rf, "utf8"));
+        // ── A hatch for a decision with a deadline ──────────────────────
+        //
+        // `CHART_NO_WITNESS=1` runs the whole gate as though no program
+        // published a Sample Plan of Study. That is not hypothetical: NEU moved
+        // the plans onto college pages and the 2027 edition publishes none, so
+        // this is the world the next majors scrape lands us in.
+        //
+        // It matters because the witness is the only thing separating a genuine
+        // cross-count (`shared` and must be scheduled) from an alternative track
+        // (`shared` and must not be) — `demand.js` reads it straight off
+        // `metadata.planOfStudyCourses`, so deleting the field here reproduces
+        // the plan-less engine exactly, in the same process, over the same
+        // shapes. `chart-probe --no-witness` does the same thing for a named
+        // list; this is the corpus-wide version, because the question is how
+        // much of the corpus moves.
+        //
+        // Scaffolding for one decision, not a setting. Delete it with the change
+        // it measures, the way CHART_NO_DEPARTMENT's predecessor should have been.
+        if (process.env.CHART_NO_WITNESS && data.metadata) delete data.metadata.planOfStudyCourses;
         if (!(data.requirementSections ?? []).length) continue;
         if (!(data.totalCreditsRequired > 0)) continue;
         const pf = join(cd, key, "plan.json");

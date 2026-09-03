@@ -1200,6 +1200,50 @@ carries. Heading text and credit arithmetic were both considered and neither sep
 (`metadata.planOfStudyCourses` is already written by the scrape), and cannot drift from the
 requirements because it is re-read with them every month.
 
+#### 19a. The witness is going away, and here is exactly what that costs
+
+**2026-09-02.** NEU moved the Sample Plan of Study out of the central catalog onto
+individual college pages — confirmed with the maintainers, done to reduce confusion. The
+2027 edition publishes none: **349 plans committed for 2026, 0 parsed**, verified on six
+pages. `witnessedSharedNodes` returns nothing when the witness is empty, so on the next
+majors scrape every `shared` section stops emitting.
+
+**The blast radius is smaller than "the witness decides".** Of 136 shared sections in the
+2026 corpus the witness actively decides only 41 — 26 it emits, 15 it declines because the
+plan names none of them. The other 95 already get nothing from it: 71 are in programs that
+publish no plan at all and 24 are structurally unwitnessable (OR/XOM/RANGE only, no plain
+course or co-requisite AND for the plan to confirm).
+
+**Measured corpus-wide** with `CHART_NO_WITNESS=1 node scripts/verify-chart.js --all
+--snapshot`, diffed against the same run without it (875 plans):
+
+| | |
+|---|---|
+| unchanged | 843 (96.3%) |
+| moved | 32, of which 3 are the same courses rearranged |
+| plans that now REFUSE outright | 2 — Computer Engineering and Computer Science BSCmpE #0 and #1 |
+| distinct courses vanishing | 35, over 65 course slots |
+| courses appearing | 1 |
+
+Both runs pass every hard rule, so this is not illegality — it is 29 degrees whose plan
+quietly loses courses the student still has to take, plus two that stop planning at all.
+The heaviest single case is CompE+CS, which loses CS 2000/2001/2100/2101/3100/3101/2800/3650;
+the widest is CS 4120, the integrative course of the CS + Communication Studies combined
+majors, gone from five plans.
+
+**The markup cannot replace it.** `scripts/alternation-probe.js` exists to answer that and
+the answer is no. Accounting MSA states its alternation outright ("Tracks — Complete one of
+the following tracks:"), which looked like a parser rule waiting to be written; over 91
+located sections the instruction appears in 19% of cross-counts and 15% of alternatives —
+flat, and marginally the wrong way round. It carries no information about which population
+a section is in.
+
+So the options are an adjudication of the 26 (bounded, one-time, the pattern
+`shared-sections.json` and `program-variants.js` already use, and it can be generated from
+the 2026 plans rather than typed), accepting the 65 slots, or scraping the college pages.
+`CHART_NO_WITNESS` is kept until that is decided, because whichever is chosen has to be
+measured the same way — then it goes with the change, like any hatch.
+
 ---
 
 ### 20. Scheduling conventions: shipped, with two costs worth naming
