@@ -15,7 +15,9 @@ import assert   from "node:assert/strict";
 import {
   parseRestrictions, standingKey, classesOf, lenientStanding,
   termGate, courseGate, STANDING_LADDER, STANDING_FLOOR,
+  coalesceValues, decodeEntities,
 } from "../../scripts/lib/class-standing.js";
+
 
 // ── Real page shapes ────────────────────────────────────────────────
 
@@ -37,6 +39,76 @@ const NEGATIVE_PAGE = `
   <span class="status-bold">Cannot be enrolled in one of the following Classes:</span><br/>
   <span class="detail-popup-indentation">Freshmen (FR)</span><br/>
 </section>`;
+
+// ── The comma-split defect (restrictions-probe, 2026-09-03) ─────────
+//
+// Banner splits a restriction value at its label's commas, emitting each
+// fragment as its own indentation span. Latent while only `Classes` was read —
+// none of its five labels contains a comma — and measured on 211 of 1,027
+// cached pages once other kinds were looked at. `classesOf` output was verified
+// byte-identical across all 1,027, which is what made the fix safe to land in
+// the shipped parser.
+//
+// These fixtures are verbatim from .cache/banner/restrictions.
+
+test("one campus split across two spans parses as ONE value", () => {
+  const page = `<span class="status-bold">Must be enrolled in one of the following Campuses:</span><br/>
+    <span class="detail-popup-indentation">Toronto</span><br/>
+    <span class="detail-popup-indentation"> Canada (TOR)</span><br/>`;
+  const p = parseRestrictions(page);
+  assert.deepEqual(p["Must be enrolled in one of the following Campuses:"],
+    ["Toronto, Canada (TOR)"]);
+});
+
+test("one MAJOR split across two spans parses as ONE value", () => {
+  // Read span-per-value this invented a codeless "Politics" and relabelled
+  // PPBA as "Phil & Econ/Bus Adm".
+  const page = `<span class="status-bold">Must be enrolled in one of the following Majors:</span><br/>
+    <span class="detail-popup-indentation">Political Science/Business Adm (POBA)</span><br/>
+    <span class="detail-popup-indentation">Politics</span><br/>
+    <span class="detail-popup-indentation"> Phil &amp; Econ/Bus Adm (PPBA)</span><br/>`;
+  const vals = parseRestrictions(page)["Must be enrolled in one of the following Majors:"];
+  assert.equal(vals.length, 2, "three spans, two majors");
+  assert.deepEqual(vals, [
+    "Political Science/Business Adm (POBA)",
+    "Politics, Phil & Econ/Bus Adm (PPBA)",
+  ]);
+});
+
+test("the fix does NOT merge Classes values — each carries its own code", () => {
+  // The regression that would matter: if "Junior (JR)" and "Senior(SR)" merged,
+  // standingKey would still find one code and the gate would silently narrow.
+  const p = parseRestrictions(REAL_PAGE);
+  assert.deepEqual(p["Must be enrolled in one of the following Classes:"],
+    ["Junior (JR)", "Senior(SR)"]);
+  assert.deepEqual(classesOf(p), { must: "JR|SR", not: "" });
+});
+
+test("a codeless run survives — Special Approvals has no code at all", () => {
+  const page = `<span class="status-bold">Special Approvals:</span><br/>
+    <span class="detail-popup-indentation">Advisor&#39;s Signature</span><br/>`;
+  assert.deepEqual(parseRestrictions(page)["Special Approvals:"], ["Advisor's Signature"]);
+});
+
+test("coalesceValues and decodeEntities degrade rather than throw", () => {
+  for (const bad of [null, undefined, [], ["", "  "], [null, undefined]]) {
+    assert.doesNotThrow(() => coalesceValues(bad));
+    assert.deepEqual(coalesceValues(bad), []);
+  }
+  for (const bad of [null, undefined, 0, {}]) assert.doesNotThrow(() => decodeEntities(bad));
+  assert.equal(decodeEntities("D&#39;Amore-McKim School Business"), "D'Amore-McKim School Business");
+});
+
+test("a standing gate is unchanged when a NON-Classes block on the same page splits", () => {
+  // The integration case: the page carries a comma-split campus AND a Classes
+  // block. Coalescing must not let the campus fragments leak into the gate.
+  const page = `<span class="status-bold">Must be enrolled in one of the following Campuses:</span><br/>
+    <span class="detail-popup-indentation">Portland</span><br/>
+    <span class="detail-popup-indentation"> Maine (PTL)</span><br/>
+    <span class="status-bold">Must be enrolled in one of the following Classes:</span><br/>
+    <span class="detail-popup-indentation">Senior(SR)</span><br/>`;
+  assert.deepEqual(classesOf(parseRestrictions(page)), { must: "SR", not: "" });
+});
 
 test("parses a real page into headings and values", () => {
   const p = parseRestrictions(REAL_PAGE);

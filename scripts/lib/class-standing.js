@@ -60,6 +60,55 @@ export { STANDING_LADDER, KNOWN_STANDINGS, STANDING_FLOOR, lenientStanding, stan
 /** Only the "Classes" restriction, positive or negative. */
 const CLASSES_HEADING = /following Classes:$/;
 
+/** Banner double-escapes into its HTML; `D&#39;Amore` and `&amp;` both occur. */
+export function decodeEntities(s) {
+  return String(s ?? "")
+    .replace(/&#(\d+);/g, (_, d) => String.fromCharCode(+d))
+    .replace(/&quot;/g, '"').replace(/&#x27;|&apos;/g, "'")
+    .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+
+/**
+ * Coalesce Banner's indentation spans into LOGICAL values.
+ *
+ * ── MEASURED (restrictions-probe, 1,027 pages, 2026-09-03) ─────────
+ *
+ * Banner emits one value per span EXCEPT that it splits a label at its commas:
+ *
+ *     <span …>Toronto</span>   <span …> Canada (TOR)</span>
+ *     <span …>Politics</span>  <span …> Phil &amp; Econ/Bus Adm (PPBA)</span>
+ *
+ * Those are ONE campus and ONE major. Read span-per-value they become a
+ * codeless phantom ("Toronto", "Politics") beside a mislabelled real one
+ * ("Canada (TOR)") — 59 over-counted values on a single 498-section sample.
+ *
+ * This was latent for as long as only `Classes` was read: its five labels
+ * (Freshmen/Sophomore/Junior/Senior/Graduate) contain no comma, so every span
+ * carries its own code and nothing merges. `Campuses`, `Majors`, `Programs`
+ * and `Attributes` all contain commas, so the defect had to be fixed here
+ * before any of them could be stored.
+ *
+ * Rule: a value continues until the span carrying a trailing `(CODE)`. A run
+ * that ends without one is emitted as it stands — that is the `Special
+ * Approvals` case ("Advisor's Signature"), which legitimately has no code.
+ *
+ * @param {string[]} spans
+ * @returns {string[]}
+ */
+export function coalesceValues(spans) {
+  const out = [];
+  let buf = [];
+  for (const raw of spans ?? []) {
+    const s = decodeEntities(String(raw ?? "")).trim();
+    if (!s) continue;
+    buf.push(s);
+    if (/\([A-Za-z0-9._-]{1,12}\)$/.test(s)) { out.push(buf.join(", ")); buf = []; }
+  }
+  if (buf.length) out.push(buf.join(", "));
+  return out;
+}
+
 /**
  * Parse a getRestrictions page into { heading: [values] }.
  *
@@ -67,6 +116,10 @@ const CLASSES_HEADING = /following Classes:$/;
  * `detail-popup-indentation` spans that follow it, up to the next heading. The
  * trailing colon separates a heading from the page's own notice ("Not all
  * restrictions are applicable."), which carries the same class and no colon.
+ *
+ * Values are LOGICAL values, not spans — see `coalesceValues`. Verified
+ * byte-identical for `classesOf` over all 1,027 cached pages, because no
+ * `Classes` label contains a comma.
  *
  * @param {string} html
  * @returns {Record<string, string[]>}
@@ -79,9 +132,10 @@ export function parseRestrictions(html) {
   while ((m = re.exec(norm))) {
     const head = m[1].trim();
     if (!head.endsWith(":")) continue;
-    const values = [...m[2].matchAll(/<span class="detail-popup-indentation">([^<]*)<\/span>/g)]
-      .map(x => x[1].trim())
-      .filter(Boolean);
+    const spans = [...m[2].matchAll(/<span class="detail-popup-indentation">([^<]*)<\/span>/g)]
+      .map(x => x[1])
+      .filter(s => String(s ?? "").trim());
+    const values = coalesceValues(spans);
     // A heading with no values is Banner rendering an empty block, not a gate.
     if (values.length) out[head] = values;
   }
