@@ -218,6 +218,96 @@ Facts that follow from this:
   `nayugu/*` forks backing them are deleted from GitHub. Never reintroduce a
   submodule data path; `git submodule update` on pre-removal commits cannot work.
 
+## Scraping: interruption is the NORMAL case
+
+Applies to any scrape here, not just Banner. The rules below were each paid for
+by a failure during the restrictions backfill (Sept 2026), where one pass is
+~7,000 requests and ~4 hours — long enough that a dropped connection, a closed
+laptop or a rate limit is not an exception to handle but the expected course of
+events. Reference implementation: `scripts/lib/banner-session.js`,
+`scripts/lib/restriction-cache.js`, `scripts/reparse-restrictions.js`.
+
+- **Know your requests-per-entity ratio before designing anything.** A bulk feed
+  (Banner's `searchResults`: 500 sections per request, ~15 requests per term) and
+  a per-entity lookup (`getRestrictions`: one request per CRN, ~7,000 per term,
+  ~55 min) are different engineering problems wearing the same word. That
+  asymmetry alone is why availability covers 11 terms and restrictions covered 1.
+  Everything below matters only on the expensive axis — do not pay its complexity
+  on a bulk feed.
+- **A LOST CONNECTION and a BAD ANSWER are different failures and must not share
+  a retry policy.** `isNetworkError` decides which: a refused connection, an
+  unresolvable host or a socket timeout means "no network right now", and
+  retrying the identical request later is exactly right. An HTTP 404 or a JSON
+  parse failure means the server answered and the answer was bad, which waiting
+  cannot fix — retrying it forever *hangs* an unattended run instead of failing
+  it, and a run that hangs reports nothing. Match on `err.cause.code` **and**
+  `err.code` (`fetch` wraps the reason; undici has its own `UND_ERR_*` family),
+  and treat junk (`null`, `{}`) as not-an-outage.
+- **Wait out a network outage indefinitely, with CAPPED backoff.** Unbounded is
+  the correct shape for an unattended backfill: there is nothing better to do
+  than wait, and the alternative is discarding hours of work already paid for.
+  The cap (1s → 5 → 15 → 30 → **60s**, held) matters as much as the retry —
+  uncapped exponential backoff sleeps straight through a recovery that happened
+  minutes ago. The old policy gave up after 4 attempts (~2 min), the caller
+  counted that as a section failure, and 25 in a row abandoned the term: a
+  ten-minute outage cost a fifty-five-minute term.
+- **Announce an outage ONCE, then rarely** (first attempt, then every tenth). An
+  hour offline must not produce an hour of log, or the real failure is invisible
+  inside it. The message must carry the reason code, not just "retrying".
+- **Cache the RAW response, never only the parse.** This is the single highest-
+  value rule: it converts every future parser change from a re-fetch into a
+  re-parse. Store it as ONE file per batch, gzipped (measured: 2.7% as a single
+  stream against 31% per-file, and 10 MB / 2,607 files became 80 KB / 2), and
+  split the work into two scripts — one that only *fetches* and one that only
+  *derives* (`reparse-*.js`). The derive then runs in seconds with zero upstream
+  traffic, so a parser fix reaches the data the same minute it is written.
+- **Flush the cache incrementally; a `finally` block does not run when you are
+  killed.** Measured: killing a run mid-term discarded all ~2,400 pages it had
+  fetched, because the only write was at the end. Flush every N (500) items, and
+  make the write **atomic** (temp file + rename) and **merging, not replacing** —
+  a sampled probe run must not be able to delete a full capture, and the same
+  growing map is rewritten repeatedly so every earlier item has to survive every
+  later flush. Losing an item is the one property worth testing hardest.
+- **`--resume` is the DEFAULT, not a flag.** A flag means the recovery path is
+  the one nobody exercises. It is safe here only because the pass runs on
+  completed terms whose pages are frozen; a scrape of *live* data has to decide
+  what staleness it will tolerate before it may resume at all.
+- **Resuming must RE-DERIVE from cache, not merely skip.** The dangerous version
+  of resume counts a cached item as done and folds the result from the newly
+  fetched half alone. For a fold that unions across sections, that produces a
+  *false gate* — the one error that can refuse a student's plan outright.
+  Restore-and-reparse; skipping is only ever safe when items are independent.
+- **A "done" marker must be a COVERAGE test, not a presence test.** `termsWithRestr`
+  was "does any record carry this field", so a term that died 5% in read as
+  complete forever. It is now ≥90% of records, because a legitimate partial
+  reparse writes a subset. Same shape as the per-course completeness gate in the
+  derive: fold a course only when its attributed pages reach its section count.
+- **Retry the answer that is a plausible-looking lie.** Banner intermittently
+  answers a bulk search with `success:true, totalCount:0` for a term with 6,699
+  sections. It is not a network error and not an HTTP error, and the empty set is
+  indistinguishable from the truth, so it needs its *own* bounded retry. This is
+  the failure that quietly overwrote a semester of history in Aug 2026.
+- **Make the session handshake explicit and idempotent, never incidental.**
+  `scrape-availability.js` seeded its cookie jar by luck (it happened to call
+  `getTermList()` early); the probe did not, and got the `totalCount:0` lie
+  above. Any stateful upstream needs one `ensureSession()` that every entry point
+  calls, and **one session per process** — two concurrent sessions are never
+  wanted against a rate-limited endpoint, and two runs sharing a merge-on-write
+  cache can drop each other's pages via a stale read.
+- **Pace deliberately, and treat a rate limit as a wait rather than an error.**
+  250 ms between requests got throttled after ~12k; the honest response is to
+  restart slower (500 ms, ~8 h) and accept it, which resumability makes cheap.
+- **Guard the derive with a loss rail.** A run that would clear more than a few
+  percent of existing records refuses to write (5% in `fetch-nupath`, 20% in
+  `derive-restrictions`). Broken upstream must not silently empty an artifact.
+- **Absent, empty and false are three different facts** — the rule that governs
+  all of the above. "We never asked", "we asked and there was nothing" and "the
+  answer was no" cannot share a representation: a corrupt cache file reads as
+  `null` (never as an empty capture), a term that failed to read produces no
+  verdict at all (`knownTermCodes`), and a subject whose page timed out is never
+  marked retired. Every scrape bug of consequence in this repo has been one of
+  these three collapsing into another.
+
 ## Major/minor requirements
 
 - **There is no Tableau-equivalent for majors.** Verified 2026-08-02 and
