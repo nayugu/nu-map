@@ -709,7 +709,6 @@ export const strings = {
   "info.restrictions.kind.info":  "{kind}:",
   "info.restrictions.variesBySection": "분반에 따라 다름",
   "info.restrictions.everySection": "모든 분반",
-  "info.restrictions.years":      "({n}개 연도)",
   "info.restrictions.someSections": "({total}개 분반 중 {n}개)",
   "info.restrictions.more":      "{n}개 더 보기",
   "info.restrictions.less":      "접기",

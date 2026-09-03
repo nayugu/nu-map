@@ -709,7 +709,6 @@ export const strings = {
   "info.restrictions.kind.info":  "{kind}:",
   "info.restrictions.variesBySection": "सेक्शन के अनुसार भिन्न",
   "info.restrictions.everySection": "सभी सेक्शन",
-  "info.restrictions.years":      "({n} वर्ष)",
   "info.restrictions.someSections": "({total} में से {n} सेक्शन)",
   "info.restrictions.more":      "{n} और दिखाएँ",
   "info.restrictions.less":      "कम दिखाएँ",

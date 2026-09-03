@@ -90,18 +90,27 @@ export function seasonCoverage(where) {
   for (const w of where ?? []) {
     const s = w.season ?? null;
     if (!bySeason.has(s)) {
-      bySeason.set(s, { season: s, terms: 0, sections: 0, of: 0, ofKnown: true, latestTerm: "" });
+      bySeason.set(s, { season: s, terms: 0, sections: 0, of: 0, ofKnown: true,
+                       latestTerm: "", termCodes: [] });
     }
     const slot = bySeason.get(s);
     slot.terms += 1;
     slot.sections += w.sections;
     if (Number.isFinite(w.of)) slot.of += w.of; else slot.ofKnown = false;
     if (String(w.term) > slot.latestTerm) slot.latestTerm = String(w.term);
+    // Every term this season pooled, so the display can NAME the years rather
+    // than count them. `terms` stays a count — it is what callers test to
+    // decide whether a season is a pattern or a single observation — and the
+    // codes are additional, because changing the type of a field this many
+    // consumers read is a breaking change for no gain.
+    slot.termCodes.push(String(w.term));
   }
   return [...bySeason.values()]
     .map(({ ofKnown, ...s }) => ({
       ...s,
       of: ofKnown ? s.of : null,
+      // Newest first, matching the order the terms themselves are listed in.
+      termCodes: [...new Set(s.termCodes)].sort().reverse(),
       // "Every section" is the gate case and needs no fraction. Anything less
       // is the reserved case and must show one.
       everySection: ofKnown && s.of > 0 && s.sections >= s.of,

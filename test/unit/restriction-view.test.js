@@ -70,6 +70,38 @@ test("an unknown section total cannot produce a fraction", () => {
   assert.equal(c.everySection, false, "unknown total must not read as a gate");
 });
 
+test("seasonCoverage names every year of a season, newest first", () => {
+  // The panel prints these instead of "(N years)". Aggregating over years was
+  // always right; counting them threw away which years, so a reader could not
+  // tell last year's gate from one three years old.
+  const [fall] = seasonCoverage([
+    { term: "202510", season: "fall", sections: 2, of: 2 },
+    { term: "202710", season: "fall", sections: 3, of: 3 },
+    { term: "202610", season: "fall", sections: 1, of: 1 },
+  ]);
+  assert.equal(fall.terms, 3, "the count is still there — callers test it");
+  assert.deepEqual(fall.termCodes, ["202710", "202610", "202510"], "newest first");
+});
+
+test("seasonCoverage DEDUPES term codes within a season", () => {
+  // SUFFIX_TYPE maps BOTH "40" and "50" to sumA — the merged summer code and a
+  // real Summer 1 code land in the same season. Without the dedupe a single
+  // year would be named twice ("2025, 2025").
+  const [sumA] = seasonCoverage([
+    { term: "202540", season: "sumA", sections: 1, of: 1 },
+    { term: "202540", season: "sumA", sections: 1, of: 1 },
+  ]);
+  assert.deepEqual(sumA.termCodes, ["202540"]);
+});
+
+test("seasonCoverage always reports a term code, even for one observation", () => {
+  // A season heading with no year would read as a standing rule, which is the
+  // one thing a single observation cannot claim.
+  const [fall] = seasonCoverage([{ term: "202510", season: "fall", sections: 1, of: 1 }]);
+  assert.deepEqual(fall.termCodes, ["202510"]);
+  assert.equal(fall.latestTerm, "202510", "latestTerm stays, as the render's fallback");
+});
+
 test("seasonCoverage survives junk", () => {
   assert.deepEqual(seasonCoverage(null), []);
   assert.deepEqual(seasonCoverage([]), []);

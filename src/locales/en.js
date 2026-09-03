@@ -874,7 +874,6 @@ export const strings = {
   "info.restrictions.kind.info":  "{kind}:",
   "info.restrictions.variesBySection": "varies by section",
   "info.restrictions.everySection": "every section",
-  "info.restrictions.years":      "({n} years)",
   "info.restrictions.someSections": "({n} of {total} sections)",
   "info.restrictions.more":      "show {n} more",
   "info.restrictions.less":      "show fewer",

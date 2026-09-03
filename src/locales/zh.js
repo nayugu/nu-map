@@ -990,7 +990,6 @@ export const strings = {
   "info.restrictions.kind.info":  "{kind}\uff1a",
   "info.restrictions.variesBySection": "因班次而异",
   "info.restrictions.everySection": "所有班次",
-  "info.restrictions.years":      "（{n} 年）",
   "info.restrictions.someSections": "\uff08{total} \u4e2a\u73ed\u6b21\u4e2d\u7684 {n} \u4e2a\uff09",
   "info.restrictions.more":      "\u518d\u663e\u793a {n} \u9879",
   "info.restrictions.less":      "\u6536\u8d77",

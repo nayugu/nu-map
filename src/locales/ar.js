@@ -708,7 +708,6 @@ export const strings = {
   "info.restrictions.kind.info":  "{kind}:",
   "info.restrictions.variesBySection": "يختلف حسب الشعبة",
   "info.restrictions.everySection": "جميع الشعب",
-  "info.restrictions.years":      "({n} سنوات)",
   "info.restrictions.someSections": "({n} من {total} شعبة)",
   "info.restrictions.more":      "أظهر {n} إضافية",
   "info.restrictions.less":      "أظهر أقل",

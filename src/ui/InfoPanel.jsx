@@ -688,6 +688,23 @@ function termYear(termCode) {
 }
 
 /**
+ * The years a season's restriction was observed in, newest first.
+ *
+ * Falls back to `latestTerm` when `termCodes` is absent, so an older cached
+ * asset still renders a year rather than an empty heading — the season alone
+ * would read as a standing rule, which is the one thing a single observation
+ * cannot claim.
+ */
+function seasonYears(s) {
+  const codes = Array.isArray(s?.termCodes) && s.termCodes.length
+    ? s.termCodes
+    : [s?.latestTerm];
+  const years = [...new Set(codes.map(termYear).filter(y => y !== null))]
+    .sort((a, b) => b - a);
+  return years.join(", ");
+}
+
+/**
  * One restriction group's values.
  *
  * ── Why a LIST rather than one `·`-joined run ──────────────────────
@@ -829,9 +846,18 @@ function RestrictionBlock({ restrictions, t, standingShown = false }) {
               {g.seasons.map((s, si) => (
                 <div key={si} style={{ paddingLeft: 8, opacity: 0.75 }}>
                   {t(SEASON_KEY[s.season] ?? s.season ?? "")}
-                  {s.terms > 1
-                    ? ` ${t("info.restrictions.years", { n: s.terms })}`
-                    : ` ${termYear(s.latestTerm) ?? ""}`}
+                  {/* Every year this season was observed in, NAMED.
+                      It used to read "Fall (3 years)" once a season had more
+                      than one observation, which aggregates correctly and then
+                      throws away the one thing a reader needs — WHICH years,
+                      and therefore whether the newest one is last year or
+                      three years ago. The recency window is what makes naming
+                      them affordable: at most three, so the longest string is
+                      "2024, 2025, 2026", no wider than the count it replaces.
+                      Deduped in seasonCoverage because SUFFIX_TYPE maps both
+                      "40" and "50" to sumA, so a merged and a real summer code
+                      in one year would otherwise print the year twice. */}
+                  {` ${seasonYears(s)}`}
                   {" · "}
                   {s.everySection
                     ? t("info.restrictions.everySection")

@@ -710,7 +710,6 @@ export const strings = {
   "info.restrictions.kind.info":  "{kind}：",
   "info.restrictions.variesBySection": "クラスにより異なる",
   "info.restrictions.everySection": "全クラス",
-  "info.restrictions.years":      "（{n} 年分）",
   "info.restrictions.someSections": "（{total} クラスのうち {n}）",
   "info.restrictions.more":      "さらに {n} 件表示",
   "info.restrictions.less":      "折りたたむ",
