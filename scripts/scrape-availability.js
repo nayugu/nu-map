@@ -65,7 +65,7 @@ import {
   BASE, PAGE_SIZE, sleep, fetchRetry, cookieHeader, updateJar,
   getTermList, activateTerm, resetForm, fetchPage,
 }                                                   from "./lib/banner-session.js";
-import { writeTermCache }                           from "./lib/restriction-cache.js";
+import { writeTermCache, readTermCache }             from "./lib/restriction-cache.js";
 
 const __dirname      = dirname(fileURLToPath(import.meta.url));
 const ROOT           = resolve(__dirname, "..");
@@ -87,6 +87,11 @@ const PROF_DELAY_MS = parseInt(process.env.BANNER_PROF_DELAY_MS || "250", 10);
 // Class-standing restrictions are the same shape of request — one per section,
 // nothing in the bulk feed — so they share the instructor pacing.
 const RESTR_DELAY_MS = parseInt(process.env.BANNER_RESTR_DELAY_MS || "250", 10);
+// How often the raw-page cache is written during a restrictions pass. 500 is
+// ~2 minutes of work at the default pacing, so an interruption costs at most
+// that. Measured: a full term gzips to ~200 KB, so 14 flushes per term is a
+// few seconds in total — nothing against the 55 minutes of requests.
+const RESTR_FLUSH_EVERY = parseInt(process.env.BANNER_RESTR_FLUSH_EVERY || "500", 10);
 
 // ── Term code logic ──────────────────────────────────────────────
 // Banner YYYY = AY end year.  Suffixes: 10=Fall, 30=Spring, 40=Sum1, 60=Sum2.
@@ -472,12 +477,40 @@ async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
   // hold across terms — are per-course, and a CRN alone cannot say.
   const rawPages   = {};
   const crnToCourse = {};
+
+  // ── RESUMING AN INTERRUPTED CAPTURE ────────────────────────────
+  //
+  // A term is ~7,000 requests and ~55 minutes, so an interruption is normal
+  // rather than exceptional — a closed laptop, a dropped connection, a Ctrl-C.
+  // Two things make that survivable, and neither was true before:
+  //
+  //   · the cache is flushed every RESTR_FLUSH_EVERY pages, not only in the
+  //     `finally` below. A `finally` does not run when the PROCESS is killed,
+  //     so a kill used to discard the whole term;
+  //   · `--resume` skips CRNs already cached for this term.
+  //
+  // `--resume` is OPT-IN, and must stay that way. The scrape otherwise writes
+  // the cache and never reads it, so that a live run always sees what Banner
+  // says today and a stale cache can never quietly become the source. Resuming
+  // trades that for progress, which is correct for a backfill of terms that
+  // ended years ago and wrong for the monthly job.
+  const resuming = process.argv.includes("--resume");
+  // The cached pages are re-PARSED rather than merely counted: the derived
+  // `std`/`restr` for a course are folded from all of its sections, so a course
+  // half of whose sections came from the cache would otherwise be folded from
+  // the other half alone — a false gate, the one failure that can refuse a plan.
+  const resumedPages = resuming ? (readTermCache(cacheKey)?.pages ?? {}) : {};
+  const alreadyCached = new Set(Object.keys(resumedPages));
+  if (resuming && alreadyCached.size) {
+    console.log(`  --resume: ${alreadyCached.size} sections already cached for ${cacheKey}, re-parsing those and fetching the rest`);
+  }
+  let skipped = 0;
   // Labels for every code seen this term, collected once rather than repeated
   // per course-term: a 115-code Majors vocabulary inlined everywhere is how an
   // 8.7 MB file stops being readable. Written at the root of term-details.
   const restrLabels = {};
 
-  const flushCache = () => {
+  const flushCache = (quiet = false) => {
     if (!Object.keys(rawPages).length) return;
     try {
       const n = writeTermCache(cacheKey, rawPages, crnToCourse);
@@ -485,7 +518,7 @@ async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
     } catch (err) {
       // The cache is an optimisation, never the data. A disk problem here must
       // not lose a 30-minute scrape.
-      console.warn(`    could not write page cache: ${err.message}`);
+      if (!quiet) console.warn(`    could not write page cache: ${err.message}`);
     }
   };
 
@@ -495,6 +528,23 @@ async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
       const not  = new Map();
       const restr = {};                 // "must:Majors" → { "IEBA|IECS|INDE": 2 }
       for (const [crn] of agg.crns ?? []) {
+        // Already captured on an earlier, interrupted run.
+        if (alreadyCached.has(String(crn))) {
+          const prior = resumedPages[String(crn)];
+          if (prior != null) {
+            rawPages[String(crn)]    = prior;
+            crnToCourse[String(crn)] = courseId;
+            const parsed = parseRestrictions(prior);
+            const { blocks, labels } = restrictionsOf(parsed);
+            tallySection(blocks, restr);
+            Object.assign(restrLabels, labels);
+            const { must: mk, not: nk } = classesOf(parsed);
+            if (mk) { must.set(mk, (must.get(mk) ?? 0) + 1); gated += 1; }
+            if (nk) { not.set(nk, (not.get(nk) ?? 0) + 1); }
+          }
+          skipped += 1;
+          continue;
+        }
         try {
           const res = await fetchRetry(
             `${BASE}/searchResults/getRestrictions?term=${termCode}&courseReferenceNumber=${crn}`,
@@ -529,12 +579,18 @@ async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
         }
         calls += 1;
         if (calls % 1000 === 0) process.stdout.write(`    …${calls} sections\n`);
+        // Durable progress. Without this a Ctrl-C or a closed laptop discarded
+        // the whole term, because the `finally` below does not run when the
+        // process is killed. `writeTermCache` merges and renames atomically, so
+        // a flush can never leave the cache worse than it was.
+        if (calls % RESTR_FLUSH_EVERY === 0) flushCache(true);
         await sleep(RESTR_DELAY_MS);
       }
       if (must.size) agg.std    = Object.fromEntries([...must].sort());
       if (not.size)  agg.stdNot = Object.fromEntries([...not].sort());
       if (Object.keys(restr).length) agg.restr = restr;
     }
+    if (skipped) console.log(`  --resume: reused ${skipped} cached sections, fetched ${calls}`);
   } finally {
     // Kept even on the abort path. Discarding the DERIVED gates is required —
     // a partial fold understates them permanently — but the raw pages are still

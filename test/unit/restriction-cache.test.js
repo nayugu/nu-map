@@ -74,6 +74,45 @@ test("a corrupt file reads as null rather than as an empty term", () => {
     "a truncated write must not look like a term with no restrictions");
 });
 
+test("many INCREMENTAL flushes accumulate without loss", () => {
+  // The contract behind `--resume`. A restrictions pass is ~7,000 requests and
+  // ~55 minutes, and the `finally` that used to be the only flush does NOT run
+  // when the process is killed — measured: killing a run mid-term discarded all
+  // ~2,400 pages it had fetched. So the pass now flushes every N pages, which
+  // means the SAME growing map is written repeatedly and every earlier page has
+  // to survive each rewrite.
+  const term = "999910";
+  const pages = {}, courses = {};
+  for (let batch = 0; batch < 4; batch++) {
+    for (let i = 0; i < 50; i++) {
+      const crn = String(batch * 50 + i);
+      pages[crn] = `<p>${crn}</p>`;
+      courses[crn] = `SUBJ${batch}`;
+    }
+    const n = writeTermCache(term, pages, courses);
+    assert.equal(n.pages, (batch + 1) * 50, `flush ${batch + 1} lost pages`);
+  }
+  const got = readTermCache(term);
+  assert.equal(Object.keys(got.pages).length, 200);
+  assert.equal(got.pages["0"], "<p>0</p>", "the first page must survive every later flush");
+  assert.equal(got.courses["0"], "SUBJ0", "and so must its course attribution");
+});
+
+test("a resumed run can tell which CRNs it already has", () => {
+  // `--resume` skips a CRN when the cache holds it, and RE-PARSES it rather
+  // than merely counting it: the derived gate for a course is folded from ALL
+  // of its sections, so a course half-restored from cache and half re-fetched
+  // would otherwise be folded from the second half alone — a false gate, the
+  // one failure that can refuse a plan outright.
+  writeTermCache("999911", { "1": "<p>a</p>", "2": "<p>b</p>" }, { "1": "X1000", "2": "X1000" });
+  const got = readTermCache("999911");
+  const have = new Set(Object.keys(got.pages));
+  assert.ok(have.has("1") && have.has("2"));
+  assert.ok(!have.has("3"), "a CRN never fetched must not look cached");
+  // The page content is what makes re-parsing possible, not just the key.
+  assert.equal(got.pages["1"], "<p>a</p>");
+});
+
 test("a half-written file cannot be observed — the write is atomic", () => {
   // writeTermCache renames a temp file into place, so a reader either sees the
   // previous cache or the new one. Asserted structurally: no .tmp survives a
