@@ -188,6 +188,76 @@ console.log(`  in subject COOP/COP: ${inCoopSubject} — the other ${work.length
 const classroom = courses.filter(c => /co-?op|cooperative|internship/i.test(c.title ?? "") && !isWork(c));
 console.log(`\nco-op-titled ordinary classes, left placeable: ${classroom.length}`);
 
+// ── Co-op PREP: the classes that must come before the work term ───────
+//
+// The advising team's complaint: nothing in NU Map says a professional-
+// development course has to precede the co-op it prepares you for. Nothing
+// upstream says so either — `COOP 3945` has empty prereqs and empty coreqs, and
+// the catalog states the rule nowhere.
+//
+// `derive-plan-order.js` already infers it from the published sample plans
+// (`coopPrep`: the text mentions co-op AND no plan ever places the course after
+// the first work term) and CHART already hard-bounds those courses. But that
+// rule has a confound, measured here:
+//
+//   its second test screens out LATE false positives — MEIE 4702 is a senior
+//   capstone that discusses co-op experience, and 0% of plans put it early —
+//   but it is VACUOUS FOR EARLY ONES. "Never appears after the first work term"
+//   is automatically true of any first-year course, because co-ops start in
+//   year two or three. So three first-year seminars that merely MENTION co-op
+//   in their description came through:
+//
+//     BIOL1000 Biology at Northeastern      "…orientation to cooperative education…"
+//     MATH1000 Mathematics at Northeastern  "…learn more about co-op."
+//     ENVR1500 Introduction to Env… Data    "…prepare students for co-ops…"
+//
+// None is a co-op prerequisite. Telling a student that "Mathematics at
+// Northeastern" must precede their co-op is wrong, and wrong in the way that
+// costs trust in everything else on the card.
+//
+// The fix needs no new predicate: intersect that evidence with the TITLE
+// classification this script already makes. A prep course is one whose title
+// says it is about co-op (`classroom`, above) and whose position the
+// departments agree on (`coopPrep`). Measured: 7 kept, exactly those 3 dropped.
+//
+// Title alone would NOT do — `Ethics and Professional Development` and
+// `Designing Transformative Curriculum and Professional Development` match the
+// CLASSROOM pattern and are not co-op prep. It is the conjunction that works.
+//
+// plan-order.json is written by a separate manual derive, so it may be absent
+// or stale. Absent → no `prep` block at all, never a guess.
+const PLAN_ORDER = path.join(REPO, "public/northeastern/plan-order.json");
+const classroomIds = new Set(classroom.map(keyOf));
+let prep = null;
+
+if (existsSync(PLAN_ORDER)) {
+  const planOrder = JSON.parse(readFileSync(PLAN_ORDER, "utf8"));
+  const candidates = Array.isArray(planOrder.coopPrep) ? planOrder.coopPrep : [];
+  const kept = [], dropped = [];
+  for (const entry of candidates) {
+    const id = entry?.course;
+    const obs = entry?.observations;
+    if (!id || !Number.isFinite(obs)) continue;
+    (classroomIds.has(id) ? kept : dropped).push({ id, obs });
+  }
+  prep = {};
+  for (const { id, obs } of kept.sort((a, b) => a.id.localeCompare(b.id))) {
+    prep[id] = { observations: obs };
+  }
+  const titleOf = (id) => courses.find(c => keyOf(c) === id)?.title ?? "?";
+  console.log(`\nco-op PREP — plan evidence ∩ co-op title: ${kept.length} of ${candidates.length}`);
+  for (const { id, obs } of kept) console.log(`  keep  ${id.padEnd(10)} ${String(obs).padStart(4)} plans  ${titleOf(id)}`);
+  for (const { id, obs } of dropped)
+    console.log(`  drop  ${id.padEnd(10)} ${String(obs).padStart(4)} plans  ${titleOf(id)}   ← title is not about co-op`);
+  if (!kept.length && candidates.length) {
+    problems.push(`plan-order.json lists ${candidates.length} co-op prep candidate(s) but NONE survived the `
+      + `title test. Either the title classifier or plan-order's shape changed — writing an empty prep block `
+      + `would silently remove the note from every course that has it.`);
+  }
+} else {
+  console.log(`\nco-op PREP — skipped: ${PLAN_ORDER} not found (run derive-plan-order.js first)`);
+}
+
 if (problems.length) {
   console.error(`\n✖ REFUSING TO WRITE — ${problems.length} guard(s) tripped:\n`);
   problems.forEach(p => console.error(`  • ${p}\n`));
@@ -201,6 +271,10 @@ if (problems.length) {
     byFlags,
     byKind,
     courses: map,
+    // Courses that must be SAT IN before the first work term, with the number
+    // of published plans that agree. Absent when plan-order.json was missing,
+    // which the loaders read as "no note", never as "no requirement".
+    ...(prep ? { prepCount: Object.keys(prep).length, prep } : {}),
   };
   writeFileSync(OUT, JSON.stringify(doc, null, 1) + "\n");
   console.log(`\nwrote ${OUT}`);

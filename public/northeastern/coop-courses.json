@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-15",
+ "generated": "2026-09-03",
  "source": "catalog course titles",
  "note": "Courses recorded by placing a work term rather than by being placed. See docs/coop-design.md.",
  "count": 92,
@@ -473,6 +473,30 @@
    "abroad": false,
    "halfTime": false,
    "kind": "coop"
+  }
+ },
+ "prepCount": 7,
+ "prep": {
+  "BUSN1103": {
+   "observations": 11
+  },
+  "CS1210": {
+   "observations": 84
+  },
+  "EEAM2000": {
+   "observations": 104
+  },
+  "EESC2000": {
+   "observations": 78
+  },
+  "EESH2000": {
+   "observations": 79
+  },
+  "ENCP2000": {
+   "observations": 141
+  },
+  "HSCI2000": {
+   "observations": 29
   }
  }
 }
