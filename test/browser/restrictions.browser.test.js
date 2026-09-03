@@ -38,6 +38,52 @@ const RESTR = JSON.parse(
 const SUBJECT = "MEIE4701";
 
 /**
+ * The YEARS this course was observed in, per season, read from the asset.
+ *
+ * Hard-coded years are tests that expire, and these already did once: the
+ * assertions named "Summer B 2024", and the 3-academic-year recency window
+ * aged that term out the same day it shipped — the data moved to Summer B
+ * 2025 and every year-bearing assertion in this file broke at once. The panel
+ * prints `season + the years observed`, so the expectation is derivable from
+ * the same asset the app reads, which is the only version of it that survives
+ * next month's scrape.
+ *
+ * Mirrors `termYear` in InfoPanel: Banner's YYYY is the year the AY ENDS, so
+ * Fall belongs to the previous calendar year.
+ */
+function expectedYears(season) {
+  const years = (RESTR.courses[SUBJECT] ?? [])
+    .filter(e => e.season === season)
+    .map(e => {
+      const y = Number(String(e.term).slice(0, 4));
+      return String(e.term).slice(4) === "10" ? y - 1 : y;
+    });
+  return [...new Set(years)].sort((a, b) => a - b).join(", ");
+}
+
+/**
+ * Just the Restrictions block's lines, from its heading to its attribution.
+ *
+ * Scoping is not tidiness. `/^Fall /` matched the OFFERING section further
+ * down the same panel and the assertion below read "Sep – Dec" as a
+ * restriction value — a test that fails for a reason unrelated to what it
+ * checks is worse than no test, because the next person edits the assertion
+ * rather than the bug.
+ */
+function restrictionLines(text) {
+  // NBSP → space. The bullet renders as `·` + a NO-BREAK SPACE (U+00A0), not
+  // U+0020, so `/^· Industrial/` failed against a line that printed
+  // identically and hexdumped as \302\240. Normalising here beats loosening
+  // every pattern to `\s`, which would also quietly accept a line break.
+  const lines = text.replace(/ /g, " ")
+    .split("\n").map(s => s.trim()).filter(Boolean);
+  const start = lines.findIndex(l => l === "Restrictions");
+  if (start === -1) return [];
+  const end = lines.findIndex((l, i) => i > start && /^From Banner/.test(l));
+  return lines.slice(start + 1, end === -1 ? undefined : end);
+}
+
+/**
  * The control, chosen at RUN TIME rather than hard-coded.
  *
  * The first draft named CS 1800 and broke as soon as the capture widened and
@@ -129,12 +175,14 @@ describe("restrictions · the course card", () => {
     // A value, glossed from the shipped label map rather than shown as a code.
     assert.match(text, /Mechanical Engineering/);
     assert.doesNotMatch(text, /\bMECE\b/, "a raw Banner code leaked instead of its label");
-    // The season and its year, through the app's own summer wording.
-    assert.match(text, /Summer B 2024/,
+    // The season and its year(s), through the app's own summer wording.
+    const sumB = expectedYears("sumB");
+    assert.ok(sumB, `${SUBJECT} has no Summer B observation in the asset`);
+    assert.match(text, new RegExp(`Summer B ${sumB}`),
       "the term must be named, and summers are 'Summer B' not 'Summer 2'");
     // Coverage: every section, so a fraction would be noise. The TERM leads,
     // because it heads its group rather than sitting beside the first value.
-    assert.match(text, /Summer B 2024 · every section/);
+    assert.match(text, new RegExp(`Summer B ${sumB} · every section`));
   });
 
   test("a group's values are listed one per line, under their own term", async () => {
@@ -146,7 +194,8 @@ describe("restrictions · the course card", () => {
     // while the panel was unreadable, which is what "tests that confirm are
     // close to worthless" means in practice.
     const text = await panelFor(SUBJECT, /MEIE\s*4701/);
-    const lines = text.split("\n").map(s => s.trim()).filter(Boolean);
+    const lines = restrictionLines(text);
+    assert.ok(lines.length, "the Restrictions block did not render");
 
     // Each value owns a line, bulleted — not joined into one run.
     const bulleted = lines.filter(l => l.startsWith("·"));
@@ -163,16 +212,28 @@ describe("restrictions · the course card", () => {
     assert.ok(bulleted.some(l => /Industrial Engineering$/.test(l)),
       "the single-value group must be bulleted like every other group");
 
-    // ASSOCIATION: the term heading precedes its own values, so Summer B's
-    // five majors cannot be read under Fall's heading.
-    const iSummer = lines.findIndex(l => /Summer B 2024/.test(l));
-    const iFall   = lines.findIndex(l => /Fall 2024/.test(l));
-    const iMech   = lines.findIndex(l => /Mechanical Engineering\/Physics/.test(l));
-    const iInd    = lines.findIndex(l => /Industrial Engineering/.test(l));
-    assert.ok(iSummer >= 0 && iFall >= 0, "both term headings should render");
-    assert.ok(iSummer < iMech, "Summer B's heading must come before its values");
-    assert.ok(iFall   < iInd,  "Fall's heading must come before its value");
-    assert.ok(iMech   < iFall, "a group's values must not appear after the NEXT group's heading");
+    // ASSOCIATION: a value belongs to the nearest heading ABOVE it, so
+    // Mechanical Engineering cannot be read under a Fall heading.
+    //
+    // Asserted without assuming the order of the groups. An earlier version
+    // fixed it ("Summer B before Fall") and that was only ever true of the
+    // data at the time: groups sort by total sections, so capturing a second
+    // Fall changed which group leads. Order is a rendering detail; the
+    // heading a value sits under is the property.
+    const headingAbove = (i) => {
+      for (let j = i - 1; j >= 0; j--) if (!lines[j].startsWith("·")) return lines[j];
+      return null;
+    };
+    const iMech = lines.findIndex(l => /Mechanical Engineering\/Physics/.test(l));
+    assert.ok(iMech > 0, "the Mechanical group did not render");
+    assert.match(headingAbove(iMech) ?? "", /Summer/,
+      "a Mechanical-only group must sit under a Summer heading, not a Fall one");
+
+    // And the Fall heading's own first value is the Industrial one.
+    const iFall = lines.findIndex(l => /^Fall /.test(l));
+    assert.ok(iFall >= 0, "a Fall heading should render");
+    assert.match(lines[iFall + 1] ?? "", /^· Industrial Engineering/,
+      "Fall's value must follow Fall's heading directly");
   });
 
   test("a restriction that differs BY SEASON shows both readings", async () => {
@@ -190,9 +251,9 @@ describe("restrictions · the course card", () => {
     assert.match(text, /Industrial Engineering/,  "the Fall reading is missing");
     assert.match(text, /Mechanical Engineering/,  "the Summer B reading is missing");
     // Term-first, because it now HEADS its group rather than trailing the
-    // first value.
-    assert.match(text, /Fall 2024 · /);
-    assert.match(text, /Summer B 2024 · /);
+    // first value. Years read from the asset — see expectedYears.
+    assert.match(text, new RegExp(`Fall ${expectedYears("fall")} · `));
+    assert.match(text, new RegExp(`Summer B ${expectedYears("sumB")} · `));
   });
 
   test("the Classes row is not duplicated under the standing box", async () => {
@@ -202,6 +263,13 @@ describe("restrictions · the course card", () => {
     // varies by section or season.
     const text = await panelFor(SUBJECT, /MEIE\s*4701/);
     assert.match(text, /Class standing: Junior standing or above/, "the standing box should show");
+    // Asserted on the KIND HEADING inside the block, not on the joined values.
+    // `Junior · Senior` was the old check and it went vacuous the moment values
+    // became bulleted — the panel would now print "· Junior" / "· Senior" on
+    // separate lines, so the pattern could never match whether the row was
+    // suppressed or not. A negative assertion has to track the positive form.
+    assert.ok(!restrictionLines(text).some(l => /^Class standing:/.test(l)),
+      "the uniform Classes restriction should not repeat the standing box");
     assert.doesNotMatch(text, /Junior · Senior/,
       "the uniform Classes restriction should not repeat the standing box");
   });

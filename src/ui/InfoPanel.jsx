@@ -533,6 +533,48 @@ function CourseInfo({ selCourse, navTo }) {
         )}
       </div>
 
+      {/* ── Retired: stated outright, never as a badge with a tooltip ────────
+          The card can only afford "⚠ retired" and a `title=`, which is a
+          warning a student has to go looking to understand — and on touch
+          there is no hover at all, so the sentence was simply unreachable on a
+          phone. This panel is the surface with room for the fact, so it states
+          it: what happened, which catalog it last appeared in, and what to do.
+
+          UNCONDITIONAL, unlike the card's badge. The board gates its
+          availability marks on the semester still being open (CourseCard →
+          `availabilityOpen`) because a mark there is an interruption and is
+          owed an action; the panel is somewhere the student went to ASK, and
+          the answer does not change because they already took the course.
+
+          The two populations are told apart by the record, exactly as the
+          badge's tooltip does — `lifespan` means the retired union (nothing
+          requires it, kept so a saved plan resolves), its absence means
+          course-retention.js rescued it because a shipped program edition
+          still requires it. One sentence cannot be true of both, so neither is
+          generalised into a vaguer one that would be true of neither. */}
+      {selCourse.retired && (() => {
+        const span = selCourse.lifespan;
+        return (
+          <div style={{
+            display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap",
+            marginBottom: 7, padding: "5px 9px",
+            background: "var(--warn-bg)",
+            borderInlineStart: "3px solid var(--warn-bright)",
+            borderRadius: 3,
+          }}>
+            <span style={{ fontSize: 9, fontWeight: 800, color: "var(--warn)", letterSpacing: "0.04em", flexShrink: 0 }}>
+              {t("course.badge.retired")}
+            </span>
+            <span style={{ fontSize: 10.5, color: "var(--text-3)", lineHeight: 1.45 }}>
+              {/* scaleLatinRuns: the edition reads "2025–2026", and bare digits
+                  inside CJK body text need the same size-adjust the title gets. */}
+              {scaleLatinRuns(span?.lastEdition
+                ? t("course.tooltip.retiredUnion", { edition: `${span.lastEdition - 1}–${span.lastEdition}` })
+                : t("course.tooltip.retired"))}
+            </span>
+          </div>
+        );
+      })()}
 
       {/* Non-English: nudge to enable translation, or show download progress */}
       {isNonEn && !courseTranslationEnabled && (
@@ -699,8 +741,12 @@ function seasonYears(s) {
   const codes = Array.isArray(s?.termCodes) && s.termCodes.length
     ? s.termCodes
     : [s?.latestTerm];
+  // CHRONOLOGICAL, oldest first — "Fall 2024, 2025" rather than "2025, 2024".
+  // The terms themselves are listed newest-first everywhere else here, and
+  // following that convention produced a descending year run that reads as a
+  // typo: a list of years is read as a span, and spans go forwards.
   const years = [...new Set(codes.map(termYear).filter(y => y !== null))]
-    .sort((a, b) => b - a);
+    .sort((a, b) => a - b);
   return years.join(", ");
 }
 
