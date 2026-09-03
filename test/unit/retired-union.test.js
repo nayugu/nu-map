@@ -1,0 +1,147 @@
+// UNIT · deriveRetiredUnion — the edition roll, simulated before it happens.
+//
+// ── Why this is the whole point of the module ───────────────────────
+//
+// Run against the repo as it stands today, `derive-retired-union.js` reports
+// "retired union: 0 courses", and it is right to: the frozen 2026 snapshot and
+// the shipped catalog are the same edition, so nothing has retired yet. Which
+// means the code that matters — what happens when a roll retires a thousand
+// courses — is exercised by nothing at all until the morning of 2026-10-01,
+// unattended, on a job that pushes straight to main.
+//
+// That is exactly the situation `course-retention.js` describes escaping by
+// injecting its IO ("the one way to find out whether it ran was to spend 29
+// minutes and see"). So the roll is simulated here instead: take the real
+// 7,966-course snapshot, delete courses from the CATALOG side, and assert the
+// union recovers precisely those and nothing else.
+//
+// The simulation uses the real snapshot rather than three hand-written
+// fixtures. A fixture proves the arithmetic; only the real corpus catches the
+// duplicate keys, missing subjects and odd records that a scrape actually
+// contains.
+
+import { test, describe } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+
+import { deriveRetiredUnion } from "../../scripts/derive-retired-union.js";
+import { keyOfCourse } from "../../scripts/lib/course-retention.js";
+
+const SNAPSHOT = JSON.parse(readFileSync(
+  new URL("../../data/northeastern/catalog/editions/2026/catalog-courses.json", import.meta.url), "utf8"));
+
+/** A post-roll catalog: the snapshot minus `n` courses, plus one brand-new one. */
+function simulateRoll(n) {
+  const gone = SNAPSHOT.slice(0, n);
+  const kept = SNAPSHOT.slice(n);
+  // A roll ADDS courses too — 923 of them in the real 2027 roll — and a new
+  // course must not be mistaken for anything. It is in neither snapshot nor
+  // union; it simply exists.
+  const added = { subject: "ZZZZ", number: "9001", title: "Brand New", credits: 4 };
+  return { catalog: [...kept, added], gone };
+}
+
+describe("deriveRetiredUnion", () => {
+  test("today: the snapshot IS the catalog, so nothing is retired", () => {
+    const { retired } = deriveRetiredUnion(SNAPSHOT, [{ year: 2026, rows: SNAPSHOT }]);
+    assert.equal(retired.length, 0,
+      "the shipped catalog and the frozen 2026 snapshot are the same edition — "
+      + "a non-empty union here means one of them moved");
+  });
+
+  test("the roll: the union recovers exactly the courses the catalog dropped", () => {
+    // 1,089 is the measured size of the real 2026→2027 retirement
+    // (974 absent from live + 115 in 10 subjects with no live page).
+    const { catalog, gone } = simulateRoll(1089);
+    const { retired } = deriveRetiredUnion(catalog, [{ year: 2026, rows: SNAPSHOT }]);
+
+    const got  = new Set(retired.map(keyOfCourse));
+    const want = new Set(gone.map(keyOfCourse));
+    assert.equal(got.size, want.size, `expected ${want.size} retired, got ${got.size}`);
+    for (const k of want) assert.ok(got.has(k), `${k} was dropped from the catalog but is not in the union`);
+  });
+
+  test("disjointness: no key is ever in both files", () => {
+    const { catalog } = simulateRoll(500);
+    const { retired } = deriveRetiredUnion(catalog, [{ year: 2026, rows: SNAPSHOT }]);
+    const current = new Set(catalog.map(keyOfCourse));
+    const both = retired.map(keyOfCourse).filter(k => current.has(k));
+    assert.deepEqual(both, [],
+      "a key in both the catalog and the union makes the runtime lookup ambiguous, "
+      + "which is the one thing the disjoint design forbids");
+  });
+
+  test("a retired course keeps its full record, not a stub", () => {
+    // The point of the union is that the card still renders. `occupantCards`
+    // warns that card rendering reads several fields unguarded — `color.slice()`
+    // was the one that threw — so a stub would trade a silent disappearance for
+    // a crash, which is worse.
+    const { catalog, gone } = simulateRoll(50);
+    const { retired } = deriveRetiredUnion(catalog, [{ year: 2026, rows: SNAPSHOT }]);
+    const byKey = new Map(retired.map(c => [keyOfCourse(c), c]));
+    for (const original of gone) {
+      const got = byKey.get(keyOfCourse(original));
+      assert.ok(got, `${keyOfCourse(original)} missing from the union`);
+      for (const field of Object.keys(original)) {
+        if (field === "retired" || field === "retiredSince") continue;
+        assert.deepEqual(got[field], original[field],
+          `${keyOfCourse(original)}.${field} was altered on its way into the union`);
+      }
+    }
+  });
+
+  test("the lifespan names editions, never a scrape date", () => {
+    const { catalog } = simulateRoll(20);
+    const { retired } = deriveRetiredUnion(catalog, [{ year: 2026, rows: SNAPSHOT }]);
+    for (const c of retired) {
+      assert.deepEqual(c.lifespan,
+        { firstEdition: 2026, lastEdition: 2026, editions: [2026], editionsHeld: 1 },
+        `${keyOfCourse(c)} carries a lifespan that does not match the one edition on disk`);
+      assert.equal(c.retiredSince, undefined,
+        "retiredSince is the day OUR scrape missed the course — a fact about us, not the catalog");
+      assert.equal(c.retired, undefined, "the lifespan replaces the boolean; two of them drift");
+    }
+  });
+
+  test("multiple editions: the lifespan spans them and the NEWEST record wins", () => {
+    // The freshest published description is the least stale thing we can show,
+    // so a course carried by two editions must keep the later copy.
+    const old  = [{ subject: "CS", number: "9001", title: "Old Title",  credits: 4 },
+                  { subject: "CS", number: "9002", title: "Only In Old", credits: 4 }];
+    const mid  = [{ subject: "CS", number: "9001", title: "New Title",  credits: 4 }];
+    const { retired } = deriveRetiredUnion([], [
+      { year: 2027, rows: mid },     // deliberately out of order — the function sorts
+      { year: 2026, rows: old },
+    ]);
+    const byKey = new Map(retired.map(c => [keyOfCourse(c), c]));
+
+    assert.equal(byKey.get("CS9001").title, "New Title", "the older record overwrote the newer one");
+    assert.deepEqual(byKey.get("CS9001").lifespan,
+      { firstEdition: 2026, lastEdition: 2027, editions: [2026, 2027], editionsHeld: 2 });
+    assert.deepEqual(byKey.get("CS9002").lifespan,
+      { firstEdition: 2026, lastEdition: 2026, editions: [2026], editionsHeld: 2 },
+      "a course present in only the older edition must not claim the newer one");
+  });
+
+  test("self-pruning: dropping an edition drops its exclusive courses", () => {
+    // The property that stops the union growing without bound, and the reason
+    // it is derived from the frozen snapshots rather than from last month's
+    // catalog. It must hold by construction, not by a cleanup step.
+    const old = [{ subject: "CS", number: "9002", title: "Only In Old", credits: 4 }];
+    const withOld    = deriveRetiredUnion([], [{ year: 2026, rows: old }]);
+    const withoutOld = deriveRetiredUnion([], []);
+    assert.equal(withOld.retired.length, 1);
+    assert.equal(withoutOld.retired.length, 0,
+      "removing the only edition naming a course must remove it from the union");
+  });
+
+  test("a revived course leaves the union", () => {
+    // NEU does un-retire courses. A stale entry would offer a student a course
+    // that is currently in the catalog, from the file that says it is gone.
+    const rows = [{ subject: "CS", number: "9003", title: "Back Again", credits: 4 }];
+    assert.equal(deriveRetiredUnion([], [{ year: 2026, rows }]).retired.length, 1,
+      "absent from the catalog, so it is retired");
+    assert.equal(deriveRetiredUnion(rows, [{ year: 2026, rows }]).retired.length, 0,
+      "the course is in the current catalog again, so it is not retired");
+  });
+});

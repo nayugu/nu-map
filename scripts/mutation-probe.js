@@ -59,6 +59,7 @@ const COURSE  = "src/core/courseModel.js";
 const DESCCOREQ = "src/adapters/northeastern/descriptionCoreq.js";
 const RETAIN  = "scripts/lib/course-retention.js";
 const SCRAPER = "scripts/scrape-catalog.js";
+const RETUNION = "scripts/derive-retired-union.js";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
@@ -69,6 +70,7 @@ const MINOR      = "cd test/unit      && node --test minor-overlap.test.js";
 const UNLOCKS      = "cd test/unit      && node --test unlocked-courses.test.js";
 const DESCOREQ_TEST = "cd test/unit      && node --test description-coreq.test.js";
 const RETAIN_TEST   = "cd test/unit      && node --test course-retention.test.js";
+const RETUNION_TEST = "cd test/unit      && node --test retired-union.test.js";
 
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
@@ -365,6 +367,32 @@ const MUTANTS = [
   { name: "retain/wiring: runSubjects keeps a stale retirement marker", file: SCRAPER,
     from: "          retired: undefined, retiredSince: undefined,\n          title:        cat.title        || prev.title,",
     to:   "          title:        cat.title        || prev.title,", run: [RETAIN_TEST] },
+
+  // ── The retired union: a plan's courses survive the edition roll ──
+  //
+  // This module reports "0 courses" against the repo as it stands — the frozen
+  // 2026 snapshot IS the shipped catalog — so every one of these mutants is
+  // invisible to a report-only run and can only be caught by the simulated
+  // roll in the unit test. That is precisely what they are here to verify.
+  { name: "union: a course still in the catalog is ALSO reported retired", file: RETUNION,
+    from: "    if (current.has(key)) continue;          // still published — not retired",
+    to:   "", run: [RETUNION_TEST] },
+
+  { name: "union: the OLDEST edition's record wins, not the newest", file: RETUNION,
+    from: "      if (prior) { prior.record = c; prior.editions.add(year); }",
+    to:   "      if (prior) { prior.editions.add(year); }", run: [RETUNION_TEST] },
+
+  { name: "union: editions are used in directory order, unsorted", file: RETUNION,
+    from: "  const ordered = [...snapshots].sort((a, b) => a.year - b.year);",
+    to:   "  const ordered = [...snapshots];", run: [RETUNION_TEST] },
+
+  { name: "union: a stale retiredSince rides along beside the lifespan", file: RETUNION,
+    from: "    const { retired: _r, retiredSince: _s, ...clean } = record;",
+    to:   "    const clean = record;", run: [RETUNION_TEST] },
+
+  { name: "union: lifespan claims every edition held, not the ones that carried it", file: RETUNION,
+    from: "        firstEdition: years[0],\n        lastEdition:  years[years.length - 1],\n        editions:     years,",
+    to:   "        firstEdition: ordered[0]?.year,\n        lastEdition:  ordered[ordered.length - 1]?.year,\n        editions:     ordered.map(e => e.year),", run: [RETUNION_TEST] },
 ];
 
 const argv = process.argv.slice(2);

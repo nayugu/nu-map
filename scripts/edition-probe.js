@@ -301,11 +301,17 @@ async function reportLifespan(courseKey, years) {
 async function reportSnapshot(path, years, slugs) {
   const { readFileSync } = await import("node:fs");
   const rows = JSON.parse(readFileSync(path, "utf8"));
-  const snap = new Set(rows.map(keyOf));
   console.log(`\nSNAPSHOT PROVENANCE — ${path}`);
   console.log(`  ${rows.length} courses; comparing the ${slugs.join(", ")} subset against each edition\n`);
 
-  const subset = new Set([...snap].filter(k => slugs.some(s => k.startsWith(s.toUpperCase()))));
+  // Filter on the record's own `subject`, NOT on a prefix of the key. `keyOf`
+  // joins subject and number with no separator, so `startsWith("CS")` also
+  // claims every CSYE course and `startsWith("ACC")` claims ACCT — the subset
+  // silently grew, and the count it reported disagreed with a directly computed
+  // one by 12 courses. A subject is a field; matching it as a string prefix is
+  // guessing at data that is right there.
+  const want = new Set(slugs.map(s => s.toUpperCase()));
+  const subset = new Set(rows.filter(c => want.has(String(c.subject).toUpperCase())).map(keyOf));
   console.log(`  snapshot subset: ${subset.size} courses`);
   console.log("\n  edition  shared  only-snapshot  only-edition  verdict");
   for (const year of years) {
