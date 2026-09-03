@@ -162,6 +162,30 @@ export function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
     attributes:   (raw.nuPath?.length ? raw.nuPath : nuPathSupp[id]) ?? raw.attributes ?? [],
     color:        subjectColor(subject),
     isCps:        (subjectColleges[subject] ?? "") === "PS",
+    // ── Retired, but still required by an older catalog edition ────────────
+    //
+    // The scrape keeps a course NEU has removed while some shipped program
+    // edition still requires it (scripts/lib/course-retention.js), because a
+    // degree is locked to the catalog year the student entered under and the
+    // alternative is a requirement row that can never be ticked — 3,660 of
+    // them across 579 programs on the 2027 roll.
+    //
+    // It has to be carried THROUGH here, and this is not incidental
+    // plumbing: `normalizeCourse` builds an explicit object, so an unlisted
+    // field is silently dropped, and without this line the flag existed in
+    // the JSON and nowhere in the app. The consequence is not a missing
+    // badge, it is a WRONG one — `effectiveOffered` answers
+    // `{ offered: true, source: "no-data" }` for any course with no term
+    // history (correct for the 3,250 ordinary courses in that state), so a
+    // retired course would read as offered in every term and CHART would
+    // schedule a dead course into a future semester. Absent data and known
+    // removal are different facts, and only one of them is evidence.
+    //
+    // Deliberately does NOT feed `offered`/`probability`: a probability of 0
+    // blocks placement, which would turn the untickable row into a refused
+    // plan — the same defect in a louder coat. The course stays placeable and
+    // schedulable; what changes is that the app can say what it is.
+    ...(raw.retired ? { retired: true, retiredSince: raw.retiredSince ?? null } : {}),
   };
 }
 
