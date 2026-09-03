@@ -58,6 +58,7 @@ import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname }                         from "path";
 import { fileURLToPath }                            from "url";
 import { parseRestrictions, classesOf }             from "./lib/class-standing.js";
+import { restrictionsOf, tallySection }             from "./lib/restrictions.js";
 import { knownTermCodes, buildTermHistory, mergePreviousHistory }
                                                     from "./lib/term-history.js";
 import {
@@ -71,6 +72,10 @@ const ROOT           = resolve(__dirname, "..");
 const ALL_COURSES    = resolve(ROOT, "public/northeastern/all-courses.json");
 const HISTORY_OUT    = resolve(ROOT, "public/northeastern/term-history.json");
 const DETAILS_OUT    = resolve(ROOT, "public/northeastern/term-details.json");
+// Restriction code → human label, in its OWN file. term-details.json is a flat
+// { courseId: { termCode: … } } map and every consumer iterates its keys as
+// course ids, so a root metadata key would be read as a course.
+const RESTR_LABELS_OUT = resolve(ROOT, "public/northeastern/restriction-labels.json");
 const COLLEGES_OUT   = resolve(ROOT, "public/northeastern/subject-colleges.json");
 const CHANGE_LOG     = resolve(ROOT, "public/northeastern/change-log.json");
 const CHANGE_LOG_MAX = 600;
@@ -281,6 +286,11 @@ function serializeDetail(agg) {
     ...(agg.prof && { prof: agg.prof }),
     ...(agg.std && { std: agg.std }),
     ...(agg.stdNot && { stdNot: agg.stdNot }),
+    // The whole Restrictions pane, per-section tally per kind. `std`/`stdNot`
+    // stay alongside rather than being derived from this: they are the one kind
+    // the engine gates on, and re-pointing a shipped gate at a new shape would
+    // risk a live behaviour change for no benefit.
+    ...(agg.restr && { restr: agg.restr }),
   };
 }
 
@@ -462,6 +472,10 @@ async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
   // hold across terms — are per-course, and a CRN alone cannot say.
   const rawPages   = {};
   const crnToCourse = {};
+  // Labels for every code seen this term, collected once rather than repeated
+  // per course-term: a 115-code Majors vocabulary inlined everywhere is how an
+  // 8.7 MB file stops being readable. Written at the root of term-details.
+  const restrLabels = {};
 
   const flushCache = () => {
     if (!Object.keys(rawPages).length) return;
@@ -479,6 +493,7 @@ async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
     for (const [courseId, agg] of detail.entries()) {
       const must = new Map();
       const not  = new Map();
+      const restr = {};                 // "must:Majors" → { "IEBA|IECS|INDE": 2 }
       for (const [crn] of agg.crns ?? []) {
         try {
           const res = await fetchRetry(
@@ -489,7 +504,15 @@ async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
           const html = await res.text();
           rawPages[crn]    = html;
           crnToCourse[crn] = courseId;
-          const { must: mk, not: nk } = classesOf(parseRestrictions(html));
+          const parsed = parseRestrictions(html);
+          // The WHOLE pane, tallied per section exactly like `days` and `std`.
+          // `std` stays beside it untouched: it is the one kind the engine
+          // already gates on, and re-deriving it from `restr` would couple a
+          // shipped gate to a new shape for no gain.
+          const { blocks, labels } = restrictionsOf(parsed);
+          tallySection(blocks, restr);
+          Object.assign(restrLabels, labels);
+          const { must: mk, not: nk } = classesOf(parsed);
           if (mk) { must.set(mk, (must.get(mk) ?? 0) + 1); gated += 1; }
           if (nk) { not.set(nk, (not.get(nk) ?? 0) + 1); }
           consecutiveFailures = 0;
@@ -510,6 +533,7 @@ async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
       }
       if (must.size) agg.std    = Object.fromEntries([...must].sort());
       if (not.size)  agg.stdNot = Object.fromEntries([...not].sort());
+      if (Object.keys(restr).length) agg.restr = restr;
     }
   } finally {
     // Kept even on the abort path. Discarding the DERIVED gates is required —
@@ -517,7 +541,7 @@ async function fetchTermRestrictions(termCode, detail, cacheKey = termCode) {
     // exactly what Banner said, and keeping them makes the retry cheaper.
     flushCache();
   }
-  return { calls, gated };
+  return { calls, gated, labels: restrLabels };
 }
 
 /**
@@ -755,13 +779,22 @@ async function main() {
   // so presence-on-a-course cannot mark a term done. Presence ANYWHERE in the term
   // can: a scraped term yields hundreds of gated courses, and a term with none would
   // mean Banner published no restriction at all that semester.
+  //
+  // The marker is `restr`, NOT `std`. Terms scraped before the whole pane was
+  // captured carry `std` and no `restr`, and they hold only the `Classes`
+  // heading — so treating `std` as "done" would leave them permanently missing
+  // Majors, Colleges and the rest. Requiring `restr` re-reads those terms once,
+  // which is the intended one-time cost of widening the parser.
   const termsWithRestr = new Set();
   for (const byTerm of Object.values(prevDetails)) {
     for (const [tc, d] of Object.entries(byTerm)) {
       if (d.prof) termsWithProf.add(tc);
-      if (d.std || d.stdNot) termsWithRestr.add(tc);
+      if (d.restr) termsWithRestr.add(tc);
     }
   }
+  // Accumulated across every term read this run, then merged over the previous
+  // file so a run that touches one term does not drop the other terms' labels.
+  const allRestrLabels = {};
 
   // Instructor pass: newest completed terms that don't have prof data yet, capped per run.
   const profTargets = [...completedTerms]
@@ -802,8 +835,9 @@ async function main() {
       // Synthetic summer codes must talk to Banner via their real merged term.
       // Ask Banner under the real code; FILE the pages under the code
       // term-details uses, which for a merged summer is the synthetic one.
-      const { calls, gated } = await fetchTermRestrictions(
+      const { calls, gated, labels } = await fetchTermRestrictions(
         bannerCodeOf[termCode] ?? termCode, termDetail[termCode] ?? new Map(), termCode);
+      Object.assign(allRestrLabels, labels ?? {});
       const pct = calls ? (100 * gated / calls).toFixed(1) : "0.0";
       console.log(`  done (${calls} section lookups, ${gated} class-gated — ${pct}%)`);
     } catch (err) {
@@ -878,6 +912,15 @@ async function main() {
 
     writeFileSync(DETAILS_OUT, JSON.stringify(termDetails, null, 2));
     console.log(`Wrote ${DETAILS_OUT} (${Object.keys(termDetails).length} courses)`);
+    if (Object.keys(allRestrLabels).length) {
+      let prevLabels = {};
+      if (existsSync(RESTR_LABELS_OUT)) {
+        try { prevLabels = JSON.parse(readFileSync(RESTR_LABELS_OUT, "utf8")); } catch {}
+      }
+      const merged = { ...prevLabels, ...allRestrLabels };
+      writeFileSync(RESTR_LABELS_OUT, JSON.stringify(merged, null, 1) + "\n");
+      console.log(`Wrote ${RESTR_LABELS_OUT} (${Object.keys(merged).length} codes)`);
+    }
 
     if (!detailsOnly && Object.keys(subjectColleges).length > 0) {
       writeFileSync(COLLEGES_OUT, JSON.stringify(subjectColleges, null, 2));
