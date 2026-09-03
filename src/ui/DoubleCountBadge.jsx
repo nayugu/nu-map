@@ -56,7 +56,7 @@ import { useRelevance } from "../context/RelevanceContext.jsx";
 import { useLanguage }  from "../context/LanguageContext.jsx";
 import { useTranslatedText } from "../context/TranslationContext.jsx";
 
-/** Whole numbers stay whole; the cap is the one figure that can be a half. */
+/** A backstop only: the cap is floored, so these figures are already whole. */
 const fmt = (sh) => (Number.isInteger(sh) ? String(sh) : sh.toFixed(1));
 
 /**

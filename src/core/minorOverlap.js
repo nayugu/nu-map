@@ -287,7 +287,27 @@ export function minorShare({ minor, placedSet, majorKeys, courseMap = {},
   const full = allocateSections(sections, placed, claimed, courseMap);
   const requiredSH = sections.reduce((n, _, i) => n + demandOf(full[i], units[i], courseMap), 0);
   const claimedSH  = sections.reduce((n, _, i) => n + satisfiedOf(full[i], units[i], courseMap), 0);
-  const capSH = requiredSH * MINOR_SHARE_FRACTION;
+  // FLOORED to a whole credit. Half of a 23 SH minor is 11.5, and 11.5 SH is a
+  // plan nobody can hold: no undergraduate course carries a fraction (16 of
+  // 8,508 courses do, and every one is graduate — ACCT 6201, LAW 7934, PHMD,
+  // NPM), so a student's shared credit is always a whole number. Reporting
+  // "6.5 SH past the limit" quotes a quantity that cannot exist.
+  //
+  // DOWN, never up. The catalog says "a maximum of 50%", so 12 of 23 — 52.2% —
+  // is past it; rounding up to 12 would licence the very thing the rule
+  // forbids. Down is also the only direction that stays a fact for the
+  // student: under an 11.5 ceiling the most they can bank is 11.
+  //
+  // And it cannot move a verdict. With whole shared credit,
+  // `shared > 11.5 ⟺ shared >= 12 ⟺ shared > 11`, so flooring changes the
+  // magnitude reported and never the over/not-over answer.
+  //
+  // ⚠ Still optimistic, and deliberately so: credit arrives in whole COURSES,
+  // usually 4 SH, so the largest amount that actually fits under an 11.5
+  // ceiling is 8, not 11. Charging that would mean choosing which courses to
+  // disallow — an advising decision this module refuses to make everywhere
+  // else, and it fails in the expensive direction.
+  const capSH = Math.floor(requiredSH * MINOR_SHARE_FRACTION);
 
   // Courses the minor counts that a MAJOR also counts, and courses it counts
   // that were never Northeastern coursework taken for it. The policy puts both
@@ -350,10 +370,37 @@ export function minorShare({ minor, placedSet, majorKeys, courseMap = {},
     }
   }
 
+  // How much of the charged credit the minor can actually spend, in whole
+  // courses.
+  //
+  // Built UP from `uniqueSH` rather than subtracted from the ceiling, which is
+  // what makes it total: the minor is credited what it reaches with NO charged
+  // course, plus the biggest legal helping of charged ones. Both halves are
+  // sound on their own — `uniqueSH` is measured by re-allocating and so carries
+  // no course-set assumption, and the subset sum runs over an actual list of
+  // courses — so there is no case where they disagree, and therefore no guard
+  // and no fall-back. An earlier version compared the course list against
+  // `dependentSH` and bailed when they differed, which made the whole thing
+  // inert on precisely the plans it was written for: a marginal charge is the
+  // normal case, not the exception.
+  //
+  // The `min` matters: the minor cannot spend more shared credit than it
+  // actually leans on. And the result is an UPPER bound on what can be
+  // credited — a course adds at most its own credit — so the waste it implies
+  // is a LOWER bound. This can under-report and cannot over-report, which is
+  // the only direction this module is allowed to be wrong in.
+  const usableSH = Math.min(
+    dependentSH,
+    usableUnderCap([...sharedKeys, ...outsideOnly].map(k => courseMap[k]?.sh ?? 0), capSH));
+
+  // The VERDICT still keys on the ceiling, never on `usableSH`. A student who
+  // is inside the policy must not be told they are over because their courses
+  // do not divide neatly; the granularity changes how much is wasted, not
+  // whether a rule is broken.
   const over = dependentSH - capSH > EPS;
   return {
-    requiredSH, capSH, sharedSH, outsideSH, dependentSH, claimedSH, uniqueSH,
-    overSH: over ? dependentSH - capSH : 0,
+    requiredSH, capSH, usableSH, sharedSH, outsideSH, dependentSH, claimedSH, uniqueSH,
+    overSH: over ? dependentSH - usableSH : 0,
     over,
     sharedKeys,
     outsideKeys: outsideOnly,
@@ -396,6 +443,40 @@ export function outsideCreditKeys({ placements = {}, grades = {}, placedOut = []
   }
   for (const id of placedOut ?? []) add(id);
   return keys;
+}
+
+/**
+ * The largest total of WHOLE COURSES that fits under a ceiling.
+ *
+ * ── Why the ceiling is not the answer ────────────────────────────
+ *
+ * A cap of 10 SH over three 4 SH courses does not admit 10 SH of double
+ * counting. It admits 8: the reachable totals are 0, 4 and 8, because a course
+ * counts toward the minor or it does not — nobody banks half of one. Reporting
+ * "2 SH past the limit" describes shaving half a course off a plan, and NU's
+ * undergraduate courses are almost all 4 SH, so the figure was usually wrong by
+ * a course-fraction rather than rarely.
+ *
+ * Coreq groups are deliberately NOT the unit here. If a minor needs a 4 SH
+ * lecture and its 1 SH lab and the major requires only the lecture, only the
+ * lecture is double counted; the lab is credit the minor pays for itself, and
+ * charging 5 because the pair is inseparable would invent an overlap the
+ * registrar cannot see. Which courses a student could swap is a different
+ * question, and one this module never answers.
+ *
+ * Subset sum, not greedy: with 4 and 3 SH courses under a 6 SH cap, greedy
+ * takes the 4 and stops, where 3+3 fits. The set is a handful of courses and
+ * every reachable total is bounded by the cap, so the search is trivial.
+ */
+function usableUnderCap(credits, cap) {
+  let reach = new Set([0]);
+  for (const c of credits) {
+    if (!(c > 0)) continue;
+    for (const r of [...reach]) {
+      if (r + c <= cap + EPS) reach.add(r + c);
+    }
+  }
+  return Math.max(...reach);
 }
 
 /**

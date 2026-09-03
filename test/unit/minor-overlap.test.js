@@ -91,19 +91,43 @@ test("minor share › a hair over half is not", () => {
   assert.equal(r.dependentSH, 8);
   assert.equal(r.capSH, 6);
   assert.equal(r.over, true);
-  assert.equal(r.overSH, 2);
+  // 8 SH shared against a 6 SH ceiling, in 4 SH courses: one course fits under
+  // it and the second does not, so 4 SH is wasted rather than 2. "2 over"
+  // describes shaving half a course off a plan.
+  assert.equal(r.usableSH, 4);
+  assert.equal(r.overSH, 4);
 });
 
-test("minor share › an odd requirement puts the cap on a half credit", () => {
+test("minor share › an odd requirement floors the cap to a whole credit", () => {
+  // Half of 7 is 3.5, and 3.5 SH is a plan nobody can hold: every
+  // undergraduate course carries whole credit, so a shared figure is always a
+  // whole number and "0.5 SH past the limit" quotes a quantity that cannot
+  // exist. DOWN, because the catalog says "a maximum of 50%" — 4 of 7 is
+  // 57%, past it either way, and rounding up would licence what the rule
+  // forbids.
   const odd = minor(SECTION("Core", 2, C("AA", 1000), C("BB", 2000)));
   const cm = { ...CM, BB2000: course("BB2000", 3) };
   const r = share(odd, ["AA1000", "BB2000"], ["AA1000"], cm);
   assert.equal(r.requiredSH, 7);
-  assert.equal(r.capSH, 3.5);
-  // 4 shared against a 3.5 cap — over by half a credit, and the comparison
-  // must not be eaten by floating-point dust.
+  assert.equal(r.capSH, 3);
   assert.equal(r.over, true);
-  assert.equal(r.overSH, 0.5);
+  // And the shared course is 4 SH, which does not fit under a 3 SH ceiling at
+  // all — so NONE of it can be double counted, not 3 of it.
+  assert.equal(r.usableSH, 0);
+  assert.equal(r.overSH, 4);
+});
+
+test("minor share › flooring the cap cannot change the verdict", () => {
+  // The property that makes it safe: with whole shared credit,
+  // `shared > 3.5` and `shared > 3` are the same test, so the floor moves the
+  // magnitude and never the answer. 3 shared against a half of 3.5 is inside
+  // the limit both ways.
+  const odd = minor(SECTION("Core", 2, C("AA", 1000), C("BB", 2000)));
+  const cm = { ...CM, BB2000: course("BB2000", 3) };
+  const r = share(odd, ["AA1000", "BB2000"], ["BB2000"], cm);
+  assert.equal(r.capSH, 3);
+  assert.equal(r.dependentSH, 3);
+  assert.equal(r.over, false, "3 of 7 is 43% — inside the ceiling under either rounding");
 });
 
 test("minor share › a minor entirely inside the major is over by half of itself", () => {
@@ -112,7 +136,9 @@ test("minor share › a minor entirely inside the major is over by half of itsel
   // the measured sweep found for Speech-Language Pathology.
   const r = share(THREE, ALL_THREE, ALL_THREE);
   assert.equal(r.dependentSH, 12);
-  assert.equal(r.overSH, 6);
+  // 12 SH of 4 SH courses against a 6 SH ceiling: one course fits, two do not.
+  assert.equal(r.usableSH, 4);
+  assert.equal(r.overSH, 8);
   assert.equal(r.over, true);
 });
 
@@ -447,7 +473,10 @@ test("share › transfer credit is charged against the cap like the major is", (
   assert.equal(r.outsideSH, 8);
   assert.equal(r.dependentSH, 8);
   assert.equal(r.over, true);
-  assert.equal(r.overSH, 2);
+  // Transferred credit arrives in whole courses too, so the same rounding
+  // applies: one 4 SH course fits under the 6 SH ceiling, the other does not.
+  assert.equal(r.usableSH, 4);
+  assert.equal(r.overSH, 4);
 });
 
 test("share › the two sources share ONE ceiling, they do not each get half", () => {
@@ -793,15 +822,20 @@ test("report › the note states the budget when the plan is inside it", () => {
 test("report › the note states the overage when it is one", () => {
   const line = _minorShareNote(share(THREE, ALL_THREE, ["AA1000", "AA1001"]));
   assert.match(line, /8 of the 12 SH/);
-  assert.match(line, /2 SH over/);
+  // 4, not 2: the ceiling is 6 SH and the courses are 4 SH each, so one fits
+  // under it and the whole of the second is wasted.
+  assert.match(line, /4 SH over/);
   assert.match(line, /50% limit/);
 });
 
-test("report › a half-credit cap prints as a half, not as 3.5000000001", () => {
+test("report › an odd minor prints a whole cap, never a half credit", () => {
+  // Half of 7 is 3.5 and the printed page is what an advisor reads, so it
+  // quotes the floored ceiling — a figure a student can actually reach.
   const odd = minor(SECTION("Core", 2, C("AA", 1000), C("BB", 2000)));
   const cm = { ...CM, BB2000: course("BB2000", 3) };
   const line = _minorShareNote(share(odd, ["AA1000", "BB2000"], [], cm), "SH");
-  assert.match(line, /0 of 3\.5 SH/);
+  assert.match(line, /0 of 3 SH/);
+  assert.doesNotMatch(line, /\d\.\d/, `a fractional credit reached the page: ${line}`);
 });
 
 test("report › nothing measurable prints nothing at all", () => {

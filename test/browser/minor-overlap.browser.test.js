@@ -125,13 +125,15 @@ describe("minor · the double-counting cap", () => {
     // the 2 SH past the ceiling does not, so the minor is 10 of 20 done — not
     // the 12 of 20 its own progress bar shows.
     // The excess is the only figure the collapsed row prints, and it encodes
-    // the whole arithmetic: 12 SH double counted against a 10 SH ceiling.
-    assert.match(text, /2 past the limit/, `the excess is missing from:\n${text.slice(0, 2000)}`);
+    // the whole arithmetic: 12 SH double counted against a 10 SH ceiling, in
+    // 4 SH courses — so two of the three fit under it and the third does not.
+    // 4, not 2: nobody banks half a course.
+    assert.match(text, /4 past the limit/, `the excess is missing from:\n${text.slice(0, 2000)}`);
     // A FACT, not an instruction. "2 SH have to come from courses that do not
     // overlap" is misleading for the student who has already satisfied every
     // requirement row: nothing has to come from anywhere, they have done the
     // work — 2 SH of it simply does not count.
-    assert.match(text, /2 SH does not count toward the minor/,
+    assert.match(text, /4 SH does not count toward the minor/,
                  "the consequence is not stated");
   });
 
@@ -170,9 +172,9 @@ describe("minor · the double-counting cap", () => {
     const text = await panelText({ major: BACJ, minor1: CJ_MINOR,
                                    placements: SUB_PLACE, substitutions: SUB });
     assert.match(text, /Double counting/, "the row is missing entirely");
-    assert.match(text, /2 past the limit/,
+    assert.match(text, /4 past the limit/,
                  `the substituted course was not charged:\n${text.slice(0, 2000)}`);
-    assert.match(text, /2 SH does not count toward the minor/);
+    assert.match(text, /4 SH does not count toward the minor/);
   });
 
   test("the same plan WITHOUT the substitution is 4 SH lighter", async () => {
@@ -184,6 +186,38 @@ describe("minor · the double-counting cap", () => {
     assert.doesNotMatch(text, /past the limit/,
                         `nothing is over without the substitution:\n${text.slice(0, 2000)}`);
     assert.doesNotMatch(text, /does not count toward the minor/);
+  });
+
+  // ── Whole courses, on a MARGINAL charge ─────────────────────────
+  // The pair above cannot tell the two readings apart: its minor leans on the
+  // major for everything, so `uniqueSH` is 0 and every version of the
+  // arithmetic lands on the same figure. This one can. Cinema Studies against
+  // Communication and Media Studies is 12 SH shared under a 10 SH ceiling, and
+  // the minor reaches part of itself WITHOUT the major — a marginal charge,
+  // which is the normal case and the one an earlier guarded version of this
+  // silently declined to act on.
+  //
+  //   ceiling reading   12 - 10           = 2 SH   (a figure no course can make)
+  //   whole courses     12 - (0 + 8)      = 4 SH   ← what the panel must say
+  //
+  // So this test fails on BOTH earlier readings, which is the only reason it is
+  // worth its 6 seconds.
+  const CINE = PROGRAM("undergraduate", "arts-media-design", "cinema_studies_minor");
+  const CAMD = PROGRAM("undergraduate", "arts-media-design",
+                       "communication_and_media_studies_ba_(boston)");
+  const CINE_COURSES = {
+    MSCR2895: "fall2025", MSCR3600: "fall2025", ARTH2212: "fall2025",
+    MSCR2220: "spr2026",  MSCR2336: "spr2026",  MSCR3389: "spr2026",
+    MSCR3392: "fall2026", MSCR4208: "fall2026", MUSC1113: "fall2026",
+  };
+
+  test("the wasted credit is whole courses, not the distance past the ceiling", async () => {
+    const text = await panelText({ major: CAMD, minor1: CINE, placements: CINE_COURSES,
+                                   expectMinor: false });
+    assert.match(text, /Cinema Studies, Minor/, "the minor card is not on screen");
+    assert.match(text, /Double counting/, "the row is missing entirely");
+    assert.match(text, /4 past the limit/,
+                 `expected whole-course waste, not the 2 SH gap to the ceiling:\n${text.slice(0, 2500)}`);
   });
 
   // ── The 2× badge on the card ────────────────────────────────────
@@ -294,7 +328,7 @@ describe("minor · the double-counting cap", () => {
     assert.match(after, /credit past that half does not count toward the minor/, "the colour's meaning is missing");
     // The minor, named, with its own budget — the same phrasing and the same
     // meter as the graduation panel's row (`grad.share.cap`).
-    assert.match(after, /Criminal Justice, Minor\s+2 past the limit/);
+    assert.match(after, /Criminal Justice, Minor\s+4 past the limit/);
   });
 
   test("an ELIGIBLE course is badged differently from one already counted", async () => {

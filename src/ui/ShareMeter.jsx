@@ -106,10 +106,15 @@ export default function ShareMeter({ required, own, shared, excess, height = 5 }
  * the allowed share is `min(dependent, cap)` and never the cap itself.
  */
 export function shareSegments(share) {
+  // `usableSH`, not `capSH`: what fits under the ceiling in WHOLE COURSES.
+  // Three 4 SH courses under a 10 SH cap spend 8, not 10 — the green band has
+  // to be an amount a student could actually hold. Falls back to the cap for
+  // an old result that predates the field.
+  const usable = share.usableSH ?? share.capSH;
   return {
     required: share.requiredSH,
     own:      Math.max(0, share.claimedSH - share.dependentSH),
-    shared:   Math.min(share.dependentSH, share.capSH),
-    excess:   Math.max(0, share.dependentSH - share.capSH),
+    shared:   Math.min(share.dependentSH, usable),
+    excess:   Math.max(0, share.dependentSH - usable),
   };
 }

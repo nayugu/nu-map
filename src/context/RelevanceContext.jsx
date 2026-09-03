@@ -311,7 +311,7 @@ export function RelevanceProvider({ children }) {
           n: m.n, name: m.name, over: m.share.over,
           sh: m.share.dependentSH, capSH: m.share.capSH,
           dependentSH: m.share.dependentSH, claimedSH: m.share.claimedSH,
-          requiredSH: m.share.requiredSH,
+          requiredSH: m.share.requiredSH, usableSH: m.share.usableSH,
         })),
       };
     };

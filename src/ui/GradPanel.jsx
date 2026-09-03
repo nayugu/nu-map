@@ -995,8 +995,10 @@ function SharedCredit({ share }) {
   // percentage to report — silence rather than a 0 that looks measured.
   if (!share || share.requiredSH <= 0) return null;
 
-  // Credits are whole numbers in the catalog; the cap halves them, so it is the
-  // one figure here that can carry a .5.
+  // Every figure here should already be whole — undergraduate credit is, and
+  // the cap is floored precisely so half of an odd minor cannot leak "6.5 SH
+  // past the limit" onto the screen. This stays as the backstop for the shape
+  // that would otherwise print 3.5000000001.
   const fmt = (sh) => (Number.isInteger(sh) ? String(sh) : sh.toFixed(1));
   const color = share.over ? REL_STYLE["corequisite-viol"].color : "var(--text-5)";
   const seg = shareSegments(share);
