@@ -87,6 +87,7 @@ import { readFileSync, writeFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 import { keyOfCourse } from "./lib/course-retention.js";
+import { fidelityOfEdition } from "./lib/catalog-course-parser.js";
 
 const EDITIONS_DIR = "data/northeastern/catalog/editions";
 const CATALOG      = "public/northeastern/catalog-courses.json";
@@ -148,14 +149,17 @@ export function deriveRetiredUnion(catalog, snapshots) {
       if (!key) continue;
       inEdition++;
       const prior = held.get(key);
-      if (prior) { prior.record = c; prior.editions.add(year); }
-      else held.set(key, { record: c, editions: new Set([year]) });
+      // `from` tracks which edition supplied the RECORD (the newest carrying
+      // it), which is not the same as the editions it appeared in. It is what
+      // decides the record's fidelity below.
+      if (prior) { prior.record = c; prior.from = year; prior.editions.add(year); }
+      else held.set(key, { record: c, from: year, editions: new Set([year]) });
     }
     perEdition[year] = inEdition;
   }
 
   const retired = [];
-  for (const [key, { record, editions: yrs }] of held) {
+  for (const [key, { record, from, editions: yrs }] of held) {
     if (current.has(key)) continue;          // still published — not retired
     const years = [...yrs].sort((a, b) => a - b);
     // `retired`/`retiredSince` may be present on a record that was itself
@@ -172,6 +176,24 @@ export function deriveRetiredUnion(catalog, snapshots) {
         // the bounds are as tight as they can be and no tighter; this is what
         // stops a reader mistaking a narrow answer for a confident one.
         editionsHeld: ordered.length,
+        // The fidelity of the edition that supplied THIS RECORD, so a consumer
+        // can tell an empty field apart from an absent one.
+        //
+        // Editions before 2022 publish title + credits + description and
+        // nothing else — no Prerequisite(s), no Corequisite(s), no
+        // Attribute(s) lines exist on the page at all. A record rescued from
+        // one therefore has `prereqs: []` meaning "this edition did not
+        // publish prerequisites", NEVER "this course has none". Reading the
+        // first as the second is how a planner schedules a course before the
+        // courses it actually requires — the same absent-vs-false collapse
+        // that `knownTermCodes` exists to prevent in term-history.
+        //
+        // Every edition on disk today is `full`, so nothing downstream has to
+        // branch on this yet. It is recorded now because the moment a
+        // descriptive-era edition IS backfilled, every consumer that already
+        // read the union would silently start treating unpublished as none,
+        // and no test would fail.
+        fidelity: fidelityOfEdition(from),
       },
     });
   }

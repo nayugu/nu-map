@@ -124,15 +124,26 @@ test("rail › survives records with no marker at all", () => {
 
 // ── The manifest itself ────────────────────────────────────────────
 
-/** The newest edition actually committed to this repository. */
-function committedEdition() {
-  const years = new Set();
-  for (const dir of ["undergraduate", "graduate"]) {
-    const base = join(ROOT, `data/northeastern/programs/${dir}`);
-    if (!existsSync(base)) continue;
-    for (const y of readdirSync(base)) if (/^\d{4}$/.test(y)) years.add(Number(y));
-  }
-  return Math.max(...years);
+/**
+ * The newest edition committed for ONE tree.
+ *
+ * Per tree, not one global maximum, because the two trees roll SEPARATELY.
+ * `update-majors.yml` and `update-grad-majors.yml` are different jobs on
+ * different schedules, so a corpus where undergraduate is 2027 and graduate is
+ * still 2026 exists for hours at every roll — and indefinitely when one of them
+ * refuses, which is not hypothetical: the graduate scrape has been stopped by
+ * the shared-section rail since 2026-09-01.
+ *
+ * A global `Math.max` reads that state as "the corpus is 2027" and then finds
+ * no graduate 2027 programs, so it blames the manifest — 68 entries reported as
+ * naming nothing — for a tree that simply has not been scraped. The failure
+ * points at the wrong file, and the honest reading is per tree.
+ */
+function committedEdition(dir) {
+  const base = join(ROOT, `data/northeastern/programs/${dir}`);
+  if (!existsSync(base)) return null;
+  const years = readdirSync(base).filter(y => /^\d{4}$/.test(y)).map(Number);
+  return years.length ? Math.max(...years) : null;
 }
 
 test("manifest › matches what the committed corpus actually carries", () => {
@@ -148,12 +159,17 @@ test("manifest › matches what the committed corpus actually carries", () => {
   // from; while it is ahead, this checks the half that still holds — every entry names a
   // program that exists — and the exact comparison comes back by itself when the scrape
   // lands the new edition. The live check is the scrape rail, and it is unaffected.
-  const corpusEdition = committedEdition();
-  const rolling = ADJUDICATED_EDITION > corpusEdition;
+  // Each tree is read at ITS OWN newest edition, and the run is "rolling" while
+  // ANY tree is behind the adjudication — including the half-rolled corpus the
+  // two separate workflows produce at every roll. Comparing exactly against a
+  // tree that has not been scraped yet reports the manifest as broken when the
+  // truth is that the data is missing; see committedEdition above.
+  const editions = { undergraduate: committedEdition("undergraduate"), graduate: committedEdition("graduate") };
+  const rolling = Object.values(editions).some(y => y == null || ADJUDICATED_EDITION > y);
 
   const found = {};
   for (const dir of ["undergraduate", "graduate"]) {
-    const base = join(ROOT, `data/northeastern/programs/${dir}/${corpusEdition}`);
+    const base = join(ROOT, `data/northeastern/programs/${dir}/${editions[dir]}`);
     if (!existsSync(base)) continue;
     for (const col of readdirSync(base)) {
       const cd = join(base, col);
