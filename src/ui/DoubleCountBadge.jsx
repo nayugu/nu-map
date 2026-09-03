@@ -47,6 +47,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { useState } from "react";
 import HoverCard from "./HoverCard.jsx";
+import ShareMeter from "./ShareMeter.jsx";
 import { useRelevance } from "../context/RelevanceContext.jsx";
 import { useLanguage }  from "../context/LanguageContext.jsx";
 import { useTranslatedText } from "../context/TranslationContext.jsx";
@@ -54,16 +55,37 @@ import { useTranslatedText } from "../context/TranslationContext.jsx";
 /** Whole numbers stay whole; the cap is the one figure that can be a half. */
 const fmt = (sh) => (Number.isInteger(sh) ? String(sh) : sh.toFixed(1));
 
-/** One minor's line in the hover card: its name, its spend, its ceiling. */
-function BudgetLine({ minor, isPhone }) {
+/**
+ * One minor's budget in the hover card: its name, its spend, its ceiling, drawn
+ * with the SAME meter as the minor card's `Double counting` row.
+ *
+ * It used to be one grey sentence — "Data Science, Minor — 14 of 22.5 SH double
+ * counted" — below two lines of prose, which put the only specific fact in the
+ * card last and in the dimmest ink, and stated a ceiling in the grammar of a
+ * total. The figures are the same; what changed is that they are now the SUBJECT
+ * of the card rather than its footnote, and that "of {cap} SH allowed" is the
+ * same phrase the panel uses, because it is the same fact.
+ */
+function BudgetLine({ minor }) {
   const { t } = useLanguage();
   const name = useTranslatedText(minor.name ?? null);
+  const ink  = minor.over ? "var(--warn-badge-text)" : "var(--text-2)";
   return (
-    <div style={{ marginTop: 3, fontSize: 12.5, lineHeight: 1.45,
-                  color: minor.over ? "var(--warn-badge-text)" : "var(--text-4)" }}>
-      {t(minor.over ? "relevance.dc.budget.over" : "relevance.dc.budget", {
-        name: name || minor.name, sh: fmt(minor.sh), cap: fmt(minor.capSH),
-      })}
+    <div style={{ marginTop: 7 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-3)",
+                    lineHeight: 1.35 }}>
+        {name || minor.name}
+      </div>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 4, margin: "1px 0 3px" }}>
+        <span style={{ fontSize: 12.5, fontWeight: 700, color: ink, letterSpacing: 0 }}>
+          {fmt(minor.sh)}
+        </span>
+        <span style={{ fontSize: 11, color: "var(--text-5)" }}>
+          {t("grad.share.cap", { cap: fmt(minor.capSH) })}
+        </span>
+      </div>
+      <ShareMeter used={minor.sh} cap={minor.capSH} over={minor.over}
+                  color="var(--warn-badge-text)" height={4} />
     </div>
   );
 }
@@ -125,13 +147,30 @@ export default function DoubleCountBadge({ course, compact = false }) {
         }}
       >{dc.count}×</span>
 
+      {/* SPECIFIC BEFORE GENERAL. The card used to open with a large coloured
+          headline, spend three lines restating the rule, and finish with the
+          one number that is about THIS student. The order is inverted now: the
+          state, then each minor's budget, then the rule in the dimmest ink — a
+          student who already knows the rule never has to read past the meter,
+          and one who doesn't still finds it. The title keeps its colour (it
+          carries the state) but drops to the body's size; at headline weight it
+          was the loudest thing in the card and the least informative. */}
       {hover && (
         <HoverCard rect={hover} maxWidth={260}>
-          <div style={{ fontWeight: 600, color: ink }}>{title}</div>
-          <div style={{ marginTop: 3, fontSize: 12.5, lineHeight: 1.45, color: "var(--text-4)" }}>
+          <div style={{ fontSize: 12.5, fontWeight: 700, color: ink, lineHeight: 1.35 }}>
+            {title}
+          </div>
+          {dc.minors.map(m => <BudgetLine key={m.n} minor={m} />)}
+          {/* One step brighter over the cap: that sentence stops being the rule
+              and becomes the way out ("Add minor coursework your major doesn't
+              count"), which is the most useful line in the card. Not the warn
+              colour — four lines of amber under an amber heading is a shout,
+              and the meter has already said it. */}
+          <div style={{ marginTop: 7, paddingTop: 6, borderTop: "1px solid var(--border-2)",
+                        fontSize: 11.5, lineHeight: 1.45,
+                        color: dc.over ? "var(--text-4)" : "var(--text-5)" }}>
             {meaning}
           </div>
-          {dc.minors.map(m => <BudgetLine key={m.n} minor={m} compact={compact} />)}
         </HoverCard>
       )}
     </>

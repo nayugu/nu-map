@@ -12,6 +12,7 @@ import { createPortal } from "react-dom";
 import VerificationPopover from "./VerificationPopover.jsx";
 import { usePlanner }         from "../context/PlannerContext.jsx";
 import SamplePlanOffer       from "./SamplePlanOffer.jsx";
+import ShareMeter            from "./ShareMeter.jsx";
 import PlusOneBlock          from "./PlusOneBlock.jsx";
 import { usePort }             from "../context/InstitutionContext.jsx";
 import { IAttributeSystem }   from "../ports/IAttributeSystem.js";
@@ -962,6 +963,24 @@ function GpaRules({ program, programKind = "major" }) {
 // the major doesn't claim", which is the student's decision to make, and
 // silently dropping a course from a requirement it genuinely satisfies would
 // make the audit disagree with the board.
+//
+// SHAPE. This is a budget, so it is drawn as one, in the same two-part idiom
+// the card's own progress bar above it already uses: a figures line, then a
+// track. Three things were confusing about the earlier row and each is fixed
+// by that rather than by more words:
+//   1. `12 /8 SH` reads as a fraction of a total, and a fraction above 1 reads
+//      as a bug. The cap is not a total — it is a ceiling — so the figure now
+//      SAYS so ("12 of 8 SH allowed") and the track shows the ceiling as a
+//      tick the fill runs past. Over-limit is then legible before any word is
+//      read, and without relying on the amber alone.
+//   2. "also counts toward your major" is a fragment with no subject, sitting
+//      where a label belongs; it is a noun phrase now ("shared with your
+//      major") and the number is what it is a quantity OF.
+//   3. The amber sentence restated the arithmetic the figures already give.
+//      It states only the CONSEQUENCE now — the credit that has to come from
+//      somewhere else — because that is the part the student can act on.
+// The expanded detail labels its two course lists: they carry different
+// meanings (shared with the major / transferred in) and rendered identically.
 function SharedCredit({ share }) {
   const { t } = useLanguage();
   const { courseMap, isPhone } = useContext(GradCtx);
@@ -976,6 +995,11 @@ function SharedCredit({ share }) {
   const fmt = (sh) => (Number.isInteger(sh) ? String(sh) : sh.toFixed(1));
   const color = share.over ? REL_STYLE["corequisite-viol"].color : "var(--text-5)";
 
+  const lists = [
+    [share.sharedKeys,  "grad.share.list.shared"],
+    [share.outsideKeys, "grad.share.list.outside"],
+  ];
+
   return (
     <div style={{ marginTop: 10, borderTop: "1px solid var(--border-2)", paddingTop: 9 }}>
       <div onClick={() => setOpen(v => !v)}
@@ -988,10 +1012,8 @@ function SharedCredit({ share }) {
         <span style={{ fontSize: 8, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
       </div>
 
-      <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-        {share.over && (
-          <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, color, lineHeight: "14px" }}>!</span>
-        )}
+      {/* Figures line: what is shared, and how much sharing is allowed. */}
+      <div style={{ display: "flex", gap: 6, alignItems: "baseline", marginBottom: 4 }}>
         <span style={{ flexShrink: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis",
                        whiteSpace: "nowrap", fontSize: isPhone ? 8 : 9.5, fontWeight: 600,
                        color: "var(--text-4)" }}>
@@ -1001,36 +1023,50 @@ function SharedCredit({ share }) {
         <span style={{ flexShrink: 0, fontSize: isPhone ? 8.5 : 10, fontWeight: 700,
                        color: share.over ? color : "var(--text-2)", letterSpacing: 0,
                        whiteSpace: "nowrap" }}>
-          {fmt(share.dependentSH)}
-          <span style={{ fontSize: isPhone ? 6.5 : 8, fontWeight: 500, color: "var(--text-5)",
-                         marginLeft: 3 }}>
-            /{fmt(share.capSH)} SH
+          {fmt(share.dependentSH)}{" "}
+          {/* A real space, not just the margin: the two spans are one phrase
+              and `innerText` is what the browser test — and a student's
+              clipboard — sees. */}
+          <span style={{ fontSize: isPhone ? 6.5 : 8, fontWeight: 500, color: "var(--text-5)" }}>
+            {t("grad.share.cap", { cap: fmt(share.capSH) })}
           </span>
         </span>
       </div>
 
+      {/* The track, shared with the 2× badge's hover card so the two surfaces
+          cannot drift — a student can have both open at once. */}
+      <ShareMeter used={share.dependentSH} cap={share.capSH} over={share.over} color={color} />
+
       {share.over && (
-        <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, color, marginTop: 2 }}>
-          {t("grad.share.over", { sh: fmt(share.overSH) })}
+        <div style={{ display: "flex", gap: 4, fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4,
+                      color, marginTop: 5 }}>
+          <span style={{ flexShrink: 0, fontWeight: 800 }}>!</span>
+          <span>{t("grad.share.over", { sh: fmt(share.overSH) })}</span>
         </div>
       )}
 
       {/* Provenance: the rule quoted, and exactly which courses are involved. */}
       {open && (
-        <div style={{ margin: "5px 0 2px 0", paddingLeft: 8,
+        <div style={{ margin: "6px 0 2px 0", paddingLeft: 8,
                       borderLeft: "2px solid var(--border-2)" }}>
           <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, color: "var(--text-5)" }}>
             {t("grad.share.policy", { pct: Math.round(MINOR_SHARE_FRACTION * 100),
                                       cap: fmt(share.capSH), required: fmt(share.requiredSH) })}
           </div>
-          {[share.sharedKeys, share.outsideKeys].map((keys, i) => keys.length > 0 && (
-            <div key={i} style={{ display: "flex", flexWrap: "wrap", gap: "2px 8px", marginTop: 4 }}>
-              {keys.map(k => (
-                <span key={k} style={{ fontSize: isPhone ? 7.5 : 9, fontWeight: 700,
-                                       letterSpacing: 0, color: "var(--text-3)" }}>
-                  {courseMap[k]?.code ?? k}
-                </span>
-              ))}
+          {lists.map(([keys, labelKey]) => keys.length > 0 && (
+            <div key={labelKey} style={{ marginTop: 6 }}>
+              <div style={{ fontSize: isPhone ? 7 : 8, fontWeight: 700, color: "var(--text-5)",
+                            letterSpacing: "0.05em", marginBottom: 2 }}>
+                {t(labelKey)}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "2px 8px" }}>
+                {keys.map(k => (
+                  <span key={k} style={{ fontSize: isPhone ? 7.5 : 9, fontWeight: 700,
+                                         letterSpacing: 0, color: "var(--text-3)" }}>
+                    {courseMap[k]?.code ?? k}
+                  </span>
+                ))}
+              </div>
             </div>
           ))}
           {/* The same ceiling covers three sources — "from their major,

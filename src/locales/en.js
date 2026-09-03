@@ -656,8 +656,20 @@ export const strings = {
   // rather than a verdict: the plan is not refused, and the way out is more
   // minor coursework the major does not claim.
   "grad.share.title":             "Double counting",
-  "grad.share.scope":             "also counts toward your major",
-  "grad.share.over":              "{sh} SH over the limit — that much of the minor has to come from courses your major doesn’t count",
+  // The label of a BUDGET, so it is a noun phrase, not the verb phrase this
+  // used to be ("also counts toward your major") — the figure beside it is a
+  // quantity of the thing named here. `cap` renders next to that figure and
+  // has to say "allowed": the cap is a ceiling, not a total, so "12 / 8" read
+  // as a broken fraction where "12 of 8 SH allowed" reads as the fact.
+  "grad.share.scope":             "Shared with your major",
+  "grad.share.cap":               "of {cap} SH allowed",
+  // The consequence only. The meter beside it already gives the arithmetic,
+  // and this is the half a student can act on.
+  "grad.share.over":              "{sh} SH of the minor requirements have to come from courses that do not overlap with your major requirements.",
+  // The two lists of course codes carry different meanings and used to render
+  // identically, one after the other, unlabelled.
+  "grad.share.list.shared":       "Counted toward both",
+  "grad.share.list.outside":      "Transfer or advanced standing",
   "grad.share.policy":            "Northeastern lets at most {pct}% of the credit a minor requires also count toward your major — {cap} of the {required} SH this minor requires.",
   // Shown when the courses listed above carry more credit than the figure. Both
   // ways that happens are the same fact for a student — some of this overlap is
@@ -676,11 +688,14 @@ export const strings = {
   // the course's — no single course is the one over the limit.
   "relevance.dc.title.would":     "Would count toward {n} programs",
   "relevance.dc.title.does":      "Counts toward {n} programs",
-  "relevance.dc.eligible":        "You haven’t placed this yet. Take it and it counts toward your major and the minor below at the same time.",
-  "relevance.dc.counted":         "Your major and the minor below both count this course. Northeastern allows that for up to half a minor’s credit.",
+  // "this minor", not "the minor below": the budget it names is drawn ABOVE
+  // this sentence now — specific first, rule last.
+  "relevance.dc.eligible":        "You haven’t placed this yet. Take it and it counts toward your major and this minor at the same time.",
+  "relevance.dc.counted":         "Your major and this minor both count this course. Northeastern allows that for up to half a minor’s credit.",
   "relevance.dc.over":            "This minor is past the half of its credit that may also count toward your major. Add minor coursework your major doesn’t count.",
-  "relevance.dc.budget":          "{name} — {sh} of {cap} SH double counted",
-  "relevance.dc.budget.over":     "{name} — {sh} of {cap} SH double counted, over the limit",
+  // The budget line is drawn now, not written: the minor's name, its figure and
+  // the same meter the graduation panel uses. `grad.share.cap` carries the
+  // "of {cap} SH allowed" half — one phrase for one fact, on both surfaces.
   "grad.conc.search":       "\u2315 search concentrations",
   "grad.minor1.label":      "MINOR 1",
   "grad.minor2.label":      "MINOR 2",
@@ -853,6 +868,23 @@ export const strings = {
   "info.standing.title":          "Class standing:",
   "info.standing.min":            "{standing} standing or above",
   "info.standing.note":           "Every section of this course is restricted in Banner. Standing is earned by credits, not by terms elapsed, and Banner notes that not all restrictions apply to every student — check with your advisor.",
+  "info.restrictions.title":      "Restrictions",
+  "info.restrictions.kind.must":  "{kind}:",
+  "info.restrictions.kind.not":   "Not open to {kind}:",
+  "info.restrictions.kind.info":  "{kind}:",
+  "info.restrictions.someSections": "({n} of {total} sections)",
+  "info.restrictions.source":     "From Banner’s Restrictions tab for the term shown. Northeastern notes that not all restrictions apply to every student.",
+  "info.restrictions.note":       "The registrar’s own enrolment restrictions, read from Banner for the term named. A later term may differ, and Northeastern states that not all restrictions apply to every student — check with your advisor before relying on this.",
+  "info.restrictions.name.Classes":        "Class standing",
+  "info.restrictions.name.Majors":         "Majors",
+  "info.restrictions.name.Programs":       "Programs",
+  "info.restrictions.name.Concentrations": "Concentrations",
+  "info.restrictions.name.Degrees":        "Degrees",
+  "info.restrictions.name.Colleges":       "Colleges",
+  "info.restrictions.name.Departments":    "Departments",
+  "info.restrictions.name.Campuses":       "Campuses",
+  "info.restrictions.name.Attributes":     "Student attributes",
+  "info.restrictions.name.Special Approvals": "Signature required",
   "info.coopPrep.title":          "Before co-op:",
   "info.coopPrep.body":           "Every one of the {count} published plans that includes this course places it before the first co-op.",
   "info.coopPrep.note":           "Northeastern does not state this as a prerequisite anywhere, so this is read from the departments' own published plans of study. Whether your program requires it before your co-op is a question for your advisor.",

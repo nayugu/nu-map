@@ -108,10 +108,13 @@ describe("minor · the double-counting cap", () => {
   test("a minor whose courses the major already requires reports the overage", async () => {
     const text = await panelText({ major: BACJ, minor1: CJ_MINOR, placements: CRIM });
     assert.match(text, /Double counting/, "the row is missing entirely");
-    // 12 SH of the minor's 20 SH requirement, against a 10 SH cap.
-    assert.match(text, /12\s*\/\s*10 SH/, `figure missing from:\n${text.slice(0, 2000)}`);
-    assert.match(text, /2 SH over the limit/, "the overage is not stated");
-    assert.match(text, /courses your major doesn’t count/, "the way out is not stated");
+    // 12 SH of the minor's 20 SH requirement, against a 10 SH cap. The cap is
+    // a CEILING, so the figure says "allowed" — "12 / 10" read as a fraction
+    // above 1, i.e. as a bug.
+    assert.match(text, /12\s+of 10 SH allowed/, `figure missing from:\n${text.slice(0, 2000)}`);
+    assert.match(text, /2 SH of the minor requirements/, "the overage is not stated");
+    assert.match(text, /do not overlap with your major requirements/,
+                 "the way out is not stated");
   });
 
   test("the same minor under an unrelated major shares nothing", async () => {
@@ -120,8 +123,12 @@ describe("minor · the double-counting cap", () => {
     // violation, which would tell a student to take courses they do not owe.
     const text = await panelText({ major: CS_BS, minor1: CJ_MINOR, placements: CRIM });
     assert.match(text, /Double counting/, "the row should still show the budget");
-    assert.match(text, /0\s*\/\s*10 SH/, `expected an empty share, got:\n${text.slice(0, 2000)}`);
-    assert.doesNotMatch(text, /over the limit/, "a false violation against an unrelated major");
+    assert.match(text, /0\s+of 10 SH allowed/, `expected an empty share, got:\n${text.slice(0, 2000)}`);
+    // Keyed on the amber sentence itself, which is the only thing the over-cap
+    // state adds — a phrase that no longer appears anywhere would make this
+    // pass for free.
+    assert.doesNotMatch(text, /do not overlap with your major requirements/,
+                        "a false violation against an unrelated major");
   });
 
   // ── The 2× badge on the card ────────────────────────────────────
@@ -203,7 +210,9 @@ describe("minor · the double-counting cap", () => {
     const badge = page.locator("span").filter({ hasText: /^\d+×$/ }).first();
     await badge.waitFor({ state: "visible", timeout: 10_000 });
     const before = await page.evaluate(() => document.body.innerText);
-    assert.doesNotMatch(before, /double counted/,
+    // Keyed on text only the hover card carries — the badge itself is just
+    // "2×", and the graduation panel is not open in this test.
+    assert.doesNotMatch(before, /past the half of its credit/,
       "the card must not be on screen before anyone hovers");
 
     await badge.hover();
@@ -214,8 +223,9 @@ describe("minor · the double-counting cap", () => {
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
     assert.match(after, /Counts toward 2 programs/, "no title in the hover card");
     assert.match(after, /past the half of its credit/, "the colour's meaning is missing");
-    // The minor, named, with its own budget.
-    assert.match(after, /Criminal Justice, Minor — 12 of 10 SH double counted/);
+    // The minor, named, with its own budget — the same phrasing and the same
+    // meter as the graduation panel's row (`grad.share.cap`).
+    assert.match(after, /Criminal Justice, Minor\s+12\s+of 10 SH allowed/);
   });
 
   test("an ELIGIBLE course is badged differently from one already counted", async () => {
