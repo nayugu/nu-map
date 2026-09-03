@@ -62,17 +62,36 @@ const val  = (f, d = null) => { const i = argv.indexOf(f); return i >= 0 ? argv[
 const SAMPLE_SUBJECTS = ["cs", "math", "biol", "eece", "engw", "phys"];
 
 // ── fetch ─────────────────────────────────────────────────────────────────────
-async function fetchPage(url) {
-  const res = await fetch(url, {
-    headers: {
-      "User-Agent":
-        "NU-Map-DataBot/1.0 (academic degree planner; contact nayugu@github; respects robots.txt)",
-      Accept: "text/html",
-    },
-  });
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
-  return res.text();
+/**
+ * Retries are not politeness padding here, they are what makes a full-catalog
+ * sweep possible at all. `--all-subjects` is 227 pages; at even a 1% transient
+ * rate an unretried run aborts most of the time, and it aborts AFTER spending
+ * the four minutes. Measured: the first two attempts at this died on a bare
+ * `fetch failed` (a connection reset, no status), one of them 200 pages in.
+ *
+ * A 404 still returns null on the FIRST look, without retrying — that is a real
+ * answer about the edition (subjects appear and disappear), not a failure.
+ */
+async function fetchPage(url, attempts = 3) {
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      const res = await fetch(url, {
+        headers: {
+          "User-Agent":
+            "NU-Map-DataBot/1.0 (academic degree planner; contact nayugu@github; respects robots.txt)",
+          Accept: "text/html",
+        },
+      });
+      if (res.status === 404) return null;
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.text();
+    } catch (e) {
+      if (i === attempts) throw new Error(`${e.message} for ${url} (after ${attempts} attempts)`);
+      // Linear, not exponential: the observed failure is a single reset rather
+      // than rate limiting, and a sweep this long should not silently stretch.
+      await sleep(DELAY_MS * 2 * i);
+    }
+  }
 }
 
 /** `/archive/2024-2025` for a past edition, `` for the live one. */
@@ -292,10 +311,27 @@ async function reportSnapshot(path, years, slugs) {
   for (const year of years) {
     const live = new Set();
     let missingPages = 0;
+    const unread = [];
     for (const slug of slugs) {
-      const got = await subjectFor(year, slug);
+      let got;
+      try {
+        got = await subjectFor(year, slug);
+      } catch (e) {
+        // A subject that could not be read is NOT a subject with no courses.
+        // Swallowing it would move every one of its courses into
+        // `only-snapshot` and read as a wave of retirements — the same
+        // false-absence error the whole design is built around. Record it and
+        // refuse to score the run instead.
+        unread.push(slug);
+        continue;
+      }
       if (!got) { missingPages++; continue; }
       for (const c of got.courses) live.add(keyOf(c));
+    }
+    if (unread.length) {
+      console.log(`  ${year}     — ${unread.length} subject(s) UNREADABLE after retries: ${unread.slice(0, 8).join(" ")}`);
+      console.log("             not scored: their courses would masquerade as retirements.");
+      continue;
     }
     // An unparsed era yields an empty set, which would read as "shares nothing"
     // — the same false-absence trap reportLifespan guards. Say so instead.

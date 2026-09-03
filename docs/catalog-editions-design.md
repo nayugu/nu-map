@@ -94,10 +94,37 @@ at all, and there is no historical course data.
 
 ### Two structural mismatches to reconcile
 
-1. **The two program trees have different on-disk shapes.** Live is one
-   `requirements.json` per program (896 files). Archive is one bundle per
-   college (9 files). The loader glob only matches the first — *this is why six
-   scraped editions are invisible to the app.*
+1. **The archived program editions carry a bug we have already fixed, and
+   their program ids do not match live.** This entry previously said the
+   mismatch was the on-disk SHAPE — live is one `requirements.json` per program
+   (896 files), archive is one bundle per college (9 files), and the loader glob
+   matches only the first. That is true, and it is the cosmetic half. The
+   bundles are `{slug: record}` whose records carry the same keys as a live
+   `requirements.json`, so exploding them is a loop.
+
+   The blocking half is IDENTITY, measured 2026-09-03 over archive 2025 against
+   live 2026:
+
+   | | count |
+   |---|---|
+   | archive slugs | 852 |
+   | match a live slug exactly | **175** |
+   | match only after dropping the campus suffix | 654 |
+   | …of which **one archive slug → 2+ live programs** | **89** |
+   | match neither way | 23 |
+
+   Those 89 are the pre-variant flattening: the archive was scraped before
+   `program-variants.js` existed, so a page publishing Boston and Oakland
+   variants was collapsed into one program. That is precisely the defect
+   CLAUDE.md records fixing — *159 phantom requirement sections across 35
+   programs*, 42 pages with the wrong credit total — frozen into committed data.
+
+   **So the six editions must be RE-SCRAPED from the archive URLs with the
+   current parser, not converted.** Converting would ship known-wrong
+   requirements under ids that cannot resolve against a student's current
+   program anyway. Note the cost this adds: `shared-sections.json` is adjudicated
+   per catalog (`ADJUDICATED_EDITION`) and an unfound title hard-stops the run,
+   so each edition needs its own adjudication pass.
 2. **Payload, on the PROGRAM side only.** `programs-bundle.json` is 6.6 MB, of
    which `programData` is 6.1 MB and the index only **517 KB**, so seven
    editions is ~45 MB of program data. The browser is fine (lazy globs), but
@@ -439,10 +466,12 @@ student rather than only continuing ones. This is the CS 2500 fix.
 
 ### Milestone B — the student picks their catalog year
 
-9. **Reconcile the two program tree shapes** so the archive's six editions are
-   visible to the loader at all — today it globs one `requirements.json` per
-   program while the archive is one bundle per college (§3). Real design
-   decision, not mechanical.
+9. **Re-scrape the six archived program editions** with the current parser
+   (`scrape-majors.js --edition`), writing per-program files the loader's glob
+   already matches. NOT a conversion of the committed bundles: 89 of their 852
+   slugs are pre-variant flattenings of campus variants, i.e. the 159-phantom-
+   section bug frozen in data (§3). Budget an adjudication pass over
+   `shared-sections.json` per edition.
 10. **Edition-aware runtime** — feed `pickCatalogYear` a real list, lazy
     per-edition loading, and fix the MCP worker's wholesale 6.6 MB bundle fetch.
 11. **Descriptive-era reading**, *if still needed* — only for courses that died
