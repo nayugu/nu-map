@@ -98,11 +98,13 @@ at all, and there is no historical course data.
    `requirements.json` per program (896 files). Archive is one bundle per
    college (9 files). The loader glob only matches the first — *this is why six
    scraped editions are invisible to the app.*
-2. **Payload.** `programs-bundle.json` is 6.6 MB, of which `programData` is
-   6.1 MB and the index only **517 KB**. Seven editions is ~45 MB of program
-   data plus ~34 MB of course catalogs. The browser is fine (lazy globs), but
+2. **Payload, on the PROGRAM side only.** `programs-bundle.json` is 6.6 MB, of
+   which `programData` is 6.1 MB and the index only **517 KB**, so seven
+   editions is ~45 MB of program data. The browser is fine (lazy globs), but
    `cloudflare/mcp-server/src/loadData.js` fetches the bundle **wholesale**.
    Multi-edition must not mean multi-edition-eagerly-loaded.
+   The course side does **not** contribute to this: under §5b/§6 it ships one
+   current catalog plus a ~1.2 MB retired union, not seven snapshots.
 
 ---
 
@@ -153,11 +155,18 @@ schedule a course *before the courses it actually requires*. So:
 - the UI says *"the 2020–2021 catalog did not publish prerequisites"*, never an
   empty list.
 
-The consolation: **the descriptive era ages out by itself.** The window is
-anchored to the live edition, so as it slides 2021–2027 → 2022–2028, the
-degraded era leaves the window in 2029 with no code change. It is worth
-carrying tiering for that finite period rather than either dropping two
-editions or pretending they are complete.
+Two consolations, and the second was only visible after §5b.
+
+**The descriptive era ages out by itself.** The window is anchored to the live
+edition, so as it slides 2021–2027 → 2022–2028, the degraded era leaves the
+window in 2029 with no code change.
+
+**And it is needed for far less than this section implies.** Under §5b, history
+only supplies a retired course's LAST record, so the pre-2022 markup is
+required solely for courses that died in the 2021→2022 roll — not for reading
+five old editions in full. Check whether that set is even non-empty before
+building the bare-credits parser (§8, step 11). The `fidelity` rule above
+stands regardless, because it governs how any degraded record is displayed.
 
 ---
 
@@ -209,15 +218,102 @@ the escalation path — not the default.
 
 ---
 
-## 6. Storage shape — DECIDED: a snapshot per edition
+## 5b. What follows the entry year, and what follows the current catalog
 
-The question was whether editions differ mostly in **membership** (which
-courses exist) or also in **field values**, since that is what decides between:
+**This is the governing decision. Everything downstream — storage, scope, the
+UI, how far back we scrape — follows from it, and nothing should be decided
+before it.**
 
-- **(A) Snapshot per edition** — `…/editions/<year>/catalog-courses.json`.
-  Simple, immutable, ~34 MB for 7. Lazily fetched per edition.
-- **(B) Current snapshot + per-edition overlay** — store only what differs.
-  Smaller, but every read becomes a merge.
+The split is not uniform across data types, and treating it as uniform is what
+produced two contradictory versions of §6:
+
+| Question a student is really asking | Governed by | Why |
+|---|---|---|
+| What must I complete for my degree? | **Entry edition** | Requirements are genuinely locked to the catalog you entered under. We already hold 7 editions. |
+| Can I register for this next spring? | **Current catalog** | The registrar enforces prerequisites, credits and standing at registration, under the catalog in force then. |
+| Does this course still exist? What was it called? | **Lifespan** | Needs history. This is the CS 2500 problem, and it is the only thing that does. |
+
+Consequences, all of which shrink the build:
+
+- The planner keeps using **current** prereqs, credits and offerings. No
+  historical mechanics reach the engine.
+- History is needed only to answer *existence* and *identity over time*, which
+  is a lifespan index plus a last-known record — not seven full course
+  snapshots (§6).
+- The **descriptive era matters far less than §4 implies.** Since only a
+  retired course's LAST record is needed, the pre-2022 markup is required only
+  for courses that died in the 2021→2022 roll. Small set, and it leaves the
+  window entirely in 2029.
+- Retirement is a fact about existence, so it is independent of all of the
+  above and can ship first (§8, Milestone A).
+
+### Status of the underlying claim
+
+The policy says *"Students are expected to meet prerequisites as listed in the
+course description of each course **in which they enroll**"*
+([Registration and Taking Courses](https://catalog.northeastern.edu/undergraduate/academic-policies-procedures/registration-taking-courses/)),
+present tense, in the 2026-2027 edition. That is **consistent with** the reading
+above but does not state it outright, and NEU is thin on exactly these
+statements (§1). Adopted as a decision on 2026-09-03 rather than a proven fact.
+
+If it ever turns out a department honours entry-year prerequisites for a
+continuing student, the retired-union model still holds unchanged — only the
+"current mechanics always" rule gains an exception. That asymmetry is why it was
+safe to decide without waiting.
+
+---
+
+## 6. Storage shape
+
+> **This section was written twice, and the first version was wrong in an
+> instructive way.** It opened "DECIDED: a snapshot per edition" and chose
+> between two storage layouts using a drift measurement — before §5b had
+> settled *which data is edition-scoped at all*. That is backwards: storage is
+> downstream of the requirement, so the decision flipped as soon as the
+> requirement was pinned. The measurement below is still good; the conclusion
+> it was used for was premature. Settle what a system must answer before
+> choosing how to store it.
+
+Given §5b, the course side does **not** need seven full snapshots. It needs to
+answer exactly two historical questions:
+
+1. *Did this course exist in edition N?* → a **lifespan index**.
+2. *What was it, if it no longer exists?* → a **last-known record**.
+
+Everything else about a course — prereqs, credits, offerings — comes from the
+current catalog, because that is what the registrar enforces (§5b).
+
+### The shape
+
+- `public/northeastern/catalog-courses.json` — the current catalog, unchanged.
+- **A retired-course union** — every course that existed in the window and is
+  not in the current catalog, each carrying its last-known record, the edition
+  that last published it, and that record's `fidelity`.
+- **A lifespan index** — `{ key → { firstEdition, lastEdition, editions[] } }`
+  over the window, for current and retired courses alike.
+
+This is a **disjoint union, not an overlay**: a key is either current or
+retired, never both, so there is no field-level merge and no reconciliation
+step. That matters, because the strongest objection to the overlay design was
+that a merge resolved wrongly yields a well-formed record with the wrong
+prerequisites — the exact defect shape this project keeps paying for. A
+disjoint union cannot produce that.
+
+### Size, derived rather than measured
+
+Six subjects hold 678 of ~7,966 courses (8.5%) and lost 27 in one roll, so
+~317 retire per roll catalog-wide, ~1,900 over six rolls before subtracting
+reappearances. At ~620 bytes/course that is roughly **1.2 MB, against 34 MB for
+seven snapshots.** Worth confirming with `edition-probe.js` before building,
+but the gap is a factor of 25, not a rounding difference.
+
+The frozen per-edition snapshots in `data/northeastern/catalog/editions/`
+remain the **source** these are derived from, and stay full snapshots — they
+are archival material, not a shipped artifact, and their self-containment is
+what lets provenance be checked in isolation (§5b, and the property that makes
+`test/invariant/archive-editions.test.js` possible for the program trees).
+
+### The measurement that informed this
 
 Measured by `edition-probe.js --drift --editions 2023,2024,2025` over the six
 sample subjects:
@@ -239,40 +335,30 @@ sample subjects:
   → a snapshot stores 679; an overlay stores 61 (added + changed) + 27 tombstones
 ```
 
-**Decision: (A), snapshots.** An overlay is roughly 8x smaller per edition
-(88 records against 679), and that saving is still not worth taking, because
-the measurement shows what it does and does not buy:
+Three readings, and the third corrects a claim this document made in its first
+version.
 
-1. **Runtime cost is identical.** Only ONE edition is ever loaded in a session,
-   so the browser fetches ~4.9 MB either way. The overlay saves repo and build
-   size, not the thing a student waits for.
-2. **The repo already accepts this pattern at this scale** — the program
-   archive is 27 MB of full per-edition snapshots, and
-   `test/invariant/archive-editions.test.js` can check a frozen snapshot's
-   provenance precisely *because* it is self-contained.
-3. **A merge step is an invisible failure class.** An overlay resolved wrongly
-   produces a well-formed course record with the wrong prerequisites, which is
-   the exact shape of defect this project keeps paying for. Conservative beats
-   clever, and the clever option's only prize is disk.
+1. **Membership churn is real and roughly symmetric** — 27 out and 28 in on one
+   roll, against 651 stable. That churn IS the retired union; it is the whole
+   reason the lifespan index exists.
+2. **Credits, coreqs and nuPath did not move at all** (0.0% across 651
+   courses). This is what makes §5b affordable rather than merely defensible.
+   The strongest case for carrying full historical records was "a course was
+   4 SH then and 3 SH now, and the audit should count 4" — and empirically that
+   case barely arises.
+3. **Prereqs are the most volatile field at 3.7%, and the first version of this
+   document pointed that finding the wrong way.** It argued prereq drift meant
+   "edition inaccuracy produces a wrong plan", i.e. that we needed historical
+   prereqs. The opposite follows. A prerequisite is enforced at registration
+   under the catalog in force *then* (§5b), so today's prereqs are the correct
+   ones for any future term, and a completed course's prereq is moot. The 3.7%
+   is therefore a measure of **how wrong we would be if we fed a reconstructed
+   old edition's prereqs to the planner** — an argument against historical
+   prereqs in the engine, not for them.
 
-The drift numbers carry a second, more important finding: **prereqs are the
-most volatile field, at 3.7% — three times the rate of titles or
-descriptions, while credits, coreqs and nuPath did not move at all.** Prereqs
-are what the planner acts on, so edition-inaccuracy here produces a wrong
-*plan*, not a cosmetically wrong label. That is the argument for doing this
-properly rather than approximating an old edition with today's course data.
-
-Caveat on the evidence: this is ONE adjacent pair over six subjects. The
-2024→2025 leg of the same run died on a transient `fetch failed`, and the
-figures above should be re-taken across more pairs before anyone quotes 5.1%
-as a per-roll constant. It is enough to decide A-vs-B, which is all it was
-run for.
-
-Independent of A/B, one derived artifact is definitely wanted:
-
-**A course lifespan index.** `{ key → { firstEdition, lastEdition, editions[] } }`
-over the window. This is what turns "retired" from a boolean into a fact, and
-it is small (7,966 keys × a few numbers).
+Caveat on the evidence: this is ONE adjacent pair over six subjects, and the
+2024→2025 leg of the same run died on a transient `fetch failed`. Do not quote
+5.1% as a per-roll constant without re-taking it across more pairs.
 
 ---
 
@@ -300,6 +386,10 @@ Consequences:
   description, prereqs, coreqs, NUPath — so a retired course is as informative
   as a live one, which is the explicit goal. Plus `term-history` and offering
   data, which are term-indexed and already historical, so they need nothing.
+  Note this is the ONE place historical course *mechanics* are shown, and it is
+  display only: a retired course cannot be registered for, so showing its last
+  prereqs contradicts nothing in §5b. They are labelled with the edition they
+  came from, never presented as current.
 - **Fidelity gates the panel** (§4). A course whose last edition is
   `descriptive` shows "this edition did not publish prerequisites", not an
   empty list.
@@ -323,29 +413,44 @@ Each step must be independently shippable and independently verifiable.
    parameter; the three hard-space regexes hoisted to one named `NBSP`).
    Nine imports orphaned by the move were removed. Verified on a live page:
    188 CS courses, correct credits/NUPath/description.
-2. **Measure edition drift.** ✅ *Done 2026-09-03* — see §6. Decided snapshots
-   over overlays, and found that prereqs drift 3x faster than any other field.
+2. **Measure edition drift.** ✅ *Done 2026-09-03* — see §6.
    `scripts/edition-probe.js` is the committed instrument.
-2b. **Preserve edition 2026 before the next roll** (§5) — the only copy, and
-   the cheapest irreversible-loss prevention on this list.
-3. **`--edition` on `scrape-catalog.js`**, reusing `catalog-edition.js`
+3. **Preserve edition 2026 before the next roll.** ✅ *Done 2026-09-03* —
+   `data/northeastern/catalog/editions/2026/`, the only copy in existence (§5).
+
+### Milestone A — retirement becomes truthful
+
+Ships alone, needs **no year picker**, and improves the app for *every*
+student rather than only continuing ones. This is the CS 2500 fix.
+
+4. **`--edition` on `scrape-catalog.js`**, reusing `catalog-edition.js`
    (`parseEditionArg`, `editionBasePath`, `assertEdition`) so the per-page
-   provenance assertion is shared, plus an edition-scoped output path that
-   **cannot** overwrite `catalog-courses.json`.
-4. **Descriptive-era reading** — the bare-credits title form, `fidelity` on
-   every record, and a test that a descriptive record's empty `prereqs` is
-   never read as "none".
-5. **Backfill 2021–2026 course editions**, one rail-guarded run per edition.
-6. **Reconcile the two program tree shapes** so the archive's six editions
-   become visible to the loader at all (§3).
-7. **Edition-aware runtime** — feed `pickCatalogYear` a real list; lazy
-   per-edition loading for both catalogs; fix the MCP worker's wholesale
-   bundle fetch.
-8. **Lifespan index + retirement UI** (§7), incl. all 8 locales.
-9. **Guards**: extend `catalog-covers-programs` per edition; an invariant that
-   every shipped program edition has a course edition to resolve against; a
-   `data-staleness` check that the live edition was captured before it rolled
-   (§5).
+   provenance assertion is shared, writing into
+   `data/northeastern/catalog/editions/<year>/` and **never** able to overwrite
+   `catalog-courses.json`.
+5. **Backfill editions 2022–2025** from the archive, one rail-guarded run per
+   edition. ~230 subjects x 400 ms is ~90 s of fetching each.
+6. **Derive the retired union + lifespan index** (§6) and ship them.
+7. **Retirement UI** (§7) — lifespan copy naming the edition, full last-known
+   record, fidelity gating, all 8 locales.
+8. **Guards for A**: the union is derived and never hand-edited; a retired
+   course never gains a substitute; `fidelity` is respected wherever an empty
+   field is read.
+
+### Milestone B — the student picks their catalog year
+
+9. **Reconcile the two program tree shapes** so the archive's six editions are
+   visible to the loader at all — today it globs one `requirements.json` per
+   program while the archive is one bundle per college (§3). Real design
+   decision, not mechanical.
+10. **Edition-aware runtime** — feed `pickCatalogYear` a real list, lazy
+    per-edition loading, and fix the MCP worker's wholesale 6.6 MB bundle fetch.
+11. **Descriptive-era reading**, *if still needed* — only for courses that died
+    in the 2021→2022 roll (§5b). Re-check whether the set is non-empty before
+    building it; it leaves the window in 2029 regardless.
+12. **Guards for B**: extend `catalog-covers-programs` per edition; an invariant
+    that every shipped program edition can be resolved; a `data-staleness`
+    check that the live edition was captured before it rolled (§5).
 
 ---
 
@@ -371,15 +476,21 @@ and must never be the default.
 
 ## 10. Open questions
 
-- **Which edition does a *course* record inside a plan belong to?** A plan spans
-  years; a student takes a course as it existed *when they took it*. Probably
-  the plan's edition governs the audit and the term governs the offering, but
-  this is unresolved and it is where a subtle wrong number could reach a
-  student.
+*Resolved 2026-09-03: "which edition does a course record inside a plan belong
+to" is answered by §5b — requirements by entry edition, mechanics current,
+history only for existence. It is left here as a pointer because it was the
+question whose absence produced two contradictory versions of §6.*
+
+- **Is the descriptive era needed at all?** (§8 step 11.) Decidable by counting
+  the courses that died in the 2021→2022 roll and are named by a shipped
+  program edition. If that set is empty, the bare-credits parser is never built.
 - **Do `course-equivalences.json`, `plan-order.json` and `early-donors.json`
   need an edition key?** All three are derived from the current program/course
   pair.
-- **2025-2026 recovery** if our `2026/` tree is ever lost — PDF only (§5).
+- **The §5b claim is adopted, not proven** — NEU states prerequisites are met
+  "as listed in the course description of each course in which they enroll" but
+  never says which catalog year. Worth confirming with the registrar; the
+  failure mode if wrong is bounded (§5b).
 - **When the window slides past an archived edition**, the oldest *archived*
   edition is the right one to retire, not the oldest live one, and it is
   unrecoverable. `prune-catalog-years.js` already says this; courses make it
