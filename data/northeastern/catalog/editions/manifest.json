@@ -1,0 +1,19 @@
+{
+  "note": "Frozen course-catalog editions. See README.md — nothing may regenerate these.",
+  "editions": {
+    "2026": {
+      "label": "2025-2026",
+      "fidelity": "full",
+      "courses": 7966,
+      "subjects": 231,
+      "coursesWithPrereqs": 2581,
+      "coursesWithNuPath": 1516,
+      "capturedFrom": "public/northeastern/catalog-courses.json",
+      "capturedAt": "2026-09-03",
+      "method": "copied from the live scrape taken before the 2026-2027 roll",
+      "archiveUrl": null,
+      "archiveNote": "/archive/2025-2026/ does not exist; NEU published this edition as PDF only, so this is the only machine-readable copy.",
+      "provenanceCheck": "CS 2500 present in the 2024-2025 archive, absent here, absent from live 2026-2027 — this snapshot is on the far side of the roll that retired it."
+    }
+  }
+}
