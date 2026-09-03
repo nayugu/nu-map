@@ -1007,8 +1007,19 @@ async function main() {
       const { calls, gated, labels } = await fetchTermRestrictions(
         bannerCodeOf[termCode] ?? termCode, termDetail[termCode] ?? new Map(), termCode);
       Object.assign(allRestrLabels, labels ?? {});
-      const pct = calls ? (100 * gated / calls).toFixed(1) : "0.0";
-      console.log(`  done (${calls} section lookups, ${gated} class-gated — ${pct}%)`);
+      // The share is against the term's TOTAL sections, not against `calls`.
+      // `calls` counts only what was newly FETCHED while `gated` counts every
+      // section folded, including the ones restored from cache — so on a
+      // resumed term the old denominator was too small and the figure was
+      // nonsense in both directions: 202610 printed "47.6%" for a real 22.0%
+      // (1,633 of 7,430), and a term restored entirely from cache printed
+      // "0.0%" for 1,595 gated sections because it divided by zero calls.
+      // 21–23% is the measured band, so a wrong number here reads as a
+      // scraping failure and would send someone hunting one.
+      const pct = sections ? (100 * gated / sections).toFixed(1) : "n/a";
+      const restored = Math.max(0, sections - calls);
+      console.log(`  done (${sections} sections — ${calls} fetched` +
+        `${restored ? `, ${restored} from cache` : ""}; ${gated} class-gated — ${pct}%)`);
     } catch (err) {
       console.warn(`  restriction fetch FAILED: ${err.message}`);
     }
