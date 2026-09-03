@@ -324,6 +324,31 @@ function listCommittedPlans(year = YEAR) {
   return out;
 }
 
+/**
+ * The plan count the rail should compare against: this edition's if it has one,
+ * otherwise the newest earlier edition's.
+ *
+ * Without the fallback the rail is blind on exactly the run where it matters.
+ * `listCommittedPlans` is scoped to the edition being written, so the first
+ * scrape of a new year finds zero "previous" plans and a fleet-wide
+ * disappearance passes in silence. Measured on the undergraduate side on
+ * 2026-09-02: the live 2027 scrape parsed 0 plans against 349 committed for
+ * 2026 — NEU removed the Sample Plan of Study pane — and the rail said nothing.
+ */
+function planBaselineCount() {
+  const here = listCommittedPlans().length;
+  if (here > 0) return here;
+  const years = existsSync(OUT_ROOT)
+    ? readdirSync(OUT_ROOT).filter(y => /^\d{4}$/.test(y) && Number(y) < YEAR)
+        .map(Number).sort((a, b) => b - a)
+    : [];
+  for (const y of years) {
+    const n = listCommittedPlans(y).length;
+    if (n > 0) return n;
+  }
+  return 0;
+}
+
 // ── Scrape one program ────────────────────────────────────────────────────────
 
 /**
@@ -543,7 +568,7 @@ async function main() {
     const nowPlans  = [...pending.values()].filter(d => d.planGrid).length;
     // A frozen edition has no plans to lose: it is written whole every time,
     // so nothing is ever left behind to delete.
-    const prevPlans = EDITION ? 0 : listCommittedPlans().length;
+    const prevPlans = EDITION ? 0 : planBaselineCount();
     const { deleteOk, reason } = checkPlanRail(nowPlans, prevPlans);
     if (!deleteOk) console.warn(`\n⚠  ${reason}\n`);
 

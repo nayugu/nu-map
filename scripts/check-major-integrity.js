@@ -84,12 +84,53 @@ function loadBaselineFile(path) {
   try { return JSON.parse(readFileSync(path, 'utf8')); } catch { return []; }
 }
 
+// A flag is a PATH, and a path carries the catalog edition:
+// `undergraduate/2026/science/x_bs/requirements.json :: Electives`.
+const EDITION_PATH = /^(\w+)\/(\d{4})\/(.+)$/;
+
+/**
+ * Re-key a flag onto another edition, so accepted debt can be recognised after
+ * the catalog rolls.
+ *
+ * Without this every entry in the baseline stops matching on the first scrape
+ * of a new edition, and every carried-over section is reported as NEW. Measured
+ * on the real 2027 scrape: 11 over-consuming pools reported, of which 4 were
+ * the identical program and section already accepted for 2026 — noise in a gate
+ * that exits 1 and stops the pipeline, which is how a gate gets `--update`d
+ * without being read. The other 7 were real, and are what should have been
+ * shown.
+ */
+const reEdition = (flag, year) => flag.replace(EDITION_PATH, `$1/${year}/$3`);
+
 /** Diff `current` flags against a baseline file, reporting added/removed with the given labels. */
 function reportDiff({ current, baselinePath, addedLabel, fixMessage }) {
-  const baseline = new Set(loadBaselineFile(baselinePath));
+  const baselineList = loadBaselineFile(baselinePath);
+  const baseline = new Set(baselineList);
   const currentSet = new Set(current);
-  const added = current.filter((f) => !baseline.has(f));
-  const removed = [...baseline].filter((f) => !currentSet.has(f));
+
+  // Editions the baseline knows about, newest first, so a 2027 flag is checked
+  // against 2026 before 2025.
+  const knownYears = [...new Set(baselineList
+    .map((f) => EDITION_PATH.exec(f)?.[2]).filter(Boolean))]
+    .sort().reverse();
+  const carriedOver = (flag) => {
+    const m = EDITION_PATH.exec(flag);
+    if (!m) return false;
+    return knownYears.some((y) => y !== m[2] && baseline.has(reEdition(flag, y)));
+  };
+
+  const added = current.filter((f) => !baseline.has(f) && !carriedOver(f));
+  // Likewise the other direction: a 2026 entry is not "now fixed" merely
+  // because the corpus has moved to 2027 under a different path.
+  const stillFlagged = (flag) => {
+    const m = EDITION_PATH.exec(flag);
+    if (!m) return false;
+    return [...currentSet].some((c) => {
+      const cm = EDITION_PATH.exec(c);
+      return cm && cm[2] !== m[2] && reEdition(c, m[2]) === flag;
+    });
+  };
+  const removed = [...baseline].filter((f) => !currentSet.has(f) && !stillFlagged(f));
 
   if (removed.length) {
     console.log(`ℹ️  ${removed.length} previously-flagged section(s) are now fixed:`);

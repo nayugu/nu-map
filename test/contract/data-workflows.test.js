@@ -195,6 +195,20 @@ test("the CHART gate runs the corpus, not a sample", () => {
     "a covering sample proves the absence of a regression only in what it covered");
 });
 
+test("no workflow waves the catalog past its shrink floor", () => {
+  // `--accept-shrink` exists so that a human handling a catalog EDITION ROLL
+  // does not have to edit the scraper or delete data to get past the 2% floor.
+  // From inside a single run, "the edition rolled" and "the markup changed"
+  // are indistinguishable — so an unattended job must stop and ask. A workflow
+  // carrying this flag would turn the last line of defence into a comment.
+  for (const f of [...PIPEFAIL, "catalog-rotate.yml"]) {
+    for (const r of runs(load(f))) {
+      assert.ok(!r.includes("--accept-shrink"),
+        `${f} passes --accept-shrink; that decision belongs to a person looking at the diff`);
+    }
+  }
+});
+
 // ── The watchdog must be talking about the same pipelines ───────────
 test("data-staleness: every leg names a real workflow and shares its alert identity", () => {
   const doc = load("data-staleness.yml");

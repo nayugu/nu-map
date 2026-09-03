@@ -54,6 +54,11 @@ const MERGE    = process.argv.includes("--merge");
 const WRITE    = process.argv.includes("--write");
 const DRY_RUN  = process.argv.includes("--dry-run");
 const ROTATE   = process.argv.includes("--rotate");
+// The documented way past the 2% shrink floor, for a catalog EDITION ROLL.
+// See the refusal at the bottom of this file for why it exists and what it
+// still refuses. Deliberately not set by any workflow: a roll is the one event
+// that should have a person looking at it.
+const ACCEPT_SHRINK = process.argv.includes("--accept-shrink");
 const SUBJECT  = (() => {
   const i = process.argv.indexOf("--subject");
   return i !== -1 ? process.argv[i + 1]?.toUpperCase() : null;
@@ -719,14 +724,53 @@ if (PARTIAL) {
 
   // Last line of defence: a full run that still loses a meaningful share of
   // the catalog is upstream breakage, not an update.
+  //
+  // ── Except once a year, when it is neither ──────────────────────────────
+  //
+  // The 2% floor is tuned for month-to-month drift inside one catalog edition.
+  // An EDITION ROLL is a different distribution: NEU retires subjects outright
+  // and adds others. Measured on the live 2027 roll (2026-09-02): 7,762 vs
+  // 7,966, a 2.6% net loss made of 90 subjects shrinking by 492 and 70 growing
+  // by 288 — DGTR, EAI and HLS gone entirely, SUST and NAVY appearing from
+  // nothing, THTR up 58. Two-sided churn like that is what a roll looks like;
+  // upstream breakage looks like a uniform collapse.
+  //
+  // So the floor stays where it is and the refusal names the way through,
+  // rather than being quietly lowered to fit the once-a-year case. No workflow
+  // passes `--accept-shrink`: an unattended run must still stop, because from
+  // inside a single run "the edition rolled" and "the markup changed" are
+  // indistinguishable, and only one of them should land. What the flag buys is
+  // that the operator does not have to edit this file or delete data to get
+  // past it — which is what people do when a hard stop has no documented exit.
+  //
+  // It is bounded, not a switch-off: below 90% it refuses regardless, because
+  // no roll loses a tenth of the catalog and a habit is not a decision.
   if (existsSync(CATALOG_OUT)) {
     try {
       const prevCount = JSON.parse(readFileSync(CATALOG_OUT, "utf8")).length;
       const floor = Math.floor(prevCount * 0.98);
+      const hardFloor = Math.floor(prevCount * 0.90);
       if (prevCount > 0 && out.length < floor) {
-        console.error(`\n❌  Refusing to write: ${out.length} courses vs ${prevCount} committed (floor ${floor}).`);
-        console.error(`    The catalog is likely unreachable or its markup changed — nothing was written.\n`);
-        process.exit(1);
+        if (ACCEPT_SHRINK && out.length >= hardFloor) {
+          console.warn(`\n⚠  ${out.length} courses vs ${prevCount} committed (floor ${floor}) — `
+            + `accepted because --accept-shrink was passed.`);
+          console.warn(`    Writing a catalog ${prevCount - out.length} courses smaller than the `
+            + `committed one. This is only correct if you have checked that the drop is real.\n`);
+        } else {
+          console.error(`\n❌  Refusing to write: ${out.length} courses vs ${prevCount} committed (floor ${floor}).`);
+          console.error(`    The catalog is likely unreachable or its markup changed — nothing was written.`);
+          if (ACCEPT_SHRINK) {
+            console.error(`    --accept-shrink was passed and is NOT enough: this run is below the `
+              + `hard floor of ${hardFloor} (90%), which no edition roll reaches.`);
+          } else {
+            console.error(`\n    If a catalog EDITION has rolled, this is expected — a roll retires`);
+            console.error(`    whole subjects and adds others. Check the per-subject counts in the log`);
+            console.error(`    above: two-sided churn is a roll, a uniform collapse is breakage. Once`);
+            console.error(`    you have checked, re-run with --accept-shrink.`);
+          }
+          console.error('');
+          process.exit(1);
+        }
       }
     } catch { /* ignore */ }
   }
