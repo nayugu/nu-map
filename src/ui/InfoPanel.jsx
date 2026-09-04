@@ -1009,14 +1009,16 @@ function RuleRow({ row, labels, t, showKind, orRaw, first }) {
 
           A gate used to print a phrase here instead ("Spring only"), on the
           reasoning that its fraction is by definition the whole and the
-          heading had already said so. True, and it still broke the layout: a
-          phrase right-aligned to the box and a grid right-aligned to its own
-          cells are two different right edges, so the block had two columns
-          pretending to be one and nothing under the divider lined up with
-          anything above it. A gate now reads "16 of 16" against a full bar,
-          which says the same thing in the same shape as every row beside it.
-          Uniformity is the property being bought; the redundant denominator is
-          the price, and it is cheap because a full bar is read, not parsed. */}
+          heading had already said so. That broke the layout — a phrase
+          right-aligned to the box and a grid right-aligned to its own cells
+          are two different right edges, so the block had two columns
+          pretending to be one — and the reasoning turned out to be wrong as
+          well. A `must:` gate is a fact about the SET ("if you are on none of
+          these lists you cannot register"), so a value inside it can still
+          reach only some of the sections: every ARTG 5000 section is
+          standing-gated, and Junior/Senior reaches 6 of the 9 Spring ones.
+          Under a gate heading the fraction is how many sections would take
+          YOU, and that is exactly the number to act on. */}
       <SeasonCoverage seasons={row.seasons} t={t} cell={cell} />
     </div>
   );
@@ -1041,26 +1043,34 @@ function RestrictionSection({ section, labels, t, orRaw, hint, first }) {
 
   // ── COLLAPSE THE DETAIL, NEVER THE GATES ──────────────────────────
   //
-  // The block is small for most courses and enormous for a few: median 6
-  // lines, but 454 courses run past 11 and EESH 2000 reaches 370. What is in
-  // that tail decides the design — across those 454, only 27% of the height is
-  // gates, and EESH 2000's 370 lines contain FOUR of them. The size problem is
-  // reserved-section detail, so that is what defers.
+  // The block is small for most courses and enormous for a few: median 3
+  // lines, but 268 courses run past 11 and EESH 2000 reaches 143. What is in
+  // that tail decides the design — EESH 2000's 143 lines contain FOUR gate
+  // lines, and the size problem is reserved-section detail, so that is what
+  // defers.
   //
   // A gate is never collapsed at any length. It is the rule with no way round
-  // it, 2,472 of the 2,949 restricted courses carry one, and the reader who
-  // needs it is exactly the one who would never open a fold — the student who
-  // is not in the College of Engineering. Hiding it would also make this the
-  // only "can I take this" box in the panel that hides its verdict; prereqs,
-  // coreqs, class standing and co-op prep all state theirs outright.
+  // it, 2,533 of the 2,950 restricted courses (86%) carry one, and the reader
+  // who needs it is exactly the one who would never open a fold — the student
+  // who is not in the College of Engineering. Hiding it would also make this
+  // the only "can I take this" box in the panel that hides its verdict;
+  // prereqs, coreqs, class standing and co-op prep all state theirs outright.
+  //
+  // ⚠ Gates are now 48% of the height in that tail, against 27% when this was
+  // first measured, because per-value folding revealed how many of the long
+  // blocks' rules apply to EVERY section (ACCT 1209 is the type case). So the
+  // collapse buys about half of what it used to on the worst courses — the
+  // remaining half is a gate and stays by the rule above. Worth knowing before
+  // reaching for a tighter cap: the cap is not what is holding those courses
+  // long.
   //
   // Budgeted in LINES rather than rules, because one rule can be eight lines
-  // and another one. Measured over the corpus: at this budget 204 courses
-  // (7% of the restricted ones, 2.3% of the catalog) gain a toggle, the median
-  // block does not move at all, and the worst case falls from 370 lines to 46.
-  // Caps from 4 to 12 all hold the median at 6 and the max near 45, so this is
-  // chosen to disturb the FEWEST courses for that tail control rather than to
-  // squeeze hardest.
+  // and another one. Re-measured over the corpus after the per-value fold: at
+  // this budget 129 courses (4.4% of the restricted ones, 1.4% of the catalog)
+  // gain a toggle, the median block does not move at all, and the worst case
+  // falls from 143 lines to 99. Caps from 4 to 12 all hold the median at 3 and
+  // the max at 99 — the max is now pure gate — so this is chosen to disturb
+  // the FEWEST courses rather than to squeeze hardest.
   const SOME_LINES = 8;
   const [open, setOpen] = useState(false);
   const some = section.tier === "some";
@@ -1129,26 +1139,28 @@ function RestrictionSection({ section, labels, t, orRaw, hint, first }) {
 /**
  * Banner's Restrictions pane for one course.
  *
- * ── Grouped by RESTRICTION, not by term ────────────────────────────
+ * ── Grouped by RESTRICTION and by VALUE, not by term or by section ──
  *
  * `groupRestrictions` does the inversion and the reasoning lives there. What it
  * buys visually: a course restricted identically every term reads as one line
  * instead of eleven, and a course whose restriction actually MOVES gets a
  * second line — so difference is loud rather than buried in repetition.
  *
- * Section groups are never unioned. Measured: 45 of 344 courses have a kind
- * whose sections disagree, and ARCH 5115 has three distinct program groups in
- * one term. Merging them would tell a BS-ARCH student that any of five
- * programmes may register, and never that exactly one section is open to them.
+ * A row is one VALUE (or several sharing identical coverage), never one
+ * section's whole code-set. Keying on the set is what made ACCT 1209 print
+ * eleven twenty-name lists of business majors differing by a code or two, and
+ * it hid the fact worth knowing: twelve of those majors are barred from EVERY
+ * section in every term read. `restrictionView.js`'s header carries the
+ * measurement and what the change gives up.
  *
  * ── Sorted by COVERAGE and POLARITY, because a flat list states a falsehood ──
  *
  * Five kinds in one list read as a conjunction, and for a course whose rules
  * each sit on a different subset of sections that conjunction describes a
  * student who cannot exist. `restrictionSections` carries the measurement; the
- * headings carry the reading. Nothing is hidden or merged — every kind, group
- * and value still appears exactly once, under a heading that says how to read
- * it, and `restriction-view.test.js` asserts that as a partition.
+ * headings carry the reading. Nothing is hidden — every kind and value still
+ * appears exactly once, under a heading that says how to read it, and
+ * `restriction-view.test.js` asserts that as a partition.
  *
  * ── Falling back to Banner's own words ─────────────────────────────
  *

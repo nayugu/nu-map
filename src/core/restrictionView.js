@@ -8,7 +8,7 @@
 //
 // A student has one question: *can I take this, and when?* An advisor answers by
 // RESTRICTION, not by term — "in Fall only IE majors, in Summer B only ME
-// majors". So this inverts the nesting: group by (kind, code-set), and list
+// majors". So this inverts the nesting: group by kind and by VALUE, and list
 // where each applied.
 //
 // That is clearer AND shorter, and the two are the same change. The common case
@@ -16,16 +16,50 @@
 // one, and a course whose restriction actually MOVES gets a second line, so
 // difference becomes visually loud instead of buried in repetition.
 //
-// ── TWO LOSSY FOLDS THIS DELIBERATELY DOES NOT DO ──────────────────
+// ── THE UNIT IS ONE VALUE, NOT ONE SECTION'S CODE-SET ──────────────
+//
+// This used to key on the whole set of codes a section listed, which is the
+// shape the data arrives in. It is the wrong unit, and ACCT 1209 is the proof:
+// eleven rows under one heading, each an eighteen-to-twenty-name list of
+// business majors differing from its neighbours by one or two codes, because
+// the registrar edited one section's list or a major code came into existence
+// mid-window. 196 major names printed to say one thing.
+//
+// The reader is ONE value. A student is one major, one class standing, one
+// campus, and their question is "how many sections may I register for?" — never
+// "which majors are listed together". So the fold is per code: how many sections
+// name this code, per season, out of how many. Codes whose coverage is
+// identical then share a row, which is a display grouping that states only what
+// is true of all of them.
+//
+// Measured over the 2,950 restricted courses: 25,184 rendered lines → 16,273, a
+// 35.4% cut, and 23,318 printed values → 13,888. 393 courses shrink (8,956
+// lines); 28 grow, by 42 lines in total, worst case three (measured before the
+// `must:` tier rule below, which moves three more lines).
+// It is not merely shorter — it is more informative, because
+// per-code coverage is what the old grouping was destroying: ACCT 1209's twelve
+// most-affected majors turn out to be excluded from EVERY section in every term
+// read, which the eleven overlapping sets could not show.
+//
+// ── WHAT IS AND IS NOT LOST ────────────────────────────────────────
 //
 // 1. It does not keep only the newest term. MEIE 4701 is Industrial-only in
 //    Fall and Mechanical-only in Summer B; showing one hides the other, and the
 //    hidden one is exactly what an IE student needs.
-// 2. It does not UNION the section groups. Measured: 98 course-term-kinds have
-//    sections that disagree. ARCH 5115 in 202510 has five sections and three
-//    program groups, and unioning them reads as "any of these programs, on some
-//    section" — never telling a BS-ARCH student that exactly ONE section is
-//    open to them. Groups stay separate and carry their own counts.
+// 2. `not:` decomposes LOSSLESSLY. A section's exclusion list is a conjunction
+//    — it bars A and B and C independently — so per-code counts are exact.
+// 3. `info:` likewise: each approval is a separate thing to obtain.
+// 4. `must:` is a DISJUNCTION at the section level ("one of the following"), so
+//    per-code decomposition keeps the number that matters to a reader (sections
+//    that would admit them) and drops the co-occurrence — which codes were
+//    listed together on one section. That is the one fact this loses, and it is
+//    unactionable: a student is in exactly one of the codes, and knowing which
+//    other majors shared the line with them changes nothing they can do.
+//    The objection this replaces was ARCH 5115 — three program groups in one
+//    term, where unioning them would "never tell a BS-ARCH student that exactly
+//    ONE section is open to them". Per-code says `BS-ARCH · 1 of 5` outright,
+//    so it answers that objection rather than dodging it.
+//    What co-occurrence DOES still decide is the tier — see `restrictionSections`.
 //
 // ── COVERAGE IS PER SEASON, AND IS A FRACTION ──────────────────────
 //
@@ -56,9 +90,6 @@ const kindRank = (key) => {
   const i = KIND_ORDER.indexOf(key);
   return i === -1 ? KIND_ORDER.length : i;
 };
-
-/** Stable identity for a set of codes, order-independent. */
-const setId = (codes) => [...codes].sort().join("|");
 
 const SEASON_SORT = ["fall", "spring", "sumA", "sumB"];
 
@@ -122,7 +153,25 @@ export function seasonCoverage(where) {
 }
 
 /**
- * Invert `terms → kinds → groups` into `kinds → groups → where`.
+ * A group's identity is its COVERAGE, not its codes: which seasons, how many
+ * sections of how many, and in which terms. Two codes share a row only when all
+ * three agree, so the row's single fraction is true of every code on it.
+ *
+ * The term codes are part of the key on purpose. They are shown (as the tooltip
+ * naming a season's years), so a row whose codes were observed in different
+ * years would print one set of years for all of them.
+ */
+const coverageId = (seasons) => seasons
+  .map(s => `${s.season} ${s.sections}/${s.of} ${s.termCodes.join(",")}`)
+  .join("");
+
+/**
+ * Invert `terms → kinds → sections' code-sets` into `kinds → values → where`.
+ *
+ * `kinds[].seasons` is the KIND's own coverage — how many sections carry this
+ * restriction at all, as against how many the term has. That is a different
+ * number from any one value's and it is what decides a `must:` kind's tier;
+ * see `restrictionSections`.
  *
  * @param {Array<{term: string, season: string|null, sections: number|null,
  *                kinds: Record<string, Array<[string[], number]>>}>} terms
@@ -132,6 +181,7 @@ export function seasonCoverage(where) {
  *   kinds: Array<{
  *     key: string, kind: string, polarity: string,
  *     variesBySection: boolean,
+ *     seasons: Array<object>,
  *     groups: Array<{
  *       codes: string[],
  *       everyTerm: boolean,
@@ -144,13 +194,8 @@ export function groupRestrictions(terms) {
   const list = Array.isArray(terms) ? terms.filter(t => t && t.kinds) : [];
   if (!list.length) return { termCount: 0, kinds: [] };
 
-  // key → setId → { codes, where[] }
+  // key → { codeWhere: code → where[], kindWhere: where[], terms: Set, varies }
   const byKind = new Map();
-  // A kind whose sections disagree in ANY single term is flagged, because the
-  // caller must then show counts rather than a bare list.
-  const varies = new Set();
-  // Terms in which this kind appeared at all — the denominator for `everyTerm`.
-  const kindTerms = new Map();
 
   for (const t of list) {
     for (const [key, groups] of Object.entries(t.kinds ?? {})) {
@@ -169,52 +214,94 @@ export function groupRestrictions(terms) {
         valid.push([codes, n]);
       }
       if (!valid.length) continue;
-      if (valid.length > 1) varies.add(key);
 
-      if (!kindTerms.has(key)) kindTerms.set(key, new Set());
-      kindTerms.get(key).add(t.term);
+      if (!byKind.has(key)) {
+        byKind.set(key, { codeWhere: new Map(), kindWhere: [],
+                          terms: new Set(), varies: false, overflow: false });
+      }
+      const slot = byKind.get(key);
+      // A kind whose sections disagree in ANY single term is flagged, because
+      // the caller must then show counts rather than a bare list.
+      if (valid.length > 1) slot.varies = true;
+      slot.terms.add(t.term);
 
-      if (!byKind.has(key)) byKind.set(key, new Map());
-      const bySet = byKind.get(key);
+      const of = Number.isFinite(t.sections) ? t.sections : null;
+      // A count above the term's section total would draw a bar past full, so
+      // it is clamped — same reason `seasonCoverage` reports a fraction and not
+      // a rate.
+      const cap = (n) => (of === null ? n : Math.min(n, of));
+
+      // The kind's own coverage is a SUM over its groups, which is exact only
+      // because the groups partition the sections carrying the kind (one
+      // code-set per section per kind). Measured on the live file: 0 of 11,775
+      // observations exceed the term's section count, and 9,107 hit it exactly.
+      // If one ever did, the partition is broken and the sum is no longer a
+      // measurement — so the kind's coverage is withheld rather than clamped,
+      // and `isGateRow` degrades to the per-value test. Clamping instead would
+      // manufacture a gate, i.e. tell a student they cannot take the course.
+      const carried = valid.reduce((s, [, n]) => s + n, 0);
+      if (of !== null && carried > of) slot.overflow = true;
+
+      // ── Per VALUE: how many of this term's sections name it ──────
+      // Summed across the groups containing it, because the groups partition
+      // the sections carrying this kind (a section has one code-set per kind).
+      const tally = new Map();
       for (const [codes, n] of valid) {
-        const id = setId(codes);
-        if (!bySet.has(id)) bySet.set(id, { codes: [...codes], where: [] });
-        bySet.get(id).where.push({
-          term: t.term,
-          season: t.season ?? null,
-          sections: n,
-          of: Number.isFinite(t.sections) ? t.sections : null,
+        for (const c of codes) tally.set(c, (tally.get(c) ?? 0) + n);
+      }
+      for (const [c, n] of tally) {
+        if (!slot.codeWhere.has(c)) slot.codeWhere.set(c, []);
+        slot.codeWhere.get(c).push({
+          term: t.term, season: t.season ?? null, sections: cap(n), of,
         });
       }
-      // The "some sections are open" fact — measured at 207 of 842
-      // kind-observations (24.6%) — needs no separate tally: `seasonCoverage`
-      // reports `sections` against `of` per season, so `everySection: false`
-      // already says it. ACCT 1201 restricting majors on 1 of its 2 sections
-      // comes out as "1 of 2", which is exactly the distinction between "you
-      // cannot take this" and "one section is closed to you".
+
+      // ── Per KIND: how many sections carry this restriction at all ──
+      slot.kindWhere.push({
+        term: t.term, season: t.season ?? null, sections: cap(carried), of,
+      });
     }
   }
 
-  const kinds = [...byKind.entries()].map(([key, bySet]) => {
-    const seen = kindTerms.get(key)?.size ?? 0;
-    const groups = [...bySet.values()]
+  const kinds = [...byKind.entries()].map(([key, slot]) => {
+    const seen = slot.terms.size;
+
+    // Codes sharing a coverage signature share a row.
+    const bySig = new Map();
+    for (const [code, where] of slot.codeWhere) {
+      const seasons = seasonCoverage(where);
+      const id = coverageId(seasons);
+      if (!bySig.has(id)) bySig.set(id, { codes: [], where, seasons });
+      bySig.get(id).codes.push(code);
+    }
+
+    const groups = [...bySig.values()]
       .map(g => ({
-        codes: g.codes,
-        // Identical in every term this KIND was seen in — not every term of the
+        // Alphabetical, so a merged row does not depend on which code the
+        // registrar happened to list first in whichever term came first.
+        codes: [...g.codes].sort(),
+        // Present in every term this KIND was seen in — not every term of the
         // course, because a term where the kind is absent is a different fact
         // from one where it differs.
         everyTerm: seen > 1 && new Set(g.where.map(w => w.term)).size === seen,
-        // Newest first, matching how the terms themselves are ordered.
-        where: g.where.sort((a, b) => String(b.term).localeCompare(String(a.term))),
+        // Newest first, matching how the terms themselves are ordered. One
+        // representative code's observations, which is everything anything
+        // reads off it: the signature makes the row's codes share their terms
+        // and their per-season totals, so `everyTerm` and the seasons are the
+        // same for all of them. It does NOT make the per-TERM split identical
+        // (2+1 and 1+2 pool alike), so do not start rendering `where` per term
+        // without giving the signature that detail too.
+        where: [...g.where].sort((a, b) => String(b.term).localeCompare(String(a.term))),
         // Coverage aggregated PER SEASON, pooled across the years of that
         // season. See the header: a student registers for one semester, seasons
         // genuinely differ, and one term is too small a denominator to read a
         // share off — three Falls is not.
-        seasons: seasonCoverage(g.where),
-        // Total sections carrying this group, across every term it appeared in.
-        // This is what "widest" means — the group most students can register
-        // for. Sorting by the number of TERMS instead put ARCH 5115's
-        // one-section group ahead of its two-section one.
+        seasons: g.seasons,
+        // Total sections this row touches, across every term — for `must:` the
+        // ones its values may register for, for `not:` the ones they are shut
+        // out of. Either way it is the widest row, which is the one most
+        // students are affected by, so it leads. Sorting by the number of TERMS
+        // instead put ARCH 5115's one-section group ahead of its two-section one.
         _weight: g.where.reduce((s, w) => s + w.sections, 0),
       }))
       .sort((a, b) => b._weight - a._weight
@@ -226,7 +313,8 @@ export function groupRestrictions(terms) {
       key,
       polarity: key.slice(0, key.indexOf(":")),
       kind:     key.slice(key.indexOf(":") + 1),
-      variesBySection: varies.has(key),
+      variesBySection: slot.varies,
+      seasons: slot.overflow ? [] : seasonCoverage(slot.kindWhere),
       groups,
     };
   }).sort((a, b) => kindRank(a.key) - kindRank(b.key) || a.key.localeCompare(b.key));
@@ -242,6 +330,40 @@ export function groupRestrictions(terms) {
  */
 export const isGate = (g) =>
   (g?.seasons?.length ?? 0) > 0 && g.seasons.every(s => s.everySection);
+
+/**
+ * Which tier one row belongs to, and the answer depends on the POLARITY.
+ *
+ * ── `not:` and `info:` are decided per VALUE ───────────────────────
+ *
+ * An exclusion list is a conjunction, so "excluded from every section, every
+ * season" is a fact about that one value and about nothing else. A code barred
+ * everywhere is a gate; a code barred on four of five Fall sections is a
+ * reservation, and putting them on the same side would hide the difference that
+ * matters most.
+ *
+ * ── `must:` is decided per KIND ────────────────────────────────────
+ *
+ * "Must be enrolled in one of the following" is a disjunction over the whole
+ * set, so the gate is the SET's property: if every section carries the
+ * restriction, then anyone outside the union cannot register at all, and that
+ * is true no matter which of the listed values a reader happens to be.
+ *
+ * Deciding it per value instead was built first and split a disjunction across
+ * two headings, which reads as a contradiction: ARTG 5000's `must:Majors` put
+ * Art Education under "Only open to" (it appears on all 9 Fall sections and in
+ * no Spring at all) and the other eighteen majors under "Some sections are only
+ * open to". A student read "only open to Art Education" and that is false —
+ * they are one of nineteen. The row's own fraction still says how many sections
+ * would take THEM, which is the number they act on.
+ *
+ * A hand-built kind with no `seasons` falls back to the per-value test, so a
+ * caller that does not compute kind coverage still gets a sane tier.
+ */
+const isGateRow = (kind, group) =>
+  (kind?.polarity === "must" && (kind?.seasons?.length ?? 0) > 0)
+    ? isGate(kind)
+    : isGate(group);
 
 /**
  * The order the six sections are read in. A gate before a reservation, because
@@ -274,16 +396,20 @@ const SECTION_ORDER = Object.freeze([
  * nothing to carry but its value.
  *
  * The measurement is what makes this a compression rather than a rearrangement.
- * Over the 2,949 courses with restrictions:
- *   · 2,180 (74%) need exactly ONE of the six headings; 602 need two;
- *   · 2,816 of 3,916 headings (72%) hold exactly one KIND, so the kind noun is
+ * Over the 2,950 courses with restrictions:
+ *   · 2,210 (75%) need exactly ONE of the six headings; 584 need two, and 4 is
+ *     the most any course reaches five of;
+ *   · 2,775 of 3,882 headings (71%) hold exactly one KIND, so the kind noun is
  *     redundant there and is dropped — hence `showKind`, the one thing here
  *     that is conditional;
- *   · 1,930 courses (65%) come out at three lines or fewer, against a floor of
- *     five for the shape this replaces.
+ *   · 1,734 courses (59%) come out at three lines or fewer, against a floor of
+ *     five for the shape this replaces;
+ *   · 2,533 (86%) carry at least one gate, which is why the gate tier is never
+ *     the thing a long block defers.
  *
- * Nothing is merged or hidden: every kind, group and value still appears
- * exactly once, and `restriction-view.test.js` asserts that as a partition.
+ * Nothing is hidden: every kind and value still appears exactly once, and
+ * `restriction-view.test.js` asserts that as a partition. Values are MERGED
+ * into a row only when their coverage is identical — see `coverageId`.
  *
  * @param {Array} kinds  `groupRestrictions(...).kinds`
  * @returns {Array<{tier: string, polarity: string, showKind: boolean, rows: Array<{
@@ -302,7 +428,7 @@ export function restrictionSections(kinds) {
         // empty row under it: an unnamed restriction implies one exists and we
         // will not say what it is, which is worse than not mentioning it.
         if (!g || !Array.isArray(g.codes) || !g.codes.length) continue;
-        if (isGate(g) !== want) continue;
+        if (isGateRow(k, g) !== want) continue;
         rows.push({
           key: k.key, kind: k.kind, codes: g.codes, seasons: g.seasons ?? [],
         });

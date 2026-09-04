@@ -101,10 +101,37 @@ function restrictionLines(text) {
  * monthly and today's worst case is not next month's. What the test needs is
  * "a course long enough to collapse, that also has a gate", which is a query.
  */
+/**
+ * The English of the six headings, keyed as `restrictionSections` tiers them.
+ *
+ * Duplicated from `en.js` on purpose — a test that reads the locale file
+ * passes when both sides are wrong together, and the point here is that the
+ * string a student sees is the one we meant.
+ */
+const HEAD = {
+  "gate|must": "Open only to",
+  "gate|not":  "Not open to",
+  "gate|info": "Also required",
+  "some|must": "Some sections open only to",
+  "some|not":  "Some sections closed to",
+  "some|info": "Some sections also require",
+};
+
+/**
+ * The headings one course's data produces, read at RUN TIME.
+ *
+ * Naming the heading was a test that expired: MEIE 4701's `must:Majors` moved
+ * from the reserved tier to the gate tier when the fold started keying on the
+ * VALUE rather than on a section's whole code-set — every one of its sections
+ * really is major-restricted, so "Open only to" is what it now says, and the
+ * old expectation of "Some sections open only to" was asserting the bug.
+ */
+function headingsFor(id) {
+  return restrictionSections(groupRestrictions(RESTR.courses?.[id]).kinds)
+    .map(s => HEAD[`${s.tier}|${s.polarity}`]);
+}
+
 function longestRestricted() {
-  const HEAD = {
-    "gate|must": "Open only to", "gate|not": "Not open to", "gate|info": "Also required",
-  };
   let best = null;
   for (const [id, terms] of Object.entries(RESTR.courses ?? {})) {
     const sections = restrictionSections(groupRestrictions(
@@ -269,9 +296,12 @@ describe("restrictions · the course card", () => {
     const { text, titles } = await panelFor(SUBJECT, /MEIE\s*4701/);
 
     assert.match(text, /Restrictions/, "the block did not render");
-    // A heading, translated. It is the polarity and the coverage stated once
-    // for every row beneath it, so if it is missing no row means anything.
-    assert.match(text, /Some sections open only to/, "the heading did not render");
+    // Every heading this course's data produces, translated. A heading is the
+    // polarity and the coverage stated once for every row beneath it, so if
+    // one is missing no row under it means anything.
+    const heads = headingsFor(SUBJECT);
+    assert.ok(heads.length, `${SUBJECT} produces no headings at all`);
+    for (const h of heads) assert.match(text, new RegExp(h), `heading "${h}" did not render`);
     // A value, glossed from the shipped label map rather than shown as a code.
     assert.match(text, /Mechanical Engineering/);
     assert.doesNotMatch(text, /\bMECE\b/, "a raw Banner code leaked instead of its label");

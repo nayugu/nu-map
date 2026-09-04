@@ -172,10 +172,12 @@ test("a restriction that MOVES between seasons keeps both readings", () => {
   }
 });
 
-test("sections that DISAGREE within one term stay separate groups", () => {
-  // ARCH 5115, 202510, five sections, three program groups. Unioned this reads
-  // "any of these programs on some section" and never tells a BS-ARCH student
-  // that exactly one section is open to them.
+test("sections that DISAGREE within one term keep their per-VALUE counts", () => {
+  // ARCH 5115, 202510, five sections, three program groups. The old fold kept
+  // the three code-SETS apart, on the argument that unioning them would never
+  // tell a BS-ARCH student that exactly one section is open to them. Per value
+  // says so outright — and the two values on 2 sections still do not merge
+  // with the three on 1, because coverage is the row's identity.
   const view = groupRestrictions([
     { term: "202510", season: "fall", sections: 5,
       kinds: { "must:Programs": [
@@ -185,14 +187,37 @@ test("sections that DISAGREE within one term stay separate groups", () => {
       ] } },
   ]);
   const progs = view.kinds.find(k => k.key === "must:Programs");
-  assert.equal(progs.groups.length, 3, "the three groups must not merge");
   assert.equal(progs.variesBySection, true, "the caller must know to show counts");
-  // The 2-section group leads; the reader sees the widest option first.
+  // Two rows: the 2-section pair, then everything on 1 section.
+  assert.equal(progs.groups.length, 2);
+  // The wider row leads; the reader sees the widest option first.
   assert.deepEqual(progs.groups[0].codes, ["MARCH-ARCH3", "MARCH-ARCH3A"]);
-  // And every group carries its own coverage, so "1 of 5" is printable.
-  for (const g of progs.groups) {
-    assert.equal(g.where[0].of, 5);
-  }
+  assert.deepEqual(progs.groups[1].codes, ["BS-ARCH", "BS-ARCS", "MARCH-ARCH2"]);
+  // Every value carries the count it can act on, so "1 of 5" is printable.
+  const cov = (code) => {
+    const g = progs.groups.find(x => x.codes.includes(code));
+    return `${g.seasons[0].sections} of ${g.seasons[0].of}`;
+  };
+  assert.equal(cov("BS-ARCH"), "1 of 5", "the fact the old fold was defending");
+  assert.equal(cov("MARCH-ARCH3"), "2 of 5");
+  // The kind covers 4 of the 5 sections, so one section is unrestricted — which
+  // is what keeps every one of these rows out of the gate tier.
+  assert.deepEqual(progs.seasons.map(s => `${s.sections}/${s.of}`), ["4/5"]);
+});
+
+test("a value in TWO of a term's groups is counted once per SECTION", () => {
+  // GR appears on the 2-section group and the 1-section group, so three of the
+  // five sections would admit a GR student. Counting the groups instead of
+  // their sections would say "2 of 5", and taking the largest "2 of 5" too.
+  const view = groupRestrictions([
+    { term: "202510", season: "fall", sections: 5,
+      kinds: { "must:Classes": [[["GR", "SR"], 2], [["GR"], 1]] } },
+  ]);
+  const cls = view.kinds[0];
+  const gr = cls.groups.find(g => g.codes.includes("GR"));
+  assert.equal(gr.seasons[0].sections, 3, "2 sections + 1 section");
+  assert.deepEqual(gr.codes, ["GR"], "SR is on 2 sections, so it is its own row");
+  assert.equal(cls.groups.find(g => g.codes.includes("SR")).seasons[0].sections, 2);
 });
 
 // ── Collapsing the boring case ──────────────────────────────────────
@@ -210,6 +235,53 @@ test("an unchanging restriction collapses to ONE group marked everyTerm", () => 
   assert.equal(cls.groups[0].everyTerm, true);
   assert.equal(cls.groups[0].where.length, 4, "the terms are still all listed underneath");
   assert.equal(cls.variesBySection, false);
+});
+
+test("near-identical exclusion lists collapse to what they AGREE on", () => {
+  // The ACCT 1209 defect, in miniature. Five sections' exclusion lists, four of
+  // them differing from the next by one code — a major created mid-window, or a
+  // list the registrar edited on one section. Keyed on the code-SET that was
+  // five rows of near-identical names; keyed on coverage it is the two facts
+  // present: three majors barred everywhere, two barred on some sections.
+  const shared = ["BACS", "BAPH", "BUDE"];
+  const sections = sectionsOf([
+    { term: "202610", season: "fall", sections: 5, kinds: { "not:Majors": [
+      [[...shared, "BSAD", "INBU"], 1],
+      [[...shared, "BSAD"], 1],
+      [[...shared, "INBU"], 1],
+      [[...shared], 2],
+    ] } },
+  ]);
+  assert.deepEqual(printed(sections), [
+    // Barred on all 5 sections — and that is the headline the old fold buried:
+    // ACCT 1209's catalog prose says "does not count as credit for business
+    // majors", and this is the machine-readable form of it.
+    "gate|not|not:Majors|BACS,BAPH,BUDE",
+    // BSAD and INBU are barred on 2 sections each — different pairs, but the
+    // same COUNT, so they share a row. The row claims only what is true of
+    // both: each is closed out of two of the five. It does not claim they are
+    // the same two, and nothing renders that.
+    "some|not|not:Majors|BSAD,INBU",
+  ]);
+  const rows = sections.flatMap(s => s.rows);
+  assert.deepEqual(rows.map(r => r.seasons[0].sections), [5, 2]);
+  // 2 rows over 5 printed values, against 4 rows over 14 under the old fold.
+  assert.equal(rows.reduce((n, r) => n + r.codes.length, 0), 5);
+});
+
+test("a value the lists DISAGREE on is never folded into the majority", () => {
+  // The hostile version of the case above: if BSAD's row were absorbed into the
+  // three-major gate for looking similar, the panel would tell a BSAD student
+  // there is no section for them when two of five are open.
+  const sections = sectionsOf([
+    { term: "202610", season: "fall", sections: 5, kinds: { "not:Majors": [
+      [["BACS", "BSAD"], 2], [["BACS"], 3],
+    ] } },
+  ]);
+  const bsad = sections.flatMap(s => s.rows).find(r => r.codes.includes("BSAD"));
+  assert.equal(bsad.codes.length, 1, "BSAD must not share a row with BACS");
+  assert.equal(bsad.seasons[0].sections, 2);
+  assert.deepEqual(sections.map(s => s.tier), ["gate", "some"]);
 });
 
 test("everyTerm counts the terms the KIND appeared in, not the course's terms", () => {
@@ -444,18 +516,67 @@ test("a gate is every section in EVERY season, not just the newest one", () => {
   assert.deepEqual(sections[0].rows[0].seasons.map(s => s.everySection), [false, true]);
 });
 
-test("a kind whose groups DISAGREE is stated under BOTH headings, with only its own groups", () => {
-  // 84 of 5,382 kinds. Filing the whole kind by majority would put "Not open
-  // to" rows under "Open only to" and state the opposite of the truth.
+test("a `must:` DISJUNCTION is never split across the two tiers", () => {
+  // Every one of the 5 sections is campus-gated, so a student on neither campus
+  // cannot register at all: both rows are gates, however few sections one of
+  // them reaches. Tiering per value put BOS under "Only open to" and OAK under
+  // "Some sections are only open to", which reads as "only open to Boston" —
+  // false, and the direction that refuses a legal registration.
   const sections = sectionsOf([
-    { term: "202510", season: "fall", sections: 4, kinds: {
+    { term: "202510", season: "fall", sections: 5, kinds: {
       "must:Campuses": [[["BOS"], 4], [["OAK"], 1]],
     } },
   ]);
   assert.deepEqual(printed(sections), [
     "gate|must|must:Campuses|BOS",
+    "gate|must|must:Campuses|OAK",
+  ]);
+  // The count each value can act on survives the shared tier.
+  assert.deepEqual(sections[0].rows.map(r => r.seasons[0].sections), [4, 1]);
+});
+
+test("one UNRESTRICTED section drops a whole `must:` kind to the reserved tier", () => {
+  // Same shape, one more section than the kind covers. Now there is a way
+  // round the rule, so nothing here may claim to close the course.
+  const sections = sectionsOf([
+    { term: "202510", season: "fall", sections: 6, kinds: {
+      "must:Campuses": [[["BOS"], 4], [["OAK"], 1]],
+    } },
+  ]);
+  assert.deepEqual(printed(sections), [
+    "some|must|must:Campuses|BOS",
     "some|must|must:Campuses|OAK",
   ]);
+});
+
+test("a `not:` kind IS split per value, because exclusions are independent", () => {
+  // The mirror of the two above, and the reason the tier test is not one rule:
+  // an exclusion list bars each value on its own, so "BOS is barred from every
+  // section" is true of BOS and says nothing about OAK.
+  const sections = sectionsOf([
+    { term: "202510", season: "fall", sections: 4, kinds: {
+      "not:Campuses": [[["BOS", "OAK"], 3], [["BOS"], 1]],
+    } },
+  ]);
+  assert.deepEqual(printed(sections), [
+    "gate|not|not:Campuses|BOS",
+    "some|not|not:Campuses|OAK",
+  ]);
+});
+
+test("a `must:` kind whose counts OVERFLOW the term withholds its tier claim", () => {
+  // The kind's coverage is a sum, exact only because the groups partition the
+  // sections. 0 of 11,775 live observations break that; if one did, the sum is
+  // not a measurement, and inventing a gate from it tells a student they
+  // cannot take a course they can. Falls back to the per-value test.
+  const view = groupRestrictions([
+    { term: "202510", season: "fall", sections: 3, kinds: {
+      "must:Campuses": [[["BOS"], 3], [["OAK"], 2]],
+    } },
+  ]);
+  assert.deepEqual(view.kinds[0].seasons, [], "no coverage claim at all");
+  // And the values still print their own counts, clamped to the term.
+  assert.deepEqual(view.kinds[0].groups.map(g => g.seasons[0].sections), [3, 2]);
 });
 
 test("an UNDATED group is never called a gate", () => {
