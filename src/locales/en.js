@@ -874,7 +874,7 @@ export const strings = {
   // plan that already names it still resolves. The sentence above would be a
   // plain falsehood here, so this states the real reason and names the catalog
   // EDITION that last published it — the registrar's fact, not our scrape date.
-  "course.tooltip.retiredUnion":  "Northeastern last published this course in the {edition} catalog. No current program requires it; it's kept here because your plan does — ask your advisor about a substitution.",
+  "course.tooltip.retiredUnion":  "Northeastern last published this course in the {edition} catalog. Ask your advisor about a substitution.",
   "course.star.save":             "Save course",
   "course.star.remove":           "Remove from saved",
   "course.tooltip.variable-sh":   "Variable credit: {min}–{max} {unit} (click to set)",

@@ -629,7 +629,7 @@ export const strings = {
   "course.badge.coreq.alone":     "! coréreq",
   "course.badge.retired":         "⚠ retiré",
   "course.tooltip.retired":       "Le catalogue de Northeastern ne propose plus ce cours. Demandez à votre conseiller une équivalence.",
-  "course.tooltip.retiredUnion":  "Northeastern a publié ce cours pour la dernière fois dans le catalogue {edition}. Aucun programme actuel ne l'exige ; il est conservé ici parce que votre plan le contient — demandez à votre conseiller une équivalence.",
+  "course.tooltip.retiredUnion":  "Northeastern a publié ce cours pour la dernière fois dans le catalogue {edition}. Demandez à votre conseiller une équivalence.",
   "course.badge.coreq.sep":       "⚡ coréreq",
   "course.tooltip.prereq.order":  "Le prérequis est dans le même semestre ou un semestre ultérieur",
   "course.tooltip.prereq.missing":"Prérequis pas encore placé dans le plan",

@@ -630,7 +630,7 @@ export const strings = {
   "course.badge.coreq.alone":     "! 同修",
   "course.badge.retired":         "⚠ 廃止",
   "course.tooltip.retired":       "この科目はノースイースタンのカタログに掲載されなくなりました。代替科目についてはアドバイザーにご相談ください。",
-  "course.tooltip.retiredUnion":  "ノースイースタンがこの科目を最後に掲載したのは {edition} 年度のカタログです。現行のプログラムで必要とするものはありませんが、あなたのプランに含まれているため保持しています。代替科目についてはアドバイザーにご相談ください。",
+  "course.tooltip.retiredUnion":  "ノースイースタンがこの科目を最後に掲載したのは {edition} 年度のカタログです。代替科目についてはアドバイザーにご相談ください。",
   "course.badge.coreq.sep":       "⚡ 同修",
   "course.tooltip.prereq.order":  "先修科目が同じまたは後の学期にあります",
   "course.tooltip.prereq.missing":"先修科目がプランに未配置です",

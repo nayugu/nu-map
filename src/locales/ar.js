@@ -628,7 +628,7 @@ export const strings = {
   "course.badge.coreq.alone":     "! متزامن",
   "course.badge.retired":         "⚠ ملغى",
   "course.tooltip.retired":       "لم يعد هذا المقرر مدرجًا في دليل مقررات نورث إيسترن. راجع مرشدك الأكاديمي بشأن مقرر بديل.",
-  "course.tooltip.retiredUnion":  "آخر مرة نشرت فيها نورث إيسترن هذا المقرر كانت في دليل {edition}. لا يتطلبه أي برنامج حالي؛ تم الإبقاء عليه هنا لأنه ضمن خطتك — راجع مرشدك الأكاديمي بشأن مقرر بديل.",
+  "course.tooltip.retiredUnion":  "آخر مرة نشرت فيها نورث إيسترن هذا المقرر كانت في دليل {edition}. راجع مرشدك الأكاديمي بشأن مقرر بديل.",
   "course.badge.coreq.sep":       "⚡ متزامن",
   "course.tooltip.prereq.order":  "المتطلب السابق في نفس الفصل أو لاحقاً",
   "course.tooltip.prereq.missing":"المتطلب السابق لم يُضَف إلى الخطة بعد",

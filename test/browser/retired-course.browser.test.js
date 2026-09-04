@@ -318,8 +318,15 @@ describe("a real retired course from the shipped union", () => {
     // rather than the body text, since a tooltip is not rendered text and
     // `innerText` cannot see it.
     const tip = await page0Title(browser, port, id);
-    assert.ok(/No current program requires it/i.test(tip),
-      `${id} shows the RETENTION tooltip, which claims a program requires it: "${tip}"`);
+    // The union string's "No current program requires it; it's kept here
+    // because your plan does" was cut too — same objection as the retention
+    // clause before it. It explained OUR storage decision to a student who
+    // did not ask, and a student holding a retired course needs the registrar
+    // fact, not our bookkeeping. So the ONLY thing separating the two strings
+    // is now the edition, which is checked immediately below; this assertion
+    // just pins that we are not showing the retention wording.
+    assert.ok(/last published/i.test(tip),
+      `${id} shows the RETENTION tooltip, which cannot name an edition: "${tip}"`);
     assert.ok(editionLabel,
       `${id} is in the union with no lifespan.lastEdition — the union tooltip `
       + "cannot name an edition and this assertion would pass vacuously");
@@ -486,7 +493,7 @@ describe("an availability alarm stops once the semester is over", () => {
     assert.match(c.panelText, /⚠\s*retired/i,
       `the info panel for ${id} does not say it is retired. That is the fact a student `
       + "opens the panel to find, and until now it was only ever in a tooltip.");
-    assert.match(c.panelText, /No current program requires it/i,
+    assert.match(c.panelText, /last published/i,
       `the panel for ${id} does not carry the UNION sentence — it is showing the `
       + "retention wording, which says only that the catalog no longer lists the course "
       + "and cannot name the edition that last published it.");
