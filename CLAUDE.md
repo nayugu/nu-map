@@ -254,6 +254,63 @@ Facts that follow from this:
   (41%) already carry no term-history and no sections**, and every one is
   already resolvable and schedulable. That measurement is why retention was
   safe to ship without touching the planner.
+- **Retired courses are backfilled from FROZEN EDITION SNAPSHOTS, and the
+  retired union is derived, never accumulated.** `scrape-catalog.js --edition
+  2024-2025` reads `catalog.northeastern.edu/archive/` into
+  `data/northeastern/catalog/editions/<year>/`; `derive-retired-union.js`
+  computes (∪ frozen editions) − (current catalog). Held: **2023, 2024, 2025,
+  2026, contiguous** — which is what makes `lifespan.lastEdition` exact rather
+  than a floor. `firstEdition` IS a floor (a 2015 course reads as 2023), which
+  is why nothing in `src/` renders it. Backfilling 2023–2025 took the union
+  from **368 to 1,550** courses. Rules:
+  1. **`--edition` short-circuits before every other mode, and may reach one
+     directory.** It is not a flag threaded through the live path, because
+     nearly everything the live run does after parsing is wrong for an archive
+     edition and *silently* so: the nuPath reconcile against the LIVE catalog,
+     `applyEditionRetention`, the 2% shrink floor, data-meta, change-log,
+     scrape-state, subjects.json. It refuses to run beside `--merge`,
+     `--rotate` or `--subjects`, and `catalog-edition-scrape.test.js`
+     fingerprints all ten live artifacts to prove nothing moves.
+  2. **Editions ≤2022 are REFUSED, not skipped.** They are `descriptive`
+     fidelity and the failure is not partial data — the title regex wants a
+     parenthesised credit form those pages do not use, so a run would write a
+     snapshot asserting the catalog had **zero** courses. Absent vs empty
+     again.
+  3. **"Skip courses already in the database" saves nothing**, and it is the
+     natural first idea, so know why: the catalog is a **BULK FEED** (one
+     request returns a whole subject, ~35 courses), not a per-entity lookup, so
+     a course is already paid for by the time its code is visible. Measured:
+     222/227/230 subject pages, **679 requests, ~8 minutes** for three
+     editions. What pays is caching the raw HTML — the three `--write` passes
+     made **zero** network requests.
+  4. **Use `politeFetch`, not the script's bare `fetchPage`.** 12 of 679 pages
+     needed a retry (1.8%, right at the fetch-failure rail's 2% tolerance), and
+     an archive edition is frozen on first write, so a lost page is permanent.
+  5. **The catalog does not monotonically grow** — 7,449 / 7,654 / 7,561 /
+     7,966 for 2023–2026. Any rail baselined on "editions get bigger" is wrong;
+     the floor compares against the NEAREST edition held.
+  6. **Storage was measured, not assumed**: the 4.9 MB snapshot is **182 KB
+     packed in git** and editions delta against each other, so snapshots stay
+     FULL and self-contained. A delta chain would save a few hundred KB and
+     cost the property that lets provenance be checked in isolation.
+  7. ⚠ **Edition 2027 is live and NOT frozen.** `derive-retired-union` warns
+     about this by counting courses in no snapshot. The archive already skipped
+     2025-2026 (PDF only), so capture the live edition with `freeze-edition.js`
+     BEFORE the next roll — the archive is not a safety net.
+- **A retired course is demoted in search, never removed — and the backfill is
+  what decides that.** The union reached **2,257 of 10,071 runtime courses
+  (22.4%)**, and **389 retired courses share a subject and title with a live
+  one** because NEU RENUMBERS rather than retires (ALY 6015 → ALY 6125
+  "Intermediate Analytics"). The bank scores a title query identically for both
+  and broke the tie alphabetically by code, so the old — lower — number won:
+  the retired twin ranked first in **292 of 389**. `BankPanel` now sinks
+  retired below live at equal score, 292 → **0**. It is deliberately a
+  tie-break: `docs/catalog-editions-design.md` argued a union course should be
+  filtered OUT of search, which was right for a 368-course union from one roll
+  and is **wrong** for a three-year backfill, whose content is courses students
+  actually took — a student recording CS 2500 from 2023 has to be able to find
+  it. An exact code query still returns it first, because asking by code is
+  asking for it.
 - Data fixes must live in the scrape scripts (both undergrad and grad paths),
   never in one-off migrations — the next scheduled scrape overwrites anything else.
 - The legacy `external/` git submodules (graduatenu, nu-courses, searchneu) were

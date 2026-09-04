@@ -61,6 +61,7 @@ const RETAIN  = "scripts/lib/course-retention.js";
 const SCRAPER = "scripts/scrape-catalog.js";
 const RETUNION = "scripts/derive-retired-union.js";
 const PREREQ   = "scripts/lib/prereq-parse.js";
+const BANK     = "src/ui/BankPanel.jsx";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
@@ -73,6 +74,10 @@ const DESCOREQ_TEST = "cd test/unit      && node --test description-coreq.test.j
 const RETAIN_TEST   = "cd test/unit      && node --test course-retention.test.js";
 const RETUNION_TEST = "cd test/unit      && node --test retired-union.test.js";
 const PREREQ_TEST   = "cd test/unit      && node --test prereq-parse.test.js";
+// A BROWSER command, because the ranking it guards is a React useMemo and
+// nothing in Node evaluates a component body. Slow (it rebuilds), so these
+// mutants are worth running with --only rather than in every sweep.
+const RETIRED_UI    = "cd test/browser   && node --test retired-course.browser.test.js";
 
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
@@ -80,6 +85,23 @@ const PREREQ_TEST   = "cd test/unit      && node --test prereq-parse.test.js";
  * file — the runner checks — so a mutant cannot silently apply somewhere else.
  */
 const MUTANTS = [
+  // ── A retired course ranks below its live twin, and stays findable ──
+  { name: "retired: the search tie-break ignores retirement (the 292/389 regression)",
+    file: BANK,
+    from: "        b.score - a.score || retiredRank(a.c) - retiredRank(b.c) || tieSort(a.c, b.c));",
+    to:   "        b.score - a.score || tieSort(a.c, b.c));", run: [RETIRED_UI] },
+
+  { name: "retired: demotion outranks relevance (an exact code query buries its own course)",
+    file: BANK,
+    from: "        b.score - a.score || retiredRank(a.c) - retiredRank(b.c) || tieSort(a.c, b.c));",
+    to:   "        retiredRank(a.c) - retiredRank(b.c) || b.score - a.score || tieSort(a.c, b.c));",
+    run: [RETIRED_UI] },
+
+  { name: "retired: demotion becomes a FILTER (courses students took vanish)",
+    file: BANK,
+    from: "    list = list.filter(c => !c.coop);",
+    to:   "    list = list.filter(c => !c.coop && !c.retired);", run: [RETIRED_UI] },
+
   // ── A section's credit is read, not estimated ───────────────────
   { name: "credit: OR takes the MAX branch, not the min", file: DEMAND,
     from: "const req = Math.min(...kids.map(k => k.req));",

@@ -412,7 +412,31 @@ export default function BankPanel() {
         }, 0);
         withScore.push({ c, score });
       });
-      withScore.sort((a, b) => b.score - a.score || tieSort(a.c, b.c));
+      // A retired course sinks BELOW a live one of equal relevance — never
+      // out of the results, and never above a better-scoring match.
+      //
+      // Why this rung exists, measured after the 2022-2025 archive backfill
+      // took the retired set from 1,075 to 2,257 (22.4% of the catalog):
+      // **389 retired courses share a subject and title with a live course**,
+      // because NEU renumbers rather than retires — ALY 6015 → ALY 6125
+      // "Intermediate Analytics", ACCT 6318 → ACCT 6418. On a title query both
+      // score identically (no code token matches), so the winner was decided
+      // by `tieSort`, i.e. alphabetically by code — and the old number is
+      // usually the lower one. Measured: the retired twin sorted first in
+      // **292 of the 389**. A student searching a course by name got, at the
+      // top, the one NEU no longer teaches.
+      //
+      // Deliberately a TIE-BREAK and not a filter, and the distinction is the
+      // whole point of the backfill. A retired course must stay findable: a
+      // continuing student recording that they took CS 2500 in 2023 has to be
+      // able to search for it, and those courses — three years of them — are
+      // exactly what the archive editions were scraped to provide. Removing
+      // them from search would break the use case the data exists for. It also
+      // stays below `score`, so an exact code query ("cs 2500") still returns
+      // the retired course first: asking for it by code is asking for it.
+      const retiredRank = (c) => (c.retired ? 1 : 0);
+      withScore.sort((a, b) =>
+        b.score - a.score || retiredRank(a.c) - retiredRank(b.c) || tieSort(a.c, b.c));
       return withScore.map(x => x.c);
     }
 
@@ -1396,7 +1420,11 @@ export default function BankPanel() {
               return (
                 // Dim only courses that can't be (re-)added — a repeatable
                 // course with takes left keeps full opacity via bankCourseIds.
-                <div key={c.id} style={{ position: "relative", opacity: placedIds.has(c.id) && !bankCourseIds.has(c.id) ? 0.55 : 1 }}>
+                // `data-bank-id` carries the RANKED ORDER out to the browser
+                // test that guards the retired tie-break above. Reading order
+                // off innerText would have to match a course code against the
+                // whole document, where the info panel prints codes too.
+                <div key={c.id} data-bank-id={c.id} style={{ position: "relative", opacity: placedIds.has(c.id) && !bankCourseIds.has(c.id) ? 0.55 : 1 }}>
                   <CourseCard course={c} inSem={false} semId={null} />
                   {repeatChip(c)}
                   {studentType !== "graduate" && !isPhone && (

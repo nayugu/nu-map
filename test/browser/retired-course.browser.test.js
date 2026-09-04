@@ -258,6 +258,17 @@ describe("a real retired course from the shipped union", () => {
   // 4 SH or more so the board gives it its own card rather than folding it
   // into the collapsed "other credits" group where this could not see it.
   const subject = union.find(c => (c.credits ?? 0) >= 4);
+  // The edition the copy must name, read off the SUBJECT rather than written
+  // in. It used to be the literal /2025–2026/, which was correct only while
+  // exactly one edition was frozen: every union course then had the same
+  // `lastEdition`, so a hardcoded string and a real assertion were
+  // indistinguishable. Backfilling 2023–2025 made the union span four
+  // editions, this test picked a course last published in 2022-2023, and it
+  // failed on copy that was exactly right. Derived, it now checks the property
+  // that matters — that the sentence names THIS course's last edition — and
+  // survives the next edition landing.
+  const lastEd = subject?.lifespan?.lastEdition;
+  const editionLabel = lastEd ? `${lastEd - 1}–${lastEd}` : null;
 
   before(async () => {
     await ensureBuild();
@@ -309,8 +320,12 @@ describe("a real retired course from the shipped union", () => {
     const tip = await page0Title(browser, port, id);
     assert.ok(/No current program requires it/i.test(tip),
       `${id} shows the RETENTION tooltip, which claims a program requires it: "${tip}"`);
-    assert.ok(/2025–2026/.test(tip),
-      `${id} should name the catalog edition that last published it, got: "${tip}"`);
+    assert.ok(editionLabel,
+      `${id} is in the union with no lifespan.lastEdition — the union tooltip `
+      + "cannot name an edition and this assertion would pass vacuously");
+    assert.ok(tip.includes(editionLabel),
+      `${id} should name the catalog edition that last published it `
+      + `(${editionLabel}), got: "${tip}"`);
   });
 });
 
@@ -334,6 +349,17 @@ describe("an availability alarm stops once the semester is over", () => {
   const union = JSON.parse(readFileSync(
     new URL("../../public/northeastern/retired-courses.json", import.meta.url), "utf8"));
   const subject = union.find(c => (c.credits ?? 0) >= 4);
+  // The edition the copy must name, read off the SUBJECT rather than written
+  // in. It used to be the literal /2025–2026/, which was correct only while
+  // exactly one edition was frozen: every union course then had the same
+  // `lastEdition`, so a hardcoded string and a real assertion were
+  // indistinguishable. Backfilling 2023–2025 made the union span four
+  // editions, this test picked a course last published in 2022-2023, and it
+  // failed on copy that was exactly right. Derived, it now checks the property
+  // that matters — that the sentence names THIS course's last edition — and
+  // survives the next edition landing.
+  const lastEd = subject?.lifespan?.lastEdition;
+  const editionLabel = lastEd ? `${lastEd - 1}–${lastEd}` : null;
 
   before(async () => {
     await ensureBuild();
@@ -464,9 +490,146 @@ describe("an availability alarm stops once the semester is over", () => {
       `the panel for ${id} does not carry the UNION sentence — it is showing the `
       + "retention wording, which says only that the catalog no longer lists the course "
       + "and cannot name the edition that last published it.");
-    assert.match(c.panelText, /2025–2026/,
-      `the panel for ${id} does not name the catalog edition that last published it, `
-      + "which is the one registrar fact an advisor can act on");
+    assert.ok(editionLabel,
+      `${id} carries no lifespan.lastEdition — this assertion would pass vacuously`);
+    assert.ok(c.panelText.includes(editionLabel),
+      `the panel for ${id} does not name the catalog edition that last published it `
+      + `(${editionLabel}), which is the one registrar fact an advisor can act on`);
+  });
+});
+
+// ── A retired course sinks below its LIVE twin, and stays findable ─────────
+//
+// NEU renumbers far more often than it retires. After the 2023–2025 archive
+// backfill, 389 retired courses share a subject and title with a live one
+// (ALY 6015 → ALY 6125 "Intermediate Analytics"). The bank scores a title
+// query identically for both — no code token matches — so the winner fell to
+// the alphabetical tie-break on code, and the retired number is usually the
+// LOWER one: measured, the retired twin ranked first in 292 of the 389.
+//
+// Both halves are asserted, because each is a different way to get this wrong:
+//
+//   · the live course must come FIRST. A student searching by name was being
+//     offered, at the top, the course NEU no longer teaches.
+//   · the retired course must still be THERE. Filtering it out was the
+//     documented plan (docs/catalog-editions-design.md §8 step 7) and the
+//     backfill is what refutes it — three years of retired courses are courses
+//     students actually TOOK, and one recording CS 2500 from 2023 has to be
+//     able to find it. A filter would break the use case the data exists for.
+//
+// This runs in a browser because the ranking lives in a React `useMemo`, which
+// nothing in Node evaluates.
+describe("a retired course ranks below its live twin without disappearing", () => {
+  let browser, server, port, launchError = null;
+
+  // The pair is DERIVED from shipped data rather than named, so the test keeps
+  // testing after a roll changes which courses are retired. It picks the
+  // regression case specifically: a twin whose retired code sorts FIRST, which
+  // is the one the old comparator got wrong.
+  const union = JSON.parse(readFileSync(
+    new URL("../../public/northeastern/retired-courses.json", import.meta.url), "utf8"));
+  const live = JSON.parse(readFileSync(
+    new URL("../../public/northeastern/catalog-courses.json", import.meta.url), "utf8"));
+
+  const liveByTitle = new Map();
+  for (const c of live) {
+    const k = `${c.subject}|${(c.title ?? "").toLowerCase()}`;
+    if (!liveByTitle.has(k)) liveByTitle.set(k, c);
+  }
+  const pair = (() => {
+    for (const r of union) {
+      const title = (r.title ?? "").trim();
+      // A short or punctuation-heavy title makes the search box match dozens of
+      // unrelated courses and the ordering claim stops being about this pair.
+      if (title.length < 12 || /[^\w\s\-—–&:,.']/.test(title)) continue;
+      const l = liveByTitle.get(`${r.subject}|${title.toLowerCase()}`);
+      if (!l) continue;
+      const rCode = `${r.subject}${r.number}`, lCode = `${l.subject}${l.number}`;
+      // Only the case the fix is for: without the retired rung, this pair
+      // would come back retired-first.
+      if (rCode.localeCompare(lCode) < 0) return { title, rCode, lCode };
+    }
+    return null;
+  })();
+
+  before(async () => {
+    await ensureBuild();
+    ({ server, port } = await serveDist());
+    try {
+      const { chromium } = await import("playwright");
+      browser = await chromium.launch();
+    } catch (e) { launchError = e; }
+  });
+  after(async () => {
+    await browser?.close();
+    await new Promise((r) => server?.close(r));
+  });
+
+  test("the live course is offered first, and the retired one is still offered", async () => {
+    assert.equal(launchError, null, "chromium unavailable");
+    // No pair means no renumbered twins in the shipped data. That is a
+    // legitimate state and it must not read as a pass — this test would be
+    // asserting nothing at all.
+    assert.ok(pair,
+      "no retired course shares a subject and title with a live one, so this "
+      + "test proves nothing and should be understood as unrun");
+
+    const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
+    const page = await ctx.newPage();
+    const errors = [];
+    page.on("pageerror", e => errors.push(String(e?.message ?? e)));
+    await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load", timeout: 60_000 });
+    await page.waitForTimeout(3500);
+
+    // The bank's search box, found by its placeholder rather than by position.
+    await page.fill("input[placeholder*='search']", pair.title);
+    await page.waitForTimeout(1200);
+
+    const order = await page.$$eval("[data-bank-id]", els =>
+      els.map(e => e.getAttribute("data-bank-id")));
+    await page.close();
+    await ctx.close();
+
+    assert.deepEqual(errors, [], `searching threw:\n  ${errors.join("\n  ")}`);
+
+    const liveAt = order.indexOf(pair.lCode);
+    const retAt  = order.indexOf(pair.rCode);
+
+    assert.ok(liveAt >= 0,
+      `searching "${pair.title}" did not return the LIVE course ${pair.lCode}; `
+      + `got ${order.slice(0, 8).join(", ") || "nothing"}`);
+    assert.ok(retAt >= 0,
+      `searching "${pair.title}" did not return the RETIRED course ${pair.rCode}. `
+      + "A retired course must be demoted, never filtered — a student recording a "
+      + "course they actually took has to be able to find it.");
+    assert.ok(liveAt < retAt,
+      `${pair.rCode} (retired) ranked above ${pair.lCode} (live) for "${pair.title}" `
+      + `— positions ${retAt} and ${liveAt}. The retired tie-break in BankPanel is not firing.`);
+  });
+
+  test("an exact code query still returns the retired course first", async () => {
+    // The demotion is below `score`, not above it. Typing a retired course's
+    // own code is asking for that course, and burying it there would make the
+    // course effectively unreachable — the filter behaviour by another route.
+    assert.equal(launchError, null, "chromium unavailable");
+    assert.ok(pair, "unrun — see above");
+
+    const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
+    const page = await ctx.newPage();
+    await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load", timeout: 60_000 });
+    await page.waitForTimeout(3500);
+
+    const m = /^([A-Z]+)(\d.*)$/.exec(pair.rCode);
+    await page.fill("input[placeholder*='search']", `${m[1]} ${m[2]}`);
+    await page.waitForTimeout(1200);
+    const order = await page.$$eval("[data-bank-id]", els =>
+      els.map(e => e.getAttribute("data-bank-id")));
+    await page.close();
+    await ctx.close();
+
+    assert.equal(order[0], pair.rCode,
+      `searching the retired course's own code "${m[1]} ${m[2]}" put ${order[0]} first. `
+      + "The retired rung must sit below score, not above it.");
   });
 });
 

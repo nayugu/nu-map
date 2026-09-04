@@ -450,13 +450,84 @@ Each step must be independently shippable and independently verifiable.
 Ships alone, needs **no year picker**, and improves the app for *every*
 student rather than only continuing ones. This is the CS 2500 fix.
 
-4. **`--edition` on `scrape-catalog.js`**, reusing `catalog-edition.js`
-   (`parseEditionArg`, `editionBasePath`, `assertEdition`) so the per-page
-   provenance assertion is shared, writing into
-   `data/northeastern/catalog/editions/<year>/` and **never** able to overwrite
-   `catalog-courses.json`.
-5. **Backfill editions 2022–2025** from the archive, one rail-guarded run per
-   edition. ~230 subjects x 400 ms is ~90 s of fetching each.
+4. **`--edition` on `scrape-catalog.js`** ✅ *Landed 2026-09-03.* Reuses
+   `catalog-edition.js` so the per-page provenance assertion is shared. It is a
+   **short-circuit before every other mode**, not a flag threaded through the
+   live path, and that is the load-bearing choice: almost everything the live
+   run does after parsing is wrong for an archive edition (the nuPath reconcile
+   against the LIVE catalog, `applyEditionRetention`, the 2% shrink floor,
+   data-meta, change-log, scrape-state, subjects.json), and every one of them
+   fails *silently* into a folder named after a year. It refuses to run
+   alongside `--merge`, `--rotate` or `--subjects`;
+   `test/unit/catalog-edition-scrape.test.js` fingerprints all ten live
+   artifacts around the refusals to prove nothing moves.
+
+   It uses `politeFetch`, not the script's bare `fetchPage`, and that earned
+   its keep on the first run: **12 of 679 pages needed a retry**. At 1.8% that
+   is right at the fetch-failure rail's 2% tolerance, so with the bare fetcher
+   the loss would have been absorbed as "a few subjects went away" and frozen
+   permanently — exactly what `catalog-cache.js`'s docblock warns about.
+
+5. **Backfill editions 2023–2025** ✅ *Done 2026-09-03.* Measured rather than
+   estimated: **222 / 227 / 230 subject pages**, 679 requests, ~8 minutes
+   total.
+
+   | edition | courses | absent from the current catalog |
+   |---|---|---|
+   | 2023 | 7,449 | 1,343 |
+   | 2024 | 7,654 | 1,001 |
+   | 2025 | 7,561 | 428 |
+
+   **Retired union: 368 → 1,550 courses** — 1,182 that a saved plan could name
+   and that previously resolved to nothing, silently subtracting their credits.
+   Disjointness re-verified at 0 overlap with the current catalog.
+
+   Three things the run taught that the plan above had wrong or missing:
+
+   - **The catalog does not monotonically grow** (7,449 → 7,654 → 7,561 →
+     7,966). A rail baselined on "editions get bigger" is wrong; the floor
+     compares against the NEAREST edition instead.
+   - **"Skip courses already in the database" saves nothing**, and it is worth
+     recording why, because it is the natural first idea. The catalog is a
+     **bulk feed** — one request returns a whole subject — so a course is
+     already paid for by the time its code is visible. The
+     requests-per-entity ratio decides which optimisations exist at all, and
+     here it is ~35:1 in the wrong direction. What *is* worth doing is caching
+     the raw HTML: the three `--write` passes made **zero** network requests.
+   - **Storage was a non-issue and had to be measured to know it.** The 4.9 MB
+     2026 snapshot is **182 KB packed in git**, and the editions delta against
+     each other, so full self-contained snapshots stay. A delta-chained store
+     would have saved a few hundred KB and cost the property that lets a
+     snapshot's provenance be checked in isolation.
+
+   ⚠ **Editions 2022 and older are refused, not merely skipped.** They are
+   `descriptive` fidelity, and the failure is not partial data — the title
+   regex wants a parenthesised credit form those pages do not use, so a run
+   would write a snapshot asserting the catalog had **zero** courses. See
+   step 11.
+
+5b. **The search consequence, measured after the fact.** This document deferred
+   "does a union course belong in search" as *measure the noise after the roll*.
+   With the backfill there is something to measure, and the answer went the
+   opposite way to the guess recorded below in step 7(2).
+
+   The retired set reached **2,257 of 10,071 runtime courses (22.4%)**, and
+   **389 retired courses share a subject and title with a live one** — NEU
+   renumbers rather than retires (ALY 6015 → ALY 6125 "Intermediate Analytics").
+   The bank scores a title query identically for both and broke the tie
+   alphabetically by code, and the old number is usually lower: **the retired
+   twin ranked first in 292 of the 389.**
+
+   The fix is a **tie-break, not a filter**, and the backfill is what settles
+   that. Step 7(2) argued a union course "is required by nothing and exists
+   solely to resolve a plan that ALREADY names it", so offering it is offering
+   a course NEU no longer teaches. That was true of a 368-course union produced
+   by ONE roll. It is false of a three-year backfill, whose whole content is
+   courses students **actually took** — a continuing student recording CS 2500
+   from 2023 must be able to search for it. Filtering would break the use case
+   the data was scraped for. So `BankPanel` sinks a retired course below a live
+   one of equal relevance and no further: 292 → **0**, while an exact code query
+   still returns it first, because asking for it by code is asking for it.
 6. ~~**Derive the retired union + lifespan index** (§6) and ship them.~~
    **DONE, 2026-09-03** — `scripts/derive-retired-union.js` →
    `public/northeastern/retired-courses.json`, merged by `mergeRetiredUnion`
@@ -546,7 +617,13 @@ student rather than only continuing ones. This is the CS 2500 fix.
       course does not need to know why we kept the record. The branch survives
       because the union case can still say something true that the retention
       case cannot: which edition last published the course.
-   2. **A union course arguably does not belong in SEARCH at all.** This was
+   2. **A union course arguably does not belong in SEARCH at all.**
+      ⚠ **Superseded — see step 5b.** This reasoning was sound for a union
+      produced by one roll and is wrong for the 2023–2025 backfill: those
+      courses are ones students actually took, so they must stay searchable.
+      The measured defect turned out to be *ranking*, not presence. Left in
+      place because the argument is still the right one to have had.
+      This was
       deferred as "measure the noise after the roll", and the copy bug sharpens
       it into a correctness question rather than a volume one: a retention
       rescue is required by a program, so a student may legitimately need to
