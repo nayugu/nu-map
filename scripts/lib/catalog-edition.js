@@ -30,6 +30,39 @@
  * longer trustworthy either.
  */
 
+/**
+ * How many editions we SHIP, counting the live one.
+ *
+ * Sized from the longest realistic path rather than picked as a round number:
+ * a 5-year co-op degree, plus a leave or an extra co-op cycle makes 6 ordinary,
+ * and 7 covers that with a year of margin. A student still enrolled under an
+ * edition older than this is rare enough to be an advising conversation rather
+ * than a data problem.
+ *
+ * It lives here, in the module both readers can import, because it was defined
+ * in `prune-catalog-years.js` and applied to the two PROGRAM trees only — the
+ * course-edition snapshots had no cap at all, so the retired union grew with
+ * every capture forever. Two windows that are meant to be the same window must
+ * not be two constants.
+ */
+export const KEEP_YEARS = 7;
+
+/**
+ * The editions inside the window, newest first.
+ *
+ * Anchored to the NEWEST EDITION HELD rather than to the live catalog, and
+ * deliberately: a derive step must not need the network to decide what it
+ * ships, and if a capture were ever missed the anchor lags by a year, which
+ * keeps one edition too many. Erring toward keeping is the recoverable
+ * direction — dropping an edition removes a course from a plan that names it.
+ *
+ * @param {number[]} years  edition end-years present on disk, any order
+ * @returns {number[]} the kept years, newest first
+ */
+export function editionWindow(years) {
+  return [...years].sort((a, b) => b - a).slice(0, KEEP_YEARS);
+}
+
 /** `2022-2023` — the archive's own directory naming. */
 const EDITION_LABEL = /^(\d{4})-(\d{4})$/;
 

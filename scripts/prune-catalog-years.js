@@ -39,10 +39,16 @@
 import { readdirSync, statSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { KEEP_YEARS } from './lib/catalog-edition.js';
 
 const ROOT  = join(dirname(fileURLToPath(import.meta.url)), '..');
 const TREES = ['data/northeastern/programs/undergraduate', 'data/northeastern/programs/graduate'];
-const KEEP_YEARS = 7;
+// Imported, not redeclared. This constant used to live here and govern the two
+// PROGRAM trees only, while the course-edition snapshots had no cap at all and
+// the retired union grew with every capture forever. Two windows meant to be
+// the same window must not be two numbers.
+// NOTE this script DELETES; derive-retired-union.js applies the same window by
+// filtering what it ships and never removes a file. See its editionsOnDisk.
 const WRITE = process.argv.includes('--write');
 
 let deleted = 0;

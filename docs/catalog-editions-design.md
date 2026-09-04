@@ -63,10 +63,32 @@ it and present it as authoritative.
   catalog is edition `2026`. This already matches
   `data/northeastern/programs/*/<year>/` and `parseEditionArg`.
 - **Live edition** — what `catalog.northeastern.edu/` serves now: **2027**.
-- **Window** — the editions we ship. `KEEP_YEARS = 7`, sized in
-  `prune-catalog-years.js` from the longest realistic path (5-year co-op degree,
-  plus a leave or an extra co-op cycle, plus a year of margin). Today that is
-  **2021–2027**.
+- **Window** — the editions we ship. `KEEP_YEARS = 7`, sized from the longest
+  realistic path (5-year co-op degree, plus a leave or an extra co-op cycle,
+  plus a year of margin). It lives in **`scripts/lib/catalog-edition.js`**
+  (`KEEP_YEARS`, `editionWindow`), imported by both readers.
+
+  ⚠ It was declared in `prune-catalog-years.js` and applied to the two PROGRAM
+  trees **only**. The course-edition snapshots had no cap at all, so the
+  retired union grew with every capture forever — a course retired in 2019
+  would still have shipped in 2035. Fixed 2026-09-04; the constant is now
+  defined once and a unit test refuses a second literal.
+
+  Two things the window does NOT do:
+  1. **It never deletes a snapshot.** `derive-retired-union` filters what it
+     SHIPS and leaves every file on disk, because the two are different
+     decisions: widening `KEEP_YEARS` brings an edition back, whereas deleting
+     one is unrecoverable — edition 2026 exists in no archive at all. Only
+     `prune-catalog-years.js` deletes, and only by hand with `--write`.
+  2. **It is anchored to the newest edition HELD, not to the clock**, so a
+     derive needs no network to decide what it ships. A missed capture makes
+     the anchor lag by a year and keeps one edition too many, which is the
+     recoverable direction.
+
+  Editions held today are **2023–2027** (5), so the cap is not yet binding; it
+  first bites at the eighth capture. That is exactly why the binding case is
+  covered by synthetic year lists in `test/unit/catalog-edition.test.js` — a
+  window nothing exercises is one that silently stops working.
 - **Fidelity** — `full` or `descriptive`; see §4.
 
 ---

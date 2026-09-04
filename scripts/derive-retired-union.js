@@ -88,6 +88,7 @@ import { join } from "node:path";
 
 import { keyOfCourse } from "./lib/course-retention.js";
 import { fidelityOfEdition } from "./lib/catalog-fidelity.js";
+import { KEEP_YEARS, editionWindow } from "./lib/catalog-edition.js";
 
 const EDITIONS_DIR = "data/northeastern/catalog/editions";
 const CATALOG      = "public/northeastern/catalog-courses.json";
@@ -106,15 +107,49 @@ const WRITE = process.argv.includes("--write");
 
 const readJSON = (p) => JSON.parse(readFileSync(p, "utf8"));
 
-/** Every frozen edition on disk, oldest first. Labelled by END year. */
+/**
+ * The frozen editions INSIDE THE WINDOW, oldest first. Labelled by END year.
+ *
+ * ## Why the union is capped
+ *
+ * Without this it grows with every capture, forever. A course retired in 2019
+ * would still ship in 2035 — a card a student can browse to for something NEU
+ * stopped teaching before they were in high school, and the record gets no
+ * truer with age. `KEEP_YEARS = 7` is sized for the longest realistic path
+ * (see catalog-edition.js) and was already applied to the two PROGRAM trees by
+ * `prune-catalog-years.js`; the course side simply never had it.
+ *
+ * ## What it does NOT do: it never deletes a snapshot
+ *
+ * This filters what we SHIP, and leaves every file on disk. The two are not
+ * the same decision and must not share a code path:
+ *
+ *   - the shipped window is reversible — widen `KEEP_YEARS` and the next run
+ *     brings the edition back;
+ *   - deleting a frozen snapshot is NOT. Edition 2026 exists in no archive at
+ *     all (NEU published 2025-2026 as PDF only), so ours is the only
+ *     machine-readable copy in existence, and the design doc's own note says
+ *     the edition sliding out of the window is "unrecoverable".
+ *
+ * So an out-of-window snapshot stays as archival material and is reported, not
+ * removed. Retiring one is a deliberate act for a person, not a side effect of
+ * a monthly derive that pushes straight to main.
+ */
 function editionsOnDisk() {
   if (!existsSync(EDITIONS_DIR)) return [];
-  return readdirSync(EDITIONS_DIR)
+  const all = readdirSync(EDITIONS_DIR)
     .filter(name => /^\d{4}$/.test(name))
     .map(Number)
-    .sort((a, b) => a - b)
     .map(year => ({ year, path: join(EDITIONS_DIR, String(year), "catalog-courses.json") }))
     .filter(e => existsSync(e.path));
+
+  const kept = new Set(editionWindow(all.map(e => e.year)));
+  const dropped = all.filter(e => !kept.has(e.year)).map(e => e.year).sort((a, b) => a - b);
+  if (dropped.length) {
+    console.log(`  window: keeping ${KEEP_YEARS} editions; outside it and NOT shipped: `
+      + `${dropped.join(", ")} (files kept on disk — see editionsOnDisk)`);
+  }
+  return all.filter(e => kept.has(e.year)).sort((a, b) => a.year - b.year);
 }
 
 /**

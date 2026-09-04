@@ -12,8 +12,10 @@
 // short ones.
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   parseEditionArg, editionBasePath, assertEdition,
+  KEEP_YEARS, editionWindow,
 } from "../../scripts/lib/catalog-edition.js";
 
 // ── Reading the flag ─────────────────────────────────────────────────────────
@@ -81,4 +83,76 @@ test("edition › the message says why the whole run stops, not just this page",
   } catch (e) {
     assert.match(e.message, /already scraped in this run cannot be trusted/);
   }
+});
+
+// ── The shipping window ──────────────────────────────────────────────────────
+//
+// Without a cap the retired union grows with every capture, forever: a course
+// retired in 2019 would still ship in 2035, browsable as something to add, for
+// a course NEU stopped teaching before the student was in high school.
+//
+// The cap is only meaningful when it BINDS, and today it does not — 5 editions
+// are held against a limit of 7, so every test below works on synthetic year
+// lists rather than on the tree. A window that is never exercised is a window
+// that silently stops working; these are what make the 2029 slide a non-event.
+
+test("window › KEEP_YEARS is 7", () => {
+  // Pinned deliberately. It is sized from the longest realistic path — a
+  // 5-year co-op degree, plus a leave or an extra co-op cycle is 6 ordinary,
+  // and 7 adds a year of margin — so changing it is a decision about which
+  // students we can still answer for, not a tuning knob.
+  assert.equal(KEEP_YEARS, 7);
+});
+
+test("window › the constant is defined ONCE", () => {
+  // It used to live in prune-catalog-years.js and govern the two PROGRAM trees
+  // only, while the course-edition snapshots had no cap at all. Two windows
+  // meant to be the same window must not be two numbers, and the way that
+  // regresses is somebody re-adding a local literal rather than importing.
+  const src = readFileSync(
+    new URL("../../scripts/prune-catalog-years.js", import.meta.url), "utf8");
+  assert.doesNotMatch(src, /const\s+KEEP_YEARS\s*=/,
+    "prune-catalog-years.js redeclares KEEP_YEARS instead of importing it");
+  assert.match(src, /import\s*\{[^}]*KEEP_YEARS[^}]*\}\s*from/);
+});
+
+test("window › under the limit keeps everything", () => {
+  assert.deepEqual(editionWindow([2023, 2024, 2025, 2026, 2027]),
+    [2027, 2026, 2025, 2024, 2023]);
+  assert.equal(editionWindow([2027]).length, 1);
+  assert.deepEqual(editionWindow([]), []);
+});
+
+test("window › exactly at the limit drops nothing", () => {
+  // The off-by-one that would quietly discard a live edition.
+  const seven = [2021, 2022, 2023, 2024, 2025, 2026, 2027];
+  assert.equal(editionWindow(seven).length, 7);
+  assert.ok(editionWindow(seven).includes(2021));
+});
+
+test("window › over the limit drops the OLDEST, never the newest", () => {
+  const eight = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
+  const kept = editionWindow(eight);
+  assert.equal(kept.length, 7);
+  assert.ok(!kept.includes(2020), "the oldest edition should have left the window");
+  assert.ok(kept.includes(2027), "the newest edition must always be kept");
+  assert.equal(kept[0], 2027);
+});
+
+test("window › the anchor is the newest edition HELD, not the clock", () => {
+  // Deliberate: a derive step must not need the network to decide what it
+  // ships. If a capture were ever missed the anchor lags a year and the window
+  // keeps one edition too many — the recoverable direction, since dropping an
+  // edition removes a course from a plan that already names it.
+  const stale = [2018, 2019, 2020, 2021, 2022];
+  assert.deepEqual(editionWindow(stale), [2022, 2021, 2020, 2019, 2018],
+    "a tree whose newest edition is old must not be emptied by the window");
+});
+
+test("window › input order does not matter and the input is not mutated", () => {
+  const years = [2025, 2020, 2027, 2022, 2026, 2021, 2023, 2024];
+  const copy = [...years];
+  const kept = editionWindow(years);
+  assert.deepEqual(kept, [2027, 2026, 2025, 2024, 2023, 2022, 2021]);
+  assert.deepEqual(years, copy, "editionWindow mutated its argument");
 });

@@ -293,10 +293,26 @@ Facts that follow from this:
      packed in git** and editions delta against each other, so snapshots stay
      FULL and self-contained. A delta chain would save a few hundred KB and
      cost the property that lets provenance be checked in isolation.
-  7. ⚠ **Edition 2027 is live and NOT frozen.** `derive-retired-union` warns
-     about this by counting courses in no snapshot. The archive already skipped
-     2025-2026 (PDF only), so capture the live edition with `freeze-edition.js`
-     BEFORE the next roll — the archive is not a safety net.
+  7. **The union is CAPPED at `KEEP_YEARS = 7` editions**, in
+     `scripts/lib/catalog-edition.js` (`editionWindow`). It was declared in
+     `prune-catalog-years.js` and governed the two PROGRAM trees only, so the
+     course side grew with every capture forever — a course retired in 2019
+     would still ship in 2035. The window **never deletes a snapshot**: the
+     derive filters what it SHIPS and leaves the files, because widening the
+     cap brings an edition back while deleting one is unrecoverable (2026
+     exists in no archive). It is anchored to the newest edition HELD, not the
+     clock, so the derive needs no network; a missed capture keeps one edition
+     too many, which is the recoverable direction. Held today is 2023–2027, so
+     it does not bind yet — which is why the binding case is tested on
+     synthetic year lists.
+  8. **Capture the live edition BEFORE it rolls; the archive is not a safety
+     net.** It lags and has already skipped a year outright (2025-2026 is PDF
+     only, so our 2026 snapshot is the only machine-readable copy in
+     existence). `derive-retired-union` raises the alarm by counting live
+     courses that are in no snapshot, and `edition-probe.js --coverage` names
+     the missing year. 2027 was frozen 2026-09-04 while still live — 7,814
+     active, the 707 retained excluded — so the next capture is due when NEU
+     publishes 2027-2028.
 - **A retired course is demoted in search, never removed — and the backfill is
   what decides that.** The union reached **2,257 of 10,071 runtime courses
   (22.4%)**, and **389 retired courses share a subject and title with a live
