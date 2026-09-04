@@ -207,12 +207,17 @@ describe("restrictions · the course card", () => {
       const px = (n) => Math.round(n);
       return {
         boxWidth: px(box.getBoundingClientRect().width),
+        gridWidth: px(Math.max(...[...grid.children].map(c => c.getBoundingClientRect().right))
+                      - grid.getBoundingClientRect().left),
         panelWidth: px(document.documentElement.clientWidth),
         cells: items.map(c => ({
-          left:  px(c.getBoundingClientRect().left),
-          right: px(c.getBoundingClientRect().right),
-          full:  getComputedStyle(c).gridColumnStart === "1"
-                 && getComputedStyle(c).gridColumnEnd === "-1",
+          left:   px(c.getBoundingClientRect().left),
+          right:  px(c.getBoundingClientRect().right),
+          top:    px(c.getBoundingClientRect().top),
+          bottom: px(c.getBoundingClientRect().bottom),
+          text:   c.textContent.trim(),
+          full:   getComputedStyle(c).gridColumnStart === "1"
+                  && getComputedStyle(c).gridColumnEnd === "-1",
         })),
       };
     });
@@ -280,11 +285,40 @@ describe("restrictions · the course card", () => {
     assert.ok(atEdge.length >= 4,
       `only ${atEdge.length} cells reach the right edge; the figures are ragged`);
 
-    // The box hugs its table instead of stretching with the drawer. Without
-    // this a rule's values sit at one end of a 1,500px row and its figure at
-    // the other, and nothing ties them together.
-    assert.ok(g.boxWidth < g.panelWidth * 0.75,
-      `the block stretched to ${g.boxWidth}px of a ${g.panelWidth}px viewport`);
+    // The table does not stretch with the drawer. Without this a rule's values
+    // sit at one end of a 1,500px row and its figure at the other, and nothing
+    // ties them together. Asserted on the GRID, not the frame: the frame fills
+    // the column on purpose, so that its edges line up with the description
+    // and the prereq box above it.
+    assert.ok(g.gridWidth < g.panelWidth * 0.75,
+      `the table stretched to ${g.gridWidth}px of a ${g.panelWidth}px viewport`);
+  });
+
+  test("the bar sits on the same line as the season and figure it belongs to", async () => {
+    // A rule whose values span two season rows stretches those rows — five
+    // majors over two seasons makes each row 60px — and the bar was centred in
+    // the row while its season and figure sat on the text baseline at the top
+    // of it. Measured on MEIE 4701 before the fix: "Summer A" occupied
+    // y549–575 and its own bar y575–583, a full line below its label.
+    //
+    // Stated as "the bar is never alone at its y". The bar is the only cell
+    // with no text, so it is identifiable without knowing the column order,
+    // and the assertion says the thing that was wrong rather than naming
+    // pixels that will move with the font.
+    const g = await geometryFor(SUBJECT, /MEIE\s*4701/);
+    assert.ok(g, "the Restrictions grid did not render");
+
+    const bars = g.cells.filter(c => !c.full && c.text === "");
+    assert.ok(bars.length >= 2,
+      `expected several bars to check, got ${bars.length} — is MEIE 4701 still multi-season?`);
+
+    for (const bar of bars) {
+      const sameLine = g.cells.filter(
+        c => c !== bar && !c.full && c.text !== "" && c.top === bar.top && c.bottom === bar.bottom);
+      assert.ok(sameLine.length >= 2,
+        `a bar at y${bar.top}–${bar.bottom} shares its line with ${sameLine.length} labelled `
+        + `cells, not 2 — it has drifted off the row it describes`);
+    }
   });
 
   test("a group's values are listed one per line, under their own term", async () => {

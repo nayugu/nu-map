@@ -869,8 +869,18 @@ function SeasonCoverage({ s, t, cell }) {
           figure is not a rate, and at a denominator of 2 a percent sign is
           false precision. The bar carries the comparison, the fraction carries
           the precision, and neither claims more than it has. */}
-      <span style={{ ...cell, alignSelf: "center" }}>
-        <span style={{ display: "block", width: 26, height: 4, borderRadius: 99, background: "var(--border-2)", overflow: "hidden" }}>
+      {/* The bar sits on the TEXT's line, not in the middle of the grid row.
+          `alignSelf: center` was the obvious thing and it is wrong here: a rule
+          whose values span two season rows stretches those rows to 60px, so
+          the centre of the row is nowhere near the season that names it —
+          measured on MEIE 4701, "Summer A" occupied y549–575 and its own bar
+          y575–583, entirely below its label.
+
+          An inline-block at `verticalAlign: middle` inside a cell that keeps
+          the grid's baseline alignment puts the bar's middle at the x-height
+          of the text beside it, whatever the row does. */}
+      <span style={{ ...cell }}>
+        <span style={{ display: "inline-block", verticalAlign: "middle", width: 26, height: 4, borderRadius: 99, background: "var(--border-2)", overflow: "hidden" }}>
           <span style={{ display: "block", height: "100%", width: `${frac * 100}%`, background: "var(--text-4)" }} />
         </span>
       </span>
