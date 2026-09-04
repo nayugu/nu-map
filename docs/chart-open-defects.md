@@ -1128,6 +1128,30 @@ carrying a named exception — is neither, and should not survive long.
 name, and a second entry appearing is a new fact about the search. A count-based tolerance
 would swallow it silently, which is the failure mode this whole file exists to prevent.
 
+**The second entry arrived (2026-09-03), and it is the same defect, not a new one.**
+
+```
+ug/chemical_engineering_and_bioengineering_bsche_(boston)#0
+  without pruning   []                        rung 0, no concessions
+  with pruning      [sequencing-preferences]  one concession
+```
+
+Identical signature to BSEnvE, and `identical 32 · moved 0` over the 33 compared — so the
+stronger neutrality claim still holds and only the ordering sensitivity shows.
+
+**How it surfaced, and this is the part worth keeping.** No engine change was involved. A
+DATA fix reached it: `scripts/lib/prereq-parse.js` had been silently truncating **415 of
+2,839** prereq trees on legacy (Mills College) course numbers — `MATH 21EM`, `CHME`'s
+`MATH 211M`/`316M`/`315M` — because a branch the parser could not read left a dangling
+operator and everything after it was discarded. Restoring those prerequisites is exactly
+what this degree's cells depend on, and the larger, truer domains were enough for the
+existing sensitivity to bite.
+
+So the defect did not get worse; the corpus got more honest, and a program that had been
+sheltering behind missing constraints stopped doing so. Expect more entries as data
+quality improves — which is the argument for taking the fix below rather than continuing
+to pin programs. Two entries is where "a named exception" starts becoming "a list".
+
 ---
 
 ### 19. A `shared` section deleted the requirement instead of de-duplicating it — FIXED, with a named residual

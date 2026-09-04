@@ -85,6 +85,49 @@ Facts that follow from this:
      costs a missing link; guessing costs a refused plan.
   Both readers live in `src/` and are called by the scraper (canonical) AND by
   `courseNorm.js`, so a fix reaches students before the next monthly scrape.
+- **A prereq branch the parser cannot read must never just VANISH — it leaves a
+  dangling token that truncates the whole tree.** NEU absorbed Mills College in
+  2022 and its prereq lines still cite the Mills equivalents, which use 2–3
+  digit numbers plus a letter (`ACCT 215M`, `MATH 21EM`, `SW 105M`). The
+  course-code pattern wants four digits, so those branches parsed to nothing and
+  the operators on either side survived. Everything after the bad token is
+  discarded (`prereqFold.js` refuses rather than guessing a recovery), so a
+  student silently loses real prerequisites. Measured on the 2026-2027 roll:
+  **81 distinct codes, 751 citations, 415 of 2,839 trees truncating.** Four
+  distinct defects in one family, and each was found only by re-measuring after
+  the previous fix "looked complete":
+  1. a doubled operator (`"Or","Or"`) where the branch dropped — 493 courses;
+  2. `cleanNote`'s "needs real words" guard discarding two-letter subjects
+     (`SW 105M` has no run of three letters) — 38 more;
+  3. an empty `()` group, because `extractConcurrentCourses` matched
+     `(may be taken concurrently)` only against four-digit codes — 56;
+  4. `{note}` adjacent to `(` with no operator, because the implicit-`And`
+     repair counted a course ref as an operand but not a note — 4. That one
+     matters beyond notes: the catalog states a top-level conjunction with a
+     bare **semicolon**, which `extractOperators` deletes, so the conjunction
+     survives ONLY as adjacency.
+  Rules:
+  - A legacy code becomes a **`{note}`, never a course ref.** All 81 are absent
+    from the catalog and always will be (it publishes zero 3-digit courses), so
+    a ref would be a permanently unresolved reference showing a branch the
+    student can never satisfy. A note is neutral — `conditionStatus` returns
+    null and `mergeOr` collapses a neutral branch onto the other side — so
+    `A or ACCT 215M or B` reads as `A or B` and the alternative stays visible
+    without ever blocking or resolving.
+  - `LEGACY_COURSE` is **anchored**, and that is load-bearing: `\d{2,3}` cannot
+    consume four digits and still reach the end, which is the only thing keeping
+    a real course from being downgraded to inert prose catalog-wide.
+  - **`( or` is repaired by SWAPPING, not dropping.** CHME 5649 is malformed in
+    NEU's own catalog (`))( or (`). Dropping the stray paren unbalances the tree;
+    swapping restores both balance and the evident reading. It lives in the
+    parser rather than a hand patch because `(` before a binary operator is
+    invalid in *any* grammar — so it repairs a provable error rather than
+    guessing — and because it is self-correcting if NEU ever fixes the line.
+  - Instrument: `node scripts/prereq-residue-probe.js` names every phrase that
+    drops. **Use it before designing anything here** — it exists because three
+    consecutive fixes were declared complete against a probe that only looked at
+    *labelled* prereq lines in the *already-afflicted* subjects, and so kept
+    under-reporting. The defect count is the arbiter, not the reasoning.
 - **Term windows are read where possible, estimated only as a fallback.**
   Which semester is "now" — and therefore which courses count as completed —
   comes from `src/adapters/northeastern/termWindows.js`, regenerated monthly

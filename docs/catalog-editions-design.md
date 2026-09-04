@@ -515,9 +515,9 @@ student rather than only continuing ones. This is the CS 2500 fix.
    tooltip exist in all 8 locales and `normalizeCourse` now carries `lifespan`
    through to the card.
 
-   ⚠ **BLOCKER — the tooltip is FALSE for union courses, and this ships the
-   moment the roll lands.** There are two populations of retired course and
-   one string:
+   ✅ **RESOLVED (2026-09-03).** Recorded because the reasoning is still what
+   keeps the two strings apart. There were two populations of retired course
+   and one string:
 
    > "Northeastern's catalog no longer lists this course. It's kept because
    > **your catalog year still requires it** — ask your advisor about a
@@ -536,6 +536,16 @@ student rather than only continuing ones. This is the CS 2500 fix.
       `retiredSince`. With the lifespan the union case can also do what §7
       wanted anyway — name the edition ("last published in the 2025–2026
       catalog") instead of a date that is a fact about our scrape.
+
+      **Done.** The branch shipped first, and then the offending clause was
+      deleted outright: the retention string is now just "Northeastern's
+      catalog no longer lists this course. Ask your advisor about a
+      substitution." in all eight locales. That is worth noting as the better
+      fix — the clause was never load-bearing, it was an explanation of OUR
+      storage decision dressed as advice, and a student holding a retired
+      course does not need to know why we kept the record. The branch survives
+      because the union case can still say something true that the retention
+      case cannot: which edition last published the course.
    2. **A union course arguably does not belong in SEARCH at all.** This was
       deferred as "measure the noise after the roll", and the copy bug sharpens
       it into a correctness question rather than a volume one: a retention

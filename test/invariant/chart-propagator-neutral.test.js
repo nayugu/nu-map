@@ -245,6 +245,20 @@ test("propagator › chain propagation moves no plan answered by the SAME rung",
  */
 const KNOWN_DEGRADED = new Set([
   "ug/environmental_engineering_and_health_science_bsenve_(boston)#2",
+  // Second entry, Sept 2026 — and per §18 a second entry is a NEW FACT about
+  // the search rather than a bigger tolerance, so it is written up there too.
+  //
+  // Same signature as the first (`without [] -> with [sequencing-preferences]`,
+  // one concession, everything else bit-identical), and the same root cause:
+  // `byConstraint` orders cells by PRUNED domain length, so pruning moves the
+  // variable order and a different legal plan is reached first.
+  //
+  // What made it reachable was a DATA fix, not an engine change: the prereq
+  // parser was silently truncating 415 trees on legacy (Mills) course numbers,
+  // and restoring the dropped prerequisites on the CHME and MATH courses this
+  // degree depends on changed the domains enough for the existing sensitivity
+  // to bite. The defect did not get worse — the corpus got more honest.
+  "ug/chemical_engineering_and_bioengineering_bsche_(boston)#0",
 ]);
 
 // A pinned exception the sample never reached is not a pass — it is an
