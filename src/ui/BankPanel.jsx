@@ -20,6 +20,7 @@ import { ICourseCatalog } from "../ports/ICourseCatalog.js";
 import { useRelevance }   from "../context/RelevanceContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
+import { compareBankHits } from "../core/bankRank.js";
 import CourseCard  from "./CourseCard.jsx";
 import SubjectTip  from "./SubjectTip.jsx";
 import GradPanel   from "./GradPanel.jsx";
@@ -412,31 +413,12 @@ export default function BankPanel() {
         }, 0);
         withScore.push({ c, score });
       });
-      // A retired course sinks BELOW a live one of equal relevance — never
-      // out of the results, and never above a better-scoring match.
-      //
-      // Why this rung exists, measured after the 2022-2025 archive backfill
-      // took the retired set from 1,075 to 2,257 (22.4% of the catalog):
-      // **389 retired courses share a subject and title with a live course**,
-      // because NEU renumbers rather than retires — ALY 6015 → ALY 6125
-      // "Intermediate Analytics", ACCT 6318 → ACCT 6418. On a title query both
-      // score identically (no code token matches), so the winner was decided
-      // by `tieSort`, i.e. alphabetically by code — and the old number is
-      // usually the lower one. Measured: the retired twin sorted first in
-      // **292 of the 389**. A student searching a course by name got, at the
-      // top, the one NEU no longer teaches.
-      //
-      // Deliberately a TIE-BREAK and not a filter, and the distinction is the
-      // whole point of the backfill. A retired course must stay findable: a
-      // continuing student recording that they took CS 2500 in 2023 has to be
-      // able to search for it, and those courses — three years of them — are
-      // exactly what the archive editions were scraped to provide. Removing
-      // them from search would break the use case the data exists for. It also
-      // stays below `score`, so an exact code query ("cs 2500") still returns
-      // the retired course first: asking for it by code is asking for it.
-      const retiredRank = (c) => (c.retired ? 1 : 0);
-      withScore.sort((a, b) =>
-        b.score - a.score || retiredRank(a.c) - retiredRank(b.c) || tieSort(a.c, b.c));
+      // Relevance, then retirement, then the caller's A-Z / SH ordering.
+      // The rungs and the measurements behind them live in core/bankRank.js —
+      // it is a pure function there because the rung ORDER is not testable in
+      // a browser (a mutant that put retirement above score survived the whole
+      // browser suite; see that file's docblock).
+      withScore.sort((a, b) => compareBankHits(a, b, tieSort));
       return withScore.map(x => x.c);
     }
 

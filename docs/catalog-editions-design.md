@@ -581,6 +581,21 @@ student rather than only continuing ones. This is the CS 2500 fix.
      browsable. Whether ~1,089 extra records is real noise is worth measuring
      *after* the roll, when there is something to measure. Deciding it now,
      against an empty file, would be speculation.
+5c. **Known gap, checked and left: 12 subjects have no display name.**
+   `AFAM AFRS DGTR GENS IS MILS MPNC MSIC PTH RFA RPT TECE` appear only in
+   retired courses, and `subjects.json` is written by the LIVE scrape, which no
+   longer sees them. Verified rather than assumed: `subjectName` returns null,
+   `SubjectTip` renders `tip = null`, and `HoverTip` shows the code with no
+   tooltip — so it degrades to *less* information, which is the acceptable
+   direction, and nothing throws.
+
+   Not fixed here because the fix is a data-shape change, not a patch. The
+   archive's own index page carries the names ("Africana Studies (AFAM)"), so
+   they are free to capture — but they would have to live INSIDE the edition
+   snapshot, since `runEdition` is deliberately unable to write `subjects.json`
+   and giving it that power to solve a tooltip would undo the containment that
+   is the whole point of step 4.
+
 7. **Retirement UI** (§7) — lifespan copy naming the edition, full last-known
    record, fidelity gating, all 8 locales. **Partly shipped**: the badge and
    tooltip exist in all 8 locales and `normalizeCourse` now carries `lifespan`

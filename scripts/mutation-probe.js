@@ -62,6 +62,7 @@ const SCRAPER = "scripts/scrape-catalog.js";
 const RETUNION = "scripts/derive-retired-union.js";
 const PREREQ   = "scripts/lib/prereq-parse.js";
 const BANK     = "src/ui/BankPanel.jsx";
+const BANKRANK = "src/core/bankRank.js";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
@@ -78,6 +79,7 @@ const PREREQ_TEST   = "cd test/unit      && node --test prereq-parse.test.js";
 // nothing in Node evaluates a component body. Slow (it rebuilds), so these
 // mutants are worth running with --only rather than in every sweep.
 const RETIRED_UI    = "cd test/browser   && node --test retired-course.browser.test.js";
+const BANKRANK_TEST = "cd test/unit      && node --test bank-rank.test.js";
 
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
@@ -86,16 +88,35 @@ const RETIRED_UI    = "cd test/browser   && node --test retired-course.browser.t
  */
 const MUTANTS = [
   // ── A retired course ranks below its live twin, and stays findable ──
+  // The rung-order mutants run the fast UNIT suite; only the two that are
+  // genuinely about rendering pay for a browser rebuild. That split is not
+  // tidiness — the second mutant below SURVIVED the whole browser suite when
+  // the comparator was inline in BankPanel.jsx, because the natural browser
+  // test for it ("type the retired course's code, it comes first") matches
+  // exactly one course and so cannot observe an ordering at all. Moving the
+  // comparator into core/bankRank.js is what made it killable.
   { name: "retired: the search tie-break ignores retirement (the 292/389 regression)",
-    file: BANK,
-    from: "        b.score - a.score || retiredRank(a.c) - retiredRank(b.c) || tieSort(a.c, b.c));",
-    to:   "        b.score - a.score || tieSort(a.c, b.c));", run: [RETIRED_UI] },
+    file: BANKRANK,
+    from: "    || retiredRank(a.c) - retiredRank(b.c)\n",
+    to:   "", run: [BANKRANK_TEST, RETIRED_UI] },
 
-  { name: "retired: demotion outranks relevance (an exact code query buries its own course)",
-    file: BANK,
-    from: "        b.score - a.score || retiredRank(a.c) - retiredRank(b.c) || tieSort(a.c, b.c));",
-    to:   "        retiredRank(a.c) - retiredRank(b.c) || b.score - a.score || tieSort(a.c, b.c));",
-    run: [RETIRED_UI] },
+  { name: "retired: demotion outranks relevance (a code query buries its own course)",
+    file: BANKRANK,
+    from: "    b.score - a.score\n    || retiredRank(a.c) - retiredRank(b.c)\n",
+    to:   "    retiredRank(a.c) - retiredRank(b.c)\n    || b.score - a.score\n",
+    run: [BANKRANK_TEST] },
+
+  { name: "retired: the rung's sign is flipped, promoting every retired course",
+    file: BANKRANK,
+    from: "export const retiredRank = (course) => (course?.retired ? 1 : 0);",
+    to:   "export const retiredRank = (course) => (course?.retired ? 0 : 1);",
+    run: [BANKRANK_TEST] },
+
+  { name: "retired: an absent `retired` field stops meaning live",
+    file: BANKRANK,
+    from: "export const retiredRank = (course) => (course?.retired ? 1 : 0);",
+    to:   "export const retiredRank = (course) => (course.retired ? 1 : 0);",
+    run: [BANKRANK_TEST] },
 
   { name: "retired: demotion becomes a FILTER (courses students took vanish)",
     file: BANK,
