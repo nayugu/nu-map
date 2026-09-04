@@ -41,6 +41,8 @@
 // new catalog wording for a known meaning lands on the existing kind.
 export const CONDITION_KINDS = [
   "grad-admission",  // admitted to a graduate program (generic)
+  "degree-admission",// admitted to a NAMED degree (MS, MA, doctoral) — NOT generic
+  "prior-coursework",// prior/transition coursework, or N terms of graduate study
   "permission",      // instructor / department / director consent
   "candidacy",       // PhD candidacy, qualifying exam, dissertation check
   "standing",        // class standing: junior, senior, undergraduate…
@@ -63,6 +65,26 @@ const CANDIDACY  = /\b(candidacy|dissertation|qualifying\s+exam|comprehensive\s+
 // wording ("doctoral program admission") deliberately does NOT match — a
 // graduate plan does not say which level, so it cannot assert that gate.
 const GRAD_ADMISSION = /\bgraduate\b[^.]*\b(admission|admitted|standing)\b|\b(admission|admitted)\b[^.]*\bgraduate\b|\bgraduate\s+(student|status)\b/;
+
+// Admission stated as a NAMED degree rather than as graduate study in general
+// — "Requires admission to MS program or completion of all transition courses"
+// (CS 5600). Recognized so it does not read as an unknown phrase, and
+// deliberately NOT auto-satisfiable: this module's rule is that only a generic
+// graduate-admission phrase may be asserted by a plan, because a plan records
+// `studentType: "graduate"` and never which degree. A PhD student is not
+// admitted to an MS program, so satisfying this from plan state would be an
+// invention. Ordered AFTER grad-admission so "admission to a graduate program
+// in Nursing" keeps the generic classification it already had.
+const DEGREE_ADMISSION = /\b(admission|admitted)\b[^.]*\b(m\.?s\.?|m\.?a\.?|master'?s?|doctoral|ph\.?d\.?|certificate)\b[^.]*\bprogram\b|\b(admission|admitted)\s+to\s+(the\s+)?(m\.?s\.?|m\.?a\.?|master'?s?|doctoral|ph\.?d\.?)\b/;
+
+// A gate that is prior WORK rather than prior status: "completion of all
+// transition courses", "at least three semesters of graduate study in health
+// informatics" (HINF 7701), "prior completion of graduate coursework in
+// microeconomics" (NETS 7341). Never auto-satisfiable — the planner does not
+// know what a student studied before this plan, and a transcript we cannot see
+// is exactly the thing invariant 1 says must stay neutral rather than become a
+// red card.
+const PRIOR_COURSEWORK = /\b(completion|completed)\b[^.]*\b(coursework|courses|semesters|terms|credits|study)\b|\b(semesters|terms)\s+of\s+graduate\s+study\b/;
 const SCORE_GATE = /\bwith a score of\b/;
 const STANDING   = /\bstanding\b/;
 const ENROLLMENT = /\b(enroll|matriculat|cohort)/;
@@ -81,6 +103,11 @@ export function classifyCondition(note) {
   if (PERMISSION.test(s))     return "permission";
   if (CANDIDACY.test(s))      return "candidacy";
   if (GRAD_ADMISSION.test(s)) return "grad-admission";
+  // Both below are non-auto-satisfiable, so they sit after the generic
+  // admission test: a phrase that qualifies as generic graduate admission must
+  // keep passing, and only what that test declines falls through to here.
+  if (DEGREE_ADMISSION.test(s))  return "degree-admission";
+  if (PRIOR_COURSEWORK.test(s))  return "prior-coursework";
   if (SCORE_GATE.test(s))     return "score-gate";
   if (STANDING.test(s))       return "standing";
   if (ENROLLMENT.test(s))     return "enrollment";

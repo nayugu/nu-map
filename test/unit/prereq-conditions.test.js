@@ -97,6 +97,49 @@ test("planConditions › undergrad, missing or malformed plan › asserts nothin
   }
 });
 
+// ── Graduate gates that are NOT generic admission ───────────────────────
+//
+// Three arrived with the 2026-2027 catalog roll, and all three had fallen
+// through to "other", which is neutral — the failure the invariant test guards
+// is that a gate reads as nothing at all and nobody notices.
+//
+// The point of these tests is the SECOND assertion in each: recognizing a
+// phrase must not quietly make it satisfiable. A plan records
+// `studentType: "graduate"` and nothing else, so it cannot assert which degree
+// a student was admitted to, nor what they studied before the plan began.
+test("classify › admission to a NAMED degree is recognized but never auto-satisfies", () => {
+  const note = "Requires admission to MS program or completion of all transition courses";
+  assert.equal(classifyCondition(note), "degree-admission");
+  assert.equal(AUTO_SATISFIABLE.has("degree-admission"), false,
+    "a graduate plan does not say WHICH degree — a PhD student is not admitted to an MS program");
+  assert.equal(conditionStatus(note, planConditions({ studentType: "graduate" })), null);
+});
+
+test("classify › prior coursework is recognized but never auto-satisfies", () => {
+  for (const note of [
+    "Requires prior completion of at least three semesters of graduate study in health informatics",
+    "Requires prior completion of graduate coursework in microeconomics and mathematics",
+  ]) {
+    assert.equal(classifyCondition(note), "prior-coursework", note);
+    assert.equal(conditionStatus(note, planConditions({ studentType: "graduate" })), null,
+      "a transcript we cannot see must stay neutral, not become a pass");
+  }
+  assert.equal(AUTO_SATISFIABLE.has("prior-coursework"), false);
+});
+
+test("classify › the new kinds did not steal generic graduate admission", () => {
+  // Ordering guard. Both new patterns mention admission, and if either ran
+  // before GRAD_ADMISSION the 209 courses that offer generic admission as an
+  // OR branch would stop auto-satisfying — reintroducing the exact bug this
+  // module was written for, silently and corpus-wide.
+  for (const note of ["graduate program admission",
+                      "admission to the graduate program in Nursing",
+                      "admitted to graduate study"]) {
+    assert.equal(classifyCondition(note), "grad-admission", note);
+    assert.equal(conditionStatus(note, planConditions({ studentType: "graduate" })), "satisfied", note);
+  }
+});
+
 test("planConditions › only grad-admission is ever auto-satisfiable", () => {
   // Guard against a future kind being wired in without a deliberate decision:
   // every kind a plan can assert must be in AUTO_SATISFIABLE.
