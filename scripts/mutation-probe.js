@@ -60,6 +60,7 @@ const DESCCOREQ = "src/adapters/northeastern/descriptionCoreq.js";
 const RETAIN  = "scripts/lib/course-retention.js";
 const SCRAPER = "scripts/scrape-catalog.js";
 const RETUNION = "scripts/derive-retired-union.js";
+const PREREQ   = "scripts/lib/prereq-parse.js";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
@@ -71,6 +72,7 @@ const UNLOCKS      = "cd test/unit      && node --test unlocked-courses.test.js"
 const DESCOREQ_TEST = "cd test/unit      && node --test description-coreq.test.js";
 const RETAIN_TEST   = "cd test/unit      && node --test course-retention.test.js";
 const RETUNION_TEST = "cd test/unit      && node --test retired-union.test.js";
+const PREREQ_TEST   = "cd test/unit      && node --test prereq-parse.test.js";
 
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
@@ -397,6 +399,32 @@ const MUTANTS = [
   { name: "union: editions are used in directory order, unsorted", file: RETUNION,
     from: "  const ordered = [...snapshots].sort((a, b) => a.year - b.year);",
     to:   "  const ordered = [...snapshots];", run: [RETUNION_TEST] },
+
+  // ── Legacy (Mills) course numbers in prereq text ────────────────────────
+  //
+  // This defect reached main: an unreadable OR-branch parsed to nothing and
+  // left the operator on BOTH sides, corrupting 513 prereq trees. These
+  // mutants exist because the bug was invisible to every unit test at the
+  // time — the suite asserted what the parser produced for inputs that parsed,
+  // and said nothing about a tree coming back malformed.
+  { name: "prereq: a legacy course number stops being note-worthy", file: PREREQ,
+    from: "  NOTE_SIGNAL.test(note) || SCORE_GATE.test(note) || LEGACY_COURSE.test(note);",
+    to:   "  NOTE_SIGNAL.test(note) || SCORE_GATE.test(note);", run: [PREREQ_TEST] },
+
+  // The half of the fix that LOOKED complete. Reverting only the cleanNote
+  // guard still leaves 4-digit-subject legacy codes working, so a test that
+  // checked one example of the fix would pass here — it has to reach a
+  // two-letter subject specifically.
+  { name: "prereq: cleanNote's word guard drops two-letter legacy subjects", file: PREREQ,
+    from: "  return /[a-z]{3,}/i.test(s) || LEGACY_COURSE.test(s) ? s : null;",
+    to:   "  return /[a-z]{3,}/i.test(s) ? s : null;", run: [PREREQ_TEST] },
+
+  // The dangerous direction. If the anchor goes, a REAL four-digit course
+  // becomes inert prose and every prereq in the catalog stops being enforced —
+  // a silent, catalog-wide disarming rather than a visible break.
+  { name: "prereq: LEGACY_COURSE loses its anchors and swallows real codes", file: PREREQ,
+    from: "const LEGACY_COURSE = /^(?:[A-Z]{2,6}\\s+\\d{2,3}[A-Z]{0,2}\\s*)+$/;",
+    to:   "const LEGACY_COURSE = /(?:[A-Z]{2,6}\\s+\\d{2,3}[A-Z]{0,2}\\s*)+/;", run: [PREREQ_TEST] },
 
   { name: "union: a stale retiredSince rides along beside the lifespan", file: RETUNION,
     from: "    const { retired: _r, retiredSince: _s, ...clean } = record;",

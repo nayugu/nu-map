@@ -6,6 +6,8 @@ import assert from "node:assert/strict";
 import { extractConcurrentCourses, parsePrereqText, parseCoreqText, hasPrereqSignal }
   from "../../scripts/lib/prereq-parse.js";
 import { parseDescriptionGpaGate } from "../../src/adapters/northeastern/gpaGate.js";
+import { conditionStatus } from "../../src/core/prereqConditions.js";
+import { prereqParseComplete } from "../../src/core/prereqFold.js";
 
 const parse = (text) => parsePrereqText(extractConcurrentCourses(text).cleaned);
 
@@ -223,4 +225,181 @@ test("coreqs › unchanged: bare refs, no grades", () => {
   assert.deepEqual(parseCoreqText("PHYS 1151 and PHYS 1152"), [
     { subject: "PHYS", number: "1151" }, { subject: "PHYS", number: "1152" },
   ]);
+});
+
+// ── Legacy (Mills College) course numbers ────────────────────────────────
+//
+// These broke main. NEU absorbed Mills in 2022 and its prereq lines cite the
+// Mills equivalents with 2–3 digit numbers plus a letter. The course pattern
+// wants four digits, so the branch parsed to nothing and the `or` on EACH side
+// survived — 81 distinct codes, 751 citations, 513 corrupted trees, surfacing
+// as "415 of 2839 prereq trees truncate" after the 2026-2027 roll.
+//
+// The property that matters is not "a note appears" but that the tree stays
+// WELL-FORMED, so these assert the operator sequence rather than just the leaf.
+const isOp = (x) => x === "And" || x === "Or";
+const wellFormed = (tree) => {
+  for (let i = 1; i < tree.length; i++) if (isOp(tree[i]) && isOp(tree[i - 1])) return false;
+  return !(tree.length && (isOp(tree[0]) || isOp(tree[tree.length - 1])));
+};
+
+test("legacy › a Mills code between two 'or's leaves no dangling operator", () => {
+  const tree = parsePrereqText(
+    "ACCT 1201 with a minimum grade of D- or ACCT 215M with a minimum grade of D- "
+    + "or ACCT 1202 with a minimum grade of D-");
+  assert.ok(wellFormed(tree), `dangling operator: ${JSON.stringify(tree)}`);
+  assert.deepEqual(tree, [
+    { subject: "ACCT", number: "1201", minGrade: "D-" }, "Or",
+    { note: "ACCT 215M" }, "Or",
+    { subject: "ACCT", number: "1202", minGrade: "D-" },
+  ]);
+});
+
+test("legacy › a NOTE, never a course ref — it can never resolve", () => {
+  // All 81 are absent from the catalog and always will be: it publishes zero
+  // 3-digit courses. A ref would be a permanently unresolved reference showing
+  // the student a branch they cannot satisfy; a note is neutral, so `mergeOr`
+  // collapses it onto the real alternative.
+  const tree = parsePrereqText("ACCT 215M with a minimum grade of D-");
+  for (const leaf of tree) {
+    assert.equal(leaf.subject, undefined,
+      `${JSON.stringify(leaf)} is a course ref — a legacy code must stay a note`);
+  }
+});
+
+test("legacy › a two-letter subject is still kept (the cleanNote guard)", () => {
+  // "SW 105M" has no run of three letters, so cleanNote's "needs real words"
+  // guard discarded it one step before isCondition could keep it. This was the
+  // half of the fix that looked done and was not: 38 of 513 still dangled.
+  for (const code of ["SW 105M", "PS 106M"]) {
+    const tree = parsePrereqText(`POLS 2345 with a minimum grade of D- or ${code} with a minimum grade of D-`);
+    assert.ok(wellFormed(tree), `${code} left a dangling operator: ${JSON.stringify(tree)}`);
+    assert.deepEqual(tree[2], { note: code });
+  }
+});
+
+test("legacy › two Mills codes with no operator between them are one note", () => {
+  const tree = parsePrereqText(
+    "PSYC 1101 with a minimum grade of D- or PSYC 101M with a minimum grade of D- "
+    + "PSYC 102M with a minimum grade of D-");
+  assert.ok(wellFormed(tree), `dangling operator: ${JSON.stringify(tree)}`);
+  assert.deepEqual(tree[2], { note: "PSYC 101M PSYC 102M" });
+});
+
+test("legacy › a real four-digit course is NEVER downgraded to a note", () => {
+  // The anchoring is what keeps LEGACY_COURSE off real codes: \d{2,3} cannot
+  // consume four digits and still reach the end of the string. If this ever
+  // fails, every prereq in the catalog is at risk of becoming inert prose.
+  for (const text of ["CS 3500 with a minimum grade of C- or CS 2510",
+                      "MATH 1341 and PHYS 1151",
+                      "BIOL 2301 or BIOL 2309 or BIOL 1111"]) {
+    for (const leaf of parsePrereqText(text)) {
+      if (typeof leaf === "string") continue;
+      assert.equal(leaf.note, undefined,
+        `${text} → ${JSON.stringify(leaf)} became a note; a real course was silently disarmed`);
+    }
+  }
+});
+
+test("legacy › '(may be taken concurrently)' on a legacy code leaves no empty group", () => {
+  // The second half of the same bug, and it survived the first fix:
+  // extractConcurrentCourses matched only four-digit codes, so the
+  // parenthetical stayed beside a code nothing could read and parsed as an
+  // empty group — `{note}, "(", ")"` — which truncates the tree just as a
+  // doubled operator does. 66 of the original 415 truncating trees were this.
+  const { cleaned } = extractConcurrentCourses(
+    "ACCT 2301 (may be taken concurrently) with a minimum grade of D- or "
+    + "ACCT 217M (may be taken concurrently) with a minimum grade of D- or "
+    + "ACCT 2302 (may be taken concurrently) with a minimum grade of D-");
+  const tree = parsePrereqText(cleaned);
+  assert.ok(wellFormed(tree), `dangling operator: ${JSON.stringify(tree)}`);
+  for (let i = 1; i < tree.length; i++) {
+    assert.ok(!(tree[i] === ")" && tree[i - 1] === "("),
+      `empty () group survived: ${JSON.stringify(tree)}`);
+  }
+  assert.deepEqual(tree, [
+    { subject: "ACCT", number: "2301", concurrent: true, minGrade: "D-" }, "Or",
+    { note: "ACCT 217M" }, "Or",
+    { subject: "ACCT", number: "2302", concurrent: true, minGrade: "D-" },
+  ]);
+});
+
+test("legacy › a real course still gets its concurrent flag", () => {
+  // Widening the number pattern must not cost the case it already handled.
+  const { cleaned } = extractConcurrentCourses(
+    "MATH 1341 (may be taken concurrently) with a minimum grade of D-");
+  assert.deepEqual(parsePrereqText(cleaned), [
+    { subject: "MATH", number: "1341", concurrent: true, minGrade: "D-" },
+  ]);
+});
+
+test("legacy › a semicolon conjunction survives beside a note (implicit And)", () => {
+  // GE 3300 states its top-level conjunction with a semicolon and no word.
+  // extractOperators deletes `;`, so the conjunction survives only as
+  // adjacency — and the implicit-And repair did not count a { note } as an
+  // operand, so `{note} (` stopped the fold and discarded the entire second
+  // group. The student loses a physics requirement, silently.
+  const tree = parsePrereqText(
+    "( MATH 1241 with a minimum grade of D- or MATH 1341 with a minimum grade of D- ) "
+    + "or MATH 21EM with a minimum grade of D- ; "
+    + "( PHYS 1151 with a minimum grade of D- or PHYS 261M with a minimum grade of D- )");
+  assert.ok(prereqParseComplete(tree), `tree truncates: ${JSON.stringify(tree)}`);
+  assert.deepEqual(tree.slice(5, 8), ["Or", { note: "MATH 21EM" }, "And"],
+    "the implicit And between the note and the second group is missing");
+  // The physics group must actually be in there — a fold that "completes"
+  // because everything after the note was dropped would be the same bug.
+  assert.ok(tree.some(t => t && t.subject === "PHYS" && t.number === "1151"),
+    `the second group was discarded: ${JSON.stringify(tree)}`);
+});
+
+test("malformed upstream › '( or' is repaired by swapping, not by dropping", () => {
+  // CHME 5649's prereq line is wrong in NEU's own catalog: they typed `)(`
+  // where they meant `)` `or` `(`, so a group opened with a bare operator.
+  // Dropping the stray paren would unbalance the tree (7 opens, 7 closes);
+  // swapping restores the reading AND the balance.
+  const src = "((( MATH 1341 with a minimum grade of D- or MATH 21EM with a minimum grade of D- ); "
+    + "( MATH 1342 with a minimum grade of D- or MATH 211M with a minimum grade of D- ))"
+    + "( or ( MATH 2321 with a minimum grade of D- or MATH 316M with a minimum grade of D- ); "
+    + "( MATH 2341 with a minimum grade of D- or MATH 315M with a minimum grade of D- ))) "
+    + "or graduate program admission";
+  const tree = parsePrereqText(extractConcurrentCourses(src).cleaned);
+
+  assert.ok(prereqParseComplete(tree), `tree truncates: ${JSON.stringify(tree)}`);
+  assert.equal(tree.filter(t => t === "(").length, tree.filter(t => t === ")").length,
+    "the repair unbalanced the parentheses");
+  assert.ok(!tree.some((t, i) => i && (t === "And" || t === "Or")
+                                 && (tree[i - 1] === "And" || tree[i - 1] === "Or")),
+    `the repair introduced a doubled operator — it must run BEFORE the implicit-And pass: ${JSON.stringify(tree)}`);
+
+  // The two calculus groups must be joined by Or, not And. Getting this
+  // backwards would demand all four courses instead of either pair — the
+  // expensive direction, since it refuses a plan that is actually valid.
+  const closeOfFirstGroup = tree.indexOf(")", tree.findIndex(
+    t => t && t.subject === "MATH" && t.number === "1342"));
+  assert.equal(tree[closeOfFirstGroup + 2], "Or",
+    `the two alternative course groups were ANDed together: ${JSON.stringify(tree)}`);
+  // Every one of the four real courses survives the repair.
+  for (const n of ["1341", "1342", "2321", "2341"]) {
+    assert.ok(tree.some(t => t && t.subject === "MATH" && t.number === n),
+      `MATH ${n} was lost: ${JSON.stringify(tree)}`);
+  }
+});
+
+test("malformed upstream › a well-formed group is left completely alone", () => {
+  // The repair must fire only on the invalid sequence. `( COURSE` and `( (`
+  // are both legal openings and must be untouched.
+  const before = parsePrereqText("( CS 2500 and CS 2510 ) or ( CS 1800 and CS 3500 )");
+  assert.ok(prereqParseComplete(before));
+  assert.deepEqual(before.filter(t => typeof t === "string"),
+    ["(", "And", ")", "Or", "(", "And", ")"]);
+});
+
+test("legacy › a note leaf classifies as neutral, so it cannot satisfy a prereq", () => {
+  // The whole safety of representing these as notes rests on neutrality: a
+  // note that auto-satisfied would let a student skip ACCT 1201 outright,
+  // which is far worse than the dangling operator this replaced.
+  const [leaf] = parsePrereqText("ACCT 215M with a minimum grade of D-");
+  assert.equal(conditionStatus(leaf.note, new Set()), null);
+  assert.equal(conditionStatus(leaf.note, new Set(["grad-admission", "permission"])), null,
+    "a legacy course note must not be satisfiable by any plan condition");
 });

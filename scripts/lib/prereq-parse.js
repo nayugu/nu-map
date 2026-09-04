@@ -30,7 +30,14 @@
 // Returns { cleaned: string, concurrent: [] }  (concurrent[] kept for call-site compat)
 export function extractConcurrentCourses(text) {
   const cleaned = text
-    .replace(/([A-Z]{2,6}\s+\d{4}[A-Z]?)\s*\(may be taken concurrently\)/gi, '$1[CONC]')
+    // `\d{2,4}[A-Z]{0,2}` covers the legacy (Mills) numbering too — "ACCT
+    // 217M (may be taken concurrently)". Matching only four digits left the
+    // parenthetical in place beside a code nothing else could read, so it
+    // parsed as an EMPTY GROUP: `{note:"ACCT 217M"}, "(", ")"`. That is the
+    // same dangling-token family as the doubled operator (see LEGACY_COURSE
+    // below) and it survived the first fix — 66 of the original 415 truncating
+    // trees were still truncating, on this alone.
+    .replace(/([A-Z]{2,6}\s+\d{2,4}[A-Z]{0,2})\s*\(may be taken concurrently\)/gi, '$1[CONC]')
     .replace(/\s+/g, ' ').trim();
   return { cleaned, concurrent: [] };
 }
@@ -93,15 +100,68 @@ export function parsePrereqText(text) {
     extractOperators(cleaned.slice(lastIndex), parts);
   }
 
-  // Post-process: insert implicit "And" between adjacent ) and ( with no operator
+  // Repair `( or` — an opening paren IMMEDIATELY followed by a binary
+  // operator. CHME 5649's line is malformed in the catalog itself:
+  //
+  //   "((( MATH 1341 … ); ( MATH 1342 … ))( or ( MATH 2321 … ); ( MATH 2341 … )))"
+  //                                        ^^^^
+  //
+  // NEU typed `)(` where they meant `)` `or` `(`, so the paren landed one token
+  // early. Swapping the pair restores exactly that, and the swap is safe in a
+  // way a guess would not be, for three separate reasons:
+  //
+  //   1. `(` followed by a binary operator is INVALID in any grammar — there is
+  //      no reading of it to preserve, so this repairs a provable error rather
+  //      than choosing between two possible meanings.
+  //   2. Parens still balance (7/7 here). DROPPING the stray paren instead
+  //      would unbalance them, so swap is the only repair that keeps the tree
+  //      foldable.
+  //   3. It is self-correcting: if NEU fixes the typo the sequence never
+  //      occurs and this never fires. That is why it lives here rather than in
+  //      a hand-written patch — a patch would keep overwriting the corrected
+  //      line with our reconstruction of it forever.
+  //
+  // Exactly ONE course in 2,839 trips this today. It runs BEFORE the implicit-
+  // And pass below deliberately: afterwards the sequence is `) ) And ( Or (`,
+  // and swapping there would leave `And` beside `Or` — trading this defect for
+  // the doubled-operator one.
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (parts[i] === '(' && (parts[i + 1] === 'And' || parts[i + 1] === 'Or')) {
+      parts[i] = parts[i + 1];
+      parts[i + 1] = '(';
+    }
+  }
+
+  // Post-process: insert an implicit "And" between two adjacent OPERANDS.
+  //
+  // The catalog states a top-level conjunction with a semicolon and no word:
+  //
+  //   GE 3300:  "( MATH 1241 … or MATH 1341 … ) or MATH 21EM … ; ( PHYS 1151 … )"
+  //
+  // extractOperators deletes `;` (it is punctuation inside phrases as often as
+  // it is a separator), so the conjunction survives only as adjacency, and this
+  // is the rule that recovers it.
+  //
+  // A { note } leaf counts as an operand on BOTH sides. It did not before, and
+  // that omission is the whole defect: notes were vanishingly rare when this
+  // was written, so an operand test that named only `cur.subject` looked
+  // complete. Once legacy course numbers began parsing as notes (LEGACY_COURSE
+  // above), `{note:"MATH 21EM"}` landed directly before `(` with nothing
+  // between them, the fold stopped at the unexpected token, and every
+  // requirement after it was silently discarded — the last 4 of the original
+  // 415 truncating trees, after the doubled operators and empty groups were
+  // fixed. Widening the test is more faithful than special-casing `;`, because
+  // it repairs the adjacency however it arose.
+  const isOperand = (tok) =>
+    typeof tok === 'object' && tok !== null && (tok.subject || tok.note);
   const result = [];
   for (let i = 0; i < parts.length; i++) {
     result.push(parts[i]);
     if (i < parts.length - 1) {
       const cur  = parts[i];
       const next = parts[i + 1];
-      const curIsEnd  = cur === ')' || (typeof cur === 'object' && cur.subject);
-      const nextIsStart = next === '(' || (typeof next === 'object' && next.subject);
+      const curIsEnd    = cur  === ')' || isOperand(cur);
+      const nextIsStart = next === '(' || isOperand(next);
       if (curIsEnd && nextIsStart) {
         result.push('And');
       }
@@ -146,9 +206,38 @@ const NOTE_SIGNAL = /\b(permission|consent|approv|admission|admitted|instructor|
 // "with a score of 3101" fragment left beside it is not itself captured.
 const SCORE_GATE = /^[A-Za-z][A-Za-z '&/-]*\s+with a score of\s+\S+$/i;
 
+// A LEGACY course number, cited as an alternative but published as no course.
+//
+// Northeastern absorbed Mills College in 2022 and its prereq lines still name
+// the Mills equivalents, which carry the old 2–3 digit numbering plus a letter:
+// "ACCT 1201 … or ACCT 215M … or ACCT 1202 …". The course-code pattern requires
+// four digits, so `ACCT 215M` matched nothing, the branch between two `or`s
+// parsed to nothing, and BOTH operators survived — the identical dangling-
+// operator scar the SCORE_GATE comment above was written for.
+//
+// This is not a small tail. Measured over the live catalog with
+// `scripts/prereq-residue-probe.js`: 81 distinct legacy codes, 751 citations,
+// corrupting 513 prereq trees — which is what `catalog-prereq-parse.test.js`
+// reports as "415 of 2839 trees truncate" on the 2026-2027 roll.
+//
+// A NOTE, deliberately, not a course ref. All 81 are absent from the catalog
+// and always will be (it publishes zero 3-digit courses), so a ref would be a
+// permanently unresolved reference and would show the student a branch they
+// can never satisfy. A note is neutral — `conditionStatus` returns null for it
+// and `mergeOr` collapses a neutral OR branch onto the other side — so
+// `A or ACCT 215M or B` reads as `A or B`, the tree stays balanced, and the
+// alternative stays VISIBLE without ever blocking or resolving.
+//
+// Anchored, and a run rather than a single code: six lines name two Mills
+// equivalents with no operator between them ("PSYC 101M … PSYC 102M …"), which
+// arrives here as one chunk. Anchoring is what keeps a real 4-digit code out —
+// `\d{2,3}` cannot consume four digits and still reach the end.
+const LEGACY_COURSE = /^(?:[A-Z]{2,6}\s+\d{2,3}[A-Z]{0,2}\s*)+$/;
+
 // A phrase worth keeping as an informational { note } leaf: a recognized
-// gating keyword, or a whole named-score gate.
-const isCondition = (note) => NOTE_SIGNAL.test(note) || SCORE_GATE.test(note);
+// gating keyword, a whole named-score gate, or a legacy course number.
+const isCondition = (note) =>
+  NOTE_SIGNAL.test(note) || SCORE_GATE.test(note) || LEGACY_COURSE.test(note);
 
 // Whether a prereq string is worth parsing at all. The catalog scraper used to
 // gate ONLY on a course-code pattern, so a prereq that is nothing but a
@@ -171,7 +260,15 @@ function cleanNote(raw) {
     .replace(/^(?:prerequisites?|prereqs?|corequisites?|coreqs?)\s*:?\s*/i, '')
     .replace(/^[-–—:.\s]+/, '')
     .replace(/[-–—:.\s]+$/, '');
-  return /[a-z]{3,}/i.test(s) ? s : null;       // needs real words, not punctuation
+  // Needs real words, not punctuation — OR a legacy course code, which can be
+  // all of two letters and still be the whole content of an OR branch. Mills's
+  // "SW 105M" (Social Work) and "PS 106M" (Political Science) have no run of
+  // three letters anywhere in them, so this guard threw them away one step
+  // before isCondition could keep them, leaving 38 of the 513 dangling
+  // operators still dangling after LEGACY_COURSE was added above. Found by
+  // re-running scripts/prereq-residue-probe.js rather than by reasoning — the
+  // fix looked complete and was not.
+  return /[a-z]{3,}/i.test(s) || LEGACY_COURSE.test(s) ? s : null;
 }
 
 function extractOperators(text, parts) {
