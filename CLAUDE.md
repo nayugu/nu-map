@@ -662,6 +662,33 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
   **"Electives Option"** among the options is the catalog's own name for the
   opt-out, so the choice itself is mandatory. 19 of the 58 programs scoring 0
   have one; the other 39 ("Astrophysics Concentration (Optional)") keep their 0.
+- **A stale program record can demand THREE TIMES the degree, and the tell is a
+  concentration menu shipped as a required section.** Global Studies and
+  International Relations MS (2026) flattens four MUTUALLY-EXCLUSIVE
+  concentration menus into four required 20 SH sections and ships
+  `concentrations: []`, so it demands **100 SH against the registrar's 34**.
+  Diagnosed 2026-09-04 after two confident wrong guesses — "NEU contradicts
+  itself" and "our pick-N credit reading is wrong" — neither of which survived
+  looking. Three rules came out of it:
+  1. **Allocate the section ALONE before blaming the section.** Its 7 courses
+     total 25 SH against a 20 SH floor and it reaches only 19, which reads as
+     an unsatisfiable section. It is not: alone the shortfall is 0, with any
+     ONE of the four menus it is 0, and only all four at once give 1. The
+     shortfall was CONTENTION between sections no student takes together.
+  2. **Re-parse the live page before concluding anything about a committed
+     record.** `scrape-grad-majors.js --url <page> --json out.json` reads the
+     same page as "7 sections + 4 concentrations, 34 SH" — the parser is fine
+     and the DATA is old. The record is from the 2026-08-21 scrape, before the
+     CPS pages rolled; **269 of 1,071 records still carry
+     `totalCreditsRequired: 0`** from that same rollover.
+  3. **It cannot be re-scraped, and that is the general shape.** The live site
+     serves 2027 and `/archive/2025-2026/` was never published, so the source
+     for a 2026 record no longer exists anywhere; writing today's parse into
+     `2026/` is the mislabelling `catalog-edition.js` refuses. An edition's
+     data is only fixable while that edition is live.
+  `KNOWN_STALE` in `requirement-credit-corpus.test.js` carries it as a NAMED
+  entry with the evidence, and reports any entry that stops failing so the
+  allowlist cannot outlive the defect.
 - **Check COVERAGE before believing a free-elective number.** 51 of 330 Boston
   undergrad degrees report >40% free electives, and the cause is almost never
   arithmetic: Art BA parsed 37 SH against a 130 SH degree. Look at

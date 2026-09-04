@@ -53,19 +53,34 @@ for (const c of raw) {
 }
 
 function corpus() {
+  // EVERY shipped edition, not a hardcoded year. Program trees are
+  // edition-partitioned and all of them ship, so pinning this to 2026 meant a
+  // newly-scraped 2027 tree would be checked by nothing at all — the guard
+  // would go quiet exactly when the data changed most. `ug`/`grad` and the
+  // year are carried in the name so a finding names one edition's record
+  // rather than a slug that exists in several.
   const out = [];
-  for (const root of ["data/northeastern/programs/undergraduate/2026",
-                      "data/northeastern/programs/graduate/2026"]) {
-    const base = join(ROOT, root);
-    if (!existsSync(base)) continue;
-    for (const college of readdirSync(base)) {
-      let progs = [];
-      try { progs = readdirSync(join(base, college)); } catch { continue; }
-      for (const prog of progs) {
-        const rf = join(base, college, prog, "requirements.json");
-        if (!existsSync(rf)) continue;
-        try { out.push({ name: prog, data: JSON.parse(readFileSync(rf, "utf8")) }); }
-        catch { /* the scrape's problem, not this test's */ }
+  for (const [tag, tree] of [["ug", "undergraduate"], ["grad", "graduate"]]) {
+    const treeDir = join(ROOT, "data/northeastern/programs", tree);
+    if (!existsSync(treeDir)) continue;
+    const years = readdirSync(treeDir).filter(y => /^\d{4}$/.test(y)).sort();
+    for (const year of years) {
+      const base = join(treeDir, year);
+      for (const college of readdirSync(base)) {
+        let progs = [];
+        try { progs = readdirSync(join(base, college)); } catch { continue; }
+        for (const prog of progs) {
+          const rf = join(base, college, prog, "requirements.json");
+          if (!existsSync(rf)) continue;
+          try {
+            // `slug` is the bare folder, kept alongside `name` so a lookup for
+            // one known program does not have to know the edition it lives in.
+            out.push({
+              name: `${tag}/${year}/${prog}`, slug: prog, year: Number(year), tree: tag,
+              data: JSON.parse(readFileSync(rf, "utf8")),
+            });
+          } catch { /* the scrape's problem, not this test's */ }
+        }
       }
     }
   }
@@ -93,7 +108,7 @@ test("corpus is present", () => {
 // ── The anchor case ────────────────────────────────────────────────
 
 test("ME&D reproduces the registrar's own free-elective figure exactly", () => {
-  const p = CORPUS.find(x => x.name.startsWith("mechanical_engineering_and_design_bsme"));
+  const p = CORPUS.find(x => x.slug.startsWith("mechanical_engineering_and_design_bsme"));
   assert.ok(p, "the program that found this bug must still be in the corpus");
   assert.equal(p.data.totalCreditsRequired, 139);
   assert.equal(p.data.generalElectiveSH, 4, "the catalog's stated figure");
@@ -159,6 +174,44 @@ test("no section reports more credit satisfied than it demands", () => {
     "a surplus here would lend credit to the section beside it and shrink free electives");
 });
 
+// ── Records that are provably STALE and cannot be re-derived ─────────────────
+//
+// Named, never a count — a count of one passes while a different section
+// breaks, which is the failure this file exists for. An entry here is a claim
+// that the DATA is wrong and unfixable, not that the check is too strict, and
+// it has to carry the evidence for that.
+const KNOWN_STALE = new Map([
+  ["grad/2026/global_studies_and_international_relations_ms_(boston) § International Economics and Consulting",
+    // Diagnosed 2026-09-04. NOT a parser defect and NOT NEU contradicting
+    // itself — both were guessed before anyone looked, and both were wrong.
+    //
+    // The 2026 record flattens FOUR MUTUALLY-EXCLUSIVE CONCENTRATION MENUS
+    // (Global Health and Development / Conflict Resolution / Diplomacy /
+    // International Economics and Consulting) into four REQUIRED sections of
+    // 20 SH each. It ships `concentrations: []`. Consequences, measured:
+    //
+    //   · the program demands 100 SH against a registrar total of 34;
+    //   · this section names 25 SH of courses and reaches only 19, because
+    //     GST 6102 and GST 6340 are claimed by the sibling menus first.
+    //
+    // Three measurements pin the cause to contention rather than to an
+    // unsatisfiable section: allocated ALONE the shortfall is 0; allocated
+    // with any ONE of the four menus it is 0; only all four at once gives 1.
+    //
+    // It is stale, not wrong-forever: `scrape-grad-majors.js --url <page>`
+    // against the live catalog parses the same page as "7 sections + 4
+    // concentrations, 34 SH". The committed record is from the 2026-08-21
+    // scrape, before the CPS pages rolled to 2026-27 — the same rollover that
+    // left 269 of these 1,071 records with `totalCreditsRequired: 0`.
+    //
+    // So why not just re-scrape it? Because the 2025-2026 page no longer
+    // exists anywhere: the live site serves 2027 and /archive/2025-2026/ was
+    // never published (PDF only). Writing today's parse into 2026/ is exactly
+    // the mislabelling `catalog-edition.js` refuses. The repair is the 2027
+    // grad tree landing, after which this record ages out of the window.
+    "stale 2026 record: 4 concentration menus flattened into required sections"],
+]);
+
 test("a section its named courses can supply is finished once they are placed", () => {
   // Three exclusions, each a section that placing every named course genuinely
   // cannot answer — so a shortfall there says nothing about this walk:
@@ -172,6 +225,7 @@ test("a section its named courses can supply is finished once they are placed", 
   //                   Repeats are `repeatInstances`/`courseMapWithRepeats`'
   //                   business, and this harness places every course once.
   const short = [];
+  const seenStale = new Set();
   for (const { name, data } of CORPUS) {
     const sections = data.requirementSections ?? [];
     const alloc = allocateSections(sections, namedCourses(data), new Set(), COURSE_MAP);
@@ -185,12 +239,27 @@ test("a section its named courses can supply is finished once they are placed", 
       for (const k of namedCourses({ requirementSections: [s] })) supply += COURSE_MAP[k]?.sh ?? 0;
       if (supply < demand) return;
       const sh = shortfallOf(alloc[i], u, COURSE_MAP);
-      if (sh > 0 && short.length < 10) {
-        short.push(`${name} § ${s.title}: ${sh} SH short of ${demand}, `
+      if (sh <= 0) return;
+      const label = `${name} § ${s.title}`;
+      if (KNOWN_STALE.has(label)) { seenStale.add(label); return; }
+      if (short.length < 10) {
+        short.push(`${label}: ${sh} SH short of ${demand}, `
           + `with ${supply} SH of courses named`);
       }
     });
   }
+
+  // An allowlist that outlives the defect is worse than no allowlist: it goes
+  // on excusing a section that is now fine, and hides the next real one behind
+  // a name that still looks accounted for. So an entry nobody hit is reported
+  // — loudly enough to be deleted, without failing a run whose only sin is
+  // that the data got better.
+  const unseen = [...KNOWN_STALE.keys()].filter(k => !seenStale.has(k));
+  if (unseen.length) {
+    console.log("  [credit] KNOWN_STALE entries no longer failing — delete them:\n    "
+      + unseen.join("\n    "));
+  }
+
   assert.deepEqual(short, [], "these can never be completed, so they can never be got right");
 });
 
