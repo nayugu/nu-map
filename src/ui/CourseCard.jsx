@@ -285,10 +285,53 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   //     otherwise cannot be registered at all.
   const retired = !!course?.retired;
 
+  // ── An availability ALARM is owed a decision the student can still make ──
+  //
+  // `retired` and `notOffered` are this app's two availability warnings, and
+  // both are predictions about REGISTRATION: "NEU may not let you take this."
+  // A completed semester has already answered that, so the amber outline there
+  // is alarm chrome laid over the one part of the board that is history rather
+  // than plan — and it cannot be acted on, because there is no version of the
+  // past in which the student picks differently. Whole rows of finished terms
+  // lit up yellow, which is also what made the outline stop reading as urgent
+  // on the terms where it IS.
+  //
+  // The BADGE is not gated, and the split is the point: the badge is
+  // information and the outline is an interruption. "This course no longer
+  // exists in the catalog" stays true and stays worth knowing about a course
+  // already taken — an advisor may ask about it — so it keeps saying so,
+  // quietly, in the badge and in the panel. Only the shout is withdrawn.
+  //
+  // Deliberately `!isDone`, NOT "starts after today". An in-progress term reads
+  // as open, which over-alarms by at most one semester — registration for it
+  // has in fact closed. That is the right side to be wrong on twice over: the
+  // "now" pointer lingers on a finished term through the 28–31 days of winter
+  // break (CLAUDE.md → term windows), so during that window the term the
+  // student is actually registering for is `future` while the one marked
+  // in-progress is already over; and an alarm shown one term too long is
+  // noise, where one withheld lets a student plan a course they cannot take.
+  //
+  // A BANK card is never `isDone` (`inSem` is false), so the outline survives
+  // where the mark is worth the most — see the note on `retired` above.
+  //
+  // `coreqViol` is NOT an availability warning and keeps its outline
+  // unconditionally: it says this term's registration is internally
+  // impossible, which is a statement about the plan as written rather than a
+  // forecast about what NEU will offer. Leaving it lit on a finished term is
+  // how a student notices they recorded something they could not have sat.
+  //
+  // Note the ladder now FALLS THROUGH on a gated warning rather than stopping
+  // at it, which is a second change and the right one: `retired` used to mask
+  // the relation rim and the ordering red beneath it, so a finished retired
+  // card showed the warning it could do nothing about and hid the prereq
+  // violation it could. Withdrawing the alarm hands the card back to whatever
+  // it would otherwise have said.
+  const availabilityAlarm = !isDone;
+
   let borderColor = isCardHov ? "var(--active)" : "var(--border-card)";
   if (coreqViol)                                                borderColor = "var(--warn-bright)";  // always wins
-  else if (retired)                                             borderColor = "var(--warn-bright)";
-  else if (notOffered)                                          borderColor = "var(--warn-bright)";
+  else if (retired && availabilityAlarm)                        borderColor = "var(--warn-bright)";
+  else if (notOffered && availabilityAlarm)                     borderColor = "var(--warn-bright)";
   else if (isConn && relType === "corequisite" && coreqViol)    borderColor = "var(--warn-bright)";
   // Connected (prereq/coreq) rims keep the vibrant relation colour but at reduced
   // opacity so they read as secondary to the glowing selected card. Warning
@@ -718,12 +761,22 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           // both. Which one a course belongs to is decidable from the record:
           //
           //   `retiredSince` only  → rescued by course-retention.js because a
-          //     shipped program edition still REQUIRES it. "Your catalog year
-          //     still requires it" is exactly right.
+          //     shipped program edition still REQUIRES it. It gets the plain
+          //     sentence: the catalog no longer lists this, ask about a
+          //     substitution.
           //   `lifespan`           → from the retired union: required by
           //     nothing, kept only so a saved plan naming it still resolves.
-          //     The same sentence is FALSE, and it is false on a card any
-          //     student can reach through search. 367 courses on the 2027 roll.
+          //     It gets its own sentence naming the EDITION that last
+          //     published the course. 368 courses on the 2027 roll.
+          //
+          // The retention string used to add "it's kept because your catalog
+          // year still requires it", which is what forced this branch to exist
+          // — that clause is a plain falsehood about a union course, and
+          // nothing filters `retired` out of search, so it was false on a card
+          // any student could reach. The clause is now gone from all eight
+          // locales, so the two sentences differ only in what they can
+          // legitimately claim: the union one can name an edition, the
+          // retention one cannot (see below).
           //
           // Still no date in either: `retiredSince` is the day OUR scrape first
           // failed to find the course, not a day NEU announced anything, and

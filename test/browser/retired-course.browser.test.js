@@ -74,7 +74,10 @@ function pickLiveCourse() {
   return null;
 }
 
-const seed = (placements) => `(${((pl, major) => {
+// `now` is which semester the plan calls the current one, and it is a
+// parameter because the alarm gate below is defined against it: everything
+// before it is "completed" and everything from it on is still open.
+const seed = (placements, now = "fall2025") => `(${((pl, major, cur) => {
   const P = "ncp-";
   localStorage.setItem(P + "plan-index", JSON.stringify([
     { id: "default", name: "T", studentType: "undergrad", parentId: null, lastOpened: Date.now() },
@@ -82,12 +85,12 @@ const seed = (placements) => `(${((pl, major) => {
   localStorage.setItem(P + "plan-data-default", JSON.stringify({
     version: 1, studentType: "undergrad",
     entSem: "fall", entYear: 2025, gradSem: "spring", gradYear: 2029,
-    currentSemId: "fall2025",
+    currentSemId: cur,
     major, minor1: null, placements: pl,
     specialTermPl: {}, semOrders: {}, placedOut: [], substitutions: [],
   }));
   localStorage.setItem(P + "tour-seen", "true");
-}).toString()})(${JSON.stringify(placements)},${JSON.stringify(CS_BS)})`;
+}).toString()})(${JSON.stringify(placements)},${JSON.stringify(CS_BS)},${JSON.stringify(now)})`;
 
 describe("a retired course in a saved plan", () => {
   let browser, server, port, launchError = null;
@@ -294,17 +297,176 @@ describe("a real retired course from the shipped union", () => {
       `${id} is in the shipped union and did not render`);
     assert.match(bodyText, /⚠\s*retired/i, `${id} rendered without the retired badge`);
 
-    // The tooltip must be the UNION one, not the retention one. The retention
-    // sentence — "your catalog year still requires it" — is a plain falsehood
-    // about a union course, which is required by nothing, and it was shipping
-    // on all 367 of them until this branch existed. Read off the title
-    // attribute rather than the body text, since a tooltip is not rendered
-    // text and `innerText` cannot see it.
+    // The tooltip must be the UNION one, not the retention one. It was the
+    // retention sentence's old "it's kept because your catalog year still
+    // requires it" clause that forced this branch — a plain falsehood about a
+    // union course, which is required by nothing, shipping on all of them.
+    // That clause is now deleted from all eight locales, so what separates the
+    // two strings today is the positive claim the union one can make and the
+    // retention one cannot: naming the edition. Read off the title attribute
+    // rather than the body text, since a tooltip is not rendered text and
+    // `innerText` cannot see it.
     const tip = await page0Title(browser, port, id);
     assert.ok(/No current program requires it/i.test(tip),
       `${id} shows the RETENTION tooltip, which claims a program requires it: "${tip}"`);
     assert.ok(/2025–2026/.test(tip),
       `${id} should name the catalog edition that last published it, got: "${tip}"`);
+  });
+});
+
+// ── The alarm is withdrawn once the semester is over; the fact is not ───────
+//
+// Two separate claims, and they are tested apart because they are easy to
+// conflate and the conflation is the bug in both directions:
+//
+//   · the amber OUTLINE is an interruption, so it is owed a decision the
+//     student can still make. On a completed term there is none.
+//   · the BADGE is information, and "NEU no longer lists this course" stays
+//     true of a course already taken. Withdrawing it with the outline would
+//     hide the fact rather than stop shouting it — and it is the badge that
+//     leads to the panel, which is where the sentence lives.
+//
+// Everything here reads COMPUTED style off the real DOM. Nothing in Node
+// evaluates a React component body, so a gate written into a `borderColor`
+// ladder is only actually checkable in a browser.
+describe("an availability alarm stops once the semester is over", () => {
+  let browser, server, port, launchError = null;
+  const union = JSON.parse(readFileSync(
+    new URL("../../public/northeastern/retired-courses.json", import.meta.url), "utf8"));
+  const subject = union.find(c => (c.credits ?? 0) >= 4);
+
+  before(async () => {
+    await ensureBuild();
+    ({ server, port } = await serveDist());
+    try {
+      const { chromium } = await import("playwright");
+      browser = await chromium.launch();
+    } catch (e) { launchError = e; }
+  });
+  after(async () => {
+    await browser?.close();
+    await new Promise((r) => server?.close(r));
+  });
+
+  /**
+   * Place `id` in `sem`, with the plan's "now" at fall2027, and report what the
+   * card looks like.
+   *
+   * The alarm colour is read from the LIVE stylesheet rather than hard-coded to
+   * #fbbf24: two themes define `--warn-bright` differently (themes.js line 62
+   * against line 187), so a literal would pass or fail on which theme the test
+   * happened to boot in, which is exactly the kind of green-for-the-wrong-
+   * reason this suite exists to avoid.
+   */
+  async function card(id, sem) {
+    assert.equal(launchError, null,
+      `chromium unavailable — run \`npx playwright install chromium\`: ${launchError?.message}`);
+    const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
+    await ctx.addInitScript(seed({ [id]: sem }, "fall2027"));
+    const page = await ctx.newPage();
+    const errors = [];
+    page.on("pageerror", e => errors.push(String(e?.message ?? e)));
+    await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load", timeout: 60_000 });
+    await page.waitForTimeout(4000);
+
+    const sel = `[data-drag-id="${id}"][data-drag-from="${sem}"]`;
+    const out = await page.evaluate(([s, cssSel]) => {
+      const norm = (c) => {
+        // Resolve a var() to the rgb() the browser actually painted, by
+        // measuring it rather than parsing it.
+        const probe = document.createElement("div");
+        probe.style.color = c;
+        document.body.appendChild(probe);
+        const v = getComputedStyle(probe).color;
+        probe.remove();
+        return v;
+      };
+      const el = document.querySelector(cssSel);
+      return {
+        found: !!el,
+        border: el ? getComputedStyle(el).borderTopColor : null,
+        alarm: norm("var(--warn-bright)"),
+        text: el ? el.innerText : "",
+      };
+    }, [sem, sel]);
+
+    // Open the panel on this card, then read it.
+    //
+    // `el.click()` rather than `page.click()`: a real pointer click is refused
+    // here because the sticky timeline header overlays the card's hit box
+    // ("<div> intercepts pointer events", 30 s of retries). That is a layout
+    // fact about a card scrolled under a header, not something this test is
+    // about — it is checking what the PANEL says once opened. The dispatched
+    // event still bubbles to React's delegated root listener, so the same
+    // onClick runs.
+    let panelText = "";
+    if (out.found) {
+      await page.$eval(sel, el => el.click());
+      await page.waitForTimeout(800);
+      panelText = await page.evaluate(() =>
+        document.querySelector("[data-info-panel]")?.innerText ?? "");
+    }
+
+    await page.close();
+    await ctx.close();
+    return { ...out, panelText, errors };
+  }
+
+  test("a retired course in a COMPLETED semester keeps its badge and loses its outline", async () => {
+    assert.ok(subject,
+      "retired-courses.json holds no course of 4 SH or more — if the union is "
+      + "empty this test proves nothing and should be understood as unrun");
+    const id = `${subject.subject}${subject.number}`;
+    const c  = await card(id, "fall2025");           // now = fall2027, so this is done
+
+    assert.deepEqual(c.errors, [], `${id} threw on render:\n  ${c.errors.join("\n  ")}`);
+    assert.ok(c.found, `${id} is not on the board in fall2025 — the seed did not take`);
+    assert.notEqual(c.border, c.alarm,
+      `${id} sits in a finished semester and still wears the amber alarm outline (${c.border}). `
+      + "An availability warning is a prediction about registration, and that term's "
+      + "registration is over.");
+    assert.match(c.text, /⚠\s*retired/i,
+      `${id} lost its retired BADGE along with the outline. The outline is the `
+      + "interruption; the badge is the fact, and the fact did not stop being true "
+      + "because the student already took the course.");
+  });
+
+  test("the same course in a FUTURE semester still wears the outline", async () => {
+    // The other half, and the one that makes the test above mean anything: a
+    // gate that suppressed the outline everywhere would pass the first test
+    // and delete the feature. This is the mutation the first test cannot see.
+    assert.ok(subject, "union is empty — unrun");
+    const id = `${subject.subject}${subject.number}`;
+    const c  = await card(id, "fall2028");           // now = fall2027, so this is ahead
+
+    assert.deepEqual(c.errors, [], `${id} threw on render:\n  ${c.errors.join("\n  ")}`);
+    assert.ok(c.found, `${id} is not on the board in fall2028 — the seed did not take`);
+    assert.equal(c.border, c.alarm,
+      `${id} is planned for a semester nobody has registered for yet and carries no `
+      + `alarm outline (${c.border}, expected ${c.alarm}) — the gate is suppressing `
+      + "the warning where it is the whole point of the feature");
+  });
+
+  test("the panel states the retirement outright, on a FINISHED placement too", async () => {
+    // The panel is unconditional where the board is gated. It is also the only
+    // surface that can carry the sentence at all: the card has room for "⚠
+    // retired" and a `title=`, and a `title=` does not exist on a touch device.
+    assert.ok(subject, "union is empty — unrun");
+    const id = `${subject.subject}${subject.number}`;
+    const c  = await card(id, "fall2025");           // completed — no outline, still explained
+
+    assert.ok(c.panelText,
+      `clicking ${id} opened no info panel, so this test checked nothing`);
+    assert.match(c.panelText, /⚠\s*retired/i,
+      `the info panel for ${id} does not say it is retired. That is the fact a student `
+      + "opens the panel to find, and until now it was only ever in a tooltip.");
+    assert.match(c.panelText, /No current program requires it/i,
+      `the panel for ${id} does not carry the UNION sentence — it is showing the `
+      + "retention wording, which says only that the catalog no longer lists the course "
+      + "and cannot name the edition that last published it.");
+    assert.match(c.panelText, /2025–2026/,
+      `the panel for ${id} does not name the catalog edition that last published it, `
+      + "which is the one registrar fact an advisor can act on");
   });
 });
 
