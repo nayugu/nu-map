@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-15",
+ "generated": "2026-09-03",
  "coopPrep": [
   {
    "course": "BIOL1000",
@@ -305,15 +305,15 @@
   },
   "CHEM1161": {
    "at": 0.077,
-   "programs": 43
+   "programs": 42
   },
   "CHEM1162": {
    "at": 0.077,
-   "programs": 43
+   "programs": 42
   },
   "CHEM1163": {
    "at": 0.077,
-   "programs": 39
+   "programs": 38
   },
   "CHEM1211": {
    "at": 0.308,
@@ -1033,11 +1033,11 @@
   },
   "MUSC1002": {
    "at": 0,
-   "programs": 8
+   "programs": 7
   },
   "MUSC1003": {
    "at": 0,
-   "programs": 8
+   "programs": 7
   },
   "MUSC1119": {
    "at": 0,
@@ -1497,13 +1497,6 @@
    "sameTerm": 0
   },
   {
-   "before": "ARTG1001",
-   "after": "ARTG4550",
-   "programs": 14,
-   "observations": 21,
-   "sameTerm": 0
-  },
-  {
    "before": "ARTG1002",
    "after": "ARTG1270",
    "programs": 16,
@@ -1546,13 +1539,6 @@
    "sameTerm": 0
   },
   {
-   "before": "ARTG1002",
-   "after": "ARTG4550",
-   "programs": 14,
-   "observations": 21,
-   "sameTerm": 0
-  },
-  {
    "before": "ARTG1270",
    "after": "ARTG2262",
    "programs": 7,
@@ -1564,13 +1550,6 @@
    "after": "ARTG2263",
    "programs": 7,
    "observations": 12,
-   "sameTerm": 0
-  },
-  {
-   "before": "ARTG1270",
-   "after": "ARTG4550",
-   "programs": 14,
-   "observations": 21,
    "sameTerm": 0
   },
   {
@@ -1588,13 +1567,6 @@
    "sameTerm": 0
   },
   {
-   "before": "ARTG1271",
-   "after": "ARTG4550",
-   "programs": 14,
-   "observations": 21,
-   "sameTerm": 0
-  },
-  {
    "before": "ARTG1290",
    "after": "ARTG2262",
    "programs": 7,
@@ -1609,13 +1581,6 @@
    "sameTerm": 0
   },
   {
-   "before": "ARTG1290",
-   "after": "ARTG4550",
-   "programs": 14,
-   "observations": 21,
-   "sameTerm": 0
-  },
-  {
    "before": "ARTG1291",
    "after": "ARTG2262",
    "programs": 7,
@@ -1627,27 +1592,6 @@
    "after": "ARTG2263",
    "programs": 7,
    "observations": 12,
-   "sameTerm": 0
-  },
-  {
-   "before": "ARTG1291",
-   "after": "ARTG4550",
-   "programs": 14,
-   "observations": 21,
-   "sameTerm": 0
-  },
-  {
-   "before": "ARTG2262",
-   "after": "ARTG4550",
-   "programs": 6,
-   "observations": 8,
-   "sameTerm": 0
-  },
-  {
-   "before": "ARTG2263",
-   "after": "ARTG4550",
-   "programs": 6,
-   "observations": 8,
    "sameTerm": 0
   },
   {
@@ -1728,13 +1672,6 @@
    "sameTerm": 0
   },
   {
-   "before": "CHEM1161",
-   "after": "CHEM2314",
-   "programs": 17,
-   "observations": 34,
-   "sameTerm": 0
-  },
-  {
    "before": "CHEM1162",
    "after": "CHEM2312",
    "programs": 23,
@@ -1742,38 +1679,10 @@
    "sameTerm": 0
   },
   {
-   "before": "CHEM1162",
-   "after": "CHEM2314",
-   "programs": 17,
-   "observations": 34,
-   "sameTerm": 0
-  },
-  {
    "before": "CHEM1163",
    "after": "CHEM2312",
    "programs": 20,
    "observations": 33,
-   "sameTerm": 0
-  },
-  {
-   "before": "CHEM1163",
-   "after": "CHEM2314",
-   "programs": 14,
-   "observations": 22,
-   "sameTerm": 0
-  },
-  {
-   "before": "CHEM2311",
-   "after": "CHEM2314",
-   "programs": 21,
-   "observations": 50,
-   "sameTerm": 0
-  },
-  {
-   "before": "CHEM2312",
-   "after": "CHEM2314",
-   "programs": 21,
-   "observations": 50,
    "sameTerm": 0
   },
   {
@@ -2009,6 +1918,13 @@
   },
   {
    "before": "CS1200",
+   "after": "CS1210",
+   "programs": 38,
+   "observations": 66,
+   "sameTerm": 0
+  },
+  {
+   "before": "CS1200",
    "after": "CS2101",
    "programs": 25,
    "observations": 44,
@@ -2043,6 +1959,20 @@
    "sameTerm": 0
   },
   {
+   "before": "CS1800",
+   "after": "CS4100",
+   "programs": 5,
+   "observations": 8,
+   "sameTerm": 0
+  },
+  {
+   "before": "CS1800",
+   "after": "CS4120",
+   "programs": 7,
+   "observations": 12,
+   "sameTerm": 0
+  },
+  {
    "before": "CS1802",
    "after": "CS2484",
    "programs": 13,
@@ -2054,6 +1984,20 @@
    "after": "CS3001",
    "programs": 5,
    "observations": 13,
+   "sameTerm": 0
+  },
+  {
+   "before": "CS1802",
+   "after": "CS4100",
+   "programs": 5,
+   "observations": 8,
+   "sameTerm": 0
+  },
+  {
+   "before": "CS1802",
+   "after": "CS4120",
+   "programs": 7,
+   "observations": 12,
    "sameTerm": 0
   },
   {
@@ -2085,6 +2029,20 @@
    "sameTerm": 0
   },
   {
+   "before": "CS2000",
+   "after": "CS4100",
+   "programs": 5,
+   "observations": 8,
+   "sameTerm": 0
+  },
+  {
+   "before": "CS2000",
+   "after": "CS4120",
+   "programs": 7,
+   "observations": 12,
+   "sameTerm": 0
+  },
+  {
    "before": "CS2001",
    "after": "CS2101",
    "programs": 48,
@@ -2110,6 +2068,20 @@
    "after": "CS3101",
    "programs": 48,
    "observations": 97,
+   "sameTerm": 0
+  },
+  {
+   "before": "CS2001",
+   "after": "CS4100",
+   "programs": 5,
+   "observations": 8,
+   "sameTerm": 0
+  },
+  {
+   "before": "CS2001",
+   "after": "CS4120",
+   "programs": 7,
+   "observations": 12,
    "sameTerm": 0
   },
   {
@@ -2145,6 +2117,13 @@
    "after": "CS3101",
    "programs": 48,
    "observations": 99,
+   "sameTerm": 0
+  },
+  {
+   "before": "CS3200",
+   "after": "CS4120",
+   "programs": 5,
+   "observations": 9,
    "sameTerm": 0
   },
   {
