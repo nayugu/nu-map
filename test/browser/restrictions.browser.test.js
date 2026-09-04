@@ -168,15 +168,66 @@ describe("restrictions · the course card", () => {
     return { text, titles };
   }
 
+  /**
+   * The coverage column's rendered geometry.
+   *
+   * Anchored STRUCTURALLY — the coverage row is the only `display: grid` in
+   * the block, and its three children are the season, the bar and the figure —
+   * rather than on a `data-` hook added to the app for the test's benefit. If
+   * that structure changes this fails loudly, which is the correct outcome:
+   * the property being asserted is a property of that structure.
+   */
+  async function geometryFor(courseId, label) {
+    assert.equal(launchError, null,
+      `chromium unavailable — run \`npx playwright install chromium\`: ${launchError?.message}`);
+    const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
+    await ctx.addInitScript(seed({ [courseId]: "fall2025" }));
+    const page = await ctx.newPage();
+    await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load", timeout: 60_000 });
+    await page.waitForTimeout(3000);
+    for (let i = 0; i < 6; i++) {
+      const skip = page.getByRole("button", { name: /^Skip$/ }).first();
+      if (await skip.count() && await skip.isVisible().catch(() => false)) {
+        await skip.click().catch(() => {}); await page.waitForTimeout(250);
+      } else break;
+    }
+    await page.getByText(label).first().click({ timeout: 10_000 });
+    await page.waitForTimeout(1500);
+    const out = await page.evaluate(() => {
+      const title = [...document.querySelectorAll("span")]
+        .find(s => s.textContent.trim() === "Restrictions");
+      const box = title?.parentElement?.parentElement;
+      const grid = box && [...box.querySelectorAll("div")]
+        .find(d => getComputedStyle(d).display === "grid");
+      if (!grid) return null;
+      // A rule is `display: contents`, so its cells are the grid's items even
+      // though they are its grandchildren. Expanding that is the whole trick.
+      const items = [...grid.children].flatMap(
+        c => getComputedStyle(c).display === "contents" ? [...c.children] : [c]);
+      const px = (n) => Math.round(n);
+      return {
+        boxWidth: px(box.getBoundingClientRect().width),
+        panelWidth: px(document.documentElement.clientWidth),
+        cells: items.map(c => ({
+          left:  px(c.getBoundingClientRect().left),
+          right: px(c.getBoundingClientRect().right),
+          full:  getComputedStyle(c).gridColumnStart === "1"
+                 && getComputedStyle(c).gridColumnEnd === "-1",
+        })),
+      };
+    });
+    await ctx.close();
+    return out;
+  }
+
   test("a restricted course shows its kinds, values and the term they came from", async () => {
     assert.ok(RESTR.courses[SUBJECT], `${SUBJECT} has no restrictions in the shipped asset`);
     const { text, titles } = await panelFor(SUBJECT, /MEIE\s*4701/);
 
     assert.match(text, /Restrictions/, "the block did not render");
-    // The kind, translated — not the raw Banner noun and not a locale key.
-    // `Majors:` rather than `Class standing:`, because the latter also appears
-    // in the standing box above and would pass for the wrong reason.
-    assert.match(text, /Majors:/);
+    // A heading, translated. It is the polarity and the coverage stated once
+    // for every row beneath it, so if it is missing no row means anything.
+    assert.match(text, /Some sections open only to/, "the heading did not render");
     // A value, glossed from the shipped label map rather than shown as a code.
     assert.match(text, /Mechanical Engineering/);
     assert.doesNotMatch(text, /\bMECE\b/, "a raw Banner code leaked instead of its label");
@@ -185,16 +236,55 @@ describe("restrictions · the course card", () => {
     assert.ok(sumB, `${SUBJECT} has no Summer B observation in the asset`);
     assert.match(text, /Summer B/,
       "the season must be named, and summers are 'Summer B' not 'Summer 2'");
-    // Every one of this course's rules is on every section, so it reads under
-    // the gate heading — which is the sentence that stops five kinds being read
-    // as five conditions one student must satisfy at once.
-    assert.match(text, /Applies to every section/, "the tier heading did not render");
-    // A gate prints no fraction: the heading above already said every section,
-    // and repeating it once per season is the noise this replaced.
-    assert.doesNotMatch(text, /every section · /);
+    // Coverage is ALWAYS a fraction, never a phrase. "every section" beside
+    // "1 of 2" put a phrase and a ratio in one column and the eye could not
+    // compare them; a full bar says it without a word.
+    assert.doesNotMatch(text, /every section/,
+      "coverage must read as a fraction, so the column can be compared down");
+    assert.match(text, /\b\d+ of \d+\b/, "no coverage fraction rendered at all");
     // The years are RELOCATED, not dropped — they are the row's title now.
     assert.ok(titles.some(x => x === `Summer B ${sumB}`),
       `no row carries "Summer B ${sumB}" as its provenance; titles: ${titles.join(" | ")}`);
+  });
+
+  test("the block is a TABLE — every cell lands on a shared column", async () => {
+    // The property no text assertion in this file can see, and the one the
+    // panel was rebuilt for. Every layout defect here was invisible to the
+    // innerText tests that were passing at the time: coverage right-aligned as
+    // a run of phrases so no two bars started at the same x; then a grid per
+    // rule, so each row sized its own columns; then a grid per heading, so
+    // "Special Approvals" and "Classes" started 60px apart under one box.
+    //
+    // Asserted as a PARTITION over rendered x positions rather than as a list
+    // of expected pixel values, so it states the property — "the cells share
+    // columns" — and not this month's font metrics.
+    const g = await geometryFor("GE1501", /GE\s*1501/);
+    assert.ok(g, "the Restrictions grid did not render");
+
+    const cells = g.cells.filter(c => !c.full);
+    const headings = g.cells.filter(c => c.full);
+    assert.ok(cells.length >= 10, `too few cells to prove a column: ${cells.length}`);
+    assert.ok(headings.length >= 1, "no full-width heading row");
+
+    // At most five distinct left edges — kind, values, season, bar, figure —
+    // across every rule of every heading. A per-section grid gives more.
+    const lefts = [...new Set(cells.map(c => c.left))];
+    assert.ok(lefts.length <= 5,
+      `cells sit on ${lefts.length} different columns, not 5: ${lefts.sort((a, b) => a - b).join(", ")}`);
+
+    // And ONE right edge for the figures: the rightmost column is where every
+    // fraction ends, which is what makes them a column of numbers rather than
+    // a ragged stack. Measured as "the widest cell right edge is shared".
+    const rightmost = Math.max(...cells.map(c => c.right));
+    const atEdge = cells.filter(c => c.right === rightmost);
+    assert.ok(atEdge.length >= 4,
+      `only ${atEdge.length} cells reach the right edge; the figures are ragged`);
+
+    // The box hugs its table instead of stretching with the drawer. Without
+    // this a rule's values sit at one end of a 1,500px row and its figure at
+    // the other, and nothing ties them together.
+    assert.ok(g.boxWidth < g.panelWidth * 0.75,
+      `the block stretched to ${g.boxWidth}px of a ${g.panelWidth}px viewport`);
   });
 
   test("a group's values are listed one per line, under their own term", async () => {
@@ -219,10 +309,14 @@ describe("restrictions · the course card", () => {
     assert.ok(!lines.some(l => /Mechanical Engineering · Mechanical/.test(l)),
       "values are still being joined into a single run");
 
-    // UNIFORM depth: the single-value Fall group is bulleted too, so it cannot
-    // sit at a shallower indent than the five-value Summer B group.
-    assert.ok(bulleted.some(l => /Industrial Engineering$/.test(l)),
-      "the single-value group must be bulleted like every other group");
+    // The single-value group still prints its value. This used to assert the
+    // BULLET on it, on the rule that every group is bulleted for a uniform
+    // indent; the indent is now unconditional and the glyph marks a sibling,
+    // so a lone value carries none. The alignment property that assertion was
+    // really about is checked as geometry in the test below, where it belongs —
+    // asserting it on a glyph is what let the columns drift unnoticed.
+    assert.ok(lines.some(l => /Industrial Engineering$/.test(l)),
+      "the single-value group must still print its value");
 
     // ASSOCIATION, in Banner's order: sentence → values → the terms those
     // values were seen in. A value's terms are the next non-bullet lines
@@ -256,9 +350,13 @@ describe("restrictions · the course card", () => {
     // And somewhere there is an Industrial Engineering value whose terms are
     // the Falls — the advisor's actual case.
     const fallGroup = lines.some((l, i) =>
-      // `/^Fall /` with the trailing space, until the years moved into the
-      // row's title and the line became bare "Fall".
-      /^· Industrial Engineering$/.test(l) && termsAfter(i).some(x => /^Fall\b/.test(x)));
+      // Two things moved under this assertion and each broke it once: the
+      // years left the line for the row's title, so `/^Fall /` with a trailing
+      // space stopped matching a bare "Fall"; and the bullet became a
+      // SIBLING marker, so this group — the only one in its heading — prints
+      // without one. Both are matched loosely here because neither is the
+      // property under test, which is the attribution.
+      /^·? ?Industrial Engineering$/.test(l) && termsAfter(i).some(x => /^Fall\b/.test(x)));
     assert.ok(fallGroup, "no Industrial Engineering group is attributed to Fall");
   });
 

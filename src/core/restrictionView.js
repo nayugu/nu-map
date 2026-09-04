@@ -244,42 +244,91 @@ export const isGate = (g) =>
   (g?.seasons?.length ?? 0) > 0 && g.seasons.every(s => s.everySection);
 
 /**
- * Split the kinds into the two readings a student has to keep apart.
+ * The order the six sections are read in. A gate before a reservation, because
+ * a gate can close the course and a reservation only shrinks the menu; and
+ * within each, "who may" before "who may not" before "what else is needed".
+ */
+const SECTION_ORDER = Object.freeze([
+  ["gate", "must"], ["gate", "not"], ["gate", "info"],
+  ["some", "must"], ["some", "not"], ["some", "info"],
+]);
+
+/**
+ * The panel's whole model: the kinds folded into at most six labelled sections.
  *
- * ── The misreading this exists to kill ─────────────────────────────
+ * ── Why SIX sections and not one list ──────────────────────────────
  *
- * Rendered as one flat list, five kinds read as a conjunction: "you must be a
- * Freshman AND in ND Global Scholars AND in the College of Engineering AND on
- * the Oakland campus AND an Honors Student" — a course nobody on earth could
- * register for. What the registrar actually published is five rules on five
- * different SETS of sections: 41 of 49, 2 of 24, 45 of 49, 4 of 49, 1 of 24.
- * The student needs one section that fits them, not all five properties.
+ * A restriction has two independent properties and the reader has to know both
+ * before a single value means anything:
  *
- * The conjunction is only true for the sections-wide rules, and there it is
- * exactly true — so the two go under headings that say which reading applies,
- * and that heading is the whole fix. Measured over the 2,949 courses carrying
- * restrictions: 3,963 of 7,035 groups (56%) are gates, 3,072 are not, 2,075
- * courses are gate-only, 477 are partial-only, and 397 carry both.
+ *   COVERAGE — every section, or only some? A gate can close the course; a
+ *     reservation only shrinks the menu, and the student needs one section
+ *     that fits rather than all of them.
+ *   POLARITY — may enrol, may not enrol, or must also obtain?
  *
- * ── Why the split is per GROUP but the kind is duplicated ──────────
+ * Printed as one flat list, both properties have to be carried per row, which
+ * is what the registrar's sentence was doing — "Must be enrolled in one of the
+ * following Classes:" repeated once per kind, three lines per rule, with the
+ * one word that differs buried at the end. Sorting the rows by the pair
+ * instead states each property ONCE, as a heading, and leaves a row with
+ * nothing to carry but its value.
  *
- * Coverage is a property of a group, not of a kind; a kind whose groups
- * disagree therefore appears in both tiers, carrying only its own groups. That
- * costs a repeated heading on 84 of 5,382 kinds and keeps polarity — the
- * `must`/`not` sentence — stated over every group it governs. Dropping the
- * kind into whichever tier holds most of its groups would put a "cannot be
- * enrolled in" list under "applies to every section" and state the opposite of
- * the truth for the rest.
+ * The measurement is what makes this a compression rather than a rearrangement.
+ * Over the 2,949 courses with restrictions:
+ *   · 2,180 (74%) need exactly ONE of the six headings; 602 need two;
+ *   · 2,816 of 3,916 headings (72%) hold exactly one KIND, so the kind noun is
+ *     redundant there and is dropped — hence `showKind`, the one thing here
+ *     that is conditional;
+ *   · 1,930 courses (65%) come out at three lines or fewer, against a floor of
+ *     five for the shape this replaces.
+ *
+ * Nothing is merged or hidden: every kind, group and value still appears
+ * exactly once, and `restriction-view.test.js` asserts that as a partition.
  *
  * @param {Array} kinds  `groupRestrictions(...).kinds`
- * @returns {{gates: Array, partial: Array}} the same kind objects, groups filtered
+ * @returns {Array<{tier: string, polarity: string, showKind: boolean, rows: Array<{
+ *            key: string, kind: string, codes: string[], seasons: Array }>}>}
  */
-export function splitByCoverage(kinds) {
-  const pick = (want) => (kinds ?? [])
-    .filter(Boolean)
-    .map(k => ({ ...k, groups: (k.groups ?? []).filter(g => isGate(g) === want) }))
-    .filter(k => k.groups.length > 0);
-  return { gates: pick(true), partial: pick(false) };
+export function restrictionSections(kinds) {
+  const out = [];
+
+  for (const [tier, polarity] of SECTION_ORDER) {
+    const want = tier === "gate";
+    const picked = (kinds ?? []).filter(Boolean).filter(k => k.polarity === polarity);
+    const rows = [];
+    for (const k of picked) {
+      for (const g of k.groups ?? []) {
+        // A malformed group is skipped, never rendered as a heading with an
+        // empty row under it: an unnamed restriction implies one exists and we
+        // will not say what it is, which is worse than not mentioning it.
+        if (!g || !Array.isArray(g.codes) || !g.codes.length) continue;
+        if (isGate(g) !== want) continue;
+        rows.push({
+          key: k.key, kind: k.kind, codes: g.codes, seasons: g.seasons ?? [],
+        });
+      }
+    }
+    if (!rows.length) continue;
+    out.push({ tier, polarity, rows });
+  }
+
+  // ── The kind noun is a DISAMBIGUATOR, and the decision is BLOCK-WIDE ──
+  //
+  // With one kind in the whole block every row is on the same axis and the
+  // noun says nothing the heading has not; with two it is the only thing
+  // telling a reader that "Mechanical Engineering" is a department on one row
+  // and a major on the next, or that "Toronto, Canada" is a campus rather than
+  // a programme. So it is shown exactly when it discriminates — 72% of
+  // headings hold one kind, but the question is not per heading.
+  //
+  // Deciding it per SECTION was built first and was wrong for a reason the
+  // panel's own history already recorded: two layouts in one block put the
+  // label-less section's values at a shallower indent than the labelled one's,
+  // so "Advisor's Signature" and "Honors Student" began at different depths
+  // under the same box. One grid for the block, or no grid at all.
+  const showKind = new Set(out.flatMap(s => s.rows.map(r => r.key))).size > 1;
+  for (const s of out) s.showKind = showKind;
+  return out;
 }
 
 /**

@@ -16,7 +16,7 @@ import { ISpecialTerms }            from "../ports/ISpecialTerms.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
 import { unlockedCourses, coreqPartnersOf } from "../core/courseModel.js";
-import { groupRestrictions, displayValues, splitByCoverage } from "../core/restrictionView.js";
+import { groupRestrictions, displayValues, restrictionSections } from "../core/restrictionView.js";
 import { conditionStatus } from "../core/prereqConditions.js";
 // Pure core, like prereqConditions beside it — the codes and their ordering, never
 // the display names: those are localized and come from `t`.
@@ -762,16 +762,19 @@ function seasonYears(s) {
  * see where one major ends and the next begins — which is the one thing the row
  * exists to tell them.
  *
- * ── Why EVERY group is bulleted, including single-value ones ────────
+ * ── The bullet marks a SIBLING, not a value ────────────────────────
  *
- * The first attempt listed only the LONG groups and left short ones inline, on
- * the measurement that 558 of 941 groups hold exactly one value and a one-item
- * bullet is noise. That was wrong, and only looking at it rendered showed why:
- * two layouts inside one block put the inline group's text at a shallower
- * indent than the listed group's values, so "Industrial Engineering" and
- * "· Mechanical Engineering" began at different depths under the same kind.
- * Uniform bulleting costs one line on a single-value group and buys an indent
- * the eye can follow. Consistency beat the saved line.
+ * An earlier version bulleted every group including single-value ones, because
+ * leaving short groups inline put their text at a shallower indent than listed
+ * ones and the eye could not follow the column. That reasoning was about the
+ * INDENT, and the fix conflated two things: the hanging indent is what keeps
+ * the column, and the glyph is what says "a new value starts here". So the
+ * indent is now unconditional and the glyph is not — 4,006 of 7,035 rows (57%)
+ * hold exactly one value, where there is no sibling to distinguish it from and
+ * the bullet is decoration. Where there ARE siblings it earns its place: at
+ * 10px in a narrow drawer "Mechanical Engineering/Bioengineering" wraps, and
+ * without a marker in the gutter a wrapped tail is indistinguishable from the
+ * next major.
  *
  * ── Why the tail is DEFERRED, not truncated ────────────────────────
  *
@@ -796,12 +799,13 @@ function RestrictionValues({ values, t }) {
     // was dim, so the eye landed on boilerplate repeated once per kind and had
     // to hunt for the one word that actually differs. The sentence states the
     // rule; the value is what a student checks themselves against.
-    <div style={{ paddingLeft: 10, color: "var(--text-2)" }}>
+    <div style={{ color: "var(--text-2)" }}>
       {shown.map((v, i) => (
-        // Hanging indent, so a value that still wraps stays visually inside
-        // its own bullet rather than aligning with the next one.
+        // Hanging indent, unconditionally, so a wrapped value stays inside its
+        // own gutter and every value in the block starts at one depth whether
+        // or not it has a sibling to be marked against.
         <div key={i} style={{ paddingLeft: 8, textIndent: -8 }}>
-          <span style={{ opacity: 0.45 }}>·{" "}</span>{v}
+          {vals.length > 1 && <span style={{ opacity: 0.45 }}>·{" "}</span>}{v}
         </div>
       ))}
       {(hidden > 0 || open) && (
@@ -839,105 +843,198 @@ function RestrictionValues({ values, t }) {
  * precision than the fraction beside it, which is exactly the split the block
  * exists to draw: "nearly every section is closed" against "one section is".
  */
-function SeasonCoverage({ s, t, gate }) {
+function SeasonCoverage({ s, t, cell }) {
   const label = t(SEASON_KEY[s.season] ?? s.season ?? "");
   const years = seasonYears(s);
   const frac  = Number.isFinite(s.of) && s.of > 0 ? Math.min(1, s.sections / s.of) : 1;
 
-  // A gate needs no figure: the tier heading above it already says every
-  // section, and repeating it once per season is the repetition that made the
-  // old block unreadable. All that is left is WHEN we saw it.
-  if (gate) {
-    return (
-      <span title={`${label} ${years}`} style={{ opacity: 0.55, whiteSpace: "nowrap" }}>
-        {label}
+  // THREE CELLS OF THE SECTION'S GRID, not a grid of its own. Nested, each row
+  // sized its own columns, so nothing lined up with the row above it; sized by
+  // hand instead, every width was a guess against eight locales — 40px was too
+  // narrow for "Summer A" and 84px wrapped "Special Approvals". As cells of one
+  // grid the widths come from the widest content in the section and are right
+  // by construction, in every language.
+  //
+  // The season is right-aligned so it butts against the bar it qualifies, and
+  // the figure is right-aligned so the block has ONE right edge — left-aligned
+  // in a fixed cell, "4 of 4" and "41 of 49" ended at different x and the
+  // fractions read as a ragged column beside everything else.
+  const common = { ...cell, whiteSpace: "nowrap", opacity: 0.8 };
+  return (
+    <>
+      <span title={`${label} ${years}`} style={{ ...common, textAlign: "right" }}>{label}</span>
+      {/* Fixed track, so the fills of two seasons — or two rules — are read
+          against each other rather than each against its own denominator.
+          A bar and not a percentage: `seasonCoverage` is deliberate that the
+          figure is not a rate, and at a denominator of 2 a percent sign is
+          false precision. The bar carries the comparison, the fraction carries
+          the precision, and neither claims more than it has. */}
+      <span style={{ ...cell, alignSelf: "center" }}>
+        <span style={{ display: "block", width: 26, height: 4, borderRadius: 99, background: "var(--border-2)", overflow: "hidden" }}>
+          <span style={{ display: "block", height: "100%", width: `${frac * 100}%`, background: "var(--text-4)" }} />
+        </span>
       </span>
-    );
-  }
+      {/* Always the fraction, including when it is the whole. "every section"
+          read as a different KIND of fact beside "41 of 49" and broke the
+          column — the eye cannot compare a phrase with a ratio, and a full
+          bar already says it without a word. Every observation in the shipped
+          asset carries a section count (7,006 of 7,006), so the denominator
+          is never missing.
+
+          Right-aligned so the digits end together, which is the ordinary
+          reading order for a column of figures. */}
+      <span style={{ ...common, textAlign: "right", paddingRight: 0 }}>
+        {t("info.restrictions.sectionsFrac", { n: s.sections, total: s.of })}
+      </span>
+    </>
+  );
+}
+
+/** The six headings, in `restrictionSections` order. */
+const SECTION_HEADING = {
+  "gate|must": "info.restrictions.head.only",
+  "gate|not":  "info.restrictions.head.notOpen",
+  "gate|info": "info.restrictions.head.alsoReq",
+  "some|must": "info.restrictions.head.someOnly",
+  "some|not":  "info.restrictions.head.someNot",
+  "some|info": "info.restrictions.head.someReq",
+};
+
+/**
+ * One rule: its values, and — only where they say something — its kind, its
+ * seasons and its coverage.
+ *
+ * ── The line budget is the design ──────────────────────────────────
+ *
+ * The shape this replaces spent three to four lines on every rule: the
+ * registrar's sentence, the value, the season-and-coverage line. Six rules on
+ * GE 1501 came to twenty-six lines of near-identical text, and no amount of
+ * weight or colour makes twenty-six lines obvious. Here the heading above owns
+ * the polarity and the coverage tier, so a rule that has nothing else to say
+ * is ONE line holding one thing: the value.
+ *
+ * The KIND noun is the one conditional part: it appears only when the block
+ * holds more than one kind, because otherwise every row is on the same axis
+ * and the noun labels a column of one.
+ *
+ * Everything else is unconditional, and that is a correction of two earlier
+ * attempts to be clever. Suppressing a gate's coverage, and suppressing a
+ * season run that covered everything we had read, each removed a real
+ * redundancy and each cost more than it saved: the rows stopped sharing a
+ * grid, so the block had one right edge above the divider and another below
+ * it. A column the eye can run down is worth more than the words it repeats.
+ */
+function RuleRow({ row, labels, t, showKind, orRaw, first }) {
+  const values = displayValues(row.codes, labels, row.key);
+  const span   = Math.max(1, row.seasons.length);
+
+  // A BAND per rule. `display: contents` means there is no row element to put
+  // a border on, so the rule is drawn on each cell of its FIRST grid row — the
+  // standard technique, and the reason `first` is threaded down here. Without
+  // it, a rule's values sit at one end and its figure at the other and nothing
+  // says where one rule stops: MEIE 4701 stacks five majors under one figure
+  // and three rules in a row, so "Fall 16 of 20" could belong to any of them.
+  // The hairline is lighter than the one between headings, because a rule is a
+  // subdivision of a heading and two rules at one weight read as two headings.
+  const band = first ? {} : { borderTop: "1px solid var(--border-1)", paddingTop: 4 };
+  // `paddingRight` and NOT a `columnGap`: with a gap, a border drawn on cells
+  // comes out as a row of disconnected dashes with holes between the columns,
+  // which reads as broken rather than as a rule. Padding inside the cells puts
+  // the same space between the columns and lets the borders meet.
+  const cell = { ...band, paddingBottom: 2, paddingRight: 10 };
 
   return (
-    <div title={`${label} ${years}`}
-         style={{ display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap", opacity: 0.75 }}>
-      <span style={{ width: 50, flexShrink: 0 }}>{label}</span>
-      {/* Fixed track, so the fills of two seasons — or two groups — are read
-          against each other rather than each against its own denominator. */}
-      <span style={{ width: 34, height: 4, flexShrink: 0, borderRadius: 99, background: "var(--border-2)", overflow: "hidden", display: "inline-block" }}>
-        <span style={{ display: "block", height: "100%", width: `${frac * 100}%`, background: "var(--text-4)" }} />
+    // `display: contents` — the cells join the SECTION's grid rather than
+    // forming a nested one. Every column is then sized once, from the widest
+    // content in the whole section, instead of from a number picked by hand:
+    // this is what "Special Approvals" wrapping in an 84px box and "Summer A"
+    // overrunning a 40px box both were.
+    <div style={{ display: "contents" }}>
+      {showKind && (
+        <span style={{ ...cell, gridRow: `span ${span}`, fontSize: 9, opacity: 0.65,
+                       whiteSpace: "nowrap", lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
+          {orRaw(`info.restrictions.name.${row.kind}`, row.kind)}
+        </span>
+      )}
+      {/* No `variesBySection` note. It said "in one term, the sections
+          disagree" — which is exactly what a row reading "1 of 2" says, with
+          the numbers. Printed beside the fraction it was a weaker restatement
+          repeated once per group, three times over on BINF 6250. */}
+      <span style={{ ...cell, gridRow: `span ${span}`, minWidth: 0 }}>
+        <RestrictionValues values={values} t={t} />
       </span>
-      <span>
-        {s.everySection
-          ? t("info.restrictions.everySection")
-          : t("info.restrictions.sectionsFrac", { n: s.sections, total: s.of })}
-      </span>
+      {/* When this rule applies and how much of the term it touches — on the
+          same three columns as every other rule in the section, one grid row
+          per season, with the kind and the values spanning them.
+
+          A gate used to print a phrase here instead ("Spring only"), on the
+          reasoning that its fraction is by definition the whole and the
+          heading had already said so. True, and it still broke the layout: a
+          phrase right-aligned to the box and a grid right-aligned to its own
+          cells are two different right edges, so the block had two columns
+          pretending to be one and nothing under the divider lined up with
+          anything above it. A gate now reads "16 of 16" against a full bar,
+          which says the same thing in the same shape as every row beside it.
+          Uniformity is the property being bought; the redundant denominator is
+          the price, and it is cheap because a full bar is read, not parsed. */}
+      {row.seasons.map((s, i) => (
+        <SeasonCoverage key={i} s={s} t={t}
+                        cell={i === 0 ? cell : { paddingBottom: 2, paddingRight: 10 }} />
+      ))}
     </div>
   );
 }
 
 /**
- * One tier: a heading that states how to READ the rules under it, then the rules.
+ * One of the six headings, with its rules under it.
  *
- * The heading is the whole redesign. See `splitByCoverage` for the misreading
- * it exists to kill and the corpus figures behind it.
+ * The heading is the whole design: it states the POLARITY and the COVERAGE
+ * once, for every row beneath it, so no row has to carry either. See
+ * `restrictionSections` for why those two properties are the axes and for the
+ * corpus figures behind the compression.
  */
-function RestrictionTier({ kinds, labels, t, gate, orRaw }) {
-  if (!kinds.length) return null;
+function RestrictionSection({ section, labels, t, orRaw, hint, first }) {
+  // A heading spans every column, so it is a full-width row of the BLOCK's
+  // grid rather than a box of its own. That is what keeps the columns aligned
+  // across headings: given a grid per section, "Special Approvals" sized its
+  // own kind column and its values started 60px from where the values under
+  // the heading above it started — the misalignment the block is being rebuilt
+  // to remove, reintroduced one level down.
+  const full = { gridColumn: "1 / -1" };
   return (
-    <div style={{
-      marginTop: 5, paddingLeft: 7,
-      // Solid for the rules that always apply, dashed for the ones that hold on
-      // some sections only — the same tentative/committed motif the Claude
-      // ghost previews use, so the two tiers separate before either is read.
-      borderLeft: `2px ${gate ? "solid" : "dashed"} var(--border-2)`,
-    }}>
-      <div style={{ color: "var(--text-3)", fontWeight: 700 }}>
-        {t(gate ? "info.restrictions.tier.all" : "info.restrictions.tier.some")}
+    <>
+      <div style={{
+        ...full,
+        // A RULED DIVIDER, not just space. Each heading changes both the
+        // reading and the polarity of everything under it, so the boundary has
+        // to be as visible as the difference is consequential — "Open only to"
+        // and "Not open to" are opposite instructions, and separated by
+        // whitespace alone the second reads as a continuation of the first.
+        marginTop: first ? 4 : 8,
+        paddingTop: first ? 0 : 6,
+        // `--border-2` against the rules' `--border-1`: two weights of line for
+        // two levels of structure. At one weight the block reads as a flat list
+        // of bands and the headings stop being headings.
+        borderTop: first ? "none" : "1px solid var(--border-2)",
+        fontWeight: 700, letterSpacing: 0.2,
+        color: section.polarity === "not" ? "var(--error)" : "var(--text-2)",
+      }}>
+        {t(SECTION_HEADING[`${section.tier}|${section.polarity}`])}
       </div>
-      <div style={{ fontSize: 9, fontStyle: "italic", opacity: 0.7, marginBottom: 1,
-                    lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
-        {t(gate ? "info.restrictions.tier.all.hint" : "info.restrictions.tier.some.hint")}
-      </div>
-
-      {kinds.map(k => (
-        <div key={k.key} style={{ marginTop: 3 }}>
-          {/* The registrar's own sentence, kept for its POLARITY — "must" and
-              "cannot" are the difference between a door and a wall, and the
-              bare noun heading this replaced stated a topic instead. It is set
-              smaller and dimmer than the values it introduces: it repeats once
-              per kind, so at the old weight the eye read the boilerplate five
-              times and hunted for the word that differs. */}
-          <span style={{ fontSize: 9, fontWeight: 600, letterSpacing: 0.2,
-                         color: k.polarity === "not" ? "var(--error)" : "var(--text-5)" }}>
-            {t(`info.restrictions.kind.${k.polarity}`, {
-              kind: orRaw(`info.restrictions.name.${k.kind}`, k.kind),
-            })}
-          </span>
-          {k.variesBySection && (
-            <span style={{ fontSize: 9, opacity: 0.7 }}> {t("info.restrictions.variesBySection")}</span>
-          )}
-          {k.groups.map((g, gi) => (
-            // Groups within one kind are ALTERNATIVES on different sections, so
-            // they need more air between them than the lines inside one group —
-            // BINF 6250 lists three program sets under one sentence and at an
-            // even rhythm they read as one long list.
-            <div key={gi} style={{ marginTop: gi ? 6 : 0 }}>
-              {/* Values, then when. The term lines come AFTER the values, not
-                  before, because a group can span several seasons: heading them
-                  produced runs of two or three term lines with no values under
-                  them and the values stranded below the last one, which read as
-                  lines "without any specification". Values belong to the
-                  sentence; the coverage is provenance for the pair. */}
-              <RestrictionValues values={displayValues(g.codes, labels, k.key)} t={t} />
-              <div style={{ paddingLeft: 10, display: gate ? "flex" : "block",
-                            flexWrap: "wrap", gap: gate ? 6 : 0 }}>
-                {g.seasons.map((s, si) => (
-                  <SeasonCoverage key={si} s={s} t={t} gate={gate} />
-                ))}
-              </div>
-            </div>
-          ))}
+      {/* Said ONCE, under the first reserved-sections heading. It is the
+          sentence that kills the conjunction misreading, and repeating it over
+          each of the three "some sections" headings would make it wallpaper. */}
+      {hint && (
+        <div style={{ ...full, fontSize: 9, fontStyle: "italic", opacity: 0.7,
+                      marginBottom: 2, lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
+          {t("info.restrictions.someHint")}
         </div>
+      )}
+      {section.rows.map((row, i) => (
+        <RuleRow key={i} row={row} labels={labels} t={t} first={i === 0}
+                 showKind={section.showKind} orRaw={orRaw} />
       ))}
-    </div>
+    </>
   );
 }
 
@@ -956,14 +1053,14 @@ function RestrictionTier({ kinds, labels, t, gate, orRaw }) {
  * one term. Merging them would tell a BS-ARCH student that any of five
  * programmes may register, and never that exactly one section is open to them.
  *
- * ── Tiered by COVERAGE, because a flat list states a falsehood ─────
+ * ── Sorted by COVERAGE and POLARITY, because a flat list states a falsehood ──
  *
  * Five kinds in one list read as a conjunction, and for a course whose rules
  * each sit on a different subset of sections that conjunction describes a
- * student who cannot exist. `splitByCoverage` carries the measurement; the two
- * headings carry the reading. Nothing is hidden or merged by the split — every
- * kind, group and value that used to print still prints, in the same order,
- * under a heading that says which of the two readings applies to it.
+ * student who cannot exist. `restrictionSections` carries the measurement; the
+ * headings carry the reading. Nothing is hidden or merged — every kind, group
+ * and value still appears exactly once, under a heading that says how to read
+ * it, and `restriction-view.test.js` asserts that as a partition.
  *
  * ── Falling back to Banner's own words ─────────────────────────────
  *
@@ -993,20 +1090,62 @@ function RestrictionBlock({ restrictions, t, standingShown = false }) {
   /** Translate, or fall back to the registrar's own word. */
   const orRaw = (key, raw) => { const s = t(key); return s === key ? raw : s; };
 
-  const { gates, partial } = splitByCoverage(kinds);
+  const sections = restrictionSections(kinds);
+  // The hint belongs to the first reserved-sections heading, whichever of the
+  // three it turns out to be — keyed on the section rather than on "is this
+  // index 3", because which headings exist varies course by course.
+  const firstSome = sections.findIndex(s => s.tier === "some");
+  // Block-wide, so every section's rows sit on the same columns. `showKind` is
+  // already decided block-wide in core; this just reads it off the first
+  // section rather than threading it separately.
+  const showKind = !!sections[0]?.showKind;
 
   return (
+    // The FRAME is full width, like every other box in this panel — prereqs,
+    // coreqs, class standing, co-op prep all fill the column, and a box that
+    // stops short of them reads as a rendering fault rather than as a choice.
+    // The TABLE inside it is the thing that must not stretch (see the grid's
+    // `justifyContent: start`), so the two decisions are separate: the frame
+    // aligns with its siblings, the columns stay within one fixation of each
+    // other. Making the frame hug the table was tried and got the association
+    // right at the cost of a ragged stack of boxes down the panel.
     <div style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 4, padding: "4px 8px", marginTop: 4, lineHeight: "calc(1.9 * var(--lh-scale, 1))" }}>
       <div title={t("info.restrictions.note")}>
         <span style={{ color: "var(--text-3)", fontWeight: 700 }}>{t("info.restrictions.title")}</span>
       </div>
 
-      {/* GATES FIRST. They are the rules with no way round them, so they are
-          what a student needs before reading any of the rest; and putting them
-          first is also what makes the second heading a correction rather than a
-          surprise — "these apply to every section" then "these do not". */}
-      <RestrictionTier kinds={gates}   labels={labels} t={t} orRaw={orRaw} gate />
-      <RestrictionTier kinds={partial} labels={labels} t={t} orRaw={orRaw} gate={false} />
+      {/* ── ONE GRID FOR THE WHOLE BLOCK ─────────────────────────────
+          Every column is sized from the widest content anywhere in the block,
+          so no width in this component is a number somebody chose. That
+          matters more than it sounds: the hand-picked ones were wrong twice in
+          one sitting (84px wrapped "Special Approvals", 40px overran
+          "Summer A") and would have been wrong again in each of the eight
+          locales, where "Classes" is "Clases", "履修区分" and "الصفوف".
+
+          `justifyContent: start` with no `1fr` track is the other half. The
+          drawer runs to 1,900px on a wide screen and the block used to stretch
+          with it, putting a rule's values at one end and its figure at the
+          other with a hand's width of nothing between — which no amount of
+          banding fixes. Content-sized tracks make the table exactly as wide as
+          it needs to be and no wider, at any panel width, with no cap to pick
+          and no breakpoint to maintain. The values track is `minmax(0, …)` so
+          that on a phone it is the one that gives, wrapping instead of
+          overflowing.
+
+          `columnGap` is 0 on purpose; the space between columns is padding
+          inside the cells, so the per-rule hairlines meet instead of coming
+          out as a row of dashes with holes at every column boundary. */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns:
+          `${showKind ? "max-content " : ""}minmax(0, max-content) max-content max-content max-content`,
+        justifyContent: "start", alignItems: "baseline",
+      }}>
+        {sections.map((s, i) => (
+          <RestrictionSection key={`${s.tier}|${s.polarity}`} section={s} labels={labels}
+                              t={t} orRaw={orRaw} hint={i === firstSome} first={i === 0} />
+        ))}
+      </div>
 
       <div style={{ opacity: 0.7, marginTop: 5 }}>{t("info.restrictions.source")}</div>
     </div>
