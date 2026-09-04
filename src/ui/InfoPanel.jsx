@@ -16,7 +16,7 @@ import { ISpecialTerms }            from "../ports/ISpecialTerms.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
 import { unlockedCourses, coreqPartnersOf } from "../core/courseModel.js";
-import { groupRestrictions, displayValues } from "../core/restrictionView.js";
+import { groupRestrictions, displayValues, splitByCoverage } from "../core/restrictionView.js";
 import { conditionStatus } from "../core/prereqConditions.js";
 // Pure core, like prereqConditions beside it — the codes and their ordering, never
 // the display names: those are localized and come from `t`.
@@ -791,11 +791,16 @@ function RestrictionValues({ values, t }) {
   const hidden = vals.length - shown.length;
 
   return (
-    <div style={{ paddingLeft: 18 }}>
+    // The VALUES are the brightest thing in the block, and that is an inversion
+    // of what shipped before: the registrar's sentence was bold and "Freshmen"
+    // was dim, so the eye landed on boilerplate repeated once per kind and had
+    // to hunt for the one word that actually differs. The sentence states the
+    // rule; the value is what a student checks themselves against.
+    <div style={{ paddingLeft: 10, color: "var(--text-2)" }}>
       {shown.map((v, i) => (
         // Hanging indent, so a value that still wraps stays visually inside
         // its own bullet rather than aligning with the next one.
-        <div key={i} style={{ paddingLeft: 7, textIndent: -7 }}>
+        <div key={i} style={{ paddingLeft: 8, textIndent: -8 }}>
           <span style={{ opacity: 0.45 }}>·{" "}</span>{v}
         </div>
       ))}
@@ -815,6 +820,128 @@ function RestrictionValues({ values, t }) {
 }
 
 /**
+ * A season's coverage, as one line.
+ *
+ * ── Why the years moved into the tooltip ───────────────────────────
+ *
+ * "Fall 2024, 2025 · (41 of 49 sections)" states three different things at one
+ * weight, and only one of them is a decision: 41 of 49 is the answer to "is
+ * there a section left for me". The season qualifies it ("in Fall"), and the
+ * YEARS are provenance — they say which reads the figure came from, which
+ * matters when you doubt the number and never before. So they keep their place
+ * in the DOM, as the row's title, and stop competing with the figure.
+ *
+ * ── Why a bar and not a percentage ─────────────────────────────────
+ *
+ * `seasonCoverage` is deliberate that the fraction is not a rate — at a
+ * denominator of 2 a percent sign is false precision. A bar makes 41-of-49 and
+ * 1-of-24 tell themselves apart at a glance without asserting any more
+ * precision than the fraction beside it, which is exactly the split the block
+ * exists to draw: "nearly every section is closed" against "one section is".
+ */
+function SeasonCoverage({ s, t, gate }) {
+  const label = t(SEASON_KEY[s.season] ?? s.season ?? "");
+  const years = seasonYears(s);
+  const frac  = Number.isFinite(s.of) && s.of > 0 ? Math.min(1, s.sections / s.of) : 1;
+
+  // A gate needs no figure: the tier heading above it already says every
+  // section, and repeating it once per season is the repetition that made the
+  // old block unreadable. All that is left is WHEN we saw it.
+  if (gate) {
+    return (
+      <span title={`${label} ${years}`} style={{ opacity: 0.55, whiteSpace: "nowrap" }}>
+        {label}
+      </span>
+    );
+  }
+
+  return (
+    <div title={`${label} ${years}`}
+         style={{ display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap", opacity: 0.75 }}>
+      <span style={{ width: 50, flexShrink: 0 }}>{label}</span>
+      {/* Fixed track, so the fills of two seasons — or two groups — are read
+          against each other rather than each against its own denominator. */}
+      <span style={{ width: 34, height: 4, flexShrink: 0, borderRadius: 99, background: "var(--border-2)", overflow: "hidden", display: "inline-block" }}>
+        <span style={{ display: "block", height: "100%", width: `${frac * 100}%`, background: "var(--text-4)" }} />
+      </span>
+      <span>
+        {s.everySection
+          ? t("info.restrictions.everySection")
+          : t("info.restrictions.sectionsFrac", { n: s.sections, total: s.of })}
+      </span>
+    </div>
+  );
+}
+
+/**
+ * One tier: a heading that states how to READ the rules under it, then the rules.
+ *
+ * The heading is the whole redesign. See `splitByCoverage` for the misreading
+ * it exists to kill and the corpus figures behind it.
+ */
+function RestrictionTier({ kinds, labels, t, gate, orRaw }) {
+  if (!kinds.length) return null;
+  return (
+    <div style={{
+      marginTop: 5, paddingLeft: 7,
+      // Solid for the rules that always apply, dashed for the ones that hold on
+      // some sections only — the same tentative/committed motif the Claude
+      // ghost previews use, so the two tiers separate before either is read.
+      borderLeft: `2px ${gate ? "solid" : "dashed"} var(--border-2)`,
+    }}>
+      <div style={{ color: "var(--text-3)", fontWeight: 700 }}>
+        {t(gate ? "info.restrictions.tier.all" : "info.restrictions.tier.some")}
+      </div>
+      <div style={{ fontSize: 9, fontStyle: "italic", opacity: 0.7, marginBottom: 1,
+                    lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
+        {t(gate ? "info.restrictions.tier.all.hint" : "info.restrictions.tier.some.hint")}
+      </div>
+
+      {kinds.map(k => (
+        <div key={k.key} style={{ marginTop: 3 }}>
+          {/* The registrar's own sentence, kept for its POLARITY — "must" and
+              "cannot" are the difference between a door and a wall, and the
+              bare noun heading this replaced stated a topic instead. It is set
+              smaller and dimmer than the values it introduces: it repeats once
+              per kind, so at the old weight the eye read the boilerplate five
+              times and hunted for the word that differs. */}
+          <span style={{ fontSize: 9, fontWeight: 600, letterSpacing: 0.2,
+                         color: k.polarity === "not" ? "var(--error)" : "var(--text-5)" }}>
+            {t(`info.restrictions.kind.${k.polarity}`, {
+              kind: orRaw(`info.restrictions.name.${k.kind}`, k.kind),
+            })}
+          </span>
+          {k.variesBySection && (
+            <span style={{ fontSize: 9, opacity: 0.7 }}> {t("info.restrictions.variesBySection")}</span>
+          )}
+          {k.groups.map((g, gi) => (
+            // Groups within one kind are ALTERNATIVES on different sections, so
+            // they need more air between them than the lines inside one group —
+            // BINF 6250 lists three program sets under one sentence and at an
+            // even rhythm they read as one long list.
+            <div key={gi} style={{ marginTop: gi ? 6 : 0 }}>
+              {/* Values, then when. The term lines come AFTER the values, not
+                  before, because a group can span several seasons: heading them
+                  produced runs of two or three term lines with no values under
+                  them and the values stranded below the last one, which read as
+                  lines "without any specification". Values belong to the
+                  sentence; the coverage is provenance for the pair. */}
+              <RestrictionValues values={displayValues(g.codes, labels, k.key)} t={t} />
+              <div style={{ paddingLeft: 10, display: gate ? "flex" : "block",
+                            flexWrap: "wrap", gap: gate ? 6 : 0 }}>
+                {g.seasons.map((s, si) => (
+                  <SeasonCoverage key={si} s={s} t={t} gate={gate} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/**
  * Banner's Restrictions pane for one course.
  *
  * ── Grouped by RESTRICTION, not by term ────────────────────────────
@@ -828,6 +955,15 @@ function RestrictionValues({ values, t }) {
  * whose sections disagree, and ARCH 5115 has three distinct program groups in
  * one term. Merging them would tell a BS-ARCH student that any of five
  * programmes may register, and never that exactly one section is open to them.
+ *
+ * ── Tiered by COVERAGE, because a flat list states a falsehood ─────
+ *
+ * Five kinds in one list read as a conjunction, and for a course whose rules
+ * each sit on a different subset of sections that conjunction describes a
+ * student who cannot exist. `splitByCoverage` carries the measurement; the two
+ * headings carry the reading. Nothing is hidden or merged by the split — every
+ * kind, group and value that used to print still prints, in the same order,
+ * under a heading that says which of the two readings applies to it.
  *
  * ── Falling back to Banner's own words ─────────────────────────────
  *
@@ -857,72 +993,22 @@ function RestrictionBlock({ restrictions, t, standingShown = false }) {
   /** Translate, or fall back to the registrar's own word. */
   const orRaw = (key, raw) => { const s = t(key); return s === key ? raw : s; };
 
+  const { gates, partial } = splitByCoverage(kinds);
+
   return (
     <div style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 4, padding: "4px 8px", marginTop: 4, lineHeight: "calc(1.9 * var(--lh-scale, 1))" }}>
       <div title={t("info.restrictions.note")}>
         <span style={{ color: "var(--text-3)", fontWeight: 700 }}>{t("info.restrictions.title")}</span>
       </div>
 
-      {kinds.map(k => (
-        <div key={k.key} style={{ marginTop: 2 }}>
-          <span style={{ fontWeight: 600, color: k.polarity === "not" ? "var(--error)" : "var(--text-3)" }}>
-            {t(`info.restrictions.kind.${k.polarity}`, {
-              kind: orRaw(`info.restrictions.name.${k.kind}`, k.kind),
-            })}
-          </span>
-          {k.variesBySection && (
-            <span style={{ opacity: 0.7 }}> {t("info.restrictions.variesBySection")}</span>
-          )}
-          {k.groups.map((g, gi) => (
-            <div key={gi} style={{ marginTop: gi ? 3 : 1 }}>
-              {/* BANNER'S OWN SHAPE: sentence, then the values, then when.
-                  The registrar prints "Must be enrolled in one of the following
-                  Classes:" followed by an indented list, and copying that is
-                  what makes the polarity legible — our heading used to be the
-                  bare noun ("Class standing:"), which states a topic rather
-                  than a rule and left a reader unable to tell "only these may
-                  enrol" from "these may not".
+      {/* GATES FIRST. They are the rules with no way round them, so they are
+          what a student needs before reading any of the rest; and putting them
+          first is also what makes the second heading a correction rather than a
+          surprise — "these apply to every section" then "these do not". */}
+      <RestrictionTier kinds={gates}   labels={labels} t={t} orRaw={orRaw} gate />
+      <RestrictionTier kinds={partial} labels={labels} t={t} orRaw={orRaw} gate={false} />
 
-                  The term lines come AFTER the values, not before, because a
-                  group can span several seasons: heading them produced runs of
-                  two or three term lines with no values under them and the
-                  values stranded below the last one, which read as lines
-                  "without any specification". Values belong to the sentence;
-                  the terms are provenance for the pair.
-
-                  Coverage is per SEASON, pooled across that season's years —
-                  see seasonCoverage. "every section" is the gate; a fraction is
-                  the reserved case, 24.6% of observations, and the difference
-                  between "you cannot take this" and "one section is closed to
-                  you". */}
-              <RestrictionValues values={displayValues(g.codes, labels, k.key)} t={t} />
-              {g.seasons.map((s, si) => (
-                <div key={si} style={{ paddingLeft: 18, opacity: 0.6 }}>
-                  {t(SEASON_KEY[s.season] ?? s.season ?? "")}
-                  {/* Every year this season was observed in, NAMED.
-                      It used to read "Fall (3 years)" once a season had more
-                      than one observation, which aggregates correctly and then
-                      throws away the one thing a reader needs — WHICH years,
-                      and therefore whether the newest one is last year or
-                      three years ago. The recency window is what makes naming
-                      them affordable: at most three, so the longest string is
-                      "2024, 2025, 2026", no wider than the count it replaces.
-                      Deduped in seasonCoverage because SUFFIX_TYPE maps both
-                      "40" and "50" to sumA, so a merged and a real summer code
-                      in one year would otherwise print the year twice. */}
-                  {` ${seasonYears(s)}`}
-                  {" · "}
-                  {s.everySection
-                    ? t("info.restrictions.everySection")
-                    : t("info.restrictions.someSections", { n: s.sections, total: s.of })}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      ))}
-
-      <div style={{ opacity: 0.7, marginTop: 2 }}>{t("info.restrictions.source")}</div>
+      <div style={{ opacity: 0.7, marginTop: 5 }}>{t("info.restrictions.source")}</div>
     </div>
   );
 }

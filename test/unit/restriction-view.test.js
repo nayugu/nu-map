@@ -14,7 +14,8 @@
 import test   from "node:test";
 import assert from "node:assert/strict";
 
-import { groupRestrictions, seasonCoverage, displayValues, KIND_ORDER }
+import { groupRestrictions, seasonCoverage, displayValues, KIND_ORDER,
+         splitByCoverage, isGate }
   from "../../src/core/restrictionView.js";
 
 // ── Coverage: per season, pooled across that season's years ─────────
@@ -303,4 +304,106 @@ test("a malformed group is skipped, never rendered as an empty restriction", () 
 
 test("KIND_ORDER is frozen so a caller cannot reorder it globally", () => {
   assert.throws(() => { KIND_ORDER.push("must:Nonsense"); });
+});
+
+// ── The tier split ──────────────────────────────────────────────────
+//
+// The panel reads as a conjunction — "Freshman AND ND Global Scholars AND
+// College of Engineering AND Oakland AND Honors" — for a course whose rules sit
+// on five DIFFERENT sets of sections. These tests attack the split that fixes
+// it: the danger is not that the headings are wrong, it is that a group falls
+// between the two tiers and stops being printed at all.
+
+const gateView = (terms) => splitByCoverage(groupRestrictions(terms).kinds);
+
+test("splitByCoverage is a PARTITION — every group lands in exactly one tier", () => {
+  // The whole risk of the change. A group printed twice is noise; a group
+  // printed nowhere is a restriction the student never sees.
+  const view = groupRestrictions([
+    { term: "202510", season: "fall", sections: 4, kinds: {
+      "must:Colleges": [[["EN"], 4]],
+      "must:Classes":  [[["FR"], 3]],
+      "must:Campuses": [[["OAK"], 1], [["BOS"], 3]],
+    } },
+    { term: "202530", season: "spring", sections: 2, kinds: {
+      "must:Colleges": [[["EN"], 2]],
+      "must:Classes":  [[["FR"], 2]],
+    } },
+  ]);
+  const all = view.kinds.flatMap(k => k.groups.map(g => `${k.key}|${g.codes.join(",")}`));
+  const { gates, partial } = splitByCoverage(view.kinds);
+  const out = [...gates, ...partial]
+    .flatMap(k => k.groups.map(g => `${k.key}|${g.codes.join(",")}`));
+  assert.deepEqual(out.slice().sort(), all.slice().sort(), "no group gained or lost");
+  assert.equal(new Set(out).size, out.length, "no group in both tiers");
+});
+
+test("a gate is every section in EVERY season, not just the newest one", () => {
+  // The reserved case must never be promoted into "applies to every section":
+  // that heading tells the student there is no way round the rule, and here
+  // there is one — three of the four Fall sections.
+  const { gates, partial } = gateView([
+    { term: "202510", season: "fall",   sections: 4, kinds: { "must:Classes": [[["FR"], 3]] } },
+    { term: "202530", season: "spring", sections: 2, kinds: { "must:Classes": [[["FR"], 2]] } },
+  ]);
+  assert.deepEqual(gates, []);
+  assert.equal(partial.length, 1);
+  assert.deepEqual(partial[0].groups[0].seasons.map(s => s.everySection), [false, true]);
+});
+
+test("a kind whose groups DISAGREE is stated in both tiers, with only its own groups", () => {
+  // 84 of 5,382 kinds. Filing the whole kind by majority would print
+  // "cannot be enrolled in" under "applies to every section" for the rest.
+  const { gates, partial } = gateView([
+    { term: "202510", season: "fall", sections: 4, kinds: {
+      "must:Campuses": [[["BOS"], 4], [["OAK"], 1]],
+    } },
+  ]);
+  assert.deepEqual(gates.map(k => k.key),   ["must:Campuses"]);
+  assert.deepEqual(partial.map(k => k.key), ["must:Campuses"]);
+  assert.deepEqual(gates[0].groups.map(g => g.codes),   [["BOS"]]);
+  assert.deepEqual(partial[0].groups.map(g => g.codes), [["OAK"]]);
+  assert.equal(gates[0].polarity, "must", "polarity travels with each copy");
+});
+
+test("an UNDATED group is never called a gate", () => {
+  // `seasons` is empty only when nothing could be dated, and an undated
+  // observation cannot claim to cover every section. `[].every(...)` is true,
+  // so this is exactly the case a naive predicate gets backwards.
+  assert.equal(isGate({ seasons: [] }), false);
+  assert.equal(isGate({}), false);
+  assert.equal(isGate(null), false);
+});
+
+test("splitByCoverage does not mutate the view it was handed", () => {
+  // The panel renders the same `view` object; a filter that edited it in place
+  // would empty the second tier of whatever the first one took.
+  const kinds = groupRestrictions([
+    { term: "202510", season: "fall", sections: 4, kinds: {
+      "must:Campuses": [[["BOS"], 4], [["OAK"], 1]],
+    } },
+  ]).kinds;
+  const before = JSON.stringify(kinds);
+  splitByCoverage(kinds);
+  splitByCoverage(kinds);
+  assert.equal(JSON.stringify(kinds), before);
+});
+
+test("splitByCoverage survives junk", () => {
+  for (const junk of [undefined, null, [], [null], [{}], [{ groups: null }]]) {
+    const out = splitByCoverage(junk);
+    assert.deepEqual(out.gates, []);
+    assert.deepEqual(out.partial, []);
+  }
+});
+
+test("an empty tier is empty, not a heading with nothing under it", () => {
+  // The renderer returns null on an empty tier, so this is what keeps a
+  // gate-only course — 2,075 of 2,949 — from printing "applies to some
+  // sections only" over a blank.
+  const { gates, partial } = gateView([
+    { term: "202510", season: "fall", sections: 3, kinds: { "must:Colleges": [[["EN"], 3]] } },
+  ]);
+  assert.equal(gates.length, 1);
+  assert.deepEqual(partial, []);
 });

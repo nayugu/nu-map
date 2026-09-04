@@ -235,6 +235,54 @@ export function groupRestrictions(terms) {
 }
 
 /**
+ * Is this group a GATE — carried by every section, in every season we read?
+ *
+ * `seasons` is empty only for a group we could not date, and an undated group
+ * cannot claim to cover everything, so the empty case is deliberately false.
+ */
+export const isGate = (g) =>
+  (g?.seasons?.length ?? 0) > 0 && g.seasons.every(s => s.everySection);
+
+/**
+ * Split the kinds into the two readings a student has to keep apart.
+ *
+ * ── The misreading this exists to kill ─────────────────────────────
+ *
+ * Rendered as one flat list, five kinds read as a conjunction: "you must be a
+ * Freshman AND in ND Global Scholars AND in the College of Engineering AND on
+ * the Oakland campus AND an Honors Student" — a course nobody on earth could
+ * register for. What the registrar actually published is five rules on five
+ * different SETS of sections: 41 of 49, 2 of 24, 45 of 49, 4 of 49, 1 of 24.
+ * The student needs one section that fits them, not all five properties.
+ *
+ * The conjunction is only true for the sections-wide rules, and there it is
+ * exactly true — so the two go under headings that say which reading applies,
+ * and that heading is the whole fix. Measured over the 2,949 courses carrying
+ * restrictions: 3,963 of 7,035 groups (56%) are gates, 3,072 are not, 2,075
+ * courses are gate-only, 477 are partial-only, and 397 carry both.
+ *
+ * ── Why the split is per GROUP but the kind is duplicated ──────────
+ *
+ * Coverage is a property of a group, not of a kind; a kind whose groups
+ * disagree therefore appears in both tiers, carrying only its own groups. That
+ * costs a repeated heading on 84 of 5,382 kinds and keeps polarity — the
+ * `must`/`not` sentence — stated over every group it governs. Dropping the
+ * kind into whichever tier holds most of its groups would put a "cannot be
+ * enrolled in" list under "applies to every section" and state the opposite of
+ * the truth for the rest.
+ *
+ * @param {Array} kinds  `groupRestrictions(...).kinds`
+ * @returns {{gates: Array, partial: Array}} the same kind objects, groups filtered
+ */
+export function splitByCoverage(kinds) {
+  const pick = (want) => (kinds ?? [])
+    .filter(Boolean)
+    .map(k => ({ ...k, groups: (k.groups ?? []).filter(g => isGate(g) === want) }))
+    .filter(k => k.groups.length > 0);
+  return { gates: pick(true), partial: pick(false) };
+}
+
+/**
  * Codes → the strings to actually show, deduplicated and disambiguated.
  *
  * ── Why this is not just a label lookup ────────────────────────────

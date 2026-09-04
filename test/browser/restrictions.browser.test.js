@@ -158,14 +158,19 @@ describe("restrictions · the course card", () => {
     await card.click({ timeout: 10_000 });
     await page.waitForTimeout(1500);
     const text = await page.evaluate(() => document.body.innerText);
+    // The YEARS moved out of the visible line and into the row's title, so a
+    // test that only reads innerText can no longer tell "provenance relocated"
+    // from "provenance deleted" — and deleting it is the failure that matters.
+    const titles = await page.evaluate(
+      () => [...document.querySelectorAll("[title]")].map(e => e.getAttribute("title")));
     await ctx.close();
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
-    return text;
+    return { text, titles };
   }
 
   test("a restricted course shows its kinds, values and the term they came from", async () => {
     assert.ok(RESTR.courses[SUBJECT], `${SUBJECT} has no restrictions in the shipped asset`);
-    const text = await panelFor(SUBJECT, /MEIE\s*4701/);
+    const { text, titles } = await panelFor(SUBJECT, /MEIE\s*4701/);
 
     assert.match(text, /Restrictions/, "the block did not render");
     // The kind, translated — not the raw Banner noun and not a locale key.
@@ -175,14 +180,21 @@ describe("restrictions · the course card", () => {
     // A value, glossed from the shipped label map rather than shown as a code.
     assert.match(text, /Mechanical Engineering/);
     assert.doesNotMatch(text, /\bMECE\b/, "a raw Banner code leaked instead of its label");
-    // The season and its year(s), through the app's own summer wording.
+    // The season, through the app's own summer wording.
     const sumB = expectedYears("sumB");
     assert.ok(sumB, `${SUBJECT} has no Summer B observation in the asset`);
-    assert.match(text, new RegExp(`Summer B ${sumB}`),
-      "the term must be named, and summers are 'Summer B' not 'Summer 2'");
-    // Coverage: every section, so a fraction would be noise. The TERM leads,
-    // because it heads its group rather than sitting beside the first value.
-    assert.match(text, new RegExp(`Summer B ${sumB} · every section`));
+    assert.match(text, /Summer B/,
+      "the season must be named, and summers are 'Summer B' not 'Summer 2'");
+    // Every one of this course's rules is on every section, so it reads under
+    // the gate heading — which is the sentence that stops five kinds being read
+    // as five conditions one student must satisfy at once.
+    assert.match(text, /Applies to every section/, "the tier heading did not render");
+    // A gate prints no fraction: the heading above already said every section,
+    // and repeating it once per season is the noise this replaced.
+    assert.doesNotMatch(text, /every section · /);
+    // The years are RELOCATED, not dropped — they are the row's title now.
+    assert.ok(titles.some(x => x === `Summer B ${sumB}`),
+      `no row carries "Summer B ${sumB}" as its provenance; titles: ${titles.join(" | ")}`);
   });
 
   test("a group's values are listed one per line, under their own term", async () => {
@@ -193,7 +205,7 @@ describe("restrictions · the course card", () => {
     // indents for the same thing inside one block. Every assertion passed
     // while the panel was unreadable, which is what "tests that confirm are
     // close to worthless" means in practice.
-    const text = await panelFor(SUBJECT, /MEIE\s*4701/);
+    const { text } = await panelFor(SUBJECT, /MEIE\s*4701/);
     const lines = restrictionLines(text);
     assert.ok(lines.length, "the Restrictions block did not render");
 
@@ -223,9 +235,15 @@ describe("restrictions · the course card", () => {
     // sort by total sections, so capturing a second Fall reordered them, and
     // then the terms moved below the values entirely. Adjacency is the
     // property; absolute position is a rendering detail.
+    // Only the SEASON lines. The run below a value now also holds the next
+    // kind's sentence and, on a course with both tiers, a tier heading — none
+    // of which is a term, and all of which would fail the `every(/Summer/)`
+    // check below for a reason that has nothing to do with attribution.
     const termsAfter = (i) => {
       const out = [];
-      for (let j = i + 1; j < lines.length && !lines[j].startsWith("·"); j++) out.push(lines[j]);
+      for (let j = i + 1; j < lines.length && !lines[j].startsWith("·"); j++) {
+        if (/^(Fall|Spring|Summer)\b/.test(lines[j])) out.push(lines[j]);
+      }
       return out;
     };
     const iMech = lines.findIndex(l => /Mechanical Engineering\/Physics/.test(l));
@@ -238,7 +256,9 @@ describe("restrictions · the course card", () => {
     // And somewhere there is an Industrial Engineering value whose terms are
     // the Falls — the advisor's actual case.
     const fallGroup = lines.some((l, i) =>
-      /^· Industrial Engineering$/.test(l) && termsAfter(i).some(x => /^Fall /.test(x)));
+      // `/^Fall /` with the trailing space, until the years moved into the
+      // row's title and the line became bare "Fall".
+      /^· Industrial Engineering$/.test(l) && termsAfter(i).some(x => /^Fall\b/.test(x)));
     assert.ok(fallGroup, "no Industrial Engineering group is attributed to Fall");
   });
 
@@ -253,13 +273,17 @@ describe("restrictions · the course card", () => {
       console.log(`      (skipped: ${SUBJECT} captured in ${[...seasons]} only — backfill pending)`);
       return;
     }
-    const text = await panelFor(SUBJECT, /MEIE\s*4701/);
+    const { text, titles } = await panelFor(SUBJECT, /MEIE\s*4701/);
     assert.match(text, /Industrial Engineering/,  "the Fall reading is missing");
     assert.match(text, /Mechanical Engineering/,  "the Summer B reading is missing");
-    // Term-first, because it now HEADS its group rather than trailing the
-    // first value. Years read from the asset — see expectedYears.
-    assert.match(text, new RegExp(`Fall ${expectedYears("fall")} · `));
-    assert.match(text, new RegExp(`Summer B ${expectedYears("sumB")} · `));
+    // Both seasons are named on screen — the season is the actionable half and
+    // stays visible; the years are provenance and are asserted on the title,
+    // so "we hid the years" and "we hid the season" cannot pass for each other.
+    const lines = restrictionLines(text);
+    assert.ok(lines.some(l => /^Fall$/.test(l)),     `no bare Fall line: ${lines.join(" | ")}`);
+    assert.ok(lines.some(l => /^Summer B$/.test(l)), `no bare Summer B line: ${lines.join(" | ")}`);
+    assert.ok(titles.includes(`Fall ${expectedYears("fall")}`));
+    assert.ok(titles.includes(`Summer B ${expectedYears("sumB")}`));
   });
 
   test("the Classes row is not duplicated under the standing box", async () => {
@@ -267,7 +291,7 @@ describe("restrictions · the course card", () => {
     // `Class standing: Junior · Senior` beneath it is the same fact twice in
     // adjacent boxes — suppressed when it adds nothing, kept when standing
     // varies by section or season.
-    const text = await panelFor(SUBJECT, /MEIE\s*4701/);
+    const { text } = await panelFor(SUBJECT, /MEIE\s*4701/);
     assert.match(text, /Class standing: Junior standing or above/, "the standing box should show");
     // Asserted on the KIND HEADING inside the block, not on the joined values.
     // `Junior · Senior` was the old check and it went vacuous the moment values
@@ -284,7 +308,7 @@ describe("restrictions · the course card", () => {
     // `t()` falls back to the KEY, so a missing or typo'd key renders as
     // `info.restrictions.name.Majors` rather than throwing. This is the only
     // check that catches it.
-    const text = await panelFor(SUBJECT, /MEIE\s*4701/);
+    const { text } = await panelFor(SUBJECT, /MEIE\s*4701/);
     assert.doesNotMatch(text, /info\.restrictions/, "an untranslated key reached the UI");
     assert.doesNotMatch(text, /claude\.sem\./, "an untranslated season key reached the UI");
     assert.doesNotMatch(text, /\{(kind|n|total)\}/, "an uninterpolated placeholder reached the UI");
@@ -295,15 +319,18 @@ describe("restrictions · the course card", () => {
     // same way, on the same board, that simply is not in the asset.
     const control = pickControl(RESTR);
     assert.ok(control, "no unrestricted 4+ SH CS course left — pick a different subject");
-    const text = await panelFor(control.id, control.pattern);
+    const { text } = await panelFor(control.id, control.pattern);
     // Anchored on labels unique to this block: "Restrictions" alone is too
     // common a word elsewhere on the page to prove absence.
     assert.doesNotMatch(text, /Class standing:/);
-    // Must track the term-first heading order. This assertion read
-    // `/every section ·/` while the coverage figure came FIRST; when the term
-    // moved in front of it the pattern stopped matching anything at all and
-    // the control passed for free. A negative assertion that no longer
-    // describes the positive case is not a check.
-    assert.doesNotMatch(text, /· every section/);
+    // Anchored on a string the POSITIVE case is asserted to contain, and
+    // re-anchored whenever that string moves. This assertion has now been
+    // wrong twice for the same reason: it read `/every section ·/` while the
+    // figure came first, then `/· every section/` after the term moved in
+    // front of it, and each time it stopped matching anything at all and the
+    // control passed for free. A negative assertion that no longer describes
+    // the positive case is not a check.
+    assert.doesNotMatch(text, /Applies to every section/);
+    assert.doesNotMatch(text, /Applies to some sections only/);
   });
 });
