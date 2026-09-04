@@ -786,8 +786,24 @@ function seasonYears(s) {
  * variants" was considered and refused for the same reason: a student needs to
  * know *which* variants, and that summary is the one thing it cannot say.
  */
+/**
+ * How many values a rule lists before deferring the rest, and — because the
+ * two must not drift — the number `ruleLines` uses to predict a rule's height.
+ */
+const VALUE_CAP = 8;
+
+/**
+ * Lines a rule will occupy: its values (capped, plus the toggle) against its
+ * seasons, whichever is taller. Used to budget the collapse below, so the
+ * budget counts what the reader actually sees rather than counting rules —
+ * one rule can be eight lines and another one.
+ */
+const ruleLines = (row) => Math.max(
+  Math.min(row.codes.length, VALUE_CAP) + (row.codes.length > VALUE_CAP ? 1 : 0),
+  row.seasons.length);
+
 function RestrictionValues({ values, t }) {
-  const CAP = 8;
+  const CAP = VALUE_CAP;
   const [open, setOpen] = useState(false);
   const vals   = values ?? [];
   const shown  = open ? vals : vals.slice(0, CAP);
@@ -1022,6 +1038,44 @@ function RestrictionSection({ section, labels, t, orRaw, hint, first }) {
   // the heading above it started — the misalignment the block is being rebuilt
   // to remove, reintroduced one level down.
   const full = { gridColumn: "1 / -1" };
+
+  // ── COLLAPSE THE DETAIL, NEVER THE GATES ──────────────────────────
+  //
+  // The block is small for most courses and enormous for a few: median 6
+  // lines, but 454 courses run past 11 and EESH 2000 reaches 370. What is in
+  // that tail decides the design — across those 454, only 27% of the height is
+  // gates, and EESH 2000's 370 lines contain FOUR of them. The size problem is
+  // reserved-section detail, so that is what defers.
+  //
+  // A gate is never collapsed at any length. It is the rule with no way round
+  // it, 2,472 of the 2,949 restricted courses carry one, and the reader who
+  // needs it is exactly the one who would never open a fold — the student who
+  // is not in the College of Engineering. Hiding it would also make this the
+  // only "can I take this" box in the panel that hides its verdict; prereqs,
+  // coreqs, class standing and co-op prep all state theirs outright.
+  //
+  // Budgeted in LINES rather than rules, because one rule can be eight lines
+  // and another one. Measured over the corpus: at this budget 204 courses
+  // (7% of the restricted ones, 2.3% of the catalog) gain a toggle, the median
+  // block does not move at all, and the worst case falls from 370 lines to 46.
+  // Caps from 4 to 12 all hold the median at 6 and the max near 45, so this is
+  // chosen to disturb the FEWEST courses for that tail control rather than to
+  // squeeze hardest.
+  const SOME_LINES = 8;
+  const [open, setOpen] = useState(false);
+  const some = section.tier === "some";
+
+  let used = 0, hidden = 0;
+  const rows = [];
+  for (const row of section.rows) {
+    // `used >= budget` and not `used + h > budget`: the first rule is always
+    // shown whatever its height, so a single 57-value rule collapses its own
+    // values (RestrictionValues) rather than vanishing behind a fold that
+    // would leave the heading standing over nothing.
+    if (some && !open && used >= SOME_LINES) { hidden += 1; continue; }
+    rows.push(row);
+    used += ruleLines(row);
+  }
   return (
     <>
       <div style={{
@@ -1051,10 +1105,23 @@ function RestrictionSection({ section, labels, t, orRaw, hint, first }) {
           {t("info.restrictions.someHint")}
         </div>
       )}
-      {section.rows.map((row, i) => (
+      {rows.map((row, i) => (
         <RuleRow key={i} row={row} labels={labels} t={t} first={i === 0}
                  showKind={section.showKind} orRaw={orRaw} />
       ))}
+      {(hidden > 0 || open) && (
+        <div style={{ ...full, borderTop: "1px solid var(--border-1)", paddingTop: 3 }}>
+          <button
+            type="button"
+            onClick={() => setOpen(!open)}
+            style={{ background: "none", border: "none", padding: 0, font: "inherit",
+                     color: "var(--text-3)", cursor: "pointer",
+                     textDecoration: "underline", textUnderlineOffset: 2 }}
+          >
+            {open ? t("info.restrictions.less") : t("info.restrictions.more", { n: hidden })}
+          </button>
+        </div>
+      )}
     </>
   );
 }

@@ -27,6 +27,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 import { ensureBuild, serveDist } from "./helpers/serveDist.js";
+import { groupRestrictions, restrictionSections } from "../../src/core/restrictionView.js";
 
 const CS_BS = "../../data/northeastern/programs/undergraduate/2026/" +
   "computer-information-science/computer_science_bscs_(boston)/requirements.json";
@@ -92,6 +93,36 @@ function restrictionLines(text) {
  * CS course, 4 SH or more so the board does not file it under the collapsible
  * "other credits" group, and absent from the asset.
  */
+/**
+ * The longest restrictions block in the shipped asset, and the gate headings
+ * it carries — both read at RUN TIME.
+ *
+ * Naming EESH 2000 would be a test that expires: the asset is rescraped
+ * monthly and today's worst case is not next month's. What the test needs is
+ * "a course long enough to collapse, that also has a gate", which is a query.
+ */
+function longestRestricted() {
+  const HEAD = {
+    "gate|must": "Open only to", "gate|not": "Not open to", "gate|info": "Also required",
+  };
+  let best = null;
+  for (const [id, terms] of Object.entries(RESTR.courses ?? {})) {
+    const sections = restrictionSections(groupRestrictions(
+      terms.map(e => ({ ...e, kinds: e.kinds }))).kinds);
+    const gates = sections.filter(s => s.tier === "gate");
+    if (!gates.length) continue;
+    const lines = sections.reduce((n, s) => n + 1 + s.rows.reduce(
+      (m, r) => m + Math.max(Math.min(r.codes.length, 8) + (r.codes.length > 8 ? 1 : 0),
+                             r.seasons.length), 0), 0);
+    if (lines > (best?.lines ?? 0)) {
+      const m = id.match(/^([A-Z]+)(\d.*)$/);
+      best = { id, lines, pattern: new RegExp(`${m[1]}\\s*${m[2]}`),
+               gateHeadings: gates.map(s => HEAD[`${s.tier}|${s.polarity}`]) };
+    }
+  }
+  return best;
+}
+
 function pickControl(restrictions) {
   const catalog = JSON.parse(
     readFileSync(new URL("../../public/northeastern/catalog-courses.json", import.meta.url), "utf8"));
@@ -455,6 +486,34 @@ describe("restrictions · the course card", () => {
       "the uniform Classes restriction should not repeat the standing box");
     assert.doesNotMatch(text, /Junior · Senior/,
       "the uniform Classes restriction should not repeat the standing box");
+  });
+
+  test("a long block defers its DETAIL and never its gates", async () => {
+    // The tail this exists for: 454 courses run past 11 lines and EESH 2000
+    // reaches 370 — of which four are gates. So the collapse is budgeted over
+    // the "some sections" rows only, and the property worth guarding is the
+    // negative one: whatever is folded away, a gate heading and its rules are
+    // still on screen. A student who is not in the gated college is exactly
+    // the reader who would never open a fold.
+    const long = longestRestricted();
+    assert.ok(long, "no course with a collapsible restrictions block in the asset");
+
+    const { text } = await panelFor(long.id, long.pattern);
+    const lines = restrictionLines(text);
+    assert.ok(lines.length, "the Restrictions block did not render");
+
+    assert.ok(lines.some(l => /^show \d+ more$/.test(l)),
+      `expected a collapse toggle on ${long.id} (${long.lines} lines), got:\n  `
+      + lines.slice(0, 12).join("\n  "));
+
+    // Every gate heading the fold could have swallowed is still printed.
+    for (const head of long.gateHeadings) {
+      assert.ok(lines.includes(head),
+        `the gate heading "${head}" is missing — the collapse reached a gate`);
+    }
+    // And the block really did get shorter than the uncollapsed shape.
+    assert.ok(lines.length < long.lines,
+      `nothing was deferred: ${lines.length} lines rendered of ${long.lines}`);
   });
 
   test("no locale key leaks to the screen", async () => {
