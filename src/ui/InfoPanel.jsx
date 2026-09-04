@@ -843,58 +843,72 @@ function RestrictionValues({ values, t }) {
  * precision than the fraction beside it, which is exactly the split the block
  * exists to draw: "nearly every section is closed" against "one section is".
  */
-function SeasonCoverage({ s, t, cell }) {
-  const label = t(SEASON_KEY[s.season] ?? s.season ?? "");
-  const years = seasonYears(s);
-  const frac  = Number.isFinite(s.of) && s.of > 0 ? Math.min(1, s.sections / s.of) : 1;
-
-  // THREE CELLS OF THE SECTION'S GRID, not a grid of its own. Nested, each row
-  // sized its own columns, so nothing lined up with the row above it; sized by
-  // hand instead, every width was a guess against eight locales — 40px was too
-  // narrow for "Summer A" and 84px wrapped "Special Approvals". As cells of one
-  // grid the widths come from the widest content in the section and are right
-  // by construction, in every language.
+function SeasonCoverage({ seasons, t, cell }) {
+  // ── THREE STACKS, ONE PER COLUMN — not one grid row per season ─────
   //
-  // The season is right-aligned so it butts against the bar it qualifies, and
-  // the figure is right-aligned so the block has ONE right edge — left-aligned
-  // in a fixed cell, "4 of 4" and "41 of 49" ended at different x and the
-  // fractions read as a ragged column beside everything else.
-  const common = { ...cell, whiteSpace: "nowrap", opacity: 0.8 };
+  // A rule's seasons describe the SAME values, so they have to read as a group
+  // attached to the rule rather than as lines paired off against the values
+  // beside them. Given a grid row each, the spanning values cell stretched
+  // them to fill its height: MEIE 4701's five majors put "Summer A" and
+  // "Summer B" 60px apart, level with the first and third major, which invites
+  // exactly the reading that is false — that the first major is the Summer A
+  // one. Stacked at their natural line height they sit together as a pair, at
+  // the top of the rule, describing all of it.
+  //
+  // Three separate stacks and not one, because the three are COLUMNS: the
+  // seasons of every rule in the block line up with each other, and so do the
+  // bars and the figures. One stack of composed rows would align nothing
+  // across rules, which is the whole reason this is a grid.
+  //
+  // They stay in step with each other because each entry is one line box of
+  // the same inherited line-height in all three — including the bar, which is
+  // an inline-block on a text line rather than a block of its own.
+  const stack = { ...cell, display: "flex", flexDirection: "column", whiteSpace: "nowrap" };
+  const label = (s) => t(SEASON_KEY[s.season] ?? s.season ?? "");
+  const title = (s) => `${label(s)} ${seasonYears(s)}`;
   return (
     <>
-      <span title={`${label} ${years}`} style={{ ...common, textAlign: "right" }}>{label}</span>
-      {/* Fixed track, so the fills of two seasons — or two rules — are read
-          against each other rather than each against its own denominator.
-          A bar and not a percentage: `seasonCoverage` is deliberate that the
+      {/* Right-aligned so each season butts against the bar it qualifies. */}
+      <span style={{ ...stack, alignItems: "flex-end", opacity: 0.8 }}>
+        {seasons.map((s, i) => <span key={i} title={title(s)}>{label(s)}</span>)}
+      </span>
+      {/* A fixed track, so the fills of two seasons — or two rules — are read
+          against each other rather than each against its own denominator. A
+          bar and not a percentage: `seasonCoverage` is deliberate that the
           figure is not a rate, and at a denominator of 2 a percent sign is
           false precision. The bar carries the comparison, the fraction carries
-          the precision, and neither claims more than it has. */}
-      {/* The bar sits on the TEXT's line, not in the middle of the grid row.
-          `alignSelf: center` was the obvious thing and it is wrong here: a rule
-          whose values span two season rows stretches those rows to 60px, so
-          the centre of the row is nowhere near the season that names it —
-          measured on MEIE 4701, "Summer A" occupied y549–575 and its own bar
-          y575–583, entirely below its label.
+          the precision, and neither claims more than it has.
 
-          An inline-block at `verticalAlign: middle` inside a cell that keeps
-          the grid's baseline alignment puts the bar's middle at the x-height
-          of the text beside it, whatever the row does. */}
-      <span style={{ ...cell }}>
-        <span style={{ display: "inline-block", verticalAlign: "middle", width: 26, height: 4, borderRadius: 99, background: "var(--border-2)", overflow: "hidden" }}>
-          <span style={{ display: "block", height: "100%", width: `${frac * 100}%`, background: "var(--text-4)" }} />
-        </span>
+          `verticalAlign: middle` on an inline-block, so each bar sits at the
+          x-height of the season beside it and the entry is exactly one text
+          line tall — which is what keeps the three stacks in step. */}
+      <span style={stack}>
+        {seasons.map((s, i) => {
+          const frac = Number.isFinite(s.of) && s.of > 0 ? Math.min(1, s.sections / s.of) : 1;
+          return (
+            <span key={i} title={title(s)}>
+              <span style={{ display: "inline-block", verticalAlign: "middle", width: 26, height: 4, borderRadius: 99, background: "var(--border-2)", overflow: "hidden" }}>
+                <span style={{ display: "block", height: "100%", width: `${frac * 100}%`, background: "var(--text-4)" }} />
+              </span>
+            </span>
+          );
+        })}
       </span>
       {/* Always the fraction, including when it is the whole. "every section"
           read as a different KIND of fact beside "41 of 49" and broke the
           column — the eye cannot compare a phrase with a ratio, and a full
           bar already says it without a word. Every observation in the shipped
-          asset carries a section count (7,006 of 7,006), so the denominator
-          is never missing.
+          asset carries a section count (7,006 of 7,006), so the denominator is
+          never missing.
 
           Right-aligned so the digits end together, which is the ordinary
           reading order for a column of figures. */}
-      <span style={{ ...common, textAlign: "right", paddingRight: 0 }}>
-        {t("info.restrictions.sectionsFrac", { n: s.sections, total: s.of })}
+      <span style={{ ...stack, alignItems: "flex-end", opacity: 0.8, paddingRight: 0 }}>
+        {seasons.map((s, i) => (
+          <span key={i} title={title(s)}>
+            {t("info.restrictions.sectionsFrac", { n: s.sections, total: s.of })}
+          </span>
+        ))}
       </span>
     </>
   );
@@ -936,16 +950,16 @@ const SECTION_HEADING = {
  */
 function RuleRow({ row, labels, t, showKind, orRaw, first }) {
   const values = displayValues(row.codes, labels, row.key);
-  const span   = Math.max(1, row.seasons.length);
 
   // A BAND per rule. `display: contents` means there is no row element to put
-  // a border on, so the rule is drawn on each cell of its FIRST grid row — the
-  // standard technique, and the reason `first` is threaded down here. Without
-  // it, a rule's values sit at one end and its figure at the other and nothing
-  // says where one rule stops: MEIE 4701 stacks five majors under one figure
-  // and three rules in a row, so "Fall 16 of 20" could belong to any of them.
-  // The hairline is lighter than the one between headings, because a rule is a
-  // subdivision of a heading and two rules at one weight read as two headings.
+  // a border on, so the rule is drawn on each of its cells — the standard
+  // technique, and the reason `first` is threaded down here. Without it, a
+  // rule's values sit at one end and its figure at the other and nothing says
+  // where one rule stops: MEIE 4701 stacks five majors beside one coverage
+  // block and three rules in a row, so "Fall 16 of 20" could belong to any of
+  // them. The hairline is lighter than the one between headings, because a
+  // rule is a subdivision of a heading and two rules at one weight read as two
+  // headings.
   const band = first ? {} : { borderTop: "1px solid var(--border-1)", paddingTop: 4 };
   // `paddingRight` and NOT a `columnGap`: with a gap, a border drawn on cells
   // comes out as a row of disconnected dashes with holes between the columns,
@@ -961,8 +975,8 @@ function RuleRow({ row, labels, t, showKind, orRaw, first }) {
     // overrunning a 40px box both were.
     <div style={{ display: "contents" }}>
       {showKind && (
-        <span style={{ ...cell, gridRow: `span ${span}`, fontSize: 9, opacity: 0.65,
-                       whiteSpace: "nowrap", lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
+        <span style={{ ...cell, fontSize: 9, opacity: 0.65, whiteSpace: "nowrap",
+                       lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
           {orRaw(`info.restrictions.name.${row.kind}`, row.kind)}
         </span>
       )}
@@ -970,12 +984,12 @@ function RuleRow({ row, labels, t, showKind, orRaw, first }) {
           disagree" — which is exactly what a row reading "1 of 2" says, with
           the numbers. Printed beside the fraction it was a weaker restatement
           repeated once per group, three times over on BINF 6250. */}
-      <span style={{ ...cell, gridRow: `span ${span}`, minWidth: 0 }}>
+      <span style={{ ...cell, minWidth: 0 }}>
         <RestrictionValues values={values} t={t} />
       </span>
       {/* When this rule applies and how much of the term it touches — on the
-          same three columns as every other rule in the section, one grid row
-          per season, with the kind and the values spanning them.
+          same three columns as every other rule in the block, stacked so the
+          seasons read as one group describing the whole rule.
 
           A gate used to print a phrase here instead ("Spring only"), on the
           reasoning that its fraction is by definition the whole and the
@@ -987,10 +1001,7 @@ function RuleRow({ row, labels, t, showKind, orRaw, first }) {
           which says the same thing in the same shape as every row beside it.
           Uniformity is the property being bought; the redundant denominator is
           the price, and it is cheap because a full bar is read, not parsed. */}
-      {row.seasons.map((s, i) => (
-        <SeasonCoverage key={i} s={s} t={t}
-                        cell={i === 0 ? cell : { paddingBottom: 2, paddingRight: 10 }} />
-      ))}
+      <SeasonCoverage seasons={row.seasons} t={t} cell={cell} />
     </div>
   );
 }

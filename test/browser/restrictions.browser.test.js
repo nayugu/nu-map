@@ -205,7 +205,15 @@ describe("restrictions · the course card", () => {
       const items = [...grid.children].flatMap(
         c => getComputedStyle(c).display === "contents" ? [...c.children] : [c]);
       const px = (n) => Math.round(n);
+      // The last three cells of each rule are the season, bar and figure
+      // stacks. Their ENTRIES have to stay in step with each other, which is a
+      // different property from the cells sharing a box.
+      const stacks = [...grid.children]
+        .filter(c => getComputedStyle(c).display === "contents")
+        .map(rule => [...rule.children].slice(-3)
+          .map(col => [...col.children].map(e => px(e.getBoundingClientRect().top))));
       return {
+        stacks,
         boxWidth: px(box.getBoundingClientRect().width),
         gridWidth: px(Math.max(...[...grid.children].map(c => c.getBoundingClientRect().right))
                       - grid.getBoundingClientRect().left),
@@ -294,30 +302,43 @@ describe("restrictions · the course card", () => {
       `the table stretched to ${g.gridWidth}px of a ${g.panelWidth}px viewport`);
   });
 
-  test("the bar sits on the same line as the season and figure it belongs to", async () => {
-    // A rule whose values span two season rows stretches those rows — five
-    // majors over two seasons makes each row 60px — and the bar was centred in
-    // the row while its season and figure sat on the text baseline at the top
-    // of it. Measured on MEIE 4701 before the fix: "Summer A" occupied
-    // y549–575 and its own bar y575–583, a full line below its label.
+  test("a rule's seasons stack together, each on one line with its bar and figure", async () => {
+    // Two defects in one assertion, because they had one cause. Given a grid
+    // row per season, the rule's values cell spanned those rows and stretched
+    // them: MEIE 4701's five majors put "Summer A" and "Summer B" 60px apart,
+    // level with the first and third major, which invites the false reading
+    // that the first major is the Summer A one — the seasons describe ALL the
+    // values. And within a stretched row the bar was centred while its season
+    // and figure sat on the baseline at the top, so the bar rendered a full
+    // line below its own label (measured: "Summer A" y549–575, its bar
+    // y575–583).
     //
-    // Stated as "the bar is never alone at its y". The bar is the only cell
-    // with no text, so it is identifiable without knowing the column order,
-    // and the assertion says the thing that was wrong rather than naming
-    // pixels that will move with the font.
+    // Both are now one property: the three coverage columns are stacks, and
+    // their n-th entries share a top. Asserted per ENTRY rather than per cell,
+    // because the cells sharing a bounding box is exactly what was true while
+    // the entries inside them drifted.
     const g = await geometryFor(SUBJECT, /MEIE\s*4701/);
     assert.ok(g, "the Restrictions grid did not render");
 
-    const bars = g.cells.filter(c => !c.full && c.text === "");
-    assert.ok(bars.length >= 2,
-      `expected several bars to check, got ${bars.length} — is MEIE 4701 still multi-season?`);
+    const multi = g.stacks.filter(([seasons]) => seasons.length >= 2);
+    assert.ok(multi.length >= 1,
+      "no multi-season rule to check — is MEIE 4701 still read in two seasons?");
 
-    for (const bar of bars) {
-      const sameLine = g.cells.filter(
-        c => c !== bar && !c.full && c.text !== "" && c.top === bar.top && c.bottom === bar.bottom);
-      assert.ok(sameLine.length >= 2,
-        `a bar at y${bar.top}–${bar.bottom} shares its line with ${sameLine.length} labelled `
-        + `cells, not 2 — it has drifted off the row it describes`);
+    for (const [seasons, bars, figures] of g.stacks) {
+      assert.deepEqual(bars, seasons, "a bar drifted off the season line it describes");
+      assert.deepEqual(figures, seasons, "a figure drifted off its season line");
+    }
+
+    // And the stack is TIGHT: consecutive seasons sit one line apart, not
+    // spread down the values beside them. One line is ~19px here, so anything
+    // past 30 is the stretch this replaced (it was 60).
+    for (const [seasons] of multi) {
+      for (let i = 1; i < seasons.length; i++) {
+        const gap = seasons[i] - seasons[i - 1];
+        assert.ok(gap > 0 && gap < 30,
+          `seasons are ${gap}px apart, not stacked — they read as paired with `
+          + `the values beside them rather than describing all of them`);
+      }
     }
   });
 
