@@ -59,13 +59,31 @@
       "archiveUrl": null,
       "archiveNote": "/archive/2025-2026/ does not exist; NEU published this edition as PDF only, so this is the only machine-readable copy.",
       "provenanceCheck": "CS 2500 present in the 2024-2025 archive, absent here, absent from live 2026-2027 — this snapshot is on the far side of the roll that retired it."
+    },
+    "2027": {
+      "label": "2026-2027",
+      "fidelity": "full",
+      "courses": 7814,
+      "subjects": 226,
+      "coursesWithPrereqs": 2546,
+      "coursesWithNuPath": 1515,
+      "capturedFrom": "public/northeastern/catalog-courses.json",
+      "capturedAt": "2026-09-04",
+      "method": "frozen from the live scrape while 2026-2027 was the live edition; 707 retained course(s) from earlier editions excluded",
+      "archiveUrl": null
     }
   },
   "coverage": {
-    "held": [2023, 2024, 2025, 2026],
+    "held": [
+      2023,
+      2024,
+      2025,
+      2026,
+      2027
+    ],
     "contiguous": true,
     "note": "A contiguous run is what makes `lifespan.lastEdition` exact rather than a floor: a course retired anywhere inside the window has a known last-publishing edition. `firstEdition` remains a FLOOR — a course published before 2023 reads as 2023 — which is why nothing in src/ renders it.",
     "gap": "2022 and older are archived by NEU but are 'descriptive' fidelity (no prereqs, no attributes, and a title format the parser does not match), so scrape-catalog.js --edition refuses them. See docs/catalog-editions-design.md §4 and §8 step 11.",
-    "due": "Edition 2027 is LIVE and not yet frozen. The live catalog already holds courses in no frozen edition; capture it with freeze-edition.js before the next roll, because the archive skipped 2025-2026 and cannot be relied on."
+    "due": "Nothing outstanding. 2027 was frozen 2026-09-04 while still live, which is the rule this tree exists to encode: capture the live edition BEFORE it rolls, because the archive lags and has already skipped a year outright. The next capture is due when NEU publishes 2027-2028 — `edition-probe.js --coverage` is the alarm."
   }
 }
