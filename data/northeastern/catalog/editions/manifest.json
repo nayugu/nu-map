@@ -1,6 +1,51 @@
 {
   "note": "Frozen course-catalog editions. See README.md — nothing may regenerate these.",
   "editions": {
+    "2023": {
+      "label": "2022-2023",
+      "fidelity": "full",
+      "courses": 7449,
+      "subjects": 220,
+      "coursesWithPrereqs": 2442,
+      "coursesWithCoreqs": 481,
+      "coursesWithNuPath": 1320,
+      "capturedFrom": "https://catalog.northeastern.edu/archive/2022-2023/course-descriptions/",
+      "capturedAt": "2026-09-03",
+      "method": "node scripts/scrape-catalog.js --edition 2022-2023 --write",
+      "archiveUrl": "https://catalog.northeastern.edu/archive/2022-2023/",
+      "archiveNote": "222 subject pages, 6 transient failures recovered by politeFetch's retries. 'esl' and 'eslg' return 200 with zero course blocks in this edition and in 2024 and 2025 alike — consistent across three independently-scraped editions, so genuinely empty pages rather than a markup break.",
+      "provenanceCheck": "CS 2500 present here and absent from the 2026 snapshot and from live 2027 — this edition is on the near side of the roll that retired it. Every page carried the 2023 edition banner (assertEdition)."
+    },
+    "2024": {
+      "label": "2023-2024",
+      "fidelity": "full",
+      "courses": 7654,
+      "subjects": 225,
+      "coursesWithPrereqs": 2466,
+      "coursesWithCoreqs": 478,
+      "coursesWithNuPath": 1337,
+      "capturedFrom": "https://catalog.northeastern.edu/archive/2023-2024/course-descriptions/",
+      "capturedAt": "2026-09-03",
+      "method": "node scripts/scrape-catalog.js --edition 2023-2024 --write",
+      "archiveUrl": "https://catalog.northeastern.edu/archive/2023-2024/",
+      "archiveNote": "227 subject pages, 4 transient failures recovered by retry.",
+      "provenanceCheck": "CS 2500 present. Every page carried the 2024 edition banner (assertEdition)."
+    },
+    "2025": {
+      "label": "2024-2025",
+      "fidelity": "full",
+      "courses": 7561,
+      "subjects": 228,
+      "coursesWithPrereqs": 2448,
+      "coursesWithCoreqs": 454,
+      "coursesWithNuPath": 1352,
+      "capturedFrom": "https://catalog.northeastern.edu/archive/2024-2025/course-descriptions/",
+      "capturedAt": "2026-09-03",
+      "method": "node scripts/scrape-catalog.js --edition 2024-2025 --write",
+      "archiveUrl": "https://catalog.northeastern.edu/archive/2024-2025/",
+      "archiveNote": "230 subject pages — the newest edition the archive publishes. 2 transient failures recovered by retry.",
+      "provenanceCheck": "CS 2500 present. Every page carried the 2025 edition banner (assertEdition)."
+    },
     "2026": {
       "label": "2025-2026",
       "fidelity": "full",
@@ -15,5 +60,12 @@
       "archiveNote": "/archive/2025-2026/ does not exist; NEU published this edition as PDF only, so this is the only machine-readable copy.",
       "provenanceCheck": "CS 2500 present in the 2024-2025 archive, absent here, absent from live 2026-2027 — this snapshot is on the far side of the roll that retired it."
     }
+  },
+  "coverage": {
+    "held": [2023, 2024, 2025, 2026],
+    "contiguous": true,
+    "note": "A contiguous run is what makes `lifespan.lastEdition` exact rather than a floor: a course retired anywhere inside the window has a known last-publishing edition. `firstEdition` remains a FLOOR — a course published before 2023 reads as 2023 — which is why nothing in src/ renders it.",
+    "gap": "2022 and older are archived by NEU but are 'descriptive' fidelity (no prereqs, no attributes, and a title format the parser does not match), so scrape-catalog.js --edition refuses them. See docs/catalog-editions-design.md §4 and §8 step 11.",
+    "due": "Edition 2027 is LIVE and not yet frozen. The live catalog already holds courses in no frozen edition; capture it with freeze-edition.js before the next roll, because the archive skipped 2025-2026 and cannot be relied on."
   }
 }

@@ -20,6 +20,12 @@
  *   node scripts/scrape-catalog.js --dry-run          # scrape first 3 subjects only
  *   node scripts/scrape-catalog.js --rotate --write   # scrape one subject (rotating), partial-merge
  *
+ * Archive editions (writes ONLY to data/northeastern/catalog/editions/<year>/,
+ * never to any live artifact — see runEdition):
+ *   node scripts/scrape-catalog.js --edition 2024-2025 --dry-run
+ *   node scripts/scrape-catalog.js --edition 2024-2025 --write
+ *   CATALOG_HTML_CACHE=.cache/catalog node scripts/scrape-catalog.js --edition 2024-2025 --write
+ *
  * Rate limiting: 400 ms between requests (respectful of the server).
  * Set CATALOG_DELAY_MS env variable to override.
  */
@@ -38,6 +44,25 @@ import { activeCourseCount, applyEditionRetention } from "./lib/course-retention
 // The course-block reader lives in lib/ because a second caller now exists (an
 // archive-edition scrape reads the same markup). See catalog-course-parser.js.
 import { parseSubjectPage as parseSubjectPageLib } from "./lib/catalog-course-parser.js";
+// ── The archive-edition path ────────────────────────────────────────────────
+// `--edition 2024-2025` scrapes a FROZEN past edition out of
+// catalog.northeastern.edu/archive/ and writes it to
+// data/northeastern/catalog/editions/<year>/. It shares every rule in
+// catalog-edition.js with the program scrapers, above all the per-page
+// provenance assertion: the flag is the authority and the page is the thing
+// being checked, so a redirect that quietly serves live content aborts the run
+// instead of writing today's courses into a folder labelled 2023.
+import {
+  parseEditionArg, editionBasePath, assertEdition, isFatalScrapeError,
+} from "./lib/catalog-edition.js";
+import { fidelityOfEdition, FIRST_FULL_FIDELITY_EDITION } from "./lib/catalog-fidelity.js";
+import { parseCatalogEdition } from "./lib/catalog-program-parser.js";
+// politeFetch rather than the bare fetchPage below, and that is not a
+// preference. catalog-cache.js says it outright: a transient error on a
+// MONTHLY run gets another go in four weeks, but an archive edition is scraped
+// once and frozen, so a dropped socket writes a snapshot permanently missing a
+// subject. Seven pages were lost that way on the first 2024-2025 program run.
+import { politeFetch, cacheSummary, cacheEnabled } from "./lib/catalog-cache.js";
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const ROOT       = resolve(__dirname, "..");
@@ -69,6 +94,10 @@ const ROTATE   = process.argv.includes("--rotate");
 // still refuses. Deliberately not set by any workflow: a roll is the one event
 // that should have a person looking at it.
 const ACCEPT_SHRINK = process.argv.includes("--accept-shrink");
+// `--edition 2024-2025` → {label, year: 2025}, or null for a live scrape.
+// Throws on a malformed label, which is the right moment to fail: everything
+// this flag controls writes into a directory named after the year.
+const EDITION = parseEditionArg(process.argv);
 const SUBJECT  = (() => {
   const i = process.argv.indexOf("--subject");
   return i !== -1 ? process.argv[i + 1]?.toUpperCase() : null;
@@ -477,10 +506,247 @@ async function runSubjects(subjectCodes) {
 
 // ── Main ─────────────────────────────────────────────────────────────────────
 
+// ── Archive-edition mode ──────────────────────────────────────────────────────
+/**
+ * Scrape one FROZEN past edition into data/northeastern/catalog/editions/<year>/.
+ *
+ * ## Why this is a separate path rather than a flag threaded through the live one
+ *
+ * Almost everything the live scrape does after parsing is WRONG for an archive
+ * edition, and each one fails silently:
+ *
+ *   - the keep-if-fresh-is-empty merge reconciles nuPath against the LIVE
+ *     catalog, which would stamp 2026's designations onto a 2023 record;
+ *   - `applyEditionRetention` unions in courses a current program tree needs,
+ *     which are by definition not part of the edition being captured
+ *     (freeze-edition.js refuses them for the same reason);
+ *   - the 2% shrink floor is tuned for month-to-month drift inside ONE
+ *     edition, and a three-year-old catalog is legitimately smaller;
+ *   - data-meta, change-log, scrape-state and subjects.json all describe the
+ *     live scrape and must not move.
+ *
+ * Threading a boolean through all of that means one missed branch writes live
+ * data into a folder labelled with a past year — the precise failure
+ * catalog-edition.js exists to prevent, and one nothing downstream can detect.
+ * So this short-circuits before any of it, exactly as --rotate and --subjects
+ * already do, and it can reach only ONE output path.
+ *
+ * ## What "efficient" actually means here, measured
+ *
+ * The obvious optimisation is to skip courses already in the catalog, since
+ * only the retired ones are new information. **It saves nothing**, and the
+ * reason is the requests-per-entity ratio CLAUDE.md says to establish before
+ * designing anything: the catalog is a BULK FEED — one request returns a whole
+ * subject, ~35 courses — so a course is already paid for by the time we can
+ * see its code. Measured 2026-09-03: 222 / 227 / 230 subject pages for
+ * editions 2023 / 2024 / 2025, i.e. 679 requests for ~24,000 course records.
+ * Skipping known codes removes zero of them.
+ *
+ * The savings that are real:
+ *   - CATALOG_HTML_CACHE turns a parser fix from a re-fetch into a re-parse,
+ *     which is the highest-value rule in the scraping section;
+ *   - storage is a non-issue and that was measured too, not assumed: the
+ *     4.9 MB 2026 snapshot is 182 KB packed in git, and these files delta
+ *     against each other, so three editions cost well under a megabyte of
+ *     repo. `data/` is source material and never ships to the browser.
+ * So the snapshot stays FULL and self-contained, per the README in that tree.
+ * A delta-chained store would save ~400 KB and cost the property that lets a
+ * snapshot's provenance be checked in isolation.
+ */
+async function runEdition(edition) {
+  const outDir  = resolve(ROOT, "data/northeastern/catalog/editions", String(edition.year));
+  const outFile = resolve(outDir, "catalog-courses.json");
+  const base    = `${BASE_URL}${editionBasePath(edition)}`;
+
+  console.log(`\nNU Catalog Scraper — ARCHIVE EDITION ${edition.label} (${edition.year})`);
+  console.log("=".repeat(60));
+  console.log(`  Source: ${base}/course-descriptions/`);
+  console.log(`  Target: ${outFile}`);
+  if (cacheEnabled()) console.log(`  ⚠  HTML cache ON — never set CATALOG_HTML_CACHE in CI`);
+
+  // Frozen means frozen — the same rule freeze-edition.js enforces, and for
+  // the same reason. Deleting a snapshot by hand is a deliberate act that
+  // leaves a trace in git; a --force flag is one nobody reads.
+  if (existsSync(outFile)) {
+    console.error(`\n  ❌  ${outFile} already exists.`);
+    console.error(`      Frozen editions are never regenerated. Delete it by hand if it is wrong.`);
+    process.exit(1);
+  }
+
+  // The descriptive era (< 2022) publishes no prereqs, no coreqs and no
+  // Attribute lines, AND its title line omits the parenthesised credit form
+  // the parser matches — so those pages yield ZERO courses rather than
+  // partial ones. Writing that would be a snapshot claiming an edition had no
+  // courses. Refuse until an era-aware reader exists (design doc §8 step 11).
+  if (fidelityOfEdition(edition.year) !== "full") {
+    console.error(`\n  ❌  Edition ${edition.year} predates ${FIRST_FULL_FIDELITY_EDITION} and is 'descriptive' fidelity.`);
+    console.error(`      Its pages carry no prereq/coreq/attribute lines and its title format`);
+    console.error(`      does not match the parser, so a run would write an EMPTY snapshot.`);
+    console.error(`      See docs/catalog-editions-design.md §4 and §8 step 11.`);
+    process.exit(1);
+  }
+
+  const fetchOpts = { delayMs: DELAY_MS, userAgent: "NU-Map-DataBot/1.0 (academic degree planner; contact nayugu@github; respects robots.txt)" };
+
+  // ── Index, and its own provenance check ────────────────────────────────
+  const indexURL = `${base}/course-descriptions/`;
+  const indexHTML = await politeFetch(indexURL, fetchOpts);
+  const indexRoot = parseHTML(indexHTML);
+  assertEdition(parseCatalogEdition(indexRoot), edition, indexURL);
+
+  const slugs = new Set();
+  for (const a of indexRoot.querySelectorAll("a[href]")) {
+    const m = (a.getAttribute("href") || "").match(/\/course-descriptions\/([a-z0-9-]+)\/?$/i);
+    if (m) slugs.add(m[1].toLowerCase());
+  }
+  if (!slugs.size) {
+    console.error(`\n  ❌  No subject links on ${indexURL} — the archive markup may differ.`);
+    process.exit(1);
+  }
+  let subjects = [...slugs].sort();
+  // --dry-run is how you check the archive markup still parses without paying
+  // for 230 pages. It cannot write, and it skips the floor rail below, since
+  // three subjects are legitimately far under it.
+  if (DRY_RUN) subjects = subjects.slice(0, 3);
+  console.log(`\n  ${subjects.length} subjects${DRY_RUN ? "  (DRY RUN — first 3)" : ""}\n`);
+
+  // ── Fetch every subject page ───────────────────────────────────────────
+  const allCourses = [];
+  const emptySubjects = [];
+  for (let i = 0; i < subjects.length; i++) {
+    const slug = subjects[i];
+    const url  = `${base}/course-descriptions/${slug}/`;
+    process.stdout.write(`  [${String(i + 1).padStart(3)}/${subjects.length}]  ${slug.padEnd(12)}`);
+
+    let html;
+    try {
+      html = await politeFetch(url, fetchOpts);
+    } catch (err) {
+      // Unlike the monthly scrape, there is no next run to paper over this:
+      // the snapshot is written once and frozen. And the slug came from this
+      // edition's OWN index, so a failure here is an anomaly rather than a
+      // subject that went away. Re-running with a warm cache is nearly free,
+      // which is what makes stopping the cheap choice — the same argument
+      // backfill-archive.sh makes for halting on the first bad edition.
+      process.stdout.write(`  ERROR: ${err.message}\n`);
+      console.error(`\n  ❌  ${slug} failed after retries. Refusing to freeze a partial edition.`);
+      console.error(`      Re-run; with CATALOG_HTML_CACHE set, the pages already fetched are free.`);
+      process.exit(1);
+    }
+
+    const root = parseHTML(html);
+    try {
+      assertEdition(parseCatalogEdition(root), edition, url);
+    } catch (err) {
+      if (isFatalScrapeError(err)) {
+        process.stdout.write(`  EDITION MISMATCH\n`);
+        console.error(`\n  ❌  ${err.message}`);
+        process.exit(1);
+      }
+      throw err;
+    }
+
+    const courses = parseSubjectPageLib(html, slug.toUpperCase().replace(/-/g, " ").split(" ")[0], {});
+    allCourses.push(...courses);
+    // A 200 carrying zero course blocks is indistinguishable from broken
+    // markup, so it is COUNTED and reported rather than passed over. It is
+    // not fatal on its own — a subject page really can be empty — but a wave
+    // of them is what a markup change looks like, and the floor rail below
+    // is what turns that into a refusal.
+    if (!courses.length) emptySubjects.push(slug);
+    process.stdout.write(`  ${courses.length} courses\n`);
+  }
+
+  console.log(`\n${"─".repeat(60)}`);
+  console.log(`  Scraped: ${allCourses.length} courses from ${subjects.length} subjects`);
+  console.log(`  ${cacheSummary()}`);
+  if (emptySubjects.length) {
+    console.log(`  Empty pages (${emptySubjects.length}): ${emptySubjects.join(" ")}`);
+  }
+
+  // ── Floor rail, measured against the NEAREST committed edition ─────────
+  // Not against the live catalog: that file has retired courses unioned back
+  // into it by course-retention, so it is a superset of its own edition and
+  // would make every archive run look short. Frozen snapshots are
+  // edition-pure, which is exactly what makes them the right baseline.
+  // Nearest, not newest. The first version of this comment said "because the
+  // catalog GROWS", and the backfill disproved it on its first outing:
+  // measured 2026-09-03, editions 2023/2024/2025/2026 hold
+  // 7,449 / 7,654 / 7,561 / 7,966 courses — up, DOWN, then up. So the argument
+  // is not a trend, it is that drift accumulates with distance in either
+  // direction, and the nearest edition is the tightest honest baseline
+  // available. Same reason backfill-archive.sh walks newest-first.
+  const neighbours = existsSync(resolve(ROOT, "data/northeastern/catalog/editions"))
+    ? readdirSync(resolve(ROOT, "data/northeastern/catalog/editions"))
+        .filter(d => /^\d{4}$/.test(d))
+        .map(d => ({ year: +d, file: resolve(ROOT, "data/northeastern/catalog/editions", d, "catalog-courses.json") }))
+        .filter(n => existsSync(n.file))
+        .sort((a, b) => Math.abs(a.year - edition.year) - Math.abs(b.year - edition.year))
+    : [];
+
+  if (DRY_RUN) {
+    console.log(`  Baseline: skipped (dry run covers 3 subjects, legitimately under any floor)`);
+  } else if (neighbours.length) {
+    const near  = neighbours[0];
+    const count = JSON.parse(readFileSync(near.file, "utf8")).length;
+    const floor = Math.round(count * 0.9);
+    console.log(`  Baseline: edition ${near.year} has ${count} courses → floor ${floor} (90%)`);
+    if (allCourses.length < floor) {
+      console.error(`\n  ❌  ${allCourses.length} courses is below the floor of ${floor}.`);
+      console.error(`      Either the archive markup differs from the live catalog or pages`);
+      console.error(`      returned 200 with no course blocks. Refusing to freeze this.`);
+      process.exit(1);
+    }
+  } else {
+    console.log(`  Baseline: none on disk — no floor rail applied.`);
+  }
+
+  // ── What this edition actually contributes ─────────────────────────────
+  // The number the backfill is FOR: courses this edition published that the
+  // current catalog no longer carries. Reported, never used to filter the
+  // snapshot — the union is derived by derive-retired-union.js against the
+  // live file at the time it runs, and a snapshot pre-filtered against
+  // today's catalog would silently lose every course that retires later.
+  if (existsSync(CATALOG_OUT)) {
+    const live = new Set(
+      JSON.parse(readFileSync(CATALOG_OUT, "utf8")).map(c => `${c.subject} ${c.number}`)
+    );
+    const gone = allCourses.filter(c => !live.has(`${c.subject} ${c.number}`));
+    console.log(`  Retired yield: ${gone.length} of ${allCourses.length} are absent from the current catalog`);
+  }
+
+  if (!WRITE) {
+    console.log(`\n  (dry run — pass --write to freeze this edition)`);
+    return;
+  }
+
+  allCourses.sort((a, b) =>
+    a.subject === b.subject ? String(a.number).localeCompare(String(b.number))
+                            : a.subject.localeCompare(b.subject));
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(outFile, JSON.stringify(allCourses, null, 2));
+  console.log(`\n  ✅  Wrote ${allCourses.length} courses → ${outFile}`);
+  console.log(`      Add an entry to data/northeastern/catalog/editions/manifest.json —`);
+  console.log(`      a snapshot on disk but absent from the manifest is unexplained data.`);
+}
+
 console.log("\nNU Catalog Scraper");
 console.log("=".repeat(50));
 if (DRY_RUN) console.log("  ⚠  DRY RUN — only first 3 subjects");
 if (MERGE)   console.log("  MODE: merge into all-courses.json");
+
+// Archive-edition mode: short-circuits FIRST, and before every other mode, so
+// no combination of flags can route an edition run through a live write path.
+if (EDITION) {
+  if (MERGE || ROTATE || SUBJECTS) {
+    console.error("  ❌  --edition cannot be combined with --merge, --rotate or --subjects.");
+    console.error("      Those modes all write live artifacts; an edition run may reach");
+    console.error("      only data/northeastern/catalog/editions/<year>/.");
+    process.exit(1);
+  }
+  await runEdition(EDITION);
+  process.exit(0);
+}
 
 // Rotate mode: short-circuit into dedicated single-subject handler
 if (ROTATE) {
