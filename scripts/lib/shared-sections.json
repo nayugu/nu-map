@@ -1,7 +1,4 @@
 {
-  "https://catalog.northeastern.edu/graduate/business/certificate-programs/business-administration-graduate-certificate-mia/#business_administration_graduate_certificate_(miami)": [
-    "Eight-Month International Student Cohort Curriculum"
-  ],
   "https://catalog.northeastern.edu/graduate/business/certificate-programs/business-administration-graduate-certificate/#business_administration_graduate_certificate_(boston)": [
     "Eight-Month International Student Cohort Curriculum"
   ],
@@ -69,7 +66,7 @@
     "Thesis Option1"
   ],
   "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/mechanical-engineering-concentration-mechatronics-msme/#mechanical_engineering_with_concentration_in_mechatronics_msme_(boston)": [
-    "Thesis Option3"
+    "Thesis Option2"
   ],
   "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/mechanical-engineering-concentration-thermofluids-msme/#mechanical_engineering_with_concentration_in_thermofluids_msme_(boston)": [
     "Thesis Option1"
@@ -119,49 +116,8 @@
   "https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/pharmd-direct-entry/#pharmacy_pharmddirect_entry_(boston)": [
     "YEAR 3"
   ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/analytics-mps-arl/#analytics_mps_(arlington)": [
-    "Statistical Modeling"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/analytics-mps-oak/#analytics_mps_(oakland)": [
-    "Statistical Modeling"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/analytics-mps-ptl/#analytics_mps_(portland)": [
-    "Evidence-Based Management",
-    "Statistical Modeling"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/analytics-mps-sea/#analytics_mps_(seattle)": [
-    "Statistical Modeling"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/analytics-mps-sjo/#analytics_mps_(silicon_valley)": [
-    "Statistical Modeling"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/analytics-mps-tor/#analytics_mps_(toronto)": [
-    "Evidence-Based Management",
-    "Statistical Modeling"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/analytics-mps-van/#analytics_mps_(vancouver)": [
-    "Evidence-Based Management",
-    "Statistical Modeling"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/digital-media-mps-connect-van/#digital_media_mpsconnect_(vancouver)": [
-    "Required Courses"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/digital-media-mps-connect/#digital_media_mpsconnect_(boston)": [
-    "Digital Video",
-    "Required"
-  ],
   "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/digital-media-mps-van/#digital_media_mps_(vancouver)": [
     "Required Courses"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/digital-media-mps/#digital_media_mps_(boston)": [
-    "Digital Video",
-    "Social Media"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/human-resources-management-ms/#human_resources_management_ms_(boston)": [
-    "Required Course"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/master-of-sports-leadership/#sports_leadership_msld_(boston)": [
-    "Analytics"
   ],
   "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/teaching-elementary-licensure-mat/#elementary_education_mat_(boston)": [
     "MAT+ in English as a Second Language (ESL)"
