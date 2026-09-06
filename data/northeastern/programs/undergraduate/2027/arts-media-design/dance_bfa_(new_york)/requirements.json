@@ -1,0 +1,401 @@
+{
+  "name": "Dance, BFA (New York)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7,
+    "tablesOnPage": 7,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/theatre/dance-bfa-nyc/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.85,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/theatre/dance-bfa-nyc/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 132,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Ballet",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 1450
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2200
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2550
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 3430
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 4450
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following, according to placement."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Jazz",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 1490
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2490
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 3490
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following, according to placement."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Modern Dance",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 1890
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2430
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 3410
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following, according to placement."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Tap",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 2,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 1080
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2080
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 2 semester hours from the following, according to placement."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Additional Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DANC",
+          "classId": 1200
+        },
+        {
+          "type": "COURSE",
+          "subject": "DANC",
+          "classId": 2030
+        },
+        {
+          "type": "COURSE",
+          "subject": "DANC",
+          "classId": 2220
+        },
+        {
+          "type": "COURSE",
+          "subject": "DANC",
+          "classId": 2910
+        },
+        {
+          "type": "COURSE",
+          "subject": "DANC",
+          "classId": 3030
+        },
+        {
+          "type": "COURSE",
+          "subject": "DANC",
+          "classId": 3400
+        },
+        {
+          "type": "COURSE",
+          "subject": "DANC",
+          "classId": 3510
+        },
+        {
+          "type": "COURSE",
+          "subject": "DANC",
+          "classId": 3540
+        },
+        {
+          "type": "COURSE",
+          "subject": "DANC",
+          "classId": 3640
+        },
+        {
+          "type": "COURSE",
+          "subject": "DANC",
+          "classId": 4950
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 1080
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 1450
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 1490
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 1890
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2080
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2200
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2430
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2490
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2550
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2560
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 3410
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 3430
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 3490
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 3580
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 4410
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 4450
+            }
+          ],
+          "notes": [
+            "Complete 16 semester hours of additional studio courses from the list below, not used to fulfill other requirements of this major or of the student’s concentration:"
+          ]
+        }
+      ],
+      "minRequirementCount": 11
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 2940
+            },
+            {
+              "type": "COURSE",
+              "subject": "DANC",
+              "classId": 4250
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 3-4 semester hours of each of the following (registration should be planned for terms other than the term of registration for DANC 1200):"
+      ]
+    }
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Choreography Concentration",
+        "label": "Choreography",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "DANC",
+            "classId": 3520
+          },
+          {
+            "type": "COURSE",
+            "subject": "DANC",
+            "classId": 4530
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "THTR",
+                "classId": 2346
+              },
+              {
+                "type": "COURSE",
+                "subject": "THTR",
+                "classId": 3170
+              }
+            ],
+            "notes": [
+              "Complete one of the following:"
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  },
+  "majorCreditSubtotal": 84
+}

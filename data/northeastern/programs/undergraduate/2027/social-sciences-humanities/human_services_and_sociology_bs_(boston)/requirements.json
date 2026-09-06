@@ -1,0 +1,295 @@
+{
+  "name": "Human Services and Sociology, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/human-services-sociology-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/human-services-sociology-bs/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 3,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "3 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Human Services Electives",
+                "sh": 20
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Introductory Electives",
+                "sh": 8
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Intermediate-Level Elective",
+                "sh": 8
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 128,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Human Services Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HUSV",
+          "classId": 1101
+        },
+        {
+          "type": "COURSE",
+          "subject": "HUSV",
+          "classId": 2300
+        },
+        {
+          "type": "COURSE",
+          "subject": "HUSV",
+          "classId": 3570
+        },
+        {
+          "type": "COURSE",
+          "subject": "HUSV",
+          "classId": 3900
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Human Services Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 20,
+      "notes": [
+        "Complete five additional HUSV courses."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Sociology Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 1101
+        },
+        {
+          "type": "COURSE",
+          "subject": "SOCL",
+          "classId": 3300
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Introductory Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses between SOCL 1000 and SOCL 2999 not used to satsify another requirement"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate-Level Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two courses between SOCL 3000 and SOCL 4999 not used to satisfy another requirement"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Research Methods Requirement",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "HUSV",
+                  "classId": 2970
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 2321
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 3101
+                }
+              ]
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 2320
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 3102
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "POLS",
+                  "classId": 2400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CRIM",
+                  "classId": 3700
+                }
+              ]
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "SOCL",
+                  "classId": 2323
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ANTH",
+                  "classId": 3410
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one required methods course, one required statistics course, and one qualitative methods course:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Human Services/Sociology Integrative Course",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 2355
+            },
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 3100
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 3450
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one integrative course from the following list:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone Requirement",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 4700
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 4600
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one capstone course from either department:"
+      ]
+    }
+  ],
+  "majorCreditSubtotal": 80
+}

@@ -1,0 +1,586 @@
+{
+  "name": "Africana Studies and Criminal Justice, BA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/cultures-societies-global-studies/africana-studies-criminal-justice-ba-bos/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/cultures-societies-global-studies/africana-studies-criminal-justice-ba-bos/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 3,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "3 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "BA Language Requirements",
+                "sh": 12
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Elective",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Additional Criminal Justice Elective",
+                "sh": 4
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 128,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "BA Language Requirements",
+      "creditsRequired": 12,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "All BA students are required to complete the BA degree language requirements, for a total of 12 semester hours of language study or demonstrated equivalent proficiency, as described in Additional Requirements for BA students. Successful demonstration of proficiency does not reduce total minimum semester hours of study required to earn the BA degree."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Introductory Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "AFCS",
+          "classId": 1101
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Approaches to the Field",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 1225
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 1270
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2270
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2325
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2600
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 3120
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 3305
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 3323
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 5001
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 5544
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Exploring Intellectual Traditions and Cultural Production",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 1113
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2296
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2455
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2619
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2690
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 3404
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 3664
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 3900
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Understanding Society and Social Movements",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 1261
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2318
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2325
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2330
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2337
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2355
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2380
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2390
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2410
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 2900
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 3424
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 4526
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 4939
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one additional AFCS course at the 3000 level or above."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Introduction to Crime, Law, and Justice System",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 1100
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 1110
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 1120
+        },
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 3600
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Criminal Justice Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 1300
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 1400
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 1500
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 1700
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 2310
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 2320
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 2330
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 2350
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 2370
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 2380
+            }
+          ],
+          "notes": [
+            "Understanding and Experiencing Criminal Justice Institutions and Systems",
+            "Complete one of the following:"
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 3010
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 3030
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 3040
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 3050
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 3060
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 3070
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 3100
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 3540
+            }
+          ],
+          "notes": [
+            "Crime Problems",
+            "Complete one of the following:"
+          ]
+        }
+      ],
+      "minRequirementCount": 3,
+      "notes": [
+        "Current Crime and Justice Issues",
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Systemic Issues",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 3110
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Creating Knowledge about Crime and Justice",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CRIM",
+          "classId": 3700
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Additional Criminal Justice Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "Complete one additional CRIM course in the following range:",
+        "CRIM 3001- CRIM 5999"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 1000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Co-op Preparation",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EESH",
+          "classId": 2000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 3120
+            },
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 3120
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "AFCS",
+              "classId": 4700
+            },
+            {
+              "type": "COURSE",
+              "subject": "CRIM",
+              "classId": 4949
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ]
+}

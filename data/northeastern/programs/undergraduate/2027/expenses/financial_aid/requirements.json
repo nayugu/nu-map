@@ -1,0 +1,99 @@
+{
+  "name": "Financial Aid",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 0,
+    "tablesConsumed": 0,
+    "tablesOnPage": 0,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/expenses/financial-aid/",
+    "panes": [
+      ""
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.68,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/expenses/financial-aid/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "medium",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Financial Aid Eligibility",
+                "sh": 6
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Financial Aid Eligibility",
+      "creditsRequired": 6,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "Northeastern awards need-based federal financial aid for eligible students. In order to be federally eligible, undergraduate students must meet the following criteria:",
+        "Be a U.S. citizen or eligible noncitizen",
+        "Be matriculated in a degree-granting program",
+        "Have received a high school diploma or state-recognized equivalent (e.g., GED)",
+        "Not be in default on prior student loans",
+        "Maintain satisfactory academic progress",
+        "Students must be enrolled in at least 6 credits per term to receive federal aid, unless participating in a co-op, clinical rotation, residency, or enrolled in a full-time or part-time stand-alone course. Enrollment below full time may impact eligibility for state and institutional aid.",
+        "While international students are not eligible for U.S. federal aid, other financing options are available. Visit the Applying for Aid page on the SFS website to learn more."
+      ]
+    }
+  ]
+}

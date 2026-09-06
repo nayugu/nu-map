@@ -1,0 +1,194 @@
+{
+  "name": "Urban Landscape Studies, Minor",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/architecture/urban-landscape-studies-minor/",
+    "panes": [
+      "minorrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "minor",
+      "score": 0.98,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/architecture/urban-landscape-studies-minor/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "info",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Urban Landscape Core 1",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LARC",
+          "classId": 2340
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Urban Landscape Core 2",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "LARC",
+              "classId": 2230
+            },
+            {
+              "type": "COURSE",
+              "subject": "LARC",
+              "classId": 2330
+            },
+            {
+              "type": "COURSE",
+              "subject": "LARC",
+              "classId": 2430
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 1310
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 3352
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 4850
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2334
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3200
+            },
+            {
+              "type": "COURSE",
+              "subject": "LARC",
+              "classId": 2230
+            },
+            {
+              "type": "COURSE",
+              "subject": "LARC",
+              "classId": 2240
+            },
+            {
+              "type": "COURSE",
+              "subject": "LARC",
+              "classId": 2330
+            },
+            {
+              "type": "COURSE",
+              "subject": "LARC",
+              "classId": 2430
+            },
+            {
+              "type": "COURSE",
+              "subject": "LARC",
+              "classId": 2440
+            },
+            {
+              "type": "COURSE",
+              "subject": "LARC",
+              "classId": 5210
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 2395
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 1246
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "GPA Requirement",
+      "threshold": 2.5,
+      "scope": {
+        "kind": "program"
+      },
+      "text": "2.500 GPA required in the minor"
+    }
+  ]
+}

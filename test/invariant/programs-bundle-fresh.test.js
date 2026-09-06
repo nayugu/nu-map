@@ -42,7 +42,27 @@ test('bundle › program ids are unique', () => {
   const ids = bundle.programs.map(p => p.id);
   const dupes = ids.filter((v, i) => ids.indexOf(v) !== i);
   assert.deepEqual([...new Set(dupes)], []);
-  assert.equal(Object.keys(bundle.programData).length, ids.length);
+
+  // ⚠ This used to assert `programData.length === ids.length`, which held only
+  // while exactly ONE edition was on disk. `programRegistry.node.js` says
+  // outright that the two are different sets once editions are retained:
+  // programData keeps EVERY catalog year, because an id carries its year and a
+  // student's frozen edition has to stay reachable, while the browsable LIST is
+  // deduped to one row per program so `list_programs` does not grow by ~1,000
+  // near-identical rows per year kept. The 2027 roll made that real — 1,722
+  // records against 1,213 listed — and the equality failed while nothing was
+  // wrong.
+  //
+  // What the collision it was written for actually looks like: two programs
+  // sharing an id, so programData silently keeps one and the other is
+  // unreachable. That is checked directly instead — every listed id resolves,
+  // and no two records share a key.
+  const keys = Object.keys(bundle.programData);
+  assert.equal(new Set(keys).size, keys.length, 'two records share a programData key');
+  const missing = ids.filter(id => !(id in bundle.programData));
+  assert.deepEqual(missing, [], 'a listed program has no record in programData');
+  assert.ok(keys.length >= ids.length,
+    `programData (${keys.length}) cannot hold fewer records than the list names (${ids.length})`);
 });
 
 test('bundle › every program matches its source file', () => {

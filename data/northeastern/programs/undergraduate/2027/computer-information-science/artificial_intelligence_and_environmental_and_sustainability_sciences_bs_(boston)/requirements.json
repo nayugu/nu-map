@@ -1,0 +1,745 @@
+{
+  "name": "Artificial Intelligence and Environmental and Sustainability Sciences, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6,
+    "tablesOnPage": 6,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/artificial-intelligence-environmental-sustainability-sciences-bs-bos/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.85,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/artificial-intelligence-environmental-sustainability-sciences-bs-bos/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 131,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Computer Science Overview",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "INPR",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSC",
+              "classId": 1000
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 1210
+            },
+            {
+              "type": "COURSE",
+              "subject": "EESC",
+              "classId": 2000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "Must be taken in alignment with your home college:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Fundamental Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2001
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2100
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2101
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "CS",
+          "classId": 3200
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 3500
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1365
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1465
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 5,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute with 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Artificial Intelligence Foundations",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 3000
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 4200
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 4300
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 4400
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 4420
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Khoury Approved Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "CS",
+              "idRangeStart": 2300,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "type": "EXCLUDE",
+                  "subject": "CS",
+                  "classId": 5010
+                }
+              ]
+            },
+            {
+              "type": "RANGE",
+              "subject": "CY",
+              "idRangeStart": 2000,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "type": "EXCLUDE",
+                  "subject": "CY",
+                  "classId": 4930
+                }
+              ]
+            },
+            {
+              "type": "RANGE",
+              "subject": "DS",
+              "idRangeStart": 2500,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "type": "EXCLUDE",
+                  "subject": "DS",
+                  "classId": 4900
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2160
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 2322
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 2323
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 4606
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives.",
+        "Complete 4 semester hours from within the following options:",
+        "CS 2300 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Environmental and Sustainability Sciences Major Requirements",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 2302
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 2303
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 1400
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 1401
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 1200
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 1201
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 2200
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENVR",
+          "classId": 2515
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Skills Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3301
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5260
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Environmental and Sustainability Sciences Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 4970
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2310
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2311
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2341
+                }
+              ]
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3125
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 3600
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 4500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 4501
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5190
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5670
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3460
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3465
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 4001
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 4505
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5700
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5750
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3150
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5350
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5563
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5800
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5220
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5450
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5800
+            },
+            {
+              "type": "COURSE",
+              "subject": "POLS",
+              "classId": 2395
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5260
+            },
+            {
+              "type": "COURSE",
+              "subject": "PPUA",
+              "classId": 5268
+            },
+            {
+              "type": "COURSE",
+              "subject": "SOCL",
+              "classId": 2485
+            }
+          ],
+          "notes": [
+            "Earth Oceans and Environmental Change",
+            "Conservation, Restoration, and Management",
+            "Sustainable Planning and Development",
+            "Environment and Society"
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete any 4 courses from this list:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Calculus",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 2500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 2501
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1341
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Chemistry",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1161
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1162
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1163
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "College Writing",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1102
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Advanced Writing in the Disciplines",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3302
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3303
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3307
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Requirement",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 4991
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 4050
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 4971
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 4997
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    }
+  ],
+  "generalElectiveSH": 16
+}

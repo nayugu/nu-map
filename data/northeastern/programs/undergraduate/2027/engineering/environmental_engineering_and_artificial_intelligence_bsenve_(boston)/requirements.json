@@ -1,0 +1,711 @@
+{
+  "name": "Environmental Engineering and Artificial Intelligence, BSEnvE (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7,
+    "tablesOnPage": 7,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/civil-environmental/environmental-engineering-artificial-intelligence-bsenve/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "titleCollisions": {
+      "sections": [
+        "Supplemental Credit"
+      ],
+      "concentrations": []
+    },
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/civil-environmental/environmental-engineering-artificial-intelligence-bsenve/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "General Electives",
+                "sh": 8
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 135,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Engineering",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2221
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2222
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2300
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 2301
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 2331
+        },
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 2334
+        },
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 3435
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 4534
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 4535
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 4765
+        }
+      ],
+      "minRequirementCount": 7
+    },
+    {
+      "type": "SECTION",
+      "title": "Environmental Engineering Elective Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 4540
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 4777
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5100
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5250
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5255
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5260
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5261
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5271
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5275
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5280
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5281
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5363
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5365
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5366
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5368
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5369
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5536
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5670
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 5699
+            },
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 3300
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete at least one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Supplemental Credit",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 3,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 3430
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 2,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1501
+            }
+          ],
+          "notes": [
+            "2 semester hours from the following counts toward the engineering requirement:"
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 3,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1502
+            }
+          ],
+          "notes": [
+            "3 semester hours from the following counts toward the engineering requirement:"
+          ]
+        }
+      ],
+      "minRequirementCount": 3,
+      "notes": [
+        "3 semester hours from the following counts toward the engineering requirement:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Fundamental Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CS",
+          "classId": 1800
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2001
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2100
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2101
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "CS",
+          "classId": 3200
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 3500
+        }
+      ],
+      "minRequirementCount": 5,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Artificial Intelligence Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 3000
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 4200
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 4300
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 4400
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Mathematics/Science",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1151
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1153
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1341
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1342
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 2321
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 2341
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 3081
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 1151
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 1152
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 1153
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 7
+    },
+    {
+      "type": "SECTION",
+      "title": "Science Elective (Earth)",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 2200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3125
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 3600
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Supplemental Credit (2)",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 3430
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1501
+            }
+          ],
+          "notes": [
+            "1 semester hour from the following counts toward the mathematics/science requirement:"
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following counts toward the mathematics/science requirement:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Professional Development",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 2000
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENCP",
+          "classId": 3000
+        },
+        {
+          "type": "COURSE",
+          "subject": "GE",
+          "classId": 1000
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Additional Required Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1501
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 1,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GE",
+              "classId": 1502
+            }
+          ],
+          "notes": [
+            "1 semester hour from the following counts toward the professional development requirement:"
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "1 semester hour from the following counts toward the professional development requirement:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENGW",
+          "classId": 1111
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3302
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3303
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Course",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 0,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 4765
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "This course is already required above and also fulfills the integrative requirement:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "General Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8,
+      "notes": [
+        "Complete 8 semester hours of academic, nonremedial courses not used toward other requirements."
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Engineering GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "described",
+        "text": "major (CIVE) courses"
+      },
+      "text": "Minimum 2.000 GPA required in major (CIVE) courses"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students can substitute Engineering Design (GE 1110)and Engineering Problem Solving and Computation (GE 1111) for Cornerstone of Engineering 1 (GE 1501) and Cornerstone of Engineering 2 (GE 1502).",
+      "codes": [
+        "GE 1110",
+        "GE 1111",
+        "GE 1501",
+        "GE 1502"
+      ],
+      "substitution": {
+        "from": [
+          "GE 1110",
+          "GE 1111"
+        ],
+        "to": [
+          "GE 1501",
+          "GE 1502"
+        ]
+      }
+    },
+    {
+      "marker": "2",
+      "text": "Mathematics/science requirement: General Chemistry for Engineers (CHEM 1151), Calculus 1 for Science and Engineering (MATH 1341), and Physics for Engineering 1 (PHYS 1151) require a grade of C– or higher.",
+      "codes": [
+        "CHEM 1151",
+        "MATH 1341",
+        "PHYS 1151"
+      ],
+      "substitution": null
+    }
+  ]
+}

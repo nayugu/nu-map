@@ -1,0 +1,577 @@
+{
+  "name": "Linguistics and Communication Studies, BA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/linguistics-communication-studies-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/linguistics-communication-studies-ba/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "BA Language Requirements",
+                "sh": 12
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 128,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "BA Language Requirements",
+      "creditsRequired": 12,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "All BA students are required to complete the BA degree language requirements, for a total of 12 semester hours of language study or demonstrated equivalent proficiency, as described in Additional Requirements for BA students. Successful demonstration of proficiency does not reduce total minimum semester hours of study required to earn the BA degree."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Linguistics Foundations",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LING",
+          "classId": 1150
+        },
+        {
+          "type": "COURSE",
+          "subject": "LING",
+          "classId": 2350
+        },
+        {
+          "type": "COURSE",
+          "subject": "LING",
+          "classId": 3412
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Linguistic Structure",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 3420
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 3422
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 3424
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 3450
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 3452
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Linguistics Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "LING",
+              "idRangeStart": 3000,
+              "idRangeEnd": 4999,
+              "exceptions": []
+            },
+            {
+              "type": "COURSE",
+              "subject": "DEAF",
+              "classId": 2700
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two courses not used to fulfill other degree requirements from the following options:",
+        "LING 3000 to LING 4999"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Common Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 1101
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1112
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2301
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Foundation Course",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1210
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1225
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1231
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1255
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Cluster Course",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1131
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2303
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2304
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2501
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 2551
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Intensive Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3200
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3201
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3230
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3304
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3320
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3415
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3500
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3501
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3530
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3532
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4535
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4605
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4631
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Communication Studies Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 1230
+            },
+            {
+              "type": "COURSE",
+              "subject": "PREL",
+              "classId": 1425
+            },
+            {
+              "type": "COURSE",
+              "subject": "PREL",
+              "classId": 3625
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours from the following:",
+        "COMM courses between COMM 1100 - 4999, which have not been used to satisfy other degree requirements.",
+        "MSCR courses in the ranges MSCR 2100 - 2999, MSCR 3100 - 3999, MSCR 4100 - 4999."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Requirement Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "COMM",
+          "classId": 2500
+        },
+        {
+          "type": "COURSE",
+          "subject": "LING",
+          "classId": 3442
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete 8 semester hours from the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone Experience Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4102
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4530
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4608
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4625
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 4901
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 4654
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSC",
+              "classId": 1000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Learning Introduction",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEAM",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "EESC",
+              "classId": 2000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1102
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1114
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 3409
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3314
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3307
+            }
+          ],
+          "notes": [
+            "Advanced Writing in the Disciplines"
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "First-Year Writing"
+      ]
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Please visit the Linguistics Courses page within this catalog to review the list of courses in the LING 3000 - LING 4999 range.",
+      "codes": [
+        "LING 3000",
+        "LING 4999"
+      ],
+      "substitution": null
+    }
+  ],
+  "majorCreditSubtotal": 80
+}

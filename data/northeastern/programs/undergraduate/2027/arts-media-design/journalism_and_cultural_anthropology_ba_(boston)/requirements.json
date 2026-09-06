@@ -1,0 +1,422 @@
+{
+  "name": "Journalism and Cultural Anthropology, BA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6,
+    "tablesOnPage": 6,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/journalism/journalism-cultural-anthropology-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/journalism/journalism-cultural-anthropology-ba/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 4,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "4 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "BA Language Requirements",
+                "sh": 12
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Journalism Electives",
+                "sh": 16
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Anthropology Area Requirements",
+                "sh": 8
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Anthropology Electives",
+                "sh": 8
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 128,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "BA Language Requirements",
+      "creditsRequired": 12,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "All BA students are required to complete the BA degree language requirements, for a total of 12 semester hours of language study or demonstrated equivalent proficiency, as described in Additional Requirements for BA students. Successful demonstration of proficiency does not reduce total minimum semester hours of study required to earn the BA degree."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Foundation Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1101
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 1150
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 2201
+        }
+      ],
+      "minRequirementCount": 3,
+      "notes": [
+        "A grade of C or better is required in JRNL 1101, JRNL 1102, and JRNL 2201."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Visual Storytelling",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 3370
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5309
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5310
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5314
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5320
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Law and Ethics",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "OR",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "JRNL",
+                      "classId": 3550
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "JRNL",
+                      "classId": 4650
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Journalism Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 16,
+      "notes": [
+        "Complete four JRNL courses (two must be 3000 level or above)."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 1101
+        },
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 2305
+        },
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 3410
+        },
+        {
+          "type": "COURSE",
+          "subject": "ANTH",
+          "classId": 3421
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Anthropology Area Requirements",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two area courses in the range from ANTH 4101–ANTH 4520 not used to satisfy other requirements; one study-abroad course may be substituted as an area studies course with prior permission from the department; additional area courses taken may count as anthropology electives."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Anthropology Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8,
+      "notes": [
+        "Complete two ANTH courses in addition to the above requirements. One course from study abroad may also count toward this requirement, with permission from the department.",
+        "ANTH 2000 to ANTH 4999"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 4600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 4100
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Introductory",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Co-op Preparatory Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EESH",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEAM",
+              "classId": 2000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following if electing to do a co-op:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 3418
+            },
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 4100
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1949
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 3700
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 5250
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "If ANTH 4100 was used as capstone option, choose ANTH 3418 as the integrative course:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENGW",
+          "classId": 1111
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3308
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 2301
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ],
+  "majorCreditSubtotal": 81
+}

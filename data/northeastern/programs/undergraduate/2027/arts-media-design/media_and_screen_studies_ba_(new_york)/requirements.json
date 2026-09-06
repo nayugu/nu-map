@@ -1,0 +1,373 @@
+{
+  "name": "Media and Screen Studies, BA (New York)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/media-screen-studies-ba-nyc/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/media-screen-studies-ba-nyc/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "BA Language Requirements",
+                "sh": 12
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 128,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "BA Language Requirements",
+      "creditsRequired": 12,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "All BA students are required to complete the BA degree language requirements, for a total of 12 semester hours of language study or demonstrated equivalent proficiency, as described in Additional Requirements for BA students. Successful demonstration of proficiency does not reduce total minimum semester hours of study required to earn the BA degree."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Common Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MSCR",
+          "classId": 1220
+        },
+        {
+          "type": "COURSE",
+          "subject": "MSCR",
+          "classId": 2220
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Cluster Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 1420
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 2300
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 2895
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 1230
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 2391
+            }
+          ],
+          "notes": [
+            "Media Production",
+            "Complete 4 semester hours from the following:"
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 2325
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 2335
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3392
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3437
+            }
+          ],
+          "notes": [
+            "Media Cultures",
+            "Complete 4 semester hours from the following:"
+          ]
+        }
+      ],
+      "minRequirementCount": 3,
+      "notes": [
+        "Critical Analysis",
+        "Complete 4 semester hours from the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing-Intensive Seminars",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 2600
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3330
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3420
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3422
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3600
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 3700
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 8 semester hours from the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Media and Screen Studies Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2360
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3480
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3485
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 20 semester hours from the following:",
+        "MSCR courses between MSCR 1200-4999 that have not been used to satisfy other degree requirements"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone Experience Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MSCR",
+          "classId": 4623
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MSCR",
+          "classId": 1000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1102
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1114
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3314
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            }
+          ],
+          "notes": [
+            "Advanced Writing Across the Disciplines"
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "First-Year Writing"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EXED",
+          "classId": 2000
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3945
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3946
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3947
+            },
+            {
+              "type": "COURSE",
+              "subject": "COOP",
+              "classId": 3948
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "Successful completion of EXED 2000 is required for participation in co-op."
+      ]
+    }
+  ],
+  "majorCreditSubtotal": 52
+}

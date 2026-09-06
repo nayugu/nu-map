@@ -1,0 +1,523 @@
+{
+  "name": "Journalism and Design, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/journalism/journalism-design-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/journalism/journalism-design-bs/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 4,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "4 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Journalism Electives",
+                "sh": 12
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Design Elective",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Art + Design History Elective",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Art + Design Elective",
+                "sh": 4
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 129,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Journalism Introductory Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 1150
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Journalism Foundations",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1101
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 2201
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 2301
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 3610
+        }
+      ],
+      "minRequirementCount": 4,
+      "notes": [
+        "Must receive a C or better in the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Law and Ethics",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 3550
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 4650
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Journalism Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three JRNL courses."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design Fundamentals Required",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTF",
+          "classId": 1220
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design Fundamentals Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 6,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1230
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1240
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1250
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 6 semester hours of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Design Required",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1001
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1002
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1270
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1271
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1290
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1291
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Design Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTG courses not already required as long as prerequisites have been met. ARTG 2262 and ARTG 2263 are recommended."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design History Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTH courses. ARTH 1001 Visual Intelligence and ARTH 1002 Seminar in Visual Intelligence are recommended."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTD, ARTE, ARTF, ARTG, ARTH, ARTS, EXRE, or GAME course for which prerequisites have been met and course has not been used to fulfill other requirements of the program.",
+        "If ARTG 5000 Topics in Design (or any other topics course in the subjects listed above) is completed more than once, the additional completions may be allowed toward the electives."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Degree Capstone Project",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 4550
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Design Options",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2810
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3810
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3462
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3464
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2252
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3452
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2242
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3444
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3400
+            }
+          ],
+          "groups": [
+            {
+              "title": "Creative Fabrication",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2810
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3810
+                }
+              ]
+            },
+            {
+              "title": "Experience Design",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3462
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3464
+                }
+              ]
+            },
+            {
+              "title": "Graphic Design",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2252
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3452
+                }
+              ]
+            },
+            {
+              "title": "Information Design",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2242
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3444
+                }
+              ]
+            },
+            {
+              "title": "Interaction Design",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3400
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following options:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 4550
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 5311
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "Note: ARTG 4550 double counts with the specified requirements above."
+      ],
+      "shared": true
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "For students interested in the PlusOne in Information Design and Data Visualization, speak with an advisor about an alternative course option to Prototyping with Code (ARTG 2262) and Lab for ARTG 2262 (ARTG 2263).",
+      "codes": [
+        "ARTG 2262",
+        "ARTG 2263"
+      ],
+      "substitution": null
+    }
+  ]
+}

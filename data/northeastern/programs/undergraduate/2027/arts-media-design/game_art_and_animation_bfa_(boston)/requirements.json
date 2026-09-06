@@ -1,0 +1,820 @@
+{
+  "name": "Game Art and Animation, BFA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6,
+    "tablesOnPage": 6,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/game-art-animation-bfa/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.85,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/game-art-animation-bfa/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 130,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Game Art Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTF",
+          "classId": 1000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design Fundamentals Required",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTF",
+          "classId": 1240
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design Fundamentals Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 6,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1220
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1230
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1250
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 6 semester hours from the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Art History Required",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1001
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1002
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTH",
+          "classId": 2212
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Art History Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2211
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2215
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2311
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2312
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 2313
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 3000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 3211
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 4000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 4 semester hours from the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Game Art Required",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 1001
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 1002
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2100
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2355
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2370
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2371
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "GAME",
+          "classId": 1110
+        },
+        {
+          "type": "COURSE",
+          "subject": "GAME",
+          "classId": 2500
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 5,
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2360
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2361
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2380
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2381
+                }
+              ]
+            }
+          ],
+          "notes": [
+            "Complete 5 semester hours from the following:"
+          ]
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Animation",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3000
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3470
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3472
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 3473
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 4570
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 4575
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 1850
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2010
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2650
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2750
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2755
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 2950
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 3300
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 3400
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 3700
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 3800
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 4000
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 4155
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 4460
+            },
+            {
+              "type": "COURSE",
+              "subject": "GAME",
+              "classId": 4600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 2340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3000
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3460
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3471
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 3480
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4565
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTD",
+              "classId": 4661
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 2500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTE",
+              "classId": 2501
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2252
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2262
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2263
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3250
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTH",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTS",
+              "classId": 2340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTS",
+              "classId": 2341
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTS",
+              "classId": 3449
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 2001
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 1101
+            }
+          ],
+          "groups": [
+            {
+              "title": "Game Design",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 1850
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 2010
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 2650
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 2750
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 2755
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 2950
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 3300
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 3400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 3700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 3800
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 4000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 4155
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 4460
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "GAME",
+                  "classId": 4600
+                }
+              ]
+            },
+            {
+              "title": "Art and Design",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 2340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3000
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3460
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3471
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 3480
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 4565
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTD",
+                  "classId": 4661
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTE",
+                  "classId": 2500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTE",
+                  "classId": 2501
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2252
+                },
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 2262
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "ARTG",
+                      "classId": 2263
+                    }
+                  ]
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3250
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTH",
+                  "classId": 1100
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTS",
+                  "classId": 2340
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTS",
+                  "classId": 2341
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTS",
+                  "classId": 3449
+                }
+              ]
+            },
+            {
+              "title": "Additional Elective Options",
+              "courses": [
+                {
+                  "type": "AND",
+                  "courses": [
+                    {
+                      "type": "COURSE",
+                      "subject": "CS",
+                      "classId": 2000
+                    },
+                    {
+                      "type": "COURSE",
+                      "subject": "CS",
+                      "classId": 2001
+                    }
+                  ]
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PSYC",
+                  "classId": 1101
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 16 semester hours from the following as long as prerequisites have been met. At least 4 semester hours must be at the 4000 level:",
+        "If ARTD 3000 Topics in Media Arts (or any other topics course in the options listed below) is completed more than once, the additional completions may be allowed toward the electives."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone Requirement",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTD",
+          "classId": 4530
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Supporting Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1260
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirement",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3314
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "majorCreditSubtotal": 90
+}

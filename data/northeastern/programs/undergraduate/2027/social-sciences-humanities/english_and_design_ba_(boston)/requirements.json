@@ -1,0 +1,830 @@
+{
+  "name": "English and Design, BA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 6,
+    "tablesConsumed": 6,
+    "tablesOnPage": 6,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/english/english-design-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/english/english-design-ba/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 5,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "5 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "BA Language Requirements",
+                "sh": 12
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "English Electives",
+                "sh": 8
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Design Elective",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Art + Design History Elective",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Art+Design Elective",
+                "sh": 4
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 128,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "BA Language Requirements",
+      "creditsRequired": 12,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "All BA students are required to complete the BA degree language requirements, for a total of 12 semester hours of language study or demonstrated equivalent proficiency, as described in Additional Requirements for BA students. Successful demonstration of proficiency does not reduce total minimum semester hours of study required to earn the BA degree."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Foundational Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 1160
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 1410
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 1400
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 1700
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 1701
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Diversity",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2296
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2450
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2455
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2470
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2760
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3678
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following (you may reuse this course to fulfill an additional English requirement below):"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Literary Periods",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 1600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2296
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3101
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3120
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3160
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENGL",
+                  "classId": 3678
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "JWSS",
+                  "classId": 3678
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2450
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2451
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2455
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2470
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3161
+            }
+          ],
+          "notes": [
+            "Post-1850",
+            "Complete one of the following:"
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "Pre-1850",
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Theories and Methods",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 1160
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 1410
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 1450
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2520
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2620
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3325
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3381
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3400
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3487
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3700
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 1150
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 2350
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 3450
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 3452
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 3454
+            },
+            {
+              "type": "COURSE",
+              "subject": "LING",
+              "classId": 3456
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Major Seminar",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 3710
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2700
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2710
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2760
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2770
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3375
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3376
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3377
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3378
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3380
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "English Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8,
+      "notes": [
+        "Complete any two ENGL courses that have not already been used to fulfill another requirement."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "English Capstone Requirement",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 4710
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design Fundamentals Required",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTF",
+          "classId": 1220
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design Fundamentals Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 6,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1230
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1240
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTF",
+              "classId": 1250
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 6 semester hours of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Design Required",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1001
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1002
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1270
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1271
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1290
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 1291
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Design Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTG design courses not already required, as long as prerequisites have been met."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Art + Design History Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTH course."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Art+Design Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ARTD, ARTE, ARTF, ARTG, ARTH, ARTS, or GAME courses as long as prerequisites have been met.",
+        "If ARTG 5000 Topics in Design (or any other topics course in the subjects listed above) is completed more than once, the additional completions may be allowed toward the electives."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Degree Capstone Project",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 4550
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Design Option",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2810
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3810
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3462
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3464
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2252
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3452
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2242
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3444
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 2401
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 3400
+            }
+          ],
+          "groups": [
+            {
+              "title": "Creative Fabrication",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2810
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3810
+                }
+              ]
+            },
+            {
+              "title": "Experience Design",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3462
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3464
+                }
+              ]
+            },
+            {
+              "title": "Graphic Design",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2252
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3452
+                }
+              ]
+            },
+            {
+              "title": "Information Design",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2242
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3444
+                }
+              ]
+            },
+            {
+              "title": "Interaction Design",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2400
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 2401
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ARTG",
+                  "classId": 3400
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following options:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Course",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGL",
+              "classId": 3340
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 4550
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:",
+        "The following course is already required in major:"
+      ]
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "For students interested in the PlusOne in Information Design and Data Visualization, speak with an advisor about an alternative course option to Prototyping with Code (ARTG 2262) and Lab for ARTG 2262 (ARTG 2263).",
+      "codes": [
+        "ARTG 2262",
+        "ARTG 2263"
+      ],
+      "substitution": null
+    }
+  ]
+}

@@ -65,9 +65,14 @@ const satisfies = (sec, placed) =>
 test("the corpus still names COOP where we measured it", () => {
   // If this moves, the numbers in the assertions below are stale rather than
   // wrong — re-measure before adjusting them.
+  //
+  // Re-measured 2026-09-06, on the 2026-2027 roll. 37 → 63, and the cause is
+  // the corpus, not the reading: the undergraduate tree now ships TWO editions,
+  // so a program that names COOP in both is counted twice, and NEU opened a New
+  // York campus whose programs carry an `Optional Co-op` section apiece.
   const progs = new Set(SECTIONS.map(s => s.prog));
-  assert.equal(progs.size, 37, `expected 37 COOP-naming programs, found ${progs.size}`);
-  assert.ok(SECTIONS.length >= 37);
+  assert.equal(progs.size, 63, `expected 63 COOP-naming programs, found ${progs.size}`);
+  assert.ok(SECTIONS.length >= 63);
 });
 
 test("a placed co-op satisfies the great majority of COOP sections", () => {
@@ -76,8 +81,10 @@ test("a placed co-op satisfies the great majority of COOP sections", () => {
     "a COOP section is satisfied by an EMPTY plan — the requirement is not being read");
 
   const after = SECTIONS.filter(({ sec }) => satisfies(sec, GRANTED));
-  assert.equal(after.length, 32,
-    `a placed co-op satisfies ${after.length} sections; it satisfied 32 when measured`);
+  // 32 → 68 on the 2026-2027 roll: two editions of the undergraduate tree are
+  // now shipped, so most COOP sections are counted once per edition.
+  assert.equal(after.length, 68,
+    `a placed co-op satisfies ${after.length} sections; it satisfied 68 when measured`);
 });
 
 test("the sections a co-op does NOT satisfy are the ones it should not", () => {
@@ -98,7 +105,20 @@ test("the sections a co-op does NOT satisfy are the ones it should not", () => {
 
   // Everything still unmet must be explicable. If a new one appears, it is
   // either a corpus change or a regression — either way, look at it.
-  assert.equal(unmet.length, 6, `unexpected unmet set:\n  ${unmet.join("\n  ")}`);
+  //
+  // 6 → 31 on the 2026-2027 roll. Looked at, and every addition is a corpus
+  // change with the misses staying conservative in the same way:
+  //   · the three programs above now appear TWICE, once per shipped edition (6);
+  //   · 19 are `Optional Co-op` on New York campus programs, which are new this
+  //     edition — the section is optional by its own title, so declining to
+  //     force-satisfy it is the correct reading, not a gap;
+  //   · the rest are choice or composite sections a co-op alone cannot finish —
+  //     three Economics `Supporting Courses`, Architecture's `Architectural
+  //     Practice`, Applied Psychology's `Experiential Learning`, and Biology and
+  //     International Business's `Complete one of the following:`.
+  // None of them is a co-op being silently claimed for something it is not,
+  // which is the direction this test exists to catch.
+  assert.equal(unmet.length, 31, `unexpected unmet set:\n  ${unmet.join("\n  ")}`);
 });
 
 test("the grant is one key, and the alternatives stay ungranted", () => {

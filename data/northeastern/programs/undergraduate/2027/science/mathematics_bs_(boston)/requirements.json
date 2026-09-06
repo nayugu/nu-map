@@ -1,0 +1,408 @@
+{
+  "name": "Mathematics, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/mathematics/mathematics-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/mathematics/mathematics-bs/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Upper-Division Electives",
+                "sh": 12
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 128,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Problem Solving",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1365
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1465
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Calculus",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1341
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1342
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 2321
+        }
+      ],
+      "minRequirementCount": 3,
+      "notes": [
+        "A grade of C or higher is required:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate and Advanced Mathematics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 2331
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 2341
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 3081
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 3181
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 3150
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 3175
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 3275
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Co-op Reflections",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 3000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Mathematics Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "MATH",
+              "idRangeStart": 3101,
+              "idRangeEnd": 4899,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four courses in the following range:",
+        "MATH 3101 to MATH 4899"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Physics",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1151
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1152
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1153
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1161
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1162
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1155
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1156
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1157
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1165
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1166
+                }
+              ]
+            }
+          ],
+          "notes": [
+            "Physics 2",
+            "Complete one of the following:"
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "Physics 1",
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 4020
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 4025
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 5131
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Upper-Division Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 12,
+      "notes": [
+        "Complete three general electives numbered 3000 or above."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSC",
+          "classId": 1000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Learning Introduction",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EESC",
+          "classId": 2000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3307
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ],
+  "majorCreditSubtotal": 66
+}

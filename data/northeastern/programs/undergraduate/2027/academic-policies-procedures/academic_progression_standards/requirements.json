@@ -1,0 +1,92 @@
+{
+  "name": "Academic Progression Standards",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 0,
+    "tablesConsumed": 0,
+    "tablesOnPage": 0,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/academic-policies-procedures/progression-standards/",
+    "panes": [
+      ""
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.68,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/academic-policies-procedures/progression-standards/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "medium",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Definition of Freshman, Sophomore, Junior, and Senior",
+                "sh": 16
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Definition of Freshman, Sophomore, Junior, and Senior",
+      "creditsRequired": 16,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "The standard workload expectation for undergraduate students is 16 semester hours per semester. For undergraduate day students, freshman, sophomore, junior, and senior standing are determined by earned semester hours:"
+      ]
+    }
+  ]
+}

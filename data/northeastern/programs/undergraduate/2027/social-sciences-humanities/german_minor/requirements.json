@@ -1,0 +1,175 @@
+{
+  "name": "German, Minor",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/german-minor/",
+    "panes": [
+      "minorrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "minor",
+      "score": 0.98,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/german-minor/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "info",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Language Courses",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GRMN",
+              "classId": 1101
+            },
+            {
+              "type": "COURSE",
+              "subject": "GRMN",
+              "classId": 1102
+            },
+            {
+              "type": "COURSE",
+              "subject": "GRMN",
+              "classId": 2101
+            },
+            {
+              "type": "COURSE",
+              "subject": "GRMN",
+              "classId": 2102
+            },
+            {
+              "type": "COURSE",
+              "subject": "GRMN",
+              "classId": 3101
+            },
+            {
+              "type": "COURSE",
+              "subject": "GRMN",
+              "classId": 3102
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: For students with prior knowledge of German, a placement test will determine the appropriate first course. Students who place at or above GRMN 2102 must complete the sequence through GRMN 3102 by the end of the minor. Additional elective courses may be taken at any point to fulfill the total credit requirements of five courses. For guidance on course selection, students should consult the German academic coordinator.",
+        "Complete at least four language courses in sequence from the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CLTR",
+              "classId": 1120
+            },
+            {
+              "type": "COURSE",
+              "subject": "GRMN",
+              "classId": 1973
+            },
+            {
+              "type": "COURSE",
+              "subject": "GRMN",
+              "classId": 3101
+            },
+            {
+              "type": "COURSE",
+              "subject": "GRMN",
+              "classId": 3102
+            },
+            {
+              "type": "COURSE",
+              "subject": "GRMN",
+              "classId": 3800
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 2280
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 2282
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 3343
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 3435
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Note: GRMN 3101 and GRMN 3102 may not be counted toward both the language sequence requirement and the electives requirement. If these courses are used to complete the language sequence, students must select different courses from the remaining electives to fulfill the five-course total.",
+        "Complete one or more of the following to reach a total of five courses in the minor:"
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "program"
+      },
+      "text": "2.000 GPA required in the minor"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "name": "Accelerated Bachelor/Graduate Degree Programs",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 0,
+    "tablesConsumed": 0,
+    "tablesOnPage": 0,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/accelerated-bachelor-graduate-degree-programs/",
+    "panes": [
+      ""
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.68,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/accelerated-bachelor-graduate-degree-programs/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "medium",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "2026-2027 Edition",
+                "sh": 16
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "2026-2027 Edition",
+      "creditsRequired": 16,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "Northeastern University’s D’Amore-McKim School of Business develops leaders and thinkers who will guide the future of work that is being transformed by technology and data. The D’Amore-McKim PlusOne accelerated master’s programs provide motivated students with the opportunity to start earning their master’s degree while pursuing their undergraduate education. Please see the programs below:",
+        "PlusOne in Accounting",
+        "PlusOne in Finance",
+        "PlusOne in International Management",
+        "​Depending on the program, students ​accepted into a PlusOne accelerated master’s may complete up to a total of 16 semester hours of graduate coursework ​while they are undergraduates and can apply those credits toward both the bachelor's and master's degrees."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,637 @@
+{
+  "name": "Biology, BS (Oakland)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/biology/biology-bs-oak/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.85,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/biology/biology-bs-oak/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 130,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introduction to College",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSC",
+              "classId": 1000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Learning Introduction",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EESC",
+          "classId": 2000
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Biology Core Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1107
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOL",
+                  "classId": 1108
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1111
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOL",
+          "classId": 2299
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2302
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2309
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2407
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3611
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3612
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Organismal and Evolutionary Biology",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2327
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3401
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3413
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3427
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3451
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 5585
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 2302
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 2303
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 2610
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 2700
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EEMB",
+                  "classId": 2701
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3460
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3466
+            },
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 3600
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate and Advanced Biology",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 2321,
+              "idRangeEnd": 3999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 4705,
+              "idRangeEnd": 4990,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 5000,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EEMB",
+              "idRangeStart": 2290,
+              "idRangeEnd": 5515,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EEMB",
+              "idRangeStart": 5520,
+              "idRangeEnd": 5535,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EEMB",
+              "idRangeStart": 5548,
+              "idRangeEnd": 5569,
+              "exceptions": []
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4970
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4971
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4991
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4994
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete three additional 4– or 5-semester-hour courses from the following:",
+        "BIOL 2321 to BIOL 3999",
+        "BIOL 4705 to BIOL 4990",
+        "BIOL 5000 to BIOL 5999",
+        "EEMB 2290 to EEMB 5515",
+        "EEMB 5520 to EEMB 5535",
+        "EEMB 5548 to EEMB 5569",
+        "One of the three intermediate/advanced electives can be a research course:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Biology Capstone",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4701
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4971
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4900
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Please complete one of the following options to fulfill the capstone requirement:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Mathematics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1341
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Statistics",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 2500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 2501
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Chemistry",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1161
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1162
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1163
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2311
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2312
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2313
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2314
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3,
+      "notes": [
+        "A grade of D or better is required in CHEM 1161 and CHEM 1162."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Physics 1",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 1145
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 1146
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Physics 2",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 1147
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 1148
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate or Advanced Science",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 2301,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "CHEM",
+              "idRangeStart": 2311,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EEMB",
+              "idRangeStart": 2290,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ENVR",
+              "idRangeStart": 2310,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "MATH",
+              "idRangeStart": 2280,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PHYS",
+              "idRangeStart": 2303,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PSYC",
+              "idRangeStart": 2290,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:",
+        "BIOL 2301 to BIOL 5999",
+        "CHEM 2311 to CHEM 5999",
+        "EEMB 2290 to EEMB 5999",
+        "ENVR 2310 to ENVR 5999",
+        "MATH 2280 to MATH 5999",
+        "PHYS 2303 to PHYS 5999",
+        "PSYC 2290 to PSYC 5999"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Writing Requirements",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1102
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3307
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ],
+  "majorCreditSubtotal": 78
+}

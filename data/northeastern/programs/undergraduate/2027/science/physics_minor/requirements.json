@@ -1,0 +1,221 @@
+{
+  "name": "Physics, Minor",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/physics/physics-minor/",
+    "panes": [
+      "minorrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "minor",
+      "score": 0.98,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/physics/physics-minor/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "info",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Physics 1",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1151
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1152
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1153
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1161
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1162
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1191
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1192
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Physics 2",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1155
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1156
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1157
+                }
+              ]
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1165
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "PHYS",
+                  "classId": 1166
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Modern Physics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHYS",
+          "classId": 2303
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 4606
+            },
+            {
+              "type": "RANGE",
+              "subject": "PHYS",
+              "idRangeStart": 2300,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:",
+        "PHYS 2300 to PHYS 5999"
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "program"
+      },
+      "text": "2.000 GPA required in the minor"
+    }
+  ]
+}

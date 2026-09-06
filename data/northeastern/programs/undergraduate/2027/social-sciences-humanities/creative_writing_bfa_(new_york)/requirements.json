@@ -1,0 +1,161 @@
+{
+  "name": "Creative Writing, BFA (New York)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/english/creative-writing-bfa-nyc/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/english/creative-writing-bfa-nyc/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "English Elective",
+                "sh": 4
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 128,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Major Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 1140
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 1400
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 1450
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 2700
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 2750
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 2830
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 3376
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 3377
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 3378
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 3380
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 3382
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 3465
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 3710
+        },
+        {
+          "type": "COURSE",
+          "subject": "ENGL",
+          "classId": 4710
+        }
+      ],
+      "minRequirementCount": 14
+    },
+    {
+      "type": "SECTION",
+      "title": "English Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "Complete 4 semester hours of ENGL coursework within the 1001-5999 course number range, not used to fulfill other requirements of this program."
+      ]
+    }
+  ],
+  "majorCreditSubtotal": 60
+}

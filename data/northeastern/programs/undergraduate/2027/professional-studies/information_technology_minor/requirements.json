@@ -1,0 +1,116 @@
+{
+  "name": "Information Technology, Minor",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/professional-studies/undergraduate-minors/information-technology/",
+    "panes": [
+      "minorrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "minor",
+      "score": 1,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/professional-studies/undergraduate-minors/information-technology/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 15,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 1200
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 2000
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 2200
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 2016
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 2300
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 2100
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 2400
+            },
+            {
+              "type": "COURSE",
+              "subject": "GET",
+              "classId": 2100
+            }
+          ],
+          "notes": [
+            "Complete one of the following:"
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    }
+  ]
+}

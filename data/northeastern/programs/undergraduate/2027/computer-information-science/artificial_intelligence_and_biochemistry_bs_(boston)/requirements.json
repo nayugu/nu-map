@@ -1,0 +1,629 @@
+{
+  "name": "Artificial Intelligence and Biochemistry, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/artificial-intelligence-biochemistry-bs-bos/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.85,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/artificial-intelligence-biochemistry-bs-bos/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 131,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Computer Science Overview",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 1200
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOC",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "INPR",
+              "classId": 1000
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSC",
+              "classId": 1000
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 1210
+            },
+            {
+              "type": "COURSE",
+              "subject": "EESC",
+              "classId": 2000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "Must be taken in alignment with your home college:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Fundamental Courses",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2000
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2001
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2100
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 2101
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 3500
+        },
+        {
+          "type": "COURSE",
+          "subject": "CS",
+          "classId": 3200
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1365
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1465
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 5,
+      "notes": [
+        "All students can take a self-assessment to attempt to place out of CS 2000 and CS 2001. Students who place out of CS 2000 and CS 2001 will instead substitute with 4-5 semester hours of CS, CY, or DS coursework at the 3000 level or higher not otherwise required in the degree."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Artificial Intelligence Foundations",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 3000
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 4200
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 4300
+        },
+        {
+          "type": "COURSE",
+          "subject": "DS",
+          "classId": 4400
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Khoury Approved Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "CS",
+              "idRangeStart": 2300,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "type": "EXCLUDE",
+                  "subject": "CS",
+                  "classId": 5010
+                }
+              ]
+            },
+            {
+              "type": "RANGE",
+              "subject": "CY",
+              "idRangeStart": 2000,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "type": "EXCLUDE",
+                  "subject": "CY",
+                  "classId": 4930
+                }
+              ]
+            },
+            {
+              "type": "RANGE",
+              "subject": "DS",
+              "idRangeStart": 2500,
+              "idRangeEnd": 9999,
+              "exceptions": [
+                {
+                  "type": "EXCLUDE",
+                  "subject": "DS",
+                  "classId": 4900
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2160
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2322
+            },
+            {
+              "type": "COURSE",
+              "subject": "MKTG",
+              "classId": 4606
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "With advisor approval, directed study, research, project study, and appropriate graduate-level courses may also be taken as upper-division electives.",
+        "Complete 4 semester hours from within the following options:",
+        "CS 2300 or higher, except CS 5010",
+        "CY 2000 or higher, except CY 4930",
+        "DS 2500 or higher, except DS 4900"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Statistics Foundations",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2500
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "ENVR",
+                  "classId": 2501
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 3081
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "College Writing",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 1102
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Advanced Writing in the Disciplines",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3302
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3307
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENGW",
+              "classId": 3315
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Biology Foundations",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1107
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 1108
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOL",
+          "classId": 2299
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 2302
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "BIOL",
+          "classId": 2309
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Chemistry Foundations",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1161
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 1162
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2311
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2312
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2313
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 2314
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Mathematics Foundations",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1341
+        },
+        {
+          "type": "COURSE",
+          "subject": "MATH",
+          "classId": 1342
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Biochemistry Foundations",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3611
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 3612
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 3331
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CHEM",
+                  "classId": 3332
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5620
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Intermediate or Advanced Science Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 3,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "BIOL",
+              "idRangeStart": 2301,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "CHEM",
+              "idRangeStart": 2311,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EEMB",
+              "idRangeStart": 2290,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "ENVR",
+              "idRangeStart": 2310,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "MATH",
+              "idRangeStart": 2280,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "PHYS",
+              "idRangeStart": 2303,
+              "idRangeEnd": 5999,
+              "exceptions": []
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one course from the following:",
+        "BIOL 2301 to BIOL 5999",
+        "CHEM 2311 to CHEM 5999",
+        "EEMB 2290 to EEMB 5999",
+        "ENVR 2310 to ENVR 5999",
+        "MATH 2280 to MATH 5999",
+        "PHYS 2303 to PHYS 5999"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BINF",
+              "classId": 6310
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 5591
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 4701
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 4750
+            }
+          ],
+          "notes": [
+            "Complete one of the following:"
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    }
+  ],
+  "generalElectiveSH": 16
+}

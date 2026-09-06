@@ -78,6 +78,31 @@
 // track. No hand table, and it survives the monthly re-scrape because
 // `metadata.planOfStudyCourses` is re-read with the requirements.
 //
+// ⚠ That last sentence stopped being true on 2026-09-01. It assumed the catalog
+// goes on PUBLISHING a plan of study, and with the 2026-2027 edition NEU removed
+// them outright: no `planofstudy` pane, no `sc_plangrid`, not even the phrase, on
+// any of 768 cached pages or on the live ones. So `witness.size` is 0 for every
+// 2027 program, `witnessedSharedNodes` returns [] for every shared section, and
+// the mechanism degrades to exactly the pre-witness behaviour this block was
+// written to replace.
+//
+// The degradation is ASYMMETRIC, which is the only reason it was shippable.
+// Measured over the 2027 undergraduate scrape by re-running this function with
+// the 2026 witness and with the empty one: the 54 alternative tracks emit nothing
+// either way, so forcing a thesis on every master's student is still impossible.
+// The genuine cross-counts are what is lost — 22 sections across 19 programs,
+// 43 nodes, 159 SH, which come back as anonymous General Electives. Mathematics
+// and Physics BS's `Integrative Courses` (MATH 4545, PHYS 3601), the very example
+// three paragraphs above, is among them. Graduate is near-immune: only 2 of its
+// 58 programs with shared sections ever had a witness.
+//
+// The fix on the table is to inherit the previous edition's witness in a field of
+// its own (`metadata.witnessCourses` + `witnessEdition`), leaving
+// `planOfStudyCourses` honestly empty — a prior witness can only ever confirm a
+// node the CURRENT page still states as a conjunctive child, and the 2026-witnessed
+// set was measured to be genuine cross-counts. Not built yet; do not assume the
+// witness still works when reading the rest of this block.
+//
 // Three things keep it conservative. Only a FULL conjunction is eligible, so a
 // "choose N of M" section's children stay options rather than becoming the branch
 // the plan happened to take. Only a top-level `COURSE` or `AND` child counts, so

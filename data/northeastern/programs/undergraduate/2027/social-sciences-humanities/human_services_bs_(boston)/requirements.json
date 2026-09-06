@@ -1,0 +1,161 @@
+{
+  "name": "Human Services, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/human-services-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/human-services-bs/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Human Services Electives",
+                "sh": 24
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 128,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Human Services Overview",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HUSV",
+          "classId": 1101
+        },
+        {
+          "type": "COURSE",
+          "subject": "HUSV",
+          "classId": 2300
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 2970
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 3101
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "HUSV",
+          "classId": 3570
+        },
+        {
+          "type": "COURSE",
+          "subject": "HUSV",
+          "classId": 3900
+        },
+        {
+          "type": "COURSE",
+          "subject": "HUSV",
+          "classId": 4700
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Human Services and Diverse Populations",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 2355
+            },
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 2800
+            },
+            {
+              "type": "COURSE",
+              "subject": "HUSV",
+              "classId": 2960
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Human Services Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 24,
+      "notes": [
+        "Complete six HUSV courses."
+      ]
+    }
+  ],
+  "majorCreditSubtotal": 52
+}

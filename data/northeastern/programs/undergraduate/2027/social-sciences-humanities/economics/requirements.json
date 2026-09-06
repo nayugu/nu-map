@@ -1,0 +1,127 @@
+{
+  "name": "Economics",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/economics/",
+    "panes": [
+      "textcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.7,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/economics/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "medium",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Academic Progression Standards",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 1115
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 1116
+            },
+            {
+              "type": "COURSE",
+              "subject": "MATH",
+              "classId": 1231
+            }
+          ]
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2315
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2316
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2350
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 2560
+            }
+          ],
+          "notes": [
+            "The following four core courses should be completed by the end of sophomore year:"
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "The following three core courses should be completed first:"
+      ]
+    }
+  ]
+}

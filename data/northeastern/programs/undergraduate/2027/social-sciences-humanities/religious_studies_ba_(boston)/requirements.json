@@ -1,0 +1,357 @@
+{
+  "name": "Religious Studies, BA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/philosophy-religion/religious-studies-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/philosophy-religion/religious-studies-ba/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "BA Language Requirements",
+                "sh": 12
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 128,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "BA Language Requirements",
+      "creditsRequired": 12,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "All BA students are required to complete the BA degree language requirements, for a total of 12 semester hours of language study or demonstrated equivalent proficiency, as described in Additional Requirements for BA students. Successful demonstration of proficiency does not reduce total minimum semester hours of study required to earn the BA degree."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Required Foundational Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHIL",
+          "classId": 1110
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Lived Religion Elective",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1133
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1220
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1260
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1271
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1280
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1667
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 2390
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 2410
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 2619
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 3100
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 3512
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following that is not used to satisfy another requirement:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Comparative Religion",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1130
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1220
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1271
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1275
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1290
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1667
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 2395
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 3100
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following that is not used to satisfy another requirement:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 20,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1104
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1111
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1130
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1133
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1220
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1260
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1271
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1275
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1280
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1285
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1290
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1666
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 1667
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 2301
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 2390
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 2395
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 2619
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 3100
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 3512
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 4903
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete five of the following, one of which must be 2000-level or above and another one of which must be 3000-level or above, that is not used to satisfy another requirement:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHIL",
+          "classId": 4903
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following that is not used to satisfy another requirement:"
+      ]
+    }
+  ],
+  "majorCreditSubtotal": 36
+}

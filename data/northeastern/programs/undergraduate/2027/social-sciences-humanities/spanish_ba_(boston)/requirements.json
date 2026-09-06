@@ -1,0 +1,262 @@
+{
+  "name": "Spanish, BA (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/spanish-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.85,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/spanish-ba/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 128,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Spanish Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SPNS",
+          "classId": 2102
+        },
+        {
+          "type": "COURSE",
+          "subject": "SPNS",
+          "classId": 3101
+        },
+        {
+          "type": "COURSE",
+          "subject": "SPNS",
+          "classId": 3102
+        },
+        {
+          "type": "COURSE",
+          "subject": "SPNS",
+          "classId": 3502
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Language & Linguistics Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CLTR",
+          "classId": 1120
+        },
+        {
+          "type": "COURSE",
+          "subject": "LING",
+          "classId": 1150
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Culture, Literature & History Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 16,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ANTH",
+              "classId": 4500
+            },
+            {
+              "type": "COURSE",
+              "subject": "CLTR",
+              "classId": 3805
+            },
+            {
+              "type": "COURSE",
+              "subject": "HIST",
+              "classId": 1187
+            },
+            {
+              "type": "COURSE",
+              "subject": "LACS",
+              "classId": 1220
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 1504
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 1505
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 3240
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 3715
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 3720
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 4655
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 4944
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete four of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Language & Linguistics Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 2900
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 3401
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 3402
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 3403
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 3601
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 3602
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 3603
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 3800
+            },
+            {
+              "type": "COURSE",
+              "subject": "SPNS",
+              "classId": 3900
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following courses:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Study Abroad/Experiential Learning",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SPNS",
+          "classId": 3601
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "See department for further details."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "SPNS",
+          "classId": 4700
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "majorCreditSubtotal": 56
+}

@@ -1,0 +1,110 @@
+{
+  "name": "Degrees, Majors, and Minors",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 0,
+    "tablesConsumed": 0,
+    "tablesOnPage": 0,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/academic-policies-procedures/degrees-majors-minors/",
+    "panes": [
+      ""
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.68,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/academic-policies-procedures/degrees-majors-minors/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 2,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "medium",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "2 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Second Northeastern University Bachelor’s Degree",
+                "sh": 32
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Concentrations",
+                "sh": 12
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Second Northeastern University Bachelor’s Degree",
+      "creditsRequired": 32,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "A student may earn a second Northeastern bachelor’s degree after the conferral of a first Northeastern bachelor’s degree. Following the first degree conferral, a student may seek and be granted admission into a second bachelor’s degree program. All degree requirements for the second major that are not included on the student record for the first degree must be fulfilled. Outdated coursework may not be accepted. Students must earn a minimum of 32 semester hours beyond those earned toward the first degree. A second diploma will be awarded and the second degree will be noted on the transcript.",
+        "Students must complete an application with the home college of the intended degree. Some programs may require prerequisites prior to admission. Students should apply by the normal transfer deadline to ensure timely consideration. The college makes the determination on admission; notifies the student of this decision; and, if the student is admitted, provides the student with a program of study and reactivates the student’s record. International students must consult with an advisor in the Office of Global Services to request updated documentation reflecting engagement in the second bachelor’s degree program."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Concentrations",
+      "creditsRequired": 12,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "A concentration consists of a minimum of three courses (12 semester hours) within a program. Concentrations are open to students pursuing the aligned degree program, and completing a concentration may be a graduation requirement for the aligned degree."
+      ]
+    }
+  ]
+}

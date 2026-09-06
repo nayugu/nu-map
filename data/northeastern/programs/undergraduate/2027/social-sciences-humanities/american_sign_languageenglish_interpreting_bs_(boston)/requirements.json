@@ -1,0 +1,238 @@
+{
+  "name": "American Sign Language—English Interpreting, BS (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/cultures-societies-global-studies/american-sign-language-english-interpreting-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "major",
+      "score": 0.83,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/cultures-societies-global-studies/american-sign-language-english-interpreting-bs/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "no-sample-plan",
+          "severity": "medium",
+          "message": "this program publishes no sample four-year plan, so our strongest check could not run",
+          "detail": [
+            {
+              "key": "noPlanUnusual"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Major Credit Requirement",
+                "sh": 4
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 129,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "American Sign Language",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "AMSL",
+          "classId": 1101
+        },
+        {
+          "type": "COURSE",
+          "subject": "AMSL",
+          "classId": 1102
+        },
+        {
+          "type": "COURSE",
+          "subject": "AMSL",
+          "classId": 2101
+        },
+        {
+          "type": "COURSE",
+          "subject": "AMSL",
+          "classId": 2102
+        },
+        {
+          "type": "COURSE",
+          "subject": "AMSL",
+          "classId": 3101
+        },
+        {
+          "type": "COURSE",
+          "subject": "AMSL",
+          "classId": 3102
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Social and Cultural World",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "DEAF",
+          "classId": 1500
+        },
+        {
+          "type": "COURSE",
+          "subject": "DEAF",
+          "classId": 2500
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Linguistics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LING",
+          "classId": 1150
+        },
+        {
+          "type": "COURSE",
+          "subject": "DEAF",
+          "classId": 2700
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Interpreting",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INTP",
+          "classId": 3500
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTP",
+          "classId": 3510
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTP",
+          "classId": 3515
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTP",
+          "classId": 3550
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTP",
+          "classId": 4510
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTP",
+          "classId": 4515
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Interpreting Practicum",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INTP",
+          "classId": 4995
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Ethics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INTP",
+          "classId": 4650
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTP",
+          "classId": 4651
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Research Capstone",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INTP",
+          "classId": 3970
+        },
+        {
+          "type": "COURSE",
+          "subject": "INTP",
+          "classId": 4940
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Major Credit Requirement",
+      "creditsRequired": 4,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "The catalog states 84 semester hours in the major. 80 are enumerated above; this stands for the remaining 4."
+      ]
+    }
+  ],
+  "majorCreditSubtotal": 84
+}

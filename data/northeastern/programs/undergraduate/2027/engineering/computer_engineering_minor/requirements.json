@@ -1,0 +1,188 @@
+{
+  "name": "Computer Engineering, Minor",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/6/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/electrical-computer/computer-engineering-minor/",
+    "panes": [
+      "minorrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "minor",
+      "score": 0.98,
+      "checkedAt": "2026-09-06",
+      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/electrical-computer/computer-engineering-minor/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "info",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2160
+            },
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 2310
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 2311
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Fundamental Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 2322
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EECE",
+                  "classId": 2323
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2540
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 2560
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:",
+        "Students from Khoury are highly encouraged to complete EECE 2322 and EECE 3324."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Computer Engineering Technical Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 2322,
+              "idRangeEnd": 2750,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 3324,
+              "idRangeEnd": 4698,
+              "exceptions": []
+            },
+            {
+              "type": "RANGE",
+              "subject": "EECE",
+              "idRangeStart": 5576,
+              "idRangeEnd": 5698,
+              "exceptions": []
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 5670
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following to satisfy the total course requirement for the minor:",
+        "Fundamentals not taken to satisfy the above requirement may be used as a technical elective. EECE 3324 is recommended for Khoury College students.",
+        "EECE 2322 to EECE 2750",
+        "EECE 3324 to EECE 4698",
+        "EECE 5576 to EECE 5698"
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "GPA Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "program"
+      },
+      "text": "2.000 GPA required in the minor"
+    }
+  ]
+}
