@@ -12,6 +12,11 @@ import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+// fileURLToPath, not URL.pathname: a checkout under a directory with a space
+// in it ("05 Personal Projects") yields "%20" from pathname, and every read
+// below then ENOENTs. CI's path has no spaces, so this can only ever fail on
+// someone's laptop.
+import { fileURLToPath } from "node:url";
 
 import { deriveRetiredUnion } from "../../scripts/derive-retired-union.js";
 import { keyOfCourse } from "../../scripts/lib/course-retention.js";
@@ -20,7 +25,7 @@ import { keyOfCourse } from "../../scripts/lib/course-retention.js";
 // exactly that when this test first landed.
 import { FIRST_FULL_FIDELITY_EDITION } from "../../scripts/lib/catalog-fidelity.js";
 
-const ROOT = new URL("../../", import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const EDITIONS = join(ROOT, "data/northeastern/catalog/editions");
 const union = JSON.parse(readFileSync(join(ROOT, "public/northeastern/retired-courses.json"), "utf8"));
 

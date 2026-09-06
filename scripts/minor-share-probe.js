@@ -25,10 +25,13 @@
 // ═══════════════════════════════════════════════════════════════════
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
+// fileURLToPath, not URL.pathname — pathname keeps "%20" for a checkout whose
+// path contains a space, and every read below then ENOENTs.
+import { fileURLToPath } from "node:url";
 import { minorShare, minorRequirementSections, majorClaimOf } from "../src/core/minorOverlap.js";
 import { courseKey } from "../src/core/gradRequirements.js";
 
-const ROOT = new URL("..", import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const UG = join(ROOT, "data/northeastern/programs/undergraduate/2026");
 const arg = (name, fallback) => {
   const i = process.argv.indexOf(name);

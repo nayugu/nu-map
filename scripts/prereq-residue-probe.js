@@ -27,12 +27,15 @@
  *   CATALOG_HTML_CACHE=.cache/catalog node scripts/prereq-residue-probe.js
  */
 import { readFileSync } from "fs";
+// fileURLToPath, not URL.pathname — pathname keeps "%20" for a checkout whose
+// path contains a space, and every read below then ENOENTs.
+import { fileURLToPath } from "node:url";
 import { parse as parseHTML } from "node-html-parser";
 import { politeFetch, cacheSummary } from "./lib/catalog-cache.js";
 import { extractConcurrentCourses, parsePrereqText } from "./lib/prereq-parse.js";
 
 const NBSP = / /g;
-const ROOT = new URL("../", import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL("../", import.meta.url));
 
 const args = process.argv.slice(2);
 const argOf = (flag) => {
