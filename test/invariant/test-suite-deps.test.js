@@ -80,13 +80,42 @@ function externalsOf(file, seen, stack = new Set()) {
   return out;
 }
 
+/**
+ * Repo scripts a test SPAWNS rather than imports.
+ *
+ * ⚠ This is the hole that let `catalog-edition-scrape.test.js` sit in test/unit
+ * and fail every CI run from 2026-09-04 to 2026-09-06 while passing on every
+ * laptop. The file imports nothing but `node:` builtins, so the scan above was
+ * satisfied — and then it `spawnSync`s `scripts/scrape-catalog.js`, which
+ * imports `node-html-parser`. In CI the child cannot resolve it, dies with
+ * ERR_MODULE_NOT_FOUND, and the assertions fail on the stderr they were
+ * matching. A dependency reached through a child process is still a dependency.
+ */
+const SPAWNED = /['"]((?:scripts|src)\/[\w./-]+\.js)['"]/g;
+// Only in a file that actually LAUNCHES something. Naming a script path is not
+// running it: this file's own positive control passes
+// "scripts/lib/pathway-extract.js" to externalsOf as data, and reading that as a
+// spawn made the guard fail on itself.
+const LAUNCHES = /\b(?:spawnSync|spawn|execFileSync|execFile|execSync|fork)\s*\(/;
+
 const scan = (dir) => {
   const seen = new Map();
   const offenders = [];
   const base = join(ROOT, dir);
   for (const f of readdirSync(base)) {
     if (!f.endsWith(".test.js")) continue;
-    const ext = externalsOf(join(base, f), seen);
+    const file = join(base, f);
+    const ext = externalsOf(file, seen);
+    // …and whatever the scripts it launches reach, by the same rules.
+    let src = "";
+    try { src = readFileSync(file, "utf8"); } catch { /* handled below */ }
+    if (LAUNCHES.test(src)) {
+      for (const m of src.matchAll(SPAWNED)) {
+        const target = join(ROOT, m[1]);
+        if (!existsSync(target)) continue;
+        for (const e of externalsOf(target, seen)) ext.add(e);
+      }
+    }
     if (ext.size) offenders.push(`${dir}/${f} reaches ${[...ext].sort().join(", ")}`);
   }
   return offenders;
