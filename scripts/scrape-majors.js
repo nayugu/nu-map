@@ -38,6 +38,7 @@ import { findLeakedMarkers, parseCatalogEdition,
          UNDERGRAD_PROFILE as PROFILE } from './lib/catalog-program-parser.js';
 import { UnadjudicatedPaneError }    from './lib/program-variants.js';
 import { buildProgramsForPage, slugify } from './lib/program-record.js';
+import { makeProgress }              from './lib/run-progress.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
@@ -497,8 +498,10 @@ async function main() {
   // already committed by the time anyone looked at the log.
   const pending = new Map();   // outPath → parsed program
 
+  const progress = makeProgress(programs.length);
+
   for (const prog of programs) {
-    process.stdout.write(`  ${prog.url} … `);
+    process.stdout.write(`${progress()} ${prog.url} … `);
     try {
       const records = await scrapeProgram(prog.url);
 

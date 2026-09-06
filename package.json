@@ -34,6 +34,7 @@
     "data:nupath:catalog": "node scripts/fetch-nupath.js --catalog --write",
     "data:nupath:apply": "node scripts/apply-nupath-map.js",
     "data:nupath:apply:write": "node scripts/apply-nupath-map.js --write",
+    "data:watch": "node scripts/watch-scrape.js",
     "data:majors": "node scripts/scrape-majors.js",
     "data:majors:write": "node scripts/scrape-majors.js --write",
     "data:majors:dry": "node scripts/scrape-majors.js --dry-run",
