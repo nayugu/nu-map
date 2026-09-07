@@ -7,13 +7,17 @@ import { createPortal } from "react-dom";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
-import { exportReport, getOrderedCourses, filterInTimeline } from "../core/planModel.js";
-import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
+// `getOrderedCourses`, `filterInTimeline`, `resolveTermByDuration` and
+// `termSpans` were imported for the hand-built clipboard summary that used to
+// live in this file; the schedule walk they served now lives in planSummary.js.
+import { exportReport } from "../core/planModel.js";
+import { buildPlanSummary, buildCourseDescriptions } from "../core/planSummary.js";
+import { ICourseOffering } from "../ports/ICourseOffering.js";
 import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
 import { donateEnabled } from "../core/donate.js";
 import { ratingSharingAvailable } from "../config.js";
-import { useInstitution } from "../context/InstitutionContext.jsx";
+import { useInstitution, usePort } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslation, useTranslatedText, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { ClaudeDot, ClaudeSettings, ClaudeConnectModal, ClaudeProposalCard, ClaudeOAuthModal } from "./ClaudePanel.jsx";
@@ -399,14 +403,19 @@ function SettingsToggle({ on, onClick, tone = "accent", tip, label, aria }) {
 export default function Header() {
   const {
     courses, totalSHDone, totalSHPlaced, persistEnabled, setPersistEnabled,
-    placements, courseMap, effectiveCourseMap, semesterCardIds, semView, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
+    placements, courseMap, effectiveCourseMap, semesterCardIds, semView, currentSemId, SEMESTERS, SEM_INDEX,
     resetAll, setShowDisclaimer, setShowStats, setShowDonate,
     statsVisible, statsJustUnlocked, ackStatsUnlockFlash,
     showSettings, setShowSettings,
     planEntSem, planEntYear, planGradSem, planGradYear,
     entOrd, gradOrd, semOrd,
     setEntSem, setEntYear, setGradSem, setGradYear,
-    coopGradConflicts, specialTermPl, specialTermStartMap, specialTermContMap, semOrders,
+    coopGradConflicts, specialTermPl, specialTermStartMap, specialTermContMap,
+    // ── Everything the clipboard summary's Conflicts block reports ──
+    // Read, never re-derived: these are the very maps the cards draw from, so
+    // the paste cannot disagree with the board the student is looking at.
+    prereqViolations, coreqViolations, standingViolations, allEdges,
+    offeredOverrides, semesterLoad,
     showViolLines, setShowViolLines,
     prereqDepth, setPrereqDepth, unlockDepth, setUnlockDepth,
     manualZoom, setManualZoom, isPhone, isMobile, bankWidth,
@@ -436,8 +445,15 @@ export default function Header() {
     cancelDownload, clearModelCache,
   } = useTranslation();
   const adapter = useInstitution();
-  const { attributeSystem, specialTerms, calendar, creditSystem, institution, majorRequirements } = adapter;
+  // `attributeSystem` and `specialTerms` are no longer pulled out here: the two
+  // callers that needed them (the printed report and the clipboard summary)
+  // both take the whole `adapter` and read what they need from it.
+  const { calendar, creditSystem, institution, majorRequirements } = adapter;
   const unitName        = creditSystem.getUnitName();
+  // The availability VERDICT, through the port rather than restated here: the
+  // clipboard summary flags it, and the one thing that must not happen is the
+  // paste and the card disagreeing about whether a course runs.
+  const courseOffering  = usePort(ICourseOffering);
   // Allow entry year up to next calendar year so incoming students can plan ahead
   // (e.g. a fall 2027 admit setting up their plan in spring 2027).
   const maxEntYear = new Date().getFullYear() + 1;
@@ -622,7 +638,7 @@ export default function Header() {
   // ── A code is bound to what it shared ───────────────────────────
   // The payload is captured at mint time from the plan that was active
   // and the language that was selected. Everything else in this panel —
-  // Snapshot link, Copy summary, Export PDF, Save — acts on the CURRENT
+  // Snapshot link, Copy plan, Copy descriptions, Export PDF, Save — acts on the CURRENT
   // plan, so a code that outlives a plan switch makes the panel lie:
   // measured, minting on Plan 1 and switching to Plan 2 left Plan 1's
   // code, countdown and QR sitting under a header reading "Plan 2", and
@@ -933,153 +949,72 @@ export default function Header() {
     return () => window.removeEventListener("numap:export-pdf", h);
   }, []);
 
-  const handleCopyHumanReadable = async () => {
-    // Gather plan metadata
-    const entry = `${planEntSem === 'fall' ? 'Fall' : 'Spring'} ${planEntYear}`;
-    const grad = `${planGradSem === 'fall' ? 'Fall' : 'Spring'} ${planGradYear}`;
+  // ── The clipboard exports ────────────────────────────────────────
+  //
+  // Two actions, not one action with a mode. "Copy plan" is the concise
+  // artifact: identity and a one-line flag count, the schedule, the flags,
+  // what is still outstanding, then the method as an appendix.
+  // "Copy descriptions" is the old inline appendix on its own.
+  //
+  // They are separate because they COMPOSE: the plan is what a reader needs,
+  // and the descriptions follow only if that reader cannot fetch a URL and
+  // says so. Measured on a real 32-course BSCS plan, the descriptions are
+  // 17,897 of ~20,400 characters (~4,474 of ~5,100 tokens, 88%), so as one
+  // button with a flag the common case paid all of it every time.
+  // Full account: docs/plan-summary-design.md.
+  //
+  // The season strings are the calendar's, not literals: `planEntSem` is a
+  // semTypeId, and the old code mapped anything that was not "fall" to
+  // "Spring", which is wrong the moment a plan starts in a summer half, and
+  // silently so.
+  const seasonLabel = (semTypeId) => {
+    const st = (calendar.getSemesterTypes() ?? []).find(s => s.id === semTypeId);
+    return st?.altLabel ?? st?.label ?? semTypeId;
+  };
 
-    // Readable major/minor names from their stored paths (conc is already a label)
-    const isGrad = studentType === "graduate";
-    const labelFromPath = p => {
-      if (!p) return "";
-      const parts = p.split('/');
-      const folder = parts[parts.length - 2] || '';
-      return folder ? majorRequirements.fmtProgramLabel(folder) : '';
-    };
-    const programLines = [];
-    if (isGrad) {
-      const prog = labelFromPath(major);
-      if (prog) programLines.push(`Program: ${prog}`);
-    } else {
-      const m1 = labelFromPath(major);
-      const m2 = labelFromPath(major2);
-      const mn1 = labelFromPath(minor1);
-      const mn2 = labelFromPath(minor2);
-      if (m1) programLines.push(`Major: ${m1}`);
-      if (m2) programLines.push(`Second Major: ${m2}`);
-      if (conc) programLines.push(`Concentration: ${conc}`);
-      if (mn1) programLines.push(`Minor: ${mn1}`);
-      if (mn2) programLines.push(`Second Minor: ${mn2}`);
-    }
+  /** Everything the Flags block needs that only this component can reach. */
+  const conflictInputs = () => ({
+    prereqViolations, coreqViolations, standingViolations, coopGradConflicts,
+    edges: allEdges,
+    offered:     (course, semTypeId) => courseOffering.offered(course, semTypeId, offeredOverrides[course?.id]),
+    probability: (course, semTypeId) => courseOffering.probability(course, semTypeId, offeredOverrides[course?.id]),
+    semesterLoad,
+    creditCap: creditSystem.getSemesterMax(studentType),
+    // Private-grades mode blanks `grades` upstream, so a grade-derived
+    // prerequisite failure must not name a grade as its cause either. The
+    // flag stays listed; only the reason is generalised.
+    hideGrades: !!privateGrades,
+  });
 
-    const totalSH = totalSHPlaced;
-    const completedSH = totalSHDone;
-    const plannedSH = totalSHPlaced - totalSHDone;
-
-    // Build semester blocks
-    const semLines = [];
-    const semById = Object.fromEntries(SEMESTERS.map(s => [s.id, s]));
-
-    // Determine current semester index for "completed" marking
-    const currentIdx = SEM_INDEX[currentSemId] ?? 0;
-
-    // Collect placed course IDs for the appendix — timeline only (parked
-    // entries aren't part of the plan being exported)
-    const allPlacedIds = Object.keys(filterInTimeline(placements, SEM_INDEX));
-
-    // Iterate through semesters in order
-    for (const sem of SEMESTERS) {
-      const semId = sem.id;
-      // Combined view, like every other ordering call: this walks a semester's
-      // occupants, and a reservation is one.
-      const idsInSem = semesterCardIds(semId);
-      const hasStart = !!specialTermStartMap[semId];
-      const hasCont  = !!specialTermContMap[semId];
-
-      // Skip empty semesters
-      if (idsInSem.length === 0 && !hasStart && !hasCont) continue;
-
-      const semLabel = sem.label;
-      const isDone = (SEM_INDEX[semId] ?? 99) < currentIdx;
-      const status = isDone ? ' (completed)' : (semId === currentSemId ? ' (in progress)' : '');
-      semLines.push(`\n${semLabel}${status}`);
-
-      // Special term continuation row
-      if (hasCont && !hasStart) {
-        const contId   = specialTermContMap[semId];
-        const contData = specialTermPl[contId];
-        const contType = contData ? (specialTerms.getTypes() ?? []).find(t => t.id === contData.typeId) : null;
-        const contDur  = contType ? resolveTermByDuration(contType.durations, contData.duration) : null;
-        if (contDur) {
-          const co = contData.company ? ` @ ${contData.company}` : '';
-          semLines.push(`  ⤷ ${contType.label}${co} (continues)`);
-        }
-      }
-
-      // Special term start row
-      if (hasStart) {
-        const startId   = specialTermStartMap[semId];
-        const startData = specialTermPl[startId];
-        const startType = startData ? (specialTerms.getTypes() ?? []).find(t => t.id === startData.typeId) : null;
-        const startDur  = startType ? resolveTermByDuration(startType.durations, startData.duration) : null;
-        if (startDur) {
-          const nextSemId = SEM_NEXT[semId];
-          const spansNext = termSpans(startDur.weight, sem.weight ?? 1) && !!nextSemId;
-          const contPart  = spansNext ? ` (spans into ${semById[nextSemId]?.label ?? nextSemId})` : '';
-          const co        = startData.company ? ` @ ${startData.company}` : '';
-          const role      = startData.subline ? ` · ${startData.subline}` : '';
-          // The course the block registers. It is the only reason a work term
-          // satisfies a requirement, so a summary that omits it describes a
-          // plan the reader cannot check — and it never appears among the
-          // course lines below, because it is not placed.
-          const regCrs    = startData.courseId ? courseMap[startData.courseId] : null;
-          const reg       = startData.courseId
-            ? ` · registers ${regCrs?.code ?? startData.courseId}` : '';
-          semLines.push(`  ⤷ ${startType.label}${co}${role}${reg}${contPart}`);
-        }
-      }
-
-      // Normal courses – only code, title, SH
-      for (const id of idsInSem) {
-        const c = courseMap[id];
-        if (!c) continue;
-        semLines.push(`  - ${c.code}: ${c.title} (${c.sh} ${unitName})`);
-      }
-    }
-
-    // Build appendix of course descriptions (code, title, SH, description)
-    const appendixLines = ['\n\n--- Appendix: Course Descriptions ---'];
-    for (const id of allPlacedIds) {
-      const c = courseMap[id];
-      if (!c) continue;
-      const desc = c.desc?.trim() || c.description?.trim() || 'No description available.';
-      appendixLines.push(`\n${c.code}: ${c.title}`);
-      appendixLines.push(`  Credits: ${c.sh} ${unitName}`);
-      appendixLines.push(`  Description: ${desc}`);
-    }
-
-    const placedOutLines = placedOut.size > 0
-      ? ['\n--- Placed Out (no credit, satisfies prerequisites) ---',
-         ...[...placedOut].map(id => { const c = courseMap[id]; return c ? `  - ${c.code}: ${c.title}` : null; }).filter(Boolean)]
-      : [];
-
-    const substitutionLines = substitutions.length > 0
-      ? ['\n--- Substitutions (course A placed → satisfies course B, credits count once) ---',
-         ...substitutions.map(({ from, to }) => {
-           const fc = courseMap[from]; const tc = courseMap[to];
-           if (!fc || !tc) return null;
-           return `  - ${fc.code} → ${tc.code}${placements[from] ? '' : ' ⚠ not placed'}`;
-         }).filter(Boolean)]
-      : [];
-
-    // Assemble final text
-    const fullText = [
-      `${institution.appName} Plan: ${plans.find(p => p.id === activePlanId)?.name || 'Untitled'}`,
-      ...programLines,
-      `Entry: ${entry}`,
-      `Graduation: ${grad}`,
-      `Total SH: ${totalSH} (completed: ${completedSH}, planned: ${plannedSH})`,
-      '',
-      '--- Semester Schedule ---',
-      ...semLines,
-      ...placedOutLines,
-      ...substitutionLines,
-      ...appendixLines,
-    ].join('\n');
-
+  const handleCopyPlan = async () => {
     try {
-      await navigator.clipboard.writeText(fullText);
+      const text = await buildPlanSummary({
+        planName: plans.find(p => p.id === activePlanId)?.name,
+        placements, courseMap, semesters: SEMESTERS, semIndex: SEM_INDEX,
+        currentSemId, semesterCardIds,
+        specialTermPl, specialTermStartMap, specialTermContMap,
+        grades, placedOut, substitutions, studentType,
+        entry: `${seasonLabel(planEntSem)} ${planEntYear}`,
+        graduation: `${seasonLabel(planGradSem)} ${planGradYear}`,
+        majorPath: major || "", major2Path: major2 || "", concLabel: conc || "",
+        minor1Path: minor1 || "", minor2Path: minor2 || "",
+        totalSHPlaced, totalSHDone,
+        conflictInputs: conflictInputs(), adapter,
+        dataUpdated: dataMeta.lastUpdated || null,
+      });
+      await navigator.clipboard.writeText(text);
       alert(t("header.io.copy.done") ?? "Plan copied to clipboard!");
+    } catch (err) {
+      alert("Failed to copy: " + err.message);
+    }
+  };
+
+  const handleCopyDescriptions = async () => {
+    try {
+      await navigator.clipboard.writeText(buildCourseDescriptions({
+        placements, courseMap, semIndex: SEM_INDEX, unitName,
+      }));
+      alert(t("header.io.copy.desc.done") ?? "Course descriptions copied to clipboard!");
     } catch (err) {
       alert("Failed to copy: " + err.message);
     }
@@ -1851,11 +1786,24 @@ export default function Header() {
               <div style={IO_GROUP_RULED}>
               <div style={IO_GROUP_LABEL}>{t("header.io.group.export")}</div>
               <HoverTip tip={t("header.io.copy.title")} placement="side">
-              <button className="hdr-btn-dd" onClick={handleCopyHumanReadable}
+              <button className="hdr-btn-dd" onClick={handleCopyPlan}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                 {t("header.io.copy")}
+              </button>
+              </HoverTip>
+              {/* The descriptions, separately: the plan paste points at the
+                  course pages instead of inlining them, so this is for a
+                  reader who cannot fetch a URL. Same weight as its neighbours
+                  — an export that is dimmed reads as deprecated, and this one
+                  is simply less often needed. */}
+              <HoverTip tip={t("header.io.copy.desc.title")} placement="side">
+              <button className="hdr-btn-dd" onClick={handleCopyDescriptions}
+                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                  border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
+                {t("header.io.copy.desc")}
               </button>
               </HoverTip>
               {/* No hover card: `header.io.export.pdf.title` is the string

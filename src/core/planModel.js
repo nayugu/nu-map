@@ -336,17 +336,67 @@ function catalogNotesHtml(notes) {
     + `</div>`;
 }
 
-function sectionHtml(sec, doneKeys) {
-  // Mirror SectionBlock's pool-structure logic exactly
-  const isPoolStructure   = sec.minRequired !== undefined && sec.minRequired < sec.total;
-  const displaySatCount   = isPoolStructure ? Math.min(sec.satCount, sec.minRequired) : sec.satCount;
-  const displayTotal      = isPoolStructure ? sec.minRequired : sec.total;
+/**
+ * How far through a section the plan is, as the artifact states it.
+ *
+ * Split out of `sectionHtml` when the clipboard summary began reporting
+ * outstanding sections: the progress figure is a JUDGEMENT (which of four
+ * shapes a section is, and therefore whether "2/5" or "12 SH" is the honest
+ * number), and the printed report and the clipboard must not each hold their
+ * own copy of it. The PDF wraps these numbers in colour; this returns them.
+ *
+ * The four shapes, and why each reads differently:
+ *   · a POOL states how many of its courses are needed, so the denominator is
+ *     `minRequired`, not the size of the menu;
+ *   · GENERAL ELECTIVES is credit, not courses, and splits completed from
+ *     planned when a grade view exists;
+ *   · a PROSE-ONLY section (580 of them) has credit stated and no course to
+ *     tick, so it gets the registrar's figure and NO progress — an empty bar
+ *     claims no progress where none is measurable;
+ *   · everything else counts courses.
+ *
+ * @returns {{text: string, kind: string, satisfied: boolean}}
+ */
+export function sectionProgress(sec) {
+  const isPoolStructure    = sec.minRequired !== undefined && sec.minRequired < sec.total;
+  const displaySatCount    = isPoolStructure ? Math.min(sec.satCount, sec.minRequired) : sec.satCount;
+  const displayTotal       = isPoolStructure ? sec.minRequired : sec.total;
   const isGeneralElectives = sec.title === 'General Electives' && sec.placedSH !== undefined;
   const hasSplit           = isGeneralElectives && sec.completedSH !== undefined;
-  // A section the catalog states in prose only — credit demanded, no course to
-  // tick. Same treatment as the panel: the registrar's number, and no bar,
-  // because an empty bar claims no progress where none is measurable.
   const isStatedOnly       = (sec.children ?? []).length === 0 && sec.statedSH > 0;
+  return {
+    isPoolStructure, displaySatCount, displayTotal, isGeneralElectives, hasSplit, isStatedOnly,
+    satisfied: !!sec.sat,
+    kind: isStatedOnly ? "stated" : isGeneralElectives ? "credit" : isPoolStructure ? "pool" : "count",
+  };
+}
+
+/**
+ * The same figure as one plain-text string, for the clipboard export.
+ *
+ * A prose-only section reads "12 SH stated in prose, nothing to tick" rather
+ * than "0/0": a reader has to be able to tell "we checked and it is
+ * outstanding" from "we could not check this at all", which is the same
+ * distinction the PDF draws with a dash.
+ */
+export function sectionProgressText(sec, unitName = "SH") {
+  const p = sectionProgress(sec);
+  if (p.isStatedOnly) return `${sec.statedSH} ${unitName} required, stated in prose only — no course list to check against`;
+  if (p.hasSplit) return `${sec.completedSH} completed + ${sec.plannedSH} planned of ${sec.requiredSH} ${unitName}`;
+  if (p.isGeneralElectives) return `${sec.placedSH} of ${sec.requiredSH} ${unitName}`;
+  if (p.isPoolStructure) return `${p.displaySatCount} of ${p.displayTotal} needed (from a menu of ${sec.total})`;
+  return `${p.displaySatCount} of ${p.displayTotal}`;
+}
+
+function sectionHtml(sec, doneKeys) {
+  // Mirror SectionBlock's pool-structure logic exactly — via sectionProgress,
+  // so the clipboard summary reports the same figure this prints.
+  // `isStatedOnly` — a section the catalog states in prose only: credit
+  // demanded, no course to tick. Same treatment as the panel, the registrar's
+  // number and no bar, because an empty bar claims no progress where none is
+  // measurable.
+  const { isPoolStructure, displaySatCount, displayTotal, isGeneralElectives, hasSplit, isStatedOnly }
+    = sectionProgress(sec);
 
   // Progress text
   // Numbers, but escaped anyway: `sh` reaches these totals from scraped

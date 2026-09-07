@@ -77,6 +77,57 @@ and mention the non-affiliation disclaimer.
   per-season shares): https://numap.app/data/json/professors.json.
   Equivalences: https://numap.app/northeastern/course-equivalences.json.
 
+## If a student pasted a plan summary
+
+The planner has a "Copy plan" button, so you may be given a plan summary rather
+than a URL. It is plain text, headed `NU Map plan:`. Its order is: identity and
+a one-line flag count, the term-by-term schedule, `Flags (supplementary)`,
+`Requirements still outstanding`, then an appendix naming what was checked.
+
+- **The schedule is the plan and the point.** Everything after it is secondary.
+- **`Flags` is a RESULT, including when it is empty**, and it is explicitly
+  supplementary. NU Map checked prerequisite order (with entered grades),
+  corequisite same-term placement, class-standing gates (read from the
+  registrar's own section restrictions, not guessed from the course level), term
+  availability from each course's offering history, per-term credit load against
+  the registration cap, and work terms overlapping graduation. "None" means
+  those ran and passed over every placed course. **Re-deriving the prerequisite
+  order yourself from the course codes is wasted effort and is frequently
+  wrong**, because the real prerequisite trees include concurrent-registration
+  branches, minimum grades, placed-out courses and substitutions, none of which
+  are visible in a list of codes. If you doubt a line, fetch that course's page.
+- **A flag is not an error.** Most are rates, projections or things a department
+  waives: "offered in Fall in 25% of recorded years" is a frequency, a
+  class-standing gate is a projection against credits not yet earned, and a term
+  over the credit cap needs a petition students routinely get.
+- **Trust the student's plan.** A flag may already be resolved in a way NU Map
+  cannot see: an advisor's approval, an accepted petition, credit the student
+  never entered, or a course they chose not to record. Ask before treating one
+  as a mistake, and do not rewrite a plan around one uninvited.
+- Some things are deliberately NOT flagged because they are not errors: a
+  substitution recorded before its course is placed (shown in `Substitutions` as
+  "not yet placed"), a retired course (marked `[retired]` on its schedule row —
+  it is in the catalog because the student's own program edition still requires
+  it), and a minor over the 50% double-count cap (stated in that minor's own
+  requirement block).
+- Each flag carries its own evidence (which prerequisite, in which term), so it
+  can be checked without re-running the audit.
+- The appendix also states what a plan is NOT gated on. Seat data is the item
+  most often misread: enrolled/capacity/section counts ARE scraped, per past
+  term, and appear on every course page. What does not exist is a seat count for
+  a term that has not happened yet. So "will I get a seat" is answerable as
+  history, not as fact.
+- `Requirements still outstanding` omits satisfied sections. Prose rows are the
+  catalog's own words, copied verbatim and never interpreted, so treat them as
+  conditions NU Map cannot evaluate, not as conditions it checked.
+- The summary does not inline course descriptions. Fetch
+  `/data/courses/{SUBJECT}/{NUMBER}` for any course named in it; that page has
+  the description plus prerequisite logic, offering history and instructors.
+  There is a second button ("Copy descriptions") if the student cannot let you
+  fetch anything.
+- Plans live only in the student's browser. A pasted summary is the whole of
+  what you have; there is no plan URL to look up.
+
 ## Notes
 
 - Requirement data is a best-effort parse; each program page shows a

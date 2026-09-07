@@ -1164,6 +1164,76 @@ bundle.
   changes to action semantics or tool docs need a worker redeploy to reach prod.
 - Hexagonal rules: UI imports ports only (`src/ports/`), adapters import core only.
   The Claude UI motif is orange `#fb923c`; previews are dashed-orange ghosts.
+- **The clipboard summary is written for a reader who will otherwise re-derive
+  it.** Design of record: `docs/plan-summary-design.md`. It used to be the plan
+  plus every placed course's description; measured on a real 32-course BSCS
+  plan, the appendix was **17,897 of ~20,400 characters — 88% of the paste**,
+  and the two things a reader could not look up were both missing: the app's
+  own FLAGS (known since forever, only ever *drawn* — an amber rim, a red
+  line) and the requirement audit (which the PDF has had for a year). So the
+  expensive 88% was the part needing no thought. Now ~3,900 chars with both in,
+  and descriptions moved to a second button. Rules:
+  1. **The default is to CUT, and the section is `Flags (supplementary)`, not
+     Conflicts.** Most entries are not errors: an offering rate is a rate, a
+     class-standing gate is a projection against credits not yet earned, a term
+     over the cap is a petition students get. A flag has to be able to state a
+     REGISTRATION CONSEQUENCE ("Banner will refuse this"), and three could not,
+     so they moved to where they are facts rather than accusations: an unplaced
+     substitution → `(not yet placed)` on its Substitutions row (recording the
+     substitution first is the order a person does it in); a retired course →
+     `[retired]` on its schedule row (it is in the catalog BECAUSE the student's
+     own edition requires it); a minor over the 50% cap → already printed
+     verbatim in that minor's audit block. Nine kinds → six, pinned by a test.
+  2. **The envelope is TWO SENTENCES** (`Checked:` / `Not gated on:`), cut twice
+     on measurement — 24 bullets/1,900 chars → 775 → ~400, no fact dropped. The
+     one thing that must survive the next cut: the first draft filed seat
+     availability as "not checked", which is **false**. Enrolled, capacity and
+     section counts per completed term ARE scraped and every course page draws
+     fill % and open-per-section; what is absent is a seat count for a term not
+     yet scraped. Those two entries sit adjacent, and a test pins them.
+  3. **Trust the student.** `TRUST_NOTE` is the flag block's SECOND LINE, before
+     the list (a reader who has met four terse lines has already decided what
+     they are by the time a caveat arrives underneath): any flag may already be
+     resolved invisibly by an advisor's approval, a petition, unentered credit,
+     or a course they chose not to record. A reader who reads the list as the
+     student's MISTAKES is confidently wrong about someone else's degree, which
+     is a worse failure than the one the block was built to prevent.
+  4. **Empty is a result; ABSENT is not.** "Flags: none" prints with its
+     denominator, because an omitted section is indistinguishable from a check
+     that never ran — that IS the feature. Which is why `CHECKS` is keyed on the
+     input that enables each check and `collectConflicts` returns `ran`: called
+     with no violation maps, the export claimed 32 courses "pass every check",
+     over a plan nothing had looked at. An unwired check is named as NOT CHECKED
+     and dropped from *validated*; an empty Map still counts as a check that ran;
+     `creditCap: Infinity` reads as not-run, because a comparison that cannot
+     fail is not a check.
+  5. **The verdict comes from the app; only the EVIDENCE is derived here.**
+     Every item originates in a map the UI already draws. The search for which
+     prereq, in which term, is best-effort and degrades to naming the
+     requirement in prose — never to inventing or withholding a verdict. And
+     the card's two gates are copied deliberately: an availability alarm is
+     withheld on a completed term, a coreq/standing failure is not, and a
+     `concurrent` prereq sharing the term is not evidence. A paste that
+     disagrees with the board is worse than no paste — the student sees both.
+  6. **Two buttons, never one with a mode.** They compose: plan first,
+     descriptions only if the reader cannot fetch. The footer's
+     `/data/courses/{SUBJECT}/{NUMBER}` is ~60 tokens for strictly MORE than the
+     appendix held (prereq logic, offering history, instructors).
+  7. **The PLAN comes first; the envelope is an appendix.** The first draft
+     opened with the three buckets, which put three screens of methodology
+     ahead of the first course. What holds the property instead is a one-line
+     verdict at the top and the NOT-CHECKED list printed inside the flag block.
+     So `formatConflicts` names the envelope rather than pointing at it:
+     "listed above" was falsified by that very reorder; the order is now a test.
+  8. `public/llms.txt` documents the paste from the other side, so a model that
+     fetches the index knows "Flags: none" is a result, and that a flag is not
+     an error. Keep the two in step.
+  9. **No em dashes in anything the artifact prints**, or in the button tips.
+     Comments keep the house style; the output reads plainer without them.
+  ⚠ `standaloneSemLabel`: a SemesterType's `altLabel` is the form for a term
+  naming itself alone ("Summer A 2026"). `SemLabel`, `InfoPanel` and the MCP
+  adapter all use it; the clipboard and **the PDF (still)** used `sem.label` and
+  printed "Summer 1 2026", the one spelling this file's own convention rules out.
 
 ## Team workflow (two humans + pipeline bots)
 
