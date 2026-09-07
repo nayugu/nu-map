@@ -13,11 +13,26 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "AFCS1101",
+      "AFCS1113",
+      "AFCS1270",
+      "AFCS2296",
+      "AFCS2325",
+      "AFCS2619",
+      "AFCS3424",
+      "AFCS4526",
+      "AFCS4700",
+      "CLTR1000",
+      "ENGW1111",
+      "PHIL1110"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/philosophy-religion/religious-studies-africana-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",

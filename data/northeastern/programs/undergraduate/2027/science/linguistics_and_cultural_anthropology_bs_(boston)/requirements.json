@@ -13,11 +13,25 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ANTH1101",
+      "ANTH2305",
+      "ANTH4600",
+      "ENGW1111",
+      "ENGW3315",
+      "LING1150",
+      "LING2350",
+      "LING3412",
+      "LING3442",
+      "LING3456",
+      "MATH1215"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/linguistics-cultural-anthropology-bs/",
       "sourcesAvailable": [
         "requirement-tables",

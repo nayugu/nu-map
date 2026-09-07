@@ -13,11 +13,31 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "AFCS1101",
+      "AFCS1270",
+      "AFCS2325",
+      "AFCS2355",
+      "AFCS3424",
+      "AFCS3900",
+      "AFCS4700",
+      "EEAM2000",
+      "EESH2000",
+      "ENGW1111",
+      "JRNL1000",
+      "JRNL1101",
+      "JRNL1102",
+      "JRNL1150",
+      "JRNL2201",
+      "JRNL3550",
+      "JRNL4650"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/cultures-societies-global-studies/africana-studies-journalism-ba/",
       "sourcesAvailable": [
         "requirement-tables",

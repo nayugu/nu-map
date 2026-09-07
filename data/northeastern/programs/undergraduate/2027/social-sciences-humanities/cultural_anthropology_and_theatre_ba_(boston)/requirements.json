@@ -13,11 +13,32 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ANTH1000",
+      "ANTH1101",
+      "ANTH2305",
+      "ANTH3410",
+      "ANTH3421",
+      "EEAM2000",
+      "EESH2000",
+      "ENGW1111",
+      "INAM2000",
+      "THTR1000",
+      "THTR1100",
+      "THTR1101",
+      "THTR1120",
+      "THTR1131",
+      "THTR1270",
+      "THTR2000",
+      "THTR3325",
+      "THTR4702"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/sociology-anthropology/cultural-anthropology-theatre-ba/",
       "sourcesAvailable": [
         "requirement-tables",

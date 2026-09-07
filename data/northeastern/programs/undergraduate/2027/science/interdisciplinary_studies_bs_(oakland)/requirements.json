@@ -13,11 +13,16 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ENGW1111",
+      "ENGW3315"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/interdisciplinary-studies-bs/",
       "sourcesAvailable": [
         "requirement-tables",

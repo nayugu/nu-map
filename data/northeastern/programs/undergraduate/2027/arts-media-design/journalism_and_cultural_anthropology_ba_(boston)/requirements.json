@@ -13,11 +13,31 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ANTH1000",
+      "ANTH1101",
+      "ANTH2305",
+      "ANTH3410",
+      "ANTH3421",
+      "ANTH4100",
+      "ANTH4600",
+      "EEAM2000",
+      "EESH2000",
+      "ENGW1111",
+      "JRNL1000",
+      "JRNL1101",
+      "JRNL1102",
+      "JRNL1150",
+      "JRNL2201",
+      "JRNL3550",
+      "JRNL4650"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/journalism/journalism-cultural-anthropology-ba/",
       "sourcesAvailable": [
         "requirement-tables",

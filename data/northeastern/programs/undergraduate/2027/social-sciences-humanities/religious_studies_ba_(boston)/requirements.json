@@ -13,11 +13,16 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ENGW1111",
+      "PHIL1110"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/philosophy-religion/religious-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",

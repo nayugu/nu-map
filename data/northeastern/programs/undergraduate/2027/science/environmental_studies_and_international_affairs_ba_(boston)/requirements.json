@@ -21,11 +21,31 @@
       "concentrations": []
     },
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ECON3423",
+      "EESC2000",
+      "ENGW1111",
+      "ENGW3308",
+      "ENGW3315",
+      "ENVR1000",
+      "ENVR1101",
+      "ENVR1110",
+      "ENVR2515",
+      "ENVR3300",
+      "ENVR3301",
+      "INTL1000",
+      "INTL1101",
+      "INTL3400",
+      "INTL4700",
+      "POLS1160",
+      "SOCL1246"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/marine-environmental/environmental-studies-international-affairs-ba/",
       "sourcesAvailable": [
         "requirement-tables",

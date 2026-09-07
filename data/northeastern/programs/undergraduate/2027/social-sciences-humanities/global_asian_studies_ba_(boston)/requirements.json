@@ -13,11 +13,20 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ASNS1150",
+      "ASNS4900",
+      "CLTR1000",
+      "EESH2000",
+      "ENGW1111",
+      "HIST1215"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/global-asian-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",

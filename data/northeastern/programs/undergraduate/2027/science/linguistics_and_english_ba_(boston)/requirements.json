@@ -13,11 +13,27 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EESC2000",
+      "ENGL1160",
+      "ENGL1400",
+      "ENGL1410",
+      "ENGL3710",
+      "ENGW1111",
+      "ENGW3315",
+      "LING1150",
+      "LING2350",
+      "LING3412",
+      "LING3442",
+      "LING3454",
+      "MATH1215"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/linguistics-english-ba/",
       "sourcesAvailable": [
         "requirement-tables",

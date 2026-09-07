@@ -21,11 +21,27 @@
       "concentrations": []
     },
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "CLTR1120",
+      "ECON1115",
+      "ECON1116",
+      "ENGW1111",
+      "ENGW3315",
+      "INTL1000",
+      "INTL1101",
+      "INTL3400",
+      "INTL4700",
+      "MATH1215",
+      "SPNS2102",
+      "SPNS3101",
+      "SPNS3102"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/spanish-international-affairs-ba-bos/",
       "sourcesAvailable": [
         "requirement-tables",

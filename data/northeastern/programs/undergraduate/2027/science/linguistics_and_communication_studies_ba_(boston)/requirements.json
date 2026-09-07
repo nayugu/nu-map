@@ -13,11 +13,27 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "COMM1101",
+      "COMM1112",
+      "COMM2301",
+      "COMM3415",
+      "EEAM2000",
+      "EESC2000",
+      "ENGW1111",
+      "ENGW3315",
+      "LING1000",
+      "LING1150",
+      "LING2350",
+      "LING3412",
+      "LING3442"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/linguistics-communication-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",

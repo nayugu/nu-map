@@ -13,11 +13,27 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "AFCS1101",
+      "AFCS1113",
+      "AFCS1225",
+      "AFCS1261",
+      "AFCS1270",
+      "AFCS2355",
+      "AFCS2619",
+      "AFCS4526",
+      "CLTR1000",
+      "ENGL1160",
+      "ENGL1400",
+      "ENGL3710",
+      "ENGW1111"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/cultures-societies-global-studies/africana-studies-english-ba/",
       "sourcesAvailable": [
         "requirement-tables",

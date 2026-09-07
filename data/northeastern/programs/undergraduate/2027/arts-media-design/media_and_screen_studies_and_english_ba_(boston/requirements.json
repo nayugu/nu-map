@@ -13,11 +13,28 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EEAM2000",
+      "ENGL1000",
+      "ENGL1160",
+      "ENGL1400",
+      "ENGL1410",
+      "ENGL1450",
+      "ENGL3340",
+      "ENGL3710",
+      "ENGL4710",
+      "MSCR1000",
+      "MSCR1220",
+      "MSCR1320",
+      "MSCR1420",
+      "MSCR3600"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/media-screen-studies-english-ba/",
       "sourcesAvailable": [
         "requirement-tables",

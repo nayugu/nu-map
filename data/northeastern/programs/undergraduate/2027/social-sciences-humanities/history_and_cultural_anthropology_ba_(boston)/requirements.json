@@ -13,11 +13,26 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ANTH1000",
+      "ANTH1101",
+      "ANTH2305",
+      "ANTH3410",
+      "ANTH3421",
+      "EESH2000",
+      "ENGW1111",
+      "HIST1000",
+      "HIST1200",
+      "HIST1201",
+      "HIST2301",
+      "HIST2302"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-cultural-anthropology-ba/",
       "sourcesAvailable": [
         "requirement-tables",

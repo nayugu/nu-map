@@ -13,11 +13,31 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3306",
+      "ENGW3315",
+      "HSCI1000",
+      "HSCI2000",
+      "INSH1300",
+      "INSH2300",
+      "PHTH1260",
+      "PHTH2210",
+      "PHTH2300",
+      "PHTH2350",
+      "PHTH2515",
+      "PHTH4120",
+      "PHTH4202",
+      "PHTH4540",
+      "PSYC1101"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/health-humanities-public-health/",
       "sourcesAvailable": [
         "requirement-tables",

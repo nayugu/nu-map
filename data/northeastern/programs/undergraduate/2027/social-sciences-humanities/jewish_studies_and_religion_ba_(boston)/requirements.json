@@ -13,11 +13,22 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ENGW1111",
+      "HBRW1101",
+      "HBRW1102",
+      "HIST1100",
+      "JWSS1285",
+      "JWSS4660",
+      "PHIL1110",
+      "PHIL1285"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/philosophy-religion/jewish-studies-religion-ba/",
       "sourcesAvailable": [
         "requirement-tables",

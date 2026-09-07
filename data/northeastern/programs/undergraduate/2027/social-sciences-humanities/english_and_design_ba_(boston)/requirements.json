@@ -13,11 +13,30 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ARTF1000",
+      "ARTF1220",
+      "ARTG1001",
+      "ARTG1002",
+      "ARTG1270",
+      "ARTG1271",
+      "ARTG1290",
+      "ARTG1291",
+      "ARTG4550",
+      "ENGL1000",
+      "ENGL1160",
+      "ENGL1400",
+      "ENGL1410",
+      "ENGL1450",
+      "ENGL1700",
+      "ENGL4710"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/english/english-design-ba/",
       "sourcesAvailable": [
         "requirement-tables",

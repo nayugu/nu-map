@@ -13,11 +13,29 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ARTD1001",
+      "ARTD1002",
+      "ARTD4530",
+      "ARTF1000",
+      "ARTF1240",
+      "ARTF1241",
+      "ARTH1001",
+      "ARTH1002",
+      "ARTH2212",
+      "COMM1000",
+      "COMM1101",
+      "COMM1112",
+      "COMM3415",
+      "EEAM2000",
+      "ENGW1111"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/media-arts-communication-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",

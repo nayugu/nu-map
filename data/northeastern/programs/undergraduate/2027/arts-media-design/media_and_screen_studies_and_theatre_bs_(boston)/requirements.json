@@ -13,11 +13,29 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EEAM2000",
+      "ENGW1111",
+      "INAM2000",
+      "MSCR1000",
+      "MSCR1220",
+      "MSCR1320",
+      "MSCR1420",
+      "THTR1000",
+      "THTR1100",
+      "THTR1101",
+      "THTR1120",
+      "THTR1131",
+      "THTR1270",
+      "THTR2000",
+      "THTR3325"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/media-screen-studies-theatre-bs/",
       "sourcesAvailable": [
         "requirement-tables",

@@ -13,11 +13,25 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3308",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS4701",
+      "SOCL1000",
+      "SOCL1101",
+      "SOCL3300",
+      "SOCL4600"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/sociology-anthropology/sociology-political-science-ba/",
       "sourcesAvailable": [
         "requirement-tables",

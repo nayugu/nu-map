@@ -13,11 +13,32 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "CMN1100",
+      "CMN2310",
+      "ENG1105",
+      "ENG1106",
+      "ENG1107",
+      "ENG1108",
+      "ENG3107",
+      "ENG3108",
+      "ENG3260",
+      "HSV2240",
+      "ITC1000",
+      "LDR1200",
+      "LDR3200",
+      "LST4850",
+      "MTH1100",
+      "MTH2310",
+      "PHL2100",
+      "PJM1100"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/professional-studies/bachelors-postbaccalaureate/interdisciplinary-studies/",
       "sourcesAvailable": [
         "requirement-tables",

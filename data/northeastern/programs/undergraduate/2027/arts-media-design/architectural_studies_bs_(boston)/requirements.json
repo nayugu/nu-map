@@ -13,11 +13,29 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ARCH1000",
+      "ARCH1110",
+      "ARCH1120",
+      "ARCH1310",
+      "ARCH2130",
+      "ARCH2140",
+      "ARCH2260",
+      "ARCH2330",
+      "ARCH2331",
+      "ARCH2340",
+      "ARCH2341",
+      "ARCH4960",
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3314"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/architecture/architectural-studies-bs/",
       "sourcesAvailable": [
         "requirement-tables",

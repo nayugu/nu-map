@@ -13,11 +13,31 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "COMM1000",
+      "COMM1101",
+      "COMM1112",
+      "COMM2301",
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3314",
+      "ENGW3315",
+      "INAM2000",
+      "THTR1000",
+      "THTR1100",
+      "THTR1101",
+      "THTR1120",
+      "THTR1131",
+      "THTR1270",
+      "THTR2000",
+      "THTR3325"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/communication-studies-theatre-ba/",
       "sourcesAvailable": [
         "requirement-tables",

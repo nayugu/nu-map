@@ -13,11 +13,26 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "CRIM1000",
+      "CRIM1100",
+      "CRIM1110",
+      "CRIM1120",
+      "CRIM3600",
+      "CRIM3700",
+      "ENGL1000",
+      "ENGL1160",
+      "ENGL1400",
+      "ENGL1410",
+      "ENGL3710",
+      "ENGW1111"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/english/english-criminal-justice-ba/",
       "sourcesAvailable": [
         "requirement-tables",

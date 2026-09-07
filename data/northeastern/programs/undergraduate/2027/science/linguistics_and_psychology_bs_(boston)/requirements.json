@@ -13,11 +13,25 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EESC2000",
+      "ENGW1111",
+      "ENGW3315",
+      "LING1150",
+      "LING2350",
+      "LING3412",
+      "PSYC1101",
+      "PSYC2320",
+      "PSYC3402",
+      "PSYC3464",
+      "PSYC3466"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/linguistics-psychology-bs/",
       "sourcesAvailable": [
         "requirement-tables",

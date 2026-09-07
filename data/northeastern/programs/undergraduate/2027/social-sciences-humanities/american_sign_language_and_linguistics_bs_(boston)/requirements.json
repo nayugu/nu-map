@@ -13,11 +13,31 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "AMSL1101",
+      "AMSL1102",
+      "AMSL2101",
+      "AMSL2102",
+      "AMSL3101",
+      "DEAF1500",
+      "DEAF2500",
+      "DEAF2700",
+      "INTP3500",
+      "INTP3510",
+      "INTP4940",
+      "LING1150",
+      "LING2350",
+      "LING3412",
+      "PSYC1101",
+      "PSYC2320",
+      "PSYC3464"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/cultures-societies-global-studies/american-sign-language-linguistics-bs/",
       "sourcesAvailable": [
         "requirement-tables",

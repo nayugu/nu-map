@@ -13,11 +13,32 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ARCH1110",
+      "ARCH1120",
+      "EEAM2000",
+      "EEMB2302",
+      "EEMB2303",
+      "ENGW1111",
+      "ENGW3314",
+      "ENVR1400",
+      "ENVR1401",
+      "ENVR2200",
+      "ENVR2515",
+      "ENVR3300",
+      "ENVR3301",
+      "LARC2130",
+      "LARC2230",
+      "LARC2330",
+      "LARC2340",
+      "LARC2430"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/marine-environmental/environmental-sustainability-sciences-landscape-architecture-bs/",
       "sourcesAvailable": [
         "requirement-tables",

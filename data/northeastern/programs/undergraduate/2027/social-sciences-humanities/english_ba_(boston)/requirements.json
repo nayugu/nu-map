@@ -13,11 +13,23 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EESH2000",
+      "ENGL1000",
+      "ENGL1160",
+      "ENGL1400",
+      "ENGL1410",
+      "ENGL1700",
+      "ENGL1701",
+      "ENGL3710",
+      "ENGW1111"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/english/english-ba/",
       "sourcesAvailable": [
         "requirement-tables",

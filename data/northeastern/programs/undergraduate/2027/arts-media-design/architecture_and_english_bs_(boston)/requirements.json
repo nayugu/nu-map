@@ -13,11 +13,31 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ARCH1000",
+      "ARCH1110",
+      "ARCH1120",
+      "ARCH1310",
+      "ARCH1450",
+      "ARCH2130",
+      "ARCH2240",
+      "ENGL1000",
+      "ENGL1160",
+      "ENGL1400",
+      "ENGL1410",
+      "ENGL3375",
+      "ENGL3710",
+      "ENGL4710",
+      "ENGW1111",
+      "ENGW3309",
+      "ENGW3314"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/architecture/architecture-english-bs/",
       "sourcesAvailable": [
         "requirement-tables",

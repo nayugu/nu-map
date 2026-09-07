@@ -13,11 +13,30 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "CLTR1000",
+      "CLTR1120",
+      "COOP3948",
+      "EESC2000",
+      "EESH2000",
+      "INSC1000",
+      "LING1150",
+      "LING2350",
+      "LING3412",
+      "LING4654",
+      "LING4891",
+      "SPNS2102",
+      "SPNS3101",
+      "SPNS3102",
+      "SPNS3601",
+      "SPNS3602"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/spanish-linguistics-ba-bos/",
       "sourcesAvailable": [
         "requirement-tables",

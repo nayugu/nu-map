@@ -13,11 +13,30 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "BIOL1111",
+      "BIOL1112",
+      "BIOL1113",
+      "BIOL1114",
+      "CHEM1161",
+      "CHEM1162",
+      "CHEM1163",
+      "ENGW1111",
+      "ENGW3306",
+      "HSCI1000",
+      "HSCI2000",
+      "MATH1241",
+      "PHIL1165",
+      "PHTH1260",
+      "PHTH2210",
+      "PSYC1101"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-bs-oak/",
       "sourcesAvailable": [
         "requirement-tables",

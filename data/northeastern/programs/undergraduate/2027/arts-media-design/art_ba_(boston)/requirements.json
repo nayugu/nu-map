@@ -13,11 +13,23 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ARTD4530",
+      "ARTF1000",
+      "ARTF1220",
+      "ARTH1001",
+      "ARTH1002",
+      "ARTH3000",
+      "ARTH4000",
+      "EEAM2000",
+      "ENGW1111"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/art-ba/",
       "sourcesAvailable": [
         "requirement-tables",

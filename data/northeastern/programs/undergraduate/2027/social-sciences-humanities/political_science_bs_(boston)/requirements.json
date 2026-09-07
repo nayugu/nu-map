@@ -13,11 +13,26 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3315",
+      "MATH1215",
+      "POLS1000",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2399",
+      "POLS2400",
+      "POLS4701",
+      "POLS4703"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-bs/",
       "sourcesAvailable": [
         "requirement-tables",

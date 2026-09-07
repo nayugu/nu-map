@@ -13,11 +13,28 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EESH2000",
+      "ENGW1111",
+      "HUSV1000",
+      "HUSV1101",
+      "HUSV2300",
+      "HUSV3570",
+      "HUSV3900",
+      "HUSV4994",
+      "POLS1000",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2400",
+      "POLS3307"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-human-services-ba/",
       "sourcesAvailable": [
         "requirement-tables",

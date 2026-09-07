@@ -13,11 +13,27 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "COMM3320",
+      "EEAM2000",
+      "ENGW1111",
+      "MSCR1000",
+      "MSCR1220",
+      "MSCR1320",
+      "MSCR1420",
+      "MSCR3437",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2400",
+      "POLS3320"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/media-screen-studies-political-science-ba/",
       "sourcesAvailable": [
         "requirement-tables",

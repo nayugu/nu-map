@@ -40,6 +40,7 @@ import { findLeakedMarkers, parseCatalogEdition,
 import { UnadjudicatedPaneError }    from './lib/program-variants.js';
 import { buildProgramsForPage, slugify } from './lib/program-record.js';
 import { makeProgress }              from './lib/run-progress.js';
+import { inheritWitness }            from './lib/witness-carry.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
@@ -464,6 +465,10 @@ async function main() {
         for (const data of records) {
           const slug = data._slug || slugify(data.name || prog.college);
           const path = outPath(prog.college, slug);
+          // See scrape-majors.js: the 2026-2027 catalog publishes no Sample Plan
+          // of Study, so carry the previous edition's witness forward where this
+          // one states none. `planOfStudyCourses` stays empty and honest.
+          inheritWitness(data, { outRoot: OUT_ROOT, college: prog.college, slug, year: YEAR });
           const concCount = data.concentrations?.concentrationOptions?.length ?? 0;
           const { tablesPresent: tp, tablesConsumed: tc } = data.metadata;
           const gap = tp > tc ? `  ⚠ DROPPED ${tp - tc}/${tp} tables` : '';

@@ -13,11 +13,31 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "CRIM1100",
+      "CRIM1110",
+      "CRIM1120",
+      "CRIM3040",
+      "CRIM3600",
+      "CS1100",
+      "EESC2000",
+      "ENGW1111",
+      "INSC1000",
+      "MATH1215",
+      "PSYC1101",
+      "PSYC2320",
+      "PSYC3400",
+      "PSYC3402",
+      "PSYC3450",
+      "PSYC3458",
+      "PSYC4612"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/criminology-criminal-justice/criminal-justice-psychology-bs/",
       "sourcesAvailable": [
         "requirement-tables",

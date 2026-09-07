@@ -13,11 +13,31 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EESC2000",
+      "ENGW1111",
+      "INSH3101",
+      "INSH3102",
+      "MATH1000",
+      "MATH1341",
+      "MATH1342",
+      "MATH1365",
+      "MATH2321",
+      "MATH2331",
+      "MATH2341",
+      "MATH3081",
+      "SOCL1000",
+      "SOCL1101",
+      "SOCL2320",
+      "SOCL2321",
+      "SOCL3300"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/mathematics/mathematics-sociology-bs/",
       "sourcesAvailable": [
         "requirement-tables",

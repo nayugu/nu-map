@@ -13,11 +13,27 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EEAM2000",
+      "ENGW1111",
+      "JRNL1000",
+      "JRNL1101",
+      "JRNL1102",
+      "JRNL1150",
+      "JRNL2201",
+      "JRNL2301",
+      "JRNL2350",
+      "JRNL3550",
+      "JRNL3610",
+      "JRNL4650",
+      "JRNL5314"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/journalism/journalism-ba/",
       "sourcesAvailable": [
         "requirement-tables",

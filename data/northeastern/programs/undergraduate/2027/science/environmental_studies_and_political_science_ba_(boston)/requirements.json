@@ -13,11 +13,28 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ENGW1111",
+      "ENGW3308",
+      "ENGW3315",
+      "ENVR1101",
+      "ENVR2515",
+      "ENVR3150",
+      "ENVR3300",
+      "ENVR3301",
+      "ENVR4900",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2400",
+      "SOCL1246"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/marine-environmental/environmental-studies-political-science-ba/",
       "sourcesAvailable": [
         "requirement-tables",

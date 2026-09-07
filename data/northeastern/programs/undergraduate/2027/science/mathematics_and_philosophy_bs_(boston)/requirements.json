@@ -19,11 +19,27 @@
       "concentrations": []
     },
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "MATH1341",
+      "MATH1342",
+      "MATH1365",
+      "MATH2321",
+      "MATH2331",
+      "MATH2341",
+      "MATH3081",
+      "PHIL1115",
+      "PHIL2001",
+      "PHIL2325",
+      "PHIL2330",
+      "PHIL3050",
+      "PHIL4515"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/mathematics/mathematics-philosophy-bs/",
       "sourcesAvailable": [
         "requirement-tables",

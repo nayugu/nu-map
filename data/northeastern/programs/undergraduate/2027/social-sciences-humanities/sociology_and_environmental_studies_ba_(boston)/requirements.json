@@ -13,11 +13,27 @@
       "progrtextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EESC2000",
+      "EESH2000",
+      "ENVR1101",
+      "ENVR2515",
+      "ENVR3300",
+      "ENVR3301",
+      "INSC1000",
+      "INSH3101",
+      "PHIL1180",
+      "SOCL1000",
+      "SOCL1101",
+      "SOCL2321",
+      "SOCL3300"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/sociology-anthropology/sociology-environmental-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",

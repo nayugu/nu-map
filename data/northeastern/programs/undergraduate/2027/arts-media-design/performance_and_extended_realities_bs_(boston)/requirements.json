@@ -13,11 +13,25 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ARTD2000",
+      "ARTF1000",
+      "ARTG2262",
+      "ARTG2263",
+      "EEAM2000",
+      "ENGW1111",
+      "INAM1300",
+      "INAM1301",
+      "INAM2000",
+      "MUSC1000",
+      "THTR1000"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/theatre/performance-extended-realities-bs/",
       "sourcesAvailable": [
         "requirement-tables",

@@ -13,11 +13,24 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ARTF1000",
+      "ARTH1001",
+      "ARTH1002",
+      "ARTH3000",
+      "ARTH4000",
+      "EEAM2010",
+      "ENGW1111",
+      "ENGW3314",
+      "SMFA3000",
+      "SMFA4000"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/studio-art-bfa/",
       "sourcesAvailable": [
         "requirement-tables",

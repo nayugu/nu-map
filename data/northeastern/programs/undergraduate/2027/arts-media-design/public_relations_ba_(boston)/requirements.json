@@ -13,11 +13,25 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "COMM1000",
+      "COMM1113",
+      "COMM4608",
+      "EEAM2000",
+      "ENGW1111",
+      "JRNL1000",
+      "JRNL2200",
+      "JRNL5311",
+      "JRNL5480",
+      "PREL1425",
+      "PREL3625"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/journalism/public-relations-ba/",
       "sourcesAvailable": [
         "requirement-tables",

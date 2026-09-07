@@ -13,11 +13,26 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ANTH1000",
+      "ANTH1101",
+      "ANTH2305",
+      "ANTH3410",
+      "ANTH3421",
+      "ANTH4100",
+      "ANTH4600",
+      "ENGW1111",
+      "PHIL1000",
+      "PHIL1115",
+      "PHIL2325",
+      "PHIL2330"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/sociology-anthropology/cultural-anthropology-philosophy-ba/",
       "sourcesAvailable": [
         "requirement-tables",

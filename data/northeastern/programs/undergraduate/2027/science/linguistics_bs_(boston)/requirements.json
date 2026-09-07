@@ -13,11 +13,22 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EESC2000",
+      "ENGW1111",
+      "ENGW3315",
+      "INSC1000",
+      "LING1150",
+      "LING2350",
+      "LING3412",
+      "LING4654"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/linguistics-bs/",
       "sourcesAvailable": [
         "requirement-tables",

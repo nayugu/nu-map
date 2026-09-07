@@ -19,11 +19,23 @@
       "concentrations": []
     },
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "INSH3101",
+      "INSH3102",
+      "PHIL1000",
+      "PHIL1110",
+      "SOCL1000",
+      "SOCL1101",
+      "SOCL2320",
+      "SOCL2321",
+      "SOCL3300"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/sociology-anthropology/sociology-religious-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",

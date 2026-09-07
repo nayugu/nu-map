@@ -13,11 +13,26 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EEAM2000",
+      "ENGW1111",
+      "HIST1200",
+      "HIST1201",
+      "HIST1357",
+      "HIST2301",
+      "HIST2302",
+      "HIST4701",
+      "MSCR1000",
+      "MSCR1220",
+      "MSCR1320",
+      "MSCR1420"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/media-screen-studies-history-ba/",
       "sourcesAvailable": [
         "requirement-tables",

@@ -13,11 +13,23 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3314",
+      "MUSC1000",
+      "MUSC1001",
+      "MUSC1002",
+      "MUSC1003",
+      "MUSC1119",
+      "MUSC1201"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/music/music-ba/",
       "sourcesAvailable": [
         "requirement-tables",

@@ -19,11 +19,24 @@
       "concentrations": []
     },
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ENGL1000",
+      "ENGL1160",
+      "ENGL1400",
+      "ENGL1410",
+      "ENGL3710",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2399",
+      "POLS2400"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/english/english-political-science-ba/",
       "sourcesAvailable": [
         "requirement-tables",

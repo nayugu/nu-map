@@ -22,11 +22,31 @@
       "concentrations": []
     },
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ECON1115",
+      "ECON3290",
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3315",
+      "HUSV1101",
+      "HUSV2300",
+      "HUSV2970",
+      "HUSV3900",
+      "HUSV4700",
+      "HUSV4994",
+      "INTL1000",
+      "INTL1101",
+      "INTL2718",
+      "INTL3400",
+      "INTL4700",
+      "POLS1160"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/human-services-international-affairs-ba/",
       "sourcesAvailable": [
         "requirement-tables",

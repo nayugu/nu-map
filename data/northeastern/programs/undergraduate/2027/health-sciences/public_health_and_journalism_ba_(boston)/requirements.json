@@ -13,11 +13,29 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EEAM2000",
+      "ENGW1111",
+      "ENGW3303",
+      "ENGW3306",
+      "ENGW3314",
+      "HSCI1000",
+      "HSCI2000",
+      "JRNL1000",
+      "JRNL1101",
+      "JRNL1102",
+      "JRNL1150",
+      "JRNL2201",
+      "PHTH1260",
+      "PHTH2210",
+      "PSYC1101"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/public-health-journalism-ba/",
       "sourcesAvailable": [
         "requirement-tables",

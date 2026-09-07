@@ -13,11 +13,21 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ENGW1111",
+      "HIST1000",
+      "HIST1200",
+      "HIST1201",
+      "HIST2301",
+      "HIST2302",
+      "PHIL1110"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/history/history-religious-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",

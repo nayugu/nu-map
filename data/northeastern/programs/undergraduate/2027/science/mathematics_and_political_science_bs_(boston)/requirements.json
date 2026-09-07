@@ -13,11 +13,30 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ENGW1111",
+      "MATH1341",
+      "MATH1342",
+      "MATH1365",
+      "MATH2321",
+      "MATH2331",
+      "MATH2341",
+      "MATH3081",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2390",
+      "POLS2399",
+      "POLS2400",
+      "POLS4701",
+      "POLS4703"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/mathematics/mathematics-political-science-bs/",
       "sourcesAvailable": [
         "requirement-tables",

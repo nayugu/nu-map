@@ -24,11 +24,25 @@
       "concentrations": []
     },
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "CRIM1100",
+      "CRIM1110",
+      "CRIM1120",
+      "CRIM3700",
+      "CS1100",
+      "CS1101",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2400",
+      "POLS4701"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/criminology-criminal-justice/criminal-justice-political-science-bs/",
       "sourcesAvailable": [
         "requirement-tables",

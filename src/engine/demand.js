@@ -865,7 +865,13 @@ export function deriveCells(programData, {
   // Read once for the whole program, not per section: both are properties of the
   // requirement list as a whole, and re-deriving them inside the loop is how the
   // two halves of a cross-count check end up disagreeing.
-  const witness = new Set(programData?.metadata?.planOfStudyCourses ?? []);
+  // `witnessCourses` is the PREVIOUS edition's plan, carried forward by
+  // scripts/lib/witness-carry.js for the editions NEU publishes no plan in —
+  // which, since 2026-09-01, is all of them. It is a separate field precisely so
+  // `planOfStudyCourses` can stay honest about what THIS page published; see
+  // that file for why inheriting cannot invent a requirement.
+  const witness = new Set(programData?.metadata?.witnessCourses
+    ?? programData?.metadata?.planOfStudyCourses ?? []);
   const namedElsewhere = keysNamedElsewhere(sections);
 
   sections.forEach((section, i) => {

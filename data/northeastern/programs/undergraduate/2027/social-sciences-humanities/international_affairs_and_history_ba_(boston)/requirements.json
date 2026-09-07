@@ -21,11 +21,27 @@
       "concentrations": []
     },
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ECON1115",
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3315",
+      "HIST1200",
+      "HIST1201",
+      "INTL1000",
+      "INTL1101",
+      "INTL2718",
+      "INTL3400",
+      "INTL4700",
+      "POLS1155",
+      "POLS1160"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/international-affairs/international-affairs-history-ba/",
       "sourcesAvailable": [
         "requirement-tables",

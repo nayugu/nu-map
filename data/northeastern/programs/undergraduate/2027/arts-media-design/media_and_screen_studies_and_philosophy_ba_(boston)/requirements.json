@@ -13,11 +13,26 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "EEAM2000",
+      "EESH2000",
+      "ENGW1111",
+      "MSCR1000",
+      "MSCR1220",
+      "MSCR1320",
+      "MSCR1420",
+      "MSCR3600",
+      "PHIL1115",
+      "PHIL2325",
+      "PHIL2330",
+      "POLS2325"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/media-screen-studies-philosophy-ba/",
       "sourcesAvailable": [
         "requirement-tables",

@@ -21,11 +21,26 @@
       "concentrations": []
     },
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ECON3290",
+      "ENGW1111",
+      "ENGW3315",
+      "HIST2211",
+      "INTL1101",
+      "INTL3400",
+      "MATH1215",
+      "POLS1000",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2400"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-international-affairs-ba/",
       "sourcesAvailable": [
         "requirement-tables",

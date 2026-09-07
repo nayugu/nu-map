@@ -13,11 +13,29 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "AFCS1101",
+      "AFCS2355",
+      "AFCS2618",
+      "AFCS4700",
+      "CLTR1000",
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3308",
+      "ENGW3315",
+      "HUSV1000",
+      "HUSV1101",
+      "HUSV2300",
+      "HUSV3570",
+      "HUSV3900",
+      "HUSV4994"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/cultures-societies-global-studies/africana-studies-human-services-ba/",
       "sourcesAvailable": [
         "requirement-tables",

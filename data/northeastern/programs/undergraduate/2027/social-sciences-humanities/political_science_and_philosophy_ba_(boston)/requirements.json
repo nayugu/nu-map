@@ -13,11 +13,28 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ENGW1111",
+      "MATH1215",
+      "PHIL1115",
+      "PHIL2303",
+      "PHIL2325",
+      "PHIL2330",
+      "PHIL5001",
+      "POLS1000",
+      "POLS1150",
+      "POLS1155",
+      "POLS1160",
+      "POLS2325",
+      "POLS2399",
+      "POLS2400"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.83,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-philosophy-ba/",
       "sourcesAvailable": [
         "requirement-tables",

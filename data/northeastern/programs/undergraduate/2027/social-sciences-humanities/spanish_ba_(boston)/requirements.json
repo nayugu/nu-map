@@ -13,11 +13,27 @@
       "programrequirementstextcontainer"
     ],
     "planOfStudyCourses": [],
+    "witnessCourses": [
+      "CLTR1000",
+      "CLTR1120",
+      "EESH2000",
+      "ENGW1111",
+      "ENGW3315",
+      "LING1150",
+      "MATH1215",
+      "SPNS2102",
+      "SPNS3101",
+      "SPNS3102",
+      "SPNS3502",
+      "SPNS3601",
+      "SPNS4700"
+    ],
+    "witnessEdition": 2026,
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-06",
+      "checkedAt": "2026-09-07",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/spanish-ba/",
       "sourcesAvailable": [
         "requirement-tables",
