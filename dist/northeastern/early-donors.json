@@ -1,0 +1,4052 @@
+{
+ "generated": "2026-08-18",
+ "source": "per-cluster nearest neighbour among programs that publish a Sample Plan of Study",
+ "method": "the target's OWN required courses, timed by the donor's first terms",
+ "filters": {
+  "minSimilarity": 0.4,
+  "minCluster": 3,
+  "terms": 4
+ },
+ "programs": {
+  "Applied Behavior Analysis, MS (Charlotte) @ https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/applied-behavior-analysis-ms-chl/": {
+   "program": "Applied Behavior Analysis, MS (Charlotte)",
+   "donors": [
+    {
+     "subject": "CAEP",
+     "from": "Applied Behavior Analysis, MS (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "CAEP6326",
+          "options": [
+           [
+            "CAEP6326"
+           ]
+          ]
+         },
+         {
+          "text": "CAEP6329",
+          "options": [
+           [
+            "CAEP6329"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "CAEP6327",
+          "options": [
+           [
+            "CAEP6327"
+           ]
+          ]
+         },
+         {
+          "text": "CAEP6328",
+          "options": [
+           [
+            "CAEP6328"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "CAEP6341",
+          "options": [
+           [
+            "CAEP6341"
+           ]
+          ]
+         },
+         {
+          "text": "CAEP6342",
+          "options": [
+           [
+            "CAEP6342"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "CAEP6343",
+          "options": [
+           [
+            "CAEP6343"
+           ]
+          ]
+         },
+         {
+          "text": "CAEP7412",
+          "options": [
+           [
+            "CAEP7412"
+           ]
+          ]
+         },
+         {
+          "text": "CAEP8412",
+          "options": [
+           [
+            "CAEP8412"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Arts Administration, Graduate Certificate (Boston) @ https://catalog.northeastern.edu/graduate/arts-media-design/interdisciplinary-programs/arts-administration-graduate-certificate/": {
+   "program": "Arts Administration, Graduate Certificate (Boston)",
+   "donors": [
+    {
+     "subject": "AACE",
+     "from": "Arts Administration and Cultural Entrepreneurship, MS (Boston)",
+     "similarity": 0.667
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "AACE6000",
+          "options": [
+           [
+            "AACE6000"
+           ]
+          ]
+         },
+         {
+          "text": "AACE6200",
+          "options": [
+           [
+            "AACE6200"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "AACE6010",
+          "options": [
+           [
+            "AACE6010"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "AACE6020",
+          "options": [
+           [
+            "AACE6020"
+           ]
+          ]
+         },
+         {
+          "text": "AACE6210",
+          "options": [
+           [
+            "AACE6210"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Bioengineering, PhD (Boston) @ https://catalog.northeastern.edu/graduate/engineering/bioengineering/bioengineering-bachelors-degree-entrance-phd/": {
+   "program": "Bioengineering, PhD (Boston)",
+   "donors": [
+    {
+     "subject": "PMST",
+     "from": "Biomedical Science, PhD (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PMST6254",
+          "options": [
+           [
+            "PMST6254"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Bioengineering, PhD (Portland) @ https://catalog.northeastern.edu/graduate/engineering/bioengineering/bioengineering-bachelors-degree-entrance-phd-ptl/": {
+   "program": "Bioengineering, PhD (Portland)",
+   "donors": [
+    {
+     "subject": "PMST",
+     "from": "Biomedical Science, PhD (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PMST6254",
+          "options": [
+           [
+            "PMST6254"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Bioengineering, PhD—Advanced Entry (Boston) @ https://catalog.northeastern.edu/graduate/engineering/bioengineering/bioengineering-bachelors-degree-entrance-phd/": {
+   "program": "Bioengineering, PhD—Advanced Entry (Boston)",
+   "donors": [
+    {
+     "subject": "PMST",
+     "from": "Biomedical Science, PhD (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PMST6254",
+          "options": [
+           [
+            "PMST6254"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Bioengineering, PhD—Advanced Entry (Portland) @ https://catalog.northeastern.edu/graduate/engineering/bioengineering/bioengineering-bachelors-degree-entrance-phd-ptl/": {
+   "program": "Bioengineering, PhD—Advanced Entry (Portland)",
+   "donors": [
+    {
+     "subject": "PMST",
+     "from": "Biomedical Science, PhD (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PMST6254",
+          "options": [
+           [
+            "PMST6254"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Biomedical Science, PhD—Advanced Entry (Boston) @ https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/biomedical-sciences-phd/": {
+   "program": "Biomedical Science, PhD—Advanced Entry (Boston)",
+   "donors": [
+    {
+     "subject": "PHSC",
+     "from": "Pharmaceutics and Drug Delivery, PhD (Boston)",
+     "similarity": 0.538
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHSC6300",
+          "options": [
+           [
+            "PHSC6300"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHSC8940",
+          "options": [
+           [
+            "PHSC8940"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Biophysics, PhD (Boston) @ https://catalog.northeastern.edu/graduate/science/interdisciplinary/biophysics-phd-bos/": {
+   "program": "Biophysics, PhD (Boston)",
+   "donors": [
+    {
+     "subject": "PHYS",
+     "from": "Physics, PhD (Boston)",
+     "similarity": 0.682
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHYS7301",
+          "options": [
+           [
+            "PHYS7301"
+           ]
+          ]
+         },
+         {
+          "text": "PHYS7302",
+          "options": [
+           [
+            "PHYS7302"
+           ]
+          ]
+         },
+         {
+          "text": "PHYS7315",
+          "options": [
+           [
+            "PHYS7315"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHYS5318",
+          "options": [
+           [
+            "PHYS5318"
+           ]
+          ]
+         },
+         {
+          "text": "PHYS7305",
+          "options": [
+           [
+            "PHYS7305"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHYS7321",
+          "options": [
+           [
+            "PHYS7321"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHYS9984",
+          "options": [
+           [
+            "PHYS9984"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Biotechnology, MS (Boston) @ https://catalog.northeastern.edu/graduate/science/chemistry-chemical-biology/biotechnology-ms/": {
+   "program": "Biotechnology, MS (Boston)",
+   "donors": [
+    {
+     "subject": "NNMD",
+     "from": "Nanomedicine, MS (Boston)",
+     "similarity": 0.417
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "NNMD5270",
+          "options": [
+           [
+            "NNMD5270"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "NNMD5271",
+          "options": [
+           [
+            "NNMD5271"
+           ]
+          ]
+         },
+         {
+          "text": "NNMD5570",
+          "options": [
+           [
+            "NNMD5570"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Biotechnology, MS (Oakland) @ https://catalog.northeastern.edu/graduate/science/chemistry-chemical-biology/biotechnology-ms-oak/": {
+   "program": "Biotechnology, MS (Oakland)",
+   "donors": [
+    {
+     "subject": "NNMD",
+     "from": "Nanomedicine, MS (Boston)",
+     "similarity": 0.417
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "NNMD5270",
+          "options": [
+           [
+            "NNMD5270"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "NNMD5271",
+          "options": [
+           [
+            "NNMD5271"
+           ]
+          ]
+         },
+         {
+          "text": "NNMD5570",
+          "options": [
+           [
+            "NNMD5570"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Biotechnology, MS (Portland) @ https://catalog.northeastern.edu/graduate/science/chemistry-chemical-biology/biotechnology-ms-ptl/": {
+   "program": "Biotechnology, MS (Portland)",
+   "donors": [
+    {
+     "subject": "NNMD",
+     "from": "Nanomedicine, MS (Boston)",
+     "similarity": 0.417
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "NNMD5270",
+          "options": [
+           [
+            "NNMD5270"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "NNMD5271",
+          "options": [
+           [
+            "NNMD5271"
+           ]
+          ]
+         },
+         {
+          "text": "NNMD5570",
+          "options": [
+           [
+            "NNMD5570"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Cross-Disciplinary Science, MS (Boston) @ https://catalog.northeastern.edu/graduate/science/interdisciplinary/cross-disciplinary-science-ms-bos/": {
+   "program": "Cross-Disciplinary Science, MS (Boston)",
+   "donors": [
+    {
+     "subject": "PHYS",
+     "from": "Physics, PhD (Boston)",
+     "similarity": 0.545
+    },
+    {
+     "subject": "PSYC",
+     "from": "Psychology, PhD (Boston)",
+     "similarity": 0.45
+    },
+    {
+     "subject": "INSH",
+     "from": "Management, MS (Boston)",
+     "similarity": 0.5
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHYS7301",
+          "options": [
+           [
+            "PHYS7301"
+           ]
+          ]
+         },
+         {
+          "text": "PHYS7302",
+          "options": [
+           [
+            "PHYS7302"
+           ]
+          ]
+         },
+         {
+          "text": "PHYS7315",
+          "options": [
+           [
+            "PHYS7315"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5110",
+          "options": [
+           [
+            "PSYC5110"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5180",
+          "options": [
+           [
+            "PSYC5180"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC8401",
+          "options": [
+           [
+            "PSYC8401"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHYS5318",
+          "options": [
+           [
+            "PHYS5318"
+           ]
+          ]
+         },
+         {
+          "text": "PHYS7305",
+          "options": [
+           [
+            "PHYS7305"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5120",
+          "options": [
+           [
+            "PSYC5120"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5130",
+          "options": [
+           [
+            "PSYC5130"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5140",
+          "options": [
+           [
+            "PSYC5140"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5150",
+          "options": [
+           [
+            "PSYC5150"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5170",
+          "options": [
+           [
+            "PSYC5170"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5181",
+          "options": [
+           [
+            "PSYC5181"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHYS7321",
+          "options": [
+           [
+            "PHYS7321"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHYS9984",
+          "options": [
+           [
+            "PHYS9984"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Cultural Entrepreneurship, Graduate Certificate (Boston) @ https://catalog.northeastern.edu/graduate/arts-media-design/interdisciplinary-programs/cultural-entrepreneurship-graduate-certificate/": {
+   "program": "Cultural Entrepreneurship, Graduate Certificate (Boston)",
+   "donors": [
+    {
+     "subject": "AACE",
+     "from": "Arts Administration and Cultural Entrepreneurship, MS (Boston)",
+     "similarity": 0.667
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "AACE6000",
+          "options": [
+           [
+            "AACE6000"
+           ]
+          ]
+         },
+         {
+          "text": "AACE6200",
+          "options": [
+           [
+            "AACE6200"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "AACE6010",
+          "options": [
+           [
+            "AACE6010"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "AACE6210",
+          "options": [
+           [
+            "AACE6210"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Data Science, MS (Portland) @ https://catalog.northeastern.edu/graduate/computer-information-science/computer-science/data-science-ms-ptl/": {
+   "program": "Data Science, MS (Portland)",
+   "donors": [
+    {
+     "subject": "DS",
+     "from": "Computer Science, PhD (Boston)",
+     "similarity": 0.429
+    },
+    {
+     "subject": "PHYS",
+     "from": "Network Science, PhD (Boston)",
+     "similarity": 0.4
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHYS5116",
+          "options": [
+           [
+            "PHYS5116"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Data Science, MS (Silicon Valley) @ https://catalog.northeastern.edu/graduate/computer-information-science/computer-science/data-science-ms-sjo/": {
+   "program": "Data Science, MS (Silicon Valley)",
+   "donors": [
+    {
+     "subject": "DS",
+     "from": "Computer Science, PhD (Boston)",
+     "similarity": 0.429
+    },
+    {
+     "subject": "PHYS",
+     "from": "Network Science, PhD (Boston)",
+     "similarity": 0.4
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHYS5116",
+          "options": [
+           [
+            "PHYS5116"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Data Science, MS—Align (Portland) @ https://catalog.northeastern.edu/graduate/computer-information-science/computer-science/data-science-ms-align-ptl/": {
+   "program": "Data Science, MS—Align (Portland)",
+   "donors": [
+    {
+     "subject": "PHYS",
+     "from": "Network Science, PhD (Boston)",
+     "similarity": 0.4
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHYS5116",
+          "options": [
+           [
+            "PHYS5116"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Data Science, MS—Align (Silicon Valley) @ https://catalog.northeastern.edu/graduate/computer-information-science/computer-science/data-science-ms-align-sjo/": {
+   "program": "Data Science, MS—Align (Silicon Valley)",
+   "donors": [
+    {
+     "subject": "PHYS",
+     "from": "Network Science, PhD (Boston)",
+     "similarity": 0.4
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHYS5116",
+          "options": [
+           [
+            "PHYS5116"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Design, BFA (Boston) @ https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/design-bfa/": {
+   "program": "Design, BFA (Boston)",
+   "donors": [
+    {
+     "subject": "ARTF",
+     "from": "Art, BA (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "ARTH",
+     "from": "Art, BA (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "ARTG",
+     "from": "Design and Public Health, BS (Boston)",
+     "similarity": 0.556
+    },
+    {
+     "subject": "ARTD",
+     "from": "Media Arts and Communication Studies, BA (Boston)",
+     "similarity": 0.6
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "ARTF1000",
+          "options": [
+           [
+            "ARTF1000"
+           ]
+          ]
+         },
+         {
+          "text": "ARTF1220",
+          "options": [
+           [
+            "ARTF1220"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Digital Humanities, Graduate Certificate (Boston) @ https://catalog.northeastern.edu/graduate/social-sciences-humanities/english/digital-humanities-graduate-certificate/": {
+   "program": "Digital Humanities, Graduate Certificate (Boston)",
+   "donors": [
+    {
+     "subject": "INSH",
+     "from": "Management, MS (Boston)",
+     "similarity": 0.4
+    },
+    {
+     "subject": "JRNL",
+     "from": "Media Innovation and Data Communication, MS (Boston)",
+     "similarity": 0.4
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "JRNL6340",
+          "options": [
+           [
+            "JRNL6340"
+           ]
+          ]
+         },
+         {
+          "text": "JRNL6341",
+          "options": [
+           [
+            "JRNL6341"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Game Experience Design, Graduate Certificate (Boston) @ https://catalog.northeastern.edu/graduate/arts-media-design/art-design/game-experience-design-graduate-certificate/": {
+   "program": "Game Experience Design, Graduate Certificate (Boston)",
+   "donors": [
+    {
+     "subject": "GSND",
+     "from": "Game Science and Design, MS (Boston)",
+     "similarity": 0.438
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "GSND5110",
+          "options": [
+           [
+            "GSND5110"
+           ]
+          ]
+         },
+         {
+          "text": "GSND5111",
+          "options": [
+           [
+            "GSND5111"
+           ]
+          ]
+         },
+         {
+          "text": "GSND5130",
+          "options": [
+           [
+            "GSND5130"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Health Law and Policy, Graduate Certificate (Boston) @ https://catalog.northeastern.edu/graduate/law/graduate-certificates/health-law-policy-graduate-certificate/": {
+   "program": "Health Law and Policy, Graduate Certificate (Boston)",
+   "donors": [
+    {
+     "subject": "PHTH",
+     "from": "Public Health, MPH—Accelerated (Boston)",
+     "similarity": 0.55
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHTH5222",
+          "options": [
+           [
+            "PHTH5222"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH6200",
+          "options": [
+           [
+            "PHTH6200"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH6204",
+          "options": [
+           [
+            "PHTH6204"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH6208",
+          "options": [
+           [
+            "PHTH6208"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHTH5120",
+          "options": [
+           [
+            "PHTH5120"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5212",
+          "options": [
+           [
+            "PHTH5212"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5214",
+          "options": [
+           [
+            "PHTH5214"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHTH5226",
+          "options": [
+           [
+            "PHTH5226"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHTH5300",
+          "options": [
+           [
+            "PHTH5300"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5310",
+          "options": [
+           [
+            "PHTH5310"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5320",
+          "options": [
+           [
+            "PHTH5320"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Health Science and Business Administration, BS (Boston) @ https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-business-administration-bs/": {
+   "program": "Health Science and Business Administration, BS (Boston)",
+   "donors": [
+    {
+     "subject": "PHTH",
+     "from": "Health Humanities and Health Science, BS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "BIOL",
+     "from": "Biomedical Physics, BS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "CHEM",
+     "from": "Computer Science and Environmental and Sustainability Sciences, BS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "MATH",
+     "from": "Architectural Studies and Business Administration, BS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "HSCI",
+     "from": "Business Administration and Public Health, BS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "BUSN",
+     "from": "Architectural Studies and Business Administration, BS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "COOP",
+     "from": "Architectural Studies and Business Administration, BS (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "BIOL1111",
+          "options": [
+           [
+            "BIOL1111"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL1112",
+          "options": [
+           [
+            "BIOL1112"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH1260",
+          "options": [
+           [
+            "PHTH1260"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "BIOL1113",
+          "options": [
+           [
+            "BIOL1113"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL1114",
+          "options": [
+           [
+            "BIOL1114"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "MATH1231",
+          "options": [
+           [
+            "MATH1231"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH2350",
+          "options": [
+           [
+            "PHTH2350"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Health Science and Sociology, BS (Boston) @ https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-sociology-bs/": {
+   "program": "Health Science and Sociology, BS (Boston)",
+   "donors": [
+    {
+     "subject": "PHTH",
+     "from": "Health Humanities and Health Science, BS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "BIOL",
+     "from": "Biomedical Physics, BS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "CHEM",
+     "from": "Computer Science and Environmental and Sustainability Sciences, BS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "SOCL",
+     "from": "Public Health and Sociology, BA (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "HSCI",
+     "from": "Criminal Justice and Public Health, BS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "ENGW",
+     "from": "Public Health and Cultural Anthropology, BA (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "BIOL1111",
+          "options": [
+           [
+            "BIOL1111"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL1112",
+          "options": [
+           [
+            "BIOL1112"
+           ]
+          ]
+         },
+         {
+          "text": "ENGW1111",
+          "options": [
+           [
+            "ENGW1111"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH1260",
+          "options": [
+           [
+            "PHTH1260"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "BIOL1113",
+          "options": [
+           [
+            "BIOL1113"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL1114",
+          "options": [
+           [
+            "BIOL1114"
+           ]
+          ]
+         },
+         {
+          "text": "SOCL1101",
+          "options": [
+           [
+            "SOCL1101"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHTH2350",
+          "options": [
+           [
+            "PHTH2350"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Human Behavior and Sustainability Sciences, PhD (Boston) @ https://catalog.northeastern.edu/graduate/science/marine-environmental-sciences/human-behavior-sustainability-sciences-phd/": {
+   "program": "Human Behavior and Sustainability Sciences, PhD (Boston)",
+   "donors": [
+    {
+     "subject": "PSYC",
+     "from": "Psychology, PhD (Boston)",
+     "similarity": 0.55
+    },
+    {
+     "subject": "INSH",
+     "from": "Management, MS (Boston)",
+     "similarity": 0.5
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PSYC5110",
+          "options": [
+           [
+            "PSYC5110"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5180",
+          "options": [
+           [
+            "PSYC5180"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC8401",
+          "options": [
+           [
+            "PSYC8401"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PSYC5120",
+          "options": [
+           [
+            "PSYC5120"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5130",
+          "options": [
+           [
+            "PSYC5130"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5140",
+          "options": [
+           [
+            "PSYC5140"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5150",
+          "options": [
+           [
+            "PSYC5150"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5170",
+          "options": [
+           [
+            "PSYC5170"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5181",
+          "options": [
+           [
+            "PSYC5181"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Information Design and Data Visualization, MS (Vancouver) @ https://catalog.northeastern.edu/graduate/arts-media-design/art-design/information-design-data-visualization-ms-van/": {
+   "program": "Information Design and Data Visualization, MS (Vancouver)",
+   "donors": [
+    {
+     "subject": "ARTG",
+     "from": "Information Design and Data Visualization, MS (Boston)",
+     "similarity": 0.444
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "ARTG5100",
+          "options": [
+           [
+            "ARTG5100"
+           ]
+          ]
+         },
+         {
+          "text": "ARTG5310",
+          "options": [
+           [
+            "ARTG5310"
+           ]
+          ]
+         },
+         {
+          "text": "ARTG5320",
+          "options": [
+           [
+            "ARTG5320"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "ARTG5120",
+          "options": [
+           [
+            "ARTG5120"
+           ]
+          ]
+         },
+         {
+          "text": "ARTG5330",
+          "options": [
+           [
+            "ARTG5330"
+           ]
+          ]
+         },
+         {
+          "text": "ARTG6100",
+          "options": [
+           [
+            "ARTG6100"
+           ]
+          ]
+         },
+         {
+          "text": "ARTG6110",
+          "options": [
+           [
+            "ARTG6110"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Information Design and Visualization, Graduate Certificate (Boston) @ https://catalog.northeastern.edu/graduate/arts-media-design/art-design/information-design-visualization-graduate-certificate/": {
+   "program": "Information Design and Visualization, Graduate Certificate (Boston)",
+   "donors": [
+    {
+     "subject": "ARTG",
+     "from": "Information Design and Data Visualization, MS (Boston)",
+     "similarity": 0.833
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "ARTG5100",
+          "options": [
+           [
+            "ARTG5100"
+           ]
+          ]
+         },
+         {
+          "text": "ARTG5310",
+          "options": [
+           [
+            "ARTG5310"
+           ]
+          ]
+         },
+         {
+          "text": "ARTG5320",
+          "options": [
+           [
+            "ARTG5320"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "ARTG5330",
+          "options": [
+           [
+            "ARTG5330"
+           ]
+          ]
+         },
+         {
+          "text": "ARTG6100",
+          "options": [
+           [
+            "ARTG6100"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Information Systems, MSIS—Bridge (Boston) @ https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/information-systems-msis-bridge/": {
+   "program": "Information Systems, MSIS—Bridge (Boston)",
+   "donors": [
+    {
+     "subject": "INFO",
+     "from": "Information Systems—Online, MSIS",
+     "similarity": 0.5
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "INFO5100",
+          "options": [
+           [
+            "INFO5100"
+           ]
+          ]
+         },
+         {
+          "text": "INFO5101",
+          "options": [
+           [
+            "INFO5101"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Information Systems, MSIS—Bridge (Oakland) @ https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/information-systems-msis-bridge-oak/": {
+   "program": "Information Systems, MSIS—Bridge (Oakland)",
+   "donors": [
+    {
+     "subject": "INFO",
+     "from": "Information Systems—Online, MSIS",
+     "similarity": 0.5
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "INFO5100",
+          "options": [
+           [
+            "INFO5100"
+           ]
+          ]
+         },
+         {
+          "text": "INFO5101",
+          "options": [
+           [
+            "INFO5101"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Information Systems, MSIS—Bridge (Portland) @ https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/information-systems-msis-bridge-ptl/": {
+   "program": "Information Systems, MSIS—Bridge (Portland)",
+   "donors": [
+    {
+     "subject": "INFO",
+     "from": "Information Systems—Online, MSIS",
+     "similarity": 0.5
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "INFO5100",
+          "options": [
+           [
+            "INFO5100"
+           ]
+          ]
+         },
+         {
+          "text": "INFO5101",
+          "options": [
+           [
+            "INFO5101"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Information Systems, MSIS—Bridge (Silicon Valley) @ https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/information-systems-msis-bridge-sjo/": {
+   "program": "Information Systems, MSIS—Bridge (Silicon Valley)",
+   "donors": [
+    {
+     "subject": "INFO",
+     "from": "Information Systems—Online, MSIS",
+     "similarity": 0.5
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "INFO5100",
+          "options": [
+           [
+            "INFO5100"
+           ]
+          ]
+         },
+         {
+          "text": "INFO5101",
+          "options": [
+           [
+            "INFO5101"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Information Systems, MSIS—Bridge—Online @ https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/information-systems-msis-bridge-online/": {
+   "program": "Information Systems, MSIS—Bridge—Online",
+   "donors": [
+    {
+     "subject": "INFO",
+     "from": "Information Systems—Online, MSIS",
+     "similarity": 0.636
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "INFO5100",
+          "options": [
+           [
+            "INFO5100"
+           ]
+          ]
+         },
+         {
+          "text": "INFO5101",
+          "options": [
+           [
+            "INFO5101"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Interdisciplinary Design and Media, PhD—Advanced Entry (Boston) @ https://catalog.northeastern.edu/graduate/arts-media-design/interdisciplinary-programs/interdisciplinary-design-media-phd/": {
+   "program": "Interdisciplinary Design and Media, PhD—Advanced Entry (Boston)",
+   "donors": [
+    {
+     "subject": "INAM",
+     "from": "Interdisciplinary Design and Media, PhD (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "ARTG",
+     "from": "Interdisciplinary Design and Media, PhD (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "GSND",
+     "from": "Interdisciplinary Design and Media, PhD (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "INAM7000",
+          "options": [
+           [
+            "INAM7000"
+           ]
+          ]
+         },
+         {
+          "text": "INAM7001",
+          "options": [
+           [
+            "INAM7001"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "INAM7900",
+          "options": [
+           [
+            "INAM7900"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "INAM7901",
+          "options": [
+           [
+            "INAM7901"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "International Business, BSIB—Exchange (Boston) @ https://catalog.northeastern.edu/undergraduate/business/international-business-bsib/": {
+   "program": "International Business, BSIB—Exchange (Boston)",
+   "donors": [
+    {
+     "subject": "INTB",
+     "from": "International Business, BSIB (Boston)",
+     "similarity": 0.444
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "INTB1205",
+          "options": [
+           [
+            "INTB1205"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "INTB2205",
+          "options": [
+           [
+            "INTB2205"
+           ]
+          ]
+         },
+         {
+          "text": "INTB2206",
+          "options": [
+           [
+            "INTB2206"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Legal Design, Graduate Certificate (Boston) @ https://catalog.northeastern.edu/graduate/law/graduate-certificates/legal-design-graduate-certificate/": {
+   "program": "Legal Design, Graduate Certificate (Boston)",
+   "donors": [
+    {
+     "subject": "ARTG",
+     "from": "Experience Design, MS (Boston)",
+     "similarity": 0.526
+    },
+    {
+     "subject": "GSND",
+     "from": "Management, MS (Boston)",
+     "similarity": 0.75
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "ARTG5120",
+          "options": [
+           [
+            "ARTG5120"
+           ]
+          ]
+         },
+         {
+          "text": "ARTG5600",
+          "options": [
+           [
+            "ARTG5600"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "ARTG5610",
+          "options": [
+           [
+            "ARTG5610"
+           ]
+          ]
+         },
+         {
+          "text": "ARTG6310",
+          "options": [
+           [
+            "ARTG6310"
+           ]
+          ]
+         },
+         {
+          "text": "ARTG6600",
+          "options": [
+           [
+            "ARTG6600"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Medicinal Chemistry and Drug Discovery, PhD—Advanced Entry (Boston) @ https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/medicinal-chemistry-drug-discovery-phd/": {
+   "program": "Medicinal Chemistry and Drug Discovery, PhD—Advanced Entry (Boston)",
+   "donors": [
+    {
+     "subject": "PHSC",
+     "from": "Pharmaceutics and Drug Delivery, PhD (Boston)",
+     "similarity": 0.538
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHSC6300",
+          "options": [
+           [
+            "PHSC6300"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHSC8940",
+          "options": [
+           [
+            "PHSC8940"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Nanomedicine, Graduate Certificate (Boston) @ https://catalog.northeastern.edu/graduate/science/physics/nanomedicine-graduate-certificate/": {
+   "program": "Nanomedicine, Graduate Certificate (Boston)",
+   "donors": [
+    {
+     "subject": "NNMD",
+     "from": "Nanomedicine, MS (Boston)",
+     "similarity": 0.75
+    },
+    {
+     "subject": "BIOT",
+     "from": "Nanomedicine, MS (Boston)",
+     "similarity": 0.824
+    },
+    {
+     "subject": "PHSC",
+     "from": "Nanomedicine, MS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "CHEM",
+     "from": "Nanomedicine, MS (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "CHME",
+     "from": "Nanomedicine, MS (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "NNMD5270",
+          "options": [
+           [
+            "NNMD5270"
+           ]
+          ]
+         },
+         {
+          "text": "NNMD5310",
+          "options": [
+           [
+            "NNMD5310"
+           ]
+          ]
+         },
+         {
+          "text": "PHSC5560",
+          "options": [
+           [
+            "PHSC5560"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "NNMD5271",
+          "options": [
+           [
+            "NNMD5271"
+           ]
+          ]
+         },
+         {
+          "text": "NNMD5570",
+          "options": [
+           [
+            "NNMD5570"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Nursing, BSN—Transfer Track (Boston) @ https://catalog.northeastern.edu/undergraduate/health-sciences/nursing/nursing-bsn-transfer-track-bos/": {
+   "program": "Nursing, BSN—Transfer Track (Boston)",
+   "donors": [
+    {
+     "subject": "NRSG",
+     "from": "Nursing, BSN (Boston)",
+     "similarity": 0.846
+    },
+    {
+     "subject": "ENGW",
+     "from": "Health Science and Law, BS (Boston)",
+     "similarity": 0.75
+    },
+    {
+     "subject": "BIOL",
+     "from": "Nursing, BSN (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "CHEM",
+     "from": "Nursing, BSN (Boston)",
+     "similarity": 0.667
+    },
+    {
+     "subject": "MATH",
+     "from": "Nursing, BSN (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "ENGW1111",
+          "options": [
+           [
+            "ENGW1111"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Nursing, BSN—Transfer Track (Charlotte) @ https://catalog.northeastern.edu/undergraduate/health-sciences/nursing/nursing-bsn-transfer-track/": {
+   "program": "Nursing, BSN—Transfer Track (Charlotte)",
+   "donors": [
+    {
+     "subject": "NRSG",
+     "from": "Nursing, BSN (Boston)",
+     "similarity": 0.846
+    },
+    {
+     "subject": "ENGW",
+     "from": "Health Science and Law, BS (Boston)",
+     "similarity": 0.75
+    },
+    {
+     "subject": "BIOL",
+     "from": "Nursing, BSN (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "CHEM",
+     "from": "Nursing, BSN (Boston)",
+     "similarity": 0.667
+    },
+    {
+     "subject": "MATH",
+     "from": "Nursing, BSN (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "ENGW1111",
+          "options": [
+           [
+            "ENGW1111"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Pharmaceutical Engineering, MS (Boston) @ https://catalog.northeastern.edu/graduate/engineering/chemical/pharmaceutical-engineering-ms/": {
+   "program": "Pharmaceutical Engineering, MS (Boston)",
+   "donors": [
+    {
+     "subject": "IE",
+     "from": "Management, MS (Boston)",
+     "similarity": 0.5
+    },
+    {
+     "subject": "PMST",
+     "from": "Biomedical Science, PhD (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PMST6254",
+          "options": [
+           [
+            "PMST6254"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Pharmaceutics and Drug Delivery, MS (Boston) @ https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/pharmaceutics-drug-delivery-ms/": {
+   "program": "Pharmaceutics and Drug Delivery, MS (Boston)",
+   "donors": [
+    {
+     "subject": "PMST",
+     "from": "Biomedical Science, PhD (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PMST6254",
+          "options": [
+           [
+            "PMST6254"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Pharmaceutics and Drug Delivery, PhD—Advanced Entry (Boston) @ https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/pharmaceutics-drug-delivery-phd/": {
+   "program": "Pharmaceutics and Drug Delivery, PhD—Advanced Entry (Boston)",
+   "donors": [
+    {
+     "subject": "PHSC",
+     "from": "Pharmaceutics and Drug Delivery, PhD (Boston)",
+     "similarity": 0.538
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHSC6300",
+          "options": [
+           [
+            "PHSC6300"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHSC8940",
+          "options": [
+           [
+            "PHSC8940"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Pharmacology, PhD—Advanced Entry (Boston) @ https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/pharmacology-phd/": {
+   "program": "Pharmacology, PhD—Advanced Entry (Boston)",
+   "donors": [
+    {
+     "subject": "PHSC",
+     "from": "Pharmaceutics and Drug Delivery, PhD (Boston)",
+     "similarity": 0.538
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHSC6300",
+          "options": [
+           [
+            "PHSC6300"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHSC8940",
+          "options": [
+           [
+            "PHSC8940"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Psychology, MS (Boston) @ https://catalog.northeastern.edu/graduate/science/psychology/psychology-ms/": {
+   "program": "Psychology, MS (Boston)",
+   "donors": [
+    {
+     "subject": "PSYC",
+     "from": "Psychology, PhD (Boston)",
+     "similarity": 0.65
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PSYC5110",
+          "options": [
+           [
+            "PSYC5110"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5180",
+          "options": [
+           [
+            "PSYC5180"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PSYC5115",
+          "options": [
+           [
+            "PSYC5115"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5120",
+          "options": [
+           [
+            "PSYC5120"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5130",
+          "options": [
+           [
+            "PSYC5130"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5140",
+          "options": [
+           [
+            "PSYC5140"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5150",
+          "options": [
+           [
+            "PSYC5150"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5170",
+          "options": [
+           [
+            "PSYC5170"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC5181",
+          "options": [
+           [
+            "PSYC5181"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PSYC5301",
+          "options": [
+           [
+            "PSYC5301"
+           ]
+          ]
+         },
+         {
+          "text": "PSYC7990",
+          "options": [
+           [
+            "PSYC7990"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Public Health, MPH (Boston) @ https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/public-health-mph/": {
+   "program": "Public Health, MPH (Boston)",
+   "donors": [
+    {
+     "subject": "PHTH",
+     "from": "Public Health, MPH—Accelerated (Boston)",
+     "similarity": 0.586
+    },
+    {
+     "subject": "CAEP",
+     "from": "Public Health, MPH—Accelerated (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHTH5210",
+          "options": [
+           [
+            "PHTH5210"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5222",
+          "options": [
+           [
+            "PHTH5222"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH6200",
+          "options": [
+           [
+            "PHTH6200"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH6204",
+          "options": [
+           [
+            "PHTH6204"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH6208",
+          "options": [
+           [
+            "PHTH6208"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHTH5120",
+          "options": [
+           [
+            "PHTH5120"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5202",
+          "options": [
+           [
+            "PHTH5202"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5212",
+          "options": [
+           [
+            "PHTH5212"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5214",
+          "options": [
+           [
+            "PHTH5214"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH6966",
+          "options": [
+           [
+            "PHTH6966"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHTH5226",
+          "options": [
+           [
+            "PHTH5226"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5540",
+          "options": [
+           [
+            "PHTH5540"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHTH5300",
+          "options": [
+           [
+            "PHTH5300"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5310",
+          "options": [
+           [
+            "PHTH5310"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5320",
+          "options": [
+           [
+            "PHTH5320"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Public Health, MPH (Charlotte) @ https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/public-health-mph-chl/": {
+   "program": "Public Health, MPH (Charlotte)",
+   "donors": [
+    {
+     "subject": "PHTH",
+     "from": "Public Health, MPH—Accelerated (Boston)",
+     "similarity": 1
+    },
+    {
+     "subject": "CAEP",
+     "from": "Public Health, MPH—Accelerated (Boston)",
+     "similarity": 1
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHTH5210",
+          "options": [
+           [
+            "PHTH5210"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5222",
+          "options": [
+           [
+            "PHTH5222"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH6200",
+          "options": [
+           [
+            "PHTH6200"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH6204",
+          "options": [
+           [
+            "PHTH6204"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH6208",
+          "options": [
+           [
+            "PHTH6208"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHTH5120",
+          "options": [
+           [
+            "PHTH5120"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5202",
+          "options": [
+           [
+            "PHTH5202"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5212",
+          "options": [
+           [
+            "PHTH5212"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5214",
+          "options": [
+           [
+            "PHTH5214"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH6966",
+          "options": [
+           [
+            "PHTH6966"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "PHTH5226",
+          "options": [
+           [
+            "PHTH5226"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5540",
+          "options": [
+           [
+            "PHTH5540"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "PHTH5300",
+          "options": [
+           [
+            "PHTH5300"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5310",
+          "options": [
+           [
+            "PHTH5310"
+           ]
+          ]
+         },
+         {
+          "text": "PHTH5320",
+          "options": [
+           [
+            "PHTH5320"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Software Engineering Systems, MS (Toronto) @ https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/software-engineering-systems-ms-tor/": {
+   "program": "Software Engineering Systems, MS (Toronto)",
+   "donors": [
+    {
+     "subject": "INFO",
+     "from": "Information Systems—Online, MSIS",
+     "similarity": 0.4
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "INFO5100",
+          "options": [
+           [
+            "INFO5100"
+           ]
+          ]
+         },
+         {
+          "text": "INFO5101",
+          "options": [
+           [
+            "INFO5101"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "Urban Planning and Policy, MS (Boston) @ https://catalog.northeastern.edu/graduate/social-sciences-humanities/public-policy-urban-affairs/urban-planning-policy-ms/": {
+   "program": "Urban Planning and Policy, MS (Boston)",
+   "donors": [
+    {
+     "subject": "SUEN",
+     "from": "Sustainable Urban Environments, MDes—Two-Year Program (Boston)",
+     "similarity": 0.818
+    },
+    {
+     "subject": "INSH",
+     "from": "Management, MS (Boston)",
+     "similarity": 0.4
+    }
+   ],
+   "plan": {
+    "label": "derived from similar programs",
+    "pattern": "",
+    "years": [
+     {
+      "label": "Year 1",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": [
+         {
+          "text": "SUEN6110",
+          "options": [
+           [
+            "SUEN6110"
+           ]
+          ]
+         },
+         {
+          "text": "SUEN6210",
+          "options": [
+           [
+            "SUEN6210"
+           ]
+          ]
+         },
+         {
+          "text": "SUEN6310",
+          "options": [
+           [
+            "SUEN6310"
+           ]
+          ]
+         }
+        ]
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": [
+         {
+          "text": "SUEN6120",
+          "options": [
+           [
+            "SUEN6120"
+           ]
+          ]
+         },
+         {
+          "text": "SUEN6220",
+          "options": [
+           [
+            "SUEN6220"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "label": "Year 2",
+      "terms": [
+       {
+        "term": "Fall",
+        "type": "fall",
+        "entries": []
+       },
+       {
+        "term": "Spring",
+        "type": "spring",
+        "entries": []
+       }
+      ]
+     }
+    ]
+   }
+  }
+ }
+}
