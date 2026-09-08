@@ -65,6 +65,15 @@ export default {
   getGradMajorOptions()     { return []; },
   getGradMajorOptionGroups(){ return new Map(); },
 
+  // An institution with no catalog editions has no edition to move between,
+  // and no name to give a path it does not publish. Both answer "nothing",
+  // which is the honest empty case rather than a stub that throws: the panel
+  // calls these on every render, and a throw here would take the whole grad
+  // panel down for an adapter that is otherwise perfectly usable.
+  findCohortMajorVersion()     { return null; },
+  findCohortGradMajorVersion() { return null; },
+  describeProgram()            { return null; },
+
   loadMajor(_path)     { return Promise.reject(new Error("loadMajor() not implemented in generic adapter.")); },
   loadMinor(_path)     { return Promise.reject(new Error("loadMinor() not implemented in generic adapter.")); },
   loadGradMajor(_path) { return Promise.reject(new Error("loadGradMajor() not implemented in generic adapter.")); },

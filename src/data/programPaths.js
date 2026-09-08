@@ -71,10 +71,17 @@ export function programIdFromPath(pathOrId) {
  * should consult previous versions"). We do NOT model change-of-major:
  * NEU publishes no rule for which edition a later-declared major follows,
  * and inventing one would be worse than the entry-year default, which is
- * right for every student who never switched. A student who did switch can
- * pick the other year explicitly; that stays their (and their advisor's)
- * call, and the choice is pinned by the saved program id, which carries
- * its year.
+ * right for every student who never switched.
+ *
+ * ⚠ This paragraph used to end "a student who did switch can pick the other
+ * year explicitly", and that was FALSE for as long as it was written: the
+ * option lists dedupe to exactly one year per program, so no explicit year
+ * picker has ever existed. What is true is narrower — a saved program id
+ * carries its year, so an id already on another edition is honoured and
+ * `findCohortVersion` (majorLoader.js) offers the cohort's edition beside it
+ * rather than switching underneath them. Choosing an arbitrary third edition
+ * is still not something the UI can do, and nothing here should be read as
+ * saying it can.
  *
  * @param {string} entSem   "fall" | "spring" | "sumA" | …
  * @param {number} entYear
@@ -103,6 +110,90 @@ export function pickCatalogYear(availableYears, cohortYear) {
   let best;
   for (const y of sorted) if (y <= cohortYear) best = y;
   return best ?? sorted[0];
+}
+
+/**
+ * Keep one row per program, at the catalog year THIS COHORT follows.
+ *
+ * Requirements are frozen at the edition a student entered under, so a 2026
+ * entrant must keep seeing 2026 after the 2027 edition lands. Search stays
+ * exactly as short as before: this picks which year survives the dedupe, never
+ * how many rows there are.
+ *
+ * @param {{college: string, folder: string, year: number}[]} options
+ * @param {number} cohortYear
+ */
+export function atCohortYear(options, cohortYear) {
+  return options.filter((opt, _, arr) => {
+    const years = arr.filter(o => o.college === opt.college && o.folder === opt.folder).map(o => o.year);
+    return opt.year === pickCatalogYear(years, cohortYear);
+  });
+}
+
+/**
+ * The edition of `path`'s program that THIS COHORT follows — or null when the
+ * path is already on it, which is the overwhelmingly common case.
+ *
+ * ── Why this is not "is a newer version available" ──────────────────
+ *
+ * It was, from May 2026 until Sept 2026, and that predates the edition freeze.
+ * Once programs were pinned per cohort the two disagreed, and the newer-only
+ * reading was wrong in BOTH directions at once:
+ *
+ *   · it fired for students who were correctly pinned — measured at 338 of 498
+ *     undergraduate majors for every cohort from fall 2023 to spring 2026, i.e.
+ *     every student the app then had — and advised each of them to leave the
+ *     edition they actually owe;
+ *   · and it could not rescue anyone who had taken that advice, because their
+ *     saved path is now AHEAD of their cohort and "newer" has nothing to offer.
+ *
+ * So the axis is difference from the cohort, not recency, and the switch it
+ * offers may move a plan BACKWARD. That backward move is the repair path for
+ * every plan the old banner pushed forward, and it is the reason this could not
+ * be fixed by adding a cohort check to the newer-only version.
+ *
+ * ⚠ `programRegistry.node.js` reached this conclusion FIRST and went further:
+ * it deleted its `newerVersionYear` flag outright, on the reasoning that
+ * "moving to a newer catalog is a petition, not a suggestion an audit tool
+ * should make". That is not in tension with keeping this one, and the
+ * difference is the whole point — that flag was true for every student not in
+ * the current year, i.e. for students who were CORRECTLY pinned, which is a
+ * suggestion. This fires only when a plan is not on its cohort's edition,
+ * which is a correction. The two surfaces disagreed for months because the
+ * reasoning lived in a comment on one of them; hence this paragraph.
+ *
+ * ── The invariant ──────────────────────────────────────────────────
+ *
+ * The returned path is always one that `atCohortYear` keeps for the same
+ * cohort. That is not incidental — this predicate and that dedupe are the same
+ * rule over the same map — and it is the whole safety property: a path offered
+ * here can always be DISPLAYED and re-selected. Offering a path outside the
+ * list is exactly the defect that left the program box blank while the
+ * requirements changed underneath the student, with no way back.
+ *
+ * @param {Record<string, unknown>} map  a path-keyed registry
+ * @param {string} path                  the plan's saved program path
+ * @param {number} cohortYear
+ * @returns {string|null}
+ */
+export function findCohortVersion(map, path, cohortYear) {
+  // No cohort (a plan with no entry term yet) means no opinion. `pickCatalogYear`
+  // answers "newest" for NaN, which is right for BUILDING A LIST and wrong here:
+  // it would prompt every such student onto an edition we cannot say is theirs.
+  if (!Number.isFinite(cohortYear)) return null;
+
+  const canonical = resolveInMap(map, path, parseMajorPathParts) ?? path;
+  const current = parseMajorPathParts(canonical);
+  if (!current) return null;
+
+  const siblings = Object.keys(map)
+    .map(p => ({ p, pp: parseMajorPathParts(p) }))
+    .filter(e => e.pp && e.pp.college === current.college && e.pp.folder === current.folder);
+  if (!siblings.length) return null;
+
+  const want = pickCatalogYear(siblings.map(e => e.pp.year), cohortYear);
+  if (want == null || want === current.year) return null;
+  return siblings.find(e => e.pp.year === want)?.p ?? null;
 }
 
 /**

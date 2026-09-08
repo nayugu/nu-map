@@ -25,7 +25,7 @@
 // calls loadMajor() + gradRequirements.js directly (Stage 2 migration).
 // ═══════════════════════════════════════════════════════════════════
 import { loadSamplePlans as _loadSamplePlans, hasSamplePlan as _hasSamplePlan } from "../../data/samplePlanLoader.js";
-import { getMajorOptions as _getMajorOptions, getMajorOptionGroups as _getMajorOptionGroups, loadMajor as _loadMajor, getGradMajorOptions as _getGradMajorOptions, getGradMajorOptionGroups as _getGradMajorOptionGroups, loadGradMajor as _loadGradMajor } from "../../data/majorLoader.js";
+import { getMajorOptions as _getMajorOptions, getMajorOptionGroups as _getMajorOptionGroups, loadMajor as _loadMajor, getGradMajorOptions as _getGradMajorOptions, getGradMajorOptionGroups as _getGradMajorOptionGroups, loadGradMajor as _loadGradMajor, findCohortMajorVersion as _findCohortMajorVersion, findCohortGradMajorVersion as _findCohortGradMajorVersion, describeProgramPath as _describeProgramPath } from "../../data/majorLoader.js";
 import { getMinorOptions as _getMinorOptions, getMinorOptionGroups as _getMinorOptionGroups, loadMinor as _loadMinor } from "../../data/minorLoader.js";
 
 // Label formatting lives in programNaming.js (pure, shared with the Node
@@ -54,6 +54,29 @@ export default {
 
   /** @returns {Map<string, import('../../ports/IMajorRequirements.js').ProgramOption[]>} */
   getMinorOptionGroups(cohortYear) { return _getMinorOptionGroups(_self, cohortYear); },
+
+  /**
+   * The edition of a program that a cohort follows, or null when the saved path
+   * is already on it. GradPanel used to reach into majorLoader.js for these
+   * directly, which is the one import rule this architecture has (UI imports
+   * ports only) — and the direct import is how the pair went on answering
+   * "is there a newer one" for four months after the edition freeze made that
+   * the wrong question.
+   *
+   * @returns {string|null}
+   */
+  findCohortMajorVersion(path, cohortYear) { return _findCohortMajorVersion(path, cohortYear); },
+
+  /** @returns {string|null} */
+  findCohortGradMajorVersion(path, cohortYear) { return _findCohortGradMajorVersion(path, cohortYear); },
+
+  /**
+   * Name a program path WITHOUT the cohort filter — for displaying a selection
+   * the cohort's own option list does not contain.
+   *
+   * @returns {import('../../ports/IMajorRequirements.js').ProgramOption|null}
+   */
+  describeProgram(path) { return _describeProgramPath(_self, path); },
 
   /** @returns {Promise<object>} Raw graduatenu Major2 JSON */
   loadMajor(path) { return _loadMajor(path); },

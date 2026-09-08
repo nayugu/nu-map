@@ -35,8 +35,49 @@ const _gradMap = import.meta.glob(
 
 // Path parsing/resolution helpers live in programPaths.js (pure, shared
 // with the Node program registry). Re-exported for existing importers.
-import { parseMajorPathParts, normalizeFolder, resolveInMap, pickCatalogYear } from './programPaths.js';
-export { normalizeFolder, resolveInMap };
+// `atCohortYear` and `findCohortVersion` live in programPaths.js rather than
+// here: both are pure functions of a path-keyed map, and this file cannot be
+// imported under Node at all (`import.meta.glob` is a Vite transform), so a
+// rule kept here is a rule no unit test can reach. That is not hypothetical —
+// the newer-vs-cohort defect this pair replaced survived four months in a file
+// nothing could test.
+import { parseMajorPathParts, normalizeFolder, resolveInMap, atCohortYear, findCohortVersion } from './programPaths.js';
+export { normalizeFolder, resolveInMap, atCohortYear };
+
+/**
+ * One dropdown option, derived from a module-map path alone. No JSON is read.
+ *
+ * Extracted because the three option builders below (undergrad, graduate,
+ * minor) carried a byte-identical copy of it, which is how a naming fix lands
+ * in one list and not the others — the same reason `program-record.js` exists
+ * on the scraper side. `describeProgramPath` needs a fourth caller of exactly
+ * this logic, and adding it as a fourth copy is what forced the extraction.
+ *
+ * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
+ * @param {string} path
+ * @returns {object|null} null when the path carries no catalog-year segment
+ */
+export function optionFromPath(majorRequirements, path) {
+  const { fmtLabel, parseProgram } = majorRequirements;
+  const parts = path.split('/');
+  // Find the first segment that looks like a 4-digit catalog year
+  let yearIdx = -1;
+  for (let i = 0; i < parts.length; i++) {
+    if (/^\d{4}$/.test(parts[i])) { yearIdx = i; break; }
+  }
+  if (yearIdx < 0) return null;
+
+  const year    = parseInt(parts[yearIdx], 10);
+  const college = parts[yearIdx + 1] ?? '';
+  const folder  = parts[yearIdx + 2] ?? '';
+  // name/degree/acronyms are what searchRank scores against; label is the
+  // catalog's own rendering of the two, e.g. "Computer Science, BSCS".
+  const { name, degree, location, acronym, acronyms } = parseProgram(folder);
+  const label        = degree ? `${name}, ${degree}` : name;
+  const collegeLabel = fmtLabel(college);
+
+  return { path, year, college, collegeLabel, folder, label, location, name, degree, acronym, acronyms };
+}
 
 // ── Public API ───────────────────────────────────────────────────
 // Naming helpers (fmtLabel, parseProgram) come from the majorRequirements
@@ -64,45 +105,18 @@ export function getMajorOptions(majorRequirements, cohortYear) {
   if (_cachedOptions && _cachedMajorReqs === majorRequirements && _cachedCohort === cohortYear) return _cachedOptions;
   _cachedCohort = cohortYear;
 
-  const { fmtLabel, parseProgram } = majorRequirements;
   _cachedMajorReqs = majorRequirements;
-  _cachedOptions = Object.keys(_moduleMap)
-    .map(path => {
-      const parts = path.split('/');
-      // Find the first segment that looks like a 4-digit catalog year
-      let yearIdx = -1;
-      for (let i = 0; i < parts.length; i++) {
-        if (/^\d{4}$/.test(parts[i])) { yearIdx = i; break; }
-      }
-      if (yearIdx < 0) return null;
-
-      const year        = parseInt(parts[yearIdx], 10);
-      const college     = parts[yearIdx + 1] ?? '';
-      const folder      = parts[yearIdx + 2] ?? '';
-      if (folder.endsWith('_minor')) return null; // minors live in the minor search
-      // name/degree/acronyms are what searchRank scores against; label is the
-      // catalog's own rendering of the two, e.g. "Computer Science, BSCS".
-      const { name, degree, location, acronym, acronyms } = parseProgram(folder);
-      const label        = degree ? `${name}, ${degree}` : name;
-      const collegeLabel = fmtLabel(college);
-
-      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronym, acronyms };
-    })
-    .filter(Boolean)
-    .sort((a, b) =>
-      b.year - a.year ||
-      a.college.localeCompare(b.college) ||
-      a.label.localeCompare(b.label)
-    )
-    // One row per program, choosing the CATALOG YEAR THE COHORT FOLLOWS —
-    // not simply the newest. Requirements are frozen at the edition a
-    // student entered under, so a 2026 entrant must keep seeing 2026 after
-    // the 2027 edition lands. Search stays exactly as short as before: this
-    // picks which year survives the dedupe, never how many rows there are.
-    .filter((opt, _, arr) => {
-      const years = arr.filter(o => o.college === opt.college && o.folder === opt.folder).map(o => o.year);
-      return opt.year === pickCatalogYear(years, cohortYear);
-    });
+  _cachedOptions = atCohortYear(
+    Object.keys(_moduleMap)
+      .map(path => optionFromPath(majorRequirements, path))
+      .filter(o => o && !o.folder.endsWith('_minor'))   // minors live in the minor search
+      .sort((a, b) =>
+        b.year - a.year ||
+        a.college.localeCompare(b.college) ||
+        a.label.localeCompare(b.label)
+      ),
+    cohortYear
+  );
 
   return _cachedOptions;
 }
@@ -138,30 +152,15 @@ export function canonicalizeMajorPath(path) {
 }
 
 /**
- * Check whether a newer catalog-year version of a major exists.
- * Returns the newer path string, or null if the given path is already the latest.
+ * The edition of this major that the cohort follows, or null when the saved
+ * path is already on it. See `findCohortVersion` for why this is not "newer".
  *
  * @param {string} currentPath  - path from getMajorOptions or saved plan state
+ * @param {number} cohortYear
  * @returns {string|null}
  */
-export function findNewerMajorVersion(currentPath) {
-  const canonical = canonicalizeMajorPath(currentPath);
-  const current = parseMajorPathParts(canonical);
-  if (!current) return null;
-
-  let newestPath = null;
-  let newestYear = current.year;
-
-  for (const path of Object.keys(_moduleMap)) {
-    const pp = parseMajorPathParts(path);
-    if (!pp) continue;
-    if (pp.college === current.college && pp.folder === current.folder && pp.year > newestYear) {
-      newestYear = pp.year;
-      newestPath = path;
-    }
-  }
-
-  return newestPath;
+export function findCohortMajorVersion(currentPath, cohortYear) {
+  return findCohortVersion(_moduleMap, currentPath, cohortYear);
 }
 
 export async function loadMajor(path) {
@@ -183,41 +182,18 @@ export function getGradMajorOptions(majorRequirements, cohortYear) {
   if (_cachedGradOptions && _cachedGradMajorReqs === majorRequirements && _cachedGradCohort === cohortYear) return _cachedGradOptions;
   _cachedGradCohort = cohortYear;
 
-  const { fmtLabel, parseProgram } = majorRequirements;
   _cachedGradMajorReqs = majorRequirements;
-  _cachedGradOptions = Object.keys(_gradMap)
-    .map(path => {
-      const parts = path.split('/');
-      let yearIdx = -1;
-      for (let i = 0; i < parts.length; i++) {
-        if (/^\d{4}$/.test(parts[i])) { yearIdx = i; break; }
-      }
-      if (yearIdx < 0) return null;
-
-      const year        = parseInt(parts[yearIdx], 10);
-      const college     = parts[yearIdx + 1] ?? '';
-      const folder      = parts[yearIdx + 2] ?? '';
-      const { name, degree, location, acronym, acronyms } = parseProgram(folder);
-      const label        = degree ? `${name}, ${degree}` : name;
-      const collegeLabel = fmtLabel(college);
-
-      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronym, acronyms };
-    })
-    .filter(Boolean)
-    .sort((a, b) =>
-      b.year - a.year ||
-      a.college.localeCompare(b.college) ||
-      a.label.localeCompare(b.label)
-    )
-    // One row per program, choosing the CATALOG YEAR THE COHORT FOLLOWS —
-    // not simply the newest. Requirements are frozen at the edition a
-    // student entered under, so a 2026 entrant must keep seeing 2026 after
-    // the 2027 edition lands. Search stays exactly as short as before: this
-    // picks which year survives the dedupe, never how many rows there are.
-    .filter((opt, _, arr) => {
-      const years = arr.filter(o => o.college === opt.college && o.folder === opt.folder).map(o => o.year);
-      return opt.year === pickCatalogYear(years, cohortYear);
-    });
+  _cachedGradOptions = atCohortYear(
+    Object.keys(_gradMap)
+      .map(path => optionFromPath(majorRequirements, path))
+      .filter(Boolean)
+      .sort((a, b) =>
+        b.year - a.year ||
+        a.college.localeCompare(b.college) ||
+        a.label.localeCompare(b.label)
+      ),
+    cohortYear
+  );
 
   return _cachedGradOptions;
 }
@@ -247,26 +223,14 @@ export function canonicalizeGradMajorPath(path) {
 }
 
 /**
- * Check whether a newer catalog-year version of a graduate major exists.
+ * The edition of this graduate program that the cohort follows, or null.
+ *
+ * Fires on nothing today, because only one graduate edition is held — and that
+ * is precisely why it must be right BEFORE the next one lands. The 2027
+ * graduate roll turns this on for 524 programs in a single scrape.
  */
-export function findNewerGradMajorVersion(currentPath) {
-  const canonical = canonicalizeGradMajorPath(currentPath);
-  const current = parseMajorPathParts(canonical);
-  if (!current) return null;
-
-  let newestPath = null;
-  let newestYear = current.year;
-
-  for (const path of Object.keys(_gradMap)) {
-    const pp = parseMajorPathParts(path);
-    if (!pp) continue;
-    if (pp.college === current.college && pp.folder === current.folder && pp.year > newestYear) {
-      newestYear = pp.year;
-      newestPath = path;
-    }
-  }
-
-  return newestPath;
+export function findCohortGradMajorVersion(currentPath, cohortYear) {
+  return findCohortVersion(_gradMap, currentPath, cohortYear);
 }
 
 export async function loadGradMajor(path) {
@@ -275,4 +239,38 @@ export async function loadGradMajor(path) {
   if (!fn) throw new Error(`Graduate major not found in registry: ${path}`);
   const mod = await fn();
   return mod.default ?? mod;
+}
+
+// ── Describing a path the cohort's option list does not contain ──────────────
+
+/**
+ * The option row for ANY program path we hold, ignoring cohort entirely.
+ *
+ * Every other lookup here goes through the cohort-filtered list, and that is
+ * the right default — it is what keeps a student's search short and pinned to
+ * the edition they owe. But a filtered list is the wrong thing to RESOLVE A
+ * NAME against, and using it for that is a defect with three faces:
+ *
+ *   · `SearchCombo` displays the selected program by finding it among its own
+ *     options, so a plan whose edition is not the cohort's rendered an EMPTY
+ *     box over fully-loaded requirements — reachable with no banner involved,
+ *     from a share link or by editing the entry term;
+ *   · `myPrograms` labels the declared programmes the same way, and
+ *     `matchesEligibility` keys on that label, so 4 of the 6 published pathway
+ *     eligibility rules silently stopped matching;
+ *   · and both failed SILENTLY, degrading to "" rather than to a question.
+ *
+ * A name is a fact about a program, not about who is allowed to pick it. This
+ * answers the name; the option list goes on deciding what is offered.
+ *
+ * @param {import('../ports/IMajorRequirements.js').IMajorRequirements} majorRequirements
+ * @param {string} path  a saved-plan path, in any of the three trees
+ * @returns {object|null}
+ */
+export function describeProgramPath(majorRequirements, path) {
+  if (!path) return null;
+  const canonical = resolveInMap(_moduleMap, path, parseMajorPathParts)
+                 ?? resolveInMap(_gradMap,   path, parseMajorPathParts)
+                 ?? path;
+  return optionFromPath(majorRequirements, canonical);
 }

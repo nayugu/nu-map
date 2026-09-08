@@ -9,8 +9,7 @@
 // data/northeastern/programs/undergraduate/ — any folder ending in _minor is a minor program.
 // ═══════════════════════════════════════════════════════════════════
 
-import { resolveInMap } from './majorLoader.js';
-import { pickCatalogYear } from './programPaths.js';
+import { resolveInMap, optionFromPath, atCohortYear } from './majorLoader.js';
 
 // Scraped minors live alongside scraped majors; folder names end with _minor.
 const _moduleMap = import.meta.glob(
@@ -49,39 +48,21 @@ export function getMinorOptions(majorRequirements, cohortYear) {
   if (_cachedOptions && _cachedMajorReqs === majorRequirements && _cachedCohort === cohortYear) return _cachedOptions;
   _cachedCohort = cohortYear;
 
-  const { fmtLabel, parseProgram } = majorRequirements;
   _cachedMajorReqs = majorRequirements;
-  _cachedOptions = Object.keys(_moduleMap)
-    .map(path => {
-      const parts = path.split('/');
-      let yearIdx = -1;
-      for (let i = 0; i < parts.length; i++) {
-        if (/^\d{4}$/.test(parts[i])) { yearIdx = i; break; }
-      }
-      if (yearIdx < 0) return null;
-
-      const year         = parseInt(parts[yearIdx], 10);
-      const college      = parts[yearIdx + 1] ?? '';
-      const folder       = parts[yearIdx + 2] ?? '';
-      const { name, degree, location, acronym, acronyms } = parseProgram(folder);
-      const label        = degree ? `${name}, ${degree}` : name;
-      const collegeLabel = fmtLabel(college);
-
-      return { path, year, college, collegeLabel, folder, label, location, name, degree, acronym, acronyms };
-    })
-    .filter(Boolean)
-    .sort((a, b) =>
-      b.year - a.year ||
-      a.college.localeCompare(b.college) ||
-      a.label.localeCompare(b.label)
-    )
-    // Minors had NO year dedupe at all — harmless while one edition
-    // existed, but with several it would list every minor once per year.
-    // Same rule as majors: keep the edition this cohort follows.
-    .filter((opt, _, arr) => {
-      const years = arr.filter(o => o.college === opt.college && o.folder === opt.folder).map(o => o.year);
-      return opt.year === pickCatalogYear(years, cohortYear);
-    });
+  // Minors had NO year dedupe at all — harmless while one edition existed, but
+  // with several it would list every minor once per year. Same rule as majors:
+  // keep the edition this cohort follows.
+  _cachedOptions = atCohortYear(
+    Object.keys(_moduleMap)
+      .map(path => optionFromPath(majorRequirements, path))
+      .filter(Boolean)
+      .sort((a, b) =>
+        b.year - a.year ||
+        a.college.localeCompare(b.college) ||
+        a.label.localeCompare(b.label)
+      ),
+    cohortYear
+  );
 
   return _cachedOptions;
 }

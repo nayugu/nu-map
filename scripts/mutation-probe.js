@@ -63,6 +63,8 @@ const RETUNION = "scripts/derive-retired-union.js";
 const PREREQ   = "scripts/lib/prereq-parse.js";
 const BANK     = "src/ui/BankPanel.jsx";
 const BANKRANK = "src/core/bankRank.js";
+const PATHS    = "src/data/programPaths.js";
+const GRADPANEL = "src/ui/GradPanel.jsx";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
@@ -80,6 +82,10 @@ const PREREQ_TEST   = "cd test/unit      && node --test prereq-parse.test.js";
 // mutants are worth running with --only rather than in every sweep.
 const RETIRED_UI    = "cd test/browser   && node --test retired-course.browser.test.js";
 const BANKRANK_TEST = "cd test/unit      && node --test bank-rank.test.js";
+const COHORT_TEST   = "cd test/unit      && node --test cohort-version.test.js";
+// Also a BROWSER command, for the same reason as RETIRED_UI: the blank program
+// box was a render-time defect that every Node test passed straight through.
+const EDITION_UI    = "cd test/browser   && node --test catalog-edition.browser.test.js";
 
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
@@ -87,6 +93,41 @@ const BANKRANK_TEST = "cd test/unit      && node --test bank-rank.test.js";
  * file — the runner checks — so a mutant cannot silently apply somewhere else.
  */
 const MUTANTS = [
+  // ── The catalog edition a cohort is offered ─────────────────────
+  // The historic bug, restored verbatim: "newest" instead of "the cohort's".
+  // It fired for 338 of 498 undergraduate majors for every cohort the app had.
+  { name: "edition: the prompt goes back to offering the NEWEST edition",
+    file: PATHS,
+    from: "  const want = pickCatalogYear(siblings.map(e => e.pp.year), cohortYear);",
+    to:   "  const want = Math.max(...siblings.map(e => e.pp.year));",
+    run: [COHORT_TEST, EDITION_UI] },
+
+  { name: "edition: a plan with no entry term is prompted anyway",
+    file: PATHS,
+    from: "  if (!Number.isFinite(cohortYear)) return null;\n",
+    to:   "", run: [COHORT_TEST] },
+
+  { name: "edition: the already-on-it bail is dropped (a prompt that never clears)",
+    file: PATHS,
+    from: "  if (want == null || want === current.year) return null;",
+    to:   "  if (want == null) return null;",
+    run: [COHORT_TEST, EDITION_UI] },
+
+  { name: "edition: the sibling match goes folder-blind (offers a different degree)",
+    file: PATHS,
+    from: "    .filter(e => e.pp && e.pp.college === current.college && e.pp.folder === current.folder);",
+    to:   "    .filter(e => e.pp && e.pp.college === current.college);",
+    run: [COHORT_TEST] },
+
+  // The render half. `findCohortVersion` can be perfectly correct and the box
+  // still empties, because the display resolves through the FILTERED list —
+  // which is what actually happened.
+  { name: "edition: the program box resolves its name from the filtered list only",
+    file: GRADPANEL,
+    from: "    ? (allOptions.find(o => o.path === value) ?? (valueOption?.path === value ? valueOption : null))",
+    to:   "    ? (allOptions.find(o => o.path === value) ?? null)",
+    run: [EDITION_UI] },
+
   // ── A retired course ranks below its live twin, and stays findable ──
   // The rung-order mutants run the fast UNIT suite; only the two that are
   // genuinely about rendering pay for a browser rebuild. That split is not

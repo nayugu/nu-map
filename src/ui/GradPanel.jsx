@@ -45,7 +45,6 @@ import {
   minorShare, minorRequirementSections, majorClaimOf, outsideCreditKeys,
   MINOR_SHARE_FRACTION,
 } from "../core/minorOverlap.js";
-import { findNewerMajorVersion, findNewerGradMajorVersion } from "../data/majorLoader.js";
 import { rankOptions } from "../core/searchRank.js";
 
 // ── GradCtx (avoids deep prop-drilling through requirement tree) ─────────
@@ -159,6 +158,13 @@ export function SearchCombo({
   // student who does not yet know a program's concentrations is better served
   // by seeing all of them on focus, filtering only once they start typing.
   showAllWhenEmpty = false,
+  // The option for `value` when it is NOT among `groups` — a plan on a catalog
+  // edition its cohort does not follow. `groups` is a filtered list and is the
+  // right thing to OFFER from; it is the wrong thing to resolve a name against,
+  // and using it for both rendered an empty box over fully-loaded requirements.
+  // Display only, deliberately: it never joins `allOptions`, so the cohort
+  // filter still decides what a search can reach.
+  valueOption = null,
 }) {
   const [query, setQuery] = useState("");
   const [open,  setOpen]  = useState(false);
@@ -204,7 +210,9 @@ export function SearchCombo({
   // focus behavior below is opted into per instance, not changed at the source.
   const filtered = q ? rankOptions(allOptions, query) : (showAllWhenEmpty ? allOptions : []);
 
-  const sel = value ? allOptions.find(o => o.path === value) : null;
+  const sel = value
+    ? (allOptions.find(o => o.path === value) ?? (valueOption?.path === value ? valueOption : null))
+    : null;
   // Always show the selected label when not editing, otherwise show the query
   const displayVal = open ? query : (sel ? `${sel.label}${sel.location ? ` (${sel.location})` : ""}` : "");
 
@@ -1942,22 +1950,35 @@ export default function GradPanel({ wideCatalog = false }) {
     [acceleratedPathway, studentType]
   );
 
+  // Name a program path WITHOUT the cohort filter. Detached from the port
+  // object deliberately — it closes over the adapter's own registry rather than
+  // `this`, so it is stable enough to sit in a dependency array.
+  const describeProgram = majorRequirements.describeProgram;
+  const majorOption  = useMemo(() => describeProgram?.(selPath)     ?? null, [describeProgram, selPath]);
+  const major2Option = useMemo(() => describeProgram?.(major2Path)  ?? null, [describeProgram, major2Path]);
+
   // The declared programmes, as { id, label } — the id gives the college (it is
   // "<year>/<college>/<folder>") and the label is what "and all combined majors"
   // matches on, since NEU names a combined major after both of its halves.
+  //
+  // ⚠ The label must NOT come from `majorGroups` alone. That list is filtered to
+  // the cohort's edition, so a plan on any other one produced a null label —
+  // and `matchesEligibility` keys `nameIncludes` on it, which is 4 of the 6
+  // published eligibility rules. The pathway simply stopped being marked
+  // eligible, silently. Fall through to the unfiltered describer.
   const myPrograms = useMemo(() => {
     const labelOf = (path) => {
       for (const opts of majorGroups.values()) {
         const hit = opts.find(o => o.path === path);
         if (hit) return hit.label;
       }
-      return null;
+      return describeProgram?.(path)?.label ?? null;
     };
     return [majorPath, major2Path].filter(Boolean).map(path => ({
       id: programIdFromPath(path),
       label: labelOf(path),
     })).filter(p => p.id);
-  }, [majorPath, major2Path, majorGroups]);
+  }, [majorPath, major2Path, majorGroups, describeProgram]);
 
   // Pathways the student's own programme is listed for. Not a filter — the
   // dropdown offers everything — but it drives the ORDER and the default, so the
@@ -1993,7 +2014,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const [major,          setMajor]          = useState(null);
   const [loadErr,        setLoadErr]        = useState(null);
   const [fetching,       setFetching]       = useState(false);
-  const [newerMajorPath, setNewerMajorPath] = useState(null);
+  const [cohortMajorPath, setCohortMajorPath] = useState(null);
   const [majorGone,      setMajorGone]      = useState(false);
   const majorName = useTranslatedText(major?.name ?? null);
   const concName  = useTranslatedText(selConc || null);
@@ -2023,12 +2044,17 @@ export default function GradPanel({ wideCatalog = false }) {
 
   // Fetch major JSON on path change
   useEffect(() => {
-    if (!selPath) { setMajor(null); setLoadErr(null); setNewerMajorPath(null); setMajorGone(false); setSelConc(""); return; }
-    setFetching(true); setLoadErr(null); setMajor(null); setNewerMajorPath(null); setMajorGone(false);
+    if (!selPath) { setMajor(null); setLoadErr(null); setCohortMajorPath(null); setMajorGone(false); setSelConc(""); return; }
+    setFetching(true); setLoadErr(null); setMajor(null); setCohortMajorPath(null); setMajorGone(false);
     const loader = isGrad ? majorRequirements.loadGradMajor(selPath) : majorRequirements.loadMajor(selPath);
-    const findNewer = isGrad ? findNewerGradMajorVersion : findNewerMajorVersion;
+    // The cohort's edition of this program, when the plan is not already on it.
+    // `cohortYear` is a dependency: editing the entry term changes which edition
+    // the student owes, and the prompt has to follow it.
+    const findCohort = isGrad
+      ? majorRequirements.findCohortGradMajorVersion
+      : majorRequirements.findCohortMajorVersion;
     loader
-      .then(data => { setMajor(data); setNewerMajorPath(findNewer(selPath)); })
+      .then(data => { setMajor(data); setCohortMajorPath(findCohort(selPath, cohortYear)); })
       .catch(e => {
         if (e.message.includes('not found in registry')) {
           // The program could not be resolved to any current catalog entry (renamed
@@ -2040,7 +2066,7 @@ export default function GradPanel({ wideCatalog = false }) {
         }
       })
       .finally(() => setFetching(false));
-  }, [selPath, isGrad]);
+  }, [selPath, isGrad, cohortYear]);
 
   // Reset concentration if not available in newly loaded major
   useEffect(() => {
@@ -2448,9 +2474,22 @@ export default function GradPanel({ wideCatalog = false }) {
                   value={selPath}
                   onChange={setSelPath}
                   groups={majorGroups}
+                  valueOption={majorOption}
                   placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")}
                 />
-                {newerMajorPath && (
+                {/* The plan is on an edition this cohort does not follow.
+                    STATES the cohort's edition rather than describing this one
+                    as out of date: the difference is not always staleness, and
+                    the switch can move the plan BACKWARD — which is the repair
+                    path for every plan the old newer-only banner pushed
+                    forward. `findCohortMajorVersion` guarantees the offered
+                    path is in `majorGroups`, so Switch can never empty the box
+                    above it. Dismissal is per session on purpose: after the
+                    cohort fix this fires only for a plan genuinely off its own
+                    edition, which is rare enough that persisting a dismissal
+                    would cost a saved-plan field to silence a prompt that is
+                    telling the truth. */}
+                {cohortMajorPath && (
                   <div style={{
                     marginTop: 4, padding: "5px 7px", borderRadius: 4,
                     background: "var(--info-bg, var(--border-2))",
@@ -2459,27 +2498,27 @@ export default function GradPanel({ wideCatalog = false }) {
                     fontSize: isPhone ? 8 : 9,
                   }}>
                     <span style={{ color: "var(--text-2)", flex: 1 }}>
-                      A {newerMajorPath.match(/\/(\d{4})\//)?.[1]} version of this major is available.
+                      {t("grad.edition.mismatch", { year: cohortMajorPath.match(/\/(\d{4})\//)?.[1] ?? "" })}
                     </span>
                     <button
-                      onClick={() => setSelPath(newerMajorPath)}
+                      onClick={() => setSelPath(cohortMajorPath)}
                       style={{
                         fontSize: isPhone ? 7 : 8, padding: "2px 7px", cursor: "pointer",
                         borderRadius: 3, border: "1px solid var(--accent)",
                         background: "var(--accent)", color: "white", fontWeight: 600,
                       }}
                     >
-                      Switch
+                      {t("grad.edition.switch")}
                     </button>
                     <button
-                      onClick={() => setNewerMajorPath(null)}
+                      onClick={() => setCohortMajorPath(null)}
                       style={{
                         fontSize: isPhone ? 7 : 8, padding: "2px 7px", cursor: "pointer",
                         borderRadius: 3, border: "1px solid var(--border-3)",
                         background: "transparent", color: "var(--text-4)",
                       }}
                     >
-                      Keep
+                      {t("grad.edition.keep")}
                     </button>
                   </div>
                 )}
@@ -2520,7 +2559,7 @@ export default function GradPanel({ wideCatalog = false }) {
                       title="Remove second major"
                     >✕</button>
                   </div>
-                  <SearchCombo value={major2Path} onChange={setMajor2Path} groups={majorGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")} />
+                  <SearchCombo value={major2Path} onChange={setMajor2Path} groups={majorGroups} valueOption={major2Option} placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")} />
                   {major2Gone && (
                     <StaleNotice
                       isPhone={isPhone}
@@ -2568,7 +2607,7 @@ export default function GradPanel({ wideCatalog = false }) {
                 {[[t("grad.minor1.label"), minor1, setMinor1, "minor1"], [t("grad.minor2.label"), minor2, setMinor2, "minor2"]].map(([lbl, val, set, field]) => (
                   <div key={lbl} data-claude-focus={field} style={{ minWidth: 0, overflow: "hidden", ...(pvMark(field, { inset: true }).style ?? {}) }}>
                     <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
-                    <SearchCombo value={val} onChange={set} groups={minorGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.minor.search")} />
+                    <SearchCombo value={val} onChange={set} groups={minorGroups} valueOption={describeProgram?.(val) ?? null} placeholder={isPhone ? t("grad.major.search.short") : t("grad.minor.search")} />
                   </div>
                 ))}
               </div>

@@ -46,7 +46,7 @@ and `mcp-server/`. Status legend: ✅ exposed today · ⚠️ partial/drifted ·
 | C5 | Requirement tree audit: sat/satCount/satSh/matched/warnings, one-course-used-once, coreq consumption, substitution virtual placements, General Electives | `gradRequirements.js` (imported from src — no drift) | ✅ |
 | C6 | **Completed vs planned split** in every progress number/bar (green vs blue) | doneSet = semesters before `currentSemId` | ❌ audit has no doneKeys → Claude can't tell taken from planned |
 | C7 | `totalCreditsRequired`, `metadata.verified` badge, `yearVersion` | program JSON | ⚠️ in `majorData` but not surfaced in list/audit output |
-| C8 | "Newer version available" banner | `findNewerMajorVersion` | ❌ |
+| C8 | "Your catalog edition is {year}" prompt, with a Switch that may move a plan BACKWARD | `findCohortVersion` (`programPaths.js`) | ❌ — and note the gap is now narrower than it reads: the prompt fires only for a plan whose edition is not its cohort's, so MCP's silence is wrong for that plan alone rather than for the 338-of-498 the old "newer version available" banner shouted at |
 | C9 | Stale-path resolution (tiered newest-year fallback) | `resolveInMap` | ⚠️ server only normalizes path shape |
 | C10 | NUPath grid: 3×4 codes+labels, coverage incl. co-op EX grant, count | `attributeSystem` | ✅ `get_nupath_coverage` (⚠️ hardcodes `typeId==="coop"` instead of reading `attributeGrants` — drift risk) |
 
