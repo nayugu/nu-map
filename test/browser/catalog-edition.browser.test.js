@@ -37,6 +37,19 @@ const P2026 = PROGRAM(2026);
 const P2027 = PROGRAM(2027);
 const NAME  = "Computer Science, BSCS (Boston)";
 
+/**
+ * A minor held in both editions, for case D.
+ *
+ * The shared display rule lives in `SearchCombo`, so cases A–C already cover
+ * it — but `valueOption` is passed PER CALL SITE, and there are four (major,
+ * second major, two minors). Deleting one prop leaves the others working and
+ * every test above green. Found by measuring instead of asserting: the claim
+ * "the fix reaches the minors" was made, checked, and was wrong on the first
+ * reading — from a stale bundle, but the gap in coverage was real either way.
+ */
+const MINOR_2026 = "../../data/northeastern/programs/undergraduate/2026/science/mathematics_minor/requirements.json";
+const MINOR_NAME = "Mathematics, Minor";
+
 describe("catalog editions · the prompt and the program box", () => {
   let browser, server, port, launchError = null;
 
@@ -55,7 +68,7 @@ describe("catalog editions · the prompt and the program box", () => {
   });
 
   /** Seeded through addInitScript — the app writes the live plan on unload. */
-  const seed = (major, entYear) => `(${((mj, ey) => {
+  const seed = (major, entYear, minor = "") => `(${((mj, ey, mn) => {
     const K = "ncp-";
     localStorage.setItem(K + "plan-index", JSON.stringify([
       { id: "default", name: "T", studentType: "undergrad", parentId: null, lastOpened: Date.now() },
@@ -64,17 +77,17 @@ describe("catalog editions · the prompt and the program box", () => {
       version: 1, studentType: "undergrad",
       entSem: "fall", entYear: ey, gradSem: "spring", gradYear: ey + 4,
       currentSemId: "fall" + ey,
-      major: mj, minor1: "", placements: {},
+      major: mj, minor1: mn, placements: {},
       specialTermPl: {}, semOrders: {}, placedOut: [], substitutions: [],
     }));
     localStorage.setItem(K + "tour-seen", "true");
-  }).toString()})(${JSON.stringify(major)},${entYear})`;
+  }).toString()})(${JSON.stringify(major)},${entYear},${JSON.stringify(minor)})`;
 
-  async function openPanel(major, entYear) {
+  async function openPanel(major, entYear, minor = "") {
     assert.equal(launchError, null,
       `chromium unavailable — run \`npx playwright install chromium\`: ${launchError?.message}`);
     const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
-    await ctx.addInitScript(seed(major, entYear));
+    await ctx.addInitScript(seed(major, entYear, minor));
     const page = await ctx.newPage();
     const errors = [];
     page.on("pageerror", e => errors.push(String(e?.message ?? e)));
@@ -97,10 +110,12 @@ describe("catalog editions · the prompt and the program box", () => {
     assert.match(body, /GPA requirements|NUPATH|NUPath/,
       `the graduation panel did not open:\n${body.slice(0, 600)}`);
 
+    const minorInput = page.locator('[data-claude-focus="minor1"] input').first();
     const read = async () => {
       const text = await page.evaluate(() => document.body.innerText);
       return {
         box: await input.inputValue(),
+        minorBox: await minorInput.inputValue().catch(() => null),
         // The year the prompt NAMES, not merely that a prompt exists — the
         // direction is the whole point and a boolean cannot see it.
         promptYear: (text.match(/Your catalog edition is (\d{4})/) ?? [])[1] ?? null,
@@ -156,6 +171,23 @@ describe("catalog editions · the prompt and the program box", () => {
     assert.match(await savedPath(), /\/2026\//,
       "the repaired edition did not reach the saved plan");
 
+    await ctx.close();
+    assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
+  });
+
+  test("D · a MINOR off its cohort's edition keeps its name too", async () => {
+    // `valueOption` is wired per call site — major, second major, and the two
+    // minor slots. Cases A–C would all pass with the minors' prop deleted, so
+    // without this the coverage is one combo short of the four that exist.
+    //
+    // Minors get no edition prompt of their own (they are correctly pinned and
+    // there is nothing to correct), which is exactly why the display half has
+    // to hold on its own here: nothing else in the panel would reveal it.
+    const { ctx, read, errors } = await openPanel(P2027, 2026, MINOR_2026);
+    const s = await read();
+    assert.equal(s.box, NAME, "the major box lost its name");
+    assert.equal(s.minorBox, MINOR_NAME,
+      "the minor box is blank while its card is on screen — valueOption is not wired here");
     await ctx.close();
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
   });

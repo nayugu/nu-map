@@ -128,6 +128,14 @@ const MUTANTS = [
     to:   "    ? (allOptions.find(o => o.path === value) ?? null)",
     run: [EDITION_UI] },
 
+  // `valueOption` is passed per call site, so the shared rule above can be
+  // perfect while one combo is simply not wired. Cases A-C all pass with this
+  // prop deleted; only the minor case sees it.
+  { name: "edition: the minor combo stops being told what it has selected",
+    file: GRADPANEL,
+    from: " valueOption={describeProgram?.(val) ?? null}",
+    to:   "", run: [EDITION_UI] },
+
   // ── A retired course ranks below its live twin, and stays findable ──
   // The rung-order mutants run the fast UNIT suite; only the two that are
   // genuinely about rendering pay for a browser rebuild. That split is not
