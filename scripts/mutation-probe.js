@@ -66,6 +66,7 @@ const BANKRANK = "src/core/bankRank.js";
 const PATHS    = "src/data/programPaths.js";
 const GRADPANEL = "src/ui/GradPanel.jsx";
 const CHOICE    = "src/core/editionChoice.js";
+const LOADER    = "src/data/majorLoader.js";
 const PLANNER   = "src/context/PlannerContext.jsx";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
@@ -155,6 +156,16 @@ const MUTANTS = [
   // `valueOption` is passed per call site, so the shared rule above can be
   // perfect while one combo is simply not wired. Cases A-C all pass with this
   // prop deleted; only the minor case sees it.
+  // Caught from a SCREENSHOT, not a test: every other case here uses an exact
+  // current-year path, so all of them matched in `allOptions` and none could
+  // see it. A plan on an edition we no longer hold canonicalises to a different
+  // path, the identity check fails, and every program box renders empty.
+  { name: "edition: describeProgram answers with the canonical path, not the caller's",
+    file: LOADER,
+    from: "  return { ...option, path };",
+    to:   "  return option;",
+    run: [EDITION_UI] },
+
   { name: "edition: the minor combo stops being told what it has selected",
     file: GRADPANEL,
     from: " valueOption={describeProgram?.(val) ?? null}",

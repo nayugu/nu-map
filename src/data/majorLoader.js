@@ -317,5 +317,17 @@ export function describeProgramPath(majorRequirements, path) {
   const canonical = resolveInMap(_moduleMap, path, parseMajorPathParts)
                  ?? resolveInMap(_gradMap,   path, parseMajorPathParts)
                  ?? path;
-  return optionFromPath(majorRequirements, canonical);
+  const option = optionFromPath(majorRequirements, canonical);
+  if (!option) return null;
+  // Keyed on the path the CALLER asked about, not the one we resolved to.
+  //
+  // `SearchCombo` matches this against the value it was handed, and a saved
+  // plan's path frequently is not canonical: a student who entered under an
+  // edition we no longer hold has `.../2025/...`, which `resolveInMap` answers
+  // with the 2026 record. Returning the canonical path there made the identity
+  // check fail and the program box render EMPTY over a perfectly loaded
+  // program — the same blank box this whole change set out to fix, reappearing
+  // for exactly the students most likely to have an old plan. The name is
+  // resolved from the canonical record; the identity stays the caller's.
+  return { ...option, path };
 }

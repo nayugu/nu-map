@@ -192,6 +192,118 @@ function CheckBox({ sat, dimmedCheck = false, unknown = false, title }) {
  * today: two adjacent affordances doing the same thing, in a sidebar this
  * narrow, is worse than one control that says what it is set to.
  */
+/**
+ * The catalog-year picker itself — OUR dropdown, not the platform's.
+ *
+ * Two earlier versions used a native `<select>` and both looked foreign beside
+ * the program box. The first invented its own tokens; the second copied the
+ * app's other select and rendered VISUALLY IDENTICAL, which is the tell: macOS
+ * draws its own control and ignores padding, radius and border. And even with
+ * `appearance: none` on the closed state, the OPEN list is still drawn by the
+ * OS and cannot be styled at all — that is the half a native element can never
+ * give up.
+ *
+ * So this is a button plus a portal list, built from `SearchCombo`'s tokens
+ * (the input directly above it) at a smaller size: same family, subordinate
+ * weight, because a catalog year is metadata about that program rather than a
+ * peer control.
+ *
+ * The portal is positioned against a live rect and re-measured on scroll,
+ * because the grad panel is itself a scroll container — the same reason
+ * SearchCombo tracks its own.
+ */
+function EditionSelect({ options, currentYear, onChange, size }) {
+  const [open, setOpen] = useState(false);
+  const [rect, setRect] = useState(null);
+  const btnRef    = useRef(null);
+  const portalRef = useRef(null);
+
+  const measure = () => { if (btnRef.current) setRect(btnRef.current.getBoundingClientRect()); };
+
+  useEffect(() => {
+    if (!open) return;
+    const onMove = () => measure();
+    const onDown = (e) => {
+      // The list lives in a portal, so it is NOT inside the button's DOM
+      // subtree — a `contains` check on the button alone closes the menu before
+      // a row can be chosen. Both nodes have to be consulted.
+      if (btnRef.current?.contains(e.target) || portalRef.current?.contains(e.target)) return;
+      setOpen(false);
+    };
+    const onKey = (e) => { if (e.key === "Escape") { setOpen(false); btnRef.current?.focus(); } };
+    window.addEventListener("scroll", onMove, true);   // capture: the panel scrolls, not the window
+    window.addEventListener("resize", onMove);
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("scroll", onMove, true);
+      window.removeEventListener("resize", onMove);
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const current = options.find(o => o.year === currentYear) ?? options[0];
+  const pad = `${Math.round(size / 3)}px ${Math.round(size / 1.6)}px`;
+
+  return (
+    <span style={{ position: "relative", display: "inline-flex", flexShrink: 0, maxWidth: "100%" }}>
+      <button
+        ref={btnRef}
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        data-edition-select=""
+        onClick={() => { measure(); setOpen(v => !v); }}
+        style={{
+          display: "inline-flex", alignItems: "center", gap: Math.round(size / 2),
+          fontSize: size, fontFamily: "inherit", cursor: "pointer",
+          background: "var(--bg-surface-2)", color: "var(--text-2)",
+          border: "1px solid var(--border-2)", borderRadius: 4, outline: "none",
+          padding: pad, maxWidth: "100%",
+        }}
+      >
+        {current?.label ?? ""}
+        <span aria-hidden="true" style={{ fontSize: Math.round(size * 0.8), lineHeight: 1, color: "var(--text-5)" }}>▾</span>
+      </button>
+      {open && rect && createPortal(
+        <div
+          ref={portalRef}
+          role="listbox"
+          style={{
+            position: "fixed", top: rect.bottom + 2, left: rect.left,
+            minWidth: Math.max(rect.width, 96), zIndex: 9000,
+            background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+            borderRadius: 4, boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+            fontFamily: "'InterTight', 'Inter', system-ui, sans-serif",
+            overflow: "hidden",
+          }}
+        >
+          {options.map(o => {
+            const sel = o.year === currentYear;
+            return (
+              <div
+                key={o.year}
+                role="option"
+                aria-selected={sel}
+                onMouseDown={() => { onChange(o.path); setOpen(false); }}
+                onTouchStart={(e) => { e.preventDefault(); onChange(o.path); setOpen(false); }}
+                style={{
+                  padding: `${Math.round(size * 0.5)}px ${size}px`, fontSize: size + 1,
+                  cursor: "pointer", whiteSpace: "nowrap",
+                  background: sel ? "var(--bg-surface-2)" : undefined,
+                  color: sel ? "var(--text-1)" : "var(--text-2)",
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = "var(--bg-surface-2)"}
+                onMouseLeave={e => e.currentTarget.style.background = sel ? "var(--bg-surface-2)" : ""}
+              >{o.label}</div>
+            );
+          })}
+        </div>, document.body)}
+    </span>
+  );
+}
+
 export function EditionRow({ path, cohortYear, onChange }) {
   const { t } = useLanguage();
   const { isPhone } = useContext(GradCtx) ?? {};
@@ -216,29 +328,13 @@ export function EditionRow({ path, cohortYear, onChange }) {
       flexWrap: "wrap", fontSize: size, minWidth: 0,
     }}>
       <span style={{ color: "var(--text-5)", flexShrink: 0 }}>{t("grad.edition.label")}</span>
-      <select
-        value={String(currentYear ?? "")}
-        onChange={e => {
-          const next = options.find(x => String(x.year) === e.target.value);
-          if (next) onChange(next.path);
-        }}
-        style={{
-          fontSize: size, padding: "1px 3px", borderRadius: 3, cursor: "pointer",
-          background: "var(--bg-surface-2)", color: "var(--text-2)",
-          // Deliberately NOT recoloured when the edition differs from the
-          // cohort's. That was built and measured: `--accent` resolves to
-          // rgb(38,38,38) in the light theme, so it read as a slightly heavier
-          // border rather than a signal — and a warning colour would be wrong
-          // regardless, because choosing another edition is what this control
-          // is FOR. Students who switched into a major are supposed to sit here.
-          // The hint and the reset appearing beside it already make the row
-          // visibly different, without calling a legitimate choice a mistake.
-          border: "1px solid var(--border-2)",
-          outline: "none", maxWidth: "100%",
-        }}
-      >
-        {options.map(e => <option key={e.year} value={e.year}>{e.label}</option>)}
-      </select>
+      {/* Deliberately NOT recoloured when the edition differs from the cohort's:
+          `--accent` resolves to rgb(38,38,38) in the light theme, so it read as
+          a heavier border rather than a signal — and a warning colour would be
+          wrong regardless, because choosing another edition is what this control
+          is FOR. The hint and the reset beside it already make the row visibly
+          different, without calling a legitimate choice a mistake. */}
+      <EditionSelect options={options} currentYear={currentYear} onChange={onChange} size={size} />
       {hint && (
         <>
           <span style={{ color: "var(--text-5)", minWidth: 0 }}>

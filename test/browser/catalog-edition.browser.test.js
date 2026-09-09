@@ -122,16 +122,28 @@ describe("catalog editions · in the running app", () => {
     // actually depends on. Also proof the panel opened at all: a click
     // swallowed by a modal leaves an empty board, and assertions about absent
     // things then pass for the worst possible reason.
-    await page.locator('[data-claude-focus="major"] select').first()
+    await page.locator('[data-claude-focus="major"] [data-edition-select]').first()
       .waitFor({ timeout: 30_000 });
 
     const boxOf   = (f) => page.locator(`[data-claude-focus="${f}"] input`).first();
-    const selOf   = (f) => page.locator(`[data-claude-focus="${f}"] select`).first();
+    // The year picker is OUR control, not a <select>: a button plus a portal
+    // list, because a native select's open menu is drawn by the OS and cannot
+    // be styled to match the panel. So it is driven by clicking, not by
+    // selectOption.
+    const selOf   = (f) => page.locator(`[data-claude-focus="${f}"] [data-edition-select]`).first();
+    const yearOf  = async (f) => (await selOf(f).innerText()).replace(/[^0-9-]/g, "").split("-").pop();
+    const chooseYear = async (f, year) => {
+      await selOf(f).click();
+      const row = page.locator(`[role="listbox"] [role="option"]`, { hasText: `${year - 1}-${year}` }).first();
+      await row.waitFor({ timeout: 15_000 });
+      await row.click();
+      await page.locator('[role="listbox"]').first().waitFor({ state: "detached", timeout: 15_000 });
+    };
     const read = async () => {
       const text = await page.evaluate(() => document.body.innerText);
       return {
         box: await boxOf("major").inputValue(),
-        year: await selOf("major").inputValue(),
+        year: await yearOf("major"),
         hints: text.match(/your cohort: [\d-]+/g) ?? [],
         sh: (text.match(/13[0-9] SH/g) ?? [])[0] ?? null,
       };
@@ -139,7 +151,7 @@ describe("catalog editions · in the running app", () => {
     const saved = (key) => page.evaluate((k) =>
       JSON.parse(localStorage.getItem("ncp-plan-data-default"))[k], key);
 
-    return { ctx, page, read, saved, boxOf, selOf, errors };
+    return { ctx, page, read, saved, boxOf, selOf, yearOf, chooseYear, errors };
   }
 
   test("the panel renders, names the program, and draws its year control", async () => {
@@ -167,7 +179,7 @@ describe("catalog editions · in the running app", () => {
     // `valueOption` deleted. The mutation probe caught it: two mutants about
     // minors SURVIVED. A fall-2026 entrant (cohort 2027) puts every one of the
     // three on the wrong edition, which is what the assertions claim to test.
-    const { ctx, read, boxOf, selOf, errors } = await openPanel(CS(2026), 2026, MINOR_2026, MATH_2026);
+    const { ctx, read, boxOf, yearOf, errors } = await openPanel(CS(2026), 2026, MINOR_2026, MATH_2026);
     const s = await read();
     assert.equal(s.box, NAME, "the box is blank on arrival");
     // Every declared program, not just the first: `valueOption` is wired per
@@ -177,8 +189,8 @@ describe("catalog editions · in the running app", () => {
     // And each carries its OWN control. Minors get no separate treatment: a
     // minor declared in a different year than the major is exactly the case one
     // plan-wide catalog year could not express.
-    assert.equal(await selOf("minor1").inputValue(), "2026", "the minor has no year control");
-    assert.equal(await selOf("major2").inputValue(), "2026", "the second major has no year control");
+    assert.equal(await yearOf("minor1"), "2026", "the minor has no year control");
+    assert.equal(await yearOf("major2"), "2026", "the second major has no year control");
     // Three programs off-cohort, three hints.
     assert.equal(s.hints.length, 3, `expected a hint per program, saw ${JSON.stringify(s.hints)}`);
     await ctx.close();
@@ -186,12 +198,12 @@ describe("catalog editions · in the running app", () => {
   });
 
   test("choosing another edition re-audits the degree, persists, and resets", async () => {
-    const { ctx, page, read, saved, selOf, errors } = await openPanel(CS(2026), 2025);
+    const { ctx, page, read, saved, chooseYear, errors } = await openPanel(CS(2026), 2025);
 
     const before = await read();
     assert.equal(before.sh, SH_2026);
 
-    await selOf("major").selectOption("2027");
+    await chooseYear("major", 2027);
     // Wait for the DEGREE TOTAL to change, which is the thing being asserted.
     await page.locator(`text=${SH_2027}`).first().waitFor({ timeout: 30_000 });
 
@@ -210,12 +222,35 @@ describe("catalog editions · in the running app", () => {
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
   });
 
+  test("a plan saved on an edition we NO LONGER HOLD still shows its programs", async () => {
+    // The returning student. Their plan points at `.../2025/...`, an edition
+    // that has aged out, and `resolveInMap` answers it with the 2026 record.
+    //
+    // This shipped broken and was caught from a screenshot, not from a test:
+    // every case above uses an exact current-year path, so all of them matched
+    // in `allOptions` and none could see it. `describeProgramPath` returned the
+    // CANONICAL path while SearchCombo compares against the value it was handed,
+    // so the identity check failed and every program box rendered EMPTY over a
+    // perfectly loaded plan — for exactly the students most likely to have an
+    // old one.
+    const OLD = (f) => `../../data/northeastern/programs/undergraduate/2025/${f}/requirements.json`;
+    const { ctx, read, boxOf, errors } = await openPanel(
+      OLD("computer-information-science/computer_science_bscs_(boston)"), 2024,
+      OLD("science/mathematics_minor"), OLD("science/mathematics_bs_(boston)"));
+    const s = await read();
+    assert.equal(s.box, NAME, "the major box is blank for a plan on a retired edition");
+    assert.equal(await boxOf("minor1").inputValue(), "Mathematics, Minor");
+    assert.equal(await boxOf("major2").inputValue(), "Mathematics, BS (Boston)");
+    await ctx.close();
+    assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
+  });
+
   test("each program's control moves only that program", async () => {
     // Wiring, and the slip a shared component invites: right row, wrong setter.
     // It still renders and still changes an edition — the wrong one. Cannot be
     // unit-tested without rendering GradPanel, so it earns its place here.
-    const { ctx, page, saved, selOf, errors } = await openPanel(CS(2027), 2026, "", MATH_2026);
-    await selOf("major2").selectOption("2027");
+    const { ctx, page, saved, chooseYear, errors } = await openPanel(CS(2027), 2026, "", MATH_2026);
+    await chooseYear("major2", 2027);
     await page.waitForFunction(() =>
       /\/2027\//.test(JSON.parse(localStorage.getItem("ncp-plan-data-default")).major2), null,
       { timeout: 30_000 });
