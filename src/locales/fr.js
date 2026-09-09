@@ -233,7 +233,7 @@ export const strings = {
   "chart.source.label": "Plan par",
   "chart.source.catalog": "Catalogue",
   "chart.source.chart": "Généré",
-  "chart.source.catalog.none": "Cette année de catalogue ne publie pas de plan.",
+  "chart.source.catalog.none": "NU Map n'a pas le plan de cette année dans ses archives.",
   "chart.source.catalog.tip": "Le plan d’études publié au catalogue pour ce programme.",
   "chart.source.chart.tip": "Optimise pour le co-op ; vérifie la disponibilité et les chaînes de prérequis.",
   "chart.source.chart.none": "Les données de cursus sont insuffisantes pour générer un plan.",

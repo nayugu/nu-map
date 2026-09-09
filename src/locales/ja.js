@@ -234,7 +234,7 @@ export const strings = {
   "chart.source.label": "プランの作成元",
   "chart.source.catalog": "カタログ",
   "chart.source.chart": "自動生成",
-  "chart.source.catalog.none": "このカタログ年度ではプランが公開されていません。",
+  "chart.source.catalog.none": "NU Map はこの年度のプランを収録していません。",
   "chart.source.catalog.tip": "このプログラムについてカタログに掲載されている標準履修プランです。",
   "chart.source.chart.tip": "コープに向けて最適化し、開講状況と前提科目の連鎖を確認します。",
   "chart.source.chart.none": "要件データが不足しているためプランを生成できません。",

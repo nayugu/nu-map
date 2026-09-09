@@ -245,11 +245,17 @@ export function atCohortYear(options, cohortYear) {
  * land on something rather than empty the panel. Over plans it silently
  * changed edition. Measured on the live tree: 322 of 509 multi-edition
  * undergraduate programs publish a plan in one edition and not the other, and
- * the split is not a scatter — it is all 322 in 2026 and ZERO in 2027, because
- * NEU deleted Sample Plans of Study catalog-wide for 2026-2027 (no
- * `planofstudy` pane, no `sc_plangrid`, not even the phrase, on 768 cached
- * pages or the live site). So every student on the current edition who opened
- * that section was being shown last year's plan.
+ * the split is not a scatter — it is all 322 in 2026 and ZERO in 2027.
+ *
+ * The mechanism is not deletion, and the distinction is this file's own:
+ * Northeastern moved Sample Plans of Study OUT of the catalog and onto the
+ * colleges' own websites, one site per college. The plans still exist; they are
+ * no longer anywhere we scrape (no `planofstudy` pane, no `sc_plangrid`, not
+ * even the phrase, on 768 cached pages or the live site). Absent from our data
+ * is not the same fact as absent from the world, which is why the string the
+ * student reads says NU Map does not have it rather than that none was
+ * published. So every student on the current edition who opened that section
+ * was being shown last year's plan.
  *
  * The rule instead, and the reason it takes BOTH maps: resolve against the
  * requirements map — the same resolution `loadMajor` performs, so a saved path

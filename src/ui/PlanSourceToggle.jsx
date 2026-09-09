@@ -73,7 +73,7 @@ import HoverTip from "./InfoTip.jsx";
  * @param {boolean} busy         a generation is in flight
  */
 export default function PlanSourceToggle({
-  value, onChange, hasCatalog, canGenerate, busy, isPhone,
+  value, onChange, hasCatalog, canGenerate, chartWhy = null, busy, isPhone,
 }) {
   const { t } = useLanguage();
   const fz = isPhone ? 6 : 10;
@@ -113,8 +113,12 @@ export default function PlanSourceToggle({
     { id: "catalog", label: t("chart.source.catalog"),
       enabled: hasCatalog, why: t("chart.source.catalog.none"),
       tip: t("chart.source.catalog.tip"), tipTitle: undefined },
+    // `chartWhy` is the reason a generation that RAN came back with nothing, and
+    // it outranks the generic "not enough requirement data" — that sentence is
+    // about a program never worth trying, which is a different fact and, when a
+    // real refusal exists, a wrong one.
     { id: "chart", label: t("chart.source.chart"),
-      enabled: canGenerate, why: t("chart.source.chart.none"),
+      enabled: canGenerate, why: chartWhy || t("chart.source.chart.none"),
       tip: t("chart.source.chart.tip"), tipTitle: undefined },
   ];
 

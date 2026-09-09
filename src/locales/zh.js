@@ -233,7 +233,7 @@ export const strings = {
   "chart.source.label": "计划来源",
   "chart.source.catalog": "课程目录",
   "chart.source.chart": "自动生成",
-  "chart.source.catalog.none": "该学年版本未发布修读计划。",
+  "chart.source.catalog.none": "NU Map 未收录该学年的修读计划。",
   "chart.source.catalog.tip": "课程目录中为该专业公布的参考修读计划。",
   "chart.source.chart.tip": "为 co-op 做优化；核对开课情况与先修链。",
   "chart.source.chart.none": "课程要求数据不足，无法生成计划。",

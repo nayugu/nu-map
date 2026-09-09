@@ -251,10 +251,26 @@ function score(doc, studentType) {
   return { short, empty, unguided3, ge3, geMax, terms };
 }
 
+/**
+ * Which catalog edition to ask about. Defaults to the newest held.
+ *
+ * It was the literal `2026`, as it was in `verify-chart` and
+ * `derive-early-donors` — the whole CHART toolchain was pinned to the edition
+ * that happened to be the only one when it was written, so no instrument here
+ * had ever looked at 2027. `--edition 2026` reproduces the old behaviour.
+ */
+const EDITION = (() => {
+  const i = argv.indexOf("--edition");
+  if (i >= 0 && /^\d{4}$/.test(argv[i + 1] ?? "")) return Number(argv[i + 1]);
+  const b = join(ROOT, "data/northeastern/programs/undergraduate");
+  const ys = existsSync(b) ? readdirSync(b).filter(d => /^\d{4}$/.test(d)).map(Number) : [];
+  return ys.length ? Math.max(...ys) : 2026;
+})();
+
 const out = {};
 let refused = 0;
 for (const lvl of ["undergraduate", "graduate"]) {
-  const base = join(ROOT, "data/northeastern/programs", lvl, "2026");
+  const base = join(ROOT, "data/northeastern/programs", lvl, String(EDITION));
   if (!existsSync(base)) continue;
   for (const col of readdirSync(base)) for (const key of readdirSync(join(base, col))) {
     const rf = join(base, col, key, "requirements.json");

@@ -233,7 +233,7 @@ export const strings = {
   "chart.source.label": "Plan de",
   "chart.source.catalog": "Catálogo",
   "chart.source.chart": "Generado",
-  "chart.source.catalog.none": "Este año de catálogo no publica un plan.",
+  "chart.source.catalog.none": "NU Map no tiene archivado el plan de este año.",
   "chart.source.catalog.tip": "El plan de estudios publicado en el catálogo para este programa.",
   "chart.source.chart.tip": "Optimiza para el co-op; comprueba la disponibilidad y las cadenas de requisitos previos.",
   "chart.source.chart.none": "No hay datos suficientes sobre los requisitos para generar un plan.",

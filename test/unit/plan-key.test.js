@@ -34,10 +34,11 @@ test("the plan comes from the edition asked for", () => {
 });
 
 test("an edition that publishes no plan gets NULL, not the neighbouring year's", () => {
-  // The defect, stated exactly. NEU deleted Sample Plans of Study catalog-wide
-  // for 2026-2027, so this is not a corner case: it is every undergraduate on
-  // the current edition, and the wrong answer here is a plan that looks
-  // authoritative and describes last year's degree.
+  // The defect, stated exactly. Northeastern moved Sample Plans of Study onto
+  // the colleges' own websites for 2026-2027, so we hold none for that edition
+  // — which makes this not a corner case but every undergraduate on the current
+  // catalog, and the wrong answer here is a plan that looks authoritative and
+  // describes last year's degree.
   assert.equal(planKeyFor(plans, programs, req(2027, ...CS)), null);
 });
 

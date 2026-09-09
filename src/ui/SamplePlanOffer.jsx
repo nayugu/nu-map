@@ -79,6 +79,7 @@ import {
   sampleplanOffer, variantsFor, describeTemplate, isPlanEmpty, isGeneratedPlanLabel,
   shortVariantLabel,
 } from "../core/planTemplate.js";
+import { planSourceState }    from "../core/planSource.js";
 
 /**
  * Namespaced like the other grad-panel collapse flags, and kept separate per
@@ -167,7 +168,16 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
   // `Cannot access 'canGenerate' before initialization` on every render with a program
   // selected — which the build cannot see and no test caught, because the page loads
   // perfectly until something IS selected.
-  const canGenerate = !!path && !!planGenerator?.canGenerate?.(path, isGrad, programData);
+  // ── Memoized, because it is no longer two field reads ────────────
+  //
+  // `canGenerate` used to test `requirementSections.length` and
+  // `totalCreditsRequired`, which is free at any frequency. It now asks the
+  // engine's own program-level gate, which has to `deriveCells` first — and this
+  // component re-renders on every placement, every hover, every panel scroll.
+  // Left inline it derived a whole program's cells on each one.
+  const canGenerate = useMemo(
+    () => !!path && !!planGenerator?.canGenerate?.(path, isGrad, programData, courseMap),
+    [path, isGrad, programData, courseMap]);
 
   useEffect(() => {
     setPlans(null); setVariantIdx(0); setJustDid(null); setOpened(null);
@@ -178,22 +188,12 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
     // program in front of you, not a standing preference, and silently generating
     // for the next program would spend work nobody asked for.
     //
-    // ── ...but never onto a source that is not there ──────────────────
-    //
-    // This was an unconditional `setSource("catalog")`, and the state it produced
-    // is the worst kind: the Catalog tab selected *and disabled*, the CHART tab
-    // enabled but unselected, and the body showing "loading…" for ever, because
-    // `chosen` is null and the fallback branch assumes null means not-yet-arrived.
-    // Nothing anywhere flipped the source back, so the panel simply never resolved.
-    //
-    // It was reachable before this line existed — 417 programs publish no plan at
-    // all — and the edition fix beside it widens that to every undergraduate on
-    // 2026-2027, because NEU deleted Sample Plans of Study catalog-wide and the
-    // loader no longer borrows last year's. So the default has to be a source that
-    // exists rather than a preferred one: catalog when there IS a catalog plan for
-    // this edition, otherwise the generator. When neither exists `sampleplanOffer`
-    // hides the section, so there is no third case.
-    setSource(hasSamplePlan ? "catalog" : "chart");
+    // This is the student's PREFERENCE, not the resolved source. Resolving it
+    // against what actually exists is `planSourceState`'s job, so this line can
+    // stay the simple thing it reads as — the version that tried to pick an
+    // available source here is what put a disabled tab in `source` and left the
+    // panel showing "loading…" for ever.
+    setSource("catalog");
     if (!hasSamplePlan) return;
     let live = true;
     majorRequirements.loadSamplePlans(path, isGrad)
@@ -206,13 +206,48 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
     () => isPlanEmpty({ placements, reservations, specialTermPl, placedOut }),
     [placements, reservations, specialTermPl, placedOut]);
 
-  // `hasSamplePlan` gates the section, and CHART widens that gate: a program that
-  // publishes nothing (632 of 1,017) previously had no section at all, and is exactly
-  // the case where a generated plan is worth the most.
-  const offer = useMemo(() => sampleplanOffer({
-    major: path, major2, hasSamplePlan: hasSamplePlan || canGenerate,
-    appliedTemplate, canvasEmpty,
-  }), [path, major2, hasSamplePlan, canGenerate, appliedTemplate, canvasEmpty]);
+  // ── One decision, in one place ────────────────────────────────────
+  //
+  // `canGenerate` is a PRE-check — it asks whether the program is worth offering
+  // to plan, not whether a plan comes out — so a refusal can still arrive after
+  // the offer. When it does, CHART is unavailable in exactly the sense the
+  // catalog is unavailable for an edition we hold no plan for, and it is drawn
+  // the same way: the tab greys, carrying the reason as its tooltip.
+  //
+  //
+  // What used to be seven interacting flags and two effects that both assigned
+  // `source` is now `planSourceState` (core/planSource.js), which is pure and
+  // has `test/unit/plan-source.test.js` on it. Every bug this area produced was
+  // a disagreement between two of those flags — a disabled tab selected, a
+  // "loading" that nothing would resolve, and a full CHART search run for a
+  // section nobody could see — and none of them was reachable from a Node test
+  // while the logic lived in a component body.
+  //
+  // `sectionHidden` carries the reasons that are NOT about sources: a double
+  // major, or no program at all. `sampleplanOffer` still owns the verbs.
+  const gate = useMemo(() => sampleplanOffer({
+    major: path, major2, hasSamplePlan: true, appliedTemplate, canvasEmpty,
+  }), [path, major2, appliedTemplate, canvasEmpty]);
+
+  const refusalText = gen?.refused
+    ? (gen.refused.reason === "concentration-unfillable" && !concentration
+        ? t("chart.refused.conc")
+        : refusalMessage(gen.refused, t))
+    : null;
+
+  const src = useMemo(() => planSourceState({
+    hasCatalogPlan: hasSamplePlan,
+    chartEligible: canGenerate,
+    refusal: gen?.refused ?? null,
+    refusalText,
+    chosen: source,
+    sectionHidden: !gate.show,
+  }), [hasSamplePlan, canGenerate, gen, refusalText, source, gate.show]);
+
+  // The verbs come from the same rule as before; only the availability half
+  // moved. `show` is now the source decision's, so a section with nothing behind
+  // it does not render.
+  const offer = useMemo(() => ({ ...gate, show: src.show }), [gate, src.show]);
 
   const years = Math.round(((planGradYear * 2 + (planGradSem === "fall" ? 1 : 0)) -
                             (planEntYear  * 2 + (planEntSem  === "fall" ? 1 : 0)) + 1) / 2);
@@ -245,12 +280,47 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
   const startedRef = useRef(null);
 
   useEffect(() => {
-    if (source !== "chart" || !canGenerate) return;
+    // ── Never generate for a section that is not on screen ──────────
+    //
+    // Hooks do not care that the render below returns null, so this effect ran
+    // for a HIDDEN section — and `sampleplanOffer` hides it for a double major.
+    // Measured: a plan with two majors and a minor on the 2027 edition froze the
+    // main thread for 85.7 seconds, doing a full CHART search for a panel nobody
+    // could see. It only became reachable when the source began defaulting to
+    // "chart" (no catalog plan exists for that edition), which is what turned a
+    // dormant branch into every double-major's page load.
+    if (!src.mayGenerate) return;
     if (startedRef.current === genKey) return;
     startedRef.current = genKey;
 
     let live = true;
     setGenBusy(true);
+
+    // ── Let the page paint before spending the CPU ───────────────────
+    //
+    // The search is synchronous once it starts, and it is the ONLY expensive
+    // thing here. Measured on a 40-course plan changing its catalog year, with
+    // an A/B hatch in one build: audit alone settles in 109 ms and never blocks
+    // the main thread; with generation in the same commit it is 547 ms with a
+    // 465 ms freeze. Computer Science is one of the FAST programs — the search
+    // has a 5,000 ms budget and the phases around it are unbounded.
+    //
+    // The work is the same either way; what changes is that the year the student
+    // just chose, and the audit under it, are on screen BEFORE it starts. So the
+    // control responds immediately and CHART reports itself busy, instead of the
+    // whole panel appearing to hang on a click that already succeeded.
+    //
+    // `requestIdleCallback` with a timeout, because idle may never come on a
+    // busy page and a plan nobody generates is worse than one generated late.
+    // Cancelled on cleanup, so switching program twice quickly does not start
+    // two searches.
+    const idle = globalThis.requestIdleCallback
+      ? globalThis.requestIdleCallback(() => { if (live) start(); }, { timeout: 300 })
+      : setTimeout(() => { if (live) start(); }, 0);
+    const cancelIdle = () => (globalThis.cancelIdleCallback && globalThis.requestIdleCallback
+      ? globalThis.cancelIdleCallback(idle) : clearTimeout(idle));
+
+    function start() {
     planGenerator.generate({
       programKey: path, isGrad, programData, courseMap, studentType,
       // Without this the concentration cells can only draw on the UNION of every option, and
@@ -288,15 +358,18 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
         if (live) setGen({ refused: { reason: "error", detail: t("chart.refused") } });
       })
       .finally(() => { if (live) setGenBusy(false); });
+    }
 
-    return () => { live = false; };
+    return () => { live = false; cancelIdle(); };
     // `catalogVariants` is deliberately absent: it settles asynchronously, and a
     // change to it after generation has started would tear down the in-flight
     // request and strand the panel exactly as the dependency bug did.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [source, genKey, canGenerate]);
+  }, [src.mayGenerate, genKey]);
 
-  const usingChart = source === "chart";
+  // The RESOLVED source, never the raw preference. `source` may still say
+  // "chart" after a refusal; `src.source` is guaranteed to name an available one.
+  const usingChart = src.source === "chart";
 
   // A fetch is genuinely in flight only when this edition HAS a plan and it has
   // not arrived. `plans` is reset to null on every program change, so null alone
@@ -528,8 +601,15 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
               itself to its labels and carries its own bottom margin, and the
               `display: flex` div that used to hold it was doing neither job. */}
           <PlanSourceToggle
-            value={source} onChange={setSource}
-            hasCatalog={hasSamplePlan} canGenerate={canGenerate}
+            // The RESOLVED source, so the checked tab is always an enabled one.
+            // Passing the raw preference is what let a disabled tab read as
+            // selected. `onChange` still records the preference.
+            value={src.source} onChange={setSource}
+            hasCatalog={src.catalog.enabled} canGenerate={src.chart.enabled}
+            // Why the CHART tab is grey, when a generation actually ran and
+            // refused. `planSourceState` puts the sentence there; a program that
+            // was never eligible yields the sentinel and the generic string.
+            chartWhy={src.chart.why === "not-eligible" ? null : src.chart.why}
             busy={genBusy} isPhone={isPhone}
           />
 
@@ -571,32 +651,24 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
 
               The engine's own `detail` is suppressed here on purpose — "no legal
               placement exists" is true and is not something a student can act on. */}
-          {usingChart && gen?.refused && (
-            <div style={{
-              fontSize: fz, color: "var(--text-3)", marginBottom: 6,
-              padding: isPhone ? "5px 7px" : "7px 9px", borderRadius: 5,
-              background: "var(--bg-surface-1)", border: "1px solid var(--border-2)",
-            }}>
-              {gen.refused.reason === "concentration-unfillable" && !concentration
-                ? t("chart.refused.conc")
-                : refusalMessage(gen.refused, t)}
-              {/* The refusal says WHAT could not be done; this opens what was tried. Inside the
-                  same box rather than beside it, because it is a continuation of that sentence
-                  and not a separate offer. */}
-              {gen.derivation && (
-                <div style={{ marginTop: 5 }}>
-                  <button
-                    onClick={() => setShowWhy(true)}
-                    style={{
-                      fontSize: PHONE_FZ(isPhone), background: "transparent", border: "none",
-                      color: "var(--text-3)", cursor: "pointer", padding: 0,
-                      textDecoration: "underline", textUnderlineOffset: 2,
-                    }}
-                  >{t("chart.deriv.why")}</button>
-                </div>
-              )}
-            </div>
-          )}
+          {/* ── A refusal is not a message, it is an unavailable source ──
+            *
+            * This was a box explaining what CHART could not do, with a link opening
+            * what it tried. Both are gone, and the reasoning is the panel's own: the
+            * two tabs already say which sources exist, so a refusal belongs on the
+            * TAB — greyed, with the reason as its tooltip — exactly like a program
+            * that publishes no catalog plan. A student choosing where a plan comes
+            * from does not need a post-mortem of a search they did not ask to run.
+            *
+            * It also stopped being survivable. While the catalog plan was a fallback,
+            * a refusal cost one of two options and the box explained the loss. With
+            * Sample Plans of Study moved to the colleges' own websites, a refusal on
+            * the current edition leaves NOTHING — so the honest render is no section
+            * at all, which `planSourceState` decides (`show`).
+            *
+            * `refusalMessage` and `ChartExplainer` are untouched: the reason still
+            * travels, and `chart-status` still reports `refused` for the tests.
+            */}
 
           {/* ── The two-number summary is gone ──────────────────────
             *

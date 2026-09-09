@@ -233,7 +233,7 @@ export const strings = {
   "chart.source.label": "योजना — किसकी",
   "chart.source.catalog": "कैटलॉग",
   "chart.source.chart": "स्वतः बनाई",
-  "chart.source.catalog.none": "इस कैटलॉग वर्ष के लिए कोई योजना प्रकाशित नहीं है।",
+  "chart.source.catalog.none": "NU Map के पास इस वर्ष की योजना उपलब्ध नहीं है।",
   "chart.source.catalog.tip": "इस कार्यक्रम के लिए कैटलॉग पर प्रकाशित नमूना अध्ययन योजना।",
   "chart.source.chart.tip": "को-ऑप के लिए अनुकूलित; उपलब्धता और पूर्वापेक्षा-शृंखलाओं की जाँच करती है।",
   "chart.source.chart.none": "योजना बनाने के लिए पर्याप्त आवश्यकता‑डेटा नहीं है।",

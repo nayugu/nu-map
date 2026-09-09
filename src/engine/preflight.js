@@ -74,9 +74,37 @@ export const MAX_DERIVED_GE_SHARE = 0.5;
  * @param {object[]} [args.impossible]  cells with an empty domain, from buildDomains
  * @returns {Refusal|null} null to proceed
  */
-export function preflight({
-  programData, cells, shape, ports, studentType = "undergraduate", impossible = [],
-}) {
+/**
+ * The refusals that are a fact about the PROGRAM, not about this student.
+ *
+ * ── Why this is split out ──────────────────────────────────────────
+ *
+ * The four below need only the program and its cells. Everything after them
+ * needs the student's own `shape` — how many terms they have, their credit cap,
+ * whether a cell has a legal term — so the same program is planable for one
+ * student and not another, and refusing in the panel is the honest answer there.
+ *
+ * These four are not like that. They do not depend on anything the student
+ * chose, so a program that trips one trips it for everyone, every time, and the
+ * panel that offered to generate a plan was never going to produce one. That is
+ * what `SamplePlanOffer` used to do: `canGenerate` tested two fields
+ * (`requirementSections` and `totalCreditsRequired`), which is the first two
+ * checks here and misses the other two. International Business, BSIB (Boston)
+ * on the 2026-2027 edition passed that gate, published no catalog plan for the
+ * edition, and then refused with `mostly-unlabelled` — a section whose every
+ * source was a dead end, rendered anyway.
+ *
+ * It used to be survivable because the catalog plan was the fallback. It stopped
+ * being survivable when Northeastern moved Sample Plans of Study onto the
+ * colleges' own websites and we hold none for the current edition.
+ *
+ * The split is the rule: **a program-level impossibility hides the offer, a
+ * student-level one explains itself.** Nothing vanishes after appearing, which
+ * is what the comment on `canGenerate` was right to protect.
+ *
+ * @returns {Refusal|null} null when nothing here refuses
+ */
+export function programRefusal({ programData, cells }) {
   const sections = programData?.requirementSections ?? [];
 
   if (!sections.length) {
@@ -115,6 +143,19 @@ export function preflight({
       };
     }
   }
+
+  return null;
+}
+
+export function preflight({
+  programData, cells, shape, ports, studentType = "undergraduate", impossible = [],
+}) {
+  // The program-level gates first, unchanged in order or content — they are the
+  // same four, just callable on their own so the UI can ask before it offers.
+  const programGate = programRefusal({ programData, cells });
+  if (programGate) return programGate;
+
+  const total = programData?.totalCreditsRequired;
 
   // ── Sections that total more than the degree ─────────────────────
   //

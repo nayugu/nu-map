@@ -17,6 +17,8 @@
 
 import { IPlanGenerator } from "../../ports/IPlanGenerator.js";
 import { generatePlan, DEFAULT_PREFERENCES, createTrace } from "../../engine/index.js";
+import { deriveCells } from "../../engine/demand.js";
+import { programRefusal } from "../../engine/preflight.js";
 import { buildDepthIndex } from "../../engine/prereqDepth.js";
 import { programIdentity } from "../../core/programIdentity.js";
 import { parseMajorPathParts } from "../../data/programPaths.js";
@@ -57,10 +59,11 @@ function depthIndexFor(courseMap) {
  * `reclaimFromFiller`), so a stale observation delays a course rather than
  * requiring a wrong one.
  *
- * Worth knowing, because it cannot be refreshed: the artifact is derived from
- * published Sample Plans of Study, and NEU deleted those catalog-wide for
- * 2026-2027. These 2026 observations are the last that will ever be made unless
- * the departments' own plans become machine-readable.
+ * Worth knowing, because it cannot be refreshed from the catalog: the artifact
+ * is derived from published Sample Plans of Study, and for 2026-2027
+ * Northeastern moved those onto the colleges' own websites — one site per
+ * college, outside anything we scrape. These 2026 observations are the last
+ * that will be made unless those per-college sites are read.
  *
  * Fetched once and cached, and a failure degrades to an empty list rather than
  * blocking generation: without it CHART still orders everything the catalog states,
@@ -132,10 +135,37 @@ export default {
    * planned is `generate`'s answer, and a control that vanishes after appearing is
    * worse than one that sometimes explains a refusal.
    */
-  canGenerate(programKey, isGrad, programData) {
+  canGenerate(programKey, isGrad, programData, courseMap = null) {
     if (!programKey || !programData) return false;
-    return (programData.requirementSections?.length ?? 0) > 0
-        && (programData.totalCreditsRequired ?? 0) > 0;
+    // Without a catalog we cannot derive cells, so fall back to the two-field
+    // check. That is the old behaviour and it is the safe direction here: it
+    // over-offers, and `generate` still refuses with a reason.
+    if (!courseMap) {
+      return (programData.requirementSections?.length ?? 0) > 0
+          && (programData.totalCreditsRequired ?? 0) > 0;
+    }
+    // ── Ask the engine's own gate, not a two-field approximation ────
+    //
+    // The two fields ARE the first two of `programRefusal`'s four checks, so this
+    // was always the same question asked worse. What it missed is `no-cells` and
+    // `mostly-unlabelled`, and the second is the largest single refusal in the
+    // corpus (105 of 257). International Business, BSIB (Boston) on 2026-2027
+    // passed the old check, published no catalog plan for that edition, and then
+    // refused — a section offering two sources and possessing neither.
+    //
+    // Only the PROGRAM-level gates run here. The student-level ones need a shape
+    // (their terms, their credit cap) and are legitimately different per student,
+    // so they stay where they can explain themselves.
+    try {
+      const { cells } = deriveCells(programData, { courseMap });
+      return !programRefusal({ programData, cells });
+    } catch {
+      // A gate that throws must not take the panel with it, and refusing to
+      // offer on a crash would silently delete the feature. Degrade to the
+      // cheap check; `generate` remains the real answer.
+      return (programData.requirementSections?.length ?? 0) > 0
+          && (programData.totalCreditsRequired ?? 0) > 0;
+    }
   },
 
   async generate({
@@ -183,6 +213,22 @@ export default {
       // Where departments put each course — a floor on how early a requirement may be
       // reclaimed, never a target. See `reclaimFromFiller`.
       positions: order.positions,
+      // ── A wall clock, because this one runs in front of a person ─────
+      //
+      // The engine's `timeBudgetMs` bounds one search attempt, and `generatePlan`
+      // makes up to seventeen of them. Unbounded that is 87 seconds of frozen
+      // main thread, measured on Computer Science BSCS for the 2026-2027 edition
+      // — an edition with no published plans, so every program on it takes the
+      // long road through the ladder.
+      //
+      // 6 seconds because the engine's own budget for one attempt is 5: anything
+      // lower would cut the FIRST attempt short and start refusing programs that
+      // plan perfectly well today, which is a correctness change dressed as a
+      // performance fix. This only ever truncates the ladder.
+      //
+      // Node callers (verify-chart, chart-probe, the MCP server) pass nothing and
+      // stay unbounded, so no committed corpus measurement moves.
+      totalBudgetMs: 6000,
       studentType: type,
       // Resolved by title inside the engine, through `concentrationResolve` — the title is a
       // concentration's only identity across saved plans, share links and MCP, and a stale one

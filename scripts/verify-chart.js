@@ -73,10 +73,29 @@ const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
  */
 const MIN_GENERATED_RATIO = 0.40;
 
+/**
+ * Which catalog edition the corpus gate runs over.
+ *
+ * It was the literal `2026`, written when that was the only edition held. It is
+ * not any more, and the consequence is worth stating plainly: the 2027 tree —
+ * the edition every student entering this year is on — has never been through
+ * this gate at all. `--edition 2026` reproduces the old run exactly.
+ *
+ * Defaults to the NEWEST edition held, because the question this script answers
+ * is "can CHART plan what we ship", and a frozen edition's answer stops moving.
+ */
+const EDITION = (() => {
+  const i = process.argv.indexOf("--edition");
+  if (i >= 0 && /^\d{4}$/.test(process.argv[i + 1] ?? "")) return Number(process.argv[i + 1]);
+  const base = join(ROOT, "data/northeastern/programs/undergraduate");
+  const years = existsSync(base) ? readdirSync(base).filter(d => /^\d{4}$/.test(d)).map(Number) : [];
+  return years.length ? Math.max(...years) : 2026;
+})();
+
 function degreePrograms() {
   const out = [];
   for (const lvl of ["undergraduate", "graduate"]) {
-    const base = join(ROOT, "data/northeastern/programs", lvl, "2026");
+    const base = join(ROOT, "data/northeastern/programs", lvl, String(EDITION));
     if (!existsSync(base)) continue;
     for (const col of readdirSync(base)) {
       const cd = join(base, col);

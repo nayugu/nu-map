@@ -114,6 +114,30 @@ export { createTrace, NULL_TRACE, CAUSES, EXCLUSION, NODE } from "./trace.js";
  * @returns {{plan: object, report: object} | {refused: {reason, detail, data?}}}
  */
 export function generatePlan(args = {}) {
+  // ── One wall clock for the whole request ──────────────────────────
+  //
+  // `timeBudgetMs` (5,000) bounds ONE search. It never bounded an answer,
+  // because this function retries: `withPackerRetry` is up to two attempts, and
+  // below it eight `EARLY_RUNGS` each recurse into `generatePlan` and get their
+  // own two. Seventeen full generations, each starting a fresh five seconds.
+  //
+  // Measured, not reasoned: Computer Science BSCS on the 2026-2027 edition takes
+  // **87 seconds** in plain Node and then refuses, because every attempt fails
+  // and each one spends its own budget. The same program on 2026 succeeds on the
+  // first attempt in 1 second. Nothing about the search is wrong — the ladder is
+  // doing what it was designed to do — but the cost of the ladder was never
+  // counted, and in a browser it is 87 seconds of frozen main thread.
+  //
+  // So the budget becomes an absolute DEADLINE, threaded through every retry and
+  // intersected with each attempt's own slice. `Infinity` by default, so the
+  // corpus tools behave exactly as before and no committed measurement moves;
+  // the browser passes a real one, because a plan that takes a minute to compute
+  // is not a plan anyone is waiting for.
+  const deadlineAt = args.deadlineAt
+    ?? (Number.isFinite(args.totalBudgetMs) ? Date.now() + args.totalBudgetMs : Infinity);
+  args = { ...args, deadlineAt };
+  const outOfTime = () => Date.now() > deadlineAt;
+
   const first = withPackerRetry(args);
   // ── Following the department may never COST a plan ────────────────
   //
@@ -155,6 +179,10 @@ export function generatePlan(args = {}) {
   if (first.refused && args.followDepartment !== false && !args._onEarlyRung
       && !PREFLIGHT_REASONS.has(first.refused.reason)) {
     for (const rung of EARLY_RUNGS) {
+      // Stop climbing when the request's clock is gone. Each rung is a FULL
+      // generation, so checking here is what turns eight of them from eight
+      // fresh budgets into whatever is left of one.
+      if (outOfTime()) break;
       if (args.trace) args.trace.stage("retry", { because: rung.name });
       const next = generatePlan({ ...args, ...rung.args, _onEarlyRung: true });
       if (next.refused) continue;
@@ -191,6 +219,7 @@ export function generatePlan(args = {}) {
   // A retry is part of the process, so it is marked rather than hidden. Without this the
   // recorded node run would simply continue and the spine would show one search where there
   // were two, under different demand.
+  if (outOfTime()) return first;
   if (args.trace) args.trace.stage("retry", { because: "breadth-guidance" });
   const again = withPackerRetry({ ...args, breadthGuidance: false });
   // The FIRST refusal is the one reported if both fail: it describes the degree, while the
@@ -233,6 +262,9 @@ export function generatePlan(args = {}) {
 function withPackerRetry(args) {
   const first = generateOnce(args);
   if (!first.refused || first.refused.reason !== "fails-hard-criteria") return first;
+  // The packer pass is a second full generation, so it is on the request's clock
+  // like every other retry.
+  if (Date.now() > (args.deadlineAt ?? Infinity)) return first;
   if (args.trace) args.trace.stage("retry", { because: "fails-hard-criteria" });
   const packed = generateOnce({ ...args, packOnly: true });
   if (!packed.refused) return packed;
@@ -383,7 +415,12 @@ function generateOnce({
   program, publishedPlan = null, courseMap = {}, ports: rawPorts = {},
   studentType = "undergraduate", preferences = DEFAULT_PREFERENCES,
   depthIndex = null, repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
-  timeBudgetMs = DEFAULT_TIME_BUDGET_MS, observedOrder = [], coopPrep = [],
+  timeBudgetMs = DEFAULT_TIME_BUDGET_MS,
+  // The wall clock for the WHOLE request, as an absolute timestamp. See
+  // `generatePlan`: `timeBudgetMs` bounds one attempt and there can be
+  // seventeen of them, so this is the only thing that bounds the answer.
+  deadlineAt = Infinity,
+  observedOrder = [], coopPrep = [],
   // Where the departments put each course, from `public/northeastern/plan-order.json`. Injected
   // like `observedOrder` and for the same reason: derived data carrying a support count, which a
   // caller is entitled to plan without. It is a FLOOR on how early a requirement may be
@@ -1130,7 +1167,11 @@ function generateOnce({
     }
   }
   const placed = placeCells({
-    plans, terms, ports, studentType, courseMap, repeatable, nodeBudget, timeBudgetMs,
+    plans, terms, ports, studentType, courseMap, repeatable, nodeBudget,
+    // Whichever runs out first: this attempt's slice, or the whole request's
+    // wall clock. Passing `timeBudgetMs` alone is what let seventeen attempts
+    // each start a fresh five seconds.
+    timeBudgetMs: Math.max(0, Math.min(timeBudgetMs, deadlineAt - Date.now())),
     precedence, shape, cal,
     // Foundationality against the whole catalog, off the shared depth index. It is what
     // decides whether a requirement outside the major is a prerequisite the rest of the

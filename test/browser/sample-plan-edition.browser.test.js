@@ -8,8 +8,9 @@
 // only for the two things a render can show and Node cannot.
 //
 // The second one is the reason the file exists. Fixing the loader turned
-// `hasSamplePlan` false for every undergraduate on 2026-2027 (NEU deleted
-// Sample Plans of Study catalog-wide that edition), and `SamplePlanOffer` reset
+// `hasSamplePlan` false for every undergraduate on 2026-2027 (Northeastern
+// moved Sample Plans of Study onto the colleges' own websites that edition, so
+// we hold none for it), and `SamplePlanOffer` reset
 // its source to "catalog" unconditionally on every program change. So the panel
 // selected a tab that was DISABLED, the body fell through to a "loading…"
 // branch that nothing would ever resolve, and no Node suite could see any of

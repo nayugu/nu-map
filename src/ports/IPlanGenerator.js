@@ -73,11 +73,22 @@ export const IPlanGenerator = "planGenerator";
 /**
  * @typedef {Object} IPlanGenerator
  *
- * @property {(programKey: string, isGrad: boolean) => boolean} canGenerate
- *   Cheap, synchronous, and allowed to be optimistic. It gates whether the CONTROL
- *   appears at all; `generate` decides whether a plan exists. Answering this
- *   accurately would mean doing the work, and a control that flickers away after
- *   appearing is worse than one that sometimes reports a refusal.
+ * @property {(programKey: string, isGrad: boolean, programData?: object, courseMap?: object) => boolean} canGenerate
+ *   Cheap and synchronous. It gates whether the CONTROL appears at all; `generate`
+ *   decides whether a plan exists.
+ *
+ *   It used to be allowed to be OPTIMISTIC, on the reasoning that answering
+ *   accurately means doing the work and a control that flickers away is worse than
+ *   one that sometimes reports a refusal. That held while the catalog plan was a
+ *   fallback: a refusal then cost one of two options, and the panel explained it.
+ *   It stopped holding when Northeastern moved Sample Plans of Study to the
+ *   colleges' own websites — with no catalog plan for the current edition, an
+ *   optimistic gate renders a section whose every source is a dead end.
+ *
+ *   So it is now as accurate as it can be WITHOUT doing the work: given a
+ *   `courseMap` an implementation should run the program-level refusals (which
+ *   need no student), and leave the student-level ones to `generate`, which can
+ *   explain them. Without a courseMap it may still be optimistic.
  *
  * @property {(args: {
  *   programKey: string, isGrad: boolean, programData: object,
