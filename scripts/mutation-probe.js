@@ -65,6 +65,7 @@ const BANK     = "src/ui/BankPanel.jsx";
 const BANKRANK = "src/core/bankRank.js";
 const PATHS    = "src/data/programPaths.js";
 const GRADPANEL = "src/ui/GradPanel.jsx";
+const CHOICE    = "src/core/editionChoice.js";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
@@ -83,6 +84,7 @@ const PREREQ_TEST   = "cd test/unit      && node --test prereq-parse.test.js";
 const RETIRED_UI    = "cd test/browser   && node --test retired-course.browser.test.js";
 const BANKRANK_TEST = "cd test/unit      && node --test bank-rank.test.js";
 const COHORT_TEST   = "cd test/unit      && node --test cohort-version.test.js";
+const CHOICE_TEST   = "cd test/unit      && node --test edition-choice.test.js";
 // Also a BROWSER command, for the same reason as RETIRED_UI: the blank program
 // box was a render-time defect that every Node test passed straight through.
 const EDITION_UI    = "cd test/browser   && node --test catalog-edition.browser.test.js";
@@ -98,8 +100,8 @@ const MUTANTS = [
   // It fired for 338 of 498 undergraduate majors for every cohort the app had.
   { name: "edition: the prompt goes back to offering the NEWEST edition",
     file: PATHS,
-    from: "  const want = pickCatalogYear(siblings.map(e => e.pp.year), cohortYear);",
-    to:   "  const want = Math.max(...siblings.map(e => e.pp.year));",
+    from: "  const want = pickCatalogYear(siblings.map(e => e.year), cohortYear);",
+    to:   "  const want = Math.max(...siblings.map(e => e.year));",
     run: [COHORT_TEST, EDITION_UI] },
 
   { name: "edition: a plan with no entry term is prompted anyway",
@@ -115,8 +117,8 @@ const MUTANTS = [
 
   { name: "edition: the sibling match goes folder-blind (offers a different degree)",
     file: PATHS,
-    from: "    .filter(e => e.pp && e.pp.college === current.college && e.pp.folder === current.folder);",
-    to:   "    .filter(e => e.pp && e.pp.college === current.college);",
+    from: "    .filter(e => e.pp && e.pp.college === current.college && e.pp.folder === current.folder)\n    .map(e => ({ year: e.pp.year, path: e.p }))",
+    to:   "    .filter(e => e.pp && e.pp.college === current.college)\n    .map(e => ({ year: e.pp.year, path: e.p }))",
     run: [COHORT_TEST] },
 
   // The render half. `findCohortVersion` can be perfectly correct and the box
@@ -155,21 +157,35 @@ const MUTANTS = [
     from: "                    <EditionRow path={val} cohortYear={cohortYear} onChange={set} />\n",
     to:   "", run: [EDITION_UI] },
 
+  // ── The rules, now that they are not inside a component ──────────
+  // These two used to be mutated in GradPanel.jsx and measured by the browser
+  // suite, at a 13s rebuild plus a page boot EACH. They are decisions about a
+  // small object, and they moved to core/editionChoice.js for exactly that
+  // reason: 0.11s instead of minutes, and the same assertions.
+  //
   // A single-option dropdown implies a choice the student does not have, and
   // would appear on 180 undergraduate and all 524 graduate programs.
   { name: "edition: the row renders for a program held in ONE edition",
-    file: GRADPANEL,
-    from: "  if (editions.length < 2) return null;",
-    to:   "  if (editions.length < 1) return null;",
-    run: [EDITION_UI] },
+    file: CHOICE,
+    from: "  if (options.length < 2) return null;",
+    to:   "  if (options.length < 1) return null;",
+    run: [CHOICE_TEST] },
 
   // The hint must be silent for a correctly pinned student — the 338-of-498
   // regression, in its new form.
   { name: "edition: the cohort hint shows even when the plan is on its own edition",
-    file: GRADPANEL,
-    from: "      {cohortPath && (",
-    to:   "      {(cohortPath || editions.length) && (",
-    run: [EDITION_UI] },
+    file: CHOICE,
+    from: "    hint:    off ? (cohortLabel || null) : null,",
+    to:   "    hint:    cohortLabel || null,",
+    run: [CHOICE_TEST] },
+
+  // The hint and the reset must name the SAME edition. Split sources would let
+  // the control recommend one year and hand over another.
+  { name: "edition: the reset ignores the cohort and goes to the newest edition",
+    file: CHOICE,
+    from: "    resetTo: off ? cohortPath : null,",
+    to:   "    resetTo: off ? options[options.length - 1].path : null,",
+    run: [CHOICE_TEST] },
 
   { name: "edition: a missing year renders as '-1-0' rather than as nothing",
     file: PATHS,

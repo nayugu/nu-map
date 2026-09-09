@@ -46,6 +46,7 @@ import {
   MINOR_SHARE_FRACTION,
 } from "../core/minorOverlap.js";
 import { rankOptions } from "../core/searchRank.js";
+import { editionChoice } from "../core/editionChoice.js";
 
 // ── GradCtx (avoids deep prop-drilling through requirement tree) ─────────
 // isPhone is included so child nodes (NuPathGrid, ReqNode) can adapt.
@@ -195,13 +196,18 @@ export function EditionRow({ path, cohortYear, onChange }) {
   const { t } = useLanguage();
   const { isPhone } = useContext(GradCtx) ?? {};
   const majorRequirements = usePort(IMajorRequirements);
-  const { editions, cohortPath, cohortLabel, currentYear } =
-    majorRequirements.getProgramEditions?.(path, cohortYear)
-    ?? { editions: [], cohortPath: null, cohortLabel: "", currentYear: null };
 
-  // One edition is not a choice. Rendering a single-option dropdown would
-  // imply the student had one.
-  if (editions.length < 2) return null;
+  // Every DECISION about this control lives in `editionChoice`, and this
+  // component makes none — see that file for why. Whether the row appears at
+  // all, which editions it offers, and whether the cohort hint is shown are
+  // rules, and a rule kept inside a component can only be checked by building
+  // the app and driving a browser.
+  const choice = editionChoice(
+    majorRequirements.getProgramEditions?.(path, cohortYear)
+    ?? { editions: [], cohortPath: null, cohortLabel: "", currentYear: null }
+  );
+  if (!choice) return null;
+  const { options, currentYear, hint, resetTo } = choice;
 
   const size = isPhone ? 7 : 9;
   return (
@@ -213,7 +219,7 @@ export function EditionRow({ path, cohortYear, onChange }) {
       <select
         value={String(currentYear ?? "")}
         onChange={e => {
-          const next = editions.find(x => String(x.year) === e.target.value);
+          const next = options.find(x => String(x.year) === e.target.value);
           if (next) onChange(next.path);
         }}
         style={{
@@ -231,15 +237,15 @@ export function EditionRow({ path, cohortYear, onChange }) {
           outline: "none", maxWidth: "100%",
         }}
       >
-        {editions.map(e => <option key={e.year} value={e.year}>{e.label}</option>)}
+        {options.map(e => <option key={e.year} value={e.year}>{e.label}</option>)}
       </select>
-      {cohortPath && (
+      {hint && (
         <>
           <span style={{ color: "var(--text-5)", minWidth: 0 }}>
-            {t("grad.edition.cohort", { label: cohortLabel })}
+            {t("grad.edition.cohort", { label: hint })}
           </span>
           <button
-            onClick={() => onChange(cohortPath)}
+            onClick={() => onChange(resetTo)}
             style={{
               fontSize: size - 1, padding: "1px 5px", cursor: "pointer", borderRadius: 3,
               border: "1px solid var(--border-3)", background: "transparent",
