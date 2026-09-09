@@ -156,3 +156,57 @@ test("persistence › restorePlan distinguishes an ABSENT grades key from an emp
   assert.ok(!/d\.grades \?\? \{\}/.test(code),
     "`d.grades ?? {}` conflates absent with empty — that is the wipe");
 });
+
+test("persistence › the beforeunload handler reads current state, not a closure", () => {
+  // Bug (4), and the fourth of the same shape. The handler's dependency array
+  // watched 12 fields while captureCurrentPlan writes 26, so the handler
+  // registered in one render went on firing with the state of that render —
+  // and on unload wrote those stale values over the correct ones the slot
+  // autosave had already written.
+  //
+  // Fifteen fields were affected, all of them things a student sets and expects
+  // to keep: major, major2, conc, conc2, minor1, minor2, plusOne, studentType,
+  // placedOut, appliedTemplate, activePlanId and the four entry/graduation
+  // term fields. Measured on a real plan: choose a concentration, reload, and
+  // it is gone from the slot.
+  //
+  // The loss needed one of those to be the LAST change before leaving, because
+  // touching a watched field afterwards re-registered the handler with a fresh
+  // closure. That is why it survived three earlier rounds of this test.
+  //
+  // The fix is not a longer dependency list — that is the thing that drifted
+  // twice. The handler goes through a ref refreshed after every render, so it
+  // cannot be stale, and the next field added to the plan is safe here without
+  // anyone remembering. This checks the SHAPE of that: the handler body must
+  // reach the ref and must not name plan state at all.
+  const i = SRC.indexOf('window.addEventListener("beforeunload"');
+  assert.notEqual(i, -1, "beforeunload handler not found — this test needs updating");
+
+  // The handler itself: `const h = () => …` immediately above the registration.
+  const hStart = SRC.lastIndexOf("const h = () =>", i);
+  assert.notEqual(hStart, -1, "could not find the beforeunload handler body");
+  const handler = SRC.slice(hStart, i).replace(/\/\/.*$/gm, "");
+
+  assert.ok(/unloadSaveRef\.current/.test(handler),
+    "the beforeunload handler must call through unloadSaveRef, or it holds a stale closure");
+
+  // No plan state may be named in the handler. `captureCurrentPlan`'s own field
+  // list is the authority, so this tightens automatically as the plan grows.
+  const named = [...capturedFields()].filter(f => new RegExp(`\\b${f}\\b`).test(handler));
+  assert.deepEqual(named, [],
+    `the beforeunload handler closes over plan state (${named.join(", ")}), which is ` +
+    `exactly how it went stale — read it from unloadSaveRef instead`);
+
+  // And the ref must be re-pointed with NO dependency array, which is the only
+  // thing that makes it current. A dep array here would reintroduce the bug in
+  // its original form.
+  const sync = SRC.indexOf("unloadSaveRef.current = () =>");
+  assert.notEqual(sync, -1, "unloadSaveRef is never refreshed — the handler would be null");
+  const after = SRC.slice(sync, sync + 1400);
+  const close = after.indexOf("});");
+  assert.notEqual(close, -1, "could not find the end of the unloadSaveRef sync effect");
+  assert.match(after.slice(close, close + 6), /\}\);/,
+    "the unloadSaveRef sync effect must end `});` with no dependency array");
+  assert.ok(!/\}\s*,\s*\[/.test(after.slice(close - 2, close + 8)),
+    "the unloadSaveRef sync effect must have NO dependency array, or it can go stale again");
+});

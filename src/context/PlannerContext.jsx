@@ -816,6 +816,9 @@ const { locale, setLocale, locales, t } = useLanguage();
   // Stale-closure escape hatches for keyboard handler
   const stateRef      = useRef({ placements: {}, specialTermPl: {}, semOrders: {}, placedOut: new Set() });
   const buildPlanContextRef = useRef(() => ({})); // sync-payload builder, refreshed each render
+  // The last-chance unload save, refreshed each render for the same reason:
+  // a beforeunload handler registered once must not hold one render's state.
+  const unloadSaveRef = useRef(null);
   const selectedIdRef = useRef(null);
   const allEdgesRef   = useRef([]);
   const onDropRef      = useRef(null);   // updated each render for touch drag
@@ -898,14 +901,47 @@ const { locale, setLocale, locales, t } = useLanguage();
     // (prefix=persistEnabled, persist=<the data object>, obj=undefined) and
     // wrote {"persist":true} to a junk key on every unload. The last-moment
     // safety net has never actually saved anything.
-    const h = () => {
+    // ⚠ Through a REF, never a closure — this handler lost data twice by
+    // holding one.
+    //
+    // Its dependency array watched 12 fields while `captureCurrentPlan` writes
+    // 26, so the handler registered in one render kept firing with the state of
+    // that render. On unload it then wrote those STALE values over the correct
+    // ones the slot autosave had already saved. Measured: pick a concentration,
+    // reload, and the handler's closure reports conc="" while the live state
+    // holds the chosen title — so the selection is silently gone. Fifteen
+    // fields were affected, every one of them something a student sets and
+    // expects to keep: `major`, `major2`, `conc`, `conc2`, `minor1`, `minor2`,
+    // `plusOne`, `studentType`, `placedOut`, `appliedTemplate`, `activePlanId`
+    // and the four entry/graduation term fields.
+    //
+    // It escaped notice because the loss needs one of those to be the LAST
+    // change before leaving: touching a watched field afterwards (placing a
+    // course, the commonest action of all) re-registers the handler with a
+    // fresh closure and everything saves correctly.
+    //
+    // The autosave above keeps its long dependency array because it must FIRE
+    // when a field changes. This one must not fire at all until the page goes
+    // away — it only has to read the CURRENT plan when it does. Those are
+    // different requirements, and a ref is the honest expression of the second:
+    // it cannot drift from `captureCurrentPlan`, so the next field added to the
+    // plan is safe here by construction rather than by remembering.
+    // `plan-persistence.test.js` pins that this handler closes over no state.
+    const h = () => unloadSaveRef.current?.();
+    window.addEventListener("beforeunload", h);
+    return () => window.removeEventListener("beforeunload", h);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Re-pointed after EVERY render (no dependency array), so the handler above
+  // always reaches the current state. Mirrors the file's existing
+  // "stale-closure ref sync" effect.
+  useEffect(() => {
+    unloadSaveRef.current = () => {
       saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, appliedTemplate, planId: activePlanId });
       // The SLOT is what the app reloads from, so it needs the same net.
       saveCurrentPlanToSlot();
     };
-    window.addEventListener("beforeunload", h);
-    return () => window.removeEventListener("beforeunload", h);
-  }, [persistEnabled, placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
+  });
 
   // ── Effect: semester tracking (live) ─────────────────────────
   // Runs on mount and whenever the tracking mode, plan semesters, or clock changes.
