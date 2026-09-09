@@ -242,6 +242,12 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
     refusalText,
     chosen: source,
     sectionHidden: !gate.show,
+    // A PLAN, not merely a finished generation — a refusal finishes too, and
+    // rendering on "finished" would show the section for a refusal and then have
+    // to take it away again. `gen.plan` is the only thing that means a plan
+    // exists; `gen !== null` cannot even tell finished from not-yet-started,
+    // because it is reset to null on every program change.
+    chartHasPlan: !!gen && !gen.refused && !gen.cancelled && !!gen.plan,
   }), [hasSamplePlan, canGenerate, gen, refusalText, source, gate.show]);
 
   // The verbs come from the same rule as before; only the availability half

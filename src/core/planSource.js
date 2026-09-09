@@ -60,6 +60,9 @@
  * @param {boolean} [args.sectionHidden]  the caller hides the section for its own
  *                                        reasons (a double major), so nothing here
  *                                        may cause work to start
+ * @param {boolean} [args.chartHasPlan]   a generation has produced a usable plan.
+ *                                        Not "has finished": a refusal finishes too,
+ *                                        and finishing is not a reason to render.
  * @returns {{show: boolean, source: string|null,
  *            catalog: SourceState, chart: SourceState,
  *            mayGenerate: boolean}}
@@ -71,6 +74,7 @@ export function planSourceState({
   refusalText = null,
   chosen = "catalog",
   sectionHidden = false,
+  chartHasPlan = false,
 } = {}) {
   const chartEnabled = Boolean(chartEligible) && !refusal;
 
@@ -86,7 +90,30 @@ export function planSourceState({
     why: chartEnabled ? null : (refusal ? (refusalText ?? "refused") : "not-eligible"),
   };
 
-  const show = !sectionHidden && (catalog.enabled || chart.enabled);
+  // CHART is the only source that has to be COMPUTED, so it is the only one that
+  // can be "not yet".
+  const chartPending = chart.enabled && !chartHasPlan;
+
+  // ── Render as soon as SOME plan is known to exist ─────────────────
+  //
+  // Stated positively on purpose. The rule is not "wait until CHART finishes" —
+  // finishing includes refusing, and a refusal is not a reason to render
+  // anything. It is: a plan is on file, or a plan has been produced.
+  //
+  // With a catalog plan that is true immediately and the section appears at once,
+  // whatever CHART is doing. With none — every program on the current edition,
+  // since Northeastern moved Sample Plans of Study to the colleges' own websites
+  // — the section waits, because whether CHART has a plan is not knowable without
+  // generating one. The program-level refusals are already gone (`chartEligible`
+  // asks the engine's own gate), so what is left depends on this student's terms
+  // and credit cap, and `verify-chart --edition 2027` still refuses for roughly a
+  // fifth of a stratified sample.
+  //
+  // Appearing, sitting busy and then vanishing is worse than never appearing: it
+  // draws the eye to something that turns out not to be there, on a control the
+  // student did not touch. Waiting costs nothing visible — there was nothing to
+  // look at either way.
+  const show = !sectionHidden && (catalog.enabled || chartHasPlan);
 
   // Never sit on a source that is not there. Preference order is the student's
   // choice first, then catalog, then chart — the catalog plan is the
@@ -98,10 +125,23 @@ export function planSourceState({
     else source = catalog.enabled ? "catalog" : "chart";
   }
 
-  // The one output that starts work, and it is deliberately the narrowest.
-  // Generation may begin ONLY for a section that is on screen with CHART
-  // actually selected — the hidden-section case is the 85.7-second freeze.
-  const mayGenerate = show && source === "chart" && Boolean(chartEligible) && !refusal;
+  // ── Work starts BEFORE the section exists, deliberately ───────────
+  //
+  // This cannot be gated on `show`, and that is not an oversight: `show` waits
+  // for the generation that `mayGenerate` starts, so gating one on the other is a
+  // deadlock — the section would wait for ever for work that never began. It was
+  // written that way once and the panel simply never appeared.
+  //
+  // What it IS gated on is `sectionHidden`, and that is the guard that matters:
+  // a section the caller has hidden for its own reasons (a double major) must
+  // never start a search. That case ran a full CHART search for a panel nobody
+  // could see and froze the main thread for 85.7 seconds.
+  //
+  // Otherwise it begins as soon as CHART is the source the student would land on
+  // — immediately when there is no catalog plan, and on their click when there
+  // is. A refusal stops it: a source that already answered is not asked again.
+  const wouldUseChart = chosen === "chart" || !catalog.enabled;
+  const mayGenerate = !sectionHidden && chart.enabled && wouldUseChart;
 
-  return { show, source, catalog, chart, mayGenerate };
+  return { show, source, catalog, chart, mayGenerate, chartPending };
 }

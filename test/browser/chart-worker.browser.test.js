@@ -138,6 +138,40 @@ describe("CHART · off the main thread", () => {
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
   });
 
+  test("an abandoned search is CANCELLED, not left queued in front of the next one", async () => {
+    // The mutation probe found this hole: deleting `planGenerator.cancel()` from
+    // the effect cleanup killed nothing, because every other assertion here is
+    // about the MAIN thread, and the worker keeps that free whether or not the
+    // search it is running is wanted. Cancellation is invisible to all of them.
+    //
+    // What makes it observable is that the section now waits for CHART's answer
+    // before rendering. One worker runs one search at a time, so an abandoned
+    // search that is not terminated still has to FINISH before the next request
+    // is even read — and the next request is the one the student is waiting on.
+    // Uncancelled, the panel for the year they actually chose cannot appear until
+    // the abandoned one gives up, which is the engine's whole 6-second budget.
+    const { ctx, page, pick, errors } = await open(CS(FAST), 2025);
+
+    await pick(SLOW);                              // starts a long search
+    await new Promise(r => setTimeout(r, 200));    // let it get going
+    const t = Date.now();
+    await pick(FAST);                              // ...and abandon it
+
+    // FAST publishes a catalog plan, so its section does not wait on CHART at
+    // all — the toggle is the thing to watch, and it must arrive promptly.
+    await page.locator('[data-testid="plan-source-catalog"]').first()
+      .waitFor({ state: "attached", timeout: 20_000 });
+    const ms = Date.now() - t;
+
+    // 4s: comfortably under the 6s a queued search would cost, comfortably over
+    // anything a healthy machine needs. Asserting a tight bound here would fail
+    // on a loaded box for no defect.
+    assert.ok(ms < 4000,
+      `the abandoned search was not cancelled — the next year took ${ms} ms to appear`);
+    await ctx.close();
+    assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
+  });
+
   test("rapid switching leaves exactly one worker, not a pile", async () => {
     // Cancellation terminates and re-creates. Spamming the control is the
     // obvious way to turn that into a leak — every abandoned search would go on

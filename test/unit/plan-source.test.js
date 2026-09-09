@@ -9,22 +9,50 @@ const S = (o) => planSourceState(o);
 
 test("both sources available: catalog is preferred and both tabs live", () => {
   const r = S({ hasCatalogPlan: true, chartEligible: true });
-  assert.equal(r.show, true);
+  assert.equal(r.show, true, "a catalog plan is something to show at once");
   assert.equal(r.source, "catalog");
   assert.equal(r.catalog.enabled, true);
   assert.equal(r.chart.enabled, true);
 });
 
-test("no catalog plan for this edition: CHART is selected, catalog greys", () => {
-  // The bug: this used to reset to "catalog" unconditionally, selecting a
-  // DISABLED tab. Nothing flipped it back, so the panel showed "loading…" for
-  // ever — for every undergraduate on 2026-2027, none of which has a catalog
-  // plan since Northeastern moved them to the colleges' own websites.
-  const r = S({ hasCatalogPlan: false, chartEligible: true });
+test("no catalog plan: the section renders once CHART HAS A PLAN, not when it finishes", () => {
+  // Stated positively, because "wait until CHART finishes" is the wrong rule and
+  // was briefly the implemented one: finishing includes REFUSING, and a refusal
+  // is not a reason to render. The section must not appear, sit busy, and then
+  // vanish — so it waits for a plan to exist, not for a search to end.
+  const pending = S({ hasCatalogPlan: false, chartEligible: true, chartHasPlan: false });
+  assert.equal(pending.show, false, "the section appeared before CHART had an answer");
+  assert.equal(pending.chartPending, true);
+  // ...and the work must still have STARTED, or it would wait for ever.
+  assert.equal(pending.mayGenerate, true, "nothing would ever start the generation");
+
+  const settled = S({ hasCatalogPlan: false, chartEligible: true, chartHasPlan: true });
+  assert.equal(settled.show, true);
+  assert.equal(settled.source, "chart");
+  assert.equal(settled.catalog.enabled, false);
+  assert.equal(settled.catalog.why, "no-catalog-plan");
+});
+
+test("show and mayGenerate are not gated on each other — the deadlock", () => {
+  // Written because it happened: gating `mayGenerate` on `show` while `show`
+  // waits for the generation is a deadlock, and the panel simply never appeared.
+  // The property is that in EVERY state where the section is waiting on CHART,
+  // something is starting CHART.
+  for (const chosen of ["catalog", "chart"])
+    for (const hasCatalogPlan of [true, false]) {
+      const r = S({ hasCatalogPlan, chartEligible: true, chartHasPlan: false, chosen });
+      if (r.chartPending && !r.show) {
+        assert.equal(r.mayGenerate, true,
+          `deadlock: waiting on CHART but not running it (${chosen}/${hasCatalogPlan})`);
+      }
+    }
+});
+
+test("a catalog plan shows AT ONCE, without waiting for CHART", () => {
+  // The wait is only ever paid by a program that has nothing else to show.
+  const r = S({ hasCatalogPlan: true, chartEligible: true, chartHasPlan: false });
   assert.equal(r.show, true);
-  assert.equal(r.source, "chart");
-  assert.equal(r.catalog.enabled, false);
-  assert.equal(r.catalog.why, "no-catalog-plan");
+  assert.equal(r.source, "catalog");
 });
 
 test("CHART refuses but the catalog plan exists: the tab greys, nothing is lost", () => {
@@ -81,18 +109,27 @@ test("the selected source is ALWAYS an available one", () => {
         }
 });
 
-test("mayGenerate implies the section is shown with CHART selected", () => {
+test("mayGenerate never runs for a hidden section, or for a source already answered", () => {
+  // This used to assert `mayGenerate => show`, which was right when the section
+  // appeared first and computed second. That order is now reversed on purpose —
+  // the section waits for the answer — so the old assertion described a deadlock
+  // rather than a safeguard. What survives is the part that was load-bearing:
+  // a hidden section starts nothing, and a refusal is never re-asked.
   for (const hasCatalogPlan of [true, false])
     for (const chartEligible of [true, false])
       for (const refusal of [null, { reason: "x" }])
         for (const sectionHidden of [true, false])
-          for (const chosen of ["catalog", "chart"]) {
-            const r = S({ hasCatalogPlan, chartEligible, refusal, sectionHidden, chosen });
-            if (!r.mayGenerate) continue;
-            assert.equal(r.show, true);
-            assert.equal(r.source, "chart");
-            assert.equal(r.chart.enabled, true);
-          }
+          for (const chartHasPlan of [true, false])
+            for (const chosen of ["catalog", "chart"]) {
+              const r = S({ hasCatalogPlan, chartEligible, refusal, sectionHidden, chartHasPlan, chosen });
+              if (!r.mayGenerate) continue;
+              assert.equal(sectionHidden, false, "a hidden section started a search");
+              assert.equal(r.chart.enabled, true, "generated for an unavailable source");
+              assert.equal(refusal, null, "re-asked a source that already refused");
+              // And it only ever runs for a student who would actually land on CHART.
+              assert.ok(chosen === "chart" || !hasCatalogPlan,
+                "generated while the student was on the catalog plan");
+            }
 });
 
 test("the student's choice is honoured while it remains available", () => {

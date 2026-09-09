@@ -148,27 +148,44 @@ describe("sample plan · tied to the selected catalog year", () => {
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
   });
 
-  test("switching to an edition with no plan drops the catalog source and RESOLVES", async () => {
+  test("switching to an edition with no plan leaves NO section, and never a flash", async () => {
     // The whole defect in one gesture. Not seeded on 2027 but SWITCHED to it,
-    // because switching is what the student does and it is the reset effect —
-    // the thing that was choosing an unavailable source — that this exercises.
-    const { ctx, chooseYear, settleTo, bodyText, errors } = await openPanel(CS(HAS_PLAN), 2025);
-    await settleTo(x => x.catalog.enabled, "precondition: 2026 offers a catalog plan");
+    // because switching is what the student does.
+    //
+    // ── What this asserted before, and why it changed ────────────────
+    //
+    // It used to require the section to still be there with the Catalog tab
+    // greyed and CHART selected. That was right while the section appeared first
+    // and computed second. It is wrong now: Computer Science on 2026-2027 has no
+    // catalog plan (Northeastern moved Sample Plans of Study to the colleges'
+    // own sites) and CHART refuses for it, so BOTH sources are unavailable and
+    // the honest render is nothing at all.
+    //
+    // The section also must not appear on the way to disappearing. Waiting for
+    // CHART's answer before rendering is the whole point — a panel that flashes
+    // up and vanishes draws the eye to something that was never there.
+    const { ctx, chooseYear, sources, bodyText, errors } = await openPanel(CS(HAS_PLAN), 2025);
+    assert.ok((await sources())?.catalog.enabled, "precondition: 2026 offers a catalog plan");
 
     await chooseYear("major", NO_PLAN);
-    const s = await settleTo(x => !x.catalog.enabled,
-      "an edition that publishes NO plan is still offering a catalog plan — the loader borrowed another year's");
 
-    assert.equal(s.catalog.selected, false,
-      "a disabled source is selected; the panel can never resolve from here");
-    assert.ok(s.chart.selected, "nothing took over as the source");
+    // Sample continuously rather than checking twice: a flash is by definition
+    // brief, and two point-checks can straddle it entirely.
+    let sawSection = false, gone = false;
+    for (let i = 0; i < 150; i++) {
+      const s = await sources();
+      if (s === null) { gone = true; break; }
+      if (s.catalog.enabled === false) sawSection = true;  // a section for 2027
+      await new Promise(r => setTimeout(r, 100));
+    }
 
-    // ...and the body must not be sitting on a promise that will never land.
-    // CHART owns its own status line, so this asserts the absence of the dumb
-    // second one rather than the presence of any particular message.
-    const text = await bodyText();
-    assert.ok(!/checking what it includes/i.test(text),
-      `the panel is stuck on a loading message that nothing will resolve:\n${text.slice(0, 400)}`);
+    assert.ok(gone, "the section is still on screen for an edition with neither source");
+    assert.equal(sawSection, false,
+      "the section appeared for the new edition and then vanished — the flash this exists to prevent");
+
+    // ...and nothing is left sitting on a promise that will never land.
+    assert.ok(!/checking what it includes/i.test(await bodyText()),
+      "the panel is stuck on a loading message that nothing will resolve");
 
     await ctx.close();
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);

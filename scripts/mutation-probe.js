@@ -243,9 +243,32 @@ const MUTANTS = [
   // ── The source decision, and CHART off the main thread ────────────
   { name: "chart: a hidden section generates anyway (the 85.7s freeze)",
     file: PLANSRC,
-    from: "  const mayGenerate = show && source === \"chart\" && Boolean(chartEligible) && !refusal;",
-    to:   "  const mayGenerate = source === \"chart\" && Boolean(chartEligible) && !refusal;",
+    from: "  const mayGenerate = !sectionHidden && chart.enabled && wouldUseChart;",
+    to:   "  const mayGenerate = chart.enabled && wouldUseChart;",
     run: [PLANSRC_TEST] },
+
+  { name: "chart: the section renders before CHART has answered (flash and vanish)",
+    file: PLANSRC,
+    from: "  const show = !sectionHidden && (catalog.enabled || chartHasPlan);",
+    to:   "  const show = !sectionHidden && (catalog.enabled || chart.enabled);",
+    run: [PLANSRC_TEST] },
+
+  { name: "chart: a catalog plan is made to wait on CHART too",
+    file: PLANSRC,
+    from: "  const show = !sectionHidden && (catalog.enabled || chartHasPlan);",
+    to:   "  const show = !sectionHidden && chartHasPlan;",
+    run: [PLANSRC_TEST] },
+
+  { name: "chart: 'has a plan' degrades to 'finished without refusing'",
+    file: OFFER,
+    from: "    chartHasPlan: !!gen && !gen.refused && !gen.cancelled && !!gen.plan,",
+    to:   "    chartHasPlan: !!gen && !gen.refused,",
+    run: [PLANSRC_TEST, WORKER_UI],
+    // `gen` is null at the start of every program change, so dropping `!genBusy`
+    // only differs during the window where a generation is running and `gen` is
+    // stale-null — which the reset effect closes in the same commit. Marked, not
+    // dropped: a KILL here means a test finally covers that window.
+    equivalent: true },
 
   { name: "chart: a disabled source can be selected",
     file: PLANSRC,
