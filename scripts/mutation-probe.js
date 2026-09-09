@@ -66,6 +66,7 @@ const BANKRANK = "src/core/bankRank.js";
 const PATHS    = "src/data/programPaths.js";
 const GRADPANEL = "src/ui/GradPanel.jsx";
 const CHOICE    = "src/core/editionChoice.js";
+const PLANNER   = "src/context/PlannerContext.jsx";
 
 const INVARIANT  = "cd test/invariant && node --test requirement-credit-corpus.test.js";
 const PROSE      = "cd test/contract  && node --test catalog-prose-sections.test.js";
@@ -85,6 +86,8 @@ const RETIRED_UI    = "cd test/browser   && node --test retired-course.browser.t
 const BANKRANK_TEST = "cd test/unit      && node --test bank-rank.test.js";
 const COHORT_TEST   = "cd test/unit      && node --test cohort-version.test.js";
 const CHOICE_TEST   = "cd test/unit      && node --test edition-choice.test.js";
+const PERSIST_TEST  = "cd test/invariant && node --test plan-persistence.test.js";
+const RELOAD_UI     = "cd test/browser   && node --test plan-reload.browser.test.js";
 // Also a BROWSER command, for the same reason as RETIRED_UI: the blank program
 // box was a render-time defect that every Node test passed straight through.
 const EDITION_UI    = "cd test/browser   && node --test catalog-edition.browser.test.js";
@@ -95,6 +98,25 @@ const EDITION_UI    = "cd test/browser   && node --test catalog-edition.browser.
  * file — the runner checks — so a mutant cannot silently apply somewhere else.
  */
 const MUTANTS = [
+  // ── The unload save must not hold one render's state ─────────────
+  // The real bug, restored: an inline handler inside an effect with no
+  // dependencies, so it fires forever with the first render's plan and
+  // overwrites the slot on the way out. Fifteen fields were losable this way.
+  { name: "persist: the unload handler goes back to closing over state",
+    file: PLANNER,
+    from: "    const h = () => unloadSaveRef.current?.();",
+    to:   "    const h = () => { saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, appliedTemplate, planId: activePlanId }); saveCurrentPlanToSlot(); };",
+    run: [PERSIST_TEST, RELOAD_UI] },
+
+  // The subtler version: the ref exists and is wired, but only ever points at
+  // the FIRST render's save. Identical symptom, and the shape check alone
+  // cannot see it — which is why the browser test exists.
+  { name: "persist: the unload ref is pointed once instead of every render",
+    file: PLANNER,
+    from: "    unloadSaveRef.current = () => {",
+    to:   "    if (!unloadSaveRef.current) unloadSaveRef.current = () => {",
+    run: [RELOAD_UI] },
+
   // ── The catalog edition a cohort is offered ─────────────────────
   // The historic bug, restored verbatim: "newest" instead of "the cohort's".
   // It fired for 338 of 498 undergraduate majors for every cohort the app had.
