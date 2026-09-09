@@ -278,8 +278,25 @@ jobs:
       # and exits 3, because a sample is the right default for a question asked in a chat and
       # the wrong one for the gate that decides whether a month of scraped data ships. The
       # flag is what distinguishes the two, so do not drop it to make this step faster.
+      # ── `--edition` is PINNED, and that is a known gap, not a preference ──
+      #
+      # `verify-chart` gained an `--edition` flag and defaults to the newest tree
+      # held. Left implicit, this gate would have moved from 2026 to 2027 the
+      # moment that tree landed — silently, in the one job that pushes to main
+      # unattended.
+      #
+      # It cannot run there yet. The 2027 edition publishes no Sample Plans of
+      # Study (Northeastern moved them to the colleges' own websites), so every
+      # program takes the long road through `generatePlan`'s retry ladder: up to
+      # seventeen attempts, each with its own 5,000 ms search budget, measured at
+      # 87 seconds for a single program. This step is minutes on 2026; on 2027 it
+      # was still running after an hour and was killed rather than finishing.
+      #
+      # So the pin is deliberate and the gap is real: the edition every current
+      # student is on is NOT gated here. Unpinning is blocked on the ladder cost,
+      # not on this line. Do not "fix" it by dropping the flag.
       - name: Verify CHART can still plan this catalog
-        run: node scripts/verify-chart.js --all 2>&1 | tee /tmp/chart-verify-log.txt
+        run: node scripts/verify-chart.js --all --edition 2026 2>&1 | tee /tmp/chart-verify-log.txt
 
       # ── The data must be SHIPPABLE, not merely correct ────────────────────
       #

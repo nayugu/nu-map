@@ -131,7 +131,18 @@ describe("catalog editions · in the running app", () => {
     // be styled to match the panel. So it is driven by clicking, not by
     // selectOption.
     const selOf   = (f) => page.locator(`[data-claude-focus="${f}"] [data-edition-select]`).first();
-    const yearOf  = async (f) => (await selOf(f).innerText()).replace(/[^0-9-]/g, "").split("-").pop();
+    // The button shows the COMPACT academic year ("2026-27"), because the
+    // labelled full form did not fit beside a minor's field name. So the ending
+    // year has to be reconstructed from the century of the starting one — the
+    // naive "last segment" read returns "27", which is not a year and silently
+    // failed every assertion here as though the control were showing the wrong
+    // edition. The open list still carries full labels; `chooseYear` matches on
+    // those and is unaffected.
+    const yearOf = async (f) => {
+      const m = (await selOf(f).innerText()).match(/(\d{4})\s*-\s*(\d{2})(\d{2})?/);
+      if (!m) return null;
+      return m[3] ? `${m[2]}${m[3]}` : `${m[1].slice(0, 2)}${m[2]}`;
+    };
     const chooseYear = async (f, year) => {
       await selOf(f).click();
       const row = page.locator(`[role="listbox"] [role="option"]`, { hasText: `${year - 1}-${year}` }).first();
@@ -144,7 +155,7 @@ describe("catalog editions · in the running app", () => {
       return {
         box: await boxOf("major").inputValue(),
         year: await yearOf("major"),
-        hints: text.match(/your cohort: [\d-]+/g) ?? [],
+        hints: text.match(/you entered under [\d-]+/g) ?? [],
         sh: (text.match(/13[0-9] SH/g) ?? [])[0] ?? null,
       };
     };
@@ -211,9 +222,15 @@ describe("catalog editions · in the running app", () => {
     assert.equal(after.sh, SH_2027, "the degree total did not follow the edition");
     assert.equal(after.box, NAME, "changing the edition emptied the program box");
     assert.match(await saved("major"), /\/2027\//, "the choice did not reach the saved plan");
-    assert.deepEqual(after.hints, ["your cohort: 2025-2026"]);
+    assert.deepEqual(after.hints, ["you entered under 2025-2026"]);
 
-    await page.getByRole("button", { name: /^use$/ }).first().click();
+    // The reset is the HINT, not a separate "use" button — the pair wrapped
+    // onto two lines at the panel's real width, so the sentence became the
+    // control. Selected on a stable hook rather than its text, because the text
+    // CHANGES under the pointer ("you entered under 2025-2026" becomes "switch
+    // to 2025-2026") and Playwright hovers before it clicks — a text selector
+    // would be racing the element's own hover.
+    await page.locator("[data-edition-reset]").first().click();
     await page.locator(`text=${SH_2026}`).first().waitFor({ timeout: 30_000 });
     assert.match(await saved("major"), /\/2026\//, "the reset did not reach the saved plan");
     assert.deepEqual((await read()).hints, [], "the hint survived being obeyed");

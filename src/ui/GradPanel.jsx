@@ -47,6 +47,7 @@ import {
 } from "../core/minorOverlap.js";
 import { rankOptions } from "../core/searchRank.js";
 import { editionChoice } from "../core/editionChoice.js";
+import { editionLabelShort } from "../data/programPaths.js";
 
 // ── GradCtx (avoids deep prop-drilling through requirement tree) ─────────
 // isPhone is included so child nodes (NuPathGrid, ReqNode) can adapt.
@@ -212,7 +213,7 @@ function CheckBox({ sat, dimmedCheck = false, unknown = false, title }) {
  * because the grad panel is itself a scroll container — the same reason
  * SearchCombo tracks its own.
  */
-function EditionSelect({ options, currentYear, onChange, size }) {
+function EditionSelect({ options, currentYear, onChange, size, prefix = null, heading = null }) {
   const [open, setOpen] = useState(false);
   const [rect, setRect] = useState(null);
   const btnRef    = useRef(null);
@@ -263,7 +264,17 @@ function EditionSelect({ options, currentYear, onChange, size }) {
           padding: pad, maxWidth: "100%",
         }}
       >
-        {current?.label ?? ""}
+        {/* The noun, dimmer than the year it qualifies: "Catalog" is what this
+            control IS and the year is what it SAYS, so the year has to win the
+            eye. Same grey as the label it replaced, so nothing got louder by
+            moving up a line. */}
+        {prefix && (
+          <span style={{ color: "var(--text-5)", flexShrink: 0 }}>{prefix}</span>
+        )}
+        {/* The compact year on the BUTTON only. The open list below keeps the
+            full label, where there is room and where two editions sit next to
+            each other and want to be unambiguous. */}
+        {editionLabelShort(current?.year) || current?.label || ""}
         <span aria-hidden="true" style={{ fontSize: Math.round(size * 0.8), lineHeight: 1, color: "var(--text-5)" }}>▾</span>
       </button>
       {open && rect && createPortal(
@@ -279,6 +290,18 @@ function EditionSelect({ options, currentYear, onChange, size }) {
             overflow: "hidden",
           }}
         >
+          {/* The noun, for the controls too narrow to carry it on the button —
+              the minors, whose grid columns measure 166px against the 171px the
+              labelled form needs. Without this, a bare "2026-27" would be the
+              only thing a student ever saw and nothing would say what year it
+              is. The list has room, so the word lives here instead of being
+              dropped. */}
+          {heading && (
+            <div style={{
+              padding: `${Math.round(size * 0.45)}px ${size}px 0`, fontSize: size,
+              color: "var(--text-5)", letterSpacing: "0.04em", whiteSpace: "nowrap",
+            }}>{heading}</div>
+          )}
           {options.map(o => {
             const sel = o.year === currentYear;
             return (
@@ -304,53 +327,119 @@ function EditionSelect({ options, currentYear, onChange, size }) {
   );
 }
 
-export function EditionRow({ path, cohortYear, onChange }) {
-  const { t } = useLanguage();
-  const { isPhone } = useContext(GradCtx) ?? {};
+/**
+ * The decisions, shared by the two pieces this control is drawn in.
+ *
+ * Every DECISION lives in `editionChoice`, and neither component below makes
+ * one — see that file for why. Whether the control appears at all, which
+ * editions it offers, and whether the cohort hint is shown are rules, and a rule
+ * kept inside a component can only be checked by building the app and driving a
+ * browser.
+ */
+function useEditionChoice(path, cohortYear) {
   const majorRequirements = usePort(IMajorRequirements);
-
-  // Every DECISION about this control lives in `editionChoice`, and this
-  // component makes none — see that file for why. Whether the row appears at
-  // all, which editions it offers, and whether the cohort hint is shown are
-  // rules, and a rule kept inside a component can only be checked by building
-  // the app and driving a browser.
-  const choice = editionChoice(
+  return editionChoice(
     majorRequirements.getProgramEditions?.(path, cohortYear)
     ?? { editions: [], cohortPath: null, cohortLabel: "", currentYear: null }
   );
-  if (!choice) return null;
-  const { options, currentYear, hint, resetTo } = choice;
+}
 
-  const size = isPhone ? 7 : 9;
+/**
+ * The catalog-year control, for the FIELD HEADER line.
+ *
+ * ── Why the label is inside the button ─────────────────────────────
+ *
+ * This used to be its own row under the combo: a grey word "Catalog", then the
+ * control. Moving it up beside "MAJOR" reclaims a line per program — with a
+ * double major and two minors that was four — but a bare year floating at the
+ * right of a header does not say what it is.
+ *
+ * So the control carries the noun: `Catalog 2026-2027`. It is the same width as
+ * a separate label plus a bare year, it is self-describing at a glance with
+ * nothing to open, and it uses the registrar's own word. A version notation
+ * (`v. 2026-2027`) was considered and refused: "v." reads as a SOFTWARE version,
+ * students do not think of their requirements as versioned, and inventing our
+ * own name for something the catalog already names is exactly what this codebase
+ * keeps deciding not to do (see the CPS minors that got no "(CPS)" suffix).
+ */
+export function EditionPicker({ path, cohortYear, onChange, withLabel = true }) {
+  const { t } = useLanguage();
+  const { isPhone } = useContext(GradCtx) ?? {};
+  const choice = useEditionChoice(path, cohortYear);
+  if (!choice) return null;
+  const { options, currentYear } = choice;
+
+  // Deliberately NOT recoloured when the edition differs from the cohort's:
+  // `--accent` resolves to rgb(38,38,38) in the light theme, so it read as a
+  // heavier border rather than a signal — and a warning colour would be wrong
+  // regardless, because choosing another edition is what this control is FOR.
+  // The hint below already makes that case visibly different, without calling a
+  // legitimate choice a mistake.
   return (
-    <div style={{
-      display: "flex", alignItems: "center", gap: 5, marginTop: 3,
-      flexWrap: "wrap", fontSize: size, minWidth: 0,
-    }}>
-      <span style={{ color: "var(--text-5)", flexShrink: 0 }}>{t("grad.edition.label")}</span>
-      {/* Deliberately NOT recoloured when the edition differs from the cohort's:
-          `--accent` resolves to rgb(38,38,38) in the light theme, so it read as
-          a heavier border rather than a signal — and a warning colour would be
-          wrong regardless, because choosing another edition is what this control
-          is FOR. The hint and the reset beside it already make the row visibly
-          different, without calling a legitimate choice a mistake. */}
-      <EditionSelect options={options} currentYear={currentYear} onChange={onChange} size={size} />
-      {hint && (
-        <>
-          <span style={{ color: "var(--text-5)", minWidth: 0 }}>
-            {t("grad.edition.cohort", { label: hint })}
-          </span>
-          <button
-            onClick={() => onChange(resetTo)}
-            style={{
-              fontSize: size - 1, padding: "1px 5px", cursor: "pointer", borderRadius: 3,
-              border: "1px solid var(--border-3)", background: "transparent",
-              color: "var(--link-1, var(--text-4))", flexShrink: 0,
-            }}
-          >{t("grad.edition.use")}</button>
-        </>
-      )}
-    </div>
+    <EditionSelect
+      options={options} currentYear={currentYear} onChange={onChange}
+      size={isPhone ? 7 : 9} prefix={withLabel ? t("grad.edition.label") : null}
+      heading={t("grad.edition.label")}
+    />
+  );
+}
+
+/**
+ * "your cohort: 2025-2026 · use", and ONLY when that is true.
+ *
+ * Kept as its own line rather than folded into the picker. It is absent for
+ * every student who never switched editions, which is the overwhelming majority,
+ * so it costs the common case nothing — and when it IS there it is a sentence
+ * about the student's situation, not a label on a control.
+ */
+export function EditionHint({ path, cohortYear, onChange }) {
+  const { t } = useLanguage();
+  const { isPhone } = useContext(GradCtx) ?? {};
+  // Declared before the early return, because hooks may not be conditional.
+  const [hovering, setHovering] = useState(false);
+  const choice = useEditionChoice(path, cohortYear);
+  if (!choice?.hint) return null;
+  const { hint, resetTo } = choice;
+  const size = isPhone ? 7 : 9;
+
+  // ── A statement at rest, an action on hover ───────────────────────
+  //
+  // This was a line of text plus a bordered "use" button beside it, and at the
+  // panel's real width the pair wrapped: the sentence on one line, a small blue
+  // box alone on the next. Two lines and a form control, to say "you are not on
+  // the edition you started under".
+  //
+  // One control now, and it says two different things. At rest it is the FACT,
+  // in the same grey as every other secondary line here — because most of the
+  // time that is all a student needs to know. Under the pointer it becomes the
+  // OFFER, and turns the app's link colour: "switch to 2025-2026". The verb and
+  // its object arrive together, which is what "use" never managed.
+  //
+  // Both strings name the same year, so the hover reveals what will happen
+  // rather than replacing the information with a mystery.
+  return (
+    <button
+      type="button"
+      data-edition-reset=""
+      onClick={() => onChange(resetTo)}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
+      onFocus={() => setHovering(true)}
+      onBlur={() => setHovering(false)}
+      style={{
+        display: "block", marginTop: 3, padding: 0, border: "none",
+        background: "transparent", textAlign: "start",
+        fontSize: size, fontFamily: "inherit",
+        color: hovering ? "var(--link-1, var(--text-2))" : "var(--text-5)",
+        cursor: "pointer", textDecoration: "underline dotted",
+        textUnderlineOffset: 3,
+        textDecorationColor: hovering ? "currentColor" : "var(--border-3)",
+      }}
+    >
+      {hovering
+        ? t("grad.edition.use",   { label: hint })
+        : t("grad.edition.entry", { label: hint })}
+    </button>
   );
 }
 
@@ -428,7 +517,28 @@ export function SearchCombo({
 
   return (
     <div style={{ position: "relative", width: "100%", boxSizing: "border-box" }}>
-      <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+      {/* ── The clear control lives INSIDE the field ──────────────────
+        *
+        * It used to sit outside, as a bare ✕ in a flex row beside the input, and
+        * that was wrong in two ways at once.
+        *
+        * It read as a second control rather than as part of the field: a ✕ next
+        * to a box, at the same rank as the box, does not obviously mean "empty
+        * this" — and the panel has ANOTHER ✕ that means "remove this major
+        * entirely", so two different destructions wore the same glyph a few
+        * pixels apart.
+        *
+        * And it broke the alignment of everything above it. The input stopped
+        * short of the field's right edge to leave room, so the field's own right
+        * edge and the header line's right edge disagreed — which is why the
+        * catalog picker looked as though it were aligned to the ✕ rather than to
+        * the field.
+        *
+        * Inside, it is the conventional clear affordance, the input spans the
+        * full width, and every right edge in the block agrees. The input keeps
+        * padding on that side so a long program name never runs under it.
+        */}
+      <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
         <input
           ref={inputRef}
           type="text"
@@ -438,17 +548,26 @@ export function SearchCombo({
           onBlur={handleBlur}
           placeholder={placeholder}
           style={{
-            flex: 1, fontSize: size, padding: `${Math.round(size / 2.2)}px ${Math.round(size / 1.5)}px`, minWidth: 0,
+            flex: 1, fontSize: size, minWidth: 0,
+            padding: `${Math.round(size / 2.2)}px ${value ? size * 1.9 : Math.round(size / 1.5)}px ${Math.round(size / 2.2)}px ${Math.round(size / 1.5)}px`,
             background: "var(--bg-surface-2)", color: "var(--text-2)",
             border: "1px solid var(--border-2)", borderRadius: 4, outline: "none",
           }}
         />
         {value && (
           <button
+            aria-label="Clear"
             onMouseDown={e => { e.preventDefault(); select(""); }}
             onTouchStart={e => { e.preventDefault(); select(""); }}
-            style={{ background: "transparent", border: "none", color: "var(--text-4)", fontSize: size + 1, cursor: "pointer", padding: "0 2px", flexShrink: 0 }}
-          >✕</button>
+            style={{
+              position: "absolute", insetInlineEnd: Math.round(size / 2.4), top: "50%",
+              transform: "translateY(-50%)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              width: size * 1.3, height: size * 1.3, borderRadius: "50%",
+              background: "transparent", border: "none", color: "var(--text-5)",
+              fontSize: size, lineHeight: 1, cursor: "pointer", padding: 0,
+            }}
+          >×</button>
         )}
       </div>
       {open && rect && (() => {
@@ -2671,9 +2790,18 @@ export default function GradPanel({ wideCatalog = false }) {
           {showProgram && (
             <>
               {/* Major selector */}
-              <div data-claude-focus="major" style={{ marginBottom: 3, ...(pvMark("major").style ?? {}) }}>
-                <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
-                  {showMajor2 ? t("grad.major1.label") : t("grad.major.label")}
+              <div data-claude-focus="major" style={{ marginBottom: 4, ...(pvMark("major").style ?? {}) }}>
+                {/* The field name and its catalog year share a line, the year
+                    pushed right. It was a row of its own under the combo, which
+                    cost a line per program — four of them on a double major with
+                    two minors — for a control that is one word and a date. */}
+                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, minWidth: 0 }}>
+                  <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", minWidth: 0 }}>
+                    {showMajor2 ? t("grad.major1.label") : t("grad.major.label")}
+                  </div>
+                  <span style={{ marginInlineStart: "auto", minWidth: 0 }}>
+                    <EditionPicker path={selPath} cohortYear={cohortYear} onChange={setSelPath} />
+                  </span>
                 </div>
                 <SearchCombo
                   value={selPath}
@@ -2682,7 +2810,7 @@ export default function GradPanel({ wideCatalog = false }) {
                   valueOption={majorOption}
                   placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")}
                 />
-                <EditionRow path={selPath} cohortYear={cohortYear} onChange={setSelPath} />
+                <EditionHint path={selPath} cohortYear={cohortYear} onChange={setSelPath} />
                 {majorGone && (
                   <StaleNotice
                     isPhone={isPhone}
@@ -2694,10 +2822,29 @@ export default function GradPanel({ wideCatalog = false }) {
                 )}
               </div>
 
-              {/* Concentration selector */}
+              {/* ── The concentration BELONGS to the major above it ──────────
+                *
+                * It used to sit as a third peer field, the same indent and the
+                * same label weight as MAJOR and MINOR 1, separated from its own
+                * major by as much space as from an unrelated one. Nothing said it
+                * was a property OF a major rather than another thing to choose,
+                * and with a second major on screen there was no way to tell which
+                * major it belonged to at all.
+                *
+                * A rail and an indent, rather than a box: this is a nesting
+                * relationship, and a border on the side the eye scans is the
+                * cheapest way to say so. The label drops a weight for the same
+                * reason — it is subordinate, so it should not shout as loudly as
+                * the field it hangs off.
+                */}
               {major?.concentrations?.concentrationOptions?.length > 0 && (
-                <div data-claude-focus="conc" style={{ marginBottom: 8, marginTop: 8, ...(pvMark("conc").style ?? {}) }}>
-                  <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
+                <div data-claude-focus="conc" style={{
+                  marginBottom: 14, marginTop: 0, paddingTop: 6,
+                  marginInlineStart: 10, paddingInlineStart: 10,
+                  borderInlineStart: "1px solid var(--border-3)",
+                  ...(pvMark("conc").style ?? {}),
+                }}>
+                  <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 600, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 4 }}>
                     {t("grad.conc.label")}
                   </div>
                   <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.conc.search")} showAllWhenEmpty />
@@ -2711,9 +2858,15 @@ export default function GradPanel({ wideCatalog = false }) {
 
               {/* Second major selector */}
               {showMajor2 ? (
-                <div data-claude-focus="major2" style={{ marginBottom: 8, marginTop: 8, ...(pvMark("major2").style ?? {}) }}>
+                <div data-claude-focus="major2" style={{ marginBottom: 14, marginTop: 14, ...(pvMark("major2").style ?? {}) }}>
                   <div style={{ display: "flex", alignItems: "center", marginBottom: 4 }}>
                     <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>{t("grad.major2.label")}</div>
+                    {/* Before the ✕, so the remove button stays the last thing
+                        on the line — it is the only destructive control here and
+                        its position should not move when a year appears. */}
+                    <span style={{ marginInlineEnd: 6, minWidth: 0 }}>
+                      <EditionPicker path={major2Path} cohortYear={cohortYear} onChange={setMajor2Path} />
+                    </span>
                     <button
                       onClick={() => { setMajor2Path(""); setShowMajor2(false); }}
                       style={{ background: "transparent", border: "none", color: "var(--text-5)", fontSize: 12, cursor: "pointer", lineHeight: 1, padding: "0 2px" }}
@@ -2721,7 +2874,7 @@ export default function GradPanel({ wideCatalog = false }) {
                     >✕</button>
                   </div>
                   <SearchCombo value={major2Path} onChange={setMajor2Path} groups={majorGroups} valueOption={major2Option} placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")} />
-                  <EditionRow path={major2Path} cohortYear={cohortYear} onChange={setMajor2Path} />
+                  <EditionHint path={major2Path} cohortYear={cohortYear} onChange={setMajor2Path} />
                   {major2Gone && (
                     <StaleNotice
                       isPhone={isPhone}
@@ -2736,8 +2889,11 @@ export default function GradPanel({ wideCatalog = false }) {
                       programs require one — BSBA among them — so without this
                       a second major could not express a mandatory choice. */}
                   {major2Data?.concentrations?.concentrationOptions?.length > 0 && (
-                    <div style={{ marginTop: 6 }}>
-                      <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
+                    <div style={{
+                      marginTop: 6, marginInlineStart: 10, paddingInlineStart: 10,
+                      borderInlineStart: "1px solid var(--border-3)",
+                    }}>
+                      <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 600, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 4 }}>
                         {t("grad.conc.label")}
                       </div>
                       <SearchCombo value={selConc2} onChange={setSelConc2} groups={conc2Groups}
@@ -2754,7 +2910,7 @@ export default function GradPanel({ wideCatalog = false }) {
                 <button
                   onClick={() => setShowMajor2(true)}
                   style={{
-                    display: "block", width: "100%", marginTop: 6, marginBottom: 8,
+                    display: "block", width: "100%", marginTop: 12, marginBottom: 14,
                     padding: "4px 0", background: "transparent",
                     border: "1px dashed var(--border-3)", borderRadius: 4,
                     color: "var(--text-5)", fontSize: isPhone ? 8 : 9,
@@ -2765,19 +2921,33 @@ export default function GradPanel({ wideCatalog = false }) {
 
               {/* Minor selectors — undergrad only */}
               {!isGrad && (
-              <div style={{ display: "grid", gridTemplateColumns: isPhone ? "1fr" : "repeat(auto-fit, minmax(120px, 1fr))", gap: isPhone ? 4 : 6, marginTop: 8, marginBottom: 8, width: "100%", boxSizing: "border-box", overflow: "hidden" }}>
+              <div style={{ display: "grid", gridTemplateColumns: isPhone ? "1fr" : "repeat(auto-fit, minmax(120px, 1fr))", gap: isPhone ? 8 : 12, marginTop: 14, marginBottom: 10, width: "100%", boxSizing: "border-box", overflow: "hidden" }}>
                 {[[t("grad.minor1.label"), minor1, setMinor1, "minor1"], [t("grad.minor2.label"), minor2, setMinor2, "minor2"]].map(([lbl, val, set, field]) => (
                   <div key={lbl} data-claude-focus={field} style={{ minWidth: 0, overflow: "hidden", ...(pvMark(field, { inset: true }).style ?? {}) }}>
-                    <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 3 }}>{lbl}</div>
-                    <SearchCombo value={val} onChange={set} groups={minorGroups} valueOption={describeProgram?.(val) ?? null} placeholder={isPhone ? t("grad.major.search.short") : t("grad.minor.search")} />
                     {/* Minors get the selector too. They never got the old
                         banner — correctly, since a pinned minor has nothing to
                         correct — but "switched into" applies to a minor as
                         much as a major, and a minor declared in a different
                         year than the major is exactly the case one plan-wide
                         year could not express. 171 of 191 changed between the
-                        two editions we hold. */}
-                    <EditionRow path={val} cohortYear={cohortYear} onChange={set} />
+                        two editions we hold.
+                        The minors sit in a narrow grid column, so this line is
+                        the one most likely to run out of room; it wraps rather
+                        than truncating either half. */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 3, minWidth: 0, flexWrap: "wrap" }}>
+                      <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", minWidth: 0 }}>{lbl}</div>
+                      {/* No noun on the button here, MEASURED rather than
+                          judged: the labelled control needs 171px beside the
+                          field name and these grid columns are 166px, so it
+                          wrapped onto its own line — costing back the exact line
+                          that moving it up was meant to save. The major directly
+                          above says "Catalog", and the open list repeats it. */}
+                      <span style={{ marginInlineStart: "auto", minWidth: 0 }}>
+                        <EditionPicker path={val} cohortYear={cohortYear} onChange={set} withLabel={false} />
+                      </span>
+                    </div>
+                    <SearchCombo value={val} onChange={set} groups={minorGroups} valueOption={describeProgram?.(val) ?? null} placeholder={isPhone ? t("grad.major.search.short") : t("grad.minor.search")} />
+                    <EditionHint path={val} cohortYear={cohortYear} onChange={set} />
                   </div>
                 ))}
               </div>

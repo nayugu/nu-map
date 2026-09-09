@@ -722,8 +722,8 @@ export const strings = {
   // switched into a major follows the catalog in force when they declared it,
   // which is why the choice exists at all rather than being derived.
   "grad.edition.label":     "Catalog",
-  "grad.edition.cohort":    "your cohort: {label}",
-  "grad.edition.use":       "use",
+  "grad.edition.entry":    "you entered under {label}",
+  "grad.edition.use":       "switch to {label}",
   "grad.credits.done":      "{unit} done",
   "grad.credits.planned":   " + planned",
   "grad.credits.required":  " / required",

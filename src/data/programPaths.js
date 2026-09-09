@@ -132,6 +132,30 @@ export function editionLabel(year) {
 }
 
 /**
+ * The same edition, in the form a narrow control can hold: `2025-26`.
+ *
+ * ── Why a second form rather than a smaller font ───────────────────
+ *
+ * The picker sits on the field's header line, and the minors sit in a grid whose
+ * columns are as narrow as 120px. At the full label the control did not fit
+ * beside "MINOR 1" and wrapped onto its own line — which costs back the exact
+ * line moving it up was meant to save, and looks worse than where it started.
+ *
+ * Shrinking the type was the other option and is the wrong one: 9px is already
+ * the floor here, and the year is the only information in the control. This is a
+ * layout problem, so it gets a layout answer.
+ *
+ * The compact academic year is not an invention — it is how every registrar,
+ * transcript and student writes it. Only the BUTTON uses it; the open list and
+ * the cohort hint keep the full form, because neither is short of room and
+ * "your cohort: 2025-2026" is a sentence rather than a label.
+ */
+export function editionLabelShort(year) {
+  const full = editionLabel(year);
+  return full ? `${full.slice(0, 4)}-${full.slice(-2)}` : "";
+}
+
+/**
  * Every edition of `path`'s program that we actually HOLD, oldest first.
  *
  * "Actually hold" is the load-bearing part. The year selector is built from
