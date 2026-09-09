@@ -73,6 +73,13 @@ export const IPlanGenerator = "planGenerator";
 /**
  * @typedef {Object} IPlanGenerator
  *
+ * @property {() => void} [cancel]
+ *   Abandon any generation in flight, because the student changed the subject.
+ *   Optional: an implementation that generates synchronously has nothing to
+ *   cancel. Implementations MUST settle the abandoned request rather than leave
+ *   it pending — a caller awaiting a plan it no longer wants still has to be
+ *   released, or the panel stays busy for ever on a search that is gone.
+ *
  * @property {(programKey: string, isGrad: boolean, programData?: object, courseMap?: object) => boolean} canGenerate
  *   Cheap and synchronous. It gates whether the CONTROL appears at all; `generate`
  *   decides whether a plan exists.

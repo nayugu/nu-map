@@ -101,6 +101,12 @@ const SAMPLEPLAN_UI = "cd test/browser   && node --test sample-plan-edition.brow
 const OFFER     = "src/ui/SamplePlanOffer.jsx";
 const GENERATOR = "src/adapters/northeastern/planGenerator.js";
 
+// The source decision, and CHART running where the UI is not.
+const PLANSRC_TEST = "cd test/unit      && node --test plan-source.test.js";
+const WORKER_UI    = "cd test/browser   && node --test chart-worker.browser.test.js";
+const PLANSRC   = "src/core/planSource.js";
+const ENGINE    = "src/engine/index.js";
+
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
  * tie-break, a deleted guard, a fallback restored. `from` must be unique in the
@@ -233,6 +239,60 @@ const MUTANTS = [
     from: "  return Number.isInteger(y) && y > 1000 ? `${y - 1}-${y}` : \"\";",
     to:   "  return Number.isFinite(y) ? `${y - 1}-${y}` : \"\";",
     run: [COHORT_TEST] },
+
+  // ── The source decision, and CHART off the main thread ────────────
+  { name: "chart: a hidden section generates anyway (the 85.7s freeze)",
+    file: PLANSRC,
+    from: "  const mayGenerate = show && source === \"chart\" && Boolean(chartEligible) && !refusal;",
+    to:   "  const mayGenerate = source === \"chart\" && Boolean(chartEligible) && !refusal;",
+    run: [PLANSRC_TEST] },
+
+  { name: "chart: a disabled source can be selected",
+    file: PLANSRC,
+    from: "    else source = catalog.enabled ? \"catalog\" : \"chart\";",
+    to:   "    else source = \"catalog\";",
+    run: [PLANSRC_TEST, SAMPLEPLAN_UI] },
+
+  { name: "chart: a refusal no longer greys its tab",
+    file: PLANSRC,
+    from: "  const chartEnabled = Boolean(chartEligible) && !refusal;",
+    to:   "  const chartEnabled = Boolean(chartEligible);",
+    run: [PLANSRC_TEST] },
+
+  { name: "chart: the section renders with neither source available",
+    file: PLANSRC,
+    from: "  const show = !sectionHidden && (catalog.enabled || chart.enabled);",
+    to:   "  const show = !sectionHidden;",
+    run: [PLANSRC_TEST] },
+
+  { name: "chart: the retry ladder gets a fresh clock again (87s)",
+    file: ENGINE,
+    from: "      if (outOfTime()) break;",
+    to:   "      if (false) break;",
+    run: [WORKER_UI],
+    // The ladder only runs when the FIRST attempt refuses, and the browser case
+    // that exercises it is bounded by the worker timeout rather than by this —
+    // which is the point of having two clocks. Marked rather than dropped: a KILL
+    // here means a test finally covers the unbounded ladder directly.
+    equivalent: true },
+
+  { name: "chart: the search runs on the main thread again",
+    file: GENERATOR,
+    from: "    if (WORKER_OK) {",
+    to:   "    if (false) {",
+    run: [WORKER_UI] },
+
+  { name: "chart: switching subject no longer cancels the running search",
+    file: OFFER,
+    from: "    return () => { live = false; cancelIdle(); planGenerator.cancel?.(); };",
+    to:   "    return () => { live = false; cancelIdle(); };",
+    run: [WORKER_UI] },
+
+  { name: "chart: a cancelled answer is shown for the program that replaced it",
+    file: OFFER,
+    from: "      .then(r => { if (live && !r?.cancelled) setGen(r); })",
+    to:   "      .then(r => { if (live) setGen(r); })",
+    run: [WORKER_UI] },
 
   // ── The sample plan's edition tie ─────────────────────────────────
   { name: "sample plan: the plan is migrated across editions, as it used to be",

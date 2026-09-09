@@ -111,6 +111,64 @@ async function run(label, openSection) {
   await ctx.close();
 }
 
+/**
+ * The requirement stated as a test: while CHART is working, the catalog year
+ * must still respond — and switching must CANCEL the search nobody wants.
+ *
+ * This is the one that matters. Total blocked time can look acceptable while the
+ * page is still unusable at the moment the student reaches for the control, so
+ * this measures the control itself, mid-generation, rather than the thread in
+ * the abstract.
+ */
+async function interactDuringGeneration() {
+  const ctx = await b.newContext({ viewport: { width: 1500, height: 1000 } });
+  await ctx.addInitScript(`(${((mj, ey, pl) => {
+    const K = "ncp-";
+    localStorage.setItem(K + "plan-index", JSON.stringify([
+      { id: "default", name: "T", studentType: "undergrad", parentId: null, lastOpened: Date.now() }]));
+    localStorage.setItem(K + "plan-data-default", JSON.stringify({
+      version: 1, studentType: "undergrad", entSem: "fall", entYear: ey,
+      gradSem: "spring", gradYear: ey + 4, currentSemId: "fall" + ey,
+      major: mj, major2: "", minor1: "", placements: pl, specialTermPl: {},
+      semOrders: {}, placedOut: [], substitutions: [] }));
+    localStorage.setItem(K + "tour-seen", "true");
+    localStorage.setItem("numap-grad-expand-sampleplan", "true");
+  }).toString()})(${JSON.stringify(CS(2026))},2025,${JSON.stringify(PLACEMENTS)})`);
+
+  const page = await ctx.newPage();
+  page.on("pageerror", e => console.log("PAGEERROR:", String(e?.message ?? e)));
+  await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "load", timeout: 60_000 });
+  const skip = page.getByRole("button", { name: /^Skip$/ }).first();
+  const grad = page.getByRole("button", { name: /^Graduation$/ }).first();
+  await grad.waitFor({ timeout: 60_000 });
+  for (let i = 0; i < 40; i++) {
+    if (await skip.isVisible().catch(() => false)) { await skip.click().catch(() => {}); continue; }
+    if (await grad.click({ timeout: 500 }).then(() => 1).catch(() => 0)) break;
+  }
+  const sel = () => page.locator('[data-claude-focus="major"] [data-edition-select]').first();
+  await sel().waitFor({ timeout: 30_000 });
+
+  const pick = async (year) => {
+    await sel().click();
+    const row = page.locator('[role="listbox"] [role="option"]', { hasText: `${year - 1}-${year}` }).first();
+    await row.waitFor({ timeout: 15_000 });
+    await row.click();
+    await page.locator('[role="listbox"]').first().waitFor({ state: "detached", timeout: 15_000 });
+  };
+
+  await pick(2027);                       // starts a generation on the slow edition
+  await new Promise(r => setTimeout(r, 150));  // ...and interrupt it almost immediately
+
+  const t = Date.now();
+  await pick(2026);
+  const ms = Date.now() - t;
+  const back = await page.locator("text=134 SH").first().count();
+  console.log(`interrupting a running generation by switching year again`);
+  console.log(`   second switch took: ${ms} ms  ${ms < 1500 ? "(responsive)" : "*** BLOCKED ***"}`);
+  console.log(`   audit followed back to 2025-2026: ${back > 0}`);
+  await ctx.close();
+}
+
 await run("catalog-year change, sample-plan section open", true);
-await run("catalog-year change, section collapsed", false);
+await interactDuringGeneration();
 await b.close(); server.close(); process.exit(0);

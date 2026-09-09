@@ -30,6 +30,114 @@ const PLAN_ORDER_URL = "/northeastern/plan-order.json";
 /** First semesters borrowed from similar programs, for the 412 that publish no plan. */
 const EARLY_DONORS_URL = "/northeastern/early-donors.json";
 
+/**
+ * The wall clock for one generation, as seen by a person.
+ *
+ * 6,000 ms because the engine's budget for ONE search attempt is 5,000 and
+ * `generatePlan` makes up to seventeen attempts; anything below 5,000 would cut
+ * the first attempt short and start refusing programs that plan perfectly well
+ * today, which is a correctness change wearing a performance fix's clothes. This
+ * only ever truncates the ladder.
+ */
+const CHART_TOTAL_BUDGET_MS = 6000;
+
+// ── Running the search somewhere the UI is not ──────────────────────
+//
+// One worker for the whole session, created on first use and never on a page
+// that does not generate. `runInWorker` resolves with the same shape the
+// in-thread path returns, so nothing downstream knows which ran.
+//
+// Node has no `Worker` and no `import.meta.url`-relative module loading here —
+// the MCP server, `verify-chart` and every unit test call `generate` directly —
+// so the absence of one is an ordinary case, not an error. `WORKER_OK` decides
+// once and the in-thread path stays the fallback for everything else.
+const WORKER_OK = typeof Worker !== "undefined" && typeof document !== "undefined";
+let _worker = null, _seq = 0;
+const _pending = new Map();
+
+function chartWorker() {
+  if (_worker) return _worker;
+  _worker = new Worker(new URL("./chartWorker.js", import.meta.url), { type: "module" });
+  _worker.onmessage = (e) => {
+    const { id, result, error } = e.data ?? {};
+    const p = _pending.get(id);
+    if (!p) return;                       // already timed out; its worker is gone
+    _pending.delete(id);
+    clearTimeout(p.timer);
+    if (error) p.reject(new Error(error));
+    else p.resolve(result);
+  };
+  // A worker that dies takes every in-flight request with it, and a request that
+  // is never answered is the freeze wearing a different hat. Fail them all loudly
+  // rather than leaving the panel busy for ever.
+  _worker.onerror = (err) => {
+    const reason = new Error(String(err?.message ?? "CHART worker failed"));
+    for (const [, p] of _pending) { clearTimeout(p.timer); p.reject(reason); }
+    _pending.clear();
+    _worker = null;
+  };
+  return _worker;
+}
+
+/**
+ * Run one generation in the worker, bounded by a wall clock the MAIN thread owns.
+ *
+ * The engine's own `totalBudgetMs` should already stop it, but that is a promise
+ * the engine makes about code inside itself. This is the promise the UI makes to
+ * the student: an answer, or a greyed tab, within a fixed time, whatever the
+ * engine does. A budget checked by the thing being budgeted is not a guarantee.
+ *
+ * On timeout the worker is TERMINATED rather than abandoned. A runaway search
+ * left running would go on burning a core for the rest of the session, and the
+ * next request would queue behind it.
+ */
+/**
+ * Abandon whatever is being generated and settle its request.
+ *
+ * ── Why this has to TERMINATE rather than flag ─────────────────────
+ *
+ * A search is one synchronous call. There is no point inside it at which a
+ * cancelled flag could be read, and a worker that is mid-search will not look at
+ * its message queue until it finishes — so a "cancel" message would be READ
+ * AFTER the work it was meant to stop, and the next request would queue behind
+ * the one nobody wants any more. Terminating is the only cancellation that
+ * cancels anything.
+ *
+ * The cost is a fresh worker on the next request, which is why this is called on
+ * a real change of subject (a different program, catalog year, variant or
+ * concentration) and not on every re-render.
+ *
+ * Pending requests are RESOLVED, never left hanging: a caller that awaited a
+ * generation it no longer wants still has to be released, or the panel sits busy
+ * for ever on a search that no longer exists.
+ */
+export function cancelChart() {
+  if (!_pending.size && !_worker) return;
+  for (const [, p] of _pending) { clearTimeout(p.timer); p.resolve({ cancelled: true }); }
+  _pending.clear();
+  try { _worker?.terminate(); } catch { /* already gone */ }
+  _worker = null;
+}
+
+function runInWorker(args, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const id = ++_seq;
+    const timer = setTimeout(() => {
+      _pending.delete(id);
+      try { _worker?.terminate(); } catch { /* already gone */ }
+      _worker = null;
+      resolve({ refused: { reason: "search-budget-exhausted",
+                           detail: "Working out a plan for this program took too long." } });
+    }, timeoutMs);
+    _pending.set(id, { resolve, reject, timer });
+    try {
+      chartWorker().postMessage({ id, args });
+    } catch (err) {
+      clearTimeout(timer); _pending.delete(id); reject(err);
+    }
+  });
+}
+
 let _depthFor = null;      // { courseMap, index }
 let _orderPromise = null;
 let _donorPromise = null;
@@ -199,6 +307,33 @@ export default {
     // takes 5000-level courses in their first term.
     const type = studentType ?? (isGrad ? "graduate" : "undergraduate");
 
+    // ── In a browser this does not run here at all ───────────────────
+    //
+    // The search is synchronous CPU work, so anywhere it runs is a thread that
+    // stops answering clicks for its duration. In front of a person that thread
+    // must not be the one drawing the page: the catalog year, the audit and the
+    // board have nothing to do with CHART and must not wait on it.
+    //
+    // The engine's `totalBudgetMs` still applies inside the worker — it bounds
+    // the ladder, which is what turned 87 seconds into 6 — and the main thread
+    // adds its own, slightly longer, timeout on top. Two clocks, deliberately:
+    // one the engine keeps for itself, and one the UI keeps regardless of
+    // whether the engine kept its.
+    if (WORKER_OK) {
+      try {
+        return await runInWorker({
+          programData, publishedPlan, donorPlan, courseMap,
+          studentType: type, concentration, preferences: preferences ?? DEFAULT_PREFERENCES,
+          wantTrace, totalBudgetMs: CHART_TOTAL_BUDGET_MS, order,
+        }, CHART_TOTAL_BUDGET_MS + 2000);
+      } catch (err) {
+        // The worker failed to start or died. Fall through and run in-thread:
+        // a plan computed slowly beats no plan, and this is the path every
+        // non-browser caller takes anyway, so it is not a cold branch.
+        console.warn("[nu-map] CHART worker unavailable, running in-thread:", err?.message ?? err);
+      }
+    }
+
     const sink = wantTrace ? createTrace() : null;
     const out = generatePlan({
       trace: sink,
@@ -228,7 +363,7 @@ export default {
       //
       // Node callers (verify-chart, chart-probe, the MCP server) pass nothing and
       // stay unbounded, so no committed corpus measurement moves.
-      totalBudgetMs: 6000,
+      totalBudgetMs: CHART_TOTAL_BUDGET_MS,
       studentType: type,
       // Resolved by title inside the engine, through `concentrationResolve` — the title is a
       // concentration's only identity across saved plans, share links and MCP, and a stale one
@@ -261,6 +396,14 @@ export default {
   },
 
   defaultPreferences() { return DEFAULT_PREFERENCES; },
+
+  /**
+   * Stop generating for a subject nobody is looking at any more.
+   *
+   * Declared on the port so the UI does not have to know a worker exists; in
+   * Node there is nothing to cancel and this is a no-op.
+   */
+  cancel() { cancelChart(); },
 };
 
 export { IPlanGenerator };

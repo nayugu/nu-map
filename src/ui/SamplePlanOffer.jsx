@@ -338,7 +338,11 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
       // that is the whole reason it inherits a shape instead of inventing one.
       publishedPlan: catalogVariants[Math.min(variantIdx, Math.max(catalogVariants.length - 1, 0))] ?? null,
     })
-      .then(r => { if (live) setGen(r); })
+      // `cancelled` means we changed the subject — a different program, catalog
+      // year, variant or concentration — and the answer that arrived is about the
+      // old one. It must settle (so nothing hangs) and must NOT be shown: writing
+      // it would put the previous year's verdict beside the new year's audit.
+      .then(r => { if (live && !r?.cancelled) setGen(r); })
       // ── A throw is not a refusal, and this used to discard the difference ──
       //
       // A real refusal carries `derivation`, so the panel offers "what was tried". This
@@ -360,7 +364,12 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
       .finally(() => { if (live) setGenBusy(false); });
     }
 
-    return () => { live = false; cancelIdle(); };
+    // Changing the catalog year, the program, the variant or the concentration
+    // changes `genKey`, which tears this effect down — and that is exactly the
+    // moment the search still running is about something nobody is looking at.
+    // Cancelling frees the worker for the request the student just made instead
+    // of queueing it behind one whose answer will be discarded.
+    return () => { live = false; cancelIdle(); planGenerator.cancel?.(); };
     // `catalogVariants` is deliberately absent: it settles asynchronously, and a
     // change to it after generation has started would tear down the in-flight
     // request and strand the panel exactly as the dependency bug did.
