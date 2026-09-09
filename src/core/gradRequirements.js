@@ -1359,6 +1359,13 @@ function allocateNodeInner(node, placedSet, used, originalUsed, courseMap, poolC
  * candidateSet: keys appearing in any requirement node; excluded even if not in allocatedSet
  *               (prevents a course from showing in both a requirement section and GE when
  *               it is a candidate for an unsatisfied AND requirement).
+ *
+ * `requiredSH` may be **null**, meaning the degree states no total to take a
+ * residual against — see `core/requirementBinding.generalElectiveAllowance`. It
+ * is carried through rather than coerced, because coercing it to 0 here is
+ * precisely the collapse that made the printed report claim a satisfied
+ * requirement on 97 degrees whose size we do not know. Renderers branch on it;
+ * `sectionProgress` in planModel.js is the one that decides how it reads.
  */
 export function calculateGeneralElectives(placedSet, allocatedSet, courseMap, requiredSH = 0, completedSet = null, candidateSet = null, realPlacedSet = null) {
   const unallocated = [];
@@ -1399,6 +1406,41 @@ export function calculateGeneralElectives(placedSet, allocatedSet, courseMap, re
     plannedSH: totalSH - completedSH,
     requiredSH,
   };
+}
+
+/**
+ * Whether a General Electives section says anything worth printing.
+ *
+ * ── The row that was nothing but a green bar ────────────────────────
+ *
+ * Measured over the 1,071 shipped programs: 633 produce an allowance that is
+ * not a positive number — 173 minors (already suppressed by their callers), 269
+ * whose degree total is missing so no residual exists, and 364 whose parsed
+ * requirements already meet or exceed the stated total. On the 460 DEGREES among
+ * them the printed report drew "General Electives 0/0 SH" with the bar at 100%,
+ * because `requiredSH > 0 ? … : 100` treats "nothing required" as "requirement
+ * met". A student reading their own audit saw a satisfied requirement; three of
+ * the four causes are defects in our own numbers.
+ *
+ * The rule is not "hide the awkward case" — it is that a row has to carry a
+ * fact. Three of them do:
+ *
+ *   · a positive allowance      → the residual, with a real denominator;
+ *   · credit placed against it  → "8 SH" of free electives the student took,
+ *                                 which is true whatever the denominator is,
+ *                                 and is exactly the over-the-top case that
+ *                                 matters on a degree with no room;
+ *   · nothing placed, no figure → nothing. Not a zero.
+ *
+ * So the row is dropped only when it is empty AND has no positive requirement to
+ * state. Absence then reads as "no free electives on this degree", which is what
+ * the row was trying and failing to say.
+ */
+export function generalElectivesWorthShowing(section) {
+  if (!section) return false;
+  const req = section.requiredSH;
+  if (Number.isFinite(req) && req > 0) return true;
+  return (section.placedSH ?? 0) > 0;
 }
 
 /**
@@ -1445,9 +1487,11 @@ export function allocateMajorSections(major, placedSet, courseMap) {
  * required — and the 95 got a figure the panel beside them disagreed with. So
  * the caller supplies it; `GradPanel` and `planModel` both already hold it.
  *
- * When nothing is supplied the denominator is 0, which is what the bar renders
- * as "no stated requirement". Callers that only want `allocatedSet` should use
- * `allocateMajorSections` and skip this entirely.
+ * When nothing is supplied the denominator is **null**, not 0. A caller that did
+ * not pass an allowance has not measured one, and 0 is a measurement — it drew a
+ * full bar over "0/0 SH", i.e. a satisfied requirement, which is the strongest
+ * claim this section can make and the one least supported. Callers that only
+ * want `allocatedSet` should use `allocateMajorSections` and skip this entirely.
  *
  * ── Why the tail is an options object ──────────────────────────────
  *
@@ -1460,7 +1504,7 @@ export function allocateMajorSections(major, placedSet, courseMap) {
  */
 export function allocateMajorWithElectives(major, placedSet, courseMap,
                                            { completedSet = null, realPlacedSet = null,
-                                             geAllowance = 0 } = {}) {
+                                             geAllowance = null } = {}) {
   const { sections, allocatedSet: globalUsed } = allocateMajorSections(major, placedSet, courseMap);
   const candidateKeys = collectCandidateKeys(sections, realPlacedSet ?? placedSet);
   const generalElectives = calculateGeneralElectives(placedSet, globalUsed, courseMap, geAllowance, completedSet, candidateKeys, realPlacedSet);

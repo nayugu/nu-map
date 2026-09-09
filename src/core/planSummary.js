@@ -46,7 +46,7 @@
 import {
   derivePlanSets, filterInTimeline, sectionProgressText, _minorShareNote,
 } from "./planModel.js";
-import { allocateMajorWithElectives } from "./gradRequirements.js";
+import { allocateMajorWithElectives, generalElectivesWorthShowing } from "./gradRequirements.js";
 import { generalElectiveSHOf } from "./requirementBinding.js";
 import { majorClaimOf, minorShare, outsideCreditKeys } from "./minorOverlap.js";
 import { computeGrantedAttrs, resolveTermByDuration, termSpans } from "./specialTermUtils.js";
@@ -242,7 +242,13 @@ export async function buildPlanSummary({
     const { sections, generalElectives } = allocateMajorWithElectives(
       prog, placedSet, courseMap,
       { completedSet: doneKeys, realPlacedSet, geAllowance: generalElectiveSHOf(prog, courseMap) });
-    const all = showGeneralElectives ? [...sections, generalElectives] : sections;
+    // The same worth-showing rule the printed report uses. It matters here even
+    // though the row itself never prints — General Electives carries `sat: true`
+    // unconditionally, so an empty one with no stated allowance was silently
+    // padding the "N of M sections complete" line with a section that is neither.
+    const all = showGeneralElectives && generalElectivesWorthShowing(generalElectives)
+      ? [...sections, generalElectives]
+      : sections;
     const outstanding = all.filter(s => !s.sat);
     lines.push(`${heading}${name}`);
     lines.push(`  ${all.length - outstanding.length} of ${all.length} sections complete.`);

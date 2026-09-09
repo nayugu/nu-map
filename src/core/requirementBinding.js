@@ -111,12 +111,33 @@ export { GENERAL_ELECTIVE, CONCENTRATION };
  * eight credits short of its own degree. Same rule, measured in each layer's
  * own unit, with `reconciliation` reporting where the units diverge.
  *
+ * ── A residual against a total we do not have is not zero ──────────
+ *
+ * `?? 0` on `totalCreditsRequired` did arithmetic on a number the record does
+ * not carry, and the answer came out looking exactly like a measurement: for
+ * the 269 programs whose total is missing, the allowance read 0 SH and the
+ * printed report drew "General Electives 0/0 SH" under a FULL green bar —
+ * requirement met, on a degree whose size is unknown to us. Those totals are
+ * missing for a reason that has nothing to do with free electives (269 records
+ * carry `totalCreditsRequired: 0` from the 2026-08-21 rollover; see CLAUDE.md
+ * → "Check COVERAGE before believing a free-elective number"), so the figure
+ * was not merely wrong, it was unrelated to the question.
+ *
+ * `null` is the third fact this repo keeps having to reintroduce — absent,
+ * empty and zero are not the same value. It is falsy, so `if (geSH > 0)` below
+ * skips exactly as it did when the answer was 0; what changes is that a
+ * RENDERER can now tell "no free electives" from "we cannot say".
+ *
  * @param demand  Σ demandOf over the program's sections, plus any concentration
  *                floor — the caller has it already, and re-deriving it here is
  *                how the two copies drift.
+ * @returns {number|null} SH of free electives, or null when the degree states
+ *                        no total to take a residual against.
  */
 export function generalElectiveAllowance(programData, demand) {
-  return Math.max(0, (programData?.totalCreditsRequired ?? 0) - demand);
+  const total = programData?.totalCreditsRequired;
+  if (!(Number.isFinite(total) && total > 0)) return null;
+  return Math.max(0, total - demand);
 }
 
 // ── Obligations ────────────────────────────────────────────────────
@@ -210,8 +231,21 @@ export function obligationsOf(programData, { placedSet = new Set(), courseMap = 
  * to delete — see `generalElectiveAllowance`.
  *
  * Placement-independent, so a caller may memoise it on the program alone.
+ *
+ * ── Why the missing obligation is read TWO ways ────────────────────
+ *
+ * `obligationsOf` emits no general-elective entry in two different situations —
+ * the degree leaves nothing free, and the degree states no total at all — and
+ * `?? 0` answered both with the same number. So the absence is disambiguated
+ * against the total itself rather than inferred from the obligation list, which
+ * is the only place the difference survives.
+ *
+ * @returns {number|null} null when the degree states no total; see
+ *                        `generalElectiveAllowance`.
  */
 export function generalElectiveSHOf(programData, courseMap = {}) {
+  const total = programData?.totalCreditsRequired;
+  if (!(Number.isFinite(total) && total > 0)) return null;
   const ge = obligationsOf(programData, { courseMap })
     .find(o => o.target === GENERAL_ELECTIVE);
   return ge?.shortfallSH ?? 0;

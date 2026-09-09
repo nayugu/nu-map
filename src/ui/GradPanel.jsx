@@ -39,6 +39,7 @@ import {
   allocateSections,
   collectCandidateKeys,
   calculateGeneralElectives,
+  generalElectivesWorthShowing,
 } from "../core/gradRequirements.js";
 import { generalElectiveSHOf } from "../core/requirementBinding.js";
 import {
@@ -705,8 +706,13 @@ function setQuotePref(id, open) {
  * remembered state, which is why a cheap hash is enough here — nothing is
  * decided by this value, and the cost of being wrong is one extra click.
  */
+// `\0` as an escape, never as a raw byte. Written literally it made this whole
+// 3,200-line file read as BINARY to every text tool — `grep` silently printed
+// nothing for any pattern in it, `file` said "data" — so a search for
+// `placedSH` came back empty and the General Electives defect looked like it
+// lived somewhere else entirely. The separator is unchanged; only its spelling.
 function quoteId(notes) {
-  const s = notes.join(" ");
+  const s = notes.join("\0");
   let h = 5381;
   for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
   return (h >>> 0).toString(36);
@@ -1562,6 +1568,17 @@ function GpaSoFar() {
 
 // ── Section accordion ────────────────────────────────────────────
 
+/**
+ * Whether a section is worth a row at all.
+ *
+ * Only General Electives can fail this, and only when it has neither a stated
+ * allowance nor any credit in it — see `generalElectivesWorthShowing`, which is
+ * shared with the printed report and the MCP payload so the three cannot
+ * disagree about what the student's own audit contains.
+ */
+const keepSection = (sec) =>
+  sec?.title !== "General Electives" || generalElectivesWorthShowing(sec);
+
 function SectionBlock({ sec, defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
   const ctx = useContext(GradCtx);
@@ -1576,7 +1593,17 @@ function SectionBlock({ sec, defaultOpen = true }) {
 
   // General electives section uses SH display instead of course count
   const isGeneralElectives = sec.title === 'General Electives' && sec.placedSH !== undefined;
-  const hasSplit = isGeneralElectives && sec.completedSH !== undefined;
+  // No stated degree total means no residual to take, so there is no
+  // denominator — not a denominator of zero. This section is built `sat: true`
+  // unconditionally (it is a bucket, not a requirement), so without this the
+  // panel drew a TICKED box over "0/0 SH" and a full bar: a satisfied
+  // requirement on a degree whose size the catalog never gave us. Same
+  // treatment as `isStatedOnly` below, which is the same distinction.
+  const allowanceUnknown = isGeneralElectives
+    && !(Number.isFinite(sec.requiredSH) && sec.requiredSH >= 0);
+  // Checked before the split: the split renderer prints `/{requiredSH}` and
+  // would put `null` on the screen.
+  const hasSplit = isGeneralElectives && !allowanceUnknown && sec.completedSH !== undefined;
 
   // A section the catalog states in prose only: it has a credit demand and no
   // course to tick, so there is nothing to count. "0/0" over a full-width empty
@@ -1587,6 +1614,10 @@ function SectionBlock({ sec, defaultOpen = true }) {
   const frac = isGeneralElectives
     ? (sec.requiredSH > 0 ? Math.min(sec.placedSH / sec.requiredSH, 1) : 1)
     : (displayTotal > 0 ? displaySatCount / displayTotal : 0);
+  // Both are "we could not check this", and both drop the bar for the same
+  // reason: a bar at 0% claims no progress and a bar at 100% claims completion,
+  // and neither is a thing we know here.
+  const notCheckable = isStatedOnly || allowanceUnknown;
 
   return (
     <div style={{ borderTop: "1px solid var(--border-1)", paddingTop: ph ? 5 : 7, marginBottom: ph ? 5 : 7 }}>
@@ -1597,8 +1628,8 @@ function SectionBlock({ sec, defaultOpen = true }) {
         display: "flex", alignItems: "center", gap: ph ? 4 : 6,
         cursor: "pointer", userSelect: "none",
       }}>
-        <CheckBox sat={sec.sat} unknown={isStatedOnly}
-                  title={isStatedOnly ? t("grad.notCheckable") : undefined} />
+        <CheckBox sat={sec.sat && !allowanceUnknown} unknown={notCheckable}
+                  title={notCheckable ? t("grad.notCheckable") : undefined} />
         {ph
           ? <span style={{ flex: 1 }} />
           : <span style={{ flex: 1, fontSize: 10, fontWeight: 700, color: sec.sat ? "var(--text-2)" : "var(--text-3)",
@@ -1612,14 +1643,15 @@ function SectionBlock({ sec, defaultOpen = true }) {
               {sec.plannedSH > 0 && <span style={{ color: "var(--planned)" }}>+{sec.plannedSH}</span>}
               <span>/{sec.requiredSH} SH</span>
             </>
-          ) : isGeneralElectives ? `${sec.placedSH}/${sec.requiredSH} SH`
+          ) : allowanceUnknown ? `${sec.placedSH} SH`
+            : isGeneralElectives ? `${sec.placedSH}/${sec.requiredSH} SH`
             : isStatedOnly ? `${sec.statedSH} SH`
             : `${displaySatCount}/${displayTotal}`}
         </span>
         <span style={{ fontSize: ph ? 8 : 9, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>
       </div>
       {/* Progress sliver */}
-      {!isStatedOnly && (
+      {!notCheckable && (
         <div style={{ marginTop: 3 }}>
           {hasSplit
             ? <CreditBar completedSH={sec.completedSH} plannedSH={sec.plannedSH} requiredSH={sec.requiredSH} showLabel={false} style={{ margin: 0 }} />
@@ -3134,7 +3166,13 @@ export default function GradPanel({ wideCatalog = false }) {
               CHART can only plan against the union of all of them. */}
           <SamplePlanOffer path={selPath} isGrad={isGrad} programData={major}
                            concentration={selConc} isPhone={isPhone} />
-          {majorSections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+          {/* Filtered HERE and not in the memo: `major1DoneSections` is paired
+              with `majorSections` BY INDEX to build the progress figures, and
+              the two are allocated over different sets (placed vs done), so a
+              General Electives row can legitimately be worth showing in one and
+              not the other. Dropping it upstream would silently shift every
+              section against its own done-count. */}
+          {majorSections.filter(keepSection).map((sec, i) => <SectionBlock key={i} sec={sec} />)}
           {concSection && (
             <>
               <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4, marginTop: 10 }}>
@@ -3162,7 +3200,7 @@ export default function GradPanel({ wideCatalog = false }) {
           loading={fetching2}
           loadingLabel={t("grad.loading")}
         >
-          {major2Sections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+          {major2Sections.filter(keepSection).map((sec, i) => <SectionBlock key={i} sec={sec} />)}
           <GpaRules program={major2Data} />
         </MajorCard>}
 

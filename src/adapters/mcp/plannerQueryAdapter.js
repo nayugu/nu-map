@@ -103,6 +103,7 @@ import {
   allocateSections,
   collectCandidateKeys,
   calculateGeneralElectives,
+  generalElectivesWorthShowing,
 } from "../../core/gradRequirements.js";
 import { generalElectiveSHOf } from "../../core/requirementBinding.js";
 import { baseId } from "../../core/repeatInstances.js";
@@ -622,7 +623,11 @@ export function createPlannerQuery(deps) {
       placedSet, allocatedSet, courseMapWithRepeats,
       generalElectiveSHOf(majorJson, courseMapWithRepeats), doneSet, candidateKeys, realPlacedSet
     );
-    results = [...results, generalElectives];
+    // Dropped rather than sent as "0 of 0", for the reason the whole payload
+    // exists: a model reads a satisfied 0 SH requirement as a fact about the
+    // degree and will repeat it to the student. `requiredSH: null` says we could
+    // not measure it, and an absent section says there is nothing to measure.
+    if (generalElectivesWorthShowing(generalElectives)) results = [...results, generalElectives];
 
     // Surface the fidelity verdict IN THE PAYLOAD, not only in the tool
     // description. The server's own instructions already treat `note` as

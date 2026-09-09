@@ -1,7 +1,8 @@
 // ═══════════════════════════════════════════════════════════════════
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
-import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirements.js";
+import { buildPlacedKeySet, allocateMajorWithElectives,
+         generalElectivesWorthShowing } from "./gradRequirements.js";
 import { generalElectiveSHOf } from "./requirementBinding.js";
 import {
   minorShare, majorClaimOf, outsideCreditKeys, MINOR_SHARE_FRACTION,
@@ -362,10 +363,17 @@ export function sectionProgress(sec) {
   const displaySatCount    = isPoolStructure ? Math.min(sec.satCount, sec.minRequired) : sec.satCount;
   const displayTotal       = isPoolStructure ? sec.minRequired : sec.total;
   const isGeneralElectives = sec.title === 'General Electives' && sec.placedSH !== undefined;
-  const hasSplit           = isGeneralElectives && sec.completedSH !== undefined;
+  // No total on the record means no residual to take, so there is no denominator
+  // — not a denominator of zero. Checked BEFORE `hasSplit`, because the split
+  // renderer prints `…/${requiredSH}` and would put `null` on the page.
+  const allowanceUnknown   = isGeneralElectives
+    && !(Number.isFinite(sec.requiredSH) && sec.requiredSH >= 0);
+  const hasSplit           = isGeneralElectives && !allowanceUnknown
+    && sec.completedSH !== undefined;
   const isStatedOnly       = (sec.children ?? []).length === 0 && sec.statedSH > 0;
   return {
     isPoolStructure, displaySatCount, displayTotal, isGeneralElectives, hasSplit, isStatedOnly,
+    allowanceUnknown,
     satisfied: !!sec.sat,
     kind: isStatedOnly ? "stated" : isGeneralElectives ? "credit" : isPoolStructure ? "pool" : "count",
   };
@@ -382,6 +390,10 @@ export function sectionProgress(sec) {
 export function sectionProgressText(sec, unitName = "SH") {
   const p = sectionProgress(sec);
   if (p.isStatedOnly) return `${sec.statedSH} ${unitName} required, stated in prose only — no course list to check against`;
+  // Same distinction the dash draws in the PDF: the degree states no total, so
+  // there is no residual to be short of. Reporting "of 0" here read as a
+  // requirement already met.
+  if (p.allowanceUnknown) return `${sec.placedSH} ${unitName} — this program states no total to measure a free-elective allowance against`;
   if (p.hasSplit) return `${sec.completedSH} completed + ${sec.plannedSH} planned of ${sec.requiredSH} ${unitName}`;
   if (p.isGeneralElectives) return `${sec.placedSH} of ${sec.requiredSH} ${unitName}`;
   if (p.isPoolStructure) return `${p.displaySatCount} of ${p.displayTotal} needed (from a menu of ${sec.total})`;
@@ -395,14 +407,19 @@ function sectionHtml(sec, doneKeys) {
   // demanded, no course to tick. Same treatment as the panel, the registrar's
   // number and no bar, because an empty bar claims no progress where none is
   // measurable.
-  const { isPoolStructure, displaySatCount, displayTotal, isGeneralElectives, hasSplit, isStatedOnly }
-    = sectionProgress(sec);
+  const { isPoolStructure, displaySatCount, displayTotal, isGeneralElectives, hasSplit, isStatedOnly,
+          allowanceUnknown } = sectionProgress(sec);
 
   // Progress text
   // Numbers, but escaped anyway: `sh` reaches these totals from scraped
   // `credits`, and "it is a number" is an assumption about someone else's
   // data rather than a fact about this function's input.
-  const progHtml = hasSplit
+  // `allowanceUnknown` first: it is the one case with no denominator to print,
+  // and it prints a dash for the same reason `isStatedOnly` does — a reader has
+  // to be able to tell "nothing outstanding" from "nothing we could check".
+  const progHtml = allowanceUnknown
+    ? `${esc(sec.placedSH)} SH<span style="opacity:.55"> / —</span>`
+    : hasSplit
     ? `<span style="color:#16a34a">${esc(sec.completedSH)}</span>${sec.plannedSH > 0 ? `<span style="color:#2563eb">+${esc(sec.plannedSH)}</span>` : ""}/${esc(sec.requiredSH)} SH`
     : isGeneralElectives
       ? `${esc(sec.placedSH)}/${esc(sec.requiredSH)} SH`
@@ -444,7 +461,11 @@ function sectionHtml(sec, doneKeys) {
   // "–" for a prose-only section: the print equivalent of the panel's dashed
   // box. An advisor reading this export has to be able to tell "we checked and
   // it is outstanding" from "we could not check this at all".
-  const secIcon = isStatedOnly ? "–"
+  // `allowanceUnknown` takes the same dash for the same reason, and it is the
+  // case that made the rule necessary: this section is built with `sat: true`
+  // unconditionally, so without the dash it printed a ✓ beside "0/0 SH" on 97
+  // degrees whose total the catalog never gave us.
+  const secIcon = isStatedOnly || allowanceUnknown ? "–"
     : secStatus === "done" ? "✓" : secStatus === "planned" ? "○" : "";
   return `<div class="sec${secStatus === "done" ? " sec-sat" : secStatus === "planned" ? " sec-planned" : ""}">
     <div class="sec-head">
@@ -452,7 +473,7 @@ function sectionHtml(sec, doneKeys) {
       <span class="sec-title">${esc(sec.title)}</span>
       <span class="sec-prog">${progHtml}</span>
     </div>
-    ${isStatedOnly ? "" : barHtml}
+    ${isStatedOnly || allowanceUnknown ? "" : barHtml}
     ${warnHtml}
     ${catalogHtml}
     <div class="sec-body">
@@ -718,7 +739,11 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
       prog, placedSet, courseMap,
       { completedSet: doneKeysSet, realPlacedSet,
         geAllowance: generalElectiveSHOf(prog, courseMap) });
-    let sections = [...majorSections, generalElectives];
+    // A minor never shows one (the 50% cap is what occupies that room, and it
+    // is printed as its own note); a degree shows one only when the row carries
+    // a fact — see `generalElectivesWorthShowing`.
+    let sections = [...majorSections,
+                    ...(generalElectivesWorthShowing(generalElectives) ? [generalElectives] : [])];
     if (!showGeneralElectives) {
       sections = sections.filter(s => s.title !== "General Electives");
     }
