@@ -19,6 +19,7 @@ import { IPlanGenerator } from "../../ports/IPlanGenerator.js";
 import { generatePlan, DEFAULT_PREFERENCES, createTrace } from "../../engine/index.js";
 import { buildDepthIndex } from "../../engine/prereqDepth.js";
 import { programIdentity } from "../../core/programIdentity.js";
+import { parseMajorPathParts } from "../../data/programPaths.js";
 import enginePorts from "./enginePorts.js";
 import chartCalibration from "./chartCalibration.js";
 
@@ -39,6 +40,27 @@ function depthIndexFor(courseMap) {
 
 /**
  * Prerequisites the catalog does not record but its own published plans agree on.
+ *
+ * ── Why this one is NOT gated on the catalog edition ───────────────
+ *
+ * `early-donors.json` is, and the difference is the rule rather than a
+ * judgement call about how much staleness to tolerate. This repo already draws
+ * the line: program requirements are edition-partitioned and the course catalog
+ * is NOT. A donor is a PROGRAM-level document — one edition's courses, credit
+ * totals and sections — so lending it across a roll answers a different
+ * question. What this file holds is COURSE-level: 224 edges saying MATH 1341
+ * precedes MATH 1342, which courses precede a co-op, and where departments
+ * typically put a course. Those are facts about courses, and courses are one
+ * current snapshot with no edition to disagree with.
+ *
+ * It is also used as a floor and a prior, never as a target (see
+ * `reclaimFromFiller`), so a stale observation delays a course rather than
+ * requiring a wrong one.
+ *
+ * Worth knowing, because it cannot be refreshed: the artifact is derived from
+ * published Sample Plans of Study, and NEU deleted those catalog-wide for
+ * 2026-2027. These 2026 observations are the last that will ever be made unless
+ * the departments' own plans become machine-readable.
  *
  * Fetched once and cached, and a failure degrades to an empty list rather than
  * blocking generation: without it CHART still orders everything the catalog states,
@@ -62,15 +84,44 @@ function observedOrder() {
  * Keyed by `programIdentity`, because neither a program's name nor its catalog url is
  * unique on its own. Degrades to nothing on failure, which is the behaviour before
  * donors existed and is always a legal answer.
+ *
+ * The `edition` travels with it because `programIdentity` is `name @ sourceUrl` and
+ * carries NO year — see `donorFor`.
  */
 function earlyDonors() {
   if (!_donorPromise) {
     _donorPromise = fetch(EARLY_DONORS_URL)
       .then(r => (r.ok ? r.json() : null))
-      .then(d => d?.programs ?? {})
-      .catch(() => ({}));
+      .then(d => ({ programs: d?.programs ?? {}, edition: Number(d?.edition) }))
+      .catch(() => ({ programs: {}, edition: NaN }));
   }
   return _donorPromise;
+}
+
+/**
+ * The donor plan for a program, but ONLY from that program's own catalog edition.
+ *
+ * A donor is a borrowed Sample Plan of Study, so it is a reading of one edition's
+ * requirements — which courses, in which credit totals, satisfying which sections.
+ * `programIdentity` cannot see that: it is `name @ sourceUrl`, both of which are
+ * stable across a roll (measured: 506 of 651 undergraduate identities are shared
+ * between the 2026 and 2027 trees). So a 2027 program looked up a donor derived
+ * from 2026 plans and was handed one, silently, by a key that could not tell the
+ * editions apart. Measured on the live artifact: 4 of the 651 undergraduate 2027
+ * programs.
+ *
+ * That is small, and it is the same defect as serving a 2026 sample plan on a 2027
+ * program — one layer down, where nothing on screen says the plan was borrowed at
+ * all, let alone from another year. Refusing costs those 4 programs a borrowed
+ * ordering and leaves them to the search, which is what every program without a
+ * donor already gets. Degrade to less information, never to wrong information.
+ *
+ * An artifact with no `edition` lends to nobody: absent is not a match.
+ */
+function donorFor(donors, programKey, programData) {
+  const want = parseMajorPathParts(String(programKey ?? ""))?.year;
+  if (!Number.isFinite(want) || donors.edition !== want) return null;
+  return donors.programs[programIdentity(programData)]?.plan ?? null;
 }
 
 /** @type {import('../../ports/IPlanGenerator.js').IPlanGenerator} */
@@ -111,7 +162,7 @@ export default {
     // and fetching donors for a program that has one is work whose result is discarded.
     const donorPlan = publishedPlan
       ? null
-      : ((await earlyDonors())[programIdentity(programData)]?.plan ?? null);
+      : donorFor(await earlyDonors(), programKey, programData);
     // Graduate PROGRAMS and graduate STUDENTS are the same thing here, and the
     // distinction matters: it sets the credit envelope (8–16 rather than 12–19) and
     // removes the class-standing floor, because a student admitted to a master's

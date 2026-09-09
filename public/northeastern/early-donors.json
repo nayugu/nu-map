@@ -1,5 +1,6 @@
 {
- "generated": "2026-08-18",
+ "generated": "2026-09-09",
+ "edition": 2026,
  "source": "per-cluster nearest neighbour among programs that publish a Sample Plan of Study",
  "method": "the target's OWN required courses, timed by the donor's first terms",
  "filters": {
@@ -926,38 +927,6 @@
           ]
          },
          {
-          "text": "PSYC5120",
-          "options": [
-           [
-            "PSYC5120"
-           ]
-          ]
-         },
-         {
-          "text": "PSYC5130",
-          "options": [
-           [
-            "PSYC5130"
-           ]
-          ]
-         },
-         {
-          "text": "PSYC5140",
-          "options": [
-           [
-            "PSYC5140"
-           ]
-          ]
-         },
-         {
-          "text": "PSYC5150",
-          "options": [
-           [
-            "PSYC5150"
-           ]
-          ]
-         },
-         {
           "text": "PSYC5170",
           "options": [
            [
@@ -1372,6 +1341,22 @@
           "options": [
            [
             "ARTF1220"
+           ]
+          ]
+         },
+         {
+          "text": "ARTH1001",
+          "options": [
+           [
+            "ARTH1001"
+           ]
+          ]
+         },
+         {
+          "text": "ARTH1002",
+          "options": [
+           [
+            "ARTH1002"
            ]
           ]
          }
@@ -2007,38 +1992,6 @@
         "term": "Spring",
         "type": "spring",
         "entries": [
-         {
-          "text": "PSYC5120",
-          "options": [
-           [
-            "PSYC5120"
-           ]
-          ]
-         },
-         {
-          "text": "PSYC5130",
-          "options": [
-           [
-            "PSYC5130"
-           ]
-          ]
-         },
-         {
-          "text": "PSYC5140",
-          "options": [
-           [
-            "PSYC5140"
-           ]
-          ]
-         },
-         {
-          "text": "PSYC5150",
-          "options": [
-           [
-            "PSYC5150"
-           ]
-          ]
-         },
          {
           "text": "PSYC5170",
           "options": [
@@ -3053,6 +3006,22 @@
         "type": "fall",
         "entries": [
          {
+          "text": "BIOL2217",
+          "options": [
+           [
+            "BIOL2217"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL2218",
+          "options": [
+           [
+            "BIOL2218"
+           ]
+          ]
+         },
+         {
           "text": "ENGW1111",
           "options": [
            [
@@ -3065,7 +3034,40 @@
        {
         "term": "Spring",
         "type": "spring",
-        "entries": []
+        "entries": [
+         {
+          "text": "BIOL2219",
+          "options": [
+           [
+            "BIOL2219"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL2220",
+          "options": [
+           [
+            "BIOL2220"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL2221",
+          "options": [
+           [
+            "BIOL2221"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL2222",
+          "options": [
+           [
+            "BIOL2222"
+           ]
+          ]
+         }
+        ]
        }
       ]
      },
@@ -3128,6 +3130,22 @@
         "type": "fall",
         "entries": [
          {
+          "text": "BIOL2217",
+          "options": [
+           [
+            "BIOL2217"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL2218",
+          "options": [
+           [
+            "BIOL2218"
+           ]
+          ]
+         },
+         {
           "text": "ENGW1111",
           "options": [
            [
@@ -3140,7 +3158,40 @@
        {
         "term": "Spring",
         "type": "spring",
-        "entries": []
+        "entries": [
+         {
+          "text": "BIOL2219",
+          "options": [
+           [
+            "BIOL2219"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL2220",
+          "options": [
+           [
+            "BIOL2220"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL2221",
+          "options": [
+           [
+            "BIOL2221"
+           ]
+          ]
+         },
+         {
+          "text": "BIOL2222",
+          "options": [
+           [
+            "BIOL2222"
+           ]
+          ]
+         }
+        ]
        }
       ]
      },
@@ -3447,46 +3498,6 @@
         "term": "Spring",
         "type": "spring",
         "entries": [
-         {
-          "text": "PSYC5115",
-          "options": [
-           [
-            "PSYC5115"
-           ]
-          ]
-         },
-         {
-          "text": "PSYC5120",
-          "options": [
-           [
-            "PSYC5120"
-           ]
-          ]
-         },
-         {
-          "text": "PSYC5130",
-          "options": [
-           [
-            "PSYC5130"
-           ]
-          ]
-         },
-         {
-          "text": "PSYC5140",
-          "options": [
-           [
-            "PSYC5140"
-           ]
-          ]
-         },
-         {
-          "text": "PSYC5150",
-          "options": [
-           [
-            "PSYC5150"
-           ]
-          ]
-         },
          {
           "text": "PSYC5170",
           "options": [

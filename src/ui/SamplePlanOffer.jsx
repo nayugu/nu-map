@@ -177,7 +177,23 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
     // Back to the catalog when the program changes: a source choice is about the
     // program in front of you, not a standing preference, and silently generating
     // for the next program would spend work nobody asked for.
-    setSource("catalog");
+    //
+    // ── ...but never onto a source that is not there ──────────────────
+    //
+    // This was an unconditional `setSource("catalog")`, and the state it produced
+    // is the worst kind: the Catalog tab selected *and disabled*, the CHART tab
+    // enabled but unselected, and the body showing "loading…" for ever, because
+    // `chosen` is null and the fallback branch assumes null means not-yet-arrived.
+    // Nothing anywhere flipped the source back, so the panel simply never resolved.
+    //
+    // It was reachable before this line existed — 417 programs publish no plan at
+    // all — and the edition fix beside it widens that to every undergraduate on
+    // 2026-2027, because NEU deleted Sample Plans of Study catalog-wide and the
+    // loader no longer borrows last year's. So the default has to be a source that
+    // exists rather than a preferred one: catalog when there IS a catalog plan for
+    // this edition, otherwise the generator. When neither exists `sampleplanOffer`
+    // hides the section, so there is no third case.
+    setSource(hasSamplePlan ? "catalog" : "chart");
     if (!hasSamplePlan) return;
     let live = true;
     majorRequirements.loadSamplePlans(path, isGrad)
@@ -281,6 +297,12 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
   }, [source, genKey, canGenerate]);
 
   const usingChart = source === "chart";
+
+  // A fetch is genuinely in flight only when this edition HAS a plan and it has
+  // not arrived. `plans` is reset to null on every program change, so null alone
+  // cannot tell "still coming" from "there was never anything" — the same
+  // absent-vs-empty distinction the data layer is built around, arriving here.
+  const plansPending = hasSamplePlan && plans === null;
   const chartPlan  = gen && !gen.refused ? gen.plan : null;
   // One list, whichever source. Everything downstream reads `chosen` and never asks.
   const variants = usingChart ? (chartPlan ? [chartPlan] : []) : catalogVariants;
@@ -723,8 +745,21 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
                 </div>
               )}
             </>
-          ) : (
-            <div style={{ fontSize: fz, color: "var(--text-5)" }}>{t("onboard.sampleplan.loading")}</div>
+          ) : usingChart ? null : (
+            // ── "loading" is a claim, and it has to be true ────────────
+            //
+            // This branch is everything that is not a chosen plan, and it used to
+            // say "loading…" for all of it. That is the absent/empty collapse this
+            // project keeps paying for: a catalog source with no plan for THIS
+            // edition is not slow, it is finished, and the panel sat on that word
+            // for ever. Now the only case that can reach it is a fetch actually in
+            // flight — the source default beside it guarantees the catalog is only
+            // selected when a plan exists — and CHART owns its own status line
+            // (`chart-status`, which reports busy/refused/ready), so repeating a
+            // second, dumber one underneath it would let the two disagree.
+            plansPending
+              ? <div style={{ fontSize: fz, color: "var(--text-5)" }}>{t("onboard.sampleplan.loading")}</div>
+              : null
           )}
         </div>
       )}

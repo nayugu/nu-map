@@ -209,7 +209,7 @@ export const strings = {
   // the catalog one sitting next to it. What actually distinguishes them is that one is published
   // and one is generated on the spot, so that is what the labels say.
   "chart.source.chart":       "Generated",
-  "chart.source.catalog.none":"This program does not publish a plan.",
+  "chart.source.catalog.none":"This catalog year does not publish a plan.",
   "chart.source.catalog.tip": "The sample plan of study published on the catalog for this program.",
   // Short enough to read at a glance, because that is all a hover gets. What it aims for, and the
   // two things it checks — the detail lives in the explainer, which is one click away.

@@ -233,7 +233,7 @@ export const strings = {
   "chart.source.label": "الخطة من",
   "chart.source.catalog": "الدليل",
   "chart.source.chart": "مولَّدة",
-  "chart.source.catalog.none": "هذا البرنامج لا ينشر خطة دراسية.",
+  "chart.source.catalog.none": "لا تنشر خطة دراسية لسنة الدليل هذه.",
   "chart.source.catalog.tip": "الخطة الدراسية النموذجية المنشورة في الدليل لهذا البرنامج.",
   "chart.source.chart.tip": "تُحسِّن للتدريب التعاوني، وتتحقّق من الطرح ومن سلاسل المتطلبات السابقة.",
   "chart.source.chart.none": "بيانات المتطلبات غير كافية لتوليد خطة.",

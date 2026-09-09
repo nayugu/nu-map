@@ -93,6 +93,14 @@ const RELOAD_UI     = "cd test/browser   && node --test plan-reload.browser.test
 // box was a render-time defect that every Node test passed straight through.
 const EDITION_UI    = "cd test/browser   && node --test catalog-edition.browser.test.js";
 
+// The sample plan's edition tie. The RULE is pure and cheap to check; the two
+// facts that need a render (a disabled source being selected, a "loading" that
+// never resolves) are the browser file's only job.
+const PLANKEY_TEST  = "cd test/unit      && node --test plan-key.test.js";
+const SAMPLEPLAN_UI = "cd test/browser   && node --test sample-plan-edition.browser.test.js";
+const OFFER     = "src/ui/SamplePlanOffer.jsx";
+const GENERATOR = "src/adapters/northeastern/planGenerator.js";
+
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
  * tie-break, a deleted guard, a fallback restored. `from` must be unique in the
@@ -225,6 +233,53 @@ const MUTANTS = [
     from: "  return Number.isInteger(y) && y > 1000 ? `${y - 1}-${y}` : \"\";",
     to:   "  return Number.isFinite(y) ? `${y - 1}-${y}` : \"\";",
     run: [COHORT_TEST] },
+
+  // ── The sample plan's edition tie ─────────────────────────────────
+  { name: "sample plan: the plan is migrated across editions, as it used to be",
+    file: PATHS,
+    from: "  const canonical = resolveInMap(programMap, p, parseMajorPathParts) ?? p;\n" +
+          "  const wanted = String(canonical).replace(/requirements\\.json$/, \"plan.json\");\n" +
+          "  return planMap[wanted] ? wanted : null;",
+    to:   "  const canonical = resolveInMap(programMap, p, parseMajorPathParts) ?? p;\n" +
+          "  const wanted = String(canonical).replace(/requirements\\.json$/, \"plan.json\");\n" +
+          "  return planMap[wanted] ? wanted : resolveInMap(planMap, wanted, parseMajorPathParts);",
+    run: [PLANKEY_TEST, SAMPLEPLAN_UI] },
+
+  { name: "sample plan: the plan stops following its requirements (no canonicalize)",
+    file: PATHS,
+    from: "  const canonical = resolveInMap(programMap, p, parseMajorPathParts) ?? p;",
+    to:   "  const canonical = p;",
+    run: [PLANKEY_TEST] },
+
+  { name: "sample plan: a program object instead of a path throws instead of answering",
+    file: PATHS,
+    from: "  const p = typeof path === \"string\" ? path : \"\";",
+    to:   "  const p = path;",
+    run: [PLANKEY_TEST] },
+
+  { name: "sample plan: the source resets onto the catalog even when there is none",
+    file: OFFER,
+    from: "    setSource(hasSamplePlan ? \"catalog\" : \"chart\");",
+    to:   "    setSource(\"catalog\");",
+    run: [SAMPLEPLAN_UI] },
+
+  { name: "sample plan: 'loading' is claimed for a fetch that was never started",
+    file: OFFER,
+    from: "  const plansPending = hasSamplePlan && plans === null;",
+    to:   "  const plansPending = plans === null;",
+    run: [SAMPLEPLAN_UI] },
+
+  { name: "sample plan: a donor is lent across catalog editions",
+    file: GENERATOR,
+    from: "  if (!Number.isFinite(want) || donors.edition !== want) return null;",
+    to:   "  if (!Number.isFinite(want)) return null;",
+    run: [SAMPLEPLAN_UI],
+    // Not expected to be observable from the panel: CS BSCS publishes a plan in
+    // 2026 and is not one of the 47 programs with a donor, so no rendered case
+    // reaches this branch. Kept as a marked mutant rather than dropped — a
+    // future KILL here means a test finally covers the donor path, which is
+    // itself the signal.
+    equivalent: true },
 
   { name: "edition: the label names the directory year, not the academic year",
     file: PATHS,

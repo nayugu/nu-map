@@ -233,7 +233,7 @@ export const strings = {
   "chart.source.label": "계획 작성 주체",
   "chart.source.catalog": "카탈로그",
   "chart.source.chart": "자동 생성",
-  "chart.source.catalog.none": "이 프로그램은 이수 계획을 공개하지 않습니다.",
+  "chart.source.catalog.none": "이 요람 연도에는 이수 계획이 공개되지 않았습니다.",
   "chart.source.catalog.tip": "이 프로그램에 대해 카탈로그에 게시된 표준 이수 모형입니다.",
   "chart.source.chart.tip": "코업에 맞춰 최적화하고, 개설 여부와 선수과목 사슬을 확인합니다.",
   "chart.source.chart.none": "요건 데이터가 부족해 계획을 생성할 수 없습니다.",

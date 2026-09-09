@@ -23,17 +23,25 @@
 // place. Whatever is not read before then is not read at all.
 // ═══════════════════════════════════════════════════════════════════
 
-import { parseMajorPathParts, resolveInMap } from "./programPaths.js";
+import { planKeyFor } from "./programPaths.js";
+import { programMapFor } from "./majorLoader.js";
 
 const _planMap = import.meta.glob("../../data/northeastern/programs/undergraduate/**/plan.json",      { eager: false });
 const _gradMap = import.meta.glob("../../data/northeastern/programs/graduate/**/plan.json", { eager: false });
 
 /**
- * A program path points at `requirements.json`; its plan is the sibling.
- * Derived rather than stored so the two can never drift apart.
+ * The plan key for a program path, or null when that program publishes none
+ * for the edition the student is actually being shown.
+ *
+ * The rule itself lives in `planKeyFor` (programPaths.js), which is pure and
+ * therefore unit-testable — this file is a Vite `import.meta.glob` module and
+ * cannot be imported under Node at all. Read the docstring there for why a
+ * plan may not be migrated across editions on its own; it is the defect this
+ * function exists to make impossible.
  */
-const toPlanPath = (programPath) =>
-  String(programPath ?? "").replace(/requirements\.json$/, "plan.json");
+function planKeyOf(path, isGrad) {
+  return planKeyFor(isGrad ? _gradMap : _planMap, programMapFor(path), path);
+}
 
 /**
  * Load the sample plans for a program path, or null when it publishes none.
@@ -47,12 +55,8 @@ const toPlanPath = (programPath) =>
  */
 export async function loadSamplePlans(path, isGrad = false) {
   const map = isGrad ? _gradMap : _planMap;
-  const wanted = toPlanPath(path);
-  // Saved plans can hold a path from an older edition or a renamed folder, so
-  // the same migration the program loader uses applies here too — otherwise a
-  // program that still resolves would silently lose its sample plan.
-  const key = map[wanted] ? wanted : resolveInMap(map, wanted, parseMajorPathParts);
-  if (!key || !map[key]) return null;
+  const key = planKeyOf(path, isGrad);
+  if (!key) return null;
   const mod = await map[key]();
   const grid = mod.default ?? mod;
   return grid?.plans?.length ? grid : null;
@@ -65,7 +69,5 @@ export async function loadSamplePlans(path, isGrad = false) {
  * and then discovering there is nothing behind it.
  */
 export function hasSamplePlan(path, isGrad = false) {
-  const map = isGrad ? _gradMap : _planMap;
-  const wanted = toPlanPath(path);
-  return Boolean(map[wanted] || resolveInMap(map, wanted, parseMajorPathParts));
+  return Boolean(planKeyOf(path, isGrad));
 }

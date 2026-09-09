@@ -225,6 +225,60 @@ export function atCohortYear(options, cohortYear) {
  * @param {number} cohortYear
  * @returns {string|null}
  */
+/**
+ * The `plan.json` key for a program, or null when it publishes none FOR THE
+ * EDITION THAT PROGRAM'S REQUIREMENTS ACTUALLY RESOLVED TO.
+ *
+ * ── Why the plan may not be migrated on its own ────────────────────
+ *
+ * A Sample Plan of Study is not a document about a program, it is a document
+ * about one EDITION of that program's requirements: it names that edition's
+ * courses, in that edition's credit totals, satisfying that edition's
+ * sections. A plan borrowed from a neighbouring year is therefore not a
+ * slightly-old answer, it is an answer to a different question — and it
+ * arrives looking authoritative, because the student asked for "the
+ * department's plan" and was handed one.
+ *
+ * `samplePlanLoader` used to run `resolveInMap` over the PLAN map. That is the
+ * same migration the program loader uses, and it is right there — but it is
+ * right only for REQUIREMENTS, where a saved path that no longer resolves must
+ * land on something rather than empty the panel. Over plans it silently
+ * changed edition. Measured on the live tree: 322 of 509 multi-edition
+ * undergraduate programs publish a plan in one edition and not the other, and
+ * the split is not a scatter — it is all 322 in 2026 and ZERO in 2027, because
+ * NEU deleted Sample Plans of Study catalog-wide for 2026-2027 (no
+ * `planofstudy` pane, no `sc_plangrid`, not even the phrase, on 768 cached
+ * pages or the live site). So every student on the current edition who opened
+ * that section was being shown last year's plan.
+ *
+ * The rule instead, and the reason it takes BOTH maps: resolve against the
+ * requirements map — the same resolution `loadMajor` performs, so a saved path
+ * from a dropped edition follows its requirements wherever they land — and
+ * then take the sibling EXACTLY. The plan's edition is then the loaded
+ * requirements' edition by construction rather than by a second agreeing
+ * guess, which is the only arrangement in which the two cannot drift.
+ *
+ * This lives here rather than in `samplePlanLoader` for the reason `editionsOf`
+ * does: that file is a Vite `import.meta.glob` module and cannot be imported
+ * under Node at all, so a rule kept there is a rule no unit test can reach.
+ *
+ * @param {Record<string, unknown>} planMap     path → plan.json loader
+ * @param {Record<string, unknown>} programMap  path → requirements.json loader
+ * @param {string} path
+ * @returns {string|null}
+ */
+export function planKeyFor(planMap, programMap, path) {
+  // Coerced BEFORE anything reads it: `parseMajorPathParts` calls `.split`, so
+  // a caller holding `{}` (a program object rather than its path — the obvious
+  // slip at this boundary) threw rather than answering "no plan". A loader that
+  // throws takes the whole panel down; one that returns null loses a feature.
+  const p = typeof path === "string" ? path : "";
+  if (!planMap || !programMap || !p) return null;
+  const canonical = resolveInMap(programMap, p, parseMajorPathParts) ?? p;
+  const wanted = String(canonical).replace(/requirements\.json$/, "plan.json");
+  return planMap[wanted] ? wanted : null;
+}
+
 export function findCohortVersion(map, path, cohortYear) {
   // No cohort (a plan with no entry term yet) means no opinion. `pickCatalogYear`
   // answers "newest" for NaN, which is right for BUILDING A LIST and wrong here:

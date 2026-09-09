@@ -58,6 +58,20 @@ function mapFor(path) {
 }
 
 /**
+ * The requirements map a path belongs to, for the one other loader that has to
+ * resolve against the SAME registry this one does.
+ *
+ * `samplePlanLoader` needs it: a plan is only ever the sibling of the
+ * requirements record that actually loaded, so resolving it against a second,
+ * separately-declared glob would reintroduce exactly the drift the rule exists
+ * to prevent (see `planKeyFor` in programPaths.js). Exported rather than
+ * re-globbed so there is one registry, not two that agree today.
+ */
+export function programMapFor(path) {
+  return mapFor(path);
+}
+
+/**
  * Everything the year selector needs about one declared program, in one call.
  *
  * Returned together rather than as three port methods because the three answers

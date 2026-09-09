@@ -56,10 +56,31 @@ function earlyTermsOf(variant) {
   return out;
 }
 
+/**
+ * The catalog edition these donors are read from, as its ending year.
+ *
+ * It was the literal `2026`, which is how the artifact came to describe an
+ * edition without saying so. A donor is a borrowed Sample Plan of Study, so it
+ * is a document about ONE edition's requirements exactly like the plan it is
+ * derived from — and `programIdentity` is `name @ sourceUrl`, which carries no
+ * year, so a 2027 program looked its 2026 donor up by an identity that could
+ * not tell the two editions apart. Writing the edition into the file is what
+ * lets the adapter refuse the loan; see `earlyDonors` in planGenerator.js.
+ *
+ * `--edition` overrides it, so re-deriving after a roll needs no code change.
+ */
+const EDITION = (() => {
+  const flag = process.argv.indexOf("--edition");
+  if (flag >= 0 && /^\d{4}$/.test(process.argv[flag + 1] ?? "")) return Number(process.argv[flag + 1]);
+  const base = join(ROOT, "data/northeastern/programs/undergraduate");
+  const years = existsSync(base) ? readdirSync(base).filter(d => /^\d{4}$/.test(d)).map(Number) : [];
+  return years.length ? Math.max(...years) : NaN;
+})();
+
 function load() {
   const out = [];
   for (const lvl of ["undergraduate", "graduate"]) {
-    const base = join(ROOT, "data/northeastern/programs", lvl, "2026");
+    const base = join(ROOT, "data/northeastern/programs", lvl, String(EDITION));
     if (!existsSync(base)) continue;
     for (const col of readdirSync(base)) {
       const cd = join(base, col);
@@ -227,6 +248,9 @@ if (!process.argv.includes("--write")) {
 }
 const doc = {
   generated: new Date().toISOString().slice(0, 10),
+  // The edition every donor here was read from. A consumer must check it: a
+  // borrowed plan is only a reading of the edition it came from.
+  edition: EDITION,
   source: "per-cluster nearest neighbour among programs that publish a Sample Plan of Study",
   method: "the target's OWN required courses, timed by the donor's first terms",
   filters: { minSimilarity: MIN_SIMILARITY, minCluster: MIN_CLUSTER, terms: EARLY_TERMS },
