@@ -145,6 +145,7 @@ export const strings = {
   "grad.major1.label":      "MAJEURE 1",
   "grad.major2.label":      "MAJEURE 2",
   "grad.major2.add":        "+ Ajouter une deuxième majeure",
+  "grad.major2.remove":    "Supprimer la seconde majeure",
   "grad.major.search":      "⌕ rechercher une majeure",
   "grad.major.search.short":"⌕ rechercher",
   "grad.conc.label":        "CONCENTRATION",

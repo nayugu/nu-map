@@ -239,6 +239,36 @@ describe("catalog editions · in the running app", () => {
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
   });
 
+  test("the entry hint does not resize when hovered", async () => {
+    // It swaps its own text on hover — the FACT at rest, the OFFER under the
+    // pointer — and the two strings are different lengths. Unreserved, hovering
+    // near the right end shrank the control out from under the cursor, firing
+    // mouseleave, which grew it back under the cursor, which fired mouseenter:
+    // the line flickered for as long as you rested there. Reported from the
+    // running app, not from a test, which is why there is one now.
+    //
+    // Asserting the BOX rather than the strings, because which of them is longer
+    // varies by locale — zh reverses it — so a length comparison would pass in
+    // English and prove nothing.
+    const { ctx, page, errors } = await openPanel(CS(2026), 2026);
+    const hint = page.locator("[data-edition-reset]").first();
+    await hint.waitFor({ timeout: 30_000 });
+
+    const rest = (await hint.boundingBox()).width;
+    await hint.hover();
+    // Wait for the swap to have actually happened, or this measures the same
+    // state twice and passes for the wrong reason.
+    await page.waitForFunction(
+      () => /switch to/i.test(document.querySelector("[data-edition-reset]")?.innerText ?? ""),
+      null, { timeout: 10_000 });
+    const hovered = (await hint.boundingBox()).width;
+
+    assert.equal(Math.round(hovered), Math.round(rest),
+      `the hint resized on hover (${rest}px → ${hovered}px) — it will flicker under the pointer`);
+    await ctx.close();
+    assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
+  });
+
   test("a plan saved on an edition we NO LONGER HOLD still shows its programs", async () => {
     // The returning student. Their plan points at `.../2025/...`, an edition
     // that has aged out, and `resolveInMap` answers it with the 2026 record.

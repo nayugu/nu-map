@@ -282,9 +282,13 @@ const MUTANTS = [
     to:   "  const chartEnabled = Boolean(chartEligible);",
     run: [PLANSRC_TEST] },
 
+  // ⚠ Re-anchored after `show` stopped asking whether CHART could still be
+  // running and started asking whether it HAS a plan. It reported SKIP for one
+  // run, which is exactly the failure this probe exits non-zero for: the mutant
+  // applied nowhere and the sweep would have gone on looking green.
   { name: "chart: the section renders with neither source available",
     file: PLANSRC,
-    from: "  const show = !sectionHidden && (catalog.enabled || chart.enabled);",
+    from: "  const show = !sectionHidden && (catalog.enabled || chartHasPlan);",
     to:   "  const show = !sectionHidden;",
     run: [PLANSRC_TEST] },
 

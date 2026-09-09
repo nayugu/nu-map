@@ -145,6 +145,7 @@ export const strings = {
   "grad.major1.label":      "CARRERA 1",
   "grad.major2.label":      "CARRERA 2",
   "grad.major2.add":        "+ Agregar segunda carrera",
+  "grad.major2.remove":    "Eliminar la segunda especialidad",
   "grad.major.search":      "⌕ buscar carreras",
   "grad.major.search.short":"⌕ buscar",
   "grad.conc.label":        "CONCENTRACIÓN",

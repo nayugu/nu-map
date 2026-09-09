@@ -436,9 +436,33 @@ export function EditionHint({ path, cohortYear, onChange }) {
         textDecorationColor: hovering ? "currentColor" : "var(--border-3)",
       }}
     >
-      {hovering
-        ? t("grad.edition.use",   { label: hint })
-        : t("grad.edition.entry", { label: hint })}
+      {/* ── Both strings occupy the box; only one is visible ──────────
+        *
+        * Swapping the text on hover changes its WIDTH, and a control that
+        * resizes under the pointer fights itself: hovering near the right end
+        * shrank the button out from under the cursor, which fired mouseleave,
+        * which grew it back under the cursor, which fired mouseenter. The line
+        * flickered for as long as you rested there — and only on the part of the
+        * area the LONGER string covers, which is exactly the tell.
+        *
+        * So both live in one grid cell and the box is always as wide as the
+        * longer of them. `visibility` rather than a conditional render, because
+        * the hidden one still has to take up space — that is the entire point —
+        * and `aria-hidden` keeps a screen reader from reading the line twice.
+        *
+        * Which string is longer varies by locale (zh reverses it), so this is
+        * not a case for hard-coding a width.
+        */}
+      <span style={{ display: "grid" }}>
+        <span style={{ gridArea: "1 / 1", visibility: hovering ? "hidden" : "visible" }}
+              aria-hidden={hovering}>
+          {t("grad.edition.entry", { label: hint })}
+        </span>
+        <span style={{ gridArea: "1 / 1", visibility: hovering ? "visible" : "hidden" }}
+              aria-hidden={!hovering}>
+          {t("grad.edition.use", { label: hint })}
+        </span>
+      </span>
     </button>
   );
 }
@@ -458,6 +482,10 @@ export function SearchCombo({
   // Display only, deliberately: it never joins `allOptions`, so the cohort
   // filter still decides what a search can reach.
   valueOption = null,
+  // What the clear control DOES, when it does more than clear. On the second
+  // major, clearing removes the whole slot, and a control that removes more than
+  // it appears to must say so — it is the only place a student is told.
+  clearLabel = "Clear",
 }) {
   const [query, setQuery] = useState("");
   const [open,  setOpen]  = useState(false);
@@ -556,7 +584,8 @@ export function SearchCombo({
         />
         {value && (
           <button
-            aria-label="Clear"
+            aria-label={clearLabel}
+            title={clearLabel}
             onMouseDown={e => { e.preventDefault(); select(""); }}
             onTouchStart={e => { e.preventDefault(); select(""); }}
             style={{
@@ -2859,21 +2888,34 @@ export default function GradPanel({ wideCatalog = false }) {
               {/* Second major selector */}
               {showMajor2 ? (
                 <div data-claude-focus="major2" style={{ marginBottom: 14, marginTop: 14, ...(pvMark("major2").style ?? {}) }}>
-                  <div style={{ display: "flex", alignItems: "center", marginBottom: 4 }}>
-                    <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>{t("grad.major2.label")}</div>
-                    {/* Before the ✕, so the remove button stays the last thing
-                        on the line — it is the only destructive control here and
-                        its position should not move when a year appears. */}
-                    <span style={{ marginInlineEnd: 6, minWidth: 0 }}>
+                  {/* ── ONE removal control, and it is the field's own ────────
+                    *
+                    * There used to be two, a few pixels apart and both a ✕: a
+                    * large one here that dropped the second major, and the small
+                    * one inside the field that cleared its value. Two different
+                    * destructions wearing one glyph, at two sizes, on one row.
+                    *
+                    * They collapse into one because the state they distinguished
+                    * is not worth having: a second-major slot with nothing in it
+                    * says nothing a student needs, and it exists only for the
+                    * moment between clicking "+ Add second major" and choosing
+                    * one. So clearing the field IS removing the second major, and
+                    * getting it back is the button that made it — one click,
+                    * exactly where it was.
+                    */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, minWidth: 0 }}>
+                    <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", minWidth: 0 }}>{t("grad.major2.label")}</div>
+                    <span style={{ marginInlineStart: "auto", minWidth: 0 }}>
                       <EditionPicker path={major2Path} cohortYear={cohortYear} onChange={setMajor2Path} />
                     </span>
-                    <button
-                      onClick={() => { setMajor2Path(""); setShowMajor2(false); }}
-                      style={{ background: "transparent", border: "none", color: "var(--text-5)", fontSize: 12, cursor: "pointer", lineHeight: 1, padding: "0 2px" }}
-                      title="Remove second major"
-                    >✕</button>
                   </div>
-                  <SearchCombo value={major2Path} onChange={setMajor2Path} groups={majorGroups} valueOption={major2Option} placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")} />
+                  <SearchCombo
+                    value={major2Path}
+                    onChange={(v) => { setMajor2Path(v); if (!v) setShowMajor2(false); }}
+                    groups={majorGroups} valueOption={major2Option}
+                    placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")}
+                    clearLabel={t("grad.major2.remove")}
+                  />
                   <EditionHint path={major2Path} cohortYear={cohortYear} onChange={setMajor2Path} />
                   {major2Gone && (
                     <StaleNotice

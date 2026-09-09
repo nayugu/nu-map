@@ -146,6 +146,7 @@ export const strings = {
   "grad.major1.label":      "専攻1",
   "grad.major2.label":      "専攻2",
   "grad.major2.add":        "+ 第二専攻を追加",
+  "grad.major2.remove":    "第2専攻を削除",
   "grad.major.search":      "⌕ 専攻を検索",
   "grad.major.search.short":"⌕ 検索",
   "grad.conc.label":        "集中分野",

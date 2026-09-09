@@ -112,6 +112,7 @@ export const strings = {
   "grad.major1.label":      "MAJOR 1",
   "grad.major2.label":      "MAJOR 2",
   "grad.major2.add":        "+ Add second major",
+  "grad.major2.remove":    "Remove second major",
   "grad.major.search":      "\u2315 search majors",
   "grad.major.search.short":"\u2315 search",
   "grad.conc.label":        "CONCENTRATION",

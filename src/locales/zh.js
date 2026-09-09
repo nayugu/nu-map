@@ -145,6 +145,7 @@ export const strings = {
   "grad.major1.label":       "\u4e13\u4e1a 1",
   "grad.major2.label":       "\u4e13\u4e1a 2",
   "grad.major2.add":         "+ \u6dfb\u52a0\u7b2c\u4e8c\u4e13\u4e1a",
+  "grad.major2.remove":    "移除第二专业",
   "grad.major.search":       "\u2315 \u641c\u7d22\u4e13\u4e1a",
   "grad.major.search.short": "\u2315 \u641c\u7d22",
   "grad.conc.label":         "\u65b9\u5411",
