@@ -23,7 +23,8 @@
 // unlistable path throws, logs, or fails a render.
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { findCohortVersion, atCohortYear, parseMajorPathParts, cohortCatalogYear }
+import { findCohortVersion, atCohortYear, parseMajorPathParts, cohortCatalogYear,
+         editionsOf, editionLabel }
   from "../../src/data/programPaths.js";
 
 const P = (year, college = "khoury", folder = "cs_bscs_(boston)") =>
@@ -48,6 +49,56 @@ function assertOfferIsSelectable(map, path, cohort) {
     `  offered: ${offer}\n  listed:  ${listed.join("\n           ")}`);
   return offer;
 }
+
+describe("editionLabel", () => {
+  test("names the academic year, not the directory year", () => {
+    // Directories key on the ENDING year; NEU prints the span. Getting this
+    // backwards labels every edition one academic year wrong, everywhere.
+    assert.equal(editionLabel(2026), "2025-2026");
+    assert.equal(editionLabel(2027), "2026-2027");
+    assert.equal(editionLabel("2026"), "2025-2026");   // a path segment is a string
+  });
+
+  test("a non-year is empty, never 'NaN-NaN'", () => {
+    for (const bad of [undefined, null, "", "soon", NaN]) assert.equal(editionLabel(bad), "");
+  });
+});
+
+describe("editionsOf · what the selector may offer", () => {
+  const map = mapOf(P(2026), P(2027), P(2026, "science", "math_bs"), P(2028));
+
+  test("only this program's editions, oldest first", () => {
+    assert.deepEqual(editionsOf(map, P(2027)).map(e => e.year), [2026, 2027, 2028]);
+    assert.deepEqual(editionsOf(map, P(2026, "science", "math_bs")).map(e => e.year), [2026]);
+  });
+
+  test("every offered edition is a path that EXISTS in the registry", () => {
+    // The safety property the whole feature rests on. An option that resolves
+    // to no requirements file empties the program box, which is the defect this
+    // panel was repaired for — so the selector is built from the registry
+    // itself and can never invent a year.
+    for (const e of editionsOf(map, P(2026))) {
+      assert.ok(map[e.path], `offered ${e.path}, which is not in the map`);
+      assert.equal(parseMajorPathParts(e.path).year, e.year, "year and path disagree");
+    }
+  });
+
+  test("a path in no registry offers nothing", () => {
+    assert.deepEqual(editionsOf(map, "not/a/path"), []);
+    assert.deepEqual(editionsOf({}, P(2026)), []);
+  });
+
+  test("what the selector offers is what findCohortVersion may return", () => {
+    // These two must agree or the hint names an edition the dropdown beside it
+    // does not list. They share `editionsOf` for exactly this reason.
+    for (const cohort of [2023, 2026, 2027, 2028, 2031]) {
+      const offer = findCohortVersion(map, P(2027), cohort);
+      if (offer === null) continue;
+      assert.ok(editionsOf(map, P(2027)).some(e => e.path === offer),
+        `cohort ${cohort}: the hint offers ${offer}, absent from the selector`);
+    }
+  });
+});
 
 describe("findCohortVersion · direction", () => {
   const TWO = mapOf(P(2026), P(2027));

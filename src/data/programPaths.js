@@ -113,6 +113,55 @@ export function pickCatalogYear(availableYears, cohortYear) {
 }
 
 /**
+ * The catalog edition's own name, from the ENDING year our directories key on.
+ *
+ *   2026 → "2025-2026"    — the label NEU prints on every page
+ *
+ * One function because three places need to agree: the year selector, the
+ * cohort hint beside it, and anything that later reports an edition to a human.
+ * A hand-built `${y-1}-${y}` in a JSX file is how one of them ends up naming
+ * the wrong academic year on a boundary.
+ */
+export function editionLabel(year) {
+  const y = Number(year);
+  // `Number.isFinite` alone is NOT enough, and the first version used it:
+  // Number(null) and Number("") are both 0, so a missing year rendered as
+  // "-1-0" rather than as nothing. A catalog year is a 4-digit integer or it is
+  // not a year.
+  return Number.isInteger(y) && y > 1000 ? `${y - 1}-${y}` : "";
+}
+
+/**
+ * Every edition of `path`'s program that we actually HOLD, oldest first.
+ *
+ * "Actually hold" is the load-bearing part. The year selector is built from
+ * this and from nothing else, so it can never offer an edition that resolves to
+ * no requirements file — which is the same invariant `findCohortVersion` keeps,
+ * for the same reason: an offered selection that cannot be loaded and displayed
+ * empties the program box and strands the student.
+ *
+ * Measured on the live tree: 509 of 689 undergraduate programs hold two
+ * editions, 180 hold one, and all 524 graduate programs hold one. So the
+ * selector is absent for a quarter of undergraduate programs and for every
+ * graduate program today, and that is correct rather than a gap — one edition
+ * is not a choice.
+ *
+ * @param {Record<string, unknown>} map
+ * @param {string} path
+ * @returns {{year: number, path: string}[]}
+ */
+export function editionsOf(map, path) {
+  const canonical = resolveInMap(map, path, parseMajorPathParts) ?? path;
+  const current = parseMajorPathParts(canonical);
+  if (!current) return [];
+  return Object.keys(map)
+    .map(p => ({ p, pp: parseMajorPathParts(p) }))
+    .filter(e => e.pp && e.pp.college === current.college && e.pp.folder === current.folder)
+    .map(e => ({ year: e.pp.year, path: e.p }))
+    .sort((a, b) => a.year - b.year);
+}
+
+/**
  * Keep one row per program, at the catalog year THIS COHORT follows.
  *
  * Requirements are frozen at the edition a student entered under, so a 2026
@@ -186,14 +235,15 @@ export function findCohortVersion(map, path, cohortYear) {
   const current = parseMajorPathParts(canonical);
   if (!current) return null;
 
-  const siblings = Object.keys(map)
-    .map(p => ({ p, pp: parseMajorPathParts(p) }))
-    .filter(e => e.pp && e.pp.college === current.college && e.pp.folder === current.folder);
+  // Shares `editionsOf` with the year selector deliberately: the set this
+  // chooses from and the set the selector offers must be the same set, or the
+  // hint can name an edition the dropdown beside it does not contain.
+  const siblings = editionsOf(map, canonical);
   if (!siblings.length) return null;
 
-  const want = pickCatalogYear(siblings.map(e => e.pp.year), cohortYear);
+  const want = pickCatalogYear(siblings.map(e => e.year), cohortYear);
   if (want == null || want === current.year) return null;
-  return siblings.find(e => e.pp.year === want)?.p ?? null;
+  return siblings.find(e => e.year === want)?.path ?? null;
 }
 
 /**

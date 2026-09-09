@@ -25,7 +25,7 @@
 // calls loadMajor() + gradRequirements.js directly (Stage 2 migration).
 // ═══════════════════════════════════════════════════════════════════
 import { loadSamplePlans as _loadSamplePlans, hasSamplePlan as _hasSamplePlan } from "../../data/samplePlanLoader.js";
-import { getMajorOptions as _getMajorOptions, getMajorOptionGroups as _getMajorOptionGroups, loadMajor as _loadMajor, getGradMajorOptions as _getGradMajorOptions, getGradMajorOptionGroups as _getGradMajorOptionGroups, loadGradMajor as _loadGradMajor, findCohortMajorVersion as _findCohortMajorVersion, findCohortGradMajorVersion as _findCohortGradMajorVersion, describeProgramPath as _describeProgramPath } from "../../data/majorLoader.js";
+import { getMajorOptions as _getMajorOptions, getMajorOptionGroups as _getMajorOptionGroups, loadMajor as _loadMajor, getGradMajorOptions as _getGradMajorOptions, getGradMajorOptionGroups as _getGradMajorOptionGroups, loadGradMajor as _loadGradMajor, findCohortMajorVersion as _findCohortMajorVersion, findCohortGradMajorVersion as _findCohortGradMajorVersion, describeProgramPath as _describeProgramPath, programEditions as _programEditions } from "../../data/majorLoader.js";
 import { getMinorOptions as _getMinorOptions, getMinorOptionGroups as _getMinorOptionGroups, loadMinor as _loadMinor } from "../../data/minorLoader.js";
 
 // Label formatting lives in programNaming.js (pure, shared with the Node
@@ -69,6 +69,16 @@ export default {
 
   /** @returns {string|null} */
   findCohortGradMajorVersion(path, cohortYear) { return _findCohortGradMajorVersion(path, cohortYear); },
+
+  /**
+   * The catalog editions held for one declared program, the one its cohort
+   * follows, and the one in use — for the year selector under each program.
+   *
+   * Works for a major, a graduate program or a minor without being told which:
+   * the tree is in the path. One call rather than three so the three answers
+   * cannot disagree.
+   */
+  getProgramEditions(path, cohortYear) { return _programEditions(path, cohortYear); },
 
   /**
    * Name a program path WITHOUT the cohort filter — for displaying a selection

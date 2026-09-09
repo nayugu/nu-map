@@ -73,6 +73,10 @@ export default {
   findCohortMajorVersion()     { return null; },
   findCohortGradMajorVersion() { return null; },
   describeProgram()            { return null; },
+  // No editions held means no choice to offer, and the row renders nothing on
+  // a list this short — the same answer the NU adapter gives for the 180
+  // undergraduate and 524 graduate programs held in a single edition.
+  getProgramEditions()         { return { editions: [], cohortPath: null, cohortLabel: "", currentYear: null }; },
 
   loadMajor(_path)     { return Promise.reject(new Error("loadMajor() not implemented in generic adapter.")); },
   loadMinor(_path)     { return Promise.reject(new Error("loadMinor() not implemented in generic adapter.")); },

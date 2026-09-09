@@ -41,8 +41,53 @@ const _gradMap = import.meta.glob(
 // rule kept here is a rule no unit test can reach. That is not hypothetical —
 // the newer-vs-cohort defect this pair replaced survived four months in a file
 // nothing could test.
-import { parseMajorPathParts, normalizeFolder, resolveInMap, atCohortYear, findCohortVersion } from './programPaths.js';
+import { parseMajorPathParts, normalizeFolder, resolveInMap, atCohortYear, findCohortVersion,
+         editionsOf, editionLabel } from './programPaths.js';
 export { normalizeFolder, resolveInMap, atCohortYear };
+
+/**
+ * Which registry a path belongs to, decided by the path ITSELF.
+ *
+ * Not by trying `resolveInMap` against each in turn: that helper's later tiers
+ * match on a normalized folder with no college, so a graduate path could
+ * fuzzily land in the undergraduate map and be answered with another degree's
+ * editions. The directory segment is unambiguous and free.
+ */
+function mapFor(path) {
+  return /\/graduate\//.test(String(path)) ? _gradMap : _moduleMap;
+}
+
+/**
+ * Everything the year selector needs about one declared program, in one call.
+ *
+ * Returned together rather than as three port methods because the three answers
+ * have to be consistent with each other — the offered editions, the one this
+ * cohort follows, and the one currently in use are all read off the same map in
+ * the same pass. Split across calls they can disagree, and the disagreement
+ * shows up as a hint naming an edition the dropdown does not list.
+ *
+ * `cohortPath` is null when the program is already on its cohort's edition,
+ * which is the common case and the one that renders no hint at all.
+ *
+ * @param {string} path
+ * @param {number} cohortYear
+ * @returns {{editions: {year:number,label:string,path:string}[],
+ *            cohortPath: string|null, cohortLabel: string, currentYear: number|null}}
+ */
+export function programEditions(path, cohortYear) {
+  const empty = { editions: [], cohortPath: null, cohortLabel: '', currentYear: null };
+  if (!path) return empty;
+  const map = mapFor(path);
+  const canonical = resolveInMap(map, path, parseMajorPathParts) ?? path;
+  const currentYear = parseMajorPathParts(canonical)?.year ?? null;
+  const cohortPath = findCohortVersion(map, path, cohortYear);
+  return {
+    editions: editionsOf(map, canonical).map(e => ({ ...e, label: editionLabel(e.year) })),
+    cohortPath,
+    cohortLabel: cohortPath ? editionLabel(parseMajorPathParts(cohortPath)?.year) : '',
+    currentYear,
+  };
+}
 
 /**
  * One dropdown option, derived from a module-map path alone. No JSON is read.

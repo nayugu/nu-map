@@ -136,19 +136,58 @@ const MUTANTS = [
     from: " valueOption={describeProgram?.(val) ?? null}",
     to:   "", run: [EDITION_UI] },
 
-  { name: "edition: the second major loses its prompt (visible but uncorrectable)",
+  { name: "edition: the second major loses its year selector",
     file: GRADPANEL,
-    from: "                  <EditionPrompt path={cohortMajor2Path} onSwitch={setMajor2Path}\n                                 onDismiss={() => setCohortMajor2Path(null)} />\n",
+    from: "                  <EditionRow path={major2Path} cohortYear={cohortYear} onChange={setMajor2Path} />\n",
     to:   "", run: [EDITION_UI] },
 
-  // The slip a shared component invites: right prompt, wrong setter. It still
-  // renders, still clears, and quietly rewrites the FIRST major instead — which
-  // a year-only assertion cannot see.
-  { name: "edition: the second major's switch moves the first major",
+  // The slip a shared component invites: right row, wrong setter. It still
+  // renders and still changes an edition — the FIRST major's. Invisible to any
+  // assertion keyed on the year rather than on which program moved.
+  { name: "edition: the second major's selector moves the first major",
     file: GRADPANEL,
-    from: "<EditionPrompt path={cohortMajor2Path} onSwitch={setMajor2Path}",
-    to:   "<EditionPrompt path={cohortMajor2Path} onSwitch={setSelPath}",
+    from: "<EditionRow path={major2Path} cohortYear={cohortYear} onChange={setMajor2Path} />",
+    to:   "<EditionRow path={major2Path} cohortYear={cohortYear} onChange={setSelPath} />",
     run: [EDITION_UI] },
+
+  { name: "edition: minors lose their year selector",
+    file: GRADPANEL,
+    from: "                    <EditionRow path={val} cohortYear={cohortYear} onChange={set} />\n",
+    to:   "", run: [EDITION_UI] },
+
+  // A single-option dropdown implies a choice the student does not have, and
+  // would appear on 180 undergraduate and all 524 graduate programs.
+  { name: "edition: the row renders for a program held in ONE edition",
+    file: GRADPANEL,
+    from: "  if (editions.length < 2) return null;",
+    to:   "  if (editions.length < 1) return null;",
+    run: [EDITION_UI] },
+
+  // The hint must be silent for a correctly pinned student — the 338-of-498
+  // regression, in its new form.
+  { name: "edition: the cohort hint shows even when the plan is on its own edition",
+    file: GRADPANEL,
+    from: "      {cohortPath && (",
+    to:   "      {(cohortPath || editions.length) && (",
+    run: [EDITION_UI] },
+
+  { name: "edition: a missing year renders as '-1-0' rather than as nothing",
+    file: PATHS,
+    from: "  return Number.isInteger(y) && y > 1000 ? `${y - 1}-${y}` : \"\";",
+    to:   "  return Number.isFinite(y) ? `${y - 1}-${y}` : \"\";",
+    run: [COHORT_TEST] },
+
+  { name: "edition: the label names the directory year, not the academic year",
+    file: PATHS,
+    from: "  return Number.isInteger(y) && y > 1000 ? `${y - 1}-${y}` : \"\";",
+    to:   "  return Number.isInteger(y) && y > 1000 ? `${y}-${y + 1}` : \"\";",
+    run: [COHORT_TEST, EDITION_UI] },
+
+  { name: "edition: the selector offers every edition held, not this program's",
+    file: PATHS,
+    from: "    .filter(e => e.pp && e.pp.college === current.college && e.pp.folder === current.folder)\n    .map(e => ({ year: e.pp.year, path: e.p }))",
+    to:   "    .filter(e => e.pp)\n    .map(e => ({ year: e.pp.year, path: e.p }))",
+    run: [COHORT_TEST] },
 
   // ── A retired course ranks below its live twin, and stays findable ──
   // The rung-order mutants run the fast UNIT suite; only the two that are

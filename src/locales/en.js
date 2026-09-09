@@ -717,11 +717,13 @@ export const strings = {
   "grad.stale.program":     "This program is no longer in the catalog. It may have been renamed or discontinued.",
   "grad.stale.minor":       "{label}: this program is no longer in the catalog. It may have been renamed or discontinued.",
   "grad.stale.remove":      "Remove",
-  // States the cohort's edition rather than calling this plan's out of date:
-  // the switch offered alongside can move a plan BACKWARD as well as forward.
-  "grad.edition.mismatch":  "Your catalog edition is {year}, not the one this plan uses.",
-  "grad.edition.switch":    "Switch",
-  "grad.edition.keep":      "Keep",
+  // The per-program catalog-edition selector. `cohort` and `use` show only when
+  // the chosen edition is not the one the entry term implies — a student who
+  // switched into a major follows the catalog in force when they declared it,
+  // which is why the choice exists at all rather than being derived.
+  "grad.edition.label":     "Catalog",
+  "grad.edition.cohort":    "your cohort: {label}",
+  "grad.edition.use":       "use",
   "grad.credits.done":      "{unit} done",
   "grad.credits.planned":   " + planned",
   "grad.credits.required":  " / required",
