@@ -152,19 +152,35 @@ describe("catalog editions · in the running app", () => {
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
   });
 
-  test("a plan on an edition its cohort does not follow still shows its name", async () => {
+  test("every declared program off its cohort's edition is still named, and gets a control", async () => {
     // Reachable with no interaction — a share link, or an edited entry term.
     // Before the fix this arrived with an EMPTY box over loaded requirements,
     // no error and no way back. It is a fact about SearchCombo resolving a
     // value that is not in its own filtered option list, so only a render can
     // show it.
-    const { ctx, read, boxOf, errors } = await openPanel(CS(2027), 2023, MINOR_2026, MATH_2026);
+    //
+    // ⚠ ALL THREE programs must be off-cohort here, and an earlier version of
+    // this case got that wrong in a way that passed. It seeded a 2023 entrant
+    // (cohort 2024) with a 2026 minor — but pickCatalogYear([2026,2027], 2024)
+    // is 2026, so the minor was ON its cohort's edition, resolved from the
+    // filtered list like any other, and the assertion below held with
+    // `valueOption` deleted. The mutation probe caught it: two mutants about
+    // minors SURVIVED. A fall-2026 entrant (cohort 2027) puts every one of the
+    // three on the wrong edition, which is what the assertions claim to test.
+    const { ctx, read, boxOf, selOf, errors } = await openPanel(CS(2026), 2026, MINOR_2026, MATH_2026);
     const s = await read();
     assert.equal(s.box, NAME, "the box is blank on arrival");
     // Every declared program, not just the first: `valueOption` is wired per
     // call site and deleting one prop leaves the others working.
     assert.equal(await boxOf("minor1").inputValue(), "Mathematics, Minor");
     assert.equal(await boxOf("major2").inputValue(), "Mathematics, BS (Boston)");
+    // And each carries its OWN control. Minors get no separate treatment: a
+    // minor declared in a different year than the major is exactly the case one
+    // plan-wide catalog year could not express.
+    assert.equal(await selOf("minor1").inputValue(), "2026", "the minor has no year control");
+    assert.equal(await selOf("major2").inputValue(), "2026", "the second major has no year control");
+    // Three programs off-cohort, three hints.
+    assert.equal(s.hints.length, 3, `expected a hint per program, saw ${JSON.stringify(s.hints)}`);
     await ctx.close();
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
   });
