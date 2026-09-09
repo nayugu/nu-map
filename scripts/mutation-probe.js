@@ -267,7 +267,24 @@ const MUTANTS = [
     file: OFFER,
     from: "  const plansPending = hasSamplePlan && plans === null;",
     to:   "  const plansPending = plans === null;",
-    run: [SAMPLEPLAN_UI] },
+    run: [SAMPLEPLAN_UI],
+    // SURVIVED on first run, and it is equivalent — checked rather than
+    // assumed, because the tempting reading was "the browser case is too weak".
+    //
+    // `plansPending` is only ever read on the branch where the source is NOT
+    // chart, and the source default beside it guarantees catalog is selected
+    // only when a plan exists. So with that fix in place there is no state a
+    // user can reach where the two guards disagree: the one frame between mount
+    // (source initialises to "catalog") and the reset effect is the entire
+    // difference, and a frame is not a render a test can hold still.
+    //
+    // Kept rather than deleted as redundant, and this is the judgement: the two
+    // guards state different things. One says "do not select a source that is
+    // not there", the other says "do not claim to be loading something you
+    // never asked for". The second is what makes the first's failure visible
+    // instead of silent, which is the whole shape of the bug this pair fixes.
+    // A KILL here later means the source default has been loosened.
+    equivalent: true },
 
   { name: "sample plan: a donor is lent across catalog editions",
     file: GENERATOR,
