@@ -136,6 +136,20 @@ const MUTANTS = [
     from: " valueOption={describeProgram?.(val) ?? null}",
     to:   "", run: [EDITION_UI] },
 
+  { name: "edition: the second major loses its prompt (visible but uncorrectable)",
+    file: GRADPANEL,
+    from: "                  <EditionPrompt path={cohortMajor2Path} onSwitch={setMajor2Path}\n                                 onDismiss={() => setCohortMajor2Path(null)} />\n",
+    to:   "", run: [EDITION_UI] },
+
+  // The slip a shared component invites: right prompt, wrong setter. It still
+  // renders, still clears, and quietly rewrites the FIRST major instead — which
+  // a year-only assertion cannot see.
+  { name: "edition: the second major's switch moves the first major",
+    file: GRADPANEL,
+    from: "<EditionPrompt path={cohortMajor2Path} onSwitch={setMajor2Path}",
+    to:   "<EditionPrompt path={cohortMajor2Path} onSwitch={setSelPath}",
+    run: [EDITION_UI] },
+
   // ── A retired course ranks below its live twin, and stays findable ──
   // The rung-order mutants run the fast UNIT suite; only the two that are
   // genuinely about rendering pay for a browser rebuild. That split is not

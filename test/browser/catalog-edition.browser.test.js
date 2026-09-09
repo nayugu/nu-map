@@ -50,6 +50,10 @@ const NAME  = "Computer Science, BSCS (Boston)";
 const MINOR_2026 = "../../data/northeastern/programs/undergraduate/2026/science/mathematics_minor/requirements.json";
 const MINOR_NAME = "Mathematics, Minor";
 
+/** A SECOND major, held in both editions, for case E. */
+const MATH_2026 = "../../data/northeastern/programs/undergraduate/2026/science/mathematics_bs_(boston)/requirements.json";
+const MATH_NAME = "Mathematics, BS (Boston)";
+
 describe("catalog editions · the prompt and the program box", () => {
   let browser, server, port, launchError = null;
 
@@ -68,7 +72,7 @@ describe("catalog editions · the prompt and the program box", () => {
   });
 
   /** Seeded through addInitScript — the app writes the live plan on unload. */
-  const seed = (major, entYear, minor = "") => `(${((mj, ey, mn) => {
+  const seed = (major, entYear, minor = "", major2 = "") => `(${((mj, ey, mn, m2) => {
     const K = "ncp-";
     localStorage.setItem(K + "plan-index", JSON.stringify([
       { id: "default", name: "T", studentType: "undergrad", parentId: null, lastOpened: Date.now() },
@@ -77,17 +81,17 @@ describe("catalog editions · the prompt and the program box", () => {
       version: 1, studentType: "undergrad",
       entSem: "fall", entYear: ey, gradSem: "spring", gradYear: ey + 4,
       currentSemId: "fall" + ey,
-      major: mj, minor1: mn, placements: {},
+      major: mj, major2: m2, minor1: mn, placements: {},
       specialTermPl: {}, semOrders: {}, placedOut: [], substitutions: [],
     }));
     localStorage.setItem(K + "tour-seen", "true");
-  }).toString()})(${JSON.stringify(major)},${entYear},${JSON.stringify(minor)})`;
+  }).toString()})(${JSON.stringify(major)},${entYear},${JSON.stringify(minor)},${JSON.stringify(major2)})`;
 
-  async function openPanel(major, entYear, minor = "") {
+  async function openPanel(major, entYear, minor = "", major2 = "") {
     assert.equal(launchError, null,
       `chromium unavailable — run \`npx playwright install chromium\`: ${launchError?.message}`);
     const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
-    await ctx.addInitScript(seed(major, entYear, minor));
+    await ctx.addInitScript(seed(major, entYear, minor, major2));
     const page = await ctx.newPage();
     const errors = [];
     page.on("pageerror", e => errors.push(String(e?.message ?? e)));
@@ -110,21 +114,31 @@ describe("catalog editions · the prompt and the program box", () => {
     assert.match(body, /GPA requirements|NUPATH|NUPath/,
       `the graduation panel did not open:\n${body.slice(0, 600)}`);
 
-    const minorInput = page.locator('[data-claude-focus="minor1"] input').first();
+    const minorInput  = page.locator('[data-claude-focus="minor1"] input').first();
+    const major2Input = page.locator('[data-claude-focus="major2"] input').first();
     const read = async () => {
       const text = await page.evaluate(() => document.body.innerText);
       return {
         box: await input.inputValue(),
         minorBox: await minorInput.inputValue().catch(() => null),
+        // How MANY prompts are on screen, not just whether one is. Case E puts
+        // the first major on its cohort's edition and the second off it, so a
+        // single prompt attached to the wrong combo would be invisible to a
+        // boolean — and attaching both to major 1 is the likeliest slip when
+        // one block becomes two.
+        prompts: (text.match(/Your catalog edition is \d{4}/g) ?? []).length,
+        major2Box: await major2Input.inputValue().catch(() => null),
         // The year the prompt NAMES, not merely that a prompt exists — the
         // direction is the whole point and a boolean cannot see it.
         promptYear: (text.match(/Your catalog edition is (\d{4})/) ?? [])[1] ?? null,
       };
     };
-    const savedPath = () => page.evaluate(() =>
+    const savedPath  = () => page.evaluate(() =>
       JSON.parse(localStorage.getItem("ncp-plan-data-default")).major);
+    const savedPath2 = () => page.evaluate(() =>
+      JSON.parse(localStorage.getItem("ncp-plan-data-default")).major2);
 
-    return { ctx, page, read, savedPath, errors };
+    return { ctx, page, read, savedPath, savedPath2, errors };
   }
 
   test("A · a correctly pinned plan gets no prompt and keeps its name", async () => {
@@ -188,6 +202,43 @@ describe("catalog editions · the prompt and the program box", () => {
     assert.equal(s.box, NAME, "the major box lost its name");
     assert.equal(s.minorBox, MINOR_NAME,
       "the minor box is blank while its card is on screen — valueOption is not wired here");
+    await ctx.close();
+    assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
+  });
+
+  test("E · the SECOND major gets its own prompt, and only it", async () => {
+    // A second major is a degree the student owes, so leaving the prompt off it
+    // meant such a plan could be seen on the wrong edition but never corrected.
+    //
+    // The seed is deliberately asymmetric: major 1 IS on the cohort's edition
+    // and major 2 is not. So "exactly one prompt" is the real assertion — two
+    // would mean the first major started prompting when it should not, and one
+    // rendered under the wrong combo is invisible to a boolean.
+    const { ctx, page, read, savedPath, savedPath2, errors } =
+      await openPanel(P2027, 2026, "", MATH_2026);
+
+    const before = await read();
+    assert.equal(before.prompts, 1,
+      `expected exactly one prompt (major 2 only), saw ${before.prompts}`);
+    assert.equal(before.box, NAME, "the first major lost its name");
+    assert.equal(before.major2Box, MATH_NAME, "the second major's box is blank");
+
+    await page.getByRole("button", { name: /^Switch$/ }).first().click();
+    await page.waitForTimeout(3000);
+
+    const after = await read();
+    assert.equal(after.prompts, 0, "the prompt survived being obeyed");
+    assert.equal(after.major2Box, MATH_NAME, "Switch emptied the second major's box");
+    assert.match(await savedPath2(), /\/2027\//, "the second major was not repaired in the saved plan");
+    // The switch must move the program it belongs to and nothing else — a
+    // shared handler would quietly rewrite the FIRST major instead. Keyed on
+    // the program's IDENTITY, not its year: major 1 is already on 2027, so a
+    // year-only check passes even when the handler overwrites it with the
+    // second major's 2027 path. (Written the weak way first; caught by asking
+    // what a shared handler would actually produce.)
+    assert.match(await savedPath(), /2027\/computer-information-science\/computer_science_bscs/,
+      "the first major was overwritten when the second was switched");
+
     await ctx.close();
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
   });

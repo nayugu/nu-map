@@ -150,6 +150,58 @@ function CheckBox({ sat, dimmedCheck = false, unknown = false, title }) {
 
 // ── Searchable combobox (matches course-bank search style) ───────────────
 
+/**
+ * "Your catalog edition is {year}" — shown when a declared program sits on an
+ * edition its cohort does not follow.
+ *
+ * STATES the cohort's edition rather than describing the plan's as out of date,
+ * because the switch can move a plan BACKWARD: that is the repair path for
+ * every plan the old newer-only banner pushed forward, and "a newer version is
+ * available" was wrong for 338 of 498 undergraduate majors.
+ *
+ * `findCohortVersion` guarantees `path` is in the same cohort's option list, so
+ * taking the switch can never empty the combo above it — which is what the
+ * previous version did.
+ *
+ * A COMPONENT rather than a copied block: it renders under the first major and
+ * the second, and two hand-maintained copies of a prompt is how one of them
+ * quietly keeps saying the wrong thing. (The minors deliberately have none —
+ * they are correctly pinned, so there is nothing to correct.)
+ *
+ * Dismissal is per session on purpose. After the cohort fix this fires only for
+ * a plan genuinely off its own edition, which is rare enough that persisting a
+ * dismissal would cost a saved-plan field in order to silence a prompt that is
+ * telling the truth.
+ */
+export function EditionPrompt({ path, onSwitch, onDismiss }) {
+  const { t } = useLanguage();
+  const { isPhone } = useContext(GradCtx) ?? {};
+  if (!path) return null;
+  const year = path.match(/\/(\d{4})\//)?.[1] ?? "";
+  const btn = (accent) => ({
+    fontSize: isPhone ? 7 : 8, padding: "2px 7px", cursor: "pointer", borderRadius: 3,
+    border: `1px solid ${accent ? "var(--accent)" : "var(--border-3)"}`,
+    background: accent ? "var(--accent)" : "transparent",
+    color: accent ? "white" : "var(--text-4)",
+    ...(accent ? { fontWeight: 600 } : {}),
+  });
+  return (
+    <div style={{
+      marginTop: 4, padding: "5px 7px", borderRadius: 4,
+      background: "var(--info-bg, var(--border-2))",
+      border: "1px solid var(--info-border, var(--border-3))",
+      display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap",
+      fontSize: isPhone ? 8 : 9,
+    }}>
+      <span style={{ color: "var(--text-2)", flex: 1 }}>
+        {t("grad.edition.mismatch", { year })}
+      </span>
+      <button onClick={() => onSwitch(path)} style={btn(true)}>{t("grad.edition.switch")}</button>
+      <button onClick={onDismiss}           style={btn(false)}>{t("grad.edition.keep")}</button>
+    </div>
+  );
+}
+
 export function SearchCombo({
   value, onChange, groups, placeholder = "Search…", size = 10,
   // Majors are a ~1,500-option list, so an empty query has to render nothing —
@@ -2023,6 +2075,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const [major2Data,    setMajor2Data]    = useState(null);
   const [fetching2,     setFetching2]     = useState(false);
   const [major2Gone,    setMajor2Gone]    = useState(false);
+  const [cohortMajor2Path, setCohortMajor2Path] = useState(null);
   const major2Name = useTranslatedText(major2Data?.name ?? null);
   const [showMajor2,    setShowMajor2]    = useState(() => major2Path !== "");
   const [showPlusOnePicker, setShowPlusOnePicker] = useState(() => plusOne !== "");
@@ -2081,15 +2134,26 @@ export default function GradPanel({ wideCatalog = false }) {
   }, [major]);
 
   // Fetch second major JSON on path change
+  //
+  // The edition prompt is here as well as on the first major, and the symmetry
+  // is the point: a second major is a degree the student owes, audited against
+  // whatever edition its saved path names. Left off, a second major stranded on
+  // the wrong edition could still be SEEN (the box resolves its name through
+  // the unfiltered describer) but never CORRECTED — the display half and the
+  // repair half would cover different sets of programs, which is the kind of
+  // asymmetry this panel already paid for once between majors and minors.
   useEffect(() => {
-    if (!major2Path) { setMajor2Data(null); setMajor2Gone(false); return; }
-    setFetching2(true); setMajor2Data(null); setMajor2Gone(false);
+    if (!major2Path) { setMajor2Data(null); setMajor2Gone(false); setCohortMajor2Path(null); return; }
+    setFetching2(true); setMajor2Data(null); setMajor2Gone(false); setCohortMajor2Path(null);
     const loader2 = isGrad ? majorRequirements.loadGradMajor(major2Path) : majorRequirements.loadMajor(major2Path);
+    const findCohort2 = isGrad
+      ? majorRequirements.findCohortGradMajorVersion
+      : majorRequirements.findCohortMajorVersion;
     loader2
-      .then(data => setMajor2Data(data))
+      .then(data => { setMajor2Data(data); setCohortMajor2Path(findCohort2(major2Path, cohortYear)); })
       .catch(() => setMajor2Gone(true)) // keep the saved path; surface it instead of wiping
       .finally(() => setFetching2(false));
-  }, [major2Path, isGrad]);
+  }, [major2Path, isGrad, cohortYear]);
 
   // Timeline-scoped: courses parked outside the cohort range never satisfy
   // requirements (they stay in state, uncounted, until the cohort widens).
@@ -2477,51 +2541,8 @@ export default function GradPanel({ wideCatalog = false }) {
                   valueOption={majorOption}
                   placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")}
                 />
-                {/* The plan is on an edition this cohort does not follow.
-                    STATES the cohort's edition rather than describing this one
-                    as out of date: the difference is not always staleness, and
-                    the switch can move the plan BACKWARD — which is the repair
-                    path for every plan the old newer-only banner pushed
-                    forward. `findCohortMajorVersion` guarantees the offered
-                    path is in `majorGroups`, so Switch can never empty the box
-                    above it. Dismissal is per session on purpose: after the
-                    cohort fix this fires only for a plan genuinely off its own
-                    edition, which is rare enough that persisting a dismissal
-                    would cost a saved-plan field to silence a prompt that is
-                    telling the truth. */}
-                {cohortMajorPath && (
-                  <div style={{
-                    marginTop: 4, padding: "5px 7px", borderRadius: 4,
-                    background: "var(--info-bg, var(--border-2))",
-                    border: "1px solid var(--info-border, var(--border-3))",
-                    display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap",
-                    fontSize: isPhone ? 8 : 9,
-                  }}>
-                    <span style={{ color: "var(--text-2)", flex: 1 }}>
-                      {t("grad.edition.mismatch", { year: cohortMajorPath.match(/\/(\d{4})\//)?.[1] ?? "" })}
-                    </span>
-                    <button
-                      onClick={() => setSelPath(cohortMajorPath)}
-                      style={{
-                        fontSize: isPhone ? 7 : 8, padding: "2px 7px", cursor: "pointer",
-                        borderRadius: 3, border: "1px solid var(--accent)",
-                        background: "var(--accent)", color: "white", fontWeight: 600,
-                      }}
-                    >
-                      {t("grad.edition.switch")}
-                    </button>
-                    <button
-                      onClick={() => setCohortMajorPath(null)}
-                      style={{
-                        fontSize: isPhone ? 7 : 8, padding: "2px 7px", cursor: "pointer",
-                        borderRadius: 3, border: "1px solid var(--border-3)",
-                        background: "transparent", color: "var(--text-4)",
-                      }}
-                    >
-                      {t("grad.edition.keep")}
-                    </button>
-                  </div>
-                )}
+                <EditionPrompt path={cohortMajorPath} onSwitch={setSelPath}
+                               onDismiss={() => setCohortMajorPath(null)} />
                 {majorGone && (
                   <StaleNotice
                     isPhone={isPhone}
@@ -2560,6 +2581,8 @@ export default function GradPanel({ wideCatalog = false }) {
                     >✕</button>
                   </div>
                   <SearchCombo value={major2Path} onChange={setMajor2Path} groups={majorGroups} valueOption={major2Option} placeholder={isPhone ? t("grad.major.search.short") : t("grad.major.search")} />
+                  <EditionPrompt path={cohortMajor2Path} onSwitch={setMajor2Path}
+                                 onDismiss={() => setCohortMajor2Path(null)} />
                   {major2Gone && (
                     <StaleNotice
                       isPhone={isPhone}
