@@ -159,6 +159,47 @@ test("rails › a REAL program vanishing still fails, even beside withdrawals", 
   assert.ok(failures.some(f => /previously parsed now yield nothing/.test(f)), failures.join(" | "));
 });
 
+test("rails › a program whose NEW parse lost its tables is still a vanish", () => {
+  // Found by scripts/mutation-probe.js, not by review, and it is the case that makes the
+  // whole exemption sound. The plausible mistake is judging the withdrawal on
+  // `results.get(k) ?? previous.get(k)` instead of on the committed record — which reads
+  // identically whenever the program is simply ABSENT from the run, so the test above could
+  // not tell the two apart.
+  //
+  // The difference appears only when the NEW record EXISTS and fails the rule: a real
+  // program whose page stopped yielding tables, which is exactly what a markup change at NEU
+  // looks like. Judged on the new parse, every such program exempts ITSELF for having
+  // broken, and a catalog-wide regression is reported as a tidy set of withdrawals.
+  const previous = mapOf(500);                       // 500 real programs
+  // Same section count, so the section-loss rail is not what decides this — the ONLY
+  // difference is that the new parse would fail the not-a-program rule.
+  const results = new Map();
+  for (const k of previous.keys()) results.set(k, Object.assign(prog(3), { __policy: true }));
+  const healthy = checkScrapeRails({
+    discovered: 500, failed: 0, results, previous,
+    // The predicate reads only what it is handed; the RAIL decides which record that is.
+    wasProgram: (p) => !p.__policy,
+  });
+  assert.equal(healthy.stats.withdrawn, 0,
+    "a committed program was called a withdrawal because of how it parsed THIS run");
+  assert.equal(healthy.ok, true, "precondition: nothing has vanished, so nothing should fail");
+
+  // Now they stop parsing entirely, still marked as not-a-program by the new parse. The
+  // committed records say they ARE programs, so this is a fleet-wide vanish and must fail.
+  const gone = new Map();
+  for (const k of previous.keys()) gone.set(k, Object.assign(prog(0), { __policy: true }));
+  const collapsed = checkScrapeRails({
+    discovered: 500, failed: 0, results: gone, previous,
+    wasProgram: (p) => !p.__policy,
+  });
+  assert.equal(collapsed.stats.withdrawn, 0,
+    "the committed records are real programs — none of them was withdrawn");
+  assert.ok(collapsed.stats.vanished >= 500,
+    `only ${collapsed.stats.vanished} counted as vanished — the collapse was laundered `
+    + `into withdrawals by judging the NEW record`);
+  assert.equal(collapsed.ok, false);
+});
+
 test("rails › the default predicate changes nothing", () => {
   // Behaviour-neutral for every existing caller: without `wasProgram`, every previously
   // committed record is a program and the arithmetic is exactly what it was.

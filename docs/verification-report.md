@@ -8,14 +8,14 @@ Generated 2026-09-10 by `npm run data:verify`.
 > the per-page PDF is the same render as the HTML. These checks confirm we
 > parsed the catalog faithfully. They cannot confirm the catalog is right.
 
-**2375 programs** — 1723 verified · 644 partial · 8 review · 0 unverified
+**2337 programs** — 1715 verified · 614 partial · 8 review · 0 unverified
 
 ## Findings by root cause
 
 Grouped by check rather than by program: one parser bug usually wears many
 names, and a list of every affected program is not a work order.
 
-### `unenumerated-sections` · 836 program(s) · info
+### `unenumerated-sections` · 798 program(s) · info
 
 4 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically
 
@@ -29,9 +29,9 @@ names, and a list of every affected program is not a work order.
 - Communication Studies and Speech-Language Pathology and Audiology, BS (Boston) — `undergraduate/2026/arts-media-design/communication_studies_and_speech-language_pathology_and_audiology_bs_(boston)`
 - Communication Studies and Theatre, BA (Boston) — `undergraduate/2026/arts-media-design/communication_studies_and_theatre_ba_(boston)`
 - Communication Studies, BA (Boston) — `undergraduate/2026/arts-media-design/communication_studies_ba_(boston)`
-- …and 826 more
+- …and 788 more
 
-### `missing-total-credits` · 517 program(s) · medium
+### `missing-total-credits` · 483 program(s) · medium
 
 the catalog page states no total credit requirement
 
@@ -45,7 +45,7 @@ the catalog page states no total credit requirement
 - Art, Minor — `undergraduate/2026/arts-media-design/art_minor`
 - Cinema Studies, Minor — `undergraduate/2026/arts-media-design/cinema_studies_minor`
 - Communication Studies, Minor — `undergraduate/2026/arts-media-design/communication_studies_minor`
-- …and 507 more
+- …and 473 more
 
 ### `no-sample-plan` · 472 program(s) · medium
 
