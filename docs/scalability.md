@@ -23,7 +23,8 @@ find out, because the site does not get slower, it stops updating.
 
 | Wall | Measured | Limit | Consumed |
 |---|---|---|---|
-| Pages files per site | 15,964 | 20,000 (free) · 100,000 (paid) | **80%** |
+| Pages files per site | 16,921 | 20,000 (free) · 100,000 (paid) | **85%** |
+| `_redirects` static rules | 1,285 | 2,100 (free) | **61%** |
 | Largest single asset | 22.48 MiB | 25 MiB (**all plans**) | **90%** |
 | MCP worker isolate heap | 60.6 MB | 128 MB per isolate | **47%** |
 | MCP worker cold start | ~197 ms CPU, ~23 MB fan-out | 10 ms CPU (free) | see below |
@@ -112,25 +113,94 @@ returning visitor pays one request instead of nine.
 
 ## The walls, in the order they will be hit
 
-### 1. Pages file count — 15,964 / 20,000
-
-14,406 of those files are the generated AI data export under `dist/data/**`:
-8,197 course pages, 3,793 professor pages, 1,329 JSON, plus programs. It grows
-with the catalog, which grows every month, unattended.
+### 1. Pages file count — 16,921 / 20,000
 
 The failure mode is a **rejected deployment**. The site keeps serving the last
 good build and simply stops receiving updates — including data updates from the
-monthly scrape.
+monthly scrape. Nobody is watching that happen, which is why `probe:ci` fails the
+build at 90% instead.
 
-Three ways out, none yet taken:
-- **Upgrade Pages to paid** — the limit becomes 100,000 and this stops being a
-  question for years. Cheapest by far in engineering time.
-- **Serve `/data/**` from a Worker**, rendering pages on demand from the JSON
-  already deployed. Removes 14,406 files. Costs a Worker invocation per AI
-  fetch, against a 100,000/day free budget — and these URLs exist specifically
-  to be crawled, so that budget is the wrong shape.
-- **Drop the per-professor pages** (3,793 files) and keep courses. Smallest win,
-  loses real product surface.
+It got there. On **2026-09-10** the count was **19,176 (95.9%)** and the gate was
+red. Two things had taken it from 80%: the catalog grew (7,966 → 8,521 courses,
++554 pages), and the 2027 edition landed — and program JSON was emitted **one file
+per program per edition**, so a single roll added ~1,100 files.
+
+#### Split the budget before choosing anything
+
+This is the measurement that decides which options are real:
+
+| | files | |
+|---|---|---|
+| course pages (1 per course, crawlable) | 8,751 | |
+| professor pages | 3,793 | |
+| program HTML (newest year only) | 1,235 | |
+| **the PRODUCT** | **13,779** | **69%** — one URL per thing, built to be crawled |
+| program JSON (was 1 per program per year) | 2,307 | |
+| app JS chunks: `requirements-*.js` | 2,306 | |
+| app JS chunks: `plan-*.js` | 385 | |
+| **PLUMBING** | **4,998** | **25%** — the same data, over-granular, shipped twice |
+
+69% is the deliverable. Bundling it *is* deleting the feature, so the efficiency
+that exists is all in the other 25% — and there it is nearly total.
+
+#### Done: program JSON bundled per college per year
+
+2,307 files → **51**. Not a new convention: the courses half of the same API has
+always shipped **one compact file per subject** (8,521 courses in 232 files) with
+each per-course *page* linking its subject bundle. Programs now match, and
+`data/northeastern/programs/archive/` has shipped this shape since August (9–13
+files per edition against 1,071 for a live one). A whole college is ~40 KB gzipped.
+
+Refused, with the measurements:
+- **A delta between editions.** The wall is *files*, not bytes, and a delta is
+  still one file per program. Separately: only **208 of the 925** programs present
+  in both editions are byte-identical (22.5%), so there is little to delta away.
+  Co-compressing two editions in one file beats compressing them separately by
+  only **1.1%** — gzip's window cannot see across a 570 KB file.
+- **A second Pages project for `dist/data`.** It gets its own budget but cannot
+  take a *path prefix* of `numap.app` without a Worker in front, so in practice it
+  means moving every `/data` URL — 27 mentions in `llms.txt`, `robots.txt`, 24
+  source files, and the search index's `path`, which is derived by splitting on
+  `/data/`. Those URLs are the feature.
+- **Serving `/data/**` from a Worker.** One full crawl is 14% of the free
+  100,000/day budget, and these URLs exist specifically to be crawled.
+
+#### Next, and it is the one that matters for catalog history
+
+The app ships **one JS chunk per program per edition** — the `import.meta.glob`
+calls in `src/data/majorLoader.js`, `minorLoader.js` and `samplePlanLoader.js`.
+That is ~1,150 files per edition on top of the ~22 the JSON now costs, so **5–7
+years of requirements is unaffordable until it is bundled too**. Bundling it the
+same way would cut ~2,200 files and take 7 editions to ~14,500 (72%), leaving
+about ten years of catalog growth.
+
+⚠ It cannot be done casually: the glob's KEYS are the program identity, and those
+exact strings are persisted in saved plans and share links (`PlannerContext`
+stores `major` as the glob path). Replacing the glob means reconstructing that
+identity from a generated manifest without changing one key.
+
+After that the remaining levers are dropping the per-professor pages (~3,700) and
+a paid plan (limit becomes 100,000).
+
+### 1b. `_redirects` static rules — 1,285 / 2,100
+
+Same failure class as the file count: it fails a **deploy**, silently. It was
+unmeasured until 2026-09-10, and only came up because the program-JSON bundling
+raised the question "is there anything else shaped like this?" — there was, at
+61%. `load-probe.js` watches it now.
+
+Almost all 1,285 are `programRedirects` in `scripts/build-ai-data.js`: one per
+program in the newest catalog year, keeping the old
+`/data/programs/{year}-{level}-{college}-{prog}` URLs resolving. So it grows with
+the catalog, not with editions.
+
+It also decided something. The 2,307 old per-program JSON URLs were **not** given
+redirects when they were bundled away — 2,307 rules alone would exceed this
+limit. The JSON API is documented index-first in `llms.txt`, so the entry point
+still resolves and the deep URLs were a shape, not a contract.
+
+**Never solve a file-count problem by adding redirects.** That trades one wall for
+a tighter one.
 
 ### 2. Largest asset — 22.48 / 25 MiB, and it is dead weight
 

@@ -15,7 +15,12 @@
 //   dist/data.html                     the hub (served at /data)
 //   dist/data/courses[.html|/SUBJ|/SUBJ/NUM]
 //   dist/data/majors, /minors          program directories
-//   dist/data/programs/{slug}          one page per program
+//   dist/data/programs/{slug}          301s to the directories above
+//   dist/data/json/courses/{SUBJ}      one JSON per SUBJECT, not per course
+//   dist/data/json/programs/{year}/{level}/{college}
+//                                      one JSON per COLLEGE PER YEAR, not per
+//                                      program — see programBundles below for
+//                                      the file-count wall that decides this
 //   dist/data/nupath[/CODE]            index + 13 attribute pages
 //   dist/data/professors[/A|/name-slug]
 //   dist/data/equivalences
@@ -123,8 +128,35 @@ const pageQueue = []; // filled by the loops, flushed at the page stage
 const searchAssets = { index: "", script: "", indexUrl: "" };
 
 const programs = [];
-const seenUrls = new Map(); // url → id, for collision rails
+const seenUrls = new Map(); // "bundleRel#slug" → id, for collision rails
 const programRedirects = []; // old /data/programs/* page paths → new homes
+
+// ── Program JSON is bundled per college per catalog year ─────────────
+//
+// One file per PROGRAM was the obvious shape and it is the wrong one, for a
+// reason that has nothing to do with bytes: Cloudflare Pages' free plan caps a
+// deployment at 20,000 FILES, and a rejected deployment is silent — the site
+// keeps serving the last good build while the monthly scrape goes on committing
+// data that never ships. Measured 2026-09-10: 19,176 of 20,000 files, of which
+// 2,307 were per-program JSON. Each new catalog edition added ~1,100 more, so
+// shipping the 5-7 years of requirements students actually need was arithmetically
+// impossible on any plan.
+//
+// This is not a new convention — it is the one the COURSES half of this same API
+// already uses, and which llms.txt documents as "one compact file per subject":
+// 8,521 courses ship as 232 files, and every per-course PAGE links its subject
+// bundle rather than a per-course JSON. Programs now match: 2,307 files -> ~44,
+// and an edition costs ~22 files instead of ~1,100.
+//
+// A DELTA between editions was considered first and refused twice over. The wall
+// is files, not bytes, and a delta is still one file per program — it saves
+// nothing here. And measured against the corpus, only 208 of the 925 programs
+// present in both editions are byte-identical (22.5%), so most genuinely changed
+// and there is little to delta away.
+//
+// `data/northeastern/programs/archive/` has shipped exactly this shape since
+// August: 9-13 files per edition against 1,071 for a live one.
+const programBundles = new Map(); // bundleRel → { meta, programs: [] }
 
 // Program pages live under their directory, same grammar as courses and
 // professors: /data/majors/{slug}, /data/minors/{slug}, /data/graduate/{slug}.
@@ -140,12 +172,16 @@ for (const src of allSrcs) {
 
   const b = bundleById.get(src.id);
   const level = b?.level ?? (src.id.startsWith("grad/") ? "grad" : "undergrad");
-  const rel = `programs/${src.year}/${level}/${slugify(src.college)}/${slugify(src.prog)}.json`;
+  // One file per college per catalog year, holding every program in it. `slug` is
+  // how a reader finds one program inside the bundle, so it has to stay unique
+  // WITHIN the bundle — the collision rail moves with it rather than being lost.
+  const rel = `programs/${src.year}/${level}/${slugify(src.college)}.json`;
   const url = `${JSON_ROOT}/${rel}`;
+  const slug = slugify(src.prog);
 
-  const clash = seenUrls.get(url);
-  if (clash) throw new Error(`slug collision: ${src.id} vs ${clash} → ${url}`);
-  seenUrls.set(url, src.id);
+  const clash = seenUrls.get(`${rel}#${slug}`);
+  if (clash) throw new Error(`slug collision inside a bundle: ${src.id} vs ${clash} → ${url}#${slug}`);
+  seenUrls.set(`${rel}#${slug}`, src.id);
 
   const kind = b?.type ?? (/(^|_)minor$/.test(src.prog) ? "minor" : "major");
   const isNewest = Number(src.year) === newestProgYear;
@@ -154,18 +190,26 @@ for (const src of allSrcs) {
   let page;
   let pageRel;
   if (isNewest) {
-    let slug = slugify(src.prog);
-    if (pageSlugTaken.has(`${dir}/${slug}`)) slug = `${slugify(src.college)}-${slug}`;
-    if (pageSlugTaken.has(`${dir}/${slug}`)) throw new Error(`page slug collision: ${src.id} vs ${pageSlugTaken.get(`${dir}/${slug}`)}`);
-    pageSlugTaken.set(`${dir}/${slug}`, src.id);
-    pageRel = `${dir}/${slug}.html`;
-    page = `${PAGE_ROOT}/${dir}/${slug}`;
-    programRedirects.push([`/data/programs/${src.year}-${level}-${slugify(src.college)}-${slugify(src.prog)}`, `/data/${dir}/${slug}`]);
+    // Deliberately NOT the same string as the bundle key above. A page slug may
+    // gain a college prefix to break a collision across the whole directory; a
+    // bundle key is scoped to one college already and must stay the plain slug,
+    // or a reader cannot find a program from its id.
+    let pageSlug = slug;
+    if (pageSlugTaken.has(`${dir}/${pageSlug}`)) pageSlug = `${slugify(src.college)}-${pageSlug}`;
+    if (pageSlugTaken.has(`${dir}/${pageSlug}`)) throw new Error(`page slug collision: ${src.id} vs ${pageSlugTaken.get(`${dir}/${pageSlug}`)}`);
+    pageSlugTaken.set(`${dir}/${pageSlug}`, src.id);
+    pageRel = `${dir}/${pageSlug}.html`;
+    page = `${PAGE_ROOT}/${dir}/${pageSlug}`;
+    programRedirects.push([`/data/programs/${src.year}-${level}-${slugify(src.college)}-${slugify(src.prog)}`, `/data/${dir}/${pageSlug}`]);
   }
 
   const { metadata, name, ...requirements } = parsed;
   const payload = {
     id: src.id,
+    // How to find this program inside the bundle. The id is the other way in;
+    // both are here because a reader arriving from `programs/index.json` has the
+    // id, and a reader arriving from a page URL has the slug.
+    slug,
     name,
     level,
     kind,
@@ -179,20 +223,36 @@ for (const src of allSrcs) {
     lastEdited: metadata?.lastEdited,
     ...(page ? { page } : {}),
     url,
-    app: ORIGIN,
-    generatedAt,
-    disclaimer: DISCLAIMER,
-    // Two fields of the tree carry a meaning a reader cannot guess from the
-    // name, and guessing either one wrong produces a confidently wrong answer
-    // about somebody's degree — so they are documented here rather than left to
-    // inference, the same reason the course payloads carry a legend.
-    legend: {
-      notes: "Sentences quoted verbatim from the catalog page that state a condition we could NOT express as structure — exclusions (\"Research courses may not be used\"), eligibility lists, per-course grade minimums. A section can consist of nothing but these. Quote them; never infer from them that a particular course does or does not satisfy the section.",
-      creditsRequired: "Semester hours the catalog states for a section whose courses it does not list. Do not add these into a program total: some restate credit that another section already counts.",
-    },
     requirements,
   };
-  writeJSON(rel, payload);
+  // `app`, `generatedAt`, `disclaimer` and `legend` used to sit on every program.
+  // In a bundle that is pure repetition — the legend alone is ~800 characters and
+  // was being written 2,307 times, about 1.8 MB of identical prose — so they move
+  // to the bundle, which is the level they actually describe.
+  if (!programBundles.has(rel)) {
+    programBundles.set(rel, {
+      what: `Every ${level === "grad" ? "graduate" : "undergraduate"} program NU Map holds for `
+          + `the ${src.year} catalog year in this college, with full requirement trees. `
+          + `Find one by its \`slug\` or \`id\`. One file per college per catalog year, the same `
+          + `shape as courses/{SUBJECT}.json.`,
+      catalogYear: Number(src.year),
+      level,
+      college: src.college,
+      app: ORIGIN,
+      generatedAt,
+      disclaimer: DISCLAIMER,
+      // Two fields of the tree carry a meaning a reader cannot guess from the
+      // name, and guessing either one wrong produces a confidently wrong answer
+      // about somebody's degree — so they are documented here rather than left to
+      // inference, the same reason the course payloads carry a legend.
+      legend: {
+        notes: "Sentences quoted verbatim from the catalog page that state a condition we could NOT express as structure — exclusions (\"Research courses may not be used\"), eligibility lists, per-course grade minimums. A section can consist of nothing but these. Quote them; never infer from them that a particular course does or does not satisfy the section.",
+        creditsRequired: "Semester hours the catalog states for a section whose courses it does not list. Do not add these into a program total: some restate credit that another section already counts.",
+      },
+      programs: [],
+    });
+  }
+  programBundles.get(rel).programs.push(payload);
   if (isNewest) {
     pageQueue.push({
       year: Number(src.year),
@@ -208,10 +268,12 @@ for (const src of allSrcs) {
   }
 
   programs.push({
-    id: src.id, name, level, kind,
+    id: src.id, slug, name, level, kind,
     catalogYear: Number(src.year), college: src.college,
     location: b?.location || undefined,
     totalCreditsRequired: b?.totalCreditsRequired,
+    // `url` is now a whole college's bundle, so the index has to say WHICH entry
+    // in it this row is. Without `slug` a reader has the file and no key.
     ...(page ? { page } : {}), url,
   });
 }
@@ -219,9 +281,29 @@ for (const src of allSrcs) {
 if (programs.length < MIN_PROGRAMS) {
   throw new Error(`rails: only ${programs.length} programs (< ${MIN_PROGRAMS}) — refusing to ship a broken export`);
 }
+
+// The bundles, one per college per catalog year. Sorted so a re-run produces a
+// diff about the catalog rather than about directory iteration order.
+for (const [rel, bundle] of [...programBundles].sort(([a], [b2]) => a.localeCompare(b2))) {
+  bundle.programs.sort((a, b2) => a.slug.localeCompare(b2.slug));
+  writeJSON(rel, { count: bundle.programs.length, ...bundle });
+}
+// A file-count rail, because this is the wall that fails a DEPLOY rather than a
+// request, and silently: Cloudflare rejects the upload and the site goes on
+// serving the last good build. One file per program is what this shape replaced;
+// if a future edit reverts to that by accident, the count is how it shows up
+// before the deploy does. Generous — it only catches the shape being wrong.
+const MAX_PROGRAM_BUNDLES = 200;
+if (programBundles.size > MAX_PROGRAM_BUNDLES) {
+  throw new Error(`rails: ${programBundles.size} program JSON files (> ${MAX_PROGRAM_BUNDLES}). `
+    + `These are meant to be one file per college per catalog year (~22 an edition). `
+    + `One file per PROGRAM is ~1,100 an edition and put dist/ at 95.9% of Cloudflare's `
+    + `20,000-file cap in Sept 2026. See the comment on programBundles.`);
+}
+
 programs.sort((a, b2) => a.id.localeCompare(b2.id));
 writeJSON("programs/index.json", {
-  what: "Every Northeastern program NU Map knows. `page` is the human-readable requirements page (current catalog year only; best for reading); `url` is the full requirements JSON (all years).",
+  what: "Every Northeastern program NU Map knows. `page` is the human-readable requirements page (current catalog year only; best for reading); `url` is the requirements JSON for this program's whole college and catalog year — find this program inside it by `id` or `slug`. Bundled per college, like courses/{SUBJECT}.json.",
   count: programs.length,
   generatedAt,
   disclaimer: DISCLAIMER,
@@ -883,7 +965,12 @@ const writePage = ({ rel, section, title, heading, description, jsonUrl, body, w
     + `<div class="sections">` + searchBox + NAV_SECTIONS.map(([id, label, href]) =>
     `<a href="${href}"${id === section ? ` class="here"` : ""}>${label}</a>`).join("")
     + `</div><div class="aux"><a href="${ORIGIN}">numap.app</a><a href="${ORIGIN}/story">the story</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
-    + (jsonUrl ? `<a href="${jsonUrl}">JSON of this page</a>` : `<a href="${JSON_ROOT}/index.json">JSON API</a>`)
+    // "of this page" was already a small lie for course pages, whose JSON is the
+    // whole SUBJECT file, and bundling programs per college made it a bigger one:
+    // the link hands a reader 68 programs. A model that follows it expecting one
+    // entity and finding a collection has to guess which entry it wanted, so the
+    // label says what it actually is.
+    + (jsonUrl ? `<a href="${jsonUrl}">JSON (this page's group)</a>` : `<a href="${JSON_ROOT}/index.json">JSON API</a>`)
     + `</div>`;
   // The disclaimer is its own bottom section on every page: a hairline bar
   // (the footer's border-top), the disclaimer, the freshness stamp centered
@@ -1184,7 +1271,11 @@ const renderProgram = (p) => {
       }
     }
   }
-  out.push(`<p class="muted">Parsed from the catalog by NU Map; the <a href="${p.url}">JSON version</a> is the structured machine copy${p.sourceUrl ? `, and the <a href="${p.sourceUrl}">official page</a> is the authority` : ""}.</p>`);
+  // Names the key, because `p.url` is now this program's whole college for this
+  // catalog year. Without the slug a reader has the right file and no way in.
+  out.push(`<p class="muted">Parsed from the catalog by NU Map; the structured machine copy is in `
+    + `<a href="${p.url}">this college's JSON for the ${p.catalogYear} catalog</a>, under `
+    + `<code>${escapeHtml(p.slug)}</code>${p.sourceUrl ? `, and the <a href="${p.sourceUrl}">official page</a> is the authority` : ""}.</p>`);
   return out.join("\n");
 };
 

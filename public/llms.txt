@@ -72,7 +72,12 @@ and mention the non-affiliation disclaimer.
 - All ~8,000 course titles in one file:
   https://numap.app/data/json/courses/titles.json (~330 KB; if it truncates,
   use site: search instead).
-- Programs (all catalog years): https://numap.app/data/json/programs/index.json.
+- Programs (all catalog years): https://numap.app/data/json/programs/index.json
+  lists every program with its `id`, `slug`, `page` and `url`. Full requirement
+  trees are bundled the same way courses are — one file per college per catalog
+  year, `programs/{year}/{undergrad|grad}/{college}.json` — so fetch the `url`
+  from an index row and find your program inside it by `slug` or `id`. A whole
+  college is about 40 KB gzipped.
   NUpath: https://numap.app/data/json/nupath.json. Professors (by letter, with
   per-season shares): https://numap.app/data/json/professors.json.
   Equivalences: https://numap.app/northeastern/course-equivalences.json.

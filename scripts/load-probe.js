@@ -84,7 +84,7 @@
  *   node scripts/load-probe.js --diff before.json after.json
  */
 import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
+import { join, relative, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import zlib from "node:zlib";
 
@@ -108,6 +108,13 @@ const LIMITS = {
   pagesFilesFree: 20_000,        // developers.cloudflare.com/pages/platform/limits
   pagesFilesPaid: 100_000,
   pagesMaxFileBytes: 25 * 1024 * 1024,  // 25 MiB, ALL plans — no paid escape
+  // Static rules in `_redirects`. Same failure class as the file count — it
+  // fails the DEPLOY, not a request — and it was unmeasured until the program
+  // JSON was bundled in Sept 2026 and the count came up while looking. 1,285 of
+  // 2,100 consumed at that point, almost all of them the per-program page
+  // redirects, which grow with the catalog. It is also the reason the 2,307 old
+  // per-program JSON URLs were NOT given redirects: that alone would exceed it.
+  pagesRedirectRules: 2_100,
   workerIsolateBytes: 128 * 1024 * 1024,
   workerCpuMsFree: 10,
   workerCpuMsPaid: 30_000,
@@ -162,6 +169,27 @@ const WORKER_FANOUT = [
 const kb = (n) => `${(n / 1024).toFixed(0)}K`;
 const mb = (n) => `${(n / 1048576).toFixed(2)} MB`;
 const pct = (n, d) => `${((100 * n) / d).toFixed(1)}%`;
+
+/**
+ * Static rules in every `_redirects` Cloudflare will read.
+ *
+ * Counted rather than assumed to be one file: Pages reads `_redirects` at the
+ * output root, and this build also emits one under `dist/data/`. Blank lines and
+ * `#` comments are not rules. Returns 0 when there is none, which is honest —
+ * absent is not the same as zero rules in a file that exists, but for a LIMIT
+ * both consume nothing.
+ */
+function countRedirectRules(dir) {
+  let n = 0;
+  for (const f of walk(dir)) {
+    if (basename(f.path) !== "_redirects") continue;
+    for (const line of readFileSync(f.path, "utf8").split("\n")) {
+      const t = line.trim();
+      if (t && !t.startsWith("#")) n += 1;
+    }
+  }
+  return n;
+}
 
 /** A headroom line: consumed / limit, with the verdict a reader should act on. */
 function wall(label, used, limit, unit = mb) {
@@ -302,6 +330,9 @@ function budget() {
   console.log(wall("Pages files per site (free)", fileCount, LIMITS.pagesFilesFree, (n) => String(n)));
   console.log(wall(`largest asset`, biggest.size, LIMITS.pagesMaxFileBytes));
   console.log(`   ${"".padEnd(34)} ${relative(dir, biggest.path)}`);
+  const redirectRules = countRedirectRules(dir);
+  report.walls.redirectRules = { used: redirectRules, limit: LIMITS.pagesRedirectRules };
+  console.log(wall("_redirects rules (free)", redirectRules, LIMITS.pagesRedirectRules, (n) => String(n)));
 
   // Worker fan-out: not a wall by itself, but it sets the cold-start cost and
   // the isolate footprint, and both of those ARE walls.
@@ -608,12 +639,37 @@ function ci() {
       used: all.length,
       limit: LIMITS.pagesFilesFree,
       unit: (n) => String(n),
-      fix: "Options, cheapest first: move to a paid Cloudflare plan (limit becomes "
-         + `${LIMITS.pagesFilesPaid.toLocaleString()}); drop the per-professor pages from `
-         + "scripts/build-ai-data.js (~3,700 files); or publish dist/data as its own "
-         + "Pages project, which gets its own budget. Do NOT serve /data from a Worker "
-         + "on the free plan — one full crawl is 14% of the daily request quota, and "
-         + "these URLs exist to be crawled. See docs/scalability.md.",
+      // Ordered by what is left AFTER the program JSON was bundled (Sept 2026,
+      // 2,307 files -> 51). Know the split first: about 69% of the budget is one
+      // crawlable URL per course, professor and program, which IS the product and
+      // cannot be bundled without deleting it. The rest is plumbing.
+      fix: "Check WHICH half grew first — `find dist -type f | sed 's|^dist/||' | "
+         + "awk -F/ '{print $1\"/\"$2}' | sort | uniq -c | sort -rn | head`.\n"
+         + "      Biggest remaining lever: the app ships one JS chunk per program per "
+         + "edition (~2,300 files in dist/assets, from the import.meta.glob calls in "
+         + "src/data/majorLoader.js, minorLoader.js and samplePlanLoader.js). Bundling "
+         + "those per college the way the program JSON now is would cut ~2,200 files and "
+         + "is what makes 5-7 catalog editions affordable at all — but the glob KEYS are "
+         + "the program identity persisted in saved plans and share links, so it cannot "
+         + "be done casually. Then: drop the per-professor pages (~3,700). Then: a paid "
+         + `plan (limit becomes ${LIMITS.pagesFilesPaid.toLocaleString()}).\n`
+         + "      Do NOT serve /data from a Worker on the free plan — one full crawl is "
+         + "14% of the daily request quota, and these URLs exist to be crawled. A second "
+         + "Pages project gets its own budget but cannot take a PATH prefix of numap.app "
+         + "without that Worker, so it means moving every /data URL. See docs/scalability.md.",
+    },
+    {
+      name: "_redirects rules",
+      used: countRedirectRules(dir),
+      limit: LIMITS.pagesRedirectRules,
+      unit: (n) => String(n),
+      fix: "Almost all of these are the per-program page redirects in "
+         + "scripts/build-ai-data.js (programRedirects), one per program in the newest "
+         + "catalog year, so this grows with the catalog and not with editions. If it "
+         + "ever binds: those redirects exist so the OLD /data/programs/{year}-{level}-"
+         + "{college}-{prog} URLs keep resolving, and they can be dropped for programs "
+         + "whose old URL was never published. Do not solve a file-count problem by "
+         + "adding redirects — that trades one wall for a tighter one.",
     },
     {
       name: "largest single asset",
