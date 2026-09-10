@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/northeastern/dev_logo.png"><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Tab - NU Map Docs</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body data-page="dev-portal/log">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../">nu-map/documentation</a><span class="sep"> / </span><a href="../">dev-portal</a><span class="sep"> / </span><strong>Log tab</strong>
+    </div>
+
+    <h1>Log tab <span class="badge blue">📋 change-log.json</span></h1>
+    <p class="lead">A paginated audit log of every data operation that has modified the course database. Reads <code>public/northeastern/change-log.json</code> directly. On localhost, it also fetches the deployed version of that file from GitHub Pages and computes which local entries haven't been pushed yet — those get a <strong>⏳ Pending push</strong> badge.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Source file</div><div class="nb-value"><code>public/northeastern/change-log.json</code></div></div>
+      <div class="nb-group"><div class="nb-label">Max entries</div><div class="nb-value">600 (oldest are dropped when the limit is exceeded)</div></div>
+      <div class="nb-group"><div class="nb-label">Available on</div><div class="nb-value">Both localhost and GitHub Pages (read-only)</div></div>
+    </div>
+
+    <h2>Pending push badge</h2>
+    <p>On localhost, the Log tab fetches the deployed <code>change-log.json</code> from GitHub Pages at load time and builds a Set of timestamps that are already on the remote. Any local entry whose <code>timestamp</code> is not in that Set gets the amber <strong>⏳ Pending push</strong> badge. This tells you at a glance which runs still need to be pushed via Review &amp; Push.</p>
+
+    <h2>Entry types</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>type</th><th>Created by</th><th>Key fields shown</th></tr></thead>
+      <tbody>
+        <tr><td><code>manual-trigger</code></td><td>Trigger tab — ⚡ Run locally (any adapter)</td><td>adapter label, exit code (✓ Exit 0 / ✗ Exit N)</td></tr>
+        <tr><td><code>availability</code></td><td><code>scrape-availability.js --write</code></td><td>covered / total courses with history; terms queried</td></tr>
+        <tr><td><code>majors</code></td><td><code>scrape-majors.js --write</code></td><td>scraped / written / skipped / failed program count</td></tr>
+        <tr><td><code>nupath-auto-update</code></td><td><code>fetch-nupath.js --write</code> (via Trigger tab or GitHub Actions)</td><td>scanned / changed / gained-only / lost-only; source (Tableau or catalog); triggeredBy; GH Actions runId</td></tr>
+        <tr><td><em>no type field</em></td><td><code>scrape-catalog.js --rotate --write</code></td><td>subject code (e.g. "CS"); added[] / modified[] (per-field before→after) / removedFromCatalog[]</td></tr>
+      </tbody>
+    </table></div>
+
+    <p>Legacy entry types (<code>nupath-scan</code>, <code>nupath-manual-fix</code>) from the old portal are still rendered if they appear in the log file — they show NUPath discrepancy stats and apply-fix counts respectively.</p>
+
+    <h2>change-log.json format</h2>
+    <pre><code>{
+  "runs": [
+    {
+      "type": "manual-trigger",
+      "subject": "Course Catalog (manual)",
+      "adapter": "catalog",
+      "timestamp": "2026-05-19T14:32:00.000Z",
+      "exitCode": 0
+    },
+    {
+      "type": "availability",
+      "subject": "📅 Term Availability",
+      "timestamp": "2026-05-19T12:00:00.000Z",
+      "terms": ["202310","202330","202340","202360", ...],
+      "covered": 4812,
+      "total": 5200
+    },
+    {
+      "timestamp": "2026-05-18T10:00:00.000Z",
+      "subject": "CS",
+      "added": [],
+      "modified": [{"code":"CS 3500","changes":[{"field":"description","before":"...","after":"..."}]}],
+      "removedFromCatalog": [],
+      "unchanged": 87
+    }
+  ]
+}</code></pre>
+
+    <p>Entries are prepended (newest first). The 600-entry cap is enforced by every script that writes to the log.</p>
+
+  </main>
+</div>
+<script src="../../nav.js"></script>
+</body>
+</html>
