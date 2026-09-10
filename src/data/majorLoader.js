@@ -42,7 +42,7 @@ const _gradMap = import.meta.glob(
 // the newer-vs-cohort defect this pair replaced survived four months in a file
 // nothing could test.
 import { parseMajorPathParts, normalizeFolder, resolveInMap, atCohortYear, findCohortVersion,
-         editionsOf, editionLabel } from './programPaths.js';
+         editionsOf, editionLabel, editionLabelCompact } from './programPaths.js';
 export { normalizeFolder, resolveInMap, atCohortYear };
 
 /**
@@ -189,7 +189,10 @@ export function getMajorOptions(majorRequirements, cohortYear) {
 export function getMajorOptionGroups(majorRequirements, cohortYear) {
   const map = new Map();
   for (const opt of getMajorOptions(majorRequirements, cohortYear)) {
-    const key = `${opt.year} · ${opt.collegeLabel}`;
+    // `25-26`, not the bare ending year: "2026" reads as a calendar year, and
+    // names the year the edition ENDS rather than the one a student entered
+    // under. See editionLabelCompact.
+    const key = `${editionLabelCompact(opt.year)} · ${opt.collegeLabel}`;
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(opt);
   }
@@ -265,7 +268,10 @@ export function getGradMajorOptions(majorRequirements, cohortYear) {
 export function getGradMajorOptionGroups(majorRequirements, cohortYear) {
   const map = new Map();
   for (const opt of getGradMajorOptions(majorRequirements, cohortYear)) {
-    const key = `${opt.year} · ${opt.collegeLabel}`;
+    // `25-26`, not the bare ending year: "2026" reads as a calendar year, and
+    // names the year the edition ENDS rather than the one a student entered
+    // under. See editionLabelCompact.
+    const key = `${editionLabelCompact(opt.year)} · ${opt.collegeLabel}`;
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(opt);
   }

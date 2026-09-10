@@ -24,7 +24,7 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { findCohortVersion, atCohortYear, parseMajorPathParts, cohortCatalogYear,
-         editionsOf, editionLabel }
+         editionsOf, editionLabel, editionLabelShort, editionLabelCompact }
   from "../../src/data/programPaths.js";
 
 const P = (year, college = "khoury", folder = "cs_bscs_(boston)") =>
@@ -61,6 +61,49 @@ describe("editionLabel", () => {
 
   test("a non-year is empty, never 'NaN-NaN'", () => {
     for (const bad of [undefined, null, "", "soon", NaN]) assert.equal(editionLabel(bad), "");
+  });
+});
+
+describe("editionLabelCompact · the search result heading", () => {
+  test("names the SPAN, because a bare ending year is a different number", () => {
+    // The headings grouped by `opt.year`, so a program under the 2025-2026
+    // catalog sat beneath a heading reading "2026". That is not an abbreviation
+    // of the edition — it reads as a calendar year, and the one it names is the
+    // year the edition ENDS, not the one a student entered under. Someone
+    // scanning for their own catalog year had to know the off-by-one.
+    assert.equal(editionLabelCompact(2026), "25-26");
+    assert.equal(editionLabelCompact(2027), "26-27");
+    assert.equal(editionLabelCompact("2026"), "25-26");   // a path segment is a string
+  });
+
+  test("it is a span, not a truncation — both halves move together", () => {
+    // Stated as a property over a decade rather than three examples: whatever
+    // else changes, the second half is always the first plus one.
+    for (let y = 2024; y <= 2034; y++) {
+      const [a, b] = editionLabelCompact(y).split("-").map(Number);
+      assert.equal(b, (a + 1) % 100, `${y} produced ${editionLabelCompact(y)}`);
+    }
+  });
+
+  test("the century boundary does not produce '99-0'", () => {
+    // Zero-padding is easy to lose here, and the output is two fixed-width
+    // halves — "99-0" would misalign every heading in the list.
+    assert.equal(editionLabelCompact(2100), "99-00");
+    assert.equal(editionLabelCompact(2101), "00-01");
+  });
+
+  test("a non-year is empty, and never partially rendered", () => {
+    for (const bad of [undefined, null, "", "soon", NaN, 0]) {
+      assert.equal(editionLabelCompact(bad), "", `${JSON.stringify(bad)} rendered something`);
+    }
+  });
+
+  test("it stays distinct from editionLabelShort, which the picker button uses", () => {
+    // Two forms on purpose: the button is a control a student sets deliberately
+    // and keeps the century; a heading is scanned and repeats down the list. If
+    // these ever collapse into one, the button silently loses its century.
+    assert.equal(editionLabelShort(2026), "2025-26");
+    assert.notEqual(editionLabelCompact(2026), editionLabelShort(2026));
   });
 });
 

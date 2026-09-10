@@ -156,6 +156,27 @@ export function editionLabelShort(year) {
 }
 
 /**
+ * The edition at its shortest: `25-26`.
+ *
+ * For the SEARCH RESULT headings, which grouped by the bare ending year — so a
+ * program under the 2025-2026 catalog sat beneath a heading reading "2026". That
+ * is not a short form of the edition, it is a different number: it reads as a
+ * calendar year, and the one it names is the year the edition ENDS rather than
+ * the one a student would say they entered under. Someone scanning results for
+ * their own catalog year had to know the off-by-one to find it.
+ *
+ * Distinct from `editionLabelShort` on purpose. That one answers a LAYOUT
+ * question for the picker button and keeps the century because the button is the
+ * control a student sets deliberately. A result heading is scanned, repeats down
+ * the list, and shares its line with a college name, so it wants the form a
+ * registrar or a student actually writes on a transcript.
+ */
+export function editionLabelCompact(year) {
+  const full = editionLabel(year);
+  return full ? `${full.slice(2, 4)}-${full.slice(-2)}` : "";
+}
+
+/**
  * Every edition of `path`'s program that we actually HOLD, oldest first.
  *
  * "Actually hold" is the load-bearing part. The year selector is built from

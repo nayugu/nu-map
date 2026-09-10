@@ -10,6 +10,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { resolveInMap, optionFromPath, atCohortYear } from './majorLoader.js';
+import { editionLabelCompact } from './programPaths.js';
 
 // Scraped minors live alongside scraped majors; folder names end with _minor.
 const _moduleMap = import.meta.glob(
@@ -73,7 +74,8 @@ export function getMinorOptions(majorRequirements, cohortYear) {
 export function getMinorOptionGroups(majorRequirements, cohortYear) {
   const map = new Map();
   for (const opt of getMinorOptions(majorRequirements, cohortYear)) {
-    const key = `${opt.year} · ${opt.collegeLabel}`;
+    // `25-26`, not the bare ending year — see editionLabelCompact.
+    const key = `${editionLabelCompact(opt.year)} · ${opt.collegeLabel}`;
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(opt);
   }
