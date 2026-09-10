@@ -912,6 +912,65 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
      A unit test asserts the two halves **partition** the manifest — an entry
      belonging to neither would be orphan-checked by no scraper, which is
      exactly the state this replaced.
+- **Not every page with a table is a PROGRAM**, and widening discovery is what
+  taught us that. The late-August 2026 widening (added CPS's two undergraduate
+  path shapes) also began admitting registrar POLICY pages (`Thesis Policy`,
+  `Transfer of Credit`, `Grading`, `Student Time Status`) and DEPARTMENT landing
+  pages (`Biology`, `School of Journalism`). Measured on the 2027 trees, the
+  first scraped after it: **77 records carry zero requirement tables, 46 graduate
+  and 31 undergraduate — and 2026 has none**, so it is a regression, not a
+  longstanding condition. Each one was a selectable program in the picker, a page
+  on `/data`, a row in the search index, and the bulk of the "programs stating no
+  total" figure people reason from.
+  `scripts/lib/non-program-pages.js` keeps a page when EITHER holds, both signals
+  being NEU's own:
+  1. it **states requirements in a table** (`metadata.tablesPresent > 0`) —
+     verified against the live catalog rather than our parse, because "our parser
+     found nothing" and "the page contains nothing" are different claims. A real
+     program page carries `sc_courselist`; a department landing page carries
+     `sc_sccoursedescs` (course DESCRIPTIONS); a policy page carries neither;
+  2. its **title names a credential after a comma or slash** — `Biology, MS
+     (Boston)`, `Law, JD / Public Health, MPH (Boston)` — reusing
+     `programNaming.DEGREES`, which is already a closed vocabulary.
+  Signal 2 exists only to rescue the **eight dual-degree pages**, where NEU
+  publishes the requirements on the two constituent degrees and there is
+  genuinely no table. Those ship with their notes and an empty requirement set:
+  less information, which is acceptable, where deleting the program would be
+  wrong information.
+  - **This is a RULE, not a hand adjudication, and the distinction matters.**
+    The first draft named the eight pages explicitly, copying the shape of
+    `program-variants.js` and `referenced-menus.js`. That was wrong: those
+    adjudicate a JUDGEMENT the page does not answer, which no parsing settles.
+    This is a FACT the page states in a convention NEU applies consistently, so a
+    rule can read it — and a hand list here would need re-checking at every
+    edition roll forever and would go stale silently, which is exactly the
+    failure `shared-sections.json` had.
+  - All three simpler rules were measured and refused, and each is now a test:
+    `/dual-degrees/` in the URL gets 6 of 8 (the two Public Health duals sit under
+    an ordinary department); `" / "` in the title gets those two but admits
+    `Course Retake / Course Substitution Policy`; an unanchored search for
+    credential WORDS admits four more, including `Regulations and Requirements
+    for the Certificate of Advanced Graduate Study`. **The comma/slash anchor is
+    what makes a match a reading of the convention rather than a keyword hit.**
+  - **`tablesPresent` ABSENT is not zero.** A record that never counted its
+    tables is kept — dropping costs a degree, keeping costs a noise row.
+  - It **drops rather than failing the run**, unlike the two adjudication tables:
+    NEU reorganises policy pages routinely, so a hard stop would fire on most
+    runs of an unattended job, and a rail that fires constantly gets switched off.
+    The bulk case is covered instead by a **20% ratio rail** — if NEU changed the
+    requirement markup, `tablesPresent` would read 0 catalog-wide and this filter
+    would discard every degree we ship while every other rail saw a well-formed
+    run of nothing. A ratio, not a count, so it needs no re-tuning as the catalog
+    grows.
+  - ⚠ **A WITHDRAWAL is not a VANISH**, and the first real run proved it: 38
+    graduate pages dropped against `maxVanishedRatio`'s limit of 33, so the
+    scrape refused to write. `checkScrapeRails` now takes `wasProgram`, which
+    reads the **previously committed** record — a page that was already
+    not-a-program by today's rule was withdrawn, not lost. Reading the PREVIOUS
+    record is what stops this being a hole: a genuine program's own record still
+    says it is a program, so it stays counted however badly this run parsed it.
+    Withdrawals are reported in the rails line, never silent, and in steady state
+    the exemption is a no-op because such pages never enter `previous` again.
 - Program discovery uses the **sitemap**; `/azindex/` is `Disallow`ed in
   robots.txt and both scrapers used to violate it.
 - **A minor may double count at most 50% of its credit against a major**

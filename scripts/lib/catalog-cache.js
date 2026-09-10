@@ -24,7 +24,7 @@
  * Cache entries never expire on their own; delete the directory to refresh.
  * `.cache/` is gitignored.
  */
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from "fs";
 import { resolve, dirname, join } from "path";
 import { createHash } from "crypto";
 
@@ -53,6 +53,47 @@ let queue = Promise.resolve();
 let lastFetchAt = 0;
 
 export const cacheStats = { hits: 0, misses: 0, writes: 0, retries: 0 };
+
+/**
+ * Refuse to WRITE program data from a cache that predates an edition roll.
+ *
+ * ── The hazard, hit for real on 2026-09-10 ─────────────────────────
+ *
+ * The scrapers latch the edition year from the FIRST PAGE FETCHED, which is right: the
+ * catalog is the authority, never the clock. But a cached page carries the edition it had
+ * when it was captured, so a cache taken before a roll silently redirects the whole run into
+ * the PREVIOUS year's directory.
+ *
+ * Observed: `.cache/catalog` was captured 2026-09-03, days after NEU published 2026-2027 but
+ * holding pre-roll pages. A `--write` run against it resolved to 2026 and began comparing
+ * itself to the 547-program 2026 tree — i.e. it was about to re-parse stale HTML over the
+ * FROZEN edition that every current student's plan is pinned to. It stopped only because an
+ * unrelated rail (a shared-section title) happened to fire first. That is luck, and luck is
+ * not a guard.
+ *
+ * The rule: writing is allowed only when the resolved edition is at least the newest one
+ * already held. A cache is a development affordance for iterating on the PARSER, where the
+ * output is inspected and discarded; the moment it decides what lands in `data/`, it has to
+ * prove it is not older than what we ship.
+ *
+ * Reading (a preview run, `--dry-run`, `--json`) is untouched — that is the legitimate use.
+ */
+export function assertCacheEditionSafe({ resolvedYear, write, outRoot }) {
+  if (!write || !CACHE_DIR) return;
+  const held = existsSync(outRoot)
+    ? readdirSync(outRoot).filter(d => /^\d{4}$/.test(d)).map(Number) : [];
+  const newest = held.length ? Math.max(...held) : null;
+  if (newest == null || resolvedYear >= newest) return;
+  console.error(
+    `\n❌  Refusing to write from a stale HTML cache.\n\n`
+    + `    CATALOG_HTML_CACHE=${CACHE_DIR} resolved the catalog edition to ${resolvedYear}, `
+    + `but ${newest} is already held.\n`
+    + `    The cache predates an edition roll, so this run would re-parse pre-roll pages over `
+    + `the FROZEN ${resolvedYear} tree\n    that existing plans are pinned to.\n\n`
+    + `    Use the cache to iterate on the parser (no --write), and scrape live to write.\n`
+    + `    Or delete ${CACHE_DIR} to recapture.\n`);
+  process.exit(1);
+}
 
 /** True when the on-disk cache is active for this run. */
 export function cacheEnabled() {

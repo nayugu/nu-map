@@ -114,6 +114,14 @@ const ENGINE    = "src/engine/index.js";
 const BINDING     = "src/core/requirementBinding.js";
 const GRADREQ     = "src/core/gradRequirements.js";
 const GE_TEST     = "cd test/unit      && node --test general-electives.test.js";
+
+// A catalog page that is not a program. The rule is pure and the tests are hand-built
+// records, so this is cheap to probe — which matters, because the tempting simplifications
+// here each DELETE a real degree rather than merely admitting noise.
+const NONPROG      = "scripts/lib/non-program-pages.js";
+const RAILS        = "scripts/lib/scrape-rails.js";
+const NONPROG_TEST = "cd test/unit      && node --test non-program-pages.test.js";
+const RAILS_TEST   = "cd test/unit      && node --test scrape-rails.test.js";
 const GE_CORPUS   = "cd test/invariant && node --test general-elective-allowance.test.js";
 const GE_UI       = "cd test/browser   && node --test general-electives.browser.test.js";
 
@@ -842,6 +850,52 @@ const MUTANTS = [
     from: "  const allowanceUnknown = isGeneralElectives\n    && !(Number.isFinite(sec.requiredSH) && sec.requiredSH >= 0);",
     to:   "  const allowanceUnknown = false;",
     run: [GE_UI] },
+
+  // ── A page that is not a program ────────────────────────────────
+  // Each mutant is one of the simpler rules that was measured and REFUSED, restored. They
+  // matter because they fail in the expensive direction: every one of them deletes a degree
+  // a student can be admitted to, rather than merely admitting a noise row.
+  { name: "non-program: the credential rescue is dropped (deletes the dual degrees)",
+    file: NONPROG,
+    from: "  return tables > 0 || titleNamesCredential(data?.name);",
+    to:   "  return tables > 0;",
+    run: [NONPROG_TEST] },
+
+  // The anchor is what makes a match a READING of NEU's title convention rather than a
+  // keyword hit. Unanchored it admits four registrar policy pages that merely discuss
+  // certificates.
+  { name: "non-program: the comma/slash anchor is dropped",
+    file: NONPROG,
+    from: "const AFTER_SEPARATOR = /[,/]\\s*([A-Za-z]+)/g;",
+    to:   "const AFTER_SEPARATOR = /([A-Za-z]+)/g;",
+    run: [NONPROG_TEST] },
+
+  // Absent is not zero. A record that never counted its tables is one this filter has no
+  // evidence about; reading that as "no tables" deletes it.
+  { name: "non-program: an absent tablesPresent is read as zero",
+    file: NONPROG,
+    from: "  if (tables == null) return true;",
+    to:   "  if (tables == null) return false;",
+    run: [NONPROG_TEST] },
+
+  // The bulk guard. Without it, a markup change at NEU makes `tablesPresent` read 0
+  // catalog-wide and this filter discards every degree we ship, while every other rail sees
+  // a well-formed, internally consistent run of nothing.
+  { name: "non-program: the bulk rail stops refusing a catalog-wide collapse",
+    file: NONPROG,
+    from: "  if (!discovered || dropped <= discovered * MAX_DROP_RATIO) return { ok: true, reason: null };",
+    to:   "  return { ok: true, reason: null };\n  if (!discovered) return { ok: true, reason: null };",
+    run: [NONPROG_TEST] },
+
+  // A withdrawal is not a vanish — but the exemption must not become a hole. Reading the
+  // NEW record instead of the previous one is the plausible mistake, and it would let a
+  // genuine fleet-wide regression through: every program that stopped parsing would be
+  // exempted for having stopped parsing.
+  { name: "rails: withdrawal is judged on the NEW record, not the committed one",
+    file: RAILS,
+    from: "      if (!wasProgram(previous.get(k))) { withdrawn.push(k); return false; }",
+    to:   "      if (!wasProgram(results.get(k) ?? previous.get(k))) { withdrawn.push(k); return false; }",
+    run: [RAILS_TEST] },
 ];
 
 const argv = process.argv.slice(2);

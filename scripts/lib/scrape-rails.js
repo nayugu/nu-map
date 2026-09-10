@@ -34,9 +34,12 @@ export const DEFAULT_LIMITS = {
  * @param {Map<string, object>} args.results   outPath → parsed program
  * @param {Map<string, object>} args.previous  outPath → committed program
  * @param {object} [args.limits]
+ * @param {(prev: object) => boolean} [args.wasProgram]  given a COMMITTED record, was it a
+ *   program at all? Defaults to yes. See the withdrawal note beside `vanished`.
  * @returns {{ok: boolean, failures: string[], stats: object}}
  */
-export function checkScrapeRails({ discovered, failed, results, previous, baselineCount, limits = {} }) {
+export function checkScrapeRails({ discovered, failed, results, previous, baselineCount,
+                                   limits = {}, wasProgram = () => true }) {
   const L = { ...DEFAULT_LIMITS, ...limits };
   const failures = [];
 
@@ -55,14 +58,40 @@ export function checkScrapeRails({ discovered, failed, results, previous, baseli
   const nowSections  = [...results.values()].reduce((n, p) => n + sectionsOf(p), 0);
 
   // Programs that used to parse and now produce nothing at all.
+  //
+  // ── A WITHDRAWAL is not a vanish ───────────────────────────────────
+  //
+  // `wasProgram` lets a caller say that a previously-committed record is one we have since
+  // decided is not a program at all — a registrar policy page or a department landing page
+  // (see lib/non-program-pages.js). Those records parsed before and are deliberately not
+  // written now, which is indistinguishable to the arithmetic here from the catalog
+  // breaking, and it really did stop the first run of that filter: 38 graduate pages
+  // withdrawn against a limit of 33.
+  //
+  // This cannot hide a real regression, and the reason is that the predicate reads the
+  // PREVIOUS record rather than the new one: a genuine program's committed record still
+  // says it is a program, so it stays counted however badly this run parsed it. Only a
+  // record that was already not-a-program by today's rule is excluded.
+  //
+  // In steady state it is a no-op — once such pages stop being written they never enter
+  // `previous` again — so this is transition safety that stays correct rather than a
+  // permanent exemption.
+  const withdrawn = [];
   const vanished = [...previous.keys()].filter(k => {
     if (sectionsOf(previous.get(k)) === 0) return false;   // wasn't parsing before
-    return !results.has(k) || sectionsOf(results.get(k)) === 0;
+    if (!(results.has(k) && sectionsOf(results.get(k)) > 0)) {
+      if (!wasProgram(previous.get(k))) { withdrawn.push(k); return false; }
+      return true;
+    }
+    return false;
   });
 
   const stats = {
     discovered, failed, prevCount, nowCount: results.size,
     prevSections, nowSections, vanished: vanished.length,
+    // Reported, never silent: a withdrawal is a deliberate deletion of a committed record
+    // and the operator has to see the number even though it does not fail the run.
+    withdrawn: withdrawn.length,
   };
 
   if (floorBase > 0 && discovered > 0 && discovered < floorBase * L.minDiscoveryRatio) {

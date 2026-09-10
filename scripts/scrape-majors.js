@@ -27,11 +27,12 @@ import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync, statSy
 import { join, dirname, sep }       from 'path';
 import { fileURLToPath }            from 'url';
 import { parse as parseHTML }       from 'node-html-parser';
-import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
+import { politeFetch, cacheSummary, assertCacheEditionSafe } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
 import { checkScrapeRails, checkPlanRail, checkSharedSectionsRail,
          SHARED_RAIL_RUNBOOK, SHARED_ORPHAN_RUNBOOK } from './lib/scrape-rails.js';
 import { sharedSectionsOrphans }     from './lib/shared-sections.js';
+import { isProgramPage, checkNonProgramRail } from './lib/non-program-pages.js';
 import { verifyPlanGrid, planGridCourseKeys } from './lib/plan-grid.js';
 import { parseEditionArg, editionBasePath, assertEdition,
          isFatalScrapeError }        from './lib/catalog-edition.js';
@@ -89,6 +90,7 @@ function resolveYearFrom(root, url) {
     console.warn(`  ⚠  No edition label found; falling back to ${YEAR}/`);
   }
   YEAR_RESOLVED = true;
+  assertCacheEditionSafe({ resolvedYear: YEAR, write: WRITE, outRoot: OUT_ROOT });
 }
 
 const WRITE   = process.argv.includes('--write');
@@ -497,6 +499,9 @@ async function main() {
   // Pages this run could not read at all. Distinct from `failed` (a count) because the
   // orphan rail needs the IDENTITIES: see sharedSectionsOrphans.
   const unreadable = new Set();
+  // Records dropped as policy or department pages. Counted so the run can refuse when the
+  // share is implausible — see checkNonProgramRail.
+  let nonProgram = 0;
   let plansWritten = 0, plansRemoved = 0;
   // Buffered, not written as we go: the rails below need to see the whole run
   // before any of it lands. Writing per-program meant a broken parse was
@@ -510,15 +515,24 @@ async function main() {
     try {
       const records = await scrapeProgram(prog.url);
 
-      if (!records.length) {
-        console.log('SKIP (no requirements found)');
+      // A registrar POLICY page or a DEPARTMENT landing page. It reaches the parser because
+      // the container match is deliberately broad, and it parses to a record made entirely
+      // of prose. Dropped here rather than downstream so it never becomes a selectable
+      // program, a /data page or a search row. See lib/non-program-pages.js.
+      const kept = records.filter(isProgramPage);
+      nonProgram += records.length - kept.length;
+
+      if (!kept.length) {
+        console.log(records.length
+          ? 'SKIP (no requirement table, no credential in the title — not a program)'
+          : 'SKIP (no requirements found)');
         skipped++;
       } else {
         // A page yields one program normally and more when it publishes an
         // alternate curriculum; each gets its own folder, the primary keeping
         // the one it has always had.
-        if (records.length > 1) console.log(`${records.length} programs on this page`);
-        for (const data of records) {
+        if (kept.length > 1) console.log(`${kept.length} programs on this page`);
+        for (const data of kept) {
           const slug = data._slug || slugify(data.name || prog.college);
           const path = outPath(prog.college, slug);
           // The 2026-2027 catalog publishes no Sample Plan of Study anywhere, and
@@ -603,9 +617,13 @@ async function main() {
     const { ok, failures, stats } = checkScrapeRails({
       discovered: programs.length, failed, results: pending, previous,
       baselineCount: priorEditionCount(),
+      // A committed record we have since decided is not a program was WITHDRAWN, not lost.
+      // Reading the previous record is what keeps this from hiding a real regression.
+      wasProgram: isProgramPage,
     });
     console.log(`\nRails: ${stats.nowCount} parsed vs ${stats.prevCount} committed, ` +
-                `${stats.nowSections} sections vs ${stats.prevSections}, ${stats.vanished} vanished.`);
+                `${stats.nowSections} sections vs ${stats.prevSections}, ${stats.vanished} vanished` +
+                `${stats.withdrawn ? `, ${stats.withdrawn} withdrawn (not programs)` : ''}.`);
     if (!ok) {
       console.error(`\n❌  Refusing to write — this run looks like upstream breakage:\n`);
       for (const f of failures) console.error(`   • ${f}`);
@@ -631,6 +649,15 @@ async function main() {
     // `applySharedSections` is keyed on url#slug, so a page NEU moved, renamed or retired
     // never matches, produces no `missing` titles, and leaves no trace. See the graduate
     // scraper for the roll that proved it — ten entries died silently there.
+    // Dropping policy pages is safe one at a time and catastrophic in bulk — see the grad
+    // scraper for the same guard and why it is a ratio.
+    const npRail = checkNonProgramRail(nonProgram, programs.length);
+    if (!npRail.ok) {
+      console.error(`\n❌  Refusing to write — ${npRail.reason}\n`);
+      process.exit(1);
+    }
+    if (nonProgram) console.log(`Non-program pages dropped: ${nonProgram} (policy and department pages)`);
+
     const { orphans, unchecked } = sharedSectionsOrphans('undergraduate',
                                                          { unreachable: unreadable });
     // Reported and ALLOWED. A page we could not read says nothing about whether its entry is
@@ -706,6 +733,21 @@ async function main() {
       }
       console.log(`Sample plans: ${plansWritten} written, ${plansRemoved} removed ` +
                   `(${prevPlans} committed before this run).`);
+
+      // Withdraw records this edition already committed that are not programs. See the
+      // graduate scraper for why this is scoped to THIS edition and to records the rule
+      // rejects: absence from `pending` alone is never grounds for deletion, because a page
+      // that failed to read is absent too.
+      let withdrawn = 0;
+      for (const p of listCommittedPrograms()) {
+        if (pending.has(p)) continue;
+        let committed;
+        try { committed = JSON.parse(readFileSync(p, 'utf8')); } catch { continue; }
+        if (isProgramPage(committed)) continue;
+        rmSync(dirname(p), { recursive: true, force: true });
+        withdrawn++;
+      }
+      if (withdrawn) console.log(`Withdrew ${withdrawn} committed record(s) that are not programs.`);
     }
   }
 

@@ -107,3 +107,65 @@ test("plan rail › the first run has nothing to protect", () => {
 test("plan rail › gaining plans never trips it", () => {
   assert.equal(checkPlanRail(500, 388).deleteOk, true);
 });
+
+// ── Withdrawal is not vanishing ────────────────────────────────────
+//
+// Non-program pages (registrar policy pages, department landing pages) began being written
+// when discovery widened, and are now filtered out — see lib/non-program-pages.js. To the
+// arithmetic here that filter is indistinguishable from the catalog breaking, and it really
+// did stop the first run: 38 graduate pages withdrawn against a limit of 33.
+//
+// `wasProgram` reads the PREVIOUS record, which is what keeps this from becoming a hole.
+
+test("rails › records we have since decided are not programs do not count as vanished", () => {
+  // 40 of 500 withdrawn — well over the 5% limit — and the run must still pass.
+  const previous = mapOf(500);
+  for (let i = 0; i < 40; i++) previous.set(`policy${i}`, prog(1));
+  const { ok, stats } = checkScrapeRails({
+    discovered: 540, failed: 0, results: mapOf(500), previous,
+    wasProgram: (p) => !p.__policy,
+  });
+  // Nothing is marked, so with the default predicate this MUST fail — proving the test is
+  // exercising the limit rather than sitting under it.
+  const naive = checkScrapeRails({ discovered: 540, failed: 0, results: mapOf(500), previous });
+  assert.equal(naive.ok, false, "precondition: 40 losses should trip the vanish rail");
+
+  for (const [k, v] of previous) if (k.startsWith("policy")) v.__policy = true;
+  const marked = checkScrapeRails({
+    discovered: 540, failed: 0, results: mapOf(500), previous,
+    wasProgram: (p) => !p.__policy,
+  });
+  assert.equal(marked.ok, true, "withdrawn records still counted as vanished");
+  assert.equal(marked.stats.withdrawn, 40, "withdrawals must be REPORTED, not silent");
+  assert.equal(marked.stats.vanished, 0);
+  void ok; void stats;
+});
+
+test("rails › a REAL program vanishing still fails, even beside withdrawals", () => {
+  // The property that makes the exemption safe. The predicate reads the committed record,
+  // so a genuine program's own record still says it is a program and it stays counted
+  // however badly this run parsed it.
+  const previous = mapOf(500);
+  for (let i = 0; i < 30; i++) previous.set(`policy${i}`, Object.assign(prog(1), { __policy: true }));
+  // 40 real programs stop parsing at the same time.
+  const results = mapOf(460);
+  const { ok, failures, stats } = checkScrapeRails({
+    discovered: 530, failed: 0, results, previous,
+    wasProgram: (p) => !p.__policy,
+  });
+  assert.equal(ok, false, "a real fleet-wide loss was hidden by the withdrawal exemption");
+  assert.equal(stats.withdrawn, 30);
+  assert.ok(stats.vanished >= 40, `only ${stats.vanished} counted as vanished`);
+  assert.ok(failures.some(f => /previously parsed now yield nothing/.test(f)), failures.join(" | "));
+});
+
+test("rails › the default predicate changes nothing", () => {
+  // Behaviour-neutral for every existing caller: without `wasProgram`, every previously
+  // committed record is a program and the arithmetic is exactly what it was.
+  const previous = mapOf(500);
+  const a = checkScrapeRails({ discovered: 500, failed: 0, results: mapOf(480), previous });
+  const b = checkScrapeRails({ discovered: 500, failed: 0, results: mapOf(480), previous,
+                               wasProgram: () => true });
+  assert.deepEqual(a.stats, b.stats);
+  assert.equal(a.stats.withdrawn, 0);
+});
