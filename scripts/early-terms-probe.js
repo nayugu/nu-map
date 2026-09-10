@@ -51,6 +51,7 @@ import enginePorts from "../src/adapters/northeastern/enginePorts.js";
 import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
 import { FIRST_TERM_OVERLOAD_SH, EARLY_TERMS } from "../src/engine/earlyTerms.js";
 import { programIdentity } from "../src/core/programIdentity.js";
+import { newestEditionHeld } from "./lib/catalog-edition.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 
@@ -64,7 +65,9 @@ const JSON_OUT = argAt("--json");
 function degreePrograms() {
   const out = [];
   for (const lvl of ["undergraduate", "graduate"]) {
-    const base = join(ROOT, "data/northeastern/programs", lvl, "2026");
+    // The edition HELD, not a literal — see `newestEditionHeld`.
+    const base = join(ROOT, "data/northeastern/programs", lvl,
+                      String(newestEditionHeld(ROOT, lvl, process.argv)));
     if (!existsSync(base)) continue;
     for (const col of readdirSync(base)) {
       const cd = join(base, col);

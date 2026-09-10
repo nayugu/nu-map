@@ -51,6 +51,7 @@ import { breadthSplit } from "../src/engine/electives.js";
 import { buildPrecedence, chainHeight } from "../src/engine/precedence.js";
 import { cellLevelTarget } from "../src/engine/prereqDepth.js";
 import { majorSubjectsOf, cellSubject } from "../src/engine/subjects.js";
+import { newestEditionHeld } from "./lib/catalog-edition.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const argv = process.argv.slice(2);
@@ -259,13 +260,9 @@ function score(doc, studentType) {
  * that happened to be the only one when it was written, so no instrument here
  * had ever looked at 2027. `--edition 2026` reproduces the old behaviour.
  */
-const EDITION = (() => {
-  const i = argv.indexOf("--edition");
-  if (i >= 0 && /^\d{4}$/.test(argv[i + 1] ?? "")) return Number(argv[i + 1]);
-  const b = join(ROOT, "data/northeastern/programs/undergraduate");
-  const ys = existsSync(b) ? readdirSync(b).filter(d => /^\d{4}$/.test(d)).map(Number) : [];
-  return ys.length ? Math.max(...ys) : 2026;
-})();
+// Shared with every other instrument — see `newestEditionHeld` for why this is one function
+// and not eight.
+const EDITION = newestEditionHeld(ROOT, "undergraduate", argv);
 
 const out = {};
 let refused = 0;

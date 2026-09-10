@@ -47,6 +47,12 @@
  */
 export const KEEP_YEARS = 7;
 
+// The only I/O in this module, and it is confined to `newestEditionHeld` below: everything
+// else here is pure and should stay that way, so a caller can reason about editions without
+// touching a disk.
+import { existsSync, readdirSync } from 'node:fs';
+import { join as joinPath } from 'node:path';
+
 /**
  * The editions inside the window, newest first.
  *
@@ -61,6 +67,55 @@ export const KEEP_YEARS = 7;
  */
 export function editionWindow(years) {
   return [...years].sort((a, b) => b - a).slice(0, KEEP_YEARS);
+}
+
+/**
+ * The newest program edition actually held on disk, for the instruments.
+ *
+ * ── Why this is one function and not eight ──────────────────────────
+ *
+ * Every script that reads the program corpus has to pick an edition, and until this existed
+ * they each picked one for themselves. Audited 2026-09-10, immediately after the graduate
+ * 2027 roll: **two** scripts resolved it correctly (`verify-chart`, `chart-probe`, by
+ * near-identical copies of the code below) and **six** hard-coded `2026` — including
+ * `corpus-ask.js` and `corpus-snapshot.js`, which CLAUDE.md names as THE way to ask a
+ * question about the corpus.
+ *
+ * A hard-coded edition in an instrument is worse than one in a feature, and the reason is
+ * the whole working method here: measurements are what decisions are made from. A pinned
+ * instrument does not fail — it answers confidently about last year's catalog, in the same
+ * format, with a plausible number. "Measure before designing" stops being a safeguard the
+ * moment the measurement silently describes a corpus we no longer ship.
+ *
+ * Anchored to what is HELD rather than to the clock, for the same reason `editionWindow` is:
+ * a derive must not need the network, and a run in the gap between a catalog roll and our
+ * scrape of it would otherwise name an edition that does not exist here.
+ *
+ * Throws rather than falling back to a year. A fallback is how a missing tree becomes a
+ * confident answer about the wrong one, which is the defect this replaces.
+ *
+ * @param {string} root   repo root
+ * @param {string} tree   "undergraduate" | "graduate"
+ * @param {string[]} [argv]  honours an explicit `--edition YYYY`, which pins a measurement
+ *                           to a frozen edition so its answer stops moving under it
+ * @returns {number}
+ */
+export function newestEditionHeld(root, tree = "undergraduate", argv = null) {
+  if (argv) {
+    const i = argv.indexOf("--edition");
+    const v = argv[i + 1] ?? "";
+    if (i >= 0 && /^\d{4}$/.test(v)) return Number(v);
+  }
+  const base = joinPath(root, "data/northeastern/programs", tree);
+  const years = existsSync(base)
+    ? readdirSync(base).filter(d => /^\d{4}$/.test(d)).map(Number) : [];
+  if (!years.length) {
+    throw new Error(
+      `no program editions found under ${base} — refusing to guess a year. `
+      + `An instrument that falls back to a hard-coded edition reports confidently `
+      + `about a corpus we do not ship.`);
+  }
+  return Math.max(...years);
 }
 
 /** `2022-2023` — the archive's own directory naming. */

@@ -61,6 +61,7 @@ import { structurePlan, writeSnapshot } from "./lib/corpus-snapshot.js";
 import { spawn } from "node:child_process";
 import { tmpdir } from "node:os";
 import { unlinkSync } from "node:fs";
+import { newestEditionHeld } from "./lib/catalog-edition.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 
@@ -84,13 +85,12 @@ const MIN_GENERATED_RATIO = 0.40;
  * Defaults to the NEWEST edition held, because the question this script answers
  * is "can CHART plan what we ship", and a frozen edition's answer stops moving.
  */
-const EDITION = (() => {
-  const i = process.argv.indexOf("--edition");
-  if (i >= 0 && /^\d{4}$/.test(process.argv[i + 1] ?? "")) return Number(process.argv[i + 1]);
-  const base = join(ROOT, "data/northeastern/programs/undergraduate");
-  const years = existsSync(base) ? readdirSync(base).filter(d => /^\d{4}$/.test(d)).map(Number) : [];
-  return years.length ? Math.max(...years) : 2026;
-})();
+// Shared with every other instrument (`newestEditionHeld`), rather than a private copy of
+// the same seven lines. This one and chart-probe's were the only two that resolved the
+// edition correctly, and they did it by duplication — six other scripts hard-coded 2026 and
+// went on answering about a superseded catalog. One rule, or they agree only until someone
+// edits one of them.
+const EDITION = newestEditionHeld(ROOT, "undergraduate", process.argv);
 
 function degreePrograms() {
   const out = [];

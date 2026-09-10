@@ -29,6 +29,7 @@ import { fileURLToPath } from "node:url";
 import { allocateMajorSections } from "../src/core/gradRequirements.js";
 import { workTermGrants } from "../src/core/specialTermUtils.js";
 import specialTerms from "../src/adapters/northeastern/specialTerms.js";
+import { newestEditionHeld } from "./lib/catalog-edition.js";
 
 const COOP_TYPES = specialTerms.getTypes();
 
@@ -304,8 +305,13 @@ function reportAllocate() {
   console.log(`── REAL ALLOCATOR: International Business BSIB ──`);
   const courseMap = {};
   for (const c of courses) courseMap[keyOf(c)] = { ...c, sh: c.credits };
-  const ib = JSON.parse(fs.readFileSync(
-    path.join(REPO, "data/northeastern/programs/undergraduate/2026/business/international_business_bsib_(boston)/requirements.json"), "utf8"));
+  // The edition HELD, not a literal — see `newestEditionHeld`. This probe reports on the
+  // allocator's real behaviour, so reading a superseded record makes its verdict describe a
+  // program nobody is enrolled in.
+  const ib = JSON.parse(fs.readFileSync(path.join(REPO,
+    "data/northeastern/programs/undergraduate",
+    String(newestEditionHeld(REPO, "undergraduate", process.argv)),
+    "business/international_business_bsib_(boston)/requirements.json"), "utf8"));
 
   const ABROAD = { abroad: true, halfTime: false };
   const progKeys = programKeysOf(coopNodes(ib));

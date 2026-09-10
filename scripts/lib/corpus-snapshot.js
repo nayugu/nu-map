@@ -47,6 +47,7 @@ import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from "
 import { createHash } from "node:crypto";
 import { execSync } from "node:child_process";
 import { join } from "node:path";
+import { newestEditionHeld } from "./catalog-edition.js";
 
 /**
  * Fingerprint of the code that produces plans.
@@ -81,7 +82,11 @@ export function dataHash(root) {
   // hashing them all costs more than the snapshot is worth. A scrape rewrites them, so
   // mtime moves; that is enough to invalidate.
   for (const lvl of ["undergraduate", "graduate"]) {
-    const base = join(root, "data/northeastern/programs", lvl, "2026");
+    // The edition HELD, never a literal. Pinned to 2026 this hashed a tree that the roll had
+    // already superseded, so a snapshot taken after the roll carried a fingerprint that
+    // could not move when the shipped corpus did — the staleness banner this file exists to
+    // raise would have stayed silent about the one change that matters most.
+    const base = join(root, "data/northeastern/programs", lvl, String(newestEditionHeld(root, lvl)));
     if (!existsSync(base)) continue;
     for (const col of readdirSync(base).sort()) {
       const cd = join(base, col);

@@ -45,6 +45,7 @@ import enginePorts from "../src/adapters/northeastern/enginePorts.js";
 import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
 import { earnedSHBefore, meetsStanding, requiredSHFor, standingAtSH, STANDING_LADDER, standingViolationsOf }
   from "../src/core/classStanding.js";
+import { newestEditionHeld } from "./lib/catalog-edition.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
@@ -84,7 +85,9 @@ const observed = (() => {
 const gatedCatalog = Object.values(courseMap)
   .filter(c => STANDING_LADDER.includes(c?.offering?.std)).length;
 
-const base = join(ROOT, "data/northeastern/programs/undergraduate/2026");
+// The edition HELD, not a literal — see `newestEditionHeld`.
+const base = join(ROOT, "data/northeastern/programs/undergraduate",
+                  String(newestEditionHeld(ROOT, "undergraduate", process.argv)));
 const targets = [];
 for (const col of readdirSync(base)) {
   for (const key of readdirSync(join(base, col))) {

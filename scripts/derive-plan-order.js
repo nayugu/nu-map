@@ -58,6 +58,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCatalog } from "../src/adapters/northeastern/courseCatalog.node.js";
 import { foldPrereqTree } from "../src/core/prereqFold.js";
+import { newestEditionHeld } from "./lib/catalog-edition.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "public/northeastern/plan-order.json");
@@ -74,7 +75,9 @@ const { courseMap } = loadCatalog();
 function publishedPlans() {
   const out = [];
   for (const lvl of ["undergraduate", "graduate"]) {
-    const base = join(ROOT, `data/northeastern/programs/${lvl}/2026`);
+    // The edition HELD, not a literal — see `newestEditionHeld`. Pinned, this derived the
+    // plan order from a superseded catalog and shipped it as current.
+    const base = join(ROOT, `data/northeastern/programs/${lvl}/${newestEditionHeld(ROOT, lvl, process.argv)}`);
     if (!existsSync(base)) continue;
     for (const col of readdirSync(base)) {
       const cd = join(base, col);

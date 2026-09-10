@@ -30,9 +30,12 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { minorShare, minorRequirementSections, majorClaimOf } from "../src/core/minorOverlap.js";
 import { courseKey } from "../src/core/gradRequirements.js";
+import { newestEditionHeld } from "./lib/catalog-edition.js";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
-const UG = join(ROOT, "data/northeastern/programs/undergraduate/2026");
+// The edition HELD, not a literal — see `newestEditionHeld`.
+const UG = join(ROOT, "data/northeastern/programs/undergraduate",
+                String(newestEditionHeld(ROOT, "undergraduate", process.argv)));
 const arg = (name, fallback) => {
   const i = process.argv.indexOf(name);
   return i >= 0 ? Number(process.argv[i + 1]) : fallback;

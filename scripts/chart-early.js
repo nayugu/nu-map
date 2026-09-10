@@ -33,6 +33,7 @@ import { loadCatalog } from "../src/adapters/northeastern/courseCatalog.node.js"
 import enginePorts from "../src/adapters/northeastern/enginePorts.js";
 import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
 import { EARLY_TERMS } from "../src/engine/earlyTerms.js";
+import { newestEditionHeld } from "./lib/catalog-edition.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const argv = process.argv.slice(2);
@@ -83,7 +84,9 @@ function studyTermsOf(plan) {
 
 function undergradWithPlans() {
   const out = [];
-  const base = join(ROOT, "data/northeastern/programs/undergraduate/2026");
+  // The edition HELD, not a literal — see `newestEditionHeld`.
+  const base = join(ROOT, "data/northeastern/programs/undergraduate",
+                    String(newestEditionHeld(ROOT, "undergraduate", process.argv)));
   if (!existsSync(base)) return out;
   for (const col of readdirSync(base)) {
     const cd = join(base, col);

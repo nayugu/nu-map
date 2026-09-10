@@ -24,6 +24,7 @@ import { evalPrereqTree } from "../src/core/prereqEval.js";
 import { realCourseCount } from "../src/core/coreqGroups.js";
 import { GENERAL_ELECTIVE } from "../src/core/requirementDemand.js";
 import { gatePlan } from "./lib/chart-gate.js";
+import { newestEditionHeld } from "./lib/catalog-edition.js";
 
 const arg = (name, dflt = null) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -38,7 +39,10 @@ const arg = (name, dflt = null) => {
 // exactly where the free-elective rule decides everything.
 const BENCHMARKS = ["international_business", "computer_science_and_mathematics"];
 const MATCH = arg("program", null);
-const ROOT = "data/northeastern/programs/undergraduate/2026";
+// The edition HELD, not a literal — see `newestEditionHeld`. A benchmark pinned to a stale
+// edition keeps reporting a number for a corpus we no longer ship, which is the worst
+// possible property for a benchmark: it looks like a regression signal and is not one.
+const ROOT = `data/northeastern/programs/undergraduate/${newestEditionHeld(".", "undergraduate", process.argv)}`;
 
 const { courseMap } = loadCatalog();
 const ports = enginePorts(courseMap);

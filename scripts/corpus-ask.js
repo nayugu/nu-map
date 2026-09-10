@@ -49,6 +49,7 @@ import { fileURLToPath } from "node:url";
 import {
   readSnapshot, planList, plansWith, positionsOf, termsWhere, cellsWhere, diffSnapshots,
 } from "./lib/corpus-snapshot.js";
+import { newestEditionHeld } from "./lib/catalog-edition.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const argv = process.argv.slice(2);
@@ -100,9 +101,16 @@ const { loadCatalog } = await import("../src/adapters/northeastern/courseCatalog
 const { courseMap } = loadCatalog();
 const courses = Object.values(courseMap);
 
+// The edition HELD per tree, never a literal, and `--edition YYYY` pins it. Hard-coded to
+// 2026 this answered every question about a superseded catalog — in the same format, with a
+// plausible number, and no way to tell from the output. That is the failure mode an
+// instrument cannot have: "measure before designing" only works while the measurement
+// describes the corpus we actually ship. Each `p` now carries its `year` for the same
+// reason: a question spanning both trees must be able to say which edition it read.
 const programs = [];
 for (const lvl of ["undergraduate", "graduate"]) {
-  const base = join(ROOT, "data/northeastern/programs", lvl, "2026");
+  const year = newestEditionHeld(ROOT, lvl, argv);
+  const base = join(ROOT, "data/northeastern/programs", lvl, String(year));
   if (!existsSync(base)) continue;
   const { readdirSync, statSync } = await import("node:fs");
   for (const college of readdirSync(base)) {
@@ -111,7 +119,7 @@ for (const lvl of ["undergraduate", "graduate"]) {
     for (const key of readdirSync(cd)) {
       const rf = join(cd, key, "requirements.json");
       if (!existsSync(rf)) continue;
-      programs.push({ lvl, college, key, data: JSON.parse(readFileSync(rf, "utf8")) });
+      programs.push({ lvl, year, college, key, data: JSON.parse(readFileSync(rf, "utf8")) });
     }
   }
 }

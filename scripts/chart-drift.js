@@ -43,6 +43,7 @@ import { loadCatalog } from "../src/adapters/northeastern/courseCatalog.node.js"
 import enginePorts from "../src/adapters/northeastern/enginePorts.js";
 import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
 import { coveringSample, describeShape, formatCoverage } from "./lib/chart-sample.js";
+import { newestEditionHeld } from "./lib/catalog-edition.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const argv = process.argv.slice(2);
@@ -70,7 +71,9 @@ const observed = existsSync(orderFile)
 
 const degrees = [];
 for (const lvl of ["undergraduate", "graduate"]) {
-  const base = join(ROOT, `data/northeastern/programs/${lvl}/2026`);
+  // The edition HELD, not a literal — see `newestEditionHeld`. Drift measured against a
+  // stale edition is drift against a corpus nobody ships.
+  const base = join(ROOT, `data/northeastern/programs/${lvl}/${newestEditionHeld(ROOT, lvl, process.argv)}`);
   if (!existsSync(base)) continue;
   for (const col of readdirSync(base)) {
     const cd = join(base, col);
