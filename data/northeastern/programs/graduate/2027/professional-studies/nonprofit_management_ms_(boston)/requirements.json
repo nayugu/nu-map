@@ -1,0 +1,376 @@
+{
+  "name": "Nonprofit Management, MS (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 8,
+    "tablesConsumed": 8,
+    "tablesOnPage": 8,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/nonprofit-management-ms/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/nonprofit-management-ms/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 34,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NPM",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "NPM",
+          "classId": 6120
+        },
+        {
+          "type": "COURSE",
+          "subject": "NPM",
+          "classId": 6130
+        },
+        {
+          "type": "COURSE",
+          "subject": "NPM",
+          "classId": 6150
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 6,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ALY",
+              "classId": 6105
+            },
+            {
+              "type": "COURSE",
+              "subject": "CMN",
+              "classId": 6980
+            },
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6943
+            },
+            {
+              "type": "COURSE",
+              "subject": "PJM",
+              "classId": 6420
+            },
+            {
+              "type": "COURSE",
+              "subject": "NPM",
+              "classId": 6140
+            },
+            {
+              "type": "COURSE",
+              "subject": "NPM",
+              "classId": 6220
+            },
+            {
+              "type": "COURSE",
+              "subject": "NPM",
+              "classId": 6230
+            },
+            {
+              "type": "COURSE",
+              "subject": "NPM",
+              "classId": 6240
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "NPM",
+          "classId": 6980
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "Complete 6 semester hours from the following:",
+        "Students who do not declare the Fundraising and Development Concentration may also complete two courses from the following:",
+        "Capstone"
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "34 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Note: Foundations of Project Management (PJM 6100) is for students with fewer than three years of experience directing or leading project tasks. Students who do not complete PJM 6100 may substitute any additional project management elective to satisfy the required program hours.",
+      "codes": [
+        "PJM 6100"
+      ],
+      "substitution": null
+    }
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Decision Support Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "AAI",
+            "classId": 6600
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6135
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6145
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6700
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Fundraising and Development Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "NPM",
+            "classId": 6140
+          },
+          {
+            "type": "COURSE",
+            "subject": "NPM",
+            "classId": 6220
+          },
+          {
+            "type": "COURSE",
+            "subject": "NPM",
+            "classId": 6230
+          },
+          {
+            "type": "COURSE",
+            "subject": "NPM",
+            "classId": 6240
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Human Resources Management Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6100
+          },
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6150
+          },
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6200
+          },
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6250
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Organizational Communication Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6150
+          },
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6230
+          },
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6300
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 3,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6250
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6610
+              },
+              {
+                "type": "COURSE",
+                "subject": "PBR",
+                "classId": 6725
+              }
+            ],
+            "notes": [
+              "Complete 3 semester hours from the following:"
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Organizational Leadership Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6105
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6155
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 6,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6200
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6250
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6300
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6406
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6416
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6426
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6436
+              }
+            ],
+            "notes": [
+              "Complete 6 semester hours from the following:"
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Project Management Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6100
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6120
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6200
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6300
+          }
+        ],
+        "minRequirementCount": 4
+      }
+    ]
+  }
+}

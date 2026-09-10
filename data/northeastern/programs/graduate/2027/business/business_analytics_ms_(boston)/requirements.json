@@ -1,0 +1,137 @@
+{
+  "name": "Business Analytics, MS (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/business/master-science/business-analytics-ms/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 0.98,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/business/master-science/business-analytics-ms/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Elective Coursework",
+                "sh": 8
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 30,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6402
+        },
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6405
+        },
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6410
+        },
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6412
+        },
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6413
+        },
+        {
+          "type": "COURSE",
+          "subject": "MISM",
+          "classId": 6414
+        }
+      ],
+      "minRequirementCount": 7
+    },
+    {
+      "type": "SECTION",
+      "title": "Elective Coursework",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8,
+      "notes": [
+        "In consultation with advisor, complete 8 graduate-level semester hours for which prerequisites have been met. Choose from the following subject codes:",
+        "ACCT, BUSN, ENTR, FINA, HRMG, INNO, INTB, MECN, MGMT, MISM, MKTG, SCHM, STRT"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Career Management Course",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "BUSN",
+          "classId": 6400
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "30 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

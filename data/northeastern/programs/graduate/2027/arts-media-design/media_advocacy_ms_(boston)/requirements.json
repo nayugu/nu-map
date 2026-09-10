@@ -1,0 +1,118 @@
+{
+  "name": "Media Advocacy, MS (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/journalism/media-advocacy-ms/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "witnessCourses": [
+      "JRNL5400",
+      "JRNL5480",
+      "LW6400",
+      "LW7667"
+    ],
+    "witnessEdition": 2026,
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 0.98,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/journalism/media-advocacy-ms/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Electives",
+                "sh": 17
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 32,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 5400
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 5480
+        },
+        {
+          "type": "COURSE",
+          "subject": "LW",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "LW",
+          "classId": 7667
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 17,
+      "notes": [
+        "A minimum of 17 credits of electives is required. No more than 8 semester hours can be taken outside of the College of Arts, Media, and Design or the School of Law.",
+        "Complete a minimum of 4 semester hours of coursework from the College of Arts, Media, and Design. Choose from recommended focus areas of JRNL, ARTD, ARTG, COMM, and INAM (additional areas may be chosen in consultation with your adviser).",
+        "Complete a minimum of 5 semester hours of coursework from the School of Law."
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "32 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

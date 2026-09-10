@@ -1,0 +1,145 @@
+{
+  "name": "Civil and Environmental Engineering, PhD—Advanced Entry (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/civil-environmental/civil-environmental-engineering-phd/",
+    "panes": [
+      "advancedentryphdprogramrequirementstextcontainer"
+    ],
+    "variant": {
+      "modality": "advancedentry",
+      "label": "Advanced Entry"
+    },
+    "titleCollisions": {
+      "sections": [
+        "Coursework Requirement"
+      ],
+      "concentrations": []
+    },
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 0.98,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/civil-environmental/civil-environmental-engineering-phd/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 2,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "2 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Coursework Requirement",
+                "sh": 22
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Coursework Requirement (2)",
+                "sh": 22
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 22,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Coursework Requirement",
+      "creditsRequired": 22,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "The Department of Civil and Environmental Engineering encourages flexibility in program definition, especially in areas where complementary courses exist in other departments or where expertise resides outside the department and the objective is to introduce new technology in civil and environmental engineering practice. The academic program must include at least 22 semester hours of graduate-level coursework at Northeastern University. A student may count no more than 4 semester hours of directed study toward the minimum course requirements.",
+        "Complete all courses and requirements listed below unless otherwise indicated."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CIVE",
+          "classId": 7001
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "CIVE",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Coursework Requirement (2)",
+      "creditsRequired": 22,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "The academic program must include at least 22 semester hours of graduate-level coursework at Northeastern University.",
+        "A student may count no more than 4 semester hours of directed study toward the minimum course requirements."
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "22 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

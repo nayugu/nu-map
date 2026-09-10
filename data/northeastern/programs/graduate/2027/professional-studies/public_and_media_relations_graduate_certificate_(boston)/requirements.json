@@ -1,0 +1,107 @@
+{
+  "name": "Public and Media Relations, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/graduate-certificate-programs/public-and-media-relations-graduate-certificate/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "certificate",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/graduate-certificate-programs/public-and-media-relations-graduate-certificate/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 12,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PBR",
+          "classId": 6700
+        },
+        {
+          "type": "XOM",
+          "numCreditsMin": 9,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PBR",
+              "classId": 6710
+            },
+            {
+              "type": "COURSE",
+              "subject": "PBR",
+              "classId": 6715
+            },
+            {
+              "type": "COURSE",
+              "subject": "PBR",
+              "classId": 6720
+            },
+            {
+              "type": "COURSE",
+              "subject": "PBR",
+              "classId": 6725
+            },
+            {
+              "type": "COURSE",
+              "subject": "PBR",
+              "classId": 6730
+            },
+            {
+              "type": "COURSE",
+              "subject": "PBR",
+              "classId": 6735
+            }
+          ],
+          "notes": [
+            "Complete 9 semester hours from the following:"
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "12 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

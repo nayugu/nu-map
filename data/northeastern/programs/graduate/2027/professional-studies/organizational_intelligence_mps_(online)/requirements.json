@@ -1,0 +1,384 @@
+{
+  "name": "Organizational Intelligence, MPS (Online)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 8,
+    "tablesConsumed": 8,
+    "tablesOnPage": 8,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/organizational-intelligence-mps-vtl/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 0.96,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/organizational-intelligence-mps-vtl/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 2,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Electives",
+                "sh": 3
+              }
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unknown-course",
+          "severity": "info",
+          "message": "2 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner",
+          "detail": [
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "MIS 6100"
+              }
+            },
+            {
+              "key": "unknownCourse",
+              "params": {
+                "course": "MIS 7980"
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 34,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "AAI",
+          "classId": 6150
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6105
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6115
+        },
+        {
+          "type": "COURSE",
+          "subject": "ALY",
+          "classId": 6710
+        },
+        {
+          "type": "COURSE",
+          "subject": "MIS",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "MIS",
+          "classId": 7980
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 3,
+      "notes": [
+        "Complete any College of Professional Studies graduate-level courses or unused courses in the program to meet program requirements."
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "34 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Applied Logistics Concentration",
+        "label": "Applied Logistics",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "APL",
+            "classId": 6000
+          },
+          {
+            "type": "COURSE",
+            "subject": "APL",
+            "classId": 6110
+          },
+          {
+            "type": "COURSE",
+            "subject": "APL",
+            "classId": 6120
+          },
+          {
+            "type": "COURSE",
+            "subject": "APL",
+            "classId": 6130
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Corporate and Organizational Communication Concentration",
+        "label": "Corporate and Organizational Communication",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6150
+          },
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6230
+          },
+          {
+            "type": "COURSE",
+            "subject": "CMN",
+            "classId": 6300
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 3,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6250
+              },
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6610
+              },
+              {
+                "type": "COURSE",
+                "subject": "PBR",
+                "classId": 6725
+              }
+            ],
+            "notes": [
+              "Complete 3 semester hours from the following:"
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Human Resource Management Concentration",
+        "label": "Human Resource Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6100
+          },
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6150
+          },
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6200
+          },
+          {
+            "type": "COURSE",
+            "subject": "HRM",
+            "classId": 6250
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "National Security Intelligence Concentration",
+        "label": "National Security Intelligence",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6115
+          },
+          {
+            "type": "COURSE",
+            "subject": "SIA",
+            "classId": 6135
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 6,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "SIA",
+                "classId": 6105
+              },
+              {
+                "type": "COURSE",
+                "subject": "SIA",
+                "classId": 6125
+              },
+              {
+                "type": "COURSE",
+                "subject": "SIA",
+                "classId": 6145
+              },
+              {
+                "type": "COURSE",
+                "subject": "SIA",
+                "classId": 6630
+              }
+            ],
+            "notes": [
+              "Complete 6 semester hours from the following:"
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Nonprofit Management Concentration",
+        "label": "Nonprofit Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "NPM",
+            "classId": 6100
+          },
+          {
+            "type": "COURSE",
+            "subject": "NPM",
+            "classId": 6120
+          },
+          {
+            "type": "COURSE",
+            "subject": "NPM",
+            "classId": 6130
+          },
+          {
+            "type": "COURSE",
+            "subject": "NPM",
+            "classId": 6150
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Organizational Leadership Concentration",
+        "label": "Organizational Leadership",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6105
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6155
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 6,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6200
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6250
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6300
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6406
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6416
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6426
+              },
+              {
+                "type": "COURSE",
+                "subject": "LDR",
+                "classId": 6436
+              }
+            ],
+            "notes": [
+              "Complete 6 semester hours from the following:"
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "name": "Applied Quantitative Methods and Social Analysis, MS (Online)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/interdisciplinary/applied-quantitative-methods-social-analysis-ms-vtl/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/interdisciplinary/applied-quantitative-methods-social-analysis-ms-vtl/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 32,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 6300
+        },
+        {
+          "type": "COURSE",
+          "subject": "INSH",
+          "classId": 6500
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6460
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5047
+            },
+            {
+              "type": "COURSE",
+              "subject": "HLTH",
+              "classId": 5800
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 6460
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHIL",
+              "classId": 5110
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 12 semester hours from the following (concentration courses may not be double counted as elective courses):",
+        "CRIM, ECON, INSH, POLS, PPUA, and/or SOCL at the 5000 level or higher",
+        "The following may also count as electives toward the program:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "AND",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "INSH",
+                  "classId": 6964
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "EESH",
+                  "classId": 6000
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "32 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Computational Social Science Concentration",
+        "label": "Computational Social Science",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "DA",
+            "classId": 5030
+          },
+          {
+            "type": "COURSE",
+            "subject": "INSH",
+            "classId": 5301
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 5302
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5262
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5263
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Data Analytics in the Social Sciences Concentration",
+        "label": "Data Analytics in the Social Sciences",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "DA",
+                "classId": 5020
+              },
+              {
+                "type": "COURSE",
+                "subject": "DA",
+                "classId": 5030
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "INSH",
+            "classId": 5301
+          },
+          {
+            "type": "COURSE",
+            "subject": "INSH",
+            "classId": 5302
+          }
+        ],
+        "minRequirementCount": 3
+      }
+    ]
+  }
+}

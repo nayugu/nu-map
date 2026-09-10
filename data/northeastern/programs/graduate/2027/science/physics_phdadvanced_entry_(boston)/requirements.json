@@ -1,0 +1,122 @@
+{
+  "name": "Physics, PhD—Advanced Entry (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/science/physics/physics-advanced-entry-phd-bos/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 0.98,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/science/physics/physics-advanced-entry-phd-bos/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Core Requirements",
+                "sh": 10
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 10,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 10,
+      "notes": [
+        "Complete 10 semester hours of coursework. The courses required will be determined by the graduate program director based on the student's transcripts."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 9991
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 9996
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (repeatable) course until graduation:"
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Methods for Teaching in the Introductory Physics Laboratory 1 (PHYS 7220) is required for students awarded a teaching assistantship.",
+      "codes": [
+        "PHYS 7220"
+      ],
+      "substitution": null
+    }
+  ]
+}

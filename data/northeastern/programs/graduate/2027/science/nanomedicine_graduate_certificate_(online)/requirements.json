@@ -1,0 +1,351 @@
+{
+  "name": "Nanomedicine, Graduate Certificate (Online)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/science/physics/nanomedicine-graduate-certificate-vtl/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "certificate",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/science/physics/nanomedicine-graduate-certificate-vtl/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 12,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Core",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5270
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5271
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 9,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5272
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5310
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5370
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5380
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5470
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5570
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5580
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5590
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 6370
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 6390
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 6984
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5900
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6900
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 5905
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5219
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5220
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5225
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5920
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6290
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6310
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 5821
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5648
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHME",
+              "classId": 5160
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHME",
+              "classId": 7350
+            },
+            {
+              "type": "COURSE",
+              "subject": "PMST",
+              "classId": 6252
+            },
+            {
+              "type": "COURSE",
+              "subject": "PMST",
+              "classId": 6254
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5145
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5840
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 5410
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 5411
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 5820
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 6131
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5630
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5700
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5750
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5810
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5910
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5930
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5610
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5630
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5640
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHME",
+              "classId": 5631
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHME",
+              "classId": 5683
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 6290
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 5260
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 7731
+            }
+          ],
+          "notes": [
+            "AI-Driven Innovation",
+            "Commercialization and Regulatory Affairs",
+            "Drug Delivery",
+            "Laboratory Research",
+            "Nanomaterials Design and Application"
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 9 semester hours from the following electives. At least 5 semester hours must be Nanomedicine (NNMD) coursework:",
+        "AI-Driven Innovation",
+        "Commercialization and Regulatory Affairs",
+        "Drug Delivery",
+        "Laboratory Research",
+        "Nanomaterials Design and Application"
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "12 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

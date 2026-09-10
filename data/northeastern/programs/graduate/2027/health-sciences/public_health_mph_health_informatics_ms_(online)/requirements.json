@@ -1,0 +1,84 @@
+{
+  "name": "Public Health, MPH / Health Informatics, MS (Online)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 0,
+    "tablesConsumed": 0,
+    "tablesOnPage": 0,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/public-health-health-informatics-mphms-vtl/",
+    "panes": [
+      ""
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "grad",
+      "score": 0.83,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/public-health-health-informatics-mphms-vtl/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "medium",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "2026-2027 Edition",
+                "sh": 15
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "2026-2027 Edition",
+      "creditsRequired": 15,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "Website",
+        "The Master of Public Health and Master of Science in Health Informatics dual degree allows qualified and interested students to prepare to lead healthcare at the nexus between public health and health informatics. Graduates of this program will be well-educated in the complex issues associated with improvements in information technology, as well as changes to the public health and healthcare delivery systems. Recognizing the increasing overlap between health informatics and public health, this program incorporates course work from both the MPH and MSHI curricula for both degrees, reducing tuition costs and saving one year of study compared to obtaining both degrees individually.",
+        "The Northeastern University Master of Public Health program is accredited by the Council on Education for Public Health (CEPH). CEPH is an independent agency recognized by the U.S. Department of Education to accredit schools of public health and public health programs outside of schools of public health.",
+        "Up to 15 credits of coursework in the dual-degree program can be counted toward both the MPH and MS degrees."
+      ]
+    }
+  ]
+}

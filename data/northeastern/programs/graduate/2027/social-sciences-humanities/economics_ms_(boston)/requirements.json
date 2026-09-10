@@ -1,0 +1,296 @@
+{
+  "name": "Economics, MS (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/economics/economics-ms/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/economics/economics-ms/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 32,
+  "totalCreditsSource": "stated-required",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Quantitative",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 5105
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 6105
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 5140
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 6140
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Theory",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 5110
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 6110
+            }
+          ]
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 5120
+            },
+            {
+              "type": "COURSE",
+              "subject": "ECON",
+              "classId": 6120
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Optional Co-op Experience",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6964
+            },
+            {
+              "type": "COURSE",
+              "subject": "EESH",
+              "classId": 6000
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Data Science for Economics Concentration",
+        "label": "Data Science for Economics",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 5200
+              },
+              {
+                "type": "COURSE",
+                "subject": "DAMG",
+                "classId": 6210
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 6700
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "OR",
+                "classId": 6205
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 5130
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 5180
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 5800
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 6400
+              }
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "OR",
+                "courses": [
+                  {
+                    "type": "COURSE",
+                    "subject": "CS",
+                    "classId": 6140
+                  },
+                  {
+                    "type": "COURSE",
+                    "subject": "EECE",
+                    "classId": 5644
+                  }
+                ]
+              },
+              {
+                "type": "COURSE",
+                "subject": "CS",
+                "classId": 6220
+              },
+              {
+                "type": "COURSE",
+                "subject": "ECON",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "ECON",
+                "classId": 5220
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 6600
+              },
+              {
+                "type": "COURSE",
+                "subject": "IE",
+                "classId": 7275
+              }
+            ],
+            "notes": [
+              "Complete 4 semester hours from the following:"
+            ]
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "RANGE",
+                "subject": "ECON",
+                "idRangeStart": 5200,
+                "idRangeEnd": 7772,
+                "exceptions": []
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from the following range:",
+          "ECON 5200 to ECON 7772"
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Electives Option",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "RANGE",
+                "subject": "ECON",
+                "idRangeStart": 5200,
+                "idRangeEnd": 7772,
+                "exceptions": []
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 16 semester hours from the following range (excluding any class taken to fulfill core requirements above):",
+          "ECON 5200 to ECON 7772"
+        ]
+      }
+    ]
+  }
+}

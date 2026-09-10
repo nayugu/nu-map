@@ -183,6 +183,38 @@ export const SHARED_RAIL_RUNBOOK = `
     Context and the measured cost of getting this wrong: scripts/lib/shared-sections.js
 `;
 
+/**
+ * The same decision, for an entry whose PAGE could not be found at all.
+ *
+ * A separate runbook because the evidence is different and so is the wrong answer. Above,
+ * the page exists and a title moved — you can read the page. Here there is no page to read,
+ * so the question is what the URL does now, and `curl -I` answers it in one step: a 301 to a
+ * DEPARTMENT page means the program is gone, a 301 to another PROGRAM page means it moved or
+ * merged, and a 200 means our discovery missed it, which is a scraper bug and not a manifest
+ * one. Those three look identical from inside this process, which is why the rail refuses to
+ * guess.
+ */
+export const SHARED_ORPHAN_RUNBOOK = `
+    These manifest entries matched no page in this run, so their cross-count repair was
+    NOT applied and nothing else here can tell. Until this rail existed they were silent:
+    ten entries went dead across the 2027 graduate roll and a green scrape reported nothing.
+
+    Follow the URL and let the redirect decide:
+
+      • 200, page still there        → our DISCOVERY missed it. Fix the scraper, not
+                                       the manifest — an entry removed here hides a
+                                       program we have stopped scraping at all.
+      • 301 → a DEPARTMENT page      → NEU retired the program. Remove the entry.
+      • 301 → another PROGRAM page   → renamed, moved or merged. Re-key the entry to the
+                                       new url#slug, then CHECK THE CROSS-COUNT STILL
+                                       EXISTS before keeping it: a section can survive a
+                                       rename and stop being cross-counted, and a stale
+                                       mark DISCOUNTS a real requirement.
+
+    Removing an entry to make the run pass is only correct in the retired case. In the
+    other two it either hides a scraper bug or drops a live repair.
+`;
+
 export function checkSharedSectionsRail(results) {
   const misses = [];
   for (const rec of results ?? []) {

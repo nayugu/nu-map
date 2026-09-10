@@ -1,0 +1,149 @@
+{
+  "name": "Finance, MSF (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/business/master-science/finance-msf/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/business/master-science/finance-msf/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 30,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6402
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6403
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6404
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6405
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6418
+        },
+        {
+          "type": "COURSE",
+          "subject": "FINA",
+          "classId": 6435
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 12,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6415
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6416
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6417
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6420
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6439
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6460
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6461
+            },
+            {
+              "type": "COURSE",
+              "subject": "FINA",
+              "classId": 6492
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "In consultation with advisor, complete 12 graduate-level semester hours for which prerequisites have been met:"
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "30 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

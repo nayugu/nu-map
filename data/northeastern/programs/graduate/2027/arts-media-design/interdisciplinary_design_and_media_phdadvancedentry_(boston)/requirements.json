@@ -1,0 +1,249 @@
+{
+  "name": "Interdisciplinary Design and Media, PhD—Advanced Entry (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/interdisciplinary-programs/interdisciplinary-design-media-phd/",
+    "panes": [
+      "advancedentrytextcontainer"
+    ],
+    "variant": {
+      "modality": "advancedentry",
+      "label": "Advanced Entry"
+    },
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 0.98,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/interdisciplinary-programs/interdisciplinary-design-media-phd/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 2,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "2 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Practice-Based Elective",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Electives",
+                "sh": 4
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 28,
+  "totalCreditsSource": "stated-minimum",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Coursework",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7000
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7001
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7900
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7901
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Research Methods Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5120
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5320
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 5250
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 6350
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 7300
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 7340
+            },
+            {
+              "type": "COURSE",
+              "subject": "DS",
+              "classId": 5110
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 5644
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 6360
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5301
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6406
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6500
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 7101
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 7103
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6820
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one research methods elective from this list or in consultation with your advisor:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Practice-Based Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "In consultation with your advisor, complete 4 semester hours from the following:",
+        "INAM 6000 or INAM 8984 are recommended"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "In consultation with your advisor, complete 4 semester hours of graduate-level courses."
+      ]
+    }
+  ]
+}

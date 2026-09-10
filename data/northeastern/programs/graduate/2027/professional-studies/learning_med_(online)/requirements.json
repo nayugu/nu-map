@@ -1,0 +1,317 @@
+{
+  "name": "Learning, MEd (Online)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 5,
+    "tablesConsumed": 5,
+    "tablesOnPage": 5,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/learning-med-vtl/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/learning-med-vtl/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 34,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6095
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6105
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 9,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6414
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6444
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6454
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6457
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6464
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6467
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6474
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6488
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6715
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6720
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6730
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6740
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6750
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6900
+            },
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6995
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 9 semester hours from the following:",
+        "Complete 3 semester hours of master’s-level coursework (EDU 5000-EDU 7999) offered in the College of Professional Studies."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EDU",
+              "classId": 6910
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "34 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "ESL Instruction Concentration",
+        "label": "ESL Instruction",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6121
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6860
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6877
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6879
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6883
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Learning and Instruction Concentration",
+        "label": "Learning and Instruction",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6609
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6649
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6750
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6760
+          }
+        ],
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete any 6000-level EDU course"
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Learning Experience Design and Technology Concentration",
+        "label": "Learning Experience Design and Technology",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6609
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6619
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6629
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6639
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6649
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Special Education Concentration",
+        "label": "Special Education",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6750
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6860
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6869
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6871
+          },
+          {
+            "type": "COURSE",
+            "subject": "EDU",
+            "classId": 6873
+          }
+        ],
+        "minRequirementCount": 5
+      }
+    ]
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "name": "Graduate Student Classification",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 0,
+    "tablesConsumed": 0,
+    "tablesOnPage": 0,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/academic-policies-procedures/student-classification/",
+    "panes": [
+      ""
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "grad",
+      "score": 0.83,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/academic-policies-procedures/student-classification/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 2,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "medium",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "2 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Special Student",
+                "sh": 6
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Student Status",
+                "sh": 8
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Special Student",
+      "creditsRequired": 6,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "Special students are enrolled on a part-time basis (no more than 6 semester hours per semester). Credit can be earned for a maximum of 12 semester hours over time. Students interested in taking more than 12 semester hours must make a formal application to the degree program through Northeastern University's online application portal. Special students who do not register for four consecutive semesters (excluding summer semester) will be subject to review and possible withdrawal by CAMD graduate studies."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Student Status",
+      "creditsRequired": 8,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "For academic purposes, a graduate student is considered a full-time student if enrolled in a minimum of 8 semester hours of credit for the semester, with the following exceptions:",
+        "Note: Full-time status may be defined differently for federal loan purposes. For information, contact Student Financial Services, 617.373.5899."
+      ]
+    }
+  ]
+}

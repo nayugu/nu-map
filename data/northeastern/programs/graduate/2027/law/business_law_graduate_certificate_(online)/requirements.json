@@ -1,0 +1,99 @@
+{
+  "name": "Business Law, Graduate Certificate (Online)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/law/graduate-certificates/business-law-graduate-certificate-vtl/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "certificate",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/law/graduate-certificates/business-law-graduate-certificate-vtl/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 12,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LS",
+          "classId": 6102
+        },
+        {
+          "type": "COURSE",
+          "subject": "LS",
+          "classId": 6160
+        },
+        {
+          "type": "COURSE",
+          "subject": "LS",
+          "classId": 6170
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "LS",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "LS",
+              "classId": 6230
+            }
+          ],
+          "notes": [
+            "Complete one of the following:"
+          ]
+        }
+      ],
+      "minRequirementCount": 4,
+      "notes": [
+        "Students enrolled in Northeastern University colleges other than the School of Law should contact a School of Law advisor at lawstudentaffairs@northeastern.edu for guidance on registering for courses from the School of Law."
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "12 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "name": "Information Design and Data Visualization, MS (Vancouver)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/art-design/information-design-data-visualization-ms-van/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/art-design/information-design-data-visualization-ms-van/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 32,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5100
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5120
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5310
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5320
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5330
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 6110
+        },
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 7890
+        }
+      ],
+      "minRequirementCount": 8
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "32 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

@@ -14,7 +14,9 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { applySharedSections, SHARED_SECTIONS, ADJUDICATED_EDITION } from "../../scripts/lib/shared-sections.js";
+import { applySharedSections, SHARED_SECTIONS, ADJUDICATED_EDITION,
+         ADJUDICATED_EDITIONS, sharedSectionsOrphans,
+         _resetSharedSectionsSeen } from "../../scripts/lib/shared-sections.js";
 import { checkSharedSectionsRail, SHARED_RAIL_RUNBOOK } from "../../scripts/lib/scrape-rails.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "../..");
@@ -164,8 +166,13 @@ test("manifest › matches what the committed corpus actually carries", () => {
   // two separate workflows produce at every roll. Comparing exactly against a
   // tree that has not been scraped yet reports the manifest as broken when the
   // truth is that the data is missing; see committedEdition above.
+  // Each tree against ITS OWN adjudication, not against the newest of the two. One shared
+  // number held both trees to whichever claim was looser: bumping the constant for the
+  // undergraduate re-adjudication also asserted the graduate half had been re-adjudicated,
+  // which it had not, and the relaxation that followed hid ten dead entries for three days.
   const editions = { undergraduate: committedEdition("undergraduate"), graduate: committedEdition("graduate") };
-  const rolling = Object.values(editions).some(y => y == null || ADJUDICATED_EDITION > y);
+  const rolling = Object.entries(editions)
+    .some(([tree, y]) => y == null || ADJUDICATED_EDITIONS[tree] > y);
 
   const found = {};
   for (const dir of ["undergraduate", "graduate"]) {
@@ -230,4 +237,83 @@ test("manifest › the adjudicated edition is never behind the corpus", () => {
   assert.ok(ADJUDICATED_EDITION >= committedEdition(),
     `ADJUDICATED_EDITION (${ADJUDICATED_EDITION}) is older than the committed corpus `
     + `(${committedEdition()}) — re-adjudicate against the live catalog, or fix the constant`);
+});
+
+test("manifest › every tree's adjudication is claimed separately", () => {
+  // The shared constant asserted things about a tree nobody had looked at. Each entry now
+  // has to be answerable for on its own, and the max must stay the max or callers reading
+  // the legacy single value silently get a DIFFERENT, looser answer than they used to.
+  for (const tree of ["undergraduate", "graduate"]) {
+    assert.equal(typeof ADJUDICATED_EDITIONS[tree], "number",
+      `${tree} has no adjudicated edition — a tree with no claim is a tree nothing checks`);
+    assert.ok(ADJUDICATED_EDITIONS[tree] >= committedEdition(tree),
+      `${tree}: adjudicated ${ADJUDICATED_EDITIONS[tree]} is behind its corpus `
+      + `(${committedEdition(tree)}) — re-adjudicate that tree against the live catalog`);
+  }
+  assert.equal(ADJUDICATED_EDITION, Math.max(...Object.values(ADJUDICATED_EDITIONS)));
+});
+
+// ── The orphan rail ────────────────────────────────────────────────
+//
+// The hole this closes: `applySharedSections` is keyed on `url#slug`, so an entry whose
+// PAGE moved matched nothing, returned `{applied: 0, missing: []}`, and left no trace —
+// no rail, no log line, no record to hang a check on, because the evidence is an ABSENCE.
+// Ten entries died that way across the 2027 graduate roll while the scrape printed success.
+//
+// These run against the real manifest deliberately. A fixture would prove the function
+// filters a Set; what needs proving is that the function's idea of which entries belong to
+// which tree matches the manifest we actually ship.
+
+test("orphans › an entry nothing matched is reported, per tree", () => {
+  _resetSharedSectionsSeen();
+  const gradAll = sharedSectionsOrphans("graduate");
+  const ugAll   = sharedSectionsOrphans("undergraduate");
+  assert.ok(gradAll.length > 0, "no graduate entries at all — has the manifest moved?");
+  assert.ok(ugAll.length > 0,   "no undergraduate entries at all — has the manifest moved?");
+
+  // The two halves PARTITION the manifest. If they did not, an entry in the gap would be
+  // orphan-checked by neither scraper and we would be exactly where we started.
+  assert.equal(gradAll.length + ugAll.length, Object.keys(SHARED_SECTIONS).length,
+    "some entry belongs to neither tree — it would be checked by no scraper");
+  assert.deepEqual(gradAll.filter(k => ugAll.includes(k)), [],
+    "an entry claimed by both trees would fail whichever scrape ran second");
+
+  // Undergraduate is the COMPLEMENT of graduate, so CPS's non-/undergraduate/ paths are
+  // covered. Asserted rather than assumed, because it is the case that was invisible once.
+  assert.ok(ugAll.some(k => k.includes("/professional-studies/")),
+    "no CPS undergraduate entry landed in the undergraduate half — the split is by prefix again");
+  assert.ok(gradAll.every(k => k.includes("catalog.northeastern.edu/graduate/")),
+    "a non-graduate URL was filed as graduate");
+});
+
+test("orphans › matching a page clears the entry, and only that entry", () => {
+  _resetSharedSectionsSeen();
+  const key = sharedSectionsOrphans("graduate")[0];
+  const [url, slug] = key.split("#");
+  const before = sharedSectionsOrphans("graduate").length;
+
+  // A record with none of the wanted titles: it MATCHED the page, which is the fact the
+  // orphan check is about, and it separately reports `missing` for the other rail. The two
+  // failures are different and must not be conflated — that is why `_consumed` records on
+  // match rather than on success.
+  const r = applySharedSections({ requirementSections: [] }, { url, slug });
+  assert.ok(r.missing.length > 0, "precondition: this entry's titles are not present");
+
+  const after = sharedSectionsOrphans("graduate");
+  assert.equal(after.length, before - 1, "matching a page did not clear its entry");
+  assert.ok(!after.includes(key));
+  _resetSharedSectionsSeen();
+});
+
+test("orphans › a key that matches nothing never clears anything", () => {
+  // The defect itself, stated as a property: this is precisely what a moved URL does, and
+  // it must leave the entry standing so the rail can report it.
+  _resetSharedSectionsSeen();
+  const before = sharedSectionsOrphans("graduate");
+  const r = applySharedSections({ requirementSections: [{ title: "Thesis Option" }] },
+                                { url: "https://catalog.northeastern.edu/graduate/gone/", slug: "nope" });
+  assert.deepEqual(r, { applied: 0, missing: [] },
+    "a page the manifest does not name must be left completely alone");
+  assert.deepEqual(sharedSectionsOrphans("graduate"), before,
+    "an unmatched key cleared an entry — the orphan check would report nothing");
 });

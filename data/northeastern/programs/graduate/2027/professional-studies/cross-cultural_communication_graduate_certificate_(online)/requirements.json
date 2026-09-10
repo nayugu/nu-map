@@ -1,0 +1,143 @@
+{
+  "name": "Cross-Cultural Communication, Graduate Certificate (Online)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/graduate-certificate-programs/cross-cultural-communication-graduate-certificate-vtl/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "certificate",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/graduate-certificate-programs/cross-cultural-communication-graduate-certificate-vtl/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 12,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 6600
+        },
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 6610
+        },
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 6620
+        }
+      ],
+      "minRequirementCount": 3,
+      "notes": [
+        "Complete 5 semester hours from one of the following focused tracks:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Social Justice Track",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HRM",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6415
+            },
+            {
+              "type": "COURSE",
+              "subject": "PBR",
+              "classId": 6700
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "International Track",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 8,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6100
+            },
+            {
+              "type": "COURSE",
+              "subject": "GST",
+              "classId": 6101
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6426
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete two of the following:"
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "12 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

@@ -1,0 +1,347 @@
+{
+  "name": "Sports Leadership, MSLD (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7,
+    "tablesOnPage": 7,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/master-of-sports-leadership/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 0.98,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/master-of-sports-leadership/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Restricted Electives",
+                "sh": 3
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 34,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6400
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6405
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6410
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6430
+        },
+        {
+          "type": "COURSE",
+          "subject": "LDR",
+          "classId": 6441
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 3,
+      "notes": [
+        "Complete one 3-semester-hour, 6000-level elective course."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone or Internship",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6961
+            },
+            {
+              "type": "COURSE",
+              "subject": "LDR",
+              "classId": 6980
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Co-op",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INT",
+          "classId": 6200
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COP",
+              "classId": 6945
+            },
+            {
+              "type": "COURSE",
+              "subject": "COP",
+              "classId": 6946
+            },
+            {
+              "type": "COURSE",
+              "subject": "COP",
+              "classId": 6954
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 2,
+      "notes": [
+        "This option requires 1 additional semester hour of credit and tuition in addition to this program's required credit hours."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Integrative Experiential Learning",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INT",
+          "classId": 6943
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "This option substitutes for 3 semester hours of restricted elective credits in programs that require at least 3 semester hours of restricted elective credits. If the student has already completed the program's restricted electives or the program does not have an elective requirement, this option requires 3 additional hours of credit and tuition in addition to this program's required credit hours."
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "34 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Offered in primarily online format with intensive one-week institutes at specific Northeastern University campuses; please consult your admissions coach or advisor for institute locations.",
+      "codes": [],
+      "substitution": null
+    }
+  ],
+  "concentrations": {
+    "minOptions": 0,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Analytics Concentration",
+        "label": "Analytics",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6105
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6115
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6145
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 3,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6125
+              },
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6610
+              },
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6620
+              }
+            ],
+            "notes": [
+              "Complete 3 semester hours from the following:"
+            ]
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "Collegiate Athletics Administration Concentration",
+        "label": "ollegiate Athletics Administration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6442
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6443
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6455
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6615
+          }
+        ],
+        "minRequirementCount": 4
+      },
+      {
+        "type": "SECTION",
+        "title": "eSports Concentration",
+        "label": "eSports",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6323
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6480
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 6,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CMN",
+                "classId": 6830
+              },
+              {
+                "type": "COURSE",
+                "subject": "DGM",
+                "classId": 6650
+              },
+              {
+                "type": "COURSE",
+                "subject": "DGM",
+                "classId": 6665
+              }
+            ],
+            "notes": [
+              "Complete 6 semester hours from the following:"
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Professional Sports Administration Concentration",
+        "label": "Professional Sports Administration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6323
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6435
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6440
+          },
+          {
+            "type": "COURSE",
+            "subject": "LDR",
+            "classId": 6460
+          }
+        ],
+        "minRequirementCount": 4
+      }
+    ]
+  }
+}

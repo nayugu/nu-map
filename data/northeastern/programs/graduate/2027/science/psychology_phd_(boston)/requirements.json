@@ -1,0 +1,285 @@
+{
+  "name": "Psychology, PhD (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/science/psychology/psychology-phd/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "witnessCourses": [
+      "PSYC5110",
+      "PSYC5115",
+      "PSYC5120",
+      "PSYC5130",
+      "PSYC5140",
+      "PSYC5150",
+      "PSYC5170",
+      "PSYC5180",
+      "PSYC5181",
+      "PSYC5301",
+      "PSYC7302",
+      "PSYC7990",
+      "PSYC7996",
+      "PSYC8401",
+      "PSYC9990",
+      "PSYC9991",
+      "PSYC9996"
+    ],
+    "witnessEdition": 2026,
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/science/psychology/psychology-phd/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 50,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Fundamentals",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 5110
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 5170
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 5115
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 5120
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 5140
+            }
+          ],
+          "notes": [
+            "Complete one of the following:"
+          ]
+        }
+      ],
+      "minRequirementCount": 3,
+      "notes": [
+        "Complete the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Research Dissemination",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 5301
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Quantitative Methods",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 5180
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 5181
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Ethics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 7302
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Project",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 8401
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Take the following (repeatable) course three times:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Thesis",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSYC",
+          "classId": 7990
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Take the following (repeatable) course twice:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 14,
+          "courses": [
+            {
+              "type": "RANGE",
+              "subject": "PSYC",
+              "idRangeStart": 7200,
+              "idRangeEnd": 7300,
+              "exceptions": []
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 5110
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 5115
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 5120
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 5140
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 5170
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 8402
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete 14 semester hours from the following:",
+        "Note: Proseminars not taken to fulfill core requirements and courses outside the department may be taken if approved by faculty adviser and Director of Graduate Studies.",
+        "PSYC 7200 to PSYC 7300"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 9991
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSYC",
+              "classId": 9996
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following (repeatable) course until graduation:"
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "50 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

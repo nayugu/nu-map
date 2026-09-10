@@ -1,0 +1,81 @@
+{
+  "name": "Quantitative Finance, MSF / Business Administration, MBA—Full Time (Boston)",
+  "metadata": {
+    "verified": false,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 0,
+    "tablesConsumed": 0,
+    "tablesOnPage": 0,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/business/dual-degrees/quantitative-finance-msf-business-administration-mba-full-time-bos/",
+    "panes": [
+      ""
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "partial",
+      "kind": "grad",
+      "score": 0.83,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/business/dual-degrees/quantitative-finance-msf-business-administration-mba-full-time-bos/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 1,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "missing-total-credits",
+          "severity": "medium",
+          "message": "the catalog page states no total credit requirement",
+          "detail": [
+            {
+              "key": "noTotal"
+            }
+          ],
+          "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "The 360 Huntington Fund",
+                "sh": 1
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 0,
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "The 360 Huntington Fund",
+      "creditsRequired": 1,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "By participating in the Fund, students may earn 1 semester hour per semester with the option to fulfill a 3-semester-hour elective course requirement by participating for three terms."
+      ]
+    }
+  ]
+}

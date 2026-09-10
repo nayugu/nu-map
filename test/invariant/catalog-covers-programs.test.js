@@ -51,6 +51,17 @@ const KNOWN_UNRESOLVABLE = new Set([
   "EDU6182",
   "EDU6333",
   "EDU6340",
+  // Organizational Intelligence, MPS (Boston and Online), 2026-2027. The page prints
+  // "MIS 6100" and "MIS 7980", and there is no MIS subject: /course-descriptions/mis/ is a
+  // 404 and only /course-descriptions/mism/ exists. Checked at the source on 2026-09-10.
+  //
+  // NOT rewritten to MISM, and that is the point of naming them rather than fixing them:
+  // MISM 7980 "Capstone" exists and MISM 6100 does NOT, so the obvious correction is right
+  // for one of the pair and invents a course for the other. A mapping that is half wrong is
+  // worse than a requirement row that visibly cannot be ticked, because nothing downstream
+  // would ever show which half.
+  "MIS6100",
+  "MIS7980",
 ]);
 
 const io = {

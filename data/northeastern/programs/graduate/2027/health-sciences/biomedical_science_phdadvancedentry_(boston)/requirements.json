@@ -1,0 +1,145 @@
+{
+  "name": "Biomedical Science, PhD—Advanced Entry (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 2,
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/biomedical-sciences-phd/",
+    "panes": [
+      "advancedentryphdprogramrequirementstextcontainer"
+    ],
+    "variant": {
+      "modality": "advancedentry",
+      "label": "Advanced Entry"
+    },
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/biomedical-sciences-phd/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 10,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 6213
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Seminar",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 6300
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete the following repeatable course four times:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Colloquium",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 6810
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Qualifying Examination",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 8940
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Proposal Preparation",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 9681
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "10 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

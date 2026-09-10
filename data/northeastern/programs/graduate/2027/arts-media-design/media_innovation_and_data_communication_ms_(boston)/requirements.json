@@ -1,0 +1,413 @@
+{
+  "name": "Media Innovation and Data Communication, MS (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 8,
+    "tablesConsumed": 8,
+    "tablesOnPage": 8,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/journalism/media-innovation-data-communication-ms/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "witnessCourses": [
+      "ARTG5330",
+      "JRNL6306",
+      "JRNL6307",
+      "JRNL6340",
+      "JRNL6341"
+    ],
+    "witnessEdition": 2026,
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/journalism/media-innovation-data-communication-ms/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 36,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ARTG",
+          "classId": 5330
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6306
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6307
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6340
+        },
+        {
+          "type": "COURSE",
+          "subject": "JRNL",
+          "classId": 6341
+        }
+      ],
+      "minRequirementCount": 5
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "Minimum 3.000 GPA required"
+    }
+  ],
+  "concentrations": {
+    "minOptions": 0,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Data Storytelling Concentration",
+        "label": "Data Storytelling",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 16,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 5110
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 5130
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 5320
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 5710
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 5910
+              },
+              {
+                "type": "COURSE",
+                "subject": "ARTG",
+                "classId": 6330
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 5311
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 5500
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 5550
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete four of the following:"
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Digital Journalism Concentration",
+        "label": "Digital Journalism",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "JRNL",
+            "classId": 6200
+          },
+          {
+            "type": "COURSE",
+            "subject": "JRNL",
+            "classId": 6202
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 5309
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 5314
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 5500
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 5550
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 6201
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Media Advocacy Concentration",
+        "label": "Media Advocacy",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "JRNL",
+            "classId": 5400
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "LPSC",
+                "classId": 7311
+              },
+              {
+                "type": "COURSE",
+                "subject": "LS",
+                "classId": 6101
+              },
+              {
+                "type": "COURSE",
+                "subject": "LS",
+                "classId": 6120
+              },
+              {
+                "type": "COURSE",
+                "subject": "LS",
+                "classId": 6130
+              },
+              {
+                "type": "COURSE",
+                "subject": "LS",
+                "classId": 6155
+              },
+              {
+                "type": "COURSE",
+                "subject": "LS",
+                "classId": 6235
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6551
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 6552
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 2,
+        "notes": [
+          "Complete four of the following:"
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Media Ethics Concentration",
+        "label": "Media Ethics",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "COMM",
+            "classId": 5250
+          },
+          {
+            "type": "COURSE",
+            "subject": "MSCR",
+            "classId": 5300
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 6310
+              },
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 6320
+              },
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 6330
+              },
+              {
+                "type": "COURSE",
+                "subject": "MSCR",
+                "classId": 6340
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "News Media Strategy and Leadership Concentration",
+        "label": "News Media Strategy and Leadership",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "JRNL",
+            "classId": 5410
+          },
+          {
+            "type": "COURSE",
+            "subject": "JRNL",
+            "classId": 6202
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "COMM",
+                "classId": 5250
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 5480
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 6460
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Public Relations and Strategic Communications Concentration",
+        "label": "Public Relations and Strategic Communications",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "JRNL",
+            "classId": 5400
+          },
+          {
+            "type": "COURSE",
+            "subject": "JRNL",
+            "classId": 5480
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 8,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "COMM",
+                "classId": 5250
+              },
+              {
+                "type": "COURSE",
+                "subject": "COMM",
+                "classId": 5510
+              },
+              {
+                "type": "COURSE",
+                "subject": "COMM",
+                "classId": 6320
+              },
+              {
+                "type": "COURSE",
+                "subject": "JRNL",
+                "classId": 5420
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete two of the following:"
+        ]
+      }
+    ]
+  }
+}

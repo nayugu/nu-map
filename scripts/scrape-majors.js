@@ -30,7 +30,8 @@ import { parse as parseHTML }       from 'node-html-parser';
 import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
 import { checkScrapeRails, checkPlanRail, checkSharedSectionsRail,
-         SHARED_RAIL_RUNBOOK }   from './lib/scrape-rails.js';
+         SHARED_RAIL_RUNBOOK, SHARED_ORPHAN_RUNBOOK } from './lib/scrape-rails.js';
+import { sharedSectionsOrphans }     from './lib/shared-sections.js';
 import { verifyPlanGrid, planGridCourseKeys } from './lib/plan-grid.js';
 import { parseEditionArg, editionBasePath, assertEdition,
          isFatalScrapeError }        from './lib/catalog-edition.js';
@@ -616,6 +617,19 @@ async function main() {
         if (m.url) console.error(`     ${m.url}`);
       }
       console.error(SHARED_RAIL_RUNBOOK);
+      process.exit(1);
+    }
+
+    // ...and the other half of the same question: an entry whose PAGE was never seen.
+    // `applySharedSections` is keyed on url#slug, so a page NEU moved, renamed or retired
+    // never matches, produces no `missing` titles, and leaves no trace. See the graduate
+    // scraper for the roll that proved it — ten entries died silently there.
+    const orphans = sharedSectionsOrphans('undergraduate');
+    if (orphans.length) {
+      console.error(`\n❌  Refusing to write — ${orphans.length} shared-section `
+        + `adjudication(s) matched no page in this run:\n`);
+      for (const k of orphans) console.error(`   • ${k}`);
+      console.error(SHARED_ORPHAN_RUNBOOK);
       process.exit(1);
     }
   }

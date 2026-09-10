@@ -1,0 +1,188 @@
+{
+  "name": "Sustainability Sciences, Graduate Certificate (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/science/marine-environmental-sciences/sustainability-sciences-graduate-certificate/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "certificate",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/science/marine-environmental-sciences/sustainability-sciences-graduate-certificate/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 16,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Introduction to Sustainability Science",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ENVR",
+          "classId": 6102
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Physical and Environmental Processes and Systems",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5150
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5600
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5670
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5700
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Environmental Planning, Management, and Sustainability",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 6475
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5220
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5350
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5750
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5800
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 6150
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Research and Analytical Skills Development",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EEMB",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5450
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5500
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENVR",
+              "classId": 5984
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one of the following:"
+      ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "16 total semester hours required Minimum 3.000 GPA required"
+    }
+  ]
+}

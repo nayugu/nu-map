@@ -1,0 +1,305 @@
+{
+  "name": "Law, JD (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/law/law-jd/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 0.98,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/law/law-jd/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 1,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Electives",
+                "sh": 46
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 83,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Fall Term",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 6105
+        },
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 6106
+        },
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 6160
+        },
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 6165
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Spring Term",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 6101
+        },
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 6102
+        },
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 6103
+        },
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 6161
+        },
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 6166
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Professional Responsibility",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "LAW",
+          "classId": 7443
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 46,
+      "notes": [
+        "Complete 46 credits of elective coursework.",
+        "At least 2 credits must be completed from the Experiential Education Courses list below."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiential Education Courses",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7624
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7698
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7449
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7597
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7610
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7410
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7331
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7704
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7673
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7633
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7569
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7635
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7525
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7614
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7535
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7656
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7516
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7350
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7351
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7527
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7572
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7647
+            },
+            {
+              "type": "COURSE",
+              "subject": "LAW",
+              "classId": 7454
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Information about the public interest requirement is provided in the Student Information Handbook.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "The same course cannot be used to satisfy both the rigorous writing and experiential education requirements.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "3",
+      "text": "Transfer students should consult the Student Information Handbook for applicable requirements. All students with questions about satisfying co-op requirements should consult the Center for Co-op and Career Development.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "4",
+      "text": "To fulfill the experiential requirement, transfer students who have not completed LAW 6160 and LAW 6161 must take at least 6 credits from the Experiential Education Courses list below.",
+      "codes": [
+        "LAW 6160",
+        "LAW 6161"
+      ],
+      "substitution": null
+    }
+  ]
+}

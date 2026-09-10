@@ -1,0 +1,93 @@
+{
+  "name": "AI-Powered Project Management, Graduate Certificate (Online)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 1,
+    "tablesConsumed": 1,
+    "tablesOnPage": 1,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/graduate-certificate-programs/ai-powered-project-management-graduate-certificate-vtl/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "certificate",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/graduate-certificate-programs/ai-powered-project-management-graduate-certificate-vtl/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 12,
+  "totalCreditsSource": "stated-required",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6100
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6120
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6200
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6415
+        }
+      ],
+      "minRequirementCount": 4
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "12 semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "In rare cases and at the program's discretion, students may request a course substitution or transfer credit for Foundations of Project Management (PJM 6100). A student may qualify for the course substitution if they have at least three years of direct project management experience; the student may complete any other PJM elective (as long as they have met the prerequisites) to meet minimum required coursework hours for this certificate. A student may qualify for transfer credit if they hold their Project Management Professional certification.",
+      "codes": [
+        "PJM 6100"
+      ],
+      "substitution": null
+    }
+  ]
+}

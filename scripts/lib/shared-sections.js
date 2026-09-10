@@ -71,8 +71,16 @@ const HERE = dirname(fileURLToPath(import.meta.url));
  * `#<slug>` disambiguates the second axis — one page can be several PROGRAMS (see
  * `program-variants.js`), and a variant carries its parent's URL with a slug of its own.
  *
- * A URL that changes shape shows up as an unmatched entry rather than a silent miss, and
- * that has happened before: CPS moved its bachelor's-completion programs to a new path.
+ * ⚠ This paragraph used to claim that "a URL that changes shape shows up as an unmatched
+ * entry rather than a silent miss". That was FALSE, and it is why nobody looked: a key that
+ * matches no page never reaches `applySharedSections` at all, so it produced no `missing`
+ * titles, no rail, and no log line. Measured on the 2027 graduate roll — NEU retired four of
+ * these programs, renamed four more and MERGED two MATs into one, and all ten entries went
+ * quietly dead while the scrape reported success. They surfaced days later in a unit test,
+ * and only because BOTH trees had by then rolled past `ADJUDICATED_EDITION`.
+ *
+ * `sharedSectionsOrphans` below closes it: an entry that matched nothing is now the same
+ * hard stop as a title that matched nothing, which is what the design always intended.
  */
 export const SHARED_SECTIONS = JSON.parse(
   readFileSync(resolve(HERE, 'shared-sections.json'), 'utf8'));
@@ -103,8 +111,29 @@ export const SHARED_SECTIONS = JSON.parse(
  * The real guard is unaffected either way: `applySharedSections` reports a
  * title it cannot find, and the scrape rail refuses to write the run. That
  * check runs against the live catalog, which is the only authority here.
+ *
+ * ── Per TREE, because the two trees roll independently ──────────────
+ *
+ * This was one number, and one number cannot describe a corpus that is scraped by two
+ * workflows on different days. The undergraduate side was re-adjudicated for 2027 and the
+ * constant was bumped to 2027 — which silently asserted that the GRADUATE half had been
+ * re-adjudicated too. It had not, and there was no way to say so: the graduate tree was
+ * still 2026, `rolling` was true for both, and the exact check stayed relaxed. The claim
+ * went unexamined until the graduate scrape landed and ten entries turned out to be dead.
+ *
+ * Split, the state "undergrad re-adjudicated, graduate not yet" is expressible, and the
+ * test can hold each tree to its own claim instead of to the more generous of the two.
  */
-export const ADJUDICATED_EDITION = 2027;
+export const ADJUDICATED_EDITIONS = { undergraduate: 2027, graduate: 2027 };
+
+/**
+ * Kept as the newest edition any half has been adjudicated against.
+ *
+ * Only for callers that legitimately want one number — the `>= committedEdition()` sanity
+ * check. Anything comparing against a SPECIFIC tree must read `ADJUDICATED_EDITIONS`, or it
+ * is back to holding both trees to whichever claim is loosest.
+ */
+export const ADJUDICATED_EDITION = Math.max(...Object.values(ADJUDICATED_EDITIONS));
 
 /**
  * Apply the manifest to one freshly-built record.
@@ -115,9 +144,64 @@ export const ADJUDICATED_EDITION = 2027;
  *   matched no section on the page — the signal that the catalog moved under the
  *   adjudication and a human has to look again.
  */
+/**
+ * Manifest keys this process has actually matched against a page.
+ *
+ * Module-level because the scrape is one process making one pass, and the question the rail
+ * asks — "did every entry for the tree I just scraped find its page?" — cannot be answered
+ * from any single record. It is the ABSENCE of a match, and absence has no record to hang on.
+ */
+const _consumed = new Set();
+
+/** Test seam: forget what this process has matched. Not used by the scrapers. */
+export function _resetSharedSectionsSeen() { _consumed.clear(); }
+
+/**
+ * Which tree a manifest entry belongs to, decided by the URL the catalog itself uses.
+ *
+ * Asymmetric on purpose, and not a matter of taste: every GRADUATE program page lives under
+ * `/graduate/`, including the CPS master's programs at
+ * `/graduate/professional-studies/masters-degree-programs/`. Undergraduate does NOT have one
+ * root — it lives at three (`/undergraduate/`, and CPS's
+ * `/professional-studies/bachelors-postbaccalaureate/` and
+ * `/professional-studies/undergraduate-minors/`; see CLAUDE.md → "An undergraduate program
+ * can live at THREE path shapes", each of which was invisible until someone counted what was
+ * missing). A fourth would silently orphan its own entries under a whitelist, so undergrad is
+ * the COMPLEMENT rather than a list: a new undergraduate path is then covered by default and
+ * the failure direction is a false alarm, not a silent miss.
+ */
+const GRAD_ROOT = 'https://catalog.northeastern.edu/graduate/';
+const treeOf = (key) => (key.startsWith(GRAD_ROOT) ? 'graduate' : 'undergraduate');
+
+/**
+ * Manifest entries for `tree` that no page in this run claimed.
+ *
+ * This is the check that was missing. `applySharedSections` reports a TITLE it cannot find,
+ * and the rail refuses the run; but an entry whose URL matches no page never reaches it, so
+ * the whole class "NEU moved, renamed or retired the page" was silent. Ten of them shipped
+ * that way on the 2027 graduate roll.
+ *
+ * The caller must only ask this of a FULL run. A `--url` single-page scrape legitimately
+ * matches almost nothing, and a rail that fires on every such invocation is one people learn
+ * to pass `--no-verify` past.
+ *
+ * @param {'graduate'|'undergraduate'} tree
+ * @returns {string[]} keys, sorted, so the message names what a human has to act on
+ */
+export function sharedSectionsOrphans(tree) {
+  return Object.keys(SHARED_SECTIONS)
+    .filter(k => treeOf(k) === tree && !_consumed.has(k))
+    .sort();
+}
+
 export function applySharedSections(data, { url, slug }) {
-  const want = SHARED_SECTIONS[`${url}#${slug}`];
+  const key = `${url}#${slug}`;
+  const want = SHARED_SECTIONS[key];
   if (!Array.isArray(want) || !want.length) return { applied: 0, missing: [] };
+  // Recorded on MATCH, not on success: an entry whose titles are all missing has still
+  // found its page, and that is the case the existing rail already reports. Conflating the
+  // two would report one defect as the other.
+  _consumed.add(key);
 
   const sections = Array.isArray(data?.requirementSections) ? data.requirementSections : [];
   const byTitle = new Map(sections.map(s => [s?.title, s]));

@@ -1,0 +1,711 @@
+{
+  "name": "Nanomedicine, MS (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 7,
+    "tablesConsumed": 7,
+    "tablesOnPage": 7,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/science/physics/nanomedicine-ms/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "witnessCourses": [
+      "BIOE5820",
+      "BIOT5120",
+      "BIOT5145",
+      "BIOT5219",
+      "BIOT5220",
+      "BIOT5225",
+      "BIOT5630",
+      "BIOT5910",
+      "BIOT5920",
+      "BIOT5930",
+      "BIOT6214",
+      "BIOT6310",
+      "CHEM5648",
+      "CHME5631",
+      "EESC6500",
+      "EESC6964",
+      "EESC6965",
+      "NNMD5270",
+      "NNMD5271",
+      "NNMD5310",
+      "NNMD5370",
+      "NNMD5470",
+      "NNMD5570",
+      "NNMD6272",
+      "NNMD6370",
+      "NNMD6984",
+      "NNMD7500",
+      "PHSC5560",
+      "PHSC6214",
+      "PMST6252"
+    ],
+    "witnessEdition": 2026,
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/science/physics/nanomedicine-ms/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 34,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Core",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EESC",
+          "classId": 6500
+        },
+        {
+          "type": "COURSE",
+          "subject": "NNMD",
+          "classId": 5270
+        },
+        {
+          "type": "COURSE",
+          "subject": "NNMD",
+          "classId": 5271
+        },
+        {
+          "type": "COURSE",
+          "subject": "NNMD",
+          "classId": 5310
+        },
+        {
+          "type": "COURSE",
+          "subject": "NNMD",
+          "classId": 5570
+        },
+        {
+          "type": "COURSE",
+          "subject": "NNMD",
+          "classId": 6272
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHSC",
+          "classId": 5560
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 6214
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6214
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 8
+    },
+    {
+      "type": "SECTION",
+      "title": "Experiental Learning and Reflection",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NNMD",
+          "classId": 7500
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EESC",
+              "classId": 6954
+            },
+            {
+              "type": "COURSE",
+              "subject": "EESC",
+              "classId": 6964
+            },
+            {
+              "type": "COURSE",
+              "subject": "EESC",
+              "classId": 6965
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5470
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 6370
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 6390
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 6984
+            }
+          ],
+          "notes": [
+            "Complete at least one of the following (credit-bearing courses chosen to fulfill this requirement will also be applied to the elective requirements of this program):"
+          ]
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "AI-Driven Innovation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5900
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6900
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 6390
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 5905
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Commercialization and Regulatory Affairs",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5219
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5220
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5225
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5920
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6290
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6310
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5470
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Drug Delivery",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 5821
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5648
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHME",
+              "classId": 5160
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHME",
+              "classId": 7350
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5580
+            },
+            {
+              "type": "COURSE",
+              "subject": "PMST",
+              "classId": 6252
+            },
+            {
+              "type": "COURSE",
+              "subject": "PMST",
+              "classId": 6254
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Research",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5145
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5840
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5370
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5380
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 6370
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 6984
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Nanomaterials Design and Application",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "BIOE",
+                  "classId": 5410
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "BIOE",
+                  "classId": 5411
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOE",
+              "classId": 5820
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOL",
+              "classId": 6131
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5630
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5700
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5750
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5810
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5910
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIOT",
+              "classId": 5930
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5610
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5630
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHEM",
+              "classId": 5640
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHME",
+              "classId": 5631
+            },
+            {
+              "type": "COURSE",
+              "subject": "CHME",
+              "classId": 5683
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5272
+            },
+            {
+              "type": "COURSE",
+              "subject": "NNMD",
+              "classId": 5590
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 6216
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHSC",
+              "classId": 6290
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 5260
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHYS",
+              "classId": 7731
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "34 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Nanoformulation Research Concentration",
+        "label": "Nanoformulation Research",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOE",
+                "classId": 5820
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHME",
+                "classId": 5631
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5648
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5610
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "NNMD",
+            "classId": 6370
+          }
+        ],
+        "minRequirementCount": 3,
+        "notes": [
+          "Complete 7 semester hours from the electives list."
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "RNA Therapeutics Concentration",
+        "label": "Vaccine Development",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOL",
+                "classId": 5821
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5810
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 5750
+              },
+              {
+                "type": "COURSE",
+                "subject": "CHEM",
+                "classId": 5630
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "NNMD",
+            "classId": 5580
+          },
+          {
+            "type": "COURSE",
+            "subject": "NNMD",
+            "classId": 5590
+          }
+        ],
+        "minRequirementCount": 4,
+        "notes": [
+          "A total of 18 semester hours of coursework is required to complete this concentration.",
+          "Complete 5-6 semester hours from the electives list."
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Translation and Commercialization Concentration",
+        "label": "Translation and Commercialization",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5219
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5220
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5225
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 6290
+              },
+              {
+                "type": "COURSE",
+                "subject": "BIOT",
+                "classId": 6310
+              }
+            ]
+          },
+          {
+            "type": "COURSE",
+            "subject": "NNMD",
+            "classId": 5470
+          }
+        ],
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete 6 semester hours from the electives list."
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Vaccine Development Concentration",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5220
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5630
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5910
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5920
+          },
+          {
+            "type": "COURSE",
+            "subject": "BIOT",
+            "classId": 5930
+          }
+        ],
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete 6 semester hours from the electives list."
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Electives Option",
+        "label": "Electives Option",
+        "requirements": [
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "NNMD",
+                "classId": 5470
+              },
+              {
+                "type": "COURSE",
+                "subject": "NNMD",
+                "classId": 5370
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 1,
+        "notes": [
+          "Complete 15 semester hours from the electives list."
+        ]
+      }
+    ]
+  }
+}

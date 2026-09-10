@@ -107,6 +107,16 @@ const WORKER_UI    = "cd test/browser   && node --test chart-worker.browser.test
 const PLANSRC   = "src/core/planSource.js";
 const ENGINE    = "src/engine/index.js";
 
+// The free-elective allowance. The RULE is pure; the CONSEQUENCE needs the
+// corpus (does any shipped program print a figure it cannot support) and the
+// rendered row needs a browser, because `GradPanel` carries its own copy of the
+// section renderer and does not import planModel's.
+const BINDING     = "src/core/requirementBinding.js";
+const GRADREQ     = "src/core/gradRequirements.js";
+const GE_TEST     = "cd test/unit      && node --test general-electives.test.js";
+const GE_CORPUS   = "cd test/invariant && node --test general-elective-allowance.test.js";
+const GE_UI       = "cd test/browser   && node --test general-electives.browser.test.js";
+
 /**
  * Each mutant is a plausible REGRESSION, not random noise: an inverted
  * tie-break, a deleted guard, a fallback restored. `from` must be unique in the
@@ -786,6 +796,52 @@ const MUTANTS = [
   { name: "union: lifespan claims every edition held, not the ones that carried it", file: RETUNION,
     from: "        firstEdition: years[0],\n        lastEdition:  years[years.length - 1],\n        editions:     years,",
     to:   "        firstEdition: ordered[0]?.year,\n        lastEdition:  ordered[ordered.length - 1]?.year,\n        editions:     ordered.map(e => e.year),", run: [RETUNION_TEST] },
+
+  // ── The free-elective allowance ─────────────────────────────────
+  // The historic bug restored verbatim. `?? 0` takes a residual against a total
+  // the record does not carry, and the result is indistinguishable from a
+  // measured zero — which the audit then drew as a TICKED, fully-barred
+  // "0/0 SH" on 472 of 1,722 shipped programs.
+  { name: "electives: the allowance goes back to treating a missing total as zero",
+    file: BINDING,
+    from: "  const total = programData?.totalCreditsRequired;\n  if (!(Number.isFinite(total) && total > 0)) return null;\n  return Math.max(0, total - demand);",
+    to:   "  return Math.max(0, (programData?.totalCreditsRequired ?? 0) - demand);",
+    run: [GE_TEST, GE_CORPUS] },
+
+  // The subtler half: the rule is right but the accessor collapses it again on
+  // the way out, which is where it lived for a year the first time.
+  { name: "electives: generalElectiveSHOf collapses the unknown back to 0",
+    file: BINDING,
+    from: "  const total = programData?.totalCreditsRequired;\n  if (!(Number.isFinite(total) && total > 0)) return null;\n  const ge = obligationsOf",
+    to:   "  const ge = obligationsOf",
+    run: [GE_TEST, GE_CORPUS] },
+
+  // A row is kept when it carries a fact. Dropping the placed-credit arm is the
+  // tempting simplification ("just hide it when it is zero") and it deletes the
+  // case that matters most: credit on a degree with no room for it.
+  { name: "electives: the worth-showing rule forgets placed credit",
+    file: GRADREQ,
+    from: "  if (Number.isFinite(req) && req > 0) return true;\n  return (section.placedSH ?? 0) > 0;",
+    to:   "  return Number.isFinite(req) && req > 0;",
+    run: [GE_TEST, GE_CORPUS] },
+
+  // ...and the opposite mistake: showing everything again. Only the RENDER can
+  // see this one, which is why the browser file exists — and why GradPanel
+  // needs its own mutant despite planModel carrying the same rule.
+  { name: "electives: the panel stops filtering the empty row",
+    file: GRADPANEL,
+    from: "const keepSection = (sec) =>\n  sec?.title !== \"General Electives\" || generalElectivesWorthShowing(sec);",
+    to:   "const keepSection = () => true;",
+    run: [GE_UI] },
+
+  // The bar and the tick, which are the whole visible defect. `sat` is
+  // unconditionally true on this section, so losing the unknown branch restores
+  // a satisfied requirement on a degree we never measured.
+  { name: "electives: an unknown allowance renders as a measured zero again",
+    file: GRADPANEL,
+    from: "  const allowanceUnknown = isGeneralElectives\n    && !(Number.isFinite(sec.requiredSH) && sec.requiredSH >= 0);",
+    to:   "  const allowanceUnknown = false;",
+    run: [GE_UI] },
 ];
 
 const argv = process.argv.slice(2);

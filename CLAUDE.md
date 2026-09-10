@@ -601,6 +601,44 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
   `requirementBinding` (it would close an import cycle), so the allowance is now
   a PARAMETER — a caller that wants General Electives must supply it, and one
   that only wants `allocatedSet` calls `allocateMajorSections` instead.
+- **A residual against a total we do not have is `null`, not 0** — the same
+  absent/empty/zero rule as the scrape side, arrived at independently and a
+  year later. `max(0, (totalCreditsRequired ?? 0) - demand)` did arithmetic on a
+  number the record does not carry, and the answer was shaped exactly like a
+  measurement. General Electives is built `sat: true` unconditionally (it is a
+  bucket, not a requirement, so there is nothing for it to fail), so the audit
+  drew a TICKED box, "0/0 SH", and a bar at **100%** — a satisfied requirement
+  on a degree whose size the catalog never gave us, in the same green as the
+  ones the student earned. Measured over the 1,722 shipped programs: **472 state
+  no total** (93 graduate 2026, 341 minors, 38 undergraduate — the last being
+  the non-program policy pages the 2027 roll brought in) and **693 more** have
+  requirements that already meet or exceed their total. Four rules:
+  1. `generalElectiveSHOf` disambiguates against the **total**, not against the
+     absence of an obligation. `obligationsOf` emits nothing in BOTH cases, and
+     reading that absence as `?? 0` is exactly what collapsed them.
+  2. `obligationsOf` is unaffected by construction — it guards with
+     `if (geSH > 0)` and `null` is falsy exactly as `0` was — so no cell binding
+     moved. Only a RENDERER can now tell "no free electives" from "we cannot
+     say".
+  3. **The row is dropped only when it carries no fact**
+     (`generalElectivesWorthShowing`, shared by the panel, the printed report
+     and the MCP payload so the three cannot drift). Credit PLACED against it is
+     a fact whatever the denominator — and that is the case that matters most on
+     a degree with no room, where an extra course is credit the degree does not
+     account for. "Hide it when it is zero" is the tempting version and it
+     deletes exactly that case.
+  4. Unknown-but-occupied renders the SH with **no denominator**, a dashed box
+     and no bar — the same treatment `isStatedOnly` already gives a prose-only
+     section, and the same distinction: "we checked and it is outstanding"
+     versus "we could not check this at all".
+  ⚠ `GradPanel` carries its OWN copy of the section renderer and does not import
+  planModel's, so both had to be fixed. It was nearly missed for a stupid
+  reason worth knowing: GradPanel.jsx contained a literal **NUL byte**
+  (`notes.join` in `quoteId`), which made the whole 3,200-line file read as
+  BINARY to every text tool — `grep -c placedSH` printed nothing and `file` said
+  "data" — so the panel's copy was invisible and the defect looked like it lived
+  only in the export. Written `\0` now. If a grep over a large file here comes
+  back suspiciously empty, check `file` before believing it.
 - **A section's credit is READ from its courses, never `count × modal credit`.**
   `demandOf` sized a section as `minRequirementCount × typicalSH(...)`, which is
   an estimate standing in for a number the catalog states outright, and the
@@ -846,10 +884,34 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
      counterpart is a RANGE pool (`CS 2300–9999`), so the ranges have to be
      read too. Keeping a stale flag DISCOUNTS a real requirement, which is the
      unrecoverable direction; removing one merely demands the course.
-  `ADJUDICATED_EDITION` in `scripts/lib/shared-sections.js` records which
-  catalog the titles came from, so the unit test that compares the manifest to
-  the committed corpus relaxes to a structural check while the two are
-  legitimately different editions, and tightens again by itself.
+  3. **An entry whose PAGE moved was a silent no-op, and that is the hole this
+     design nearly died of.** `applySharedSections` is keyed on `url#slug`, so a
+     page NEU renamed, moved or retired matched nothing, returned
+     `{applied: 0, missing: []}`, and produced no rail, no log line and no
+     record — the evidence is an ABSENCE, and every check here was written over
+     records. The file's own comment asserted the opposite ("a URL that changes
+     shape shows up as an unmatched entry rather than a silent miss"), which is
+     why nobody looked. Measured on the 2027 graduate roll: **ten of 103 entries
+     went dead** — four programs retired, four renamed, and the elementary and
+     secondary MATs MERGED into one — while the scrape printed success. They
+     surfaced days later in a unit test, and only because BOTH trees had by then
+     rolled past the adjudication. `sharedSectionsOrphans` now refuses the write.
+     Its runbook is keyed on the REDIRECT, because that is the only thing that
+     distinguishes the three cases and they need three different repairs: a 301
+     to a *department* page means retired (delete the entry), a 301 to another
+     *program* page means renamed or merged (re-key, then re-check the
+     cross-count), and a **200 means our DISCOVERY missed it** — a scraper bug,
+     where deleting the entry hides a program we have stopped scraping at all.
+  4. **The adjudication edition is per TREE.** It was one number across two
+     trees that are scraped by two workflows on different days, so bumping it
+     for the undergraduate re-adjudication silently asserted the graduate half
+     had been re-adjudicated too. It had not; `rolling` stayed true for both,
+     the exact comparison stayed relaxed, and the claim went unexamined until
+     the graduate scrape landed. `ADJUDICATED_EDITIONS` is keyed by tree and the
+     test holds each tree to its own claim rather than to the looser of the two.
+     A unit test asserts the two halves **partition** the manifest — an entry
+     belonging to neither would be orphan-checked by no scraper, which is
+     exactly the state this replaced.
 - Program discovery uses the **sitemap**; `/azindex/` is `Disallow`ed in
   robots.txt and both scrapers used to violate it.
 - **A minor may double count at most 50% of its credit against a major**

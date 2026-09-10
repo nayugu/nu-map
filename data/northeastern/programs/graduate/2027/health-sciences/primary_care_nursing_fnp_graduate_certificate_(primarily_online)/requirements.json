@@ -1,0 +1,359 @@
+{
+  "name": "Primary Care Nursing FNP, Graduate Certificate (Primarily Online)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 8,
+    "tablesConsumed": 8,
+    "tablesOnPage": 8,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/nursing/primary-care-nursing-fnp-graduate-certificate-pvl/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "certificate",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/nursing/primary-care-nursing-fnp-graduate-certificate-pvl/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 20,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Core Requirements",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6392
+        },
+        {
+          "type": "COURSE",
+          "subject": "NRSG",
+          "classId": 6561
+        }
+      ],
+      "minRequirementCount": 2
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "20-30 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "concentrations": {
+    "minOptions": 1,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "Option for Licensed Pediatric Nurse Practitioners/Pediatric Clinical Nurse Specialists",
+        "label": "For Licensed Pediatric Nurse Practitioners/Pediatric Clinical Nurse Specialists",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6222
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6390
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6391
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6396
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6397
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Option for Licensed Nurse Midwives",
+        "label": "For Licensed Nurse Midwives",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6222
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6390
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6391
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6393
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6394
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6398
+          }
+        ],
+        "minRequirementCount": 6
+      },
+      {
+        "type": "SECTION",
+        "title": "Option for Licensed Adult/Gerontology Primary Nurse Practitioners/CNS Adult",
+        "label": "For Licensed Adult/Gerontology Primary Nurse Practitioners/CNS Adult",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6393
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6394
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6396
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6397
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6398
+          }
+        ],
+        "minRequirementCount": 5
+      },
+      {
+        "type": "SECTION",
+        "title": "Option for Licensed Adult/Gerontology Acute Care Nurse Practitioners/Adult/Acute Clinical Nurse Specialists",
+        "label": "For Licensed Adult/Gerontology Acute Care Nurse Practitioners/Adult/Acute Clinical Nurse Specialists",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6390
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6391
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6393
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6394
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6396
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6397
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6398
+          }
+        ],
+        "minRequirementCount": 7
+      },
+      {
+        "type": "SECTION",
+        "title": "Option for Licensed Psychiatric Mental Health Nurse Practitioners/PMH Clinical Nurse Specialists",
+        "label": "For Licensed Psychiatric Mental Health Nurse Practitioners/PMH Clinical Nurse Specialists",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6390
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6391
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6393
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6394
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6396
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6397
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6398
+          }
+        ],
+        "minRequirementCount": 7
+      },
+      {
+        "type": "SECTION",
+        "title": "Option for Licensed Neonatal Nurse Practitioners",
+        "label": "For Licensed Neonatal Nurse Practitioners",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6390
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6391
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6393
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6394
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6396
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6397
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6398
+          }
+        ],
+        "minRequirementCount": 7
+      },
+      {
+        "type": "SECTION",
+        "title": "Option for Licensed Nurse Anesthetists",
+        "label": "For Licensed Nurse Anesthetists",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6222
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6390
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6391
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6393
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6394
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6396
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6397
+          },
+          {
+            "type": "COURSE",
+            "subject": "NRSG",
+            "classId": 6398
+          }
+        ],
+        "minRequirementCount": 8
+      }
+    ]
+  }
+}

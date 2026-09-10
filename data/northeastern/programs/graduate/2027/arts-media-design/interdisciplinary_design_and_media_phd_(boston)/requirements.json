@@ -1,0 +1,696 @@
+{
+  "name": "Interdisciplinary Design and Media, PhD (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 4,
+    "tablesConsumed": 4,
+    "tablesOnPage": 4,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/interdisciplinary-programs/interdisciplinary-design-media-phd/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "witnessCourses": [
+      "INAM7000",
+      "INAM7001",
+      "INAM7900",
+      "INAM7901",
+      "INAM9990",
+      "INAM9991",
+      "INAM9996"
+    ],
+    "witnessEdition": 2026,
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 0.98,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/interdisciplinary-programs/interdisciplinary-design-media-phd/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 3,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": [
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "3 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Practice-Based Elective",
+                "sh": 4
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Course Area Requirements",
+                "sh": 16
+              }
+            },
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "Electives",
+                "sh": 8
+              }
+            }
+          ],
+          "overflow": 0
+        }
+      ]
+    }
+  },
+  "totalCreditsRequired": 48,
+  "totalCreditsSource": "stated-minimum",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Coursework",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7000
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7001
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7900
+        },
+        {
+          "type": "COURSE",
+          "subject": "INAM",
+          "classId": 7901
+        }
+      ],
+      "minRequirementCount": 4
+    },
+    {
+      "type": "SECTION",
+      "title": "Dissertation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 9990
+            },
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 9991
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Research Methods Elective",
+      "requirements": [
+        {
+          "type": "XOM",
+          "numCreditsMin": 4,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5120
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5320
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 5250
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 6350
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 7300
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 7340
+            },
+            {
+              "type": "COURSE",
+              "subject": "DS",
+              "classId": 5110
+            },
+            {
+              "type": "COURSE",
+              "subject": "EECE",
+              "classId": 5644
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 6360
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 5301
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6406
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 6500
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 7101
+            },
+            {
+              "type": "COURSE",
+              "subject": "INSH",
+              "classId": 7103
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6820
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1,
+      "notes": [
+        "Complete one research methods elective from the following or in consultation with your advisor:"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Practice-Based Elective",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 4,
+      "notes": [
+        "In consultation with your advisor, complete 4 semester hours from the following:",
+        "INAM 6000 or INAM 8984 are recommended"
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Course Area Requirements",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 16,
+      "notes": [
+        "Complete 16 semester hours from the course areas below."
+      ]
+    },
+    {
+      "type": "SECTION",
+      "title": "Architecture and Sustainability",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 5210
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 5230
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 5312
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 5314
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 5330
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARCH",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "SUEN",
+              "classId": 6210
+            },
+            {
+              "type": "COURSE",
+              "subject": "SUEN",
+              "classId": 6220
+            },
+            {
+              "type": "COURSE",
+              "subject": "SUEN",
+              "classId": 7230
+            },
+            {
+              "type": "COURSE",
+              "subject": "SUEN",
+              "classId": 7240
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Design and Technology",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5130
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5310
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5330
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5430
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5610
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5620
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5640
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5710
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6310
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6330
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Art and Technology",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 5000
+            },
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 6430
+            },
+            {
+              "type": "COURSE",
+              "subject": "INAM",
+              "classId": 6530
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 5700
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 6100
+            },
+            {
+              "type": "COURSE",
+              "subject": "THTR",
+              "classId": 6670
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Art and Health/Behavioral Sciences",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HINF",
+              "classId": 5200
+            },
+            {
+              "type": "COURSE",
+              "subject": "HINF",
+              "classId": 5300
+            },
+            {
+              "type": "COURSE",
+              "subject": "HINF",
+              "classId": 5301
+            },
+            {
+              "type": "COURSE",
+              "subject": "HLTH",
+              "classId": 5800
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSC",
+              "classId": 6300
+            },
+            {
+              "type": "COURSE",
+              "subject": "MUSC",
+              "classId": 6510
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5230
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 5540
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6204
+            },
+            {
+              "type": "COURSE",
+              "subject": "PHTH",
+              "classId": 6208
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Media and Innovation",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 5510
+            },
+            {
+              "type": "COURSE",
+              "subject": "COMM",
+              "classId": 6500
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 6340
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 6341
+            },
+            {
+              "type": "COURSE",
+              "subject": "JRNL",
+              "classId": 6460
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 5300
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 6310
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 6330
+            },
+            {
+              "type": "COURSE",
+              "subject": "MSCR",
+              "classId": 6340
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Games and XR",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "EXRE",
+              "classId": 5010
+            },
+            {
+              "type": "COURSE",
+              "subject": "EXRE",
+              "classId": 5020
+            },
+            {
+              "type": "COURSE",
+              "subject": "EXRE",
+              "classId": 5030
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 5110
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6225
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6240
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6320
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6350
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6460
+            },
+            {
+              "type": "COURSE",
+              "subject": "GSND",
+              "classId": 6520
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Human Computer/Robot Interaction",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 5910
+            },
+            {
+              "type": "COURSE",
+              "subject": "ARTG",
+              "classId": 6460
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5170
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 5345
+            },
+            {
+              "type": "COURSE",
+              "subject": "CS",
+              "classId": 6130
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 5630
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 6500
+            },
+            {
+              "type": "COURSE",
+              "subject": "IE",
+              "classId": 7315
+            },
+            {
+              "type": "OR",
+              "courses": [
+                {
+                  "type": "COURSE",
+                  "subject": "INAM",
+                  "classId": 5347
+                },
+                {
+                  "type": "COURSE",
+                  "subject": "CS",
+                  "classId": 5347
+                }
+              ]
+            },
+            {
+              "type": "COURSE",
+              "subject": "ME",
+              "classId": 6250
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Electives",
+      "requirements": [],
+      "minRequirementCount": 1,
+      "creditsRequired": 8,
+      "notes": [
+        "In consultation with your advisor, complete 8 semester hours of graduate-level courses."
+      ]
+    }
+  ]
+}

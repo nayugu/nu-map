@@ -2,9 +2,6 @@
   "https://catalog.northeastern.edu/graduate/business/certificate-programs/business-administration-graduate-certificate/#business_administration_graduate_certificate_(boston)": [
     "Eight-Month International Student Cohort Curriculum"
   ],
-  "https://catalog.northeastern.edu/graduate/business/master-business-administration/mba-online-program/#business_administration_mbaonline": [
-    "Business Electives"
-  ],
   "https://catalog.northeastern.edu/graduate/business/master-science/accounting-msa/#accounting_msa_(boston)": [
     "Taxation Track"
   ],
@@ -44,16 +41,13 @@
   "https://catalog.northeastern.edu/graduate/engineering/electrical-computer/semiconductor-engineering-ms/#semiconductor_engineering_ms_(boston)": [
     "Elective Courses in Innovation"
   ],
-  "https://catalog.northeastern.edu/graduate/engineering/interdisciplinary-phd/product-development-ms/#product_development_ms_(boston)": [
+  "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/product-development-ms-bos/#product_development_ms_(boston)": [
     "Thesis Option"
   ],
   "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/data-analytics-engineering-ms/#data_analytics_engineering_ms_(boston)": [
     "Thesis Option2"
   ],
   "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/engineering-management-msem/#engineering_management_msem_(boston)": [
-    "Thesis Option1"
-  ],
-  "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/human-factors-mshf/#human_factors_ms_(boston)": [
     "Thesis Option1"
   ],
   "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/industrial-engineering-msie/#industrial_engineering_msie_(boston)": [
@@ -71,12 +65,6 @@
   "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/mechanical-engineering-concentration-thermofluids-msme/#mechanical_engineering_with_concentration_in_thermofluids_msme_(boston)": [
     "Thesis Option1"
   ],
-  "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/operations-research-msor/#operations_research_msor_(boston)": [
-    "Thesis Option"
-  ],
-  "https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/cyber-physical-systems-ms/#cyber-physical_systems_ms_(boston)": [
-    "Thesis Option"
-  ],
   "https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/data-architecture-management-ms/#data_architecture_and_management_ms_(boston)": [
     "Thesis Option"
   ],
@@ -84,9 +72,6 @@
     "Thesis Option"
   ],
   "https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/information-systems-msis-bridge-tor/#information_systems_msisbridge_(toronto)": [
-    "Thesis Option"
-  ],
-  "https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/information-systems-msis-oak/#information_systems_msis_(oakland)": [
     "Thesis Option"
   ],
   "https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/information-systems-msis-ptl/#information_systems_msis_(portland)": [
@@ -107,10 +92,7 @@
   "https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/software-engineering-systems-ms/#software_engineering_systems_ms_(boston)": [
     "Thesis Option"
   ],
-  "https://catalog.northeastern.edu/graduate/engineering/multidisciplinary/telecommunication-networks-ms/#telecommunication_networks_ms_(boston)": [
-    "Thesis Option"
-  ],
-  "https://catalog.northeastern.edu/graduate/health-sciences/clinical-rehabilitation-sciences/extreme-medicine-graduate-certificate/#extreme_medicine_graduate_certificate_(boston)": [
+  "https://catalog.northeastern.edu/graduate/health-sciences/clinical-rehabilitation-sciences/extreme-medicine-graduate-certificate-pvl/#extreme_medicine_graduate_certificate_(primarily_online)": [
     "Optional Experiential Electives"
   ],
   "https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/pharmd-direct-entry/#pharmacy_pharmddirect_entry_(boston)": [
@@ -118,12 +100,6 @@
   ],
   "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/digital-media-mps-van/#digital_media_mps_(vancouver)": [
     "Required Courses"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/teaching-elementary-licensure-mat/#elementary_education_mat_(boston)": [
-    "MAT+ in English as a Second Language (ESL)"
-  ],
-  "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/teaching-secondary-licensure-mat/#secondary_education_mat_(boston)": [
-    "MAT+ in English as a Second Language (ESL)"
   ],
   "https://catalog.northeastern.edu/graduate/science/physics/physics-phd/#physics_phd_(boston)": [
     "Particle Physics"

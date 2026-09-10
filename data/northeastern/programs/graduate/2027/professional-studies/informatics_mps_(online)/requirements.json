@@ -1,0 +1,372 @@
+{
+  "name": "Informatics, MPS (Online)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "9/9/2026",
+    "branch": "main",
+    "tablesPresent": 9,
+    "tablesConsumed": 9,
+    "tablesOnPage": 9,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/informatics-mps-vtl/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [],
+    "verification": {
+      "level": "verified",
+      "kind": "grad",
+      "score": 1,
+      "checkedAt": "2026-09-10",
+      "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/informatics-mps-vtl/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "unenumeratedSections": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 34,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2027,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "Required Courses",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6105
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6150
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6205
+        },
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6250
+        },
+        {
+          "type": "COURSE",
+          "subject": "PJM",
+          "classId": 6440
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Capstone",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 6980
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Restricted Electives",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "INT",
+              "classId": 6940
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6405
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6415
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6435
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6480
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6680
+            },
+            {
+              "type": "COURSE",
+              "subject": "ITC",
+              "classId": 6983
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Program Credit/GPA Requirements",
+      "threshold": 3,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "34 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Foundations of Project Management (PJM 6100) is for students with fewer than three years of experience directing or leading project tasks. Students who do not complete Foundations of Project Management (PJM 6100) may substitute project management electives to satisfy the required program hours.",
+      "codes": [
+        "PJM 6100"
+      ],
+      "substitution": null
+    }
+  ],
+  "concentrations": {
+    "minOptions": 0,
+    "concentrationOptions": [
+      {
+        "type": "SECTION",
+        "title": "AI Systems and Data Management",
+        "label": "AI Systems and Data Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6711
+          },
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6721
+          },
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6730
+          },
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6670
+          }
+        ],
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from Restricted Electives list below."
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Analytics Concentration",
+        "label": "Analytics",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6105
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6115
+          },
+          {
+            "type": "COURSE",
+            "subject": "ALY",
+            "classId": 6145
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 3,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6125
+              },
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6610
+              },
+              {
+                "type": "COURSE",
+                "subject": "ALY",
+                "classId": 6620
+              }
+            ],
+            "notes": [
+              "Complete 3 semester hours from the following:"
+            ]
+          }
+        ],
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from Restricted Electives list below."
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Cloud Computing Application and Management Concentration",
+        "label": "Cloud Computing Application and Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6630
+          },
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6650
+          },
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6660
+          },
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6670
+          }
+        ],
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from Restricted Electives list below."
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Human-Centered Informatics Concentration",
+        "label": "Human-Centered Informatics",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "DGM",
+            "classId": 5060
+          },
+          {
+            "type": "COURSE",
+            "subject": "DGM",
+            "classId": 6115
+          },
+          {
+            "type": "COURSE",
+            "subject": "DGM",
+            "classId": 6255
+          },
+          {
+            "type": "COURSE",
+            "subject": "DGM",
+            "classId": 6600
+          },
+          {
+            "type": "COURSE",
+            "subject": "DGM",
+            "classId": 6610
+          }
+        ],
+        "minRequirementCount": 5,
+        "notes": [
+          "Complete 2 semester hours from Restricted Electives list below."
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Information Security Management Concentration",
+        "label": "Information Security Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6610
+          },
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6620
+          },
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6630
+          },
+          {
+            "type": "COURSE",
+            "subject": "ITC",
+            "classId": 6640
+          }
+        ],
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from Restricted Electives list below."
+        ]
+      },
+      {
+        "type": "SECTION",
+        "title": "Project Management Concentration",
+        "label": "Project Management",
+        "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6100
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6120
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6200
+          },
+          {
+            "type": "COURSE",
+            "subject": "PJM",
+            "classId": 6300
+          }
+        ],
+        "minRequirementCount": 4,
+        "notes": [
+          "Complete 4 semester hours from Restricted Electives list below."
+        ]
+      }
+    ]
+  }
+}
