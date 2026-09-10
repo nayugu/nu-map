@@ -810,8 +810,8 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
   one: across the 1,386 cached LIVE program pages exactly **two** carry a
   cross-reference row, and both obvious rules fail on the pair —
   1. **Match the menu by TITLE** and you miss one of the two cases you derived
-     it from: the CS page says "Khoury meaningful minors list", the DS page says
-     "Meaningful minor list", the heading says "Khoury Meaningful Minors".
+     it from: the CS page says "Khoury meaningful minors list", the other says
+     "Meaningful Minor list", the heading says "Khoury Meaningful Minors".
   2. **Take the NEXT heading** is true on both pages and is a guess. Getting it
      wrong DELETES a requirement section, so the student is never shown
      something they owe — the direction that does not recover.
@@ -826,8 +826,8 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
     through `mergeDuplicateSections`, `_CHOOSE` and `uniquify` for free.
   - The fold is `OR` over one labelled `OR` per area, carrying **`atMostOne`**,
     so the menu contributes at most one course however many of its courses the
-    student took — which is what the page allows and what the DS page states
-    outright. Only a POOL (an `XOM`, or a bare `OR`) can absorb it; any other
+    student took — which is what the page allows and what the second page
+    states outright. Only a POOL (an `XOM`, or a bare `OR`) can absorb it; any other
     host is left alone and reported, because not folding merely costs credit
     for a menu course where guessing could add a requirement nobody owes.
   - **`atMostOne` is a flag on ONE node, and it is NOT the general rule for an
@@ -851,10 +851,18 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
     read, not dropped.
   - Like `shared-sections.js` it carries an `ADJUDICATED_EDITION`: the patterns
     were read off a specific catalog, so a roll costs a re-adjudication and the
-    rail's message names the edition.
+    rail's message names the edition. ⚠ That was not enough on its own: the
+    constant was compared to **nothing**, so it sat at `2025-2026` while both
+    trees rolled to 2027 and no test, rail or log line could say so. What
+    carried the file across the DS→AI roll was NEU reusing its own wording on
+    the replacement page ("Meaningful minor list" → "Meaningful **M**inor
+    list", which the case-insensitive pattern still matches) — luck, not the
+    design. A unit test now holds it against `committedEdition()`, the same way
+    `shared-sections.test.js` does. The second page is the **Artificial
+    Intelligence** minor now, not Data Science.
   ⚠ **Still open on these two pages** and deliberately not fixed here, because
-  it is a different mechanism with a corpus-wide blast radius: Data Science
-  Electives says "Complete two of the following" and ships
+  it is a different mechanism with a corpus-wide blast radius: the AI (formerly
+  Data Science) Electives section says "Complete two of the following" and ships
   `minRequirementCount: 1`. `commitChooseGroup`'s `chooseItems.length <= 2`
   shortcut collapses a 2-of-2 into an `OR`. The count is only 2 because the
   cross-reference row is one of "the following" and yields no course node — so
@@ -971,6 +979,57 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
     says it is a program, so it stays counted however badly this run parsed it.
     Withdrawals are reported in the rails line, never silent, and in steady state
     the exemption is a no-op because such pages never enter `previous` again.
+  - ⚠ **The rule runs at SCRAPE time, over ONE tree, so "the filter landed" and
+    "the filter was applied" are different facts** — and the gap between them is
+    up to a bimonthly cycle. The filter shipped 2026-09-09 and the cleanup pass
+    reached the graduate tree only, because the undergraduate HTML cache was
+    pre-roll and `assertCacheEditionSafe` correctly refused it. **31 undergraduate
+    2027 records went on shipping**, the `Data Science` department landing page
+    among them: a selectable major whose whole body was a wall of DS course
+    descriptions under "From the catalog". Every check on the rule was written
+    over synthetic literals, and the evidence was inside the shipped files the
+    whole time (that record's own `metadata.verification` carries `zeroTotal: 1`
+    and a score of 0.68). `test/invariant/programs-are-programs.test.js` now
+    runs `isProgramPage` over the committed corpus, which is the half that was
+    missing — the app cannot apply the rule itself, because `majorLoader.js`
+    builds every option from the PATH STRING and never opens the file.
+- **A decision that only reaches the data through a SCRAPE is a decision that
+  can sit unapplied for a cycle**, and both times that happened here nothing
+  said so. `scrape-majors.js` therefore has two network-free verbs that judge
+  what is already committed, each calling the same function the scrape does:
+  - `--withdraw-non-programs` — apply `isProgramPage` to committed records.
+    Guarded by the same `checkNonProgramRail` ratio, and it leaves an UNREADABLE
+    record alone (absent ≠ false, again).
+  - `--apply-shared-sections` — re-apply `shared-sections.json`. Scoped to the
+    **newest edition only**: NEU renamed four of these sections at the 2027 roll,
+    so a 2026 record legitimately lacks the 2027 titles and running across every
+    edition reports a frozen one as broken. (Written the wrong way first; the
+    four false misses are what caught it.)
+  Neither re-parses. They are not migrations — the manifest and the rule stay the
+  single source, and the next real scrape computes the identical result — but a
+  full scrape is still what refreshes the parses themselves.
+- **A program's identity across an edition roll is its FOLDER SLUG, and a rename
+  breaks every table keyed on one — silently, because the evidence is an
+  ABSENCE.** NEU retired all 26 undergraduate Data Science programs for 2027 and
+  republished them as Artificial Intelligence: same curricula, same colleges, new
+  folders, new URLs. Three things keyed on the old identity went quiet at once,
+  and none of them could report it:
+  1. `shared-sections.json` (keyed `url#slug`) — the two DS entries were deleted
+     and the AI successors never added, so `AI and Journalism` and `AI and SLPA`
+     lost the cross-count their CS twins still get. Measured with `RANGE`
+     membership resolved, the duplication is identical to the flagged twins'.
+     `sharedSectionsOrphans` cannot see this by construction: it detects entries
+     that match nothing, never **pages that should have an entry**.
+  2. `witness-carry.js` (keyed `college/slug`) — 332 of 651 records inherited a
+     witness and the ones that did not were exactly the 26 renamed programs.
+     `RENAMED` repairs it, guarded by `renameOrphans` at BOTH ends.
+  3. `verify-majors`' ratchet falls back on `college/folder`, so **every renamed
+     program escaped the ratchet on the roll** — the one run it exists for.
+  ⚠ (1) and (2) are ONE change, not two: `demand.js` **skips** a `shared` section
+  whose witness is empty, so flagging a renamed program without repairing its
+  witness first deletes the requirement instead of de-duplicating it. Matching a
+  predecessor by course-set similarity was considered and refused — a tuned
+  threshold whose failure mode is attaching a stranger's plan to a degree.
 - Program discovery uses the **sitemap**; `/azindex/` is `Disallow`ed in
   robots.txt and both scrapers used to violate it.
 - **A minor may double count at most 50% of its credit against a major**

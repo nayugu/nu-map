@@ -25,6 +25,12 @@
 //   Computer Science, Minor   52 SH derived (29 SH of it phantom)  page says 20
 //   Data Science, Minor       45 SH derived (27 SH of it phantom)
 //
+// ⚠ Read those as of the 2025-2026 edition. NEU retired every undergraduate
+// Data Science program for 2026-2027 and republished the family as Artificial
+// Intelligence, so the second page is now `Artificial Intelligence, Minor`. The
+// figures stand as the measurement that motivated this file; the page they were
+// taken on no longer exists.
+//
 // That number is not cosmetic. `minorOverlap.js` derives the 50% double-count
 // ceiling from Σ `demandOf` precisely because 169 of 181 minor pages state no
 // total, so an inflated denominator quietly raises the cap: the CS minor's
@@ -39,7 +45,7 @@
 // rule to n=2 is not engineering, and both obvious rules fail on the pair:
 //
 //   match the menu by its TITLE      the CS page says "Khoury meaningful
-//     minors list" and the DS page says "Meaningful minor list", against a
+//     minors list" and the other says "Meaningful Minor list", against a
 //     heading of "Khoury Meaningful Minors". A title match already misses
 //     one of the two cases it was derived from.
 //   take the NEXT heading            true on both pages, and a guess. Getting
@@ -56,11 +62,28 @@
 //
 // Like `shared-sections.js`, these patterns were read off a specific catalog,
 // so an edition roll costs a re-adjudication. `ADJUDICATED_EDITION` records
-// which one, and the rail's message names it — a 2027 page that reworded
+// which one, and the rail's message names it — a page that reworded
 // "(see below)" should stop the run rather than silently ship the old shape.
+//
+// ⚠ That paragraph was not enough, and the 2027 roll proved it. Unlike
+// `shared-sections.js`, this constant was compared to NOTHING: it sat at
+// '2025-2026' while both trees rolled to 2027, and no test, rail or log line
+// could ever have said so. What actually carried the file across the roll was
+// luck — NEU retired the Data Science minor and republished it as the
+// Artificial Intelligence minor, and the new page happened to reuse the old
+// page's wording ("Meaningful minor list" → "Meaningful Minor list"), which the
+// case-insensitive `reference` pattern still matches. Had they reworded it, the
+// detector would have fired and the run would have stopped, which is the
+// designed outcome; had they DROPPED it, nothing would have fired at all and a
+// stale entry would have gone on claiming a page that no longer says it.
+//
+// `test/unit/referenced-menus.test.js` now holds this constant against the
+// committed corpus, the same way `shared-sections.test.js` does. It is a
+// re-adjudication reminder, not a proof of correctness: bumping it is a claim
+// that someone opened the pages.
 
 /** The catalog edition these patterns were read off. */
-export const ADJUDICATED_EDITION = '2025-2026';
+export const ADJUDICATED_EDITION = '2026-2027';
 
 /**
  * A row of prose that points at another part of the same page.

@@ -78,3 +78,40 @@ simpler rule wins outright and a good deal of arithmetic comes out.
 Worth asking alongside the official-status conversation; see
 `docs/` and the § Minors sweep in `scripts/minor-share-probe.js` for the
 numbers to put in front of them.
+
+
+## /data drops every program the edition roll retired (2026-09-09)
+
+Found while fixing the ghost "Data Science" 2027 page. Not caused by that bug,
+and deliberately left out of that fix because it is a design decision, not a
+defect to repair.
+
+`scripts/build-ai-data.js` emits a `/data` page only for the **newest** catalog
+edition (`isNewest`, near the `pageSlugTaken` map). Every other surface —
+the picker, the planner, saved plans, the programs bundle — ships all editions.
+So at a roll, every program that did not survive it silently loses:
+
+- its `/data/majors/…` (or `/minors/`, `/graduate/`) page,
+- its row in the `/data` search index, because `programRecords`
+  (`dataEntities.js`) skips any record with no `page`.
+
+Measured on the 2027 roll: **146 programs** are in 2026 and not 2027 — 38
+undergraduate, 108 graduate. All 24 undergraduate Data Science programs are in
+that number, and a 2026-cohort DS student is exactly the person most likely to
+go looking.
+
+It also lets a *worse* page take the slug. `dist/data/majors/data-science.html`
+was the department landing page — a wall of course descriptions — while the
+real `Data Science, BS (Boston)` had no page at all. Withdrawing the landing
+page fixes the theft and not the absence.
+
+The question to settle first, because the work follows from it: **is /data the
+current catalog, or is it every edition we ship?** The static surface exists so
+a model can fetch facts, and "the program I am enrolled under" is a fact.
+
+Rough shape if the answer is "every edition": keep the unsuffixed slug for the
+newest edition (so no URL moves and no redirect is needed), and give older
+editions a year-qualified path. The build already refuses to ship an
+unsearchable page, so the search index follows for free — but check the cost
+first: 1,412 bundle entries against ~750 pages today, so this roughly doubles
+the generated surface.

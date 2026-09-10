@@ -16,27 +16,39 @@
 // ═══════════════════════════════════════════════════════════════════
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { existsSync, readdirSync } from "node:fs";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   ADJUDICATED_EDITION, CROSS_REFERENCE, _MENUS,
   menuForReference, menuForHeading, foldOf, assertReferencesAdjudicated,
 } from "../../scripts/lib/referenced-menus.js";
 import { allocateSections } from "../../src/core/gradRequirements.js";
 
-// The two sentences, verbatim from the 2025-2026 pages. Kept as literals: the
-// manifest is a hand reading of these exact strings, so a test that derived
-// them from the manifest would agree with itself no matter what it said.
+// The two sentences, verbatim from the pages. Kept as literals: the manifest is
+// a hand reading of these exact strings, so a test that derived them from the
+// manifest would agree with itself no matter what it said.
+//
+// `AI_ROW` is the 2026-2027 wording. NEU retired the Data Science minor and
+// republished it as the Artificial Intelligence minor, which reworded the row
+// only in its capitals ("Meaningful minor list" → "Meaningful Minor list") —
+// and the 2025-2026 form is kept beside it deliberately, because the pattern
+// matching BOTH is the property that carried this file across the roll and is
+// worth pinning rather than quietly relying on.
 const CS_ROW = "One course from Khoury meaningful minors list (see below).";
+const AI_ROW = "Meaningful Minor list (see below)";
 const DS_ROW = "Meaningful minor list (see below)";
 
 test("menus › both live cross-references are claimed", () => {
-  for (const row of [CS_ROW, DS_ROW]) {
+  for (const row of [CS_ROW, AI_ROW, DS_ROW]) {
     assert.ok(CROSS_REFERENCE.test(row), `detector missed: ${row}`);
     assert.ok(menuForReference(row), `unadjudicated: ${row}`);
   }
-  // Both point at the SAME heading — the two pages word the pointer
-  // differently and name the menu identically, which is exactly why the
-  // reference is matched on the row and the menu on the heading.
-  assert.equal(menuForReference(CS_ROW).id, menuForReference(DS_ROW).id);
+  // All point at the SAME heading — the pages word the pointer differently and
+  // name the menu identically, which is exactly why the reference is matched on
+  // the row and the menu on the heading.
+  assert.equal(menuForReference(CS_ROW).id, menuForReference(AI_ROW).id);
+  assert.equal(menuForReference(DS_ROW).id, menuForReference(AI_ROW).id);
   assert.ok(menuForHeading("Khoury Meaningful Minors"));
 });
 
@@ -161,4 +173,47 @@ test("menus › a folded menu contributes AT MOST ONE course", () => {
     const summed = [...p.allocatedCourses].reduce((n, k) => n + (courseMap[k]?.sh ?? 4), 0);
     assert.equal(p.satSh, summed, `satSh disagrees with allocation for [${placed}]`);
   }
+});
+
+// ── The adjudication must answer to the corpus ──────────────────────
+//
+// This constant sat at '2025-2026' while both program trees rolled to 2027,
+// and nothing could have said so: unlike `shared-sections.js`, it was
+// interpolated into an error message and compared to nothing. What carried the
+// file across that roll was NEU reusing its own wording on the replacement
+// page, which is luck, and luck expires.
+//
+// The check is deliberately weak — it cannot know whether anyone opened the
+// pages, only that the claim is not older than the data. That is the same thing
+// `shared-sections.test.js` asserts, and it is what turns "stale forever and
+// silent" into "stale once and loud".
+const ROOT = fileURLToPath(new URL("../../", import.meta.url));
+
+/** The newest edition either program tree has committed. */
+function committedEdition() {
+  const years = [];
+  for (const tree of ["undergraduate", "graduate"]) {
+    const base = join(ROOT, `data/northeastern/programs/${tree}`);
+    if (!existsSync(base)) continue;
+    for (const y of readdirSync(base)) if (/^\d{4}$/.test(y)) years.push(Number(y));
+  }
+  return years.length ? Math.max(...years) : null;
+}
+
+test("menus › the adjudication is not older than the corpus", () => {
+  assert.match(ADJUDICATED_EDITION, /^\d{4}-\d{4}$/,
+    "the edition is a catalog LABEL (`2026-2027`), not a year — the rail's message prints it");
+  const [from, to] = ADJUDICATED_EDITION.split("-").map(Number);
+  assert.equal(to, from + 1, `${ADJUDICATED_EDITION} is not a single catalog year`);
+
+  const committed = committedEdition();
+  if (committed == null) return;   // no corpus checked out; nothing to compare against
+  assert.ok(to >= committed,
+    `referenced-menus is adjudicated against ${ADJUDICATED_EDITION} but the committed corpus `
+    + `is edition ${committed}. The two cross-reference rows were read off the older catalog, `
+    + `so they may name pages NEU has since renamed or retired — which is exactly what the DS `
+    + `to AI roll did.\n\n`
+    + `Open the two minor pages, confirm the "(see below)" rows still say what MENUS claims, `
+    + `then bump ADJUDICATED_EDITION. Do not bump it without looking: the constant is a claim `
+    + `that someone did.`);
 });
