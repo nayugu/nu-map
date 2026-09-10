@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 // middleware without importing THIS file — which would pull in `vite` and
 // `@vitejs/plugin-react`, neither of which the dependency-free invariant job installs.
 import aiDataDevPlugin from "./build/aiDataDevPlugin.js";
+import { programManualChunks } from "./build/programChunks.js";
 
 /** The repo root, resolved from this file rather than from cwd. */
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
@@ -255,6 +256,19 @@ function catalogCheckPlugin() {
 export default defineConfig({
   plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), maintenanceCorePlugin(), maintenanceDevPlugin(ROOT), buildManifestPlugin(), aiDataPlugin(), aiDataDevPlugin(ROOT)],
   base: "./",
+  build: {
+    rollupOptions: {
+      output: {
+        // One chunk per PROGRAM was 2,691 of the 19,176 files in a deploy, and
+        // ~1,150 more per catalog edition — against Cloudflare Pages' 20,000-file
+        // cap, which fails the deploy silently. Grouping them here rather than
+        // rewriting the loaders keeps `import.meta.glob`'s keys byte-identical,
+        // and those keys are the program identity saved plans and share links
+        // persist. See build/programChunks.js.
+        manualChunks: programManualChunks(ROOT),
+      },
+    },
+  },
   define: { __COMMIT_DATE__: JSON.stringify(commitDate) },
   optimizeDeps: { exclude: ["@huggingface/transformers"] },
   worker: { format: "es" },
