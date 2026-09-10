@@ -108,3 +108,68 @@ test("an id without an edition segment does not crash the ratchet", () => {
   assert.doesNotThrow(() => compareToBaseline([program("undergraduate/2027/x/y", "verified")], {}));
   assert.doesNotThrow(() => compareToBaseline([program("undergraduate/2027/x/y", "verified")], { programs: null }));
 });
+
+// ── ...and the edition it could not see THROUGH A RENAME ────────────
+//
+// The fallback above matches on `tree/college/folder`, which is the identity a
+// rename does not keep — and it fails on exactly the run it exists for. NEU
+// republished 26 undergraduate Data Science programs as Artificial Intelligence
+// for the 2027 edition: every one arrived under an id the baseline had never
+// seen, matched no shape either, and so was ratcheted against nothing but
+// `level === 'review'`, on the first run against markup nobody had looked at.
+//
+// Uses the REAL `RENAMED` table, so a typo in the committed entries fails here.
+const CIS = "computer-information-science";
+const AI_JRNL = `${CIS}/artificial_intelligence_and_journalism_bs_(boston)`;
+const DS_JRNL = `${CIS}/data_science_and_journalism_bs_(boston)`;
+
+const RENAME_BASE = {
+  programs: {
+    [`undergraduate/2026/${DS_JRNL}`]: {
+      level: "verified", counters: { unknownCourses: 0, tablesUnaccounted: 0 },
+    },
+    // A graduate program under a college name the undergraduate tree also uses.
+    "graduate/2026/engineering/data_science_and_journalism_bs_(boston)": {
+      level: "verified", counters: {},
+    },
+  },
+};
+
+test("across a RENAME: the successor is ratcheted against its predecessor", () => {
+  const out = compareToBaseline(
+    [program(`undergraduate/2027/${AI_JRNL}`, "review", { unknownCourses: 4 })], RENAME_BASE);
+  assert.ok(out.length >= 1);
+  assert.ok(out.some(r => /level verified → review/.test(r)),
+    `a renamed program must not escape the level check: ${JSON.stringify(out)}`);
+  assert.ok(out.every(r => r.includes(`vs undergraduate/2026/${DS_JRNL}`)),
+    "the message must name what it compared against, or the reader cannot judge it");
+});
+
+test("across a RENAME: an improvement is still not a regression", () => {
+  assert.deepEqual(
+    compareToBaseline([program(`undergraduate/2027/${AI_JRNL}`, "verified")], RENAME_BASE), []);
+});
+
+test("the rename fallback never reaches across TREES", () => {
+  // `RENAMED` carries `college/slug` with no tree segment, and `engineering`
+  // exists in both trees. A graduate program must not be ratcheted against an
+  // undergraduate adjudication — it would be comparing two different degrees.
+  const out = compareToBaseline(
+    [program(`graduate/2027/${AI_JRNL}`, "review")], RENAME_BASE);
+  assert.equal(out.length, 1);
+  assert.match(out[0], /NEW program at 'review'/);
+});
+
+test("the program's OWN shape still wins over its rename entry", () => {
+  // Same ordering rule as `inheritWitness`: the rename is a fallback for a shape
+  // that is not there, never an override. Otherwise a program that kept its
+  // folder across a later edition would be judged against a retired one.
+  const base = {
+    programs: {
+      ...RENAME_BASE.programs,
+      [`undergraduate/2026/${AI_JRNL}`]: { level: "review", counters: {} },
+    },
+  };
+  const out = compareToBaseline([program(`undergraduate/2027/${AI_JRNL}`, "partial")], base);
+  assert.deepEqual(out, [], "compared against the retired predecessor instead of its own shape");
+});

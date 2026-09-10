@@ -129,6 +129,8 @@ const RAILS_TEST   = "cd test/unit      && node --test scrape-rails.test.js";
 const WITNESS      = "scripts/lib/witness-carry.js";
 const WITNESS_TEST = "cd test/unit      && node --test witness-carry.test.js";
 const PROGRAMS_ARE_PROGRAMS = "cd test/invariant && node --test programs-are-programs.test.js";
+const VERIFY_MAJORS = "scripts/verify-majors.js";
+const RATCHET_TEST  = "cd test/unit      && node --test major-verify-ratchet.test.js";
 const GE_CORPUS   = "cd test/invariant && node --test general-elective-allowance.test.js";
 const GE_UI       = "cd test/browser   && node --test general-electives.browser.test.js";
 
@@ -950,6 +952,24 @@ const MUTANTS = [
     from: "      .filter(n => /^\\d{4}$/.test(n) && Number(n) < year && Number(n) >= year - MAX_LOOKBACK)",
     to:   "      .filter(n => /^\\d{4}$/.test(n) && Number(n) < year)",
     run: [WITNESS_TEST] },
+
+  // The third table keyed on a slug. Dropping the rename fallback puts the ratchet back
+  // to where it was on the 2027 roll: every renamed program compared against nothing,
+  // on the one run against markup nobody has looked at yet.
+  { name: "ratchet: a renamed program escapes the baseline comparison",
+    file: VERIFY_MAJORS,
+    from: "      const alt = m ? (byShape.get(`${m[1]}/${m[3]}`)\n                    ?? (wasAt ? byShape.get(`${m[1]}/${wasAt}`) : null)) : null;",
+    to:   "      const alt = m ? byShape.get(`${m[1]}/${m[3]}`) : null;",
+    run: [RATCHET_TEST] },
+
+  // ...and the tree gate on it. `RENAMED` carries `college/slug` with no tree segment and
+  // `engineering` exists in both, so without this a graduate program is ratcheted against
+  // an undergraduate degree that merely shares a folder name.
+  { name: "ratchet: the rename fallback reaches across trees",
+    file: VERIFY_MAJORS,
+    from: "      const wasAt = m && m[1] === 'undergraduate'",
+    to:   "      const wasAt = m && m[1] !== null",
+    run: [RATCHET_TEST] },
 
   // The corpus guard for the non-program rule. Its own assertion is satisfied by an
   // `isProgramPage` that never returns false, which is exactly the weakening a future

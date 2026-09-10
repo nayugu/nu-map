@@ -25,6 +25,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 
 import { verifyProgram, LEVELS, detailText } from './lib/major-verify.js';
 import { impossibleSectionTitles } from './lib/major-integrity.js';
+import { RENAMED } from './lib/witness-carry.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
@@ -164,7 +165,22 @@ export function compareToBaseline(results, base = baseline) {
 
     if (!entry) {
       const m = EDITION_ID.exec(r.id);
-      const alt = m ? byShape.get(`${m[1]}/${m[3]}`) : null;
+      // ...and the same lookup under the folder the program used to live in. The shape key
+      // is `tree/college/folder`, so a RENAME defeats it exactly as it defeats every other
+      // table keyed on a slug — and it defeats it on the ONE run this fallback exists for.
+      // NEU republished 26 undergraduate Data Science programs as Artificial Intelligence
+      // for 2027; every one arrived under an id the baseline had never seen, matched no
+      // shape either, and so was ratcheted against nothing but `level === 'review'`.
+      //
+      // `RENAMED` is the same adjudication `witness-carry.js` needs for the same reason, so
+      // it is imported rather than restated. Gated on the tree because that table carries
+      // `college/slug` with no tree segment and is consulted by the undergraduate scraper
+      // alone; `engineering` exists in both trees, and a graduate program must not be
+      // ratcheted against an undergraduate one.
+      const wasAt = m && m[1] === 'undergraduate'
+        ? RENAMED[Number(m[2])]?.[m[3]] ?? null : null;
+      const alt = m ? (byShape.get(`${m[1]}/${m[3]}`)
+                    ?? (wasAt ? byShape.get(`${m[1]}/${wasAt}`) : null)) : null;
       if (alt && alt.id !== r.id) { entry = alt.entry; against = alt.id; }
     }
     if (!entry) {
