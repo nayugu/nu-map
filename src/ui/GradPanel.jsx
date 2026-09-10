@@ -4,8 +4,29 @@
 // Rendered by BankPanel as an XOR alternative to the course bank.
 // Uses graduatenu's Major2 JSON schema + gradRequirements.js
 //
-// Double major: courses count freely toward both majors (NU policy).
-// Each major is allocated independently with allocateMajorWithElectives.
+// Double major: each major is allocated independently with
+// allocateMajorWithElectives, so a course counts toward both. That is what this
+// app DOES; it is not a policy we can cite, and this comment used to claim
+// "courses count freely toward both majors (NU policy)" with no source.
+// Corrected 2026-09-10 against the catalog, which says three other things:
+//
+//   · "Because some double majors will have a significant overlap in courses,
+//     all double-major proposals must be approved by the home college of each
+//     major" — undergraduate catalog, Degrees, Majors, and Minors § Double
+//     Major. Overlap is the stated REASON for the approval, not a freedom;
+//   · "Course credits may be shared between two credentials only if approved by
+//     the college or colleges offering both credentials", and "credits earned to
+//     fulfill the requirements of a master's program may not be used to fulfill
+//     more than 50% of the credits of another master's program or a CAGS" —
+//     graduate catalog § Course Credit Sharing. ⚠ That 50% is a REAL cap
+//     between two graduate majors and this app does not check it;
+//   · individual programs state their own limits in prose, on 52 live pages —
+//     "Only one course can be double counted toward any other major or minor"
+//     (Architectural Engineering, Minor) — and some forbid the pairing outright.
+//     Those sentences already reach the panel verbatim as catalog notes.
+//
+// So the app applies exactly ONE double-counting limit, the minor's 50% cap,
+// and no surface here may imply the rest is unlimited.
 // ═══════════════════════════════════════════════════════════════════
 import { useState, useMemo, useEffect, useContext, createContext, useRef } from "react";
 import { createPortal } from "react-dom";
@@ -1454,6 +1475,17 @@ function SharedCredit({ share }) {
             {t("grad.share.policy", { pct: Math.round(MINOR_SHARE_FRACTION * 100),
                                       cap: fmt(share.capSH), required: fmt(share.requiredSH) })}
           </div>
+          {/* The catalog's own next clause, and the reason the app's silence is
+              never the last word: "Individual programs may have stricter
+              requirements." It sits in the panel rather than on the 2× hover
+              card because the panel explains the rule once, where the card
+              would repeat it on every course. A program that states such a rule
+              states it in prose, which already reaches this panel verbatim as a
+              catalog note. */}
+          <div style={{ fontSize: isPhone ? 7.5 : 9, lineHeight: 1.4, color: "var(--text-5)",
+                        marginTop: 3 }}>
+            {t("grad.share.stricter")}
+          </div>
           {lists.map(([keys, labelKey]) => keys.length > 0 && (
             <div key={labelKey} style={{ marginTop: 6 }}>
               <div style={{ fontSize: isPhone ? 7 : 8, fontWeight: 700, color: "var(--text-5)",
@@ -1504,6 +1536,66 @@ function SharedCredit({ share }) {
 // in the graduation panel, a deliberate click from the board: the header
 // and the planner appear in every screenshot and screen-share, and this is
 // the most sensitive number in the app.
+/**
+ * Overlap between two MAJORS — a count and a citation, never a budget.
+ *
+ * Why it exists: the app was silent here. A course both majors claim drew no
+ * mark on the board (the 2× badge is scoped to the minor cap, which is the one
+ * limit we can check), and no row in this panel, so a student with two majors
+ * could not tell whether the app had noticed the overlap at all.
+ *
+ * Why it has no meter: there is nothing to be a fraction of. Northeastern
+ * publishes no number for major↔major sharing, and — the reason this block is
+ * worded the way it is — it publishes no permission either:
+ *
+ *   "Because some double majors will have a significant overlap in courses,
+ *    all double-major proposals must be approved by the home college of each
+ *    major in the proposed double major."
+ *      — Undergraduate catalog, Degrees, Majors, and Minors § Double Major
+ *
+ *   "Course credits may be shared between two credentials only if approved by
+ *    the college or colleges offering both credentials."
+ *      — Graduate catalog § Course Credit Sharing
+ *
+ * So the sentence states the approval requirement, which is the catalog's own,
+ * and then states what THIS APP does, which is the only other honest thing to
+ * say. It must never say "no limit": four comments in this repo claimed two
+ * majors double-count "freely (NU policy)" with no source, and the catalog
+ * contradicts it three ways — the approval above, a 50% ceiling between two
+ * master's programs that this app does not implement, and 52 live pages
+ * stating their own rules ("Only one course can be double counted toward any
+ * other major or minor"). A student reading "no limit" here would have been
+ * told something the registrar does not say.
+ *
+ * Zero is not drawn. Two majors with no shared course have nothing to disclose
+ * and the row would be a line of furniture on every plan that never overlaps —
+ * measured over 780 undergraduate major pairs, 52% share no eligible course at
+ * all.
+ */
+function MajorOverlap({ count }) {
+  const { t } = useLanguage();
+  const { isPhone } = useContext(GradCtx);
+  if (!count) return null;
+  return (
+    <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px solid var(--border-2)" }}>
+      <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)",
+                    letterSpacing: "0.05em", marginBottom: 3 }}>
+        {t("grad.share.title")}
+      </div>
+      <div style={{ fontSize: isPhone ? 9 : 10.5, fontWeight: 600, color: "var(--text-4)" }}>
+        {t(count === 1 ? "grad.majorshare.count.one" : "grad.majorshare.count", { n: count })}
+      </div>
+      {/* Neutral ink, like the rest of this block: overlap between two majors
+          is a fact about the plan, not a fault, and the app is not in a
+          position to call it one. */}
+      <div style={{ fontSize: isPhone ? 8.5 : 9.5, lineHeight: 1.45, color: "var(--text-5)",
+                    marginTop: 3 }}>
+        {t("grad.majorshare.note")}
+      </div>
+    </div>
+  );
+}
+
 function GpaSoFar() {
   const { t } = useLanguage();
   const { courseMap, isPhone, enteredGpaStat: stat, specialTermPl, studentType } = usePlanner();
@@ -2670,14 +2762,15 @@ export default function GradPanel({ wideCatalog = false }) {
              variableSH: major?.totalCreditsSource === "variable" };
   }, [majorSections, major1DoneSections, totalSHDone, totalSHPlaced, major]);
 
-  // ── Second major allocation (courses double-count freely per NU policy) ─
+  // ── Second major allocation (the two are allocated independently) ──────
   const major2Sections = useMemo(() => {
     if (!major2Data) return [];
     const { sections, allocatedSet } = allocateMajorSections(major2Data, placedSet, courseMap);
     // Concentration shares this major's used set, so a course already counted
     // toward its requirements can't also satisfy its concentration — the same
-    // rule major 1 uses. Across the two majors, courses still double-count
-    // freely, per NU policy.
+    // rule major 1 uses. Across the two majors a course still counts toward
+    // both — see the header for why that is stated as OUR behaviour rather
+    // than as the policy it used to be attributed to.
     let concResults = [];
     if (selConc2 && major2Data.concentrations) {
       const chosen = resolveConcentration(major2Data, selConc2);
@@ -2721,6 +2814,39 @@ export default function GradPanel({ wideCatalog = false }) {
 
   const majorClaimedKeys = useMemo(() => majorClaim(placedSet).claimed,
                                    [majorClaim, placedSet]);
+
+  /**
+   * The courses BOTH majors claim.
+   *
+   * `majorClaim` unions the two majors, which is what the minor's cap needs,
+   * so the intersection has to be asked for separately — as the same function
+   * over one major at a time, never as a second allocator. That is the rule
+   * this file already lives by: one claim function, or the board contradicts
+   * the panel.
+   *
+   * It is a COUNT of courses, not a verdict, and deliberately so — the app
+   * holds no double-counting budget between two majors, and the catalog states
+   * no number for one either. What it does state is that a double major "must
+   * be approved by the home college of each major" *because* of overlap, so the
+   * useful thing to publish is how much overlap the plan actually has. Naming
+   * that number is the whole point: silence read as "there is no overlap" or,
+   * worse, as "overlap here is unlimited".
+   *
+   * General Electives are excluded by construction (`allocateMajorSections`
+   * never allocates them), which is the same exclusion the minor's cap makes:
+   * a course landing in free electives is not shared credit.
+   */
+  const sharedMajorCount = useMemo(() => {
+    if (!major || !major2Data) return 0;
+    const claimOne = (data, conc) => majorClaimOf(
+      [{ data, concentration: conc && data?.concentrations
+          ? resolveConcentration(data, conc) : null }], courseMap)(placedSet).claimed;
+    const a = claimOne(major, selConc);
+    const b = claimOne(major2Data, selConc2);
+    let n = 0;
+    for (const k of a) if (b.has(k)) n++;
+    return n;
+  }, [major, major2Data, selConc, selConc2, courseMap, placedSet]);
 
   /**
    * Transfer and placement credit — the other two thirds of the 50% budget.
@@ -3201,6 +3327,9 @@ export default function GradPanel({ wideCatalog = false }) {
           loadingLabel={t("grad.loading")}
         >
           {major2Sections.filter(keepSection).map((sec, i) => <SectionBlock key={i} sec={sec} />)}
+          {/* On the SECOND major's card, where the overlap becomes possible —
+              and once, not on both cards, because it is one fact about a pair. */}
+          <MajorOverlap count={sharedMajorCount} />
           <GpaRules program={major2Data} />
         </MajorCard>}
 

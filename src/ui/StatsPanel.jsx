@@ -14,6 +14,11 @@
 // ═══════════════════════════════════════════════════════════════════
 import { useState, useMemo, useCallback, useEffect, useLayoutEffect, useRef, Fragment } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
+// StatsPanel renders inside PlannerApp, which App.jsx nests inside
+// RelevanceProvider, so the same allocation the board and the graduation panel
+// use is available here. Checked rather than assumed: outside that provider the
+// context's default `courseRole` returns null and every tile would read 0.
+import { useRelevance } from "../context/RelevanceContext.jsx";
 import { usePort } from "../context/InstitutionContext.jsx";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { IAttributeSystem }   from "../ports/IAttributeSystem.js";
@@ -998,6 +1003,38 @@ export default function StatsPanel() {
     return o;
   }, [placedIds, placements, SEM_INDEX]);
 
+  /**
+   * How many placed courses count toward MORE THAN ONE program.
+   *
+   * The one number a student with two credentials actually wants, and it lived
+   * nowhere: the 2× badge answers it one course at a time, and the graduation
+   * panel answers it per program pair. Both are per-thing; this is the plan.
+   *
+   * `courseRole` rather than `doubleCount`, deliberately. `doubleCount` is
+   * scoped to the major/minor pairing, because it exists to render a budget and
+   * the minor's cap is the only budget there is; a course claimed by two MAJORS
+   * returns null from it, and that is exactly the overlap a double major is
+   * asking about. `courseRole` reports every program that claims the course, so
+   * "more than one" here means what it says. `free` is not a program (an
+   * eligible course no requirement consumed), so it never contributes.
+   *
+   * Placed courses only, which is this panel's own rule: `courseRole` would
+   * happily simulate an unplaced one, and a tile that counted hypotheticals
+   * would move as the student browsed the bank.
+   */
+  const { courseRole, hasProgram } = useRelevance();
+  const multiProgramCount = useMemo(() => {
+    if (!hasProgram) return null;
+    let n = 0;
+    for (const id of placedIds) {
+      const c = cmap[id];
+      if (!c) continue;
+      const roles = courseRole(c)?.filter(r => r.type !== "free") ?? [];
+      if (roles.length > 1) n++;
+    }
+    return n;
+  }, [placedIds, cmap, courseRole, hasProgram]);
+
   const levels = useMemo(() => levelDistribution(placedIds, cmap), [placedIds, cmap]);
   const chains = useMemo(
     () => longestPrereqChains(placedIds, cmap, { excludeFromDepth: incomingSet, order }),
@@ -1227,6 +1264,14 @@ export default function StatsPanel() {
                   <StatTile label={t("stats.tile.planned")} value={totalSHPlaced}
                     sub={incomingSH > 0 ? t("stats.tile.inclIncoming", { n: incomingSH, unit }) : unit} color={UG_COLOR} />
                   <StatTile label={t("stats.tile.courses")} value={placedIds.length} sub={t("stats.tile.coursesSub")} />
+                  {/* Only with a program selected. `null` means "nothing to
+                      count against", which is not the same fact as zero, and a
+                      tile reading 0 on a plan with no major would look like a
+                      finding about the plan. */}
+                  {multiProgramCount !== null && (
+                    <StatTile label={t("stats.tile.multiProgram")} value={multiProgramCount}
+                      sub={t("stats.tile.multiProgramSub")} color={COOP_COLOR} />
+                  )}
                 </div>
 
                 <div>

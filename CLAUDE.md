@@ -1033,8 +1033,8 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
 - Program discovery uses the **sitemap**; `/azindex/` is `Disallow`ed in
   robots.txt and both scrapers used to violate it.
 - **A minor may double count at most 50% of its credit against a major**
-  (undergraduate catalog § Minors; `src/core/minorOverlap.js`). Two majors
-  double-count freely, and a minor course landing in the degree's GENERAL
+  (undergraduate catalog § Minors; `src/core/minorOverlap.js`). This app applies
+  no limit between two majors, and a minor course landing in the degree's GENERAL
   ELECTIVES is not shared credit — that is the room a minor is meant to occupy —
   so only a major's requirement-and-concentration claim counts. Four rules:
   1. **A course counts toward both only if BOTH audits claim it, and this app
@@ -1117,10 +1117,31 @@ events. Reference implementation: `scripts/lib/banner-session.js`,
   title anyway.
 - **The 2× badge marks major↔minor overlap and NOTHING else**
   (`src/ui/DoubleCountBadge.jsx`), because it is the only double counting in the
-  app with a budget attached. Two majors double-count freely, a concentration is
-  a component of its major rather than a second credential, and NUPath/degree
-  overlap is unlimited by the same catalog sentence that permits the minor's. A
-  badge on any of those invents a constraint.
+  app with a budget attached — the only sharing limit the catalog states as a
+  number we hold both sides of. A concentration is a component of its major
+  rather than a second credential, and no NUPath budget exists to be a fraction
+  of, so a badge on either invents a constraint.
+  ⚠ **"Two majors double-count freely (NU policy)" was written here and in four
+  code comments, with no source, and it is FALSE.** Corrected 2026-09-10 against
+  the catalog, which says three other things: a double major "must be approved
+  by the home college of each major" *because* "some double majors will have a
+  significant overlap in courses" (undergraduate § Double Major); graduate
+  § Course Credit Sharing requires both colleges' approval for any shared credit
+  and caps two master's programs at **50%**, which this app does not check; and
+  52 live pages state their own rules in prose ("Only one course can be double
+  counted toward any other major or minor" — Architectural Engineering, Minor),
+  some forbidding the pairing outright ("double majoring in biology and cell and
+  molecular biology … is not permitted"). The § Minors sentence itself ends
+  "Individual programs may have stricter requirements." So the absence of a
+  badge means **"we hold no budget for this pair"**, never "this is unlimited",
+  and no surface may say otherwise: `relevance.dc.scope` names what the mark
+  covers, and `MajorOverlap` in GradPanel publishes the shared-course COUNT plus
+  the approval requirement on the second major's card. Two majors sharing
+  courses was previously reported nowhere at all, which is how the silence came
+  to be read as a permission. **The graduate 50% cap is a real, unimplemented
+  gap** — measured on 780 undergraduate major pairs, 52% share no eligible
+  course, median 0, p90 7, but max 497, which is why the badge itself was not
+  widened.
   - Three states: outlined = would count twice, filled = both audits claim it,
     amber = that minor is over its cap. The eligible/counted split is free —
     `courseRole` already reports a placed course's REAL allocation and simulates

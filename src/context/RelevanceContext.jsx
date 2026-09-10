@@ -242,7 +242,12 @@ export function RelevanceProvider({ children }) {
         if (!names.some(k => allocs[i].has(k))) continue;
         const c = courseMap[key];
         const kind = c && courseEligible(c, progs[i].split.required) ? "required" : "elective";
-        roles.push({ type: progs[i].type, n: progs[i].n, numbered: progs[i].numbered, kind });
+        // `name` is the program's own catalog title, carried so a consumer can
+        // NAME the credential rather than describe its slot. "Major 1" is an
+        // identifier for our UI; "Behavioral Neuroscience, BS (Boston)" is what
+        // the student chose. Additive — every existing reader keys on type/n/kind.
+        roles.push({ type: progs[i].type, n: progs[i].n, numbered: progs[i].numbered, kind,
+                     name: progs[i].data?.name ?? "" });
       }
       return roles;
     };
@@ -264,10 +269,23 @@ export function RelevanceProvider({ children }) {
      * Does this course count toward a MAJOR and a MINOR at once?
      *
      * Northeastern lets it, up to half the credit the minor requires — the one
-     * overlap in the app that carries a budget, which is why it is the only one
-     * marked. Two majors double-count freely (no budget, nothing to watch), a
-     * concentration is part of its major rather than a second credential, and
-     * NUPath overlap is unlimited by the same catalog sentence that permits it.
+     * overlap this app can CHECK, which is why it is the only one marked. It is
+     * the only one the catalog states as a number we hold both sides of.
+     *
+     * ⚠ What this comment used to say — "two majors double-count freely (no
+     * budget, nothing to watch)… NUPath overlap is unlimited by the same catalog
+     * sentence that permits it" — was unsourced and wrong, and is corrected here
+     * rather than deleted so the next reader inherits the correction. The minors
+     * sentence speaks only to minors, and it ends "Individual programs may have
+     * stricter requirements." Nothing in the catalog grants unlimited sharing
+     * between two majors (a double major "must be approved by the home college
+     * of each major" BECAUSE of overlap; two master's programs are capped at
+     * 50% by § Course Credit Sharing, which this app does not check), and
+     * nothing grants it for NUPath either — two live pages require general
+     * electives that "do not double count with the major or NUpath".
+     *
+     * So the absence of a badge means "we hold no budget for this pair", never
+     * "this is unlimited". Quotations and citations: GradPanel's header.
      *
      * Reuses `courseRole` rather than asking allocation a second question, so
      * the badge cannot say one thing while the bank's own filter says another.
@@ -304,6 +322,14 @@ export function RelevanceProvider({ children }) {
         // How many CREDENTIALS tick this course. A concentration is part of
         // its major and is already folded into that role, so it never adds one.
         count: majorRoles.length + mins.length,
+        // The majors BY NAME. The count in the headline is of credentials, and
+        // the card used to name only the ones with a budget — so "Counts toward
+        // 2 programs" was followed by one program, and the reader had to infer
+        // that the other was their major. With two majors selected there was
+        // nothing to infer FROM: a course can be claimed by the second major and
+        // not the first, and the card said neither. They carry no meter because
+        // they carry no budget; that asymmetry is the point.
+        majors: majorRoles.map(r => ({ n: r.n, name: r.name })),
         // The hover card draws the same meter as the panel, so it needs the
         // same four numbers — `shareSegments` derives the bands from these.
         // `sh` stays for the aria-label and for anything reading the old shape.

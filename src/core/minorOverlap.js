@@ -150,9 +150,16 @@ export function majorClaimOf(programs, courseMap = {}) {
       // and a concentration naming a course the major's core already claimed
       // will still take it (checked, not assumed). That is the audit's existing
       // behaviour and it is left alone: the catalog calls a concentration "a
-      // component of a major", states no double-counting rule for one, and
-      // changing it here would move requirement rows on 81 programs to serve a
-      // badge that never reads this. Either way the same key lands in
+      // component of a major", and changing it here would move requirement rows
+      // on 81 programs to serve a badge that never reads this. ⚠ This comment
+      // also claimed the catalog "states no double-counting rule for one",
+      // which is false and is corrected here rather than removed: individual
+      // pages do state one, in prose — "Only one course may double count
+      // between another concentration or minor" (Management Information
+      // Systems concentration) and "Courses from the major may not double count
+      // in the concentration". Those sentences reach the panel verbatim as
+      // catalog notes; what is absent is a UNIVERSITY-wide rule, which is a
+      // different claim. Either way the same key lands in
       // `claimed`, which is all `minorShare` asks of us.
       if (concentration) {
         all.push(...allocateSections([concentration], set, allocatedSet, courseMap));

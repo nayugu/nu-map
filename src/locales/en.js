@@ -657,6 +657,16 @@ export const strings = {
   // rather than a verdict: the plan is not refused, and the way out is more
   // minor coursework the major does not claim.
   "grad.share.title":             "Double counting",
+  // Two majors: a COUNT and the catalog's approval requirement, never a budget.
+  // "Northeastern requires the colleges offering both programs to approve
+  // shared credit" is the catalog quoted, not paraphrased into a permission —
+  // undergraduate § Double Major and graduate § Course Credit Sharing both say
+  // it. The second sentence is about this app, which is the only other thing
+  // that can be said honestly, since no number is published for major-to-major
+  // sharing.
+  "grad.majorshare.count.one":    "1 course counts toward both majors",
+  "grad.majorshare.count":        "{n} courses count toward both majors",
+  "grad.majorshare.note":         "Northeastern requires the colleges offering both programs to approve shared credit. This planner applies no limit of its own here. The only limit it checks is a minor’s half.",
   // The caption over the bar, and the whole reason the bar is legible: the
   // green is everything counting toward the MINOR, not the double-counted
   // part, which is why it may pass half without any rule being broken. Under
@@ -681,7 +691,13 @@ export const strings = {
   // identically, one after the other, unlabelled.
   "grad.share.list.shared":       "Counted toward both",
   "grad.share.list.outside":      "Transfer or advanced standing",
-  "grad.share.policy":            "At most {pct}% of a minor can be filled by courses that also count toward your major — {cap} of the {required} SH this minor requires.",
+  "grad.share.policy":            "At most {pct}% of a minor can be filled by courses that also count toward your major: {cap} of the {required} SH this minor requires.",
+  // The catalog's own closing clause, § Minors: "Individual programs may have
+  // stricter requirements." It belongs here rather than on the hover card,
+  // because the panel is where the rule is explained once instead of on every
+  // course, and because a program that states a stricter rule states it in
+  // prose that already reaches this panel verbatim as a catalog note.
+  "grad.share.stricter":          "Individual programs may set stricter rules, printed in their own requirements.",
   // Shown when the courses listed above carry more credit than the figure. Both
   // ways that happens are the same fact for a student — some of this overlap is
   // avoidable with the courses already on the board, either because the minor
@@ -693,17 +709,51 @@ export const strings = {
   // major. Shown only when there is some; silent in the ordinary case.
   "grad.share.outside":           "{sh} SH of that is transfer or advanced-standing credit, which shares the same limit.",
   // ── The N× badge on a course card, and its hover card ───────────
-  // The number counts credentials; the COLOUR is the state, and these three
-  // strings are what the colour means. Grey = a possibility, green = a fact
-  // about the plan, amber = a limit breached. The figures are the MINOR's, not
-  // the course's — no single course is the one over the limit.
-  "relevance.dc.title.would":     "Would count toward {n} programs",
-  "relevance.dc.title.does":      "Counts toward {n} programs",
-  // "this minor", not "the minor below": the budget it names is drawn ABOVE
-  // this sentence now — specific first, rule last.
-  "relevance.dc.eligible":        "You haven’t placed this yet. Take it and it counts toward your major and this minor at the same time.",
-  "relevance.dc.counted":         "Your major and this minor both count this course. Northeastern allows that for up to half a minor’s credit.",
-  "relevance.dc.over":            "At most half of a minor can be filled by courses that also count toward your major. The credit past that half does not count toward the minor.",
+  // A GLANCE, not an explanation: the graduation panel explains the rule once,
+  // where these strings would have to repeat it on every course. So the title
+  // names the MINORS (the only programs here with a ceiling) and the closing
+  // line is one clause of state, not a policy. The colour carries the rest:
+  // grey = a possibility, green = a fact about the plan, amber = a limit
+  // breached. The figures are the MINOR's, not the course's, because no single
+  // course is the one over the limit.
+  //
+  // The title used to be "Counts toward {n} programs", which summed a major
+  // (no budget here) with a minor (the one budget we hold), so two majors and
+  // two minors read "4 programs" on every eligible course whether anything was
+  // over or not.
+  // The panel's own heading for this concept, deliberately word for word
+  // (`grad.share.title`), so the hover card and the graduation panel name the
+  // same thing the same way. It is a separate key rather than a reuse because
+  // the unplaced form differs, and because a heading shared by two surfaces
+  // that could diverge is worth being able to see in one place.
+  "relevance.dc.head.would":      "Would double count",
+  "relevance.dc.head.does":       "Double counting",
+  // The majors, as a caption under the meters. They are named because the badge
+  // counts them, and captioned because they carry nothing to measure.
+  "relevance.dc.majors.label":    "Also counts toward",
+  // THE ONE ACTIONABLE LINE, printed under the minor it is about and only when
+  // that minor is over its cap. It replaces three attempts at a state clause,
+  // all of which restated the policy: "past the limit, doesn't count" (a bar
+  // legend), "Northeastern allows that for up to half a minor's credit" (the
+  // rule) and "the credit past half a minor does not count toward it" (the
+  // rule with a pronoun in it). Same number in every version; this one says
+  // what to do with it. The rule itself lives in the panel.
+  "relevance.dc.minorNeeds":      "Needs {sh} more SH from courses your major doesn’t count.",
+  // TWO MAJORS SHARE ONE BUDGET, so the plural form cannot say "your major".
+  // The minor's 50% is a ceiling on the minor's own credit and `majorClaim`
+  // unions both majors into it, so credit found in the second major is charged
+  // exactly as the first. NEU's only two sentences about a student holding
+  // several credentials pool them the same way: "up to one course between this
+  // minor and the student's declared major(s) and minor(s)".
+  "relevance.dc.minorNeeds.two":  "Needs {sh} more SH from courses neither major counts.",
+  // `relevance.dc.scope` lived here and is gone: it said what the mark covers,
+  // in three sentences, on a card that is meant to be read at a glance. The
+  // same fact is now structural (the majors sit under their own caption with no
+  // meter) and, in words, in the panel: `grad.share.stricter` for the "stricter
+  // requirements" clause and `grad.majorshare.note` for the majors. Never write
+  // "no limit" in either place: Northeastern requires both colleges to approve
+  // a double major precisely because of course overlap, and caps sharing
+  // between two master's programs at 50%.
   // The budget line is drawn now, not written: the minor's name, its figure and
   // the same meter the graduation panel uses. `grad.share.cap` carries the
   // "of {cap} SH allowed" half — one phrase for one fact, on both surfaces.
@@ -1429,6 +1479,11 @@ export const strings = {
   "stats.tile.inclIncoming":      "{unit} \xb7 incl. {n} incoming",
   "stats.tile.courses":           "Total courses",
   "stats.tile.coursesSub":        "planned + taken",
+  // Placed courses claimed by more than one program (two majors, a major and a
+  // minor, two minors). Shown only with a program selected: with none there is
+  // nothing to count against, and "0" would read as a finding about the plan.
+  "stats.tile.multiProgram":      "Count twice",
+  "stats.tile.multiProgramSub":   "courses in 2+ programs",
   "stats.tile.remaining":         "Credits left",
   "stats.nupath":                 "NUPath planned",
   "stats.comp.sky":               "Skyline Chart",

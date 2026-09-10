@@ -271,10 +271,18 @@ describe("minor · the double-counting cap", () => {
     const badges = await boardText({ major: BACJ, minor1: CJ_MINOR, placements: CRIM });
     assert.equal(badges.length, 3, `expected one per CRIM course, got ${badges.length}`);
     for (const b of badges) {
-      // One major + one minor = two credentials.
-      assert.match(b, /Counts toward 2 programs/);
-      // This pair is over its cap, so every badge in the shared set says so.
-      assert.match(b, /credit past that half does not count toward the minor/);
+      // The badge's own label is the card's content: the concept, then every
+      // program that claims the course. It used to read "Counts toward 2
+      // programs", a count that summed the budgeted minor with the unbudgeted
+      // major; the heading is the panel's own word for the concept now, and
+      // the programs are named instead of totalled.
+      assert.match(b, /Double counting/);
+      assert.match(b, /Criminal Justice, Minor/);
+      // The MAJOR is named too. This is the assertion that would have caught
+      // the original defect: the card counted the major and named only the
+      // minor, so the student was left to infer the second program.
+      assert.match(b, /Business Administration and Criminal Justice, BS/,
+        `the major is not named in the badge label: ${b}`);
     }
   });
 
@@ -288,7 +296,7 @@ describe("minor · the double-counting cap", () => {
                                      placements: SUB_PLACE, substitutions: SUB });
     assert.equal(badges.length, 3,
       `expected CRIM 1100, CRIM 1110 and the substituting ACCT 1201: ${JSON.stringify(badges)}`);
-    for (const b of badges) assert.match(b, /Counts toward 2 programs/);
+    for (const b of badges) assert.match(b, /Double counting/);
   });
 
   test("hovering the badge explains what its colour means", async () => {
@@ -315,7 +323,7 @@ describe("minor · the double-counting cap", () => {
     const before = await page.evaluate(() => document.body.innerText);
     // Keyed on text only the hover card carries — the badge itself is just
     // "2×", and the graduation panel is not open in this test.
-    assert.doesNotMatch(before, /credit past that half does not count toward the minor/,
+    assert.doesNotMatch(before, /more SH from courses your major/,
       "the card must not be on screen before anyone hovers");
 
     await badge.hover();
@@ -324,11 +332,17 @@ describe("minor · the double-counting cap", () => {
     await ctx.close();
 
     assert.deepEqual(errors, [], `page errors:\n  ${errors.join("\n  ")}`);
-    assert.match(after, /Counts toward 2 programs/, "no title in the hover card");
-    assert.match(after, /credit past that half does not count toward the minor/, "the colour's meaning is missing");
-    // The minor, named, with its own budget — the same phrasing and the same
-    // meter as the graduation panel's row (`grad.share.cap`).
-    assert.match(after, /Criminal Justice, Minor\s+4 past the limit/);
+    assert.match(after, /Double counting/, "no heading in the hover card");
+    // WHAT TO DO, with the minor's own figure, in place of the three
+    // successive restatements of the policy this card used to close with.
+    assert.match(after, /Needs 4 more SH from courses your major doesn’t count/,
+      "the actionable line is missing");
+    // The minor, named, immediately above its own meter and its own figure.
+    assert.match(after, /Criminal Justice, Minor/);
+    // And the majors, under their caption. A card that counts a major without
+    // naming it is the defect this whole section was rewritten for.
+    assert.match(after, /Also counts toward\s+Business Administration and Criminal Justice, BS/,
+      "the major is not named under its caption");
   });
 
   test("an ELIGIBLE course is badged differently from one already counted", async () => {
@@ -338,12 +352,14 @@ describe("minor · the double-counting cap", () => {
     const badges = await boardText({ major: BACJ, minor1: CJ_MINOR,
                                      placements: { CRIM1100: "fall2025", CRIM1110: "fall2025" },
                                      search: "CRIM 1120" });
-    const would = badges.filter(b => /Would count toward/.test(b));
+    const would = badges.filter(b => /Would double count/.test(b));
     assert.ok(would.length >= 1, `no eligible-state badge among: ${JSON.stringify(badges)}`);
-    // The unplaced state says "if you take it", never "counts" — the whole
-    // difference between the grey badge and the green one.
-    assert.match(would[0], /haven’t placed this yet/);
-    assert.doesNotMatch(would[0], /both count this course/);
+    // The unplaced state is CONDITIONAL and the placed one is not, which is the
+    // whole difference between the dashed grey badge and the filled green one.
+    // It is carried by the heading alone now: the three sentences that used to
+    // spell it out ("You haven't placed this yet…") were the same policy
+    // restatement in three moods, and the panel explains the rule once.
+    assert.doesNotMatch(would[0], /^Double counting/);
   });
 
   test("the same courses under an unrelated major are not badged at all", async () => {
@@ -353,15 +369,20 @@ describe("minor · the double-counting cap", () => {
   });
 
   test("no minor selected means no badge, so it cannot leak onto a major", async () => {
-    // Two majors double-count freely at Northeastern — no budget, nothing to
-    // mark. The badge exists only for the overlap that has a cap.
+    // The badge exists only for the overlap that HAS a cap, which is the
+    // minor's. Note what this does and does not claim: it is a fact about
+    // what this app can check, not a permission — Northeastern states no
+    // number for major↔major sharing but does require both colleges to
+    // approve a double major because of overlap (see GradPanel's header).
     assert.deepEqual(await boardText({ major: BACJ, minor1: "", placements: CRIM }), []);
   });
 
   test("no minor at all draws no row", async () => {
     // `SharedCredit` lives inside `MinorBlock`, so this is really a check that
-    // the cap cannot leak onto a major card, where the policy does not apply:
-    // two majors double-count freely at Northeastern.
+    // the cap cannot leak onto a major card, where the MINOR's policy does not
+    // apply. ⚠ It is one major, so it does not exercise `MajorOverlap`, which
+    // renders the same "Double counting" heading on the SECOND major's card
+    // when two majors share a course. A two-major case belongs here.
     const text = await panelText({ major: BACJ, minor1: "", placements: CRIM, expectMinor: false });
     assert.doesNotMatch(text, /Double counting/);
   });

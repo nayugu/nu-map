@@ -6,8 +6,18 @@
 // credit". It is the ONLY overlap in the app with a budget attached, which is
 // the whole reason it is the only one marked:
 //
-//   · two majors double-count freely (no budget, nothing for an advisor to
-//     watch), so a course shared by two majors alone gets no badge;
+//   · two majors are the case this app applies NO limit to, so a course shared
+//     by two majors alone gets no badge — there is no budget here for the badge
+//     to be a fraction OF. ⚠ That is a statement about us, not a permission.
+//     This comment read "two majors double-count freely (no budget, nothing for
+//     an advisor to watch)" and cited NU policy for it; corrected 2026-09-10,
+//     because the catalog says the opposite in three places — a double major
+//     "must be approved by the home college of each major" precisely BECAUSE of
+//     course overlap, graduate credit sharing needs both colleges' approval and
+//     caps two master's programs at 50%, and 52 live pages state their own
+//     limits ("Only one course can be double counted toward any other major or
+//     minor"). See GradPanel's header for the quotations. Nothing drawn here
+//     may imply major↔major sharing is unlimited;
 //   · a concentration is "a component of a major", not a second credential —
 //     it folds into the major's role and never adds to the count;
 //   · NUPath and degree requirements overlap without limit, by the same
@@ -70,7 +80,7 @@ const fmt = (sh) => (Number.isInteger(sh) ? String(sh) : sh.toFixed(1));
  * of the card rather than its footnote, and that "of {cap} SH allowed" is the
  * same phrase the panel uses, because it is the same fact.
  */
-function BudgetLine({ minor }) {
+function BudgetLine({ minor, majors = 1 }) {
   const { t } = useLanguage();
   const name = useTranslatedText(minor.name ?? null);
   const seg = shareSegments(minor);
@@ -87,20 +97,58 @@ function BudgetLine({ minor }) {
       <div style={{ marginTop: 3 }}>
         <ShareMeter {...seg} height={4} />
       </div>
-      {/* The one band that needs naming: the credit that counts toward
-          nothing. Same single entry as the panel row. */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1px 9px", marginTop: 3 }}>
-        {[[seg.excess, "var(--warn-badge-text)", "grad.share.legend.over"]]
-          .filter(([sh]) => sh > 0)
-          .map(([sh, bg, key]) => (
-            <span key={key} style={{ display: "flex", alignItems: "center", gap: 3,
-                                     fontSize: 10, color: "var(--text-5)" }}>
-              <span style={{ width: 6, height: 6, borderRadius: 2, background: bg,
-                             flexShrink: 0 }} />
-              {fmt(sh)} {t(key)}
-            </span>
-          ))}
-      </div>
+      {/* WHAT TO DO, on the minor it is about, and only when there is
+          something to do.
+          Two policy restatements stood here before it and both were confusing
+          for the same reason: they described the RULE and left the reader to
+          work out the consequence. "7 past the limit, doesn't count" is a
+          legend for a bar segment, and "the credit past half a minor does not
+          count toward it" is the rule with a pronoun in it. The number is
+          identical in all three versions; only this one says what the number
+          means for the plan, and it sits under the minor whose number it is,
+          so two minors state two figures rather than one sentence covering
+          both ambiguously.
+          Nothing is printed when the minor is inside its cap: the bar has
+          already said so, and a card that speaks only when it has something to
+          report is the difference between a glance and a paragraph. */}
+      {seg.excess > 0 && (
+        <div style={{ display: "flex", gap: 4, fontSize: 11, lineHeight: 1.35,
+                      color: "var(--warn-badge-text)", marginTop: 3 }}>
+          <span style={{ flexShrink: 0, fontWeight: 800 }}>!</span>
+          {/* "your major" is WRONG when two are named a few lines below, and
+              the reason is the cap's own arithmetic: the minor holds ONE
+              budget and BOTH majors spend it (`majorClaim` unions them, so a
+              course either one claims is charged). A student told to find
+              credit "your major doesn't count" would reasonably go looking in
+              their second major, where it is charged just the same. */}
+          <span>{t(majors > 1 ? "relevance.dc.minorNeeds.two"
+                              : "relevance.dc.minorNeeds", { sh: fmt(seg.excess) })}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * A major: named, with no budget beside it.
+ *
+ * Naming it is not optional. The badge counts majors, so "2×" over a single
+ * named minor left the student to infer the second program, and with two majors
+ * selected there was nothing to infer FROM, since a course can be claimed by
+ * the second and not the first.
+ *
+ * But it is smaller and dimmer than `BudgetLine`, not equal to it. A major has
+ * no double-counting ceiling here, so there is no meter to draw and no figure
+ * to quote, and drawn at the same weight the names read as four peers of which
+ * two mysteriously have bars. Caption weight under a label says what the flat
+ * list could not: these are the ones with nothing to measure.
+ */
+function ProgramLine({ name }) {
+  const translated = useTranslatedText(name || null);
+  return (
+    <div style={{ fontSize: 10.5, fontWeight: 600, color: "var(--text-4)",
+                  lineHeight: 1.35 }}>
+      {translated || name}
     </div>
   );
 }
@@ -127,11 +175,21 @@ export default function DoubleCountBadge({ course, compact = false, corner = fal
             : dc.placed ? "var(--success)"
             :             "var(--text-4)";
 
-  const title = t(dc.placed ? "relevance.dc.title.does" : "relevance.dc.title.would",
-                  { n: dc.count });
-  const meaning = t(dc.over ? "relevance.dc.over"
-                   : dc.placed ? "relevance.dc.counted"
-                   : "relevance.dc.eligible");
+  // THE TITLE IS THE PANEL'S OWN HEADING for this concept, "Double counting".
+  //
+  // Two attempts preceded it and each failed differently. "Counts toward {n}
+  // programs" summed a major (no budget here) with a minor (the one budget we
+  // hold), so two majors and two minors read "4 programs" on every eligible
+  // course whether anything was over or not. "Shared with both minors" then
+  // made a fact about ONE COURSE sound like a property of the minors, and put
+  // the invented word "shared" where the panel says "double counting" two
+  // clicks away. Naming it identically in both places costs nothing and means a
+  // student who has read one has read the other.
+  //
+  // The programs are named below, so the title does not have to enumerate
+  // them; the only thing it still carries is whether this is a fact or a
+  // possibility, which the dashed-vs-filled badge also says.
+  const title = t(dc.placed ? "relevance.dc.head.does" : "relevance.dc.head.would");
 
   return (
     <>
@@ -147,7 +205,13 @@ export default function DoubleCountBadge({ course, compact = false, corner = fal
           const rect = e.currentTarget.getBoundingClientRect();
           setHover(h => (h ? null : rect));
         }}
-        aria-label={`${title}. ${meaning}`}
+        // The card's own content, since there is no longer a summary sentence
+        // to borrow: the heading, then the programs. Raw names rather than the
+        // translated ones, because translation is a hook per rendered line and
+        // this is one attribute on the glyph.
+        aria-label={[title, ...dc.minors.map(m => m.name),
+                     ...(dc.majors ?? []).map(m => m.name)]
+                     .filter(Boolean).join(". ")}
         style={{
           flexShrink: 0,
           fontSize: compact ? 6.5 : 8,
@@ -183,36 +247,70 @@ export default function DoubleCountBadge({ course, compact = false, corner = fal
         }}
       >{dc.count}×</span>
 
-      {/* SPECIFIC BEFORE GENERAL. The card used to open with a large coloured
-          headline, spend three lines restating the rule, and finish with the
-          one number that is about THIS student. The order is inverted now: the
-          state, then each minor's budget, then the rule in the dimmest ink — a
-          student who already knows the rule never has to read past the meter,
-          and one who doesn't still finds it. The title drops to the body's
-          size; at headline weight it was the loudest thing in the card and the
-          least informative. */}
+      {/* A GLANCE, NOT AN EXPLANATION.
+          The graduation panel is where the rule is explained, at length and in
+          one place; a hover card that tries to do the same job competes with it
+          and loses, because it has to say everything on every course. So this
+          card carries FACTS about this course and nothing else:
+
+            1. what it is shared with (the title),
+            2. each minor's budget, drawn with the panel's own meter,
+            3. the majors, named once and quietly,
+            4. one short clause of state, and only when it says something.
+
+          That is the correction of two mistakes in a row. It opened with a
+          count of credentials ("4 programs") that summed the budgeted and the
+          unbudgeted and so discriminated nothing; then, having named the
+          majors, it printed the flat list beside two meters and closed with
+          seven lines of policy. Both times the card grew because a fact was
+          missing somewhere ELSE. */}
       {hover && (
         <HoverCard rect={hover} maxWidth={260}>
-          {/* The heading is a COUNT of credentials, not a verdict, so it is
-              neutral. It used to take the badge's ink, which made the whole
-              card amber the moment one minor was over — announcing a fault
-              where the headline fact ("this counts toward three programs") is
-              good news. */}
+          {/* Neutral, never the badge's ink: the headline fact is that a course
+              is doing double duty, which is good news even when a minor is over
+              its cap. Colouring it amber announced a fault at the top of a card
+              whose subject is a benefit. */}
           <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--text-2)",
                         lineHeight: 1.35 }}>
             {title}
           </div>
-          {dc.minors.map(m => <BudgetLine key={m.n} minor={m} />)}
-          {/* THE one coloured element. Over the cap this sentence stops being
-              the rule and becomes the way out ("Add minor coursework your major
-              doesn't count") — the only line here a student can act on, and the
-              only thing worth spending the warning colour on. Everything above
-              it is a fact about a benefit and stays neutral. */}
-          <div style={{ marginTop: 7, paddingTop: 6, borderTop: "1px solid var(--border-2)",
-                        fontSize: 11.5, lineHeight: 1.45,
-                        color: dc.over ? ink : "var(--text-5)" }}>
-            {meaning}
-          </div>
+
+          {/* THE MINORS FIRST, because they are the only programs here with a
+              ceiling, and the meter is the reason to open this card at all. */}
+          {/* `majors` is how many majors CLAIM THIS COURSE, which is also how
+              many are named below it, so the sentence and the caption cannot
+              disagree. It is not "how many majors are selected": with two
+              selected and one claiming, the singular is the true sentence. */}
+          {dc.minors.map(m => (
+            <BudgetLine key={m.n} minor={m} majors={(dc.majors ?? []).length} />
+          ))}
+
+          {/* THE MAJORS, named once and demoted to a caption.
+              Naming them is not optional: the badge counts them, so a card that
+              did not name them left "2×" against a single named minor. But they
+              carry no budget, so they get no meter and no weight of their own —
+              a label plus the names, in the ink the legend uses. A major with no
+              name is skipped rather than drawn blank, which would read as a
+              program whose name we lost. */}
+          {(dc.majors ?? []).some(m => m.name) && (
+            <div style={{ marginTop: 8, paddingTop: 6,
+                          borderTop: "1px solid var(--border-2)" }}>
+              <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: "0.05em",
+                            color: "var(--text-5)", marginBottom: 2 }}>
+                {t("relevance.dc.majors.label")}
+              </div>
+              {dc.majors.filter(m => m.name).map(m => (
+                <ProgramLine key={`major${m.n}`} name={m.name} />
+              ))}
+            </div>
+          )}
+
+          {/* Nothing closes the card. A state clause stood here through three
+              wordings and every one of them restated the rule: what a student
+              can act on is a number under the minor it belongs to, which
+              `BudgetLine` now prints in the warning ink, and what the rule IS
+              belongs in the panel, where it is read once instead of on every
+              course. The card ends when it runs out of facts. */}
         </HoverCard>
       )}
     </>
