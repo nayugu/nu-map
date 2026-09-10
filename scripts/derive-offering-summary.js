@@ -41,6 +41,7 @@ import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { courseGate, STANDING_LADDER } from "./lib/class-standing.js";
+import { termWindow, KEEP_TERMS } from "./lib/term-history.js";
 
 const __dirname   = dirname(fileURLToPath(import.meta.url));
 const ROOT        = resolve(__dirname, "..");
@@ -57,7 +58,24 @@ if (!existsSync(DETAILS_IN)) {
 const details = JSON.parse(readFileSync(DETAILS_IN, "utf8"));
 const summary = {};
 
-for (const [courseId, byTerm] of Object.entries(details)) {
+// Retention. `term-details.json` accumulates every term ever scraped and is the
+// SOURCE, so it keeps all of them; this file is in the app's cold blocking
+// payload, so it ships a window. Measured at 13 terms, the shipped availability
+// files are 309K gzipped and had no bound at ~4 terms a year — see KEEP_TERMS.
+// Computed once over the whole corpus rather than per course, so every course is
+// summarised over the SAME terms; per course, a course last offered years ago
+// would keep its own ancient window and `typicallyOffered` would be comparing
+// different periods between two courses on the same screen.
+const shipTerms = new Set(termWindow(
+  Object.values(details).flatMap(byTerm => Object.keys(byTerm ?? {}))));
+console.log(`Terms shipped: ${shipTerms.size} of `
+  + `${new Set(Object.values(details).flatMap(b => Object.keys(b ?? {}))).size} held `
+  + `(newest ${KEEP_TERMS}; term-details.json keeps them all)`);
+
+for (const [courseId, allTerms] of Object.entries(details)) {
+  const byTerm = Object.fromEntries(
+    Object.entries(allTerms ?? {}).filter(([tc]) => shipTerms.has(tc)));
+  if (!Object.keys(byTerm).length) continue;
   const enr  = {};                                    // enrolled count
   const cap  = {};                                    // capacity
   const secs = {};                                    // section count (for open-per-section colour)

@@ -11,7 +11,7 @@
 
 import { test } from "node:test";
 import assert   from "node:assert/strict";
-import { knownTermCodes, buildTermHistory, mergePreviousHistory }
+import { knownTermCodes, buildTermHistory, mergePreviousHistory, termWindow, KEEP_TERMS }
   from "../../scripts/lib/term-history.js";
 
 const S = (...ids) => new Set(ids);
@@ -181,4 +181,66 @@ test("across random runs, a false only ever appears for a term that returned sec
   // Guard against a vacuous sweep: both interesting situations must have occurred.
   assert.ok(sawFalse > 100, `only ${sawFalse} falses generated`);
   assert.ok(sawEmptyTerm > 10, `only ${sawEmptyTerm} empty terms generated`);
+});
+
+// ── Retention: bound the shipped history without deleting anything ──
+//
+// The leak: `mergePreviousHistory` carries forward every term it did not re-read,
+// with no bound, and these files sit in the app's cold blocking payload. Terms
+// accrue ~4 a year, so at 13 terms the shipped availability files were 309K
+// gzipped and heading for ~1,261K in ten years — nobody would see a bad deploy,
+// it would just get slower for every visitor forever.
+
+test("window › keeps the newest KEEP_TERMS, newest first", () => {
+  const codes = [];
+  for (let y = 2010; y < 2010 + KEEP_TERMS; y++) codes.push(`${y}10`, `${y}30`);
+  const got = termWindow(codes);
+  assert.equal(got.length, KEEP_TERMS);
+  assert.equal(got[0], `${2010 + KEEP_TERMS - 1}30`, "newest first");
+  assert.deepEqual(got, [...got].sort((a, b) => (a < b ? 1 : -1)), "descending");
+});
+
+test("window › is a no-op below the cap, in any input order", () => {
+  const codes = ["202530", "202410", "202610", "202430"];
+  assert.deepEqual(new Set(termWindow([...codes].reverse())), new Set(codes));
+  assert.equal(termWindow(codes).length, 4);
+});
+
+test("window › an UNRECOGNISED code is kept, never silently dropped", () => {
+  // The defect the first version shipped. Deleting a code we do not understand
+  // makes "we lost it" and "there was none" identical downstream, which is the
+  // one distinction this whole module exists to keep.
+  const odd = ["t", "2026", "202610X", ""];
+  const got = termWindow(["202610", ...odd]);
+  for (const o of odd) assert.ok(got.includes(o), `dropped ${JSON.stringify(o)}`);
+});
+
+test("window › tolerates junk input", () => {
+  assert.deepEqual(termWindow(undefined), []);
+  assert.deepEqual(termWindow([]), []);
+});
+
+test("merge › drops terms past the window, for every course at once", () => {
+  const prev = {};
+  const codes = [];
+  for (let y = 2000; y < 2000 + KEEP_TERMS + 4; y++) codes.push(`${y}10`);
+  for (const id of ["A", "B"]) prev[id] = Object.fromEntries(codes.map(c => [c, true]));
+  const out = mergePreviousHistory({}, prev, []);
+  const kept = Object.keys(out.A);
+  assert.equal(kept.length, KEEP_TERMS, "A windowed");
+  assert.deepEqual(new Set(Object.keys(out.B)), new Set(kept),
+    "both courses must be summarised over the SAME terms, or two courses on one "
+    + "screen would be compared over different periods");
+  assert.ok(!kept.includes("200010"), "the oldest term is gone");
+  assert.ok(kept.includes(`${2000 + KEEP_TERMS + 3}10`), "the newest term is kept");
+});
+
+test("merge › a course with nothing left inside the window is omitted", () => {
+  // Same rule buildTermHistory applies to an all-false course: a record with no
+  // information is worse than absent, because it still costs bytes to ship.
+  const old = Object.fromEntries(
+    Array.from({ length: KEEP_TERMS }, (_, i) => [`${2100 + i}10`, true]));
+  const out = mergePreviousHistory({}, { NEW: old, ANCIENT: { "190010": true } }, []);
+  assert.ok(out.NEW, "the in-window course survives");
+  assert.equal(out.ANCIENT, undefined, "the out-of-window course is dropped whole");
 });
