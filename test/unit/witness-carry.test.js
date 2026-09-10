@@ -12,7 +12,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { inheritWitness } from "../../scripts/lib/witness-carry.js";
+import { inheritWitness, renameOrphans, RENAMED } from "../../scripts/lib/witness-carry.js";
 
 /** A throwaway tree: {year}/{college}/{slug}/requirements.json */
 function tree(entries) {
@@ -101,5 +101,120 @@ describe("witness-carry", () => {
     const r = record([]);
     assert.equal(inheritWitness(r, { outRoot: join(tmpdir(), "does-not-exist-witness"),
                                      college: "science", slug: "physics_bs", year: 2027 }), null);
+  });
+});
+
+// ── The folder itself moved ────────────────────────────────────────
+//
+// Every test above assumes the program keeps its slug, which is the assumption
+// an edition roll is entitled to break. These use the REAL `RENAMED` table
+// against a synthetic tree, so a typo in the committed entries fails here and
+// not only in the scrape rail.
+const CIS = "computer-information-science";
+const AI_JRNL = "artificial_intelligence_and_journalism_bs_(boston)";
+const DS_JRNL = "data_science_and_journalism_bs_(boston)";
+
+describe("witness-carry · renamed programs", () => {
+  test("a renamed program inherits from the folder it used to live in", (t) => {
+    const root = tree([[2026, CIS, DS_JRNL, ["JRNL2201", "JRNL2301"]]]);
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const r = record([]);
+    assert.equal(inheritWitness(r, { outRoot: root, college: CIS, slug: AI_JRNL, year: 2027 }), 2026);
+    assert.deepEqual(r.metadata.witnessCourses, ["JRNL2201", "JRNL2301"]);
+    assert.equal(r.metadata.witnessFrom, `${CIS}/${DS_JRNL}`,
+      "a carried-across-a-rename witness must say so; the ordinary case stays unannotated");
+  });
+
+  test("the program's OWN folder wins over its rename entry", (t) => {
+    // The dangerous ordering. A rename entry is a fallback for a folder that is
+    // not there — if it could override, a stale entry would replace a real
+    // witness with a retired program's, and nothing would say so.
+    const root = tree([
+      [2026, CIS, AI_JRNL, ["MINE1000"]],
+      [2026, CIS, DS_JRNL, ["THEIRS2000"]],
+    ]);
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const r = record([]);
+    inheritWitness(r, { outRoot: root, college: CIS, slug: AI_JRNL, year: 2027 });
+    assert.deepEqual(r.metadata.witnessCourses, ["MINE1000"]);
+    assert.equal(r.metadata.witnessFrom, undefined);
+  });
+
+  test("a rename does not apply to a different edition", (t) => {
+    // The table is keyed on the edition the rename appeared in, which is what
+    // makes it self-limiting rather than something to prune by hand.
+    const root = tree([[2027, CIS, DS_JRNL, ["JRNL2201"]]]);
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const r = record([]);
+    assert.equal(inheritWitness(r, { outRoot: root, college: CIS, slug: AI_JRNL, year: 2028 }), null);
+  });
+
+  test("a renamed program still publishing its own plan is untouched", (t) => {
+    const root = tree([[2026, CIS, DS_JRNL, ["OLD1000"]]]);
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const r = record(["NEW2000"]);
+    assert.equal(inheritWitness(r, { outRoot: root, college: CIS, slug: AI_JRNL, year: 2027 }), null);
+    assert.equal(r.metadata.witnessCourses, undefined);
+  });
+
+  test("the rename table is a bijection — two programs cannot claim one witness", () => {
+    // A copy-paste slip in a 26-entry table is invisible otherwise: both
+    // programs inherit, one of them inherits a stranger's plan, and the wrong
+    // one confirms a cross-count it was never witnessed for.
+    for (const [year, table] of Object.entries(RENAMED)) {
+      const values = Object.values(table);
+      assert.equal(new Set(values).size, values.length,
+        `edition ${year}: two rename entries name the same predecessor`);
+      for (const [k, v] of Object.entries(table)) {
+        assert.notEqual(k, v, `edition ${year}: ${k} is its own predecessor, which is a no-op`);
+        assert.match(k, /^[^/]+\/[^/]+$/, `edition ${year}: ${k} is not a college/slug key`);
+        assert.match(v, /^[^/]+\/[^/]+$/, `edition ${year}: ${v} is not a college/slug key`);
+      }
+    }
+  });
+});
+
+describe("witness-carry · renameOrphans", () => {
+  const present = Object.keys(RENAMED[2027]);
+
+  test("both ends resolving is silence", (t) => {
+    const root = tree(Object.values(RENAMED[2027])
+      .map(v => [2026, ...v.split("/"), ["X1000"]]));
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    assert.deepEqual(renameOrphans({ outRoot: root, year: 2027, present }),
+      { deadKeys: [], deadValues: [] });
+  });
+
+  test("a key this run did not parse is reported", (t) => {
+    const root = tree(Object.values(RENAMED[2027])
+      .map(v => [2026, ...v.split("/"), ["X1000"]]));
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const { deadKeys } = renameOrphans({
+      outRoot: root, year: 2027, present: present.filter(k => !k.endsWith(AI_JRNL)) });
+    assert.deepEqual(deadKeys, [`${CIS}/${AI_JRNL}`]);
+  });
+
+  test("a predecessor that is not on disk is reported", (t) => {
+    const root = tree(Object.values(RENAMED[2027])
+      .filter(v => !v.endsWith(DS_JRNL))
+      .map(v => [2026, ...v.split("/"), ["X1000"]]));
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const { deadValues } = renameOrphans({ outRoot: root, year: 2027, present });
+    assert.deepEqual(deadValues, [`${CIS}/${AI_JRNL} ← ${CIS}/${DS_JRNL}`]);
+  });
+
+  test("a predecessor outside the lookback window is dead, not merely quiet", (t) => {
+    // Same window `inheritWitness` uses. An entry pointing three editions back
+    // can never fire, so reporting it is the only way it is ever noticed.
+    const root = tree(Object.values(RENAMED[2027])
+      .map(v => [2024, ...v.split("/"), ["X1000"]]));
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const { deadValues } = renameOrphans({ outRoot: root, year: 2027, present });
+    assert.equal(deadValues.length, Object.keys(RENAMED[2027]).length);
+  });
+
+  test("an edition with no rename table is not an error", () => {
+    assert.deepEqual(renameOrphans({ outRoot: join(tmpdir(), "nope-witness"), year: 2099, present: [] }),
+      { deadKeys: [], deadValues: [] });
   });
 });

@@ -31,7 +31,7 @@ import { politeFetch, cacheSummary, assertCacheEditionSafe } from './lib/catalog
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
 import { checkScrapeRails, checkPlanRail, checkSharedSectionsRail,
          SHARED_RAIL_RUNBOOK, SHARED_ORPHAN_RUNBOOK } from './lib/scrape-rails.js';
-import { sharedSectionsOrphans }     from './lib/shared-sections.js';
+import { sharedSectionsOrphans, applySharedSections } from './lib/shared-sections.js';
 import { isProgramPage, checkNonProgramRail } from './lib/non-program-pages.js';
 import { verifyPlanGrid, planGridCourseKeys } from './lib/plan-grid.js';
 import { parseEditionArg, editionBasePath, assertEdition,
@@ -41,7 +41,7 @@ import { findLeakedMarkers, parseCatalogEdition,
 import { UnadjudicatedPaneError }    from './lib/program-variants.js';
 import { buildProgramsForPage, slugify } from './lib/program-record.js';
 import { makeProgress }              from './lib/run-progress.js';
-import { inheritWitness }            from './lib/witness-carry.js';
+import { inheritWitness, renameOrphans, RENAME_ORPHAN_RUNBOOK } from './lib/witness-carry.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
@@ -95,6 +95,12 @@ function resolveYearFrom(root, url) {
 
 const WRITE   = process.argv.includes('--write');
 const DRY_RUN = process.argv.includes('--dry-run');
+// Apply `isProgramPage` to what is already committed, with no network. See
+// `withdrawNonPrograms` for why the scrape's own withdrawal pass is not enough.
+const WITHDRAW_ONLY = process.argv.includes('--withdraw-non-programs');
+// Re-apply the shared-section manifest to what is committed, with no network. See
+// `applySharedToCommitted` for why an adjudication must not wait on a scrape cycle.
+const APPLY_SHARED  = process.argv.includes('--apply-shared-sections');
 const URL_ARG = (() => { const i = process.argv.indexOf('--url'); return i >= 0 ? process.argv[i + 1] : null; })();
 // Dump what the parser made of a page, without writing it into the tree.
 //
@@ -120,7 +126,8 @@ const JSON_OUT = (() => { const i = process.argv.indexOf('--json'); return i >= 
 (() => {
   // Flags that take a value are listed separately so their argument is not
   // itself mistaken for an unrecognised one.
-  const flags = new Set(['--write', '--dry-run']);
+  const flags = new Set(['--write', '--dry-run', '--withdraw-non-programs',
+                         '--apply-shared-sections']);
   const valued = new Set(['--url', '--edition', '--json']);
   const argv = process.argv.slice(2);
   const unknown = argv.filter((a, i) => a.startsWith('--')
@@ -128,7 +135,8 @@ const JSON_OUT = (() => { const i = process.argv.indexOf('--json'); return i >= 
     : !valued.has(argv[i - 1]));
   if (unknown.length) {
     console.error(`Unrecognised argument: ${unknown.join(' ')}`);
-    console.error('Usage: [--url <program-url>] [--edition YYYY-YYYY] [--dry-run] [--write] [--json <file>]');
+    console.error('Usage: [--url <program-url>] [--edition YYYY-YYYY] [--dry-run] [--write] [--json <file>]'
+                + '\n       [--withdraw-non-programs] [--apply-shared-sections]');
     process.exit(2);
   }
   // `--json` over the whole sitemap would be a 20 MB dump of what the tree
@@ -476,8 +484,181 @@ function priorEditionCount() {
   return years.length ? listCommittedPrograms(years[0]).length : 0;
 }
 
+/**
+ * Withdraw committed records that are not programs, WITHOUT scraping.
+ *
+ * ── Why this exists as its own verb ─────────────────────────────────
+ *
+ * The withdrawal already happens inside a `--write` run, and that is the path
+ * that should normally do it. But the rule and its application are separated by
+ * a scrape, and the scrape is the expensive, networked, once-a-cycle part: when
+ * `isProgramPage` landed, the graduate tree was regenerated from cache and the
+ * undergraduate tree could not be, because its cache predated the edition roll
+ * and `assertCacheEditionSafe` refused it. So 31 undergraduate records went on
+ * shipping — `Data Science`, `Computer Science`, `Biology`, `Financial Aid` —
+ * each a selectable program in the picker, until someone happened to click one.
+ *
+ * The alternative was deleting 31 directories by hand, which reaches the same
+ * place while putting the rule in a shell command nobody can review or repeat.
+ * This keeps ONE implementation of the decision — it calls `isProgramPage`, the
+ * same function the scrape does — and makes the repair a thing you can run.
+ *
+ * It deliberately does NOT re-parse: nothing here is a claim about what the
+ * catalog says today, only about what the rule says of what we already hold.
+ * A tree's records still want a real scrape for freshness; this is the half of
+ * that run which needs no network and cannot fail on NEU being slow.
+ */
+function withdrawNonPrograms() {
+  const years = existsSync(OUT_ROOT)
+    ? readdirSync(OUT_ROOT).filter(n => /^\d{4}$/.test(n)).map(Number).sort()
+    : [];
+  if (!years.length) { console.error(`No committed editions under ${OUT_ROOT}`); return 1; }
+
+  let total = 0;
+  const doomed = [];
+  for (const year of years) {
+    for (const p of listCommittedPrograms(year)) {
+      total++;
+      let rec;
+      // A record we cannot READ is not a record we have judged. Same distinction the
+      // scraper makes for a page that failed to load: absent, empty and false are three
+      // different facts, and only one of them is grounds for deletion.
+      try { rec = JSON.parse(readFileSync(p, 'utf8')); } catch {
+        console.warn(`  ⚠  unreadable, left alone: ${p}`);
+        continue;
+      }
+      if (!isProgramPage(rec)) doomed.push({ p, rec, year });
+    }
+  }
+
+  if (!doomed.length) {
+    console.log(`✅  All ${total} committed record(s) are programs. Nothing to withdraw.`);
+    return 0;
+  }
+
+  // The same bulk guard the scrape uses, for the same reason: dropping is cheap and
+  // reversible one page at a time and catastrophic in bulk. If NEU changed the requirement
+  // markup, every record would read `tablesPresent: 0` and this verb would empty the tree.
+  const rail = checkNonProgramRail(doomed.length, total);
+  if (!rail.ok) {
+    console.error(`\n❌  Refusing to withdraw — ${rail.reason}\n`);
+    return 1;
+  }
+
+  for (const { p, rec, year } of doomed) {
+    console.log(`  ${WRITE ? 'withdraw' : 'would withdraw'}  ${year}  ${JSON.stringify(rec.name)} `
+              + `(tablesPresent: ${rec.metadata?.tablesPresent})`);
+  }
+  if (!WRITE) {
+    console.log(`\n${doomed.length} of ${total} committed record(s) are not programs. `
+              + `Re-run with --write to withdraw them.`);
+    return 0;
+  }
+  for (const { p } of doomed) rmSync(dirname(p), { recursive: true, force: true });
+  console.log(`\nWithdrew ${doomed.length} of ${total} committed record(s) that are not programs.`);
+  console.log(`Rebuild the bundle so the counts stay in step: npm run data:programs-bundle`);
+  return 0;
+}
+
+/**
+ * Apply the shared-section manifest to committed records, WITHOUT scraping.
+ *
+ * Same argument as `withdrawNonPrograms`, one table over. An adjudication is
+ * made against the LIVE catalog and only reaches the data through a scrape, so
+ * between the two the manifest is ahead of the corpus — a state
+ * `shared-sections.test.js` reports, correctly, as an entry naming no program.
+ *
+ * That gap is not academic. The 2027 roll renamed every Data Science program to
+ * Artificial Intelligence, the two DS entries were deleted, and the successors
+ * were left for later with a note saying so. Nothing remembered, and both AI
+ * programs went on charging their degree twice for the same courses — measured,
+ * 21 SH of phantom demand on AI and Journalism against a 131 SH degree, where
+ * its Computer Science twin discounts exactly the same 21 SH.
+ *
+ * So the adjudication and its application are separated here by a verb rather
+ * than by a scrape cycle. It re-uses `applySharedSections` unchanged, which is
+ * what makes it a re-application rather than a migration: the next real scrape
+ * computes the identical flags from the identical manifest, and nothing here is
+ * a fact the manifest does not already state.
+ */
+function applySharedToCommitted() {
+  const years = existsSync(OUT_ROOT)
+    ? readdirSync(OUT_ROOT).filter(n => /^\d{4}$/.test(n)).map(Number).sort()
+    : [];
+  if (!years.length) { console.error(`No committed editions under ${OUT_ROOT}`); return 1; }
+
+  // The NEWEST edition only, which is the one a live scrape writes and the one the manifest
+  // is adjudicated against. Applying it across every edition looks like a free extra check
+  // and is not: NEU renamed four of these sections at the 2027 roll ("Integrative Course" →
+  // "Integrative Requirement Courses"), so a 2026 record legitimately does not carry the
+  // 2027 titles, and reading that as a miss reports a frozen edition as broken.
+  const year = Math.max(...years);
+  const changed = [], misses = [];
+  let seen = 0;
+  for (const p of listCommittedPrograms(year)) {
+    seen++;
+    let rec;
+    try { rec = JSON.parse(readFileSync(p, 'utf8')); } catch { continue; }
+    const parts = p.split(sep);
+    const slug = parts[parts.length - 2];
+    const before = JSON.stringify(rec.requirementSections);
+    const { applied, missing } = applySharedSections(rec, { url: rec.metadata?.sourceUrl, slug });
+    if (missing.length) misses.push({ slug, titles: missing, url: rec.metadata?.sourceUrl });
+    if (applied && JSON.stringify(rec.requirementSections) !== before) changed.push({ p, rec, slug, applied });
+  }
+
+  // A title the manifest names and the record does not have. Refused rather than applied
+  // in part, exactly as `checkSharedSectionsRail` refuses a scrape: a half-applied
+  // adjudication is the state nobody can read off the data afterwards.
+  if (misses.length) {
+    console.error(`\n❌  Refusing to write — ${misses.length} adjudicated section(s) `
+      + `are not in the committed record:\n`);
+    for (const m of misses) {
+      console.error(`   • ${m.slug}: ${m.titles.map(t => JSON.stringify(t)).join(', ')}`);
+      if (m.url) console.error(`     ${m.url}`);
+    }
+    console.error(SHARED_RAIL_RUNBOOK);
+    return 1;
+  }
+
+  if (!changed.length) {
+    console.log(`✅  All ${seen} committed record(s) in edition ${year} already carry `
+              + `their adjudicated flags.`);
+    return 0;
+  }
+  for (const c of changed) {
+    console.log(`  ${WRITE ? 'apply' : 'would apply'}  ${c.slug}: ${c.applied} section(s)`);
+  }
+  if (!WRITE) {
+    console.log(`\n${changed.length} record(s) are missing an adjudicated flag. `
+              + `Re-run with --write to apply.`);
+    return 0;
+  }
+  for (const { p, rec } of changed) writeFileSync(p, JSON.stringify(rec, null, 2));
+  console.log(`\nApplied the shared-section manifest to ${changed.length} committed record(s).`);
+  return 0;
+}
+
 async function main() {
   let programs;
+
+  // Before anything reaches the network. Both verbs judge what is already committed and
+  // must not depend on a scrape succeeding — that dependency is the reason they exist.
+  if (APPLY_SHARED) {
+    if (EDITION || URL_ARG || DRY_RUN || JSON_OUT) {
+      console.error('--apply-shared-sections reads the committed tree; it takes no other mode.');
+      process.exit(1);
+    }
+    process.exit(applySharedToCommitted());
+  }
+
+  if (WITHDRAW_ONLY) {
+    if (EDITION || URL_ARG || DRY_RUN || JSON_OUT) {
+      console.error('--withdraw-non-programs reads the committed tree; it takes no other mode.');
+      process.exit(1);
+    }
+    process.exit(withdrawNonPrograms());
+  }
 
   if (URL_ARG) {
     const parts = URL_ARG.replace(BASE, '').replace(/^\/|\/$/g, '').split('/');
@@ -672,6 +853,25 @@ async function main() {
         + `adjudication(s) matched no page in this run:\n`);
       for (const k of orphans) console.error(`   • ${k}`);
       console.error(SHARED_ORPHAN_RUNBOOK);
+      process.exit(1);
+    }
+
+    // The same absence, one table over. A rename entry that matches nothing carries a
+    // program's plan-of-study witness nowhere, and an uncarried witness SKIPS a shared
+    // section rather than merely failing to confirm it — so this cannot be a warning.
+    const { deadKeys, deadValues } = renameOrphans({
+      outRoot: OUT_ROOT, year: YEAR,
+      present: [...pending.keys()].map(p => {
+        const parts = p.split(sep);
+        return `${parts[parts.length - 3]}/${parts[parts.length - 2]}`;
+      }),
+    });
+    if (deadKeys.length || deadValues.length) {
+      console.error(`\n❌  Refusing to write — ${deadKeys.length + deadValues.length} `
+        + `witness-rename entr(ies) match no program:\n`);
+      for (const k of deadKeys)   console.error(`   • key not in this run:  ${k}`);
+      for (const v of deadValues) console.error(`   • predecessor missing:  ${v}`);
+      console.error(RENAME_ORPHAN_RUNBOOK);
       process.exit(1);
     }
   }

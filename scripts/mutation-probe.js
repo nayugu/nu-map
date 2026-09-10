@@ -122,6 +122,13 @@ const NONPROG      = "scripts/lib/non-program-pages.js";
 const RAILS        = "scripts/lib/scrape-rails.js";
 const NONPROG_TEST = "cd test/unit      && node --test non-program-pages.test.js";
 const RAILS_TEST   = "cd test/unit      && node --test scrape-rails.test.js";
+
+// A program that got RENAMED across an edition roll — the identity a slug cannot keep.
+// Probed with the corpus guard beside the unit test, because the tempting weakening of
+// `isProgramPage` is one that makes the corpus assertion pass vacuously.
+const WITNESS      = "scripts/lib/witness-carry.js";
+const WITNESS_TEST = "cd test/unit      && node --test witness-carry.test.js";
+const PROGRAMS_ARE_PROGRAMS = "cd test/invariant && node --test programs-are-programs.test.js";
 const GE_CORPUS   = "cd test/invariant && node --test general-elective-allowance.test.js";
 const GE_UI       = "cd test/browser   && node --test general-electives.browser.test.js";
 
@@ -896,6 +903,62 @@ const MUTANTS = [
     from: "      if (!wasProgram(previous.get(k))) { withdrawn.push(k); return false; }",
     to:   "      if (!wasProgram(results.get(k) ?? previous.get(k))) { withdrawn.push(k); return false; }",
     run: [RAILS_TEST] },
+
+  // ── A program that got RENAMED across an edition roll ──────────────
+  //
+  // The witness gates whether a `shared` section is EMITTED or SKIPPED, so every
+  // mutant here is a silently deleted requirement rather than a cosmetic loss.
+
+  // The ordering that matters. A rename entry is a fallback for a folder that is not
+  // there — if it can override, a stale entry replaces a real witness with a retired
+  // program's, and the record says nothing about which one it used.
+  { name: "witness: a rename entry OVERRIDES the program's own folder",
+    file: WITNESS,
+    from: "  const candidates = wasAt ? [`${college}/${slug}`, wasAt] : [`${college}/${slug}`];",
+    to:   "  const candidates = wasAt ? [wasAt, `${college}/${slug}`] : [`${college}/${slug}`];",
+    run: [WITNESS_TEST] },
+
+  // The table is keyed on the edition the rename appeared in, which is what makes it
+  // self-limiting. Ignoring the year applies a 2027 rename to every edition forever.
+  { name: "witness: a rename applies to every edition, not the one it happened in",
+    file: WITNESS,
+    from: "  return RENAMED[year]?.[`${college}/${slug}`] ?? null;",
+    to:   "  return Object.values(RENAMED).map(t => t[`${college}/${slug}`]).find(Boolean) ?? null;",
+    run: [WITNESS_TEST] },
+
+  // Half a rail is the shape this whole family of bugs takes. A dead KEY means the
+  // witness is not being carried for a program that exists; nothing else reports it,
+  // because the evidence is an absence.
+  { name: "witness: renameOrphans stops reporting a key this run never parsed",
+    file: WITNESS,
+    from: "    if (!here.has(now)) deadKeys.push(now);",
+    to:   "    if (false) deadKeys.push(now);",
+    run: [WITNESS_TEST] },
+
+  // ...and the other half. A dead VALUE is an entry that can never fire at all.
+  { name: "witness: renameOrphans stops reporting a missing predecessor",
+    file: WITNESS,
+    from: "    if (!found) deadValues.push(`${now} ← ${before}`);",
+    to:   "    if (false) deadValues.push(`${now} ← ${before}`);",
+    run: [WITNESS_TEST] },
+
+  // The lookback bound, on the rail side. An entry pointing outside the window reads as
+  // healthy while `inheritWitness` can never reach it — the two must agree or the rail
+  // certifies something that does not work.
+  { name: "witness: renameOrphans accepts a predecessor outside the lookback window",
+    file: WITNESS,
+    from: "      .filter(n => /^\\d{4}$/.test(n) && Number(n) < year && Number(n) >= year - MAX_LOOKBACK)",
+    to:   "      .filter(n => /^\\d{4}$/.test(n) && Number(n) < year)",
+    run: [WITNESS_TEST] },
+
+  // The corpus guard for the non-program rule. Its own assertion is satisfied by an
+  // `isProgramPage` that never returns false, which is exactly the weakening a future
+  // "make the build pass" edit would reach for.
+  { name: "programs-are-programs: the rule stops discriminating",
+    file: NONPROG,
+    from: "  return tables > 0 || titleNamesCredential(data?.name);",
+    to:   "  return true;",
+    run: [PROGRAMS_ARE_PROGRAMS] },
 ];
 
 const argv = process.argv.slice(2);
