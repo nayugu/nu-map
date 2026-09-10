@@ -110,6 +110,22 @@ const MAX_LOOKBACK = 2;
  * appearing (`…_ba` → `…_ba_(boston)`) or a nursing track moving from Boston to
  * Primarily Online are different questions with different answers, and neither
  * has been looked at.
+ *
+ * ── There is no GRADUATE table, and that is measured, not an omission ──
+ *
+ * The graduate tree renamed too — `data_science_msalign_*` became
+ * `artificial_intelligence_msalign_*`, and two of them changed COLLEGE as well
+ * (`computer-information-science` → `university-interdisciplinary-programs`),
+ * so a graduate table would need the harder key. It would also have nothing to
+ * carry: all three 2026 MSAligns and all four 2027 ones publish
+ * `planOfStudyCourses: []` and carry no `shared` section, on either side of the
+ * roll. Building the mechanism would move zero courses.
+ *
+ * That matches what `demand.js` already records — graduate is near-immune,
+ * only 2 of its 58 programs with shared sections ever had a witness. If a
+ * graduate program ever needs one, `renameOrphans` and `inheritWitness` are
+ * already tree-agnostic; the table is the only thing missing, and it should be
+ * keyed by tree when it is added rather than reusing this one.
  */
 export const RENAMED = {
   2027: Object.fromEntries([
