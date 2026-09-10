@@ -352,7 +352,8 @@
       "minRequirementCount": 4,
       "notes": [
         "A grade of C or higher is required:"
-      ]
+      ],
+      "shared": true
     },
     {
       "type": "SECTION",
@@ -520,7 +521,8 @@
       "minRequirementCount": 1,
       "notes": [
         "This course already fulfills a Journalism requirement above."
-      ]
+      ],
+      "shared": true
     },
     {
       "type": "SECTION",
