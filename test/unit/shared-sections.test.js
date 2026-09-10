@@ -266,8 +266,8 @@ test("manifest › every tree's adjudication is claimed separately", () => {
 
 test("orphans › an entry nothing matched is reported, per tree", () => {
   _resetSharedSectionsSeen();
-  const gradAll = sharedSectionsOrphans("graduate");
-  const ugAll   = sharedSectionsOrphans("undergraduate");
+  const gradAll = sharedSectionsOrphans("graduate").orphans;
+  const ugAll   = sharedSectionsOrphans("undergraduate").orphans;
   assert.ok(gradAll.length > 0, "no graduate entries at all — has the manifest moved?");
   assert.ok(ugAll.length > 0,   "no undergraduate entries at all — has the manifest moved?");
 
@@ -288,9 +288,9 @@ test("orphans › an entry nothing matched is reported, per tree", () => {
 
 test("orphans › matching a page clears the entry, and only that entry", () => {
   _resetSharedSectionsSeen();
-  const key = sharedSectionsOrphans("graduate")[0];
+  const key = sharedSectionsOrphans("graduate").orphans[0];
   const [url, slug] = key.split("#");
-  const before = sharedSectionsOrphans("graduate").length;
+  const before = sharedSectionsOrphans("graduate").orphans.length;
 
   // A record with none of the wanted titles: it MATCHED the page, which is the fact the
   // orphan check is about, and it separately reports `missing` for the other rail. The two
@@ -299,21 +299,54 @@ test("orphans › matching a page clears the entry, and only that entry", () => 
   const r = applySharedSections({ requirementSections: [] }, { url, slug });
   assert.ok(r.missing.length > 0, "precondition: this entry's titles are not present");
 
-  const after = sharedSectionsOrphans("graduate");
+  const after = sharedSectionsOrphans("graduate").orphans;
   assert.equal(after.length, before - 1, "matching a page did not clear its entry");
   assert.ok(!after.includes(key));
   _resetSharedSectionsSeen();
+});
+
+test("orphans › a page we could not READ is not a page that moved", () => {
+  // The bug this check shipped with, and the reason it is worth its own test: a scrape
+  // TOLERATES fetch failures up to 2% and carries on, so a page that timed out produces no
+  // record and its entry goes unmatched — indistinguishable, to the first version of this
+  // function, from a page NEU had retired. With 37 graduate entries among 803 pages and 16
+  // failures tolerated, one blip would have hard-stopped the unattended bimonthly job with
+  // a diagnosis that was false, and the documented recovery for "moved" is to delete or
+  // re-key the entry. A timeout would have thrown away a live adjudication.
+  //
+  // Absent, empty and unread are three different facts — the rule this whole file is about.
+  _resetSharedSectionsSeen();
+  const all = sharedSectionsOrphans("graduate").orphans;
+  const [downUrl] = all[0].split("#");
+
+  const r = sharedSectionsOrphans("graduate", { unreachable: [downUrl] });
+  assert.ok(r.unchecked.length > 0, "the unread page's entry was not separated out");
+  assert.ok(r.unchecked.every(k => k.startsWith(downUrl)),
+    "an entry for a page that loaded fine was filed as unchecked");
+  assert.ok(!r.orphans.some(k => k.startsWith(downUrl)),
+    "an unread page's entry is still being reported as moved — the run would refuse");
+
+  // Nothing is LOST: every entry is in exactly one bucket, or the rail is silently
+  // dropping adjudications instead of reporting them.
+  assert.equal(r.orphans.length + r.unchecked.length, all.length,
+    "an entry vanished between the two buckets");
+
+  // A Set is accepted as well as an array — the scrapers pass a Set.
+  assert.deepEqual(sharedSectionsOrphans("graduate", { unreachable: new Set([downUrl]) }), r);
+  // ...and no `unreachable` at all must behave exactly as before.
+  assert.deepEqual(sharedSectionsOrphans("graduate").orphans, all);
+  assert.deepEqual(sharedSectionsOrphans("graduate").unchecked, []);
 });
 
 test("orphans › a key that matches nothing never clears anything", () => {
   // The defect itself, stated as a property: this is precisely what a moved URL does, and
   // it must leave the entry standing so the rail can report it.
   _resetSharedSectionsSeen();
-  const before = sharedSectionsOrphans("graduate");
+  const before = sharedSectionsOrphans("graduate").orphans;
   const r = applySharedSections({ requirementSections: [{ title: "Thesis Option" }] },
                                 { url: "https://catalog.northeastern.edu/graduate/gone/", slug: "nope" });
   assert.deepEqual(r, { applied: 0, missing: [] },
     "a page the manifest does not name must be left completely alone");
-  assert.deepEqual(sharedSectionsOrphans("graduate"), before,
+  assert.deepEqual(sharedSectionsOrphans("graduate").orphans, before,
     "an unmatched key cleared an entry — the orphan check would report nothing");
 });

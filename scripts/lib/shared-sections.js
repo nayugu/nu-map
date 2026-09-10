@@ -185,13 +185,33 @@ const treeOf = (key) => (key.startsWith(GRAD_ROOT) ? 'graduate' : 'undergraduate
  * matches almost nothing, and a rail that fires on every such invocation is one people learn
  * to pass `--no-verify` past.
  *
+ * ── `unreachable` is the difference between moved and unread ────────
+ *
+ * The first version of this check did not take it, and that was the same absent-vs-empty
+ * collapse this file is otherwise about. A scrape TOLERATES fetch failures up to 2%
+ * (`maxFetchFailRatio`) and carries on; a page that failed produces no record, so its
+ * manifest entry goes unmatched and looked exactly like a page NEU had moved. With 37
+ * graduate entries among 803 pages and 16 failures tolerated, one transient blip could
+ * hard-stop the unattended bimonthly job with a diagnosis that was simply false — and the
+ * documented recovery for "moved" is to re-key or delete the entry, which would have thrown
+ * away a live adjudication on the strength of a timeout.
+ *
+ * So the two are returned SEPARATELY and only `orphans` is a refusal. `unchecked` is
+ * reported and allowed: the fetch-failure rail already governs how many pages may fail, and
+ * this one must not second-guess it with a different question.
+ *
  * @param {'graduate'|'undergraduate'} tree
- * @returns {string[]} keys, sorted, so the message names what a human has to act on
+ * @param {{unreachable?: Iterable<string>}} [opts]  page URLs this run could not read
+ * @returns {{orphans: string[], unchecked: string[]}} sorted, so a message names what to act on
  */
-export function sharedSectionsOrphans(tree) {
-  return Object.keys(SHARED_SECTIONS)
-    .filter(k => treeOf(k) === tree && !_consumed.has(k))
-    .sort();
+export function sharedSectionsOrphans(tree, { unreachable } = {}) {
+  const skip = unreachable instanceof Set ? unreachable : new Set(unreachable ?? []);
+  const orphans = [], unchecked = [];
+  for (const key of Object.keys(SHARED_SECTIONS)) {
+    if (treeOf(key) !== tree || _consumed.has(key)) continue;
+    (skip.has(key.split('#')[0]) ? unchecked : orphans).push(key);
+  }
+  return { orphans: orphans.sort(), unchecked: unchecked.sort() };
 }
 
 export function applySharedSections(data, { url, slug }) {

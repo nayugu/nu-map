@@ -494,6 +494,9 @@ async function main() {
   }
 
   let done = 0, skipped = 0, failed = 0, written = 0;
+  // Pages this run could not read at all. Distinct from `failed` (a count) because the
+  // orphan rail needs the IDENTITIES: see sharedSectionsOrphans.
+  const unreadable = new Set();
   let plansWritten = 0, plansRemoved = 0;
   // Buffered, not written as we go: the rails below need to see the whole run
   // before any of it lands. Writing per-program meant a broken parse was
@@ -568,6 +571,10 @@ async function main() {
         process.exit(1);
       }
       console.log(`FAIL  ${err.message}`);
+      // Recorded, not just counted: a manifest entry for a page we could not READ is a
+      // different fact from one whose page moved, and the shared-section orphan rail has to
+      // be able to tell them apart or a timeout reads as a retirement.
+      unreadable.add(prog.url);
       failed++;
     }
 
@@ -624,7 +631,15 @@ async function main() {
     // `applySharedSections` is keyed on url#slug, so a page NEU moved, renamed or retired
     // never matches, produces no `missing` titles, and leaves no trace. See the graduate
     // scraper for the roll that proved it — ten entries died silently there.
-    const orphans = sharedSectionsOrphans('undergraduate');
+    const { orphans, unchecked } = sharedSectionsOrphans('undergraduate',
+                                                         { unreachable: unreadable });
+    // Reported and ALLOWED. A page we could not read says nothing about whether its entry is
+    // still good, and the fetch-failure rail above already decides how many pages may fail.
+    if (unchecked.length) {
+      console.warn(`\n⚠  ${unchecked.length} shared-section adjudication(s) could not be `
+        + `checked — their pages failed to load this run, which is NOT evidence they moved:`);
+      for (const k of unchecked) console.warn(`   • ${k}`);
+    }
     if (orphans.length) {
       console.error(`\n❌  Refusing to write — ${orphans.length} shared-section `
         + `adjudication(s) matched no page in this run:\n`);
