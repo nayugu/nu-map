@@ -19,6 +19,16 @@ import termWindows from "./termWindows.js";
 // data settled" are different questions that shared one constant before.
 const SETTLE_DAYS = 14;
 
+/**
+ * Month names → `Date#getMonth` index, so `getYearAnchor`'s declared string is the single
+ * definition of when the academic year turns over. A bare `7` beside it would be a second
+ * place to change, and the two would agree only until someone edited one of them.
+ */
+const MONTH_INDEX = {
+  january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+  july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
+};
+
 // How long after the first class day before the planner calls a term current,
 // where that day is KNOWN rather than estimated — a published Banner date or
 // the Labor Day rule.
@@ -173,7 +183,34 @@ const _semesterTypes = [
 /** @type {import('../../ports/ICalendar.js').ICalendar} */
 const calendar = {
   getSemesterTypes()       { return _semesterTypes; },
-  getDefaultStartYear()    { return 2026; },
+  /**
+   * The entry year a NEW plan starts at: the academic year currently in progress.
+   *
+   * ── This was the constant `2026`, and that is a one-year fuse ──────
+   *
+   * It sets `planEntYear`, which sets the cohort, which picks the CATALOG EDITION a
+   * student's requirements are read from. Frozen at 2026, every plan created from fall 2027
+   * onward would have opened against the 2026 catalog — the wrong degree, chosen silently,
+   * for exactly the students who have no way to know the difference. Nothing would have
+   * failed; the app would simply have been a year stale for every new user, forever.
+   *
+   * Derived from the same August anchor `getYearAnchor` already declares, and it agrees
+   * with the constant it replaces on the day it replaced it (2026-09-10 → 2026), so this is
+   * a fuse removed rather than a behaviour changed.
+   *
+   * One-sided in the same direction as `getCurrentSemId` below: it names the year that HAS
+   * begun, never the one about to. A prospective student planning ahead changes it in one
+   * click; a current student who never touches it gets their own catalog. Guessing forward
+   * would put every returning student on an edition they do not follow.
+   *
+   * CLAUDE.md, on the term windows next door: never re-freeze any of this as constants.
+   * That rule was written about the term thresholds; this field was the counter-example
+   * sitting three lines above them.
+   */
+  getDefaultStartYear(now = new Date()) {
+    const anchor = MONTH_INDEX[this.getYearAnchor()] ?? 7;   // august → 7
+    return now.getMonth() >= anchor ? now.getFullYear() : now.getFullYear() - 1;
+  },
   getYearAnchor()          { return "august"; },
   getAcademicYearFormat()  { return "single"; },
 

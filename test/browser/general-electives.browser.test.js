@@ -54,17 +54,17 @@ describe("General Electives · a row only when there is something to say", () =>
     await new Promise((r) => server?.close(r));
   });
 
-  const seed = (major) => `(${((mj) => {
+  const seed = (major, placements) => `(${((mj, pl) => {
     const K = "ncp-";
     localStorage.setItem(K + "plan-index", JSON.stringify([
       { id: "default", name: "T", studentType: "undergrad", parentId: null, lastOpened: Date.now() }]));
     localStorage.setItem(K + "plan-data-default", JSON.stringify({
       version: 1, studentType: "undergrad", entSem: "fall", entYear: 2025,
       gradSem: "spring", gradYear: 2029, currentSemId: "fall2025",
-      major: mj, major2: "", minor1: "", placements: {}, specialTermPl: {},
+      major: mj, major2: "", minor1: "", placements: pl, specialTermPl: {},
       semOrders: {}, placedOut: [], substitutions: [] }));
     localStorage.setItem(K + "tour-seen", "true");
-  }).toString()})(${JSON.stringify(major)})`;
+  }).toString()})(${JSON.stringify(major)},${JSON.stringify(placements)})`;
 
   /**
    * Open the requirements panel and read every section row as ONE synchronous
@@ -76,11 +76,11 @@ describe("General Electives · a row only when there is something to say", () =>
    * either sees a mounted panel or sees none, and "none" is an answer the poll
    * can legitimately retry.
    */
-  async function sections(major) {
+  async function sections(major, placements = {}) {
     assert.equal(launchError, null,
       `chromium unavailable — run \`npx playwright install chromium\`: ${launchError?.message}`);
     const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
-    await ctx.addInitScript(seed(major));
+    await ctx.addInitScript(seed(major, placements));
     const page = await ctx.newPage();
     const errors = [];
     page.on("pageerror", e => errors.push(String(e?.message ?? e)));
@@ -132,5 +132,32 @@ describe("General Electives · a row only when there is something to say", () =>
     assert.ok(m, `no "n/m SH" figure beside the row — got:\n${text.slice(0, 400)}`);
     assert.ok(Number(m[2]) > 0,
       `the denominator is ${m[2]}, which is the defect this file exists for`);
+  });
+
+  test("credit placed against an UNKNOWN allowance shows the SH and no denominator", async () => {
+    // Found by `scripts/mutation-probe.js`, not by review: setting
+    // `allowanceUnknown = false` in GradPanel killed nothing, because every other
+    // assertion here is about a row that is ABSENT. The panel's unknown-but-occupied
+    // branch — a student on a program with no stated total who has actually placed
+    // courses — was reachable and untested.
+    //
+    // It is the case that matters most, too. The row appears precisely because there is
+    // credit to report, and without the branch `hasSplit` takes over and prints
+    // `…/${requiredSH}` with `requiredSH` null.
+    const text = await sections(NO_TOTAL, { CS1800: "fall2025" });
+
+    assert.match(text, /General Electives/,
+      "placed credit did not bring the row back — worth-showing is ignoring placedSH");
+    assert.doesNotMatch(text, /null/,
+      "`null` reached the screen — the split renderer ran on an unknown allowance");
+    assert.doesNotMatch(text, /General Electives[\s\S]{0,60}?\d+\s*\/\s*0\s*SH/,
+      "an unknown allowance is being reported as a measured zero");
+
+    // The SH is stated, with no denominator after it. Anchored to the row so a figure
+    // elsewhere on the page cannot satisfy it.
+    const row = text.match(/General Electives[\s\S]{0,60}/)?.[0] ?? "";
+    assert.match(row, /\d+\s*SH/, `no credit figure beside the row — got: ${row}`);
+    assert.doesNotMatch(row, /\d+\s*\/\s*\d+\s*SH/,
+      "a denominator appeared for an allowance we cannot measure");
   });
 });
