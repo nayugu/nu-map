@@ -128,10 +128,13 @@ const RENAME_BASE = {
     [`undergraduate/2026/${DS_JRNL}`]: {
       level: "verified", counters: { unknownCourses: 0, tablesUnaccounted: 0 },
     },
-    // A graduate program under a college name the undergraduate tree also uses.
-    "graduate/2026/engineering/data_science_and_journalism_bs_(boston)": {
-      level: "verified", counters: {},
-    },
+    // A graduate program under the SAME college and folder the rename entry
+    // points at. That collision is the whole hazard, and it has to be exact:
+    // built first under a different college, the shape keys never met, the
+    // mutant changed nothing and the probe reported it SURVIVED. Nine college
+    // directories are shared between the two trees, `computer-information-science`
+    // among them.
+    [`graduate/2026/${DS_JRNL}`]: { level: "verified", counters: {} },
   },
 };
 
@@ -151,13 +154,16 @@ test("across a RENAME: an improvement is still not a regression", () => {
 });
 
 test("the rename fallback never reaches across TREES", () => {
-  // `RENAMED` carries `college/slug` with no tree segment, and `engineering`
-  // exists in both trees. A graduate program must not be ratcheted against an
-  // undergraduate adjudication — it would be comparing two different degrees.
+  // `RENAMED` carries `college/slug` with no tree segment, and nine college
+  // directories exist in BOTH trees. A graduate program must not be ratcheted
+  // against an undergraduate adjudication — it would be comparing two different
+  // degrees that happen to share a folder name.
   const out = compareToBaseline(
     [program(`graduate/2027/${AI_JRNL}`, "review")], RENAME_BASE);
-  assert.equal(out.length, 1);
+  assert.equal(out.length, 1, `expected the graduate program to read as NEW: ${JSON.stringify(out)}`);
   assert.match(out[0], /NEW program at 'review'/);
+  assert.ok(!out[0].includes("vs "),
+    "an undergraduate predecessor must not be named as the comparison");
 });
 
 test("the program's OWN shape still wins over its rename entry", () => {
