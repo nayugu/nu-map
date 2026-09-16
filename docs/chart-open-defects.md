@@ -1086,23 +1086,59 @@ publishes it that way, which for these terms is false.
 Deferred by agreement on 2026-08-19 rather than forgotten: the fix lands in `earlyTerms.js`,
 which sits beside `engine/index.js` while that was being edited in a second session.
 
-### 18. Pruning changes the variable order, so it can cost a concession
+### 18. The nogood learner rewrites a domain on the propagator's verdict — FIXED
 
-`chart-propagator-neutral.test.js` argues in its header that a **pruning** propagator
-cannot change which plan the search reaches first: cutting branches that contain no
-solution leaves the *order of the solutions* alone. That argument is wrong, and §17's
-original worry — which the header rebuts — was right.
+**Fixed 2026-09-16, and the diagnosis below was wrong for a year.** Everything this section
+used to assert about `byConstraint` is struck through further down, kept because how it went
+wrong is more instructive than the defect.
 
-`byConstraint` orders cells **most-constrained-first, by domain LENGTH**. Pruning changes
-lengths. So the variable order changes, a different legal plan is encountered first, and
-it can be a plan that spent one more concession.
+`chart-propagator-neutral.test.js` argues in its header that a **pruning** propagator cannot
+change which plan the search reaches first: cutting branches that contain no solution leaves
+the *order of the solutions* alone. **That argument is correct.** Two programs nonetheless
+lost a concession when `propagateChains` was switched on, and the leak is one edge nobody had
+classified:
 
-**Measured**, on the one program that shows it:
+```
+propagator verdict (chain-has-no-room-left)
+  -> recorded into worstFailure, BEFORE the witness runs   (search.js, the `dead` branch)
+  -> fed to the nogood learner                             (placeCells, the restart loop)
+  -> target.domain = target.domain.filter(...)   *** A DOMAIN REWRITE ***
+  -> moves the width key byConstraint reads, from attempt 1 onward
+```
+
+So §17.1's pruning/rewriting table held all along; what it never counted is that the engine
+**already contains a rewriter**, the nogood learner, whose *input* is propagation-dependent.
+A propagator can be neutral in itself and still move a plan through a rewriter downstream of
+its verdict.
+
+**The fix** is at the learner: a `chain-has-no-room-left` obstruction never becomes a nogood
+(`_chainNogoods` in `placeCells`). That is the right rule rather than a workaround —
+`precedenceRoom` runs at every node of every attempt, so the next restart re-derives the
+obstruction instantly and for free. **There is nothing to learn from it.** All a nogood can
+add is the rewrite, and the honest response to an attempt that ran out of allowance is the
+existing escalation (`perAttempt * 4`): give the search more room rather than mutate the
+problem.
+
+Measured on BSEnvE#2 with `chart-probe.js --propagator --edition 2026 --ms 1200`, and
+`--chain-nogoods` for the before:
+
+| | nodes | attempts | rung |
+|---|---|---|---|
+| propagation off | 1,086 | 2 | 0 |
+| on, before | 1,255 | 5 | **[sequencing-preferences]** |
+| on, after | **1,082** | 2 | 0 |
+
+The tell nobody read: a *pruning* propagator was making the search do **more** work. It now
+costs fewer nodes than not having it, which is what pruning is for.
+
+`KNOWN_DEGRADED` is empty and the stale-direction check is an **assertion** again.
+
+**What the two counterexamples actually were.** Both `without [] -> with
+[sequencing-preferences]`, one concession, everything else bit-identical:
 
 ```
 ug/environmental_engineering_and_health_science_bsenve_(boston)#2
-  without pruning   []                        rung 0, no concessions
-  with pruning      [sequencing-preferences]  one concession
+ug/chemical_engineering_and_bioengineering_bsche_(boston)#0
 ```
 
 **How it surfaced.** The class-standing guard in `applyEarlyTerms` declined this
@@ -1114,32 +1150,31 @@ the sensitivity was always present, merely unexercised. 25 of the other 26 sampl
 are bit-identical with pruning on and off, and `moved` is still 0 — the stronger
 neutrality claim holds.
 
-**Severity S3.** The plan is registrable and correct; it gives up one convention it did
-not strictly have to. Nothing a student sees is wrong, which is exactly why only an
-invariant catches it.
+**Severity S3.** The plan was registrable and correct; it gave up one convention it did not
+strictly have to. Nothing a student saw was wrong, which is exactly why only an invariant
+caught it — and why it was worth being careful that the *repair* did not cost anything real.
 
-**The fix, when someone takes it.** Either make the variable order independent of pruned
-domain length (order on the *unpruned* length, or on a tie-broken key that pruning cannot
-move), or accept the sensitivity and stop claiming neutrality in the header. The first is
-principled and the second is honest; the current state — claiming neutrality while
-carrying a named exception — is neither, and should not survive long.
-
-**Do not convert the exception to a threshold.** `KNOWN_DEGRADED` lists the program by
-name, and a second entry appearing is a new fact about the search. A count-based tolerance
+**Do not convert the exception to a threshold**, if it ever refills. `KNOWN_DEGRADED` lists
+programs by name, and a new entry is a new fact about the search. A count-based tolerance
 would swallow it silently, which is the failure mode this whole file exists to prevent.
 
-**The second entry arrived (2026-09-03), and it is the same defect, not a new one.**
+**⚠ The invariant test is stricter than production in three ways, all worth knowing before
+reading one of its failures as student-visible.** Found while pricing this fix:
 
-```
-ug/chemical_engineering_and_bioengineering_bsche_(boston)#0
-  without pruning   []                        rung 0, no concessions
-  with pruning      [sequencing-preferences]  one concession
-```
+- it pins the literal edition **`2026`**, while every other CHART instrument moved to
+  `newestEditionHeld` — so it has never looked at the shipping 2027 tree;
+- its budget is **1,200 ms** where the app, `verify-chart`, `chart-probe` and the MCP server
+  all use 5,000. **Neither pinned program degrades at 5,000**;
+- it passes **no calibration**, so it judges neutrality under `DEFAULT_CALIBRATION` where
+  production passes `chartCalibration`. BSChE#0 does not reproduce under the latter at all.
 
-Identical signature to BSEnvE, and `identical 32 · moved 0` over the 33 compared — so the
-stronger neutrality claim still holds and only the ordering sensitivity shows.
+Stricter is the right direction for a canary, and none of it is a reason to relax the test.
+It *is* a reason not to price an S3 from it as if a student were seeing it — and raising the
+budget to 5,000 would have made both pins vanish with no engine change, which would have
+hidden the sensitivity rather than removed it.
 
-**How it surfaced, and this is the part worth keeping.** No engine change was involved. A
+**How the second entry surfaced (2026-09-03), and this is the part worth keeping.** No
+engine change was involved. A
 DATA fix reached it: `scripts/lib/prereq-parse.js` had been silently truncating **415 of
 2,839** prereq trees on legacy (Mills College) course numbers — `MATH 21EM`, `CHME`'s
 `MATH 211M`/`316M`/`315M` — because a branch the parser could not read left a dangling
@@ -1148,69 +1183,131 @@ what this degree's cells depend on, and the larger, truer domains were enough fo
 existing sensitivity to bite.
 
 So the defect did not get worse; the corpus got more honest, and a program that had been
-sheltering behind missing constraints stopped doing so. Expect more entries as data
-quality improves — which is the argument for taking the fix below rather than continuing
-to pin programs. Two entries is where "a named exception" starts becoming "a list".
+sheltering behind missing constraints stopped doing so. In hindsight that is the learner
+being handed a tighter instance and finding something to rewrite — not a new sensitivity.
 
-**The second entry stopped reproducing on the 2026-09-16 catalog, and that is what forced
-the rest of this section to be rewritten.** It was not fixed. Nothing in the engine moved;
-the monthly scrape replaced the catalog and BSChE's domains changed enough that the
-sensitivity no longer bites there. On the *committed* catalog it still degrades — the same
-suite passes locally and failed in CI on the same commit — so the entry is **dormant, not
-falsified**.
+**A named exception list turned out to be unmaintainable against a monthly-refreshed
+corpus, and the way that announced itself is worth keeping.** BSChE#0 stopped reproducing
+on the 2026-09-16 catalog without anything in the engine moving: the scrape replaced the
+catalog and its domains changed. So the pin was **dormant, not falsified** — and the
+assertion that policed staleness **failed the monthly course pipeline**, at the `npm test`
+step that sits deliberately in front of the commit, after the scrape, `verify-chart --all`
+and the build had all passed. An S3 cosmetic defect discarded a 100-minute acquisition,
+including the first successful capture of a synthetic summer term's instructors and
+restrictions. (Before 2026-09-02 it would have gone the other way and been invisible: the
+step is `npm test | tee`, and without pipefail the exit status was `tee`'s.)
 
-The way it announced itself is the part worth keeping: it **failed the monthly course
-pipeline**, at the `npm test` step that sits deliberately in front of the commit, after the
-scrape, `verify-chart --all` and the build had all passed. An S3 cosmetic defect discarded
-a 100-minute acquisition, including the first successful capture of a synthetic summer
-term's instructors and restrictions. (Before 2026-09-02 it would have gone the other way
-and been invisible: the step is `npm test | tee`, and without pipefail the exit status was
-`tee`'s.)
+Three repairs were considered that day and all three are bad, which is why the demotion to
+`console.log` was taken as temporary:
 
-**So a named exception list is unmaintainable against a monthly-refreshed corpus**, and the
-three candidate repairs are now all known to be wrong or unavailable:
-
-- **Delete the entry.** Non-deterministic. It fails `unexpected` on the committed catalog
-  and passes on the scraped one, and each scrape differs — five subject pages time out per
+- **Delete the entry.** Non-deterministic: it failed `unexpected` on the committed catalog
+  and passed on the scraped one, and each scrape differs — five subject pages time out per
   run, a different five each time.
 - **Attach a corpus hash to each entry** so a mismatch reads as unverified. The hash would
-  be stale every month, leaving the guard permanently dormant — the rot it exists to
-  prevent.
-- **A count threshold.** Refused above, and still refused: it swallows a genuinely new
-  program silently.
+  be stale every month, leaving the guard permanently dormant — the rot it exists to prevent.
+- **A count threshold.** Refused above, and still refused: it swallows a new program
+  silently.
 
-What was done instead, 2026-09-16: the "still degrades" direction is now **reported, not
-asserted** (`console.log`, matching `KNOWN_STALE` in `requirement-credit-corpus.test.js`),
-while `unexpected` — a program degrading that is not on the list — stays a hard assertion,
-because that is the only direction a real regression can cause. **This knowingly gives up
-the anti-rot guard**: a pin can now outlive its defect, and a later genuine degradation on
-BSEnvE or BSChE would be swallowed by it. That protection returns only when the list is
-empty. It is a temporary exception, and the fix below is the condition for removing it.
+**Fixing the cause is what resolved this, and it is the only thing that could have.** With
+`KNOWN_DEGRADED` empty there is no pin to go stale, so the check cannot fire on a data
+refresh and is a hard assertion again. Note the shape of the trap: the pipeline failure
+looked like an argument about *how to police an exception list*, and every available answer
+was wrong, because the real answer was to not have one. `KNOWN_STALE` in
+`requirement-credit-corpus.test.js` still reports rather than asserts, for the same reason
+this one used to — and its list is not empty.
 
-**⚠ The list of two has only ever been measured over a SAMPLE of 30 programs.**
-`chart-propagator-neutral.test.js` sets `const N = process.env.CHART_CORPUS === "all" ?
-Infinity : 30;`, so both entries are what a 30-of-~800 draw happened to show. The
-corpus-wide count of programs that degrade is **unknown** — it could be two, or fifty. So
-the first step of the fix is not a code change: run `CHART_CORPUS=all` and find out what
-is actually being fixed. Sizing the defect before designing for it also decides whether
-the forced-cell conflict below is worth paying for at all.
+**~~The fix: make the variable order independent of pruned domain length.~~ DO NOT BUILD
+THIS.** It was the plan of record here for a year, it was already known to be awkward — the
+forced-cell key `a.domain.length === 1` is pruning-dependent too, and flattening it would
+undo a measured win, 22 of 82 forced cells (26.8%) being decided after a cell that still had
+a choice — and the whole design was aimed at a mechanism **that cannot occur**.
 
-**⚠ The fix proposed above is wrong as stated, and this was found by trying to apply it.**
-"Order on the unpruned domain length" cannot simply be done, because `byConstraint`'s
-**first** key is pruning-dependent too:
+`precedenceRoom` returns a boolean and mutates no domain. `order` is sorted **once** per
+attempt, before the DFS starts. So propagation cannot reach `byConstraint` directly by any
+route. Measured with `chart-probe.js --propagator --edition 2026 --ms 1200`: **attempt 0 has
+a bit-identical permutation AND bit-identical width keys** with the propagator on and off.
+The divergence starts at attempt 1, after the learner has rewritten a domain.
 
-```js
-const sa = a.domain.length === 1 ? 0 : 1, sb = b.domain.length === 1 ? 0 : 1;
+The forced-cell trade-off therefore never had to be paid, and the width key was never
+implicated.
+
+**How this survived a year, which is the part worth keeping.** Two named programs really did
+degrade, and a plausible mechanism was attached to them. Two real counterexamples plus a
+mechanism that *sounds* like it explains them reads exactly like a measurement — and nobody
+checked the one cheap thing, which was whether the mechanism could occur at all. `trace` had
+recorded the disproof from the beginning: it stores the `byConstraint` permutation and the
+keys it sorted on, per attempt, and had done so since the derivation panel was built.
+
+Three rules come out of it:
+
+- **A confirmed symptom does not confirm the explanation attached to it.** The pins were
+  evidence of a defect and were read as evidence of its cause.
+- **When auditing neutrality, enumerate what WRITES the thing, not what reads it.** The
+  audit went looking at `byConstraint`, the reader. One `grep` for `\.domain =` finds both
+  writers in the file — `applyEarlyTerms` and the learner — and the learner had been sitting
+  there under a comment that says *"a nogood narrows a domain, so the space this attempt
+  walks is not a suffix of the last one's"*, i.e. describing itself accurately the whole time.
+- **The nogood learner has no test.** `grep -rn nogood test/` matches nothing. It is the
+  engine's one domain rewriter and the only thing exercising it was this invariant, at one
+  remove and via a wrong theory. Per CLAUDE.md's mutation rule, that is a guard nobody has
+  measured.
+
+**⚠ One channel is left open, deliberately.** Propagation also *suppresses* witness failures
+on branches it cuts, and the witness path overwrites `worstFailure` unconditionally
+(last-wins) where the `dead` path uses `??` (first-wins). So a run with propagation **off**
+can still learn a nogood a run with it **on** does not. No program in the corpus shows it.
+Closing it properly means separating "the failure we REPORT" from "the failure we LEARN
+FROM" — `worstFailure` currently does both jobs — which is a larger change than an S3
+justifies. If a program ever appears in `KNOWN_DEGRADED` again, this is the first place to
+look, not `byConstraint`.
+
+**Corpus-verified, and it is NOT free — one plan pays for it.** Measured with
+`verify-chart.js --all --edition 2026 --snapshot`, run twice: once with
+`CHART_CHAIN_NOGOODS=1` for the old behaviour and once without.
+
+```
+                    before      after
+generated           882 (81.4%) 882 (81.4%)
+refused             201         201
+rungs               four-course-bar 116   ->  115
+                    packed-largest-first 116  ->  117
+refusal reasons     fails-hard-criteria 90 -> 89 · search-budget-exhausted 5 -> 6
+every hard rule     passes      passes
 ```
 
-Pruning is precisely what collapses a domain to one term, and deciding those cells first is
-a separate, *measured* improvement — 22 of 82 forced cells (26.8%) were being decided after
-a cell that still had a choice. Making the order independent of pruned domain length would
-undo unit-propagation ordering. So the two options are not "principled" and "honest" as
-written; the principled one has a cost that was never priced. Whoever takes this needs to
-either exempt the forced-cell key and prove the width key alone carries the sensitivity, or
-find a tie-break that is pruning-invariant without flattening that key — and measure it
-with an A/B in ONE process, per CLAUDE.md, not across two runs of a shared checkout.
+`corpus-ask.js --diff before.json after.json`: **unchanged 877 · MOVED 1 · gained 0 ·
+lost 0**, the mover being `ug/design_and_public_health_bs_(boston)#1`, *same courses,
+different arrangement* — and per the rung counts it is the plan that fell to the packer.
+One refused program also swapped `fails-hard-criteria` for `search-budget-exhausted`.
+
+**State the irony plainly: a fix for "pruning must not cost a plan a rung" costs one plan a
+rung.** Those are different claims — the invariant is about propagation on-versus-off
+neutrality, which now holds, where this is an absolute change against the previous engine —
+but the trade is real and should be re-examined rather than inherited. It was accepted
+because the propagator becoming genuinely neutral empties `KNOWN_DEGRADED`, restores the
+anti-rot assertion, and removes the class of failure that cost a 100-minute acquisition,
+against one plan of 878 that is less thoughtfully sequenced while still passing every hard
+rule.
+
+**⚠ Two process notes that cost time here, both already rules in CLAUDE.md.**
+
+1. **The frozen-clock probe DISAGREES with the sweep on this program, and the sweep is
+   right.** `chart-probe --propagator --ms 5000` reports that plan bit-identical either way,
+   4 nogoods, none of them a chain nogood — because a frozen clock removes the deadline, and
+   with a live clock the deadline changes which attempts finish and therefore which
+   obstruction gets recorded. So a frozen-clock instrument can report a program unaffected
+   when the shipped, live-clock path is affected. Use it to explain a mechanism, never to
+   clear a change.
+2. **"It is probably clock noise" was asserted and was WRONG.** A same-setting control
+   (`after` vs `after2`) is byte-identical — 878 unchanged, 0 moved, summaries diffing clean
+   — so this engine is deterministic at this config and the difference is attributable. Run
+   the control before attributing anything to noise; it is one sweep and it is the only thing
+   that separates "my change did this" from "this config wobbles".
+
+Still unmeasured, and deliberately: the `CHART_CORPUS=all` count of how many programs
+degraded before the fix. It gated the choice between two repairs when one of them was
+expensive, and the repair that landed has no such trade-off, so the number is now
+archaeology about a closed defect.
 
 ---
 

@@ -447,6 +447,9 @@ function generateOnce({
   calibration = {},
   // See the call site below. A test-only escape hatch for one propagator, not a tuning knob.
   propagateChains = true,
+  // The pre-fix nogood behaviour, reachable for `chart-probe --propagator --chain-nogoods`
+  // only. Not caller-facing; see `placeCells` for why it stays.
+  _chainNogoods = false,
   // Set false by the retry in `generatePlan` when binding electives to unmet competencies is
   // what made the degree unplannable. Not a caller-facing option.
   breadthGuidance = true,
@@ -1194,7 +1197,7 @@ function generateOnce({
     // Off only so the claim "a pruning propagator does not move an existing plan" can be
     // TESTED rather than argued — see `chart-propagator-neutral.test.js`. Production never
     // passes false, and the invariant it protects is the whole basis of §17's placement rule.
-    propagateChains, packOnly, trace,
+    propagateChains, _chainNogoods, packOnly, trace,
     // Injectable so DETERMINISM can be tested as the property it is, rather than as a race
     // against the machine. With a frozen clock the search is bounded by nodes alone and the
     // same input must give the same plan; with the real clock a slow run can only ever

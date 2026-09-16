@@ -555,6 +555,22 @@ export function placeCells({
   // 200 nodes, and was unreachable because rung 3 answered first.
   packOnly = false,
   propagateChains = true,
+  // ── The pre-fix behaviour, kept reachable for ONE reason ────────────
+  //
+  // `false` is what ships: a `chain-has-no-room-left` obstruction never becomes a nogood (see
+  // the learner below for why). `true` restores the old behaviour.
+  //
+  // It started as scaffolding for the A/B — which CLAUDE.md requires to run in ONE process,
+  // because this checkout is shared and a baseline from ten minutes ago may be a different
+  // engine — and it stays for the same reason `propagateChains` does: `chart-probe.js
+  // --propagator --chain-nogoods` is what reproduces §18's before/after. A measurement you
+  // cannot re-run is a number in a comment. It is not a tuning knob and nothing in production
+  // passes it.
+  //
+  // NOT an env var, and that is not a style preference: `src/engine/` is browser-reachable, so
+  // `process.env` here is a ReferenceError under `npm run dev` and is SILENTLY REWRITTEN by
+  // `vite build`. Written that way first; `browser-globals.test.js` caught it immediately.
+  _chainNogoods = false,
   // A recording sink, or null. See trace.js: null is the production default and costs one
   // truthiness check per branch, and nothing in here may consult it to make a decision.
   trace = null,
@@ -695,11 +711,55 @@ export function placeCells({
       };
     }
 
+    // ── The nogood learner is the engine's one domain REWRITER ─────────
+    //
+    // Worth stating plainly, because §17.1 splits every change into "prunes" (safe anywhere)
+    // and "rewrites" (a later rung only) and this is the rewrite: `target.domain.filter`
+    // below removes a term permanently, for every later restart. So whatever decides WHICH
+    // rewrite happens decides the variable order, and therefore the plan.
+    //
+    // `chain-has-no-room-left` is excluded, and this is the fix for §18. It is the chain
+    // propagator's OWN verdict, so letting it become a nogood made `propagateChains` — a
+    // pruning propagator, provably unable to touch `byConstraint` directly — change the plan
+    // through this rewrite instead. Two programs duly lost a concession with it on.
+    //
+    // Excluding it is not a workaround, it is the right rule: `precedenceRoom` runs at every
+    // node of every attempt, so the next restart re-derives this obstruction instantly and
+    // for free. There is nothing to LEARN from it. All a nogood can add is the domain rewrite,
+    // and the honest response to an attempt that ran out of allowance is the escalation below
+    // (`perAttempt * 4`) — give the search more room, rather than mutate the problem.
+    //
+    // Measured on BSEnvE#2, the clearest of the two, with
+    // `chart-probe.js --propagator --edition 2026 --ms 1200` and `--chain-nogoods` for the
+    // before: propagation off spends 1,086 nodes, on spent **1,255** across 5 attempts and
+    // came out a rung lower, and on now spends **1,082** across 2 and stays at rung 0. A
+    // pruning propagator that made the search do MORE work was the tell nobody read.
+    //
+    // ⚠ BSChE#0 does not reproduce under that command, and the reason is worth more than the
+    // measurement: `chart-probe` passes `chartCalibration` and the invariant test passes NONE,
+    // so the test judges neutrality under a calibration nothing ships. It also pins edition
+    // `2026` while every other CHART instrument moved to `newestEditionHeld`, and uses a
+    // 1,200 ms budget where every real consumer uses 5,000. Three divergences, all of which
+    // make the test STRICTER than production — fine for a canary, and worth knowing before
+    // reading one of its failures as a student-visible defect.
+    //
+    // ⚠ One channel is left open and is deliberately not chased here: propagation also
+    // SUPPRESSES witness failures on branches it cuts, and the witness path overwrites
+    // `worstFailure` unconditionally (last-wins) where the `dead` path uses `??` (first-wins).
+    // So a run with propagation off can still learn a nogood that a run with it on does not.
+    // Nothing in the corpus shows it, and closing it properly means
+    // separating "the failure we REPORT" from "the failure we LEARN FROM", which is a bigger
+    // change than this defect justifies.
+    //
     // Only a failure that names a cell AND a term can become a nogood.
     const f = r.failure?.lastObstruction ?? r.failure;
     const target = f?.cell != null ? working.find(p => p.cell.id === f.cell) : null;
     const canLearn = target && f.term != null
-      && target.domain.length > 1 && target.domain.includes(f.term);
+      && target.domain.length > 1 && target.domain.includes(f.term)
+      // `!_chainNogoods` and not `=== false`: with a strict comparison a caller passing
+      // `null` or `0` would fall through to the OLD behaviour, i.e. junk silently restores
+      // the defect. Falsy means "exclude", so the safe reading is the default one.
+      && !(!_chainNogoods && f.kind === "chain-has-no-room-left");
 
     if (canLearn) {
       // At most one per restart, so ≤41 of these exist and they can be plain objects. The
@@ -2193,6 +2253,34 @@ function attemptPlacement({
   // already generate. This only answers "is this branch dead", and pruning branches that
   // contain no solution cannot change the order in which SOLUTIONS are met. The plan a
   // succeeding program produces is identical; it is simply reached without the detour.
+  //
+  // ── That is TRUE of this function and was NOT true of the engine ────
+  //
+  // Corrected 2026-09-16. The paragraph above stood for months beside two programs that
+  // demonstrably lost a concession when this propagator was switched on, and both this
+  // comment and `docs/chart-open-defects.md` §18 explained them the same wrong way: that
+  // `byConstraint` reads a PRUNED domain length, so pruning moves the variable order.
+  //
+  // It cannot. `precedenceRoom` returns a boolean and mutates no domain, and `order` is
+  // sorted ONCE per attempt before the DFS starts. Measured with
+  // `chart-probe.js --propagator --edition 2026 --ms 1200`: attempt 0 has a bit-identical
+  // permutation AND bit-identical width keys with propagation on and off. No comparator key
+  // is reachable from here.
+  //
+  // What actually leaked is one edge, and it is the REWRITER the design never accounted for:
+  //
+  //   1. the `dead` branch below records this propagator's own verdict into `worstFailure`
+  //      (`chain-has-no-room-left`), and does so BEFORE the witness runs;
+  //   2. the restart loop feeds `worstFailure` to the nogood learner;
+  //   3. the learner does `target.domain = target.domain.filter(...)` — a genuine REWRITE,
+  //      permanent for every later restart;
+  //   4. THAT moves the widths `byConstraint` reads, from attempt 1 onward.
+  //
+  // So §17.1's pruning/rewriting table was right all along; what nobody noticed is that the
+  // engine already contains a rewriter whose INPUT is propagation-dependent. The repair
+  // therefore belongs at the learner — which re-derives this obstruction at every node of
+  // every attempt anyway, so learning it buys nothing — and not in the comparator. See the
+  // `_chainNogoods` note in `placeCells`.
   //
   // Sound, so nothing valid is cut: every bound here is implied by the partial assignment and
   // the edges, and a cell with no term inside its own tightened window genuinely admits no

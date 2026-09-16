@@ -125,6 +125,38 @@ const concentrationsMode = argv.includes("--concentrations");
 // the refusal reason and detail at each — plus how many cells adoption managed to fix, which is
 // the number that says whether the arrangement was even read.
 const rungsMode = argv.includes("--rungs");
+// ── `--propagator`: WHICH CHANNEL `propagateChains` uses to change the output ──
+//
+// `chart-propagator-neutral.test.js` reports THAT a plan moved or lost a rung. It cannot say
+// how, and for two named programs the repo's answer was wrong for months: both the test header
+// and `docs/chart-open-defects.md` §18 blamed `byConstraint` reading a PRUNED domain length.
+// `precedenceRoom` returns a boolean and mutates no domain, so that was never possible — and
+// this mode is what says so out loud, because every fact needed is already in the trace.
+//
+// It generates the named plans twice in ONE process (per CLAUDE.md: never A/B across two runs
+// of a shared checkout) and prints, per attempt, the `byConstraint` permutation AND the widths
+// it sorted on. The decisive line is ATTEMPT 0: it is sorted before any nogood can exist, so
+// identical widths there prove propagation does not reach the comparator directly.
+//
+// Then the actual channel: `worstFailure` feeds the nogood learner, the learner REWRITES a
+// domain (`search.js` ~:710), and a rewrite is what moves the widths. So the nogoods are
+// listed, and each is checked against the propagation-off solution — a nogood that deletes the
+// term that solution uses would be unsound, which is a different and much worse defect.
+//
+// ⚠ Pass `--ms 1200 --edition 2026` to reproduce what the invariant test sees. Both matter and
+// neither is this script's default:
+//   • the test is pinned to the literal `2026` while every other CHART instrument moved to
+//     `newestEditionHeld`, so the two disagree about which corpus they mean;
+//   • the test's budget is 1,200 ms and production's is 5,000. BSEnvE#2 degrades at 1,200 and
+//     does NOT at the default — the extra allowance lets the strict tier find rung 0 despite
+//     the rewritten domain. So the defect is real and its blast radius is the test's budget,
+//     which is worth knowing before pricing a fix for it.
+const propagatorMode = argv.includes("--propagator");
+// Restores the pre-fix behaviour — a `chain-has-no-room-left` obstruction may become a nogood —
+// so the before/after in §18 stays reproducible after the fix became the default. Without this
+// the instrument can only show the repaired side, and a measurement you cannot re-run is a
+// number in a comment.
+const chainNogoods = argv.includes("--chain-nogoods");
 const wanted = new Set(listFile
   ? JSON.parse(readFileSync(listFile, "utf8"))
   : argv.filter(a => !a.startsWith("--") && a !== listFile && a !== jsonOut));
@@ -132,6 +164,7 @@ if (!wanted.size && !electivesMode && !concentrationsMode) {
   console.error("usage: chart-probe.js [--plans list.json] [--json out.json] [label ...]");
   console.error("       chart-probe.js --electives [--json out.json]");
   console.error("       chart-probe.js --concentrations");
+  console.error("       chart-probe.js --propagator <label ...>");
   process.exit(2);
 }
 
@@ -314,6 +347,79 @@ for (const lvl of ["undergraduate", "graduate"]) {
       const label = prefix + (variants.length > 1 ? `#${vi}` : "");
       if (!wanted.has(label)) return;
       const studentType = lvl === "graduate" ? "graduate" : "undergraduate";
+      if (propagatorMode) {
+        const run = (propagateChains) => {
+          const trace = createTrace({ maxNodes: 400_000 });
+          let res = null, threw = null;
+          try {
+            res = generatePlan({
+              program: data, publishedPlan: variant, courseMap, ports, depthIndex,
+              observedOrder: observed.edges,
+              coopPrep: (observed.coopPrep ?? []).map(x => x.course),
+              studentType, calibration: chartCalibration, timeBudgetMs: timeMs,
+              ...(nodeBudget ? { nodeBudget } : {}),
+              ...(concentration ? { concentration } : {}),
+              propagateChains, _chainNogoods: chainNogoods, trace,
+              // The same frozen clock the invariant test uses, and for the same reason: with a
+              // live clock one side of the pair can refuse on time and the difference is
+              // machine load rather than the propagator.
+              now: () => 0,
+            });
+          } catch (e) { threw = String(e?.message ?? e); }
+          return { res, threw, snap: trace.snapshot() };
+        };
+        // OFF is the baseline, exactly as the invariant test orders them.
+        const off = run(false), on = run(true);
+        console.log(`\n── ${label} ──`);
+        for (const [name, x] of [["off", off], ["on ", on]]) {
+          if (x.threw) { console.log(`  propagateChains ${name}  THREW ${x.threw}`); continue; }
+          const ng = x.snap.stages.filter(s => s.name === "nogood");
+          console.log(`  propagateChains ${name}  `
+            + (x.res.refused ? `REFUSED ${x.res.refused.reason}` : "ok")
+            + `  relaxed=[${(x.res.report?.relaxed ?? []).join(", ")}]`
+            + `  nodes=${x.snap.nodes} attempts=${x.snap.attempts.length}`
+            + `  nogoods=${ng.length}`
+            + (ng.length ? ` (${ng.map(g => `${g.cell}@t${g.term}/r${g.restart}`).join(" ")})` : ""));
+        }
+        // A nogood is only legitimate if no solution places the cell there. The propagation-off
+        // run's own answer is the readiest counterexample, so check against it.
+        const solved = new Map();
+        for (const [i, ti] of off.snap.assignment ?? []) {
+          solved.set(off.snap.roster[i]?.id ?? `#${i}`, ti);
+        }
+        for (const g of on.snap.stages.filter(s => s.name === "nogood")) {
+          const at = solved.get(g.cell);
+          console.log(`    nogood ${g.cell} deleted t${g.term}; the propagation-off plan puts `
+            + `it at t${at ?? "?"} — ${at === g.term
+              ? "UNSOUND: the nogood cut that solution"
+              : "sound against this solution"}`);
+        }
+        // Attempt 0 is the line that matters. `order` is sorted ONCE per attempt, before the
+        // DFS, so propagation can only reach it through a domain that something REWROTE.
+        console.log(`  ── byConstraint, per attempt (attempt 0 is sorted before any nogood) ──`);
+        const keyed = (s) => s.attempts.map(a => ({
+          tag: `${a.tier}/r${a.restart}`,
+          order: a.order ? a.order.join(",") : null,
+          // `terms` is the comparator's width key; a 1 there is also its forced-cell key.
+          widths: a.keys ? a.keys.map(k => k.terms).join(",") : null,
+        }));
+        const ao = keyed(off.snap), bo = keyed(on.snap);
+        for (let i = 0; i < Math.max(ao.length, bo.length); i++) {
+          const a = ao[i], b = bo[i];
+          if (!a || !b) {
+            console.log(`    attempt ${i}: only ${a ? "off" : "on"} reached it (${(a ?? b).tag})`);
+            continue;
+          }
+          console.log(`    attempt ${i}: off=${a.tag} on=${b.tag}  `
+            + `order ${a.order === b.order ? "SAME" : "DIFFER"}  `
+            + `widths ${a.widths === b.widths ? "SAME" : "DIFFER"}`);
+          if (a.widths !== b.widths) {
+            console.log(`        off ${a.widths}`);
+            console.log(`         on ${b.widths}`);
+          }
+        }
+        return;
+      }
       if (rungsMode) {
         const base = {
           program: data, publishedPlan: variant, courseMap, ports, depthIndex,

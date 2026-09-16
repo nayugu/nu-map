@@ -17,16 +17,35 @@
 // contain no solution cannot change the order in which SOLUTIONS are encountered. So the plan
 // is bit-identical and merely reached without the detour.
 //
-// ⚠ THAT REBUTTAL IS WRONG, and §17's original worry was right. Recorded here because this is
-// where the claim is made, and it stood unqualified for months while the file below carried
-// two named counterexamples to it. `byConstraint` consults pruned domain length TWICE — the
-// forced-cell key (`domain.length === 1`) and the width key — so pruning does change the
-// variable order, a different legal plan is reached first, and it can be one that spends a
-// concession. `identical N · moved 0` still holds for the overwhelming majority, which is why
-// the weaker reading survives and this file is still worth running; what does not hold is
-// "cannot". See `docs/chart-open-defects.md` §18 for the measurements, why the obvious repair
-// (order on the UNPRUNED length) is not available as stated, and what the exception list below
-// costs while it is non-empty.
+// ⚠ THE REBUTTAL IS CORRECT. What was wrong was the paragraph that used to sit here, which
+// said the opposite — and it was wrong for a whole year in a way worth keeping, because the
+// evidence looked damning: this file carried two named counterexamples, programs that lost a
+// concession when a *pruning* propagator was switched on.
+//
+// It claimed `byConstraint` consults pruned domain length TWICE — the forced-cell key
+// (`domain.length === 1`) and the width key — so pruning moves the variable order. That is
+// impossible and always was. `precedenceRoom` RETURNS A BOOLEAN and mutates no domain, and
+// `order` is sorted ONCE per attempt, before the DFS starts. Measured with
+// `chart-probe.js --propagator --edition 2026 --ms 1200`, attempt 0 has a bit-identical
+// permutation AND bit-identical width keys either way. No comparator key is reachable.
+//
+// The real channel is the NOGOOD LEARNER, which is the engine's one domain rewriter:
+//
+//   the chain propagator records its own verdict (`chain-has-no-room-left`) into
+//   `worstFailure` -> the restart loop feeds `worstFailure` to the learner -> the learner
+//   does `target.domain = target.domain.filter(...)` -> THAT moves the widths, from
+//   attempt 1 onward.
+//
+// So a propagator can be neutral in itself and still move a plan, through a rewriter
+// downstream of its verdict. Fixed at the learner (`_chainNogoods` in `placeCells`), which
+// is why `KNOWN_DEGRADED` below is now empty.
+//
+// Two lessons this cost, both cheap to state and expensive to learn:
+//   • the counterexamples were REAL and the explanation was invented. Two named programs and
+//     a plausible mechanism felt like a measurement; nobody checked that the mechanism could
+//     occur, and `trace` had recorded the disproof all along.
+//   • when auditing neutrality, enumerate what WRITES a domain, not what reads one. The
+//     learner was read as bookkeeping and never classified against §17.1's own table.
 //
 // The difference decides where a fix is allowed to live: a rewriting propagator must go in a
 // later rung, where only already-refusing programs reach it, while a pruning one is safe
@@ -228,49 +247,50 @@ test("propagator › chain propagation moves no plan answered by the SAME rung",
 });
 
 /**
- * ── ONE measured exception, and what it costs to admit it ────────────
+ * ── EMPTY, and that is the point ─────────────────────────────────────
  *
- * The header argues that a PRUNING propagator cannot change which solution is
- * reached first, because cutting branches with no solution in them leaves the order
- * of the solutions alone. That argument is WRONG, and this is the case that shows
- * it: `byConstraint` orders cells by domain LENGTH, pruning changes lengths, so the
- * variable order changes and a different legal plan is encountered first. §17's
- * original worry was right and the header's rebuttal of it is too strong.
+ * It carried two named programs until 2026-09-16. Both are fixed at the cause — the nogood
+ * learner no longer rewrites a domain on the chain propagator's own verdict (`_chainNogoods`
+ * in `placeCells`) — so there is nothing to pin, and the stale-direction check below is an
+ * ASSERTION again rather than a `console.log`.
  *
- * MEASURED on the one program that shows it:
- *   ug/environmental_engineering_and_health_science_bsenve_(boston)#2
- *   without pruning  []                          — rung 0, no concessions
- *   with pruning     [sequencing-preferences]    — one concession
+ * Leave it empty. The anti-rot guard only exists while it is, which is the whole argument
+ * §18 makes: a pin can outlive its defect, a data refresh can make one dormant without
+ * fixing anything, and neither is detectable by bookkeeping. If a program turns up here
+ * again, the mechanism is not the one the header used to describe — see the header for what
+ * the channel actually is, and `chart-probe.js --propagator` for how to look.
  *
- * It surfaced when the class-standing guard declined that program's published
- * position for PHTH 2414 (sophomore standing, 32 SH, published in a term holding
- * 17), which leaves the cell wide and enlarges the search space enough for the
- * ordering effect to bite. The guard is not the defect — a term the registrar will
- * not let the student register for is not a plan — and the ordering sensitivity was
- * always there, unexercised.
+ * ── What the two entries used to say, kept because the diagnosis was wrong ──
  *
- * Listed by NAME rather than tolerated by count. Any second program appearing here
- * is a new fact about the search and fails the test, which is the whole reason this
- * detector exists. Do not convert this to a threshold. See
- * docs/chart-open-defects.md.
+ * `ug/environmental_engineering_and_health_science_bsenve_(boston)#2` and
+ * `ug/chemical_engineering_and_bioengineering_bsche_(boston)#0`, both
+ * `without [] -> with [sequencing-preferences]`: one concession, everything else identical.
+ * They were blamed on `byConstraint` reading a pruned domain length for a year. It never
+ * could. Two real counterexamples plus a plausible mechanism read as a measurement, and the
+ * trace had held the disproof the whole time.
+ *
+ * How each became reachable is still worth keeping, because both were read as the defect
+ * getting worse and neither was:
+ *
+ *   BSEnvE#2  the class-standing guard declined its published position for PHTH 2414
+ *             (sophomore standing, 32 SH, published in a term holding 17). That leaves the
+ *             cell wide instead of pinned, which enlarges the search enough for the learner
+ *             to find something to rewrite. The guard is not the defect — a term the
+ *             registrar will not let the student register for is not a plan.
+ *   BSChE#0   a DATA fix, no engine change: the prereq parser had been truncating 415 trees
+ *             on legacy (Mills) course numbers, and restoring the CHME and MATH
+ *             prerequisites this degree depends on tightened its domains. The corpus got
+ *             more honest, not worse.
+ *
+ * Both are the same shape: something made the instance harder, the strict tier ran out of
+ * allowance, the learner rewrote a domain on the propagator's verdict, and the ladder paid
+ * for it. Removing the rewrite removes all of it.
+ *
+ * If this set is ever non-empty again: list by NAME, never by count. A threshold swallows a
+ * genuinely new program silently, which is the failure this whole file exists to prevent.
+ * See docs/chart-open-defects.md §18.
  */
-const KNOWN_DEGRADED = new Set([
-  "ug/environmental_engineering_and_health_science_bsenve_(boston)#2",
-  // Second entry, Sept 2026 — and per §18 a second entry is a NEW FACT about
-  // the search rather than a bigger tolerance, so it is written up there too.
-  //
-  // Same signature as the first (`without [] -> with [sequencing-preferences]`,
-  // one concession, everything else bit-identical), and the same root cause:
-  // `byConstraint` orders cells by PRUNED domain length, so pruning moves the
-  // variable order and a different legal plan is reached first.
-  //
-  // What made it reachable was a DATA fix, not an engine change: the prereq
-  // parser was silently truncating 415 trees on legacy (Mills) course numbers,
-  // and restoring the dropped prerequisites on the CHME and MATH courses this
-  // degree depends on changed the domains enough for the existing sensitivity
-  // to bite. The defect did not get worse — the corpus got more honest.
-  "ug/chemical_engineering_and_bioengineering_bsche_(boston)#0",
-]);
+const KNOWN_DEGRADED = new Set([]);
 
 // A pinned exception the sample never reached is not a pass — it is an
 // unobserved claim, and it must say so rather than sit quiet behind a green
@@ -294,48 +314,45 @@ test("propagator › chain propagation never makes a plan spend MORE concessions
     + `costing conventions rather than saving them.`);
 });
 
-// ── A pinned entry that stopped degrading is REPORTED, never asserted ───────
+// ── A pin that stopped degrading is ASSERTED again, and only because the list is empty ──
 //
-// A named exception that has silently stopped happening is a stale claim in a
-// comment, and this file's whole value is that its claims are measured. So this
-// has to be said out loud. It must not FAIL, and that is a correction — it was an
-// assertion until 2026-09-16, when it stopped the monthly course pipeline.
+// Restored 2026-09-16, when the cause was fixed. The history is the argument for keeping
+// `KNOWN_DEGRADED` empty rather than letting it refill, so it is worth the lines:
 //
-// Three facts, not two, and the assertion collapsed the third into the second:
+// It was an assertion, and on 2026-09-16 it STOPPED THE MONTHLY COURSE PIPELINE — at the
+// `npm test` step that sits deliberately in front of the commit, after the scrape,
+// `verify-chart --all` and the build had all passed. An S3 cosmetic defect discarded a
+// 100-minute acquisition, including the first capture of a synthetic summer term's
+// instructors and restrictions. The reason was a third fact the assertion had collapsed
+// into the second:
 //
-//   not observed            outside the sampled N — already printed below.
+//   not observed            outside the sampled N — printed above, never asserted.
 //   observed, still degrades   the claim holds.
 //   observed against DIFFERENT DATA, no longer degrades
 //                           the claim is UNVERIFIED, not falsified.
 //
-// Whether a program shows the ordering sensitivity is a function of how tight its
-// domains are, which is a function of prereq data, which the monthly scrape
-// replaces. So the third case is what an entry normally reports after a scrape,
-// and it says nothing about the engine. Asserting it made an unattended pipeline
-// fail on an S3 cosmetic defect and discard a 100-minute acquisition.
+// Whether a program shows the sensitivity depends on how tight its domains are, which
+// depends on prereq data, which the monthly scrape replaces. So the third case is what an
+// entry normally reports after a scrape and it says nothing about the engine. It was
+// demoted to a `console.log` that day to unblock the pipeline, which knowingly gave up the
+// anti-rot guard: a pin could outlive its defect, and a later genuine degradation on the
+// same program would be swallowed by it.
 //
-// Deleting the entry instead is NOT the alternative: on the committed catalog
-// BSChE still degrades, so removing it fails `unexpected` here while passing in
-// CI, and each scrape differs (five subject pages time out per run, a different
-// five each time). Report is the only outcome that is deterministic under both
-// data states.
-//
-// ⚠ This does cost the anti-rot guard the assertion provided: a pin can now
-// outlive its defect, and a later genuine degradation on the same program would
-// be swallowed by it. That protection is NOT recoverable by bookkeeping — a data
-// hash on each entry would read stale every month and leave the guard
-// permanently dormant. It comes back only when the exception list is EMPTY,
-// which is `docs/chart-open-defects.md` §18. Same shape as `KNOWN_STALE` in
-// `requirement-credit-corpus.test.js`, which reports this direction for the same
-// reason and asserts only the direction a real defect can cause.
-{
+// That protection is not recoverable by bookkeeping — a per-entry data hash would read
+// stale every month and leave the guard permanently dormant. It comes back ONLY when the
+// list is empty, because then there is no pin to go stale and the branch cannot fire on a
+// data refresh. Which is exactly what the fix bought, and exactly what refilling the list
+// would spend again.
+// A `test()` and not a bare block: an assertion at module scope throws during LOAD and takes
+// every other case in this file with it, so the one thing you want from a failure — which of
+// the four claims broke — is the thing you lose.
+test("propagator › no KNOWN_DEGRADED entry has gone stale", () => {
   const stale = [...KNOWN_DEGRADED].filter(l => comparedLabels.has(l) && !degraded.includes(l));
-  if (stale.length) {
-    console.log(`  [propagator] KNOWN_DEGRADED entries that NO LONGER degrade on this catalog: `
-      + `${stale.join(", ")} — unverified rather than fixed. If §18 has landed, delete them; `
-      + `otherwise the corpus moved and the entry is dormant.`);
-  }
-}
+  assert.deepEqual(stale, [],
+    `${stale.length} KNOWN_DEGRADED entries no longer degrade. With the list empty this `
+    + `cannot fire on a data refresh, so an entry here means a pin was added without being `
+    + `needed — delete it, or explain why §18's fix did not cover it.`);
+});
 
 test("propagator › chain propagation never LOSES a plan", () => {
   // Losing one would mean the propagator is unsound — cutting a branch that held the only

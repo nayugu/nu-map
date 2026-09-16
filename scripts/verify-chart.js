@@ -453,6 +453,21 @@ for (const { label, d, variant } of IS_PARENT ? [] : selected) {
         // by `generateOnce` itself, and the printed count of `department-early-terms`
         // fallbacks drops to zero when this is set — which is the check that it landed.
         ...(process.env.CHART_NO_DEPARTMENT ? { followDepartment: false } : {}),
+        // ── The same shape, for the nogood learner ──────────────────────
+        //
+        // `CHART_CHAIN_NOGOODS=1` restores the pre-§18 behaviour, where a
+        // `chain-has-no-room-left` obstruction could become a nogood and REWRITE a domain.
+        // Excluding it is what made the chain propagator output-neutral, and the risk that
+        // needs measuring is the opposite of the defect: the two programs that motivated the
+        // fix were selected BECAUSE the nogood hurt them, so a program the nogood was
+        // HELPING could lose a rung or a refusal. That question is about coverage over the
+        // whole corpus at production settings, which is this script and not the invariant.
+        //
+        // An env var rather than a flag, matching `CHART_NO_DEPARTMENT` above: it reaches the
+        // `--jobs` shards for free, where a flag has to survive `fanOut`'s passthrough. And
+        // it is legitimate HERE and not in `src/engine/` — that is browser-reachable, so
+        // `process.env` there is a ReferenceError in dev and is rewritten by `vite build`.
+        ...(process.env.CHART_CHAIN_NOGOODS ? { _chainNogoods: true } : {}),
       });
     } catch (err) {
       threw++;

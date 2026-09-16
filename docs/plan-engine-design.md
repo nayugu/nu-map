@@ -1996,6 +1996,36 @@ So the real rule is finer, and it is the one that decides where a fix may live:
 | **prunes** — returns "dead branch" | traversal order of solutions unchanged | **anywhere, including rung 1** |
 | **rewrites** — narrows `plan.domain` | changes MRV order → moves plans | a later rung only |
 
+**⚠ The table is right; the engine had a rewriter the table never counted.** Added
+2026-09-16, after §18's two counterexamples were finally diagnosed. Both of them lost a
+concession when a *pruning* propagator was switched on, which reads as a refutation of the
+row above, and for months §18 and the test header explained it as one: `byConstraint` reads
+a pruned domain length, so pruning moves the variable order.
+
+That was never possible. `precedenceRoom` returns a boolean and mutates no domain, and
+`order` is sorted **once** per attempt before the DFS begins. Measured with
+`chart-probe.js --propagator --edition 2026 --ms 1200`: attempt 0 has a bit-identical
+permutation and bit-identical width keys with the propagator on and off.
+
+The leak is the **nogood learner** in `placeCells`, which does
+`target.domain = target.domain.filter(...)` — a rewrite by this section's own definition,
+permanent for every later restart. Its input is `worstFailure`, and the chain propagator
+records its own verdict there before the witness runs. So the chain was:
+
+    propagator verdict -> worstFailure -> nogood learner -> DOMAIN REWRITE -> variable order
+
+Two things follow, and both matter more than the defect:
+
+- **The rewriting row applies to a mechanism nobody had classified.** The learner was read
+  as bookkeeping, not as a change of domains, so it was never priced against this table.
+  When auditing neutrality, enumerate what WRITES a domain, not what reads one.
+- **A propagator can be neutral and still move a plan, through a rewriter downstream of
+  it.** "Prunes" is a property of the propagator; neutrality is a property of the
+  propagator *plus everything its verdict feeds*. The fix is at the learner
+  (`_chainNogoods`), not in the comparator — which also means the forced-cell ordering key
+  never had to be flattened, and §18's proposed repair would have cost a measured win for
+  nothing.
+
 This is not reasoned about, it is tested. `chart-propagator-neutral.test.js` generates
 every sampled program twice, with and without the propagator, and asserts that no plan
 moved and none was lost. It has demonstrated teeth: an off-by-one probe (`>=` for `>`)
