@@ -253,6 +253,72 @@ test("union › a FAILED subject is never retired — it is already rescued, unm
   assert.equal(out.courses.length, 1);
 });
 
+// ── The caller's rescue is IN `scraped`, and that changes the answer ────────
+//
+// The test above hands SOC only in `previous`, which is the state BEFORE
+// `scrape-catalog.js` rescues it. That is not the input this function is called
+// with: the rescue is `prev.filter(c => failedSubjects.has(c.subject))` spread
+// into the array that becomes `scraped`. So the assertion above was right about
+// a shape the caller never passes, and the production shape went untested —
+// which is how a retired course whose page merely timed out came to be
+// published as live. Measured on 2026-09-16: 5 failed subjects, 19 courses
+// announced as "back in the catalog" that had not come back.
+test("union › a RESCUED retired course keeps its marker — a timeout is not a reappearance", () => {
+  const out = retainReferencedCourses({
+    // Exactly what the caller passes: the fresh scrape PLUS its own rescue.
+    scraped: [course("ACCT", "1201"), course("SOC", "1101", { retired: true, retiredSince: "2024-05-05" })],
+    previous: [course("ACCT", "1201"), course("SOC", "1101", { retired: true, retiredSince: "2024-05-05" })],
+    referenced: new Set(["ACCT1201", "SOC1101"]),
+    failedSubjects: new Set(["SOC"]),
+    now: NOW,
+  });
+  const soc = out.courses.find(c => keyOfCourse(c) === "SOC1101");
+  assert.equal(soc.retired, true, "its page failed to load, so we learned nothing about it");
+  assert.equal(soc.retiredSince, "2024-05-05", "and the date it happened must not be re-stamped");
+  assert.deepEqual(out.revived, [], "nothing came back — no operator may be told it did");
+  assert.deepEqual(out.retained, [], "still not retained: that would duplicate the caller's rescue");
+  assert.equal(out.courses.length, 2, "and not duplicated");
+});
+
+test("union › a rescued marker survives a subject named with different case and spacing", () => {
+  // The strip, the revived report and the retention skip must agree on the key.
+  // Only one of the three normalized before this was fixed.
+  const out = retainReferencedCourses({
+    scraped: [course(" soc ", "1101", { retired: true, retiredSince: "2024-05-05" })],
+    previous: [course(" soc ", "1101", { retired: true, retiredSince: "2024-05-05" })],
+    referenced: new Set(["SOC1101"]),
+    failedSubjects: new Set(["SOC"]),
+    now: NOW,
+  });
+  assert.equal(out.courses[0].retired, true);
+  assert.deepEqual(out.revived, []);
+});
+
+test("union › a rescued subject does not shelter a REAL reappearance beside it", () => {
+  // The fix must not over-reach. In one call: SOC failed (keep its marker) and
+  // DGTR was genuinely read and found (lose its marker). Both in the same pass,
+  // because a guard keyed on the wrong scope would treat them alike.
+  const out = retainReferencedCourses({
+    scraped: [
+      course("SOC", "1101", { retired: true, retiredSince: "2024-05-05" }),
+      course("DGTR", "5000", { retired: true, retiredSince: "2024-05-05" }),
+    ],
+    previous: [
+      course("SOC", "1101", { retired: true, retiredSince: "2024-05-05" }),
+      course("DGTR", "5000", { retired: true, retiredSince: "2024-05-05" }),
+    ],
+    referenced: new Set(["SOC1101", "DGTR5000"]),
+    failedSubjects: new Set(["SOC"]),
+    now: NOW,
+  });
+  const soc  = out.courses.find(c => keyOfCourse(c) === "SOC1101");
+  const dgtr = out.courses.find(c => keyOfCourse(c) === "DGTR5000");
+  assert.equal(soc.retired, true, "page failed — no evidence, keep what we knew");
+  assert.equal(dgtr.retired, undefined, "page read and the course was there — it is back");
+  assert.equal(dgtr.retiredSince, undefined);
+  assert.deepEqual(out.revived, ["DGTR5000"], "and only the real one is reported");
+});
+
 test("union › a failed subject is matched case- and space-insensitively", () => {
   const out = retainReferencedCourses({
     scraped: [],

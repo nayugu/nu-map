@@ -96,6 +96,18 @@ export function keyOfCourse(course) {
 }
 
 /**
+ * A course's subject, in the form `failedSubjects` is keyed on.
+ *
+ * Three places ask "did this course's subject fail to load", and they must agree:
+ * the strip, the `revived` report and the retention skip. It was written inline
+ * in one of them, which is how the other two came to be written without it —
+ * `scrape-catalog.js`'s own rescue matches on the RAW `c.subject` and so does not
+ * normalize at all. Same-rule-one-place, so a ` soc ` cannot be handled three ways.
+ */
+const subjectKeyOf = (course) =>
+  String(course?.subject ?? "").replace(/\s+/g, "").toUpperCase();
+
+/**
  * Courses that count toward the shrink rail: everything we actually scraped.
  *
  * A retained course is evidence about an OLDER catalog, so counting it as part
@@ -207,12 +219,38 @@ export function retainReferencedCourses({ scraped, previous, referenced, failedS
   // A freshly-scraped course is by definition in the current catalog, so it
   // must not carry a retirement marker. Stripping rather than trusting the
   // input keeps this correct if the caller's own carry-forward logic ever
-  // starts spreading the previous entry (it currently carries only nuPath).
+  // starts spreading the previous entry.
+  //
+  // ── EXCEPT for a subject that failed to load, and that is the whole point ──
+  //
+  // The premise above — "in `scraped` ⇒ in the current catalog" — is false for
+  // exactly one class of member, and the parenthetical here used to assert
+  // otherwise ("it currently carries only nuPath"). It never did:
+  // `scrape-catalog.js` rescues a failed subject with
+  // `prev.filter(c => failedSubjects.has(c.subject))`, which spreads each entry
+  // WHOLE, and passes the result in as `scraped`. So a course that was retired,
+  // and whose page merely timed out, arrived here looking freshly scraped and
+  // was un-retired.
+  //
+  // Measured on the 2026-09-16 run: 5 subjects failed (ARTD, LACS, LDR, LING,
+  // MET), 153 courses were carried forward, and 19 previously-retired courses
+  // were announced as "back in the catalog" — the visible ones all ARTD/LDR.
+  // They would have shipped live: no `[retired]` badge, no search demotion
+  // (which matters because NEU RENUMBERS rather than retires, so a retired twin
+  // outranking its live successor is a defect `BankPanel` exists to prevent),
+  // and `retiredSince` destroyed, so the next clean read would re-retire them
+  // with the wrong date.
+  //
+  // This is the same distinction the whole file is built on, one level in: a
+  // fetch failure is not a reappearance. The sibling merges in
+  // `scrape-catalog.js` DO clear `retired` on reappearance, and that stays
+  // right — they act on a page that was actually read.
   const present = new Set();
   const courses = fresh.map(c => {
     const key = keyOfCourse(c);
     if (key) present.add(key);
     if (c && typeof c === "object" && (c.retired || c.retiredSince)) {
+      if (failed.has(subjectKeyOf(c))) return c;
       const { retired, retiredSince, ...live } = c;
       return live;
     }
@@ -231,7 +269,13 @@ export function retainReferencedCourses({ scraped, previous, referenced, failedS
     if (present.has(key)) {
       // Back in the catalog. NEU does un-retire courses, and a stale marker
       // would badge a live course as gone.
-      if (c.retired) revived.push(key);
+      //
+      // A failed subject is excluded: its courses are in `present` only because
+      // the caller rescued them, so "back in the catalog" would be a claim about
+      // a page nobody managed to read. Reporting it was not cosmetic — the line
+      // is the only evidence an operator gets, and on 2026-09-16 it announced 19
+      // resurrections that had not happened.
+      if (c.retired && !failed.has(subjectKeyOf(c))) revived.push(key);
       continue;
     }
     // Duplicate keys inside the previous snapshot must not become duplicate
@@ -240,7 +284,7 @@ export function retainReferencedCourses({ scraped, previous, referenced, failedS
     // Its subject failed to load, so the caller has already carried it forward
     // unmarked. Retaining it here would duplicate the entry AND assert a
     // retirement we have no evidence for.
-    if (failed.has(String(c.subject ?? "").replace(/\s+/g, "").toUpperCase())) continue;
+    if (failed.has(subjectKeyOf(c))) continue;
 
     if (!need.has(key)) { dropped.push(key); continue; }
 

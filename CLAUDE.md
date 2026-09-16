@@ -244,11 +244,28 @@ Facts that follow from this:
      construction rather than by a cleanup step — drop the 2026 tree and the
      next scrape drops its courses. Simulated on the real roll: 703 retained,
      367 dropped, dangling 706 → 3 (the 3 being NEU's own inconsistency).
-  2. **A course whose subject FAILED to load is never retired.** Absent because
-     the page timed out is not the same fact as absent because it is gone — the
-     same distinction `knownTermCodes` enforces — and the scraper already
-     rescues those unmarked, so retaining them here would duplicate the entry
-     AND slander a live course.
+  2. **A course whose subject FAILED to load is never retired — and never
+     UN-retired either.** Absent because the page timed out is not the same fact
+     as absent because it is gone (the same distinction `knownTermCodes`
+     enforces), so retaining it here would duplicate the caller's rescue AND
+     slander a live course. ⚠ This rule read "the scraper already rescues those
+     **unmarked**" for a year and that was FALSE in both documents and the code:
+     `scrape-catalog.js` rescues with `prev.filter(...)`, which spreads each
+     entry WHOLE, and passes the result in as `scraped` — where
+     `retainReferencedCourses` stripped `retired`/`retiredSince` from everything
+     it was handed, on the premise "in `scraped` ⇒ in the current catalog". That
+     premise is false for exactly the rescued members. Measured on 2026-09-16: 5
+     failed subjects (ARTD, LACS, LDR, LING, MET), 153 courses carried forward,
+     **19 previously-retired courses announced as "back in the catalog"** and
+     shipped LIVE — no `[retired]` badge, no search demotion (which matters
+     because NEU RENUMBERS rather than retires, so this restores the very
+     retired-twin-outranks-live defect `BankPanel` exists to prevent), and
+     `retiredSince` destroyed so the next clean read re-dates the retirement.
+     Both directions are now keyed on `failedSubjects` through ONE normalizer
+     (`subjectKeyOf`), because the three sites that ask "did this subject fail"
+     had three answers and only one normalized. A fetch failure is not a
+     reappearance; the sibling merges that DO clear `retired` stay right,
+     because they act on a page that was actually read.
   3. **Retention runs strictly AFTER the 2% shrink rail, and the rail counts
      only non-retired courses on BOTH sides.** Before the rail, the union
      inflates the count past the floor and an edition roll sails through the one
