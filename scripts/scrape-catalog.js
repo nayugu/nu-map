@@ -859,6 +859,27 @@ if (PARTIAL) {
   if (failedSubjects.size && existsSync(CATALOG_OUT)) {
     try {
       const prev = JSON.parse(readFileSync(CATALOG_OUT, "utf8"));
+      // Matched RAW, and that is correct rather than an oversight — checked
+      // 2026-09-16, so don't re-hunt it and don't "fix" it with a normalizer.
+      //
+      // `retainReferencedCourses` normalizes the same question (`subjectKeyOf`),
+      // which makes this line look like the odd one out. It is not: both sides
+      // are already forced into one normal form by anchored regexes. A course's
+      // subject comes off the title line via `^([A-Z]{2,6})`, and `failedSubjects`
+      // holds `slug.toUpperCase()` cut at its first space. Measured over the live
+      // catalog: 230 distinct subjects, ZERO not already uppercase, whitespace-free
+      // and 2-6 letters. Normalizing here would be dead code. (It is normalized on
+      // the retention side because that function is exported and unit-tested with
+      // hand-written records, where the guarantee does not hold.)
+      //
+      // Also checked, because it is the failure that would matter: keying on
+      // `c.subject` while `failedSubjects` holds PAGE SLUGS would miss a live
+      // course whose subject has no page of its own. There are four such subjects
+      // (CJS, EAI, HLS, SMT — all 301 to the index, where a real subject page
+      // 200s), and all 31 of their courses are RETIRED: they are retained out of
+      // frozen program editions, for subjects NEU deleted. Of the 226 LIVE
+      // subjects, zero lack a page. So subject and slug coincide exactly where it
+      // counts, and the rescue selects precisely the right courses.
       const rescued = prev.filter(c => failedSubjects.has(c.subject));
       if (rescued.length) {
         out = [...toWrite, ...rescued];
