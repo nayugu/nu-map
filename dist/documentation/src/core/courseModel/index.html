@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/northeastern/dev_logo.png"><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>courseModel.js - NU Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src/core/courseModel">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">src/</a><span class="sep"> / </span><a href="../">core/</a><span class="sep"> / </span><strong>courseModel.js</strong>
+    </div>
+
+    <h1>courseModel.js <span class="badge green">Core logic</span></h1>
+    <p class="lead">Three pure utility functions for course visualization and offering detection. No normalization transform lives here — the catalog data shape comes from the scraper. These functions add computed values (color, edges, offered types) consumed by the planner.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">core/</a></div></div>
+      <div class="nb-group"><div class="nb-label">Called by</div><div class="nb-value">PlannerContext.jsx (subjectColor, extractEdges); CourseCard (color); NortheasternCalendar adapter (getOfferedFromTerms)</div></div>
+      <div class="nb-group"><div class="nb-label">Imports</div><div class="nb-value">constants.js (SUBJECT_PALETTE)</div></div>
+    </div>
+
+    <h2>Exported functions</h2>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">subjectColor(subject) → string</div>
+      <div class="fn-desc">
+        Deterministic color hash. Multiplies previous hash by 31 and adds the next char code (polynomial hash), then indexes into <code>SUBJECT_PALETTE</code> (25 CSS hex colors from <code>constants.js</code>). Same subject string always produces the same color across sessions and builds — used for the left-edge stripe on <code>CourseCard</code>.
+      </div>
+      <div class="fn-returns">Returns: <span>CSS hex color string, e.g. <code>"#4a90d9"</code></span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">extractEdges(courseId, prereqs, coreqs) → Edge[]</div>
+      <div class="fn-desc">
+        Walks the prereq and coreq trees recursively. At each leaf node (<code>{ subject, number }</code>), emits one edge. String tokens (<code>"Or"</code>, <code>"And"</code>, <code>"("</code>, <code>")"</code>) are skipped. Prerequisite edges carry <code>concurrent: true</code> when the leaf node has that flag set (indicating "may be taken concurrently").
+        <br><br>Edges are used to draw SVG lines in <code>RelationLines</code> and list relationships in <code>InfoPanel</code>.
+      </div>
+      <div class="fn-returns">Returns: <span>Edge[] — each is <code>{ from: string, to: string, type: "prerequisite"|"corequisite", concurrent?: true }</code></span></div>
+    </div>
+
+    <div class="fn-block exported">
+      <div class="fn-sig">getOfferedFromTerms(terms, decodeTermCode?) → string[] | null</div>
+      <div class="fn-desc">
+        Maps raw catalog term codes to the set of offered semester type IDs. Each term entry may be a plain string code or an object with a <code>.code</code> field.
+        <br><br>
+        <strong>decodeTermCode</strong> (optional): an institution-specific decoder from <code>ICalendar.decodeTermCode</code> — takes a term code string and returns a semester type ID. When omitted, falls back to the NU Banner convention:
+        <code>YYYY10</code>=fall, <code>YYYY30</code>=spring, <code>YYYY40</code>=sumA, <code>YYYY60</code>=sumB.
+        <br><br>
+        Returns <strong>null</strong> (not an empty array) when no recognisable codes are found — callers must handle this.
+      </div>
+      <div class="fn-returns">Returns: <span>string[] of semester type IDs (e.g. <code>["fall","spring"]</code>), or <code>null</code> if no codes matched</span></div>
+      <div class="fn-meta">Parameters: terms = raw term entries from course data; decodeTermCode = optional ICalendar decoder (defaults to NU Banner convention)</div>
+    </div>
+
+    <h2>Edge shape</h2>
+    <pre><code><span class="cmt">// Prerequisite edge (required earlier semester)</span>
+{ from: <span class="str">"CS2510"</span>, to: <span class="str">"CS3500"</span>, type: <span class="str">"prerequisite"</span> }
+
+<span class="cmt">// Concurrent prerequisite (same semester allowed)</span>
+{ from: <span class="str">"MATH2321"</span>, to: <span class="str">"CS3500"</span>, type: <span class="str">"prerequisite"</span>, concurrent: <span class="kw">true</span> }
+
+<span class="cmt">// Corequisite edge (must be same semester)</span>
+{ from: <span class="str">"CS3500"</span>, to: <span class="str">"CS3501"</span>, type: <span class="str">"corequisite"</span> }</code></pre>
+
+    <p>The <code>type</code> field maps to keys in <code>REL_STYLE</code> (from <code>constants.js</code>) for SVG rendering. <code>concurrent</code> affects <code>evalPrereqTree</code>'s order check, not the edge type itself — concurrent prereq edges still have <code>type: "prerequisite"</code>.</p>
+
+    <h2>Usage pattern</h2>
+    <pre><code><span class="kw">import</span> { subjectColor, extractEdges, getOfferedFromTerms } <span class="kw">from</span> <span class="str">'./courseModel.js'</span>;
+
+<span class="cmt">// Build computed fields when loading catalog data</span>
+<span class="kw">const</span> color = <span class="fn-name">subjectColor</span>(course.subject);
+<span class="kw">const</span> edges = <span class="fn-name">extractEdges</span>(course.id, course.prereqs, course.coreqs);
+
+<span class="cmt">// Map term codes to offering types</span>
+<span class="cmt">// Returns null when course has no recognisable term history</span>
+<span class="kw">const</span> offered = <span class="fn-name">getOfferedFromTerms</span>(course.terms); <span class="cmt">// e.g. ["fall","spring"] or null</span>
+<span class="kw">const</span> offeredCustom = <span class="fn-name">getOfferedFromTerms</span>(course.terms, calendar.decodeTermCode);</code></pre>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
