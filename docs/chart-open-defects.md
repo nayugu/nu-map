@@ -1187,6 +1187,14 @@ the anti-rot guard**: a pin can now outlive its defect, and a later genuine degr
 BSEnvE or BSChE would be swallowed by it. That protection returns only when the list is
 empty. It is a temporary exception, and the fix below is the condition for removing it.
 
+**⚠ The list of two has only ever been measured over a SAMPLE of 30 programs.**
+`chart-propagator-neutral.test.js` sets `const N = process.env.CHART_CORPUS === "all" ?
+Infinity : 30;`, so both entries are what a 30-of-~800 draw happened to show. The
+corpus-wide count of programs that degrade is **unknown** — it could be two, or fifty. So
+the first step of the fix is not a code change: run `CHART_CORPUS=all` and find out what
+is actually being fixed. Sizing the defect before designing for it also decides whether
+the forced-cell conflict below is worth paying for at all.
+
 **⚠ The fix proposed above is wrong as stated, and this was found by trying to apply it.**
 "Order on the unpruned domain length" cannot simply be done, because `byConstraint`'s
 **first** key is pruning-dependent too:
