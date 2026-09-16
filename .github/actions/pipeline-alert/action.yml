@@ -54,6 +54,10 @@ runs:
           const LABEL  = 'pipeline-failure';
           const { owner, repo } = context.repo;
           const runUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+          // Absolute, not relative: GitHub does not resolve a relative path in
+          // an ISSUE body the way it does in a rendered repository file, so
+          // `../blob/main/…` lands somewhere that does not exist.
+          const runbookUrl = `${context.serverUrl}/${owner}/${repo}/blob/main/docs/runbook.md`;
 
           const lines = (s) => s.split('\n').map(x => x.trim()).filter(Boolean);
 
@@ -244,6 +248,8 @@ runs:
               '',
               detail ? `### Check first\n\n${detail}` : '',
               '',
+              `**Step-by-step runbook:** [docs/runbook.md](${runbookUrl})`,
+              '',
               '### General triage',
               '',
               '1. Open the workflow in the Actions tab. If the schedule is disabled,',
@@ -317,6 +323,13 @@ runs:
             'healthy while going quietly out of date. Nothing self-heals.',
             '',
             checkFirst ? `### Check first\n\n${checkFirst}` : '',
+            '',
+            // The step-by-step half of the runbook: what this particular step
+            // failing usually MEANS and what the fix looks like. Kept in the
+            // repo rather than inlined here because it is prose that changes
+            // when the pipeline does, and a reader who did not build this needs
+            // it before the generic triage below is actionable.
+            `**Step-by-step runbook:** [docs/runbook.md](${runbookUrl})`,
             '',
             '### General triage',
             '',

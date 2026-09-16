@@ -208,7 +208,7 @@ If you are considering adopting NU Map as an ongoing organizational project (for
 - **Plan for how you will handle your own succession.** If your current members graduate and no one else picks it up, what happens? Ideally you have an answer before you take on the project.
 - **Consider whether you actually want this or whether you are being polite.** It is better to say no now than to accept and let it degrade.
 
-If you take it on as an operator rather than as a fork, most of Part 3 does not apply: the identity, the legal files and the copyright stay where they are, and what you need is access to the infrastructure and the pipelines. That is the lighter path and usually the right one.
+If you take it on as an operator rather than as a fork, most of Part 3 does not apply: the identity, the legal files and the copyright stay where they are, and what you need is access to the infrastructure and the pipelines. `docs/access.md` is the checklist for that, and `docs/runbook.md` is what to do when a scraper fails at six in the morning. That is the lighter path and usually the right one.
 
 If you accept, I would like to do a supervised handoff over several months rather than a single transfer. This means I stay available to answer questions and review changes for a period after you take over, so you can build the mental model of the codebase with support. It also means I can course-correct if I see the fork drifting from the rules early.
 

@@ -36,7 +36,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -275,6 +275,24 @@ test("stale never overwrites an open failure report", async () => {
   assert.equal(s.named("create").length, 0);
   assert.equal(s.named("update").length, 0, "a failure report carries logs; staleness carries less");
   assert.equal(s.named("createComment").length, 0);
+});
+
+test("both bodies link a runbook that resolves, and that exists", async () => {
+  // The link was written first as a relative path and then mangled to an empty
+  // `()` by a bad shell substitution, and neither version fails anything: the
+  // alert still opens, still names the step, still tails the logs. It is the
+  // one part of the body a reader follows OFF the issue, so a dead link here
+  // is invisible until the night someone needs it.
+  const LINK = /\[docs\/runbook\.md\]\((https:\/\/\S+\/blob\/main\/docs\/runbook\.md)\)/;
+
+  for (const state of ["failed", "stale"]) {
+    const s = await run({ state });
+    const body = s.named("create")[0].args.body;
+    assert.match(body, LINK, `the ${state} body must link the runbook absolutely`);
+  }
+
+  assert.ok(existsSync(join(ROOT, "docs/runbook.md")),
+    "the alert points every failure at docs/runbook.md, so it has to be there");
 });
 
 test("the issue is found by its marker, so two pipelines never share one", async () => {
