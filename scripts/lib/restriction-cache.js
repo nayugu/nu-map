@@ -36,13 +36,27 @@
 //
 // ── WHAT IT IS NOT ─────────────────────────────────────────────────
 //
-// Not a substitute for reading Banner. The scrape WRITES here and never reads:
-// a live run must see what Banner says today, or a stale cache would quietly
-// become the source. Only `reparse-restrictions.js` reads, and only to re-derive
-// stored fields from pages already captured.
+// Not a substitute for reading Banner for a term we have not attempted: a term
+// with no cached pages is always fetched live.
 //
-// `.cache/` is gitignored, so this is a local artifact. A machine without it
-// simply cannot re-parse and has to re-fetch — which is the status quo, not a
+// ⚠ This said "The scrape WRITES here and never reads" until 2026-09-16, and
+// that was true when written and false afterwards — `--resume` became the
+// DEFAULT and `scrape-availability.js` now calls `readTermCache` before
+// fetching. Corrected here rather than left to be discovered, because a comment
+// that understates what a module does is how the CI cache below went unbuilt for
+// months: the sentence said caching this directory could not help, so nobody
+// tried. (The same class of stale claim un-retired 19 courses the same week.)
+//
+// What the original sentence was protecting is still real and still holds, by a
+// different mechanism: resume is only applied to COMPLETED terms, whose pages
+// are frozen. A live term is re-read every time, so a stale cache cannot become
+// the source. `reparse-restrictions.js` also reads, to re-derive stored fields
+// without any network at all.
+//
+// `.cache/` is gitignored, so this is a local artifact — plus, since
+// 2026-09-16, a restored `actions/cache` entry in `update-courses.yml`, which is
+// what stops a failed monthly run having to re-fetch a ~21-minute term. A
+// machine without it simply re-fetches, which is the status quo, not a
 // regression.
 // ═══════════════════════════════════════════════════════════════════
 

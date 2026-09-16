@@ -126,6 +126,35 @@ jobs:
           node-version: "22"
           cache: "npm"
 
+      # ── Restore the raw Banner restriction pages ──────────────────────────
+      #
+      # `--resume` is the default in scrape-availability.js, and it RE-PARSES the
+      # cached pages rather than skipping them (a course folded from half its
+      # sections yields a false gate — the one error that can refuse a plan). So
+      # a restored cache turns the ~21-minute per-CRN restriction pass for an
+      # already-attempted term into a re-parse of seconds, with zero requests to
+      # Banner.
+      #
+      # Safe here for one specific reason, and it does not generalise: this pass
+      # runs only on COMPLETED terms, whose pages are frozen. A scrape of live
+      # data would have to decide what staleness it tolerates before it may
+      # resume at all.
+      #
+      # ⚠ `.cache/banner` ONLY, never `.cache/catalog`. The catalog HTML cache is
+      # development-only — CI must see the live catalog, and .gitignore says so.
+      #
+      # ⚠ RESTORE and SAVE are separate actions on purpose. The combined
+      # `actions/cache` does not save when the job FAILS, which is precisely the
+      # run this exists for; the split form with `if: always()` on the save is
+      # what makes a failed run's fetching survive it.
+      - name: Restore Banner restriction cache
+        id: banner-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/banner
+          key: banner-restrictions-${{ github.run_id }}
+          restore-keys: banner-restrictions-
+
       - name: Install dependencies
         # `--ignore-scripts` — see .github/workflows/test.yml. `onnxruntime-node`'s postinstall
         # fetches a ~100 MB runtime this project never loads, and it has already failed a job
@@ -322,6 +351,31 @@ jobs:
 
       - name: Suites that assert on data shape
         run: npm test 2>&1 | tee /tmp/suites-log.txt
+
+      # ── Save the Banner pages whether or not the run succeeded ────────────
+      #
+      # `if: always()` is the whole point — see the restore step. A new key every
+      # run because a cache entry is immutable, so a fixed key would be written
+      # once and never updated as further terms are captured; `restore-keys`
+      # above takes the most recent prefix match. Entries are ~100 KB (the pages
+      # are near-identical boilerplate, so one gzipped stream is 2.7% of raw),
+      # against GitHub's 10 GB LRU budget.
+      #
+      # Placed before the commit so it runs even when a later step refuses.
+      #
+      # `continue-on-error` because a cache is an OPTIMISATION and must never be
+      # able to fail a data run. The reachable case: a run where the restriction
+      # pass is skipped entirely (every in-window term already at coverage) and
+      # no prior cache was restored leaves `.cache/banner` absent, and a save
+      # over a missing path errors. That would turn a green run that was about to
+      # commit into a red one, for a directory nothing needed.
+      - name: Save Banner restriction cache
+        if: always()
+        continue-on-error: true
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/banner
+          key: banner-restrictions-${{ github.run_id }}
 
       # ── A failed run must not also DESTROY what it fetched ─────────────────
       #
