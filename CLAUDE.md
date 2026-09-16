@@ -1,5 +1,24 @@
 # NU Map — notes for Claude
 
+## Companion documents
+
+Two files sit beside this one. Neither is addressed to Claude, and both are
+worth reading before changing anything they cover.
+
+- **`CONTEXT.md`** — why the project is built the way it is. It holds the
+  decisions that look arbitrary until you know what they cost, and the
+  invariants a well-meaning change breaks silently. It is written for a human
+  successor taking the project over. It covers what this file barely touches:
+  local-only storage, ratings privacy, the share-code crypto, the plan engine's
+  refusal to pick courses, and how a plan is saved.
+  About a third of it restates rules that are stated more fully here.
+  **Where the two disagree, this file is the current one.** CONTEXT.md is the
+  reasoning behind a decision, not its present state, so a contradiction means
+  the decision changed. Find out which one moved rather than picking a side.
+- **`FORK.md`** — the contract for forking or inheriting NU Map: the three
+  rules a fork must run under, what does not transfer (legal architecture,
+  identity, infrastructure), and the cleanup checklist.
+
 ## Data pipeline: current vs legacy
 
 Read this before touching anything under `.github/workflows/` or `scripts/` that

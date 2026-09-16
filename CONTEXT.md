@@ -1,4 +1,6 @@
-This is the reasoning behind NU Map that you cannot recover by reading the code. It is not an architecture tour and not a setup guide; it assumes you can read the codebase yourself. What is here is the set of decisions that look arbitrary, or look improvable, until you know what they cost, plus the assumptions the code quietly depends on. Its companions: FORK.md for the legal and identity side of taking this over, CLAUDE.md for how to work in the repo day to day, and `docs/` for the design of record of each subsystem.
+This is the reasoning behind NU Map that you cannot recover by reading the code. It is not an architecture tour and not a setup guide; it assumes you can read the codebase yourself. What is here is the set of decisions that look arbitrary, or look improvable, until you know what they cost, plus the assumptions the code quietly depends on.
+
+Its companions: FORK.md for the legal and identity side of taking this over, CLAUDE.md for how to work in the repo day to day, and `docs/` for the design of record of each subsystem. Some of what follows is also in CLAUDE.md, in more operational detail. Where the two disagree, CLAUDE.md is the current one and this file is the reasoning behind it. A contradiction therefore means a decision changed, so find out which one moved rather than picking a side.
 
 ## 1. Non-obvious design decisions
 
