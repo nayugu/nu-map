@@ -234,5 +234,5 @@ I built this with my brother Matthew because we needed it. We made it public bec
 
 If you fork this and honor these rules, you have my thanks and my support. If you fork this and violate them, please at least have the decency to change the name.
 
-Sincerely,
+Sincerely,\
 Nathan Gu
