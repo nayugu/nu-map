@@ -6,6 +6,13 @@ public/ort/
 *.py
 .env.local
 .env*.local
+# Plain .env too, and wrangler's local-secrets file. Only `.env*.local` was
+# ignored, so a `.env` or a `cloudflare/*/.dev.vars` holding a live Stripe or
+# Cloudflare key would have been committed by an ordinary `git add`. Nothing
+# like that has ever been tracked here; this is so it stays that way.
+.env
+.dev.vars
+.dev.vars.*
 test-results/
 .vscode/settings.json
 # Local miniflare emulator state (KV blobs, Durable Object SQLite, caches).
