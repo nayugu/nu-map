@@ -1152,6 +1152,58 @@ sheltering behind missing constraints stopped doing so. Expect more entries as d
 quality improves — which is the argument for taking the fix below rather than continuing
 to pin programs. Two entries is where "a named exception" starts becoming "a list".
 
+**The second entry stopped reproducing on the 2026-09-16 catalog, and that is what forced
+the rest of this section to be rewritten.** It was not fixed. Nothing in the engine moved;
+the monthly scrape replaced the catalog and BSChE's domains changed enough that the
+sensitivity no longer bites there. On the *committed* catalog it still degrades — the same
+suite passes locally and failed in CI on the same commit — so the entry is **dormant, not
+falsified**.
+
+The way it announced itself is the part worth keeping: it **failed the monthly course
+pipeline**, at the `npm test` step that sits deliberately in front of the commit, after the
+scrape, `verify-chart --all` and the build had all passed. An S3 cosmetic defect discarded
+a 100-minute acquisition, including the first successful capture of a synthetic summer
+term's instructors and restrictions. (Before 2026-09-02 it would have gone the other way
+and been invisible: the step is `npm test | tee`, and without pipefail the exit status was
+`tee`'s.)
+
+**So a named exception list is unmaintainable against a monthly-refreshed corpus**, and the
+three candidate repairs are now all known to be wrong or unavailable:
+
+- **Delete the entry.** Non-deterministic. It fails `unexpected` on the committed catalog
+  and passes on the scraped one, and each scrape differs — five subject pages time out per
+  run, a different five each time.
+- **Attach a corpus hash to each entry** so a mismatch reads as unverified. The hash would
+  be stale every month, leaving the guard permanently dormant — the rot it exists to
+  prevent.
+- **A count threshold.** Refused above, and still refused: it swallows a genuinely new
+  program silently.
+
+What was done instead, 2026-09-16: the "still degrades" direction is now **reported, not
+asserted** (`console.log`, matching `KNOWN_STALE` in `requirement-credit-corpus.test.js`),
+while `unexpected` — a program degrading that is not on the list — stays a hard assertion,
+because that is the only direction a real regression can cause. **This knowingly gives up
+the anti-rot guard**: a pin can now outlive its defect, and a later genuine degradation on
+BSEnvE or BSChE would be swallowed by it. That protection returns only when the list is
+empty. It is a temporary exception, and the fix below is the condition for removing it.
+
+**⚠ The fix proposed above is wrong as stated, and this was found by trying to apply it.**
+"Order on the unpruned domain length" cannot simply be done, because `byConstraint`'s
+**first** key is pruning-dependent too:
+
+```js
+const sa = a.domain.length === 1 ? 0 : 1, sb = b.domain.length === 1 ? 0 : 1;
+```
+
+Pruning is precisely what collapses a domain to one term, and deciding those cells first is
+a separate, *measured* improvement — 22 of 82 forced cells (26.8%) were being decided after
+a cell that still had a choice. Making the order independent of pruned domain length would
+undo unit-propagation ordering. So the two options are not "principled" and "honest" as
+written; the principled one has a cost that was never priced. Whoever takes this needs to
+either exempt the forced-cell key and prove the width key alone carries the sensitivity, or
+find a tie-break that is pruning-invariant without flattening that key — and measure it
+with an A/B in ONE process, per CLAUDE.md, not across two runs of a shared checkout.
+
 ---
 
 ### 19. A `shared` section deleted the requirement instead of de-duplicating it — FIXED, with a named residual

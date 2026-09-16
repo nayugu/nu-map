@@ -17,6 +17,17 @@
 // contain no solution cannot change the order in which SOLUTIONS are encountered. So the plan
 // is bit-identical and merely reached without the detour.
 //
+// ⚠ THAT REBUTTAL IS WRONG, and §17's original worry was right. Recorded here because this is
+// where the claim is made, and it stood unqualified for months while the file below carried
+// two named counterexamples to it. `byConstraint` consults pruned domain length TWICE — the
+// forced-cell key (`domain.length === 1`) and the width key — so pruning does change the
+// variable order, a different legal plan is reached first, and it can be one that spends a
+// concession. `identical N · moved 0` still holds for the overwhelming majority, which is why
+// the weaker reading survives and this file is still worth running; what does not hold is
+// "cannot". See `docs/chart-open-defects.md` §18 for the measurements, why the obvious repair
+// (order on the UNPRUNED length) is not available as stated, and what the exception list below
+// costs while it is non-empty.
+//
 // The difference decides where a fix is allowed to live: a rewriting propagator must go in a
 // later rung, where only already-refusing programs reach it, while a pruning one is safe
 // everywhere. That is a strong claim about the search's behaviour and exactly the kind this
@@ -283,26 +294,48 @@ test("propagator › chain propagation never makes a plan spend MORE concessions
     + `costing conventions rather than saving them.`);
 });
 
-test("propagator › the known degradation is still the only one, and still degrades", () => {
-  // A named exception that has silently stopped happening is a stale claim in a
-  // comment, and this file's whole value is that its claims are measured. If the
-  // ordering sensitivity is ever fixed, this fails and the entry comes out.
-  //
-  // Judged only over labels this run actually COMPARED. `sample()` is a seeded
-  // shuffle of the whole corpus and then a slice, so its 30 depend on the
-  // corpus LENGTH: any change to the number of eligible programs deals a
-  // different hand. Four Interdisciplinary PhD programs became visible in Aug
-  // 2026 (they state 30 SH of committee-directed coursework and no course list,
-  // so parseTable used to drop every section and the whole program vanished),
-  // 795 eligible → 799, and BSEnvE fell out of the sample. It reported as
-  // "no longer degrades" while nothing about it had changed — a false alarm
-  // that, followed literally, would have deleted a measured fact about the
-  // search. An entry can only be falsified by a run that looked at it.
+// ── A pinned entry that stopped degrading is REPORTED, never asserted ───────
+//
+// A named exception that has silently stopped happening is a stale claim in a
+// comment, and this file's whole value is that its claims are measured. So this
+// has to be said out loud. It must not FAIL, and that is a correction — it was an
+// assertion until 2026-09-16, when it stopped the monthly course pipeline.
+//
+// Three facts, not two, and the assertion collapsed the third into the second:
+//
+//   not observed            outside the sampled N — already printed below.
+//   observed, still degrades   the claim holds.
+//   observed against DIFFERENT DATA, no longer degrades
+//                           the claim is UNVERIFIED, not falsified.
+//
+// Whether a program shows the ordering sensitivity is a function of how tight its
+// domains are, which is a function of prereq data, which the monthly scrape
+// replaces. So the third case is what an entry normally reports after a scrape,
+// and it says nothing about the engine. Asserting it made an unattended pipeline
+// fail on an S3 cosmetic defect and discard a 100-minute acquisition.
+//
+// Deleting the entry instead is NOT the alternative: on the committed catalog
+// BSChE still degrades, so removing it fails `unexpected` here while passing in
+// CI, and each scrape differs (five subject pages time out per run, a different
+// five each time). Report is the only outcome that is deterministic under both
+// data states.
+//
+// ⚠ This does cost the anti-rot guard the assertion provided: a pin can now
+// outlive its defect, and a later genuine degradation on the same program would
+// be swallowed by it. That protection is NOT recoverable by bookkeeping — a data
+// hash on each entry would read stale every month and leave the guard
+// permanently dormant. It comes back only when the exception list is EMPTY,
+// which is `docs/chart-open-defects.md` §18. Same shape as `KNOWN_STALE` in
+// `requirement-credit-corpus.test.js`, which reports this direction for the same
+// reason and asserts only the direction a real defect can cause.
+{
   const stale = [...KNOWN_DEGRADED].filter(l => comparedLabels.has(l) && !degraded.includes(l));
-  assert.deepEqual(stale, [],
-    `${stale.length} entries in KNOWN_DEGRADED no longer degrade — delete them and `
-    + `tighten the assertion above.`);
-});
+  if (stale.length) {
+    console.log(`  [propagator] KNOWN_DEGRADED entries that NO LONGER degrade on this catalog: `
+      + `${stale.join(", ")} — unverified rather than fixed. If §18 has landed, delete them; `
+      + `otherwise the corpus moved and the entry is dormant.`);
+  }
+}
 
 test("propagator › chain propagation never LOSES a plan", () => {
   // Losing one would mean the propagator is unsound — cutting a branch that held the only

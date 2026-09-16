@@ -323,6 +323,47 @@ jobs:
       - name: Suites that assert on data shape
         run: npm test 2>&1 | tee /tmp/suites-log.txt
 
+      # ── A failed run must not also DESTROY what it fetched ─────────────────
+      #
+      # The gate above is deliberate and unchanged: data that cannot be built must
+      # not be pushed. What was never intended is that it also throws the data
+      # away. On 2026-09-16 one S3 cosmetic assertion discarded a 100-minute
+      # acquisition — a full catalog plus the first successful capture of a
+      # synthetic summer term's instructors and restrictions — and left no copy
+      # anywhere, so the failure could not even be diagnosed against the data that
+      # caused it.
+      #
+      # Re-running is NOT a replay, which is why this matters more than it looks:
+      # that run lost ARTD, LACS, LDR, LING and MET to per-subject timeouts, and
+      # the next run loses a different five. Every attempt is a fresh, differently
+      # flawed acquisition at ~100 minutes a throw.
+      #
+      # This is the same rule the scrapers already follow internally — cache the
+      # raw response so a parser change becomes a re-parse rather than a re-fetch
+      # (see CLAUDE.md § Scraping) — applied one level up, at the workflow, where
+      # it was missing.
+      #
+      # `if: failure()` only: a successful run commits, so the artifact would be a
+      # duplicate of main. Nothing here is secret — it is all public catalog data
+      # that ships to the site.
+      - name: Preserve the data a failed run fetched
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: course-data-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 30
+          path: |
+            public/northeastern/catalog-courses.json
+            public/northeastern/term-history.json
+            public/northeastern/term-details.json
+            public/northeastern/restrictions.json
+            public/northeastern/restriction-labels.json
+            public/northeastern/subject-colleges.json
+            public/northeastern/change-log.json
+            public/northeastern/all-courses.json
+            data/northeastern/scrape-state.json
+
       # ── Commit and push directly to main ──────────────────────────────────────
       #
       # ONE step, and that is a fix rather than tidying. A `Check for changes`
