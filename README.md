@@ -158,6 +158,8 @@ Note that the AGPL already permits commercial use *with* source disclosure — t
 
 The **"NU Map" name, logo, and domains are not licensed**. Forks are welcome — the architecture is built for them — but must ship under their own name.
 
+If you are thinking about forking, start with **[`FORK.md`](FORK.md)**: the three rules we ask a fork to run under, what you inherit that you cannot use as-is, and the cleanup checklist. [`CONTEXT.md`](CONTEXT.md) is its companion — the reasoning behind the design that you cannot recover from the code.
+
 ---
 
 ## Credits

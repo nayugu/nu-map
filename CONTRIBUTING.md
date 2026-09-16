@@ -12,8 +12,14 @@ have found something **factually wrong in the course data**, open an issue
 describing the error. A report is useful to us; a patch is not.
 
 You are free to **fork** under the AGPL, including for other universities. That
-needs nothing from us. See [`LICENSING.md`](LICENSING.md) for terms and the
-[README](README.md) for how the project fits together.
+needs nothing from us.
+
+Read [`FORK.md`](FORK.md) before you start. It is the one document written for
+you: the three rules we ask a fork to run under, what you inherit that you
+cannot use as-is (our legal architecture, our identity, our infrastructure),
+and a cleanup checklist. Then [`LICENSING.md`](LICENSING.md) for the terms,
+[`CONTEXT.md`](CONTEXT.md) for why the project is built the way it is, and the
+[README](README.md) for how it fits together.
 
 ## Contributor terms
 
