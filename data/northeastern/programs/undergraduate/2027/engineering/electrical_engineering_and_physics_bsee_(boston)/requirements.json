@@ -2,7 +2,7 @@
   "name": "Electrical Engineering and Physics, BSEE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "9/10/2026",
+    "lastEdited": "9/17/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
@@ -72,7 +72,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-10",
+      "checkedAt": "2026-09-17",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/electrical-computer/electrical-engineering-physics-bsee/",
       "sourcesAvailable": [
         "requirement-tables",

@@ -1,6 +1,15 @@
 {
   "runs": [
     {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-09-17T00:30:17.519Z",
+      "done": 619,
+      "written": 620,
+      "skipped": 129,
+      "failed": 0
+    },
+    {
       "type": "nupath-auto-update",
       "subject": "🤖 NUpath Auto-Update",
       "timestamp": "2026-09-16T23:38:10.447Z",

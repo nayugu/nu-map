@@ -2,7 +2,7 @@
   "name": "Landscape Architecture, BLA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "9/10/2026",
+    "lastEdited": "9/17/2026",
     "branch": "main",
     "tablesPresent": 1,
     "tablesConsumed": 1,
@@ -47,7 +47,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-10",
+      "checkedAt": "2026-09-17",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/architecture/landscape-architecture-bla/",
       "sourcesAvailable": [
         "requirement-tables",

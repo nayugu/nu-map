@@ -2,7 +2,7 @@
   "name": "Bioengineering, Minor",
   "metadata": {
     "verified": true,
-    "lastEdited": "9/10/2026",
+    "lastEdited": "9/17/2026",
     "branch": "main",
     "tablesPresent": 2,
     "tablesConsumed": 2,
@@ -17,7 +17,7 @@
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
-      "checkedAt": "2026-09-10",
+      "checkedAt": "2026-09-17",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/bioengineering/bioengineering-minor/",
       "sourcesAvailable": [
         "requirement-tables",
