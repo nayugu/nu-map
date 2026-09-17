@@ -1,6 +1,15 @@
 {
   "runs": [
     {
+      "type": "grad-majors",
+      "subject": "🎓 Graduate Program Requirements",
+      "timestamp": "2026-09-17T00:46:05.649Z",
+      "done": 578,
+      "written": 615,
+      "skipped": 225,
+      "failed": 0
+    },
+    {
       "type": "majors",
       "subject": "🎓 Major Requirements",
       "timestamp": "2026-09-17T00:30:17.519Z",
