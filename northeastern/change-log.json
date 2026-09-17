@@ -1,6 +1,109 @@
 {
   "runs": [
     {
+      "type": "nupath-auto-update",
+      "subject": "🤖 NUpath Auto-Update",
+      "timestamp": "2026-09-16T23:38:10.447Z",
+      "source": "Tableau CSV (direct)",
+      "triggeredBy": "nayugu",
+      "runId": "35158604749",
+      "stats": {
+        "scanned": 1484,
+        "changed": 3,
+        "cleared": 0,
+        "unchanged": 1370,
+        "notInMap": 6506,
+        "gained": 4,
+        "lost": 0,
+        "gainedOnly": 3,
+        "lostOnly": 0,
+        "mixed": 0
+      },
+      "discrepancies": [
+        {
+          "subject": "JRNL",
+          "number": "5316",
+          "oldNuPath": [],
+          "newNuPath": [
+            "EI"
+          ],
+          "added": [
+            "EI"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "COMM",
+          "number": "2525",
+          "oldNuPath": [],
+          "newNuPath": [
+            "ER"
+          ],
+          "added": [
+            "ER"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "HST",
+          "number": "1200",
+          "oldNuPath": [],
+          "newNuPath": [
+            "DD",
+            "SI"
+          ],
+          "added": [
+            "DD",
+            "SI"
+          ],
+          "removed": []
+        }
+      ]
+    },
+    {
+      "type": "availability",
+      "subject": "📅 Term Availability",
+      "timestamp": "2026-09-16T23:32:49.521Z",
+      "terms": [
+        "202410",
+        "202430",
+        "202440",
+        "202460",
+        "202510",
+        "202530",
+        "202540",
+        "202560",
+        "202610",
+        "202630",
+        "202710",
+        "202640",
+        "202660"
+      ],
+      "covered": 4919,
+      "total": 7879,
+      "detailTerms": [
+        "202410",
+        "202430",
+        "202440",
+        "202460",
+        "202510",
+        "202530",
+        "202540",
+        "202560",
+        "202610",
+        "202630",
+        "202640",
+        "202660"
+      ],
+      "detailCovered": 4713,
+      "profTerms": [
+        "202660"
+      ],
+      "restrictionTerms": [
+        "202660"
+      ]
+    },
+    {
       "type": "majors",
       "subject": "🎓 Major Requirements",
       "timestamp": "2026-09-10T04:21:15.155Z",

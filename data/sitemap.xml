@@ -1364,6 +1364,8 @@
   <url><loc>https://numap.app/data/courses/ABRD/5117</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ABRD/5118</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ABRD/5119</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/courses/ABRD/5125</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/courses/ABRD/5126</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ABRD/5140</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ABRD/5141</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ABRD/5142</loc><changefreq>monthly</changefreq></url>
@@ -1778,8 +1780,6 @@
   <url><loc>https://numap.app/data/courses/ARCH/3211</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ARCH/3351</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ARCH/3352</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/courses/ARCH/3361</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/courses/ARCH/3362</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ARCH/3363</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ARCH/3370</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ARCH/3430</loc><changefreq>monthly</changefreq></url>
@@ -10040,11 +10040,11 @@
   <url><loc>https://numap.app/data/professors/aaron-lewis</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aaron-mutchler</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aaron-ninokawa</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/aaron-peterka</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aaron-roth</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aaron-seitz</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aarti-sathyanarayana</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aashima-gogia</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/aashita-jain</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aatmesh-shrivastava</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/abbie-decamp</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/abdel-mustafa</loc><changefreq>monthly</changefreq></url>
@@ -10098,6 +10098,7 @@
   <url><loc>https://numap.app/data/professors/adrianna-boulin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/adrianna-crossing</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/adriel-antoine</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/afton-templin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ahmad-abdul-khalek</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ahmad-reza-haj-saeedi-sadegh</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ahmed-abdeen-hamed</loc><changefreq>monthly</changefreq></url>
@@ -10124,11 +10125,13 @@
   <url><loc>https://numap.app/data/professors/akshar-varma</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/akua-tetteh</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alain-karma</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/alaina-martens</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alan-chow</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alan-jamieson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alan-mislove</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alan-west-duran</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alan-zaremba</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/alana-hoffman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alanna-prince</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/albert-lionelle</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/albert-laszlo-barabasi</loc><changefreq>monthly</changefreq></url>
@@ -10139,6 +10142,7 @@
   <url><loc>https://numap.app/data/professors/alejna-brugos</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aleko-kimbouris</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aleksandra-jakubowski</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/alesia-chernikova</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alessandra-di-credico</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alessandro-vespignani</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alessio-tognetti</loc><changefreq>monthly</changefreq></url>
@@ -10159,6 +10163,7 @@
   <url><loc>https://numap.app/data/professors/alexander-stewart</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alexander-susienka</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alexander-wood</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/alexandra-armstrong</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alexandra-fernandez</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alexandra-pevzner</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alexandra-roberts</loc><changefreq>monthly</changefreq></url>
@@ -10182,6 +10187,7 @@
   <url><loc>https://numap.app/data/professors/alicia-modestino</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alicia-svenson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alina-adams</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/alina-harper</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alina-ionica-lungeanu</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alina-marian</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/alina-mcintyre</loc><changefreq>monthly</changefreq></url>
@@ -10219,6 +10225,7 @@
   <url><loc>https://numap.app/data/professors/alysoun-wright</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/amal-ahmed</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/amanda-anderson</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/amanda-choflet</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/amanda-fallon</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/amanda-gann</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/amanda-hansen</loc><changefreq>monthly</changefreq></url>
@@ -10364,19 +10371,22 @@
   <url><loc>https://numap.app/data/professors/ashish-gautam</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ashleigh-shields</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ashley-adams</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/ashley-fyfe</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ashley-keeney</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ashley-treni</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ashley-williams</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/ashutosh-sawant</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ashwin-dsousa</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/ashwin-meshram</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/asieh-golozar</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/assad-fotovatian</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aston-mccullough</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aswin-sundarakrishnan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/audrey-lindsay</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/august-klappenbach</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/augustine-benjamin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/aurelie-edwards</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/auroop-ganguly</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/austin-barraza</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/austin-hancock</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/austin-jorgensen</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ava-obenaus</loc><changefreq>monthly</changefreq></url>
@@ -10392,6 +10402,7 @@
   <url><loc>https://numap.app/data/professors/babatunde-aideyan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/babuaravind-gururaj</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bahram-shafai</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/bailey-mcalister</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bakar-bin-khatab-abbasi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/balasubramaniam-maheswaran</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/balazs-szelenyi</loc><changefreq>monthly</changefreq></url>
@@ -10419,7 +10430,6 @@
   <url><loc>https://numap.app/data/professors/benjamin-floman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/benjamin-grey</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/benjamin-gyori</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/benjamin-hait</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/benjamin-hescott</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/benjamin-knudsen</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/benjamin-lerner</loc><changefreq>monthly</changefreq></url>
@@ -10446,7 +10456,6 @@
   <url><loc>https://numap.app/data/professors/bhawesh-sah</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bianca-duff</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bijin-joseph</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/bilal-ahmed</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bilge-erten</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bin-deng</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bindu-veetel</loc><changefreq>monthly</changefreq></url>
@@ -10463,6 +10472,7 @@
   <url><loc>https://numap.app/data/professors/brandon-bergman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/brandon-craig</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/brandon-dionne</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/brandon-morris</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/brandon-sichling</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/brandon-welsh</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/brandy-jernigan</loc><changefreq>monthly</changefreq></url>
@@ -10517,7 +10527,6 @@
   <url><loc>https://numap.app/data/professors/bruce-jacoby</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bruce-kaser</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bruce-laflamme</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/bruce-mamont</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bruce-maxwell</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bruce-ronkin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/bruno-nardone</loc><changefreq>monthly</changefreq></url>
@@ -10547,7 +10556,6 @@
   <url><loc>https://numap.app/data/professors/camille-rumberger</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/cammy-brothers</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/camron-bryant</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/candence-wills-de-jesus</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/candice-byers</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/candice-delmas</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/canek-fuentes-hernandez</loc><changefreq>monthly</changefreq></url>
@@ -10606,7 +10614,6 @@
   <url><loc>https://numap.app/data/professors/catherine-leonard</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/catherine-lizotte</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/catherine-merlo</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/catherine-o-connor</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/catherine-rossi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/catherine-turner</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/cathy-prevost</loc><changefreq>monthly</changefreq></url>
@@ -10633,6 +10640,7 @@
   <url><loc>https://numap.app/data/professors/chase-childress</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chee-chan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chel-wong</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/chelsea-johnson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chelsea-kerl</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chelsey-grasso</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chen-hsiang-yu</loc><changefreq>monthly</changefreq></url>
@@ -10643,6 +10651,7 @@
   <url><loc>https://numap.app/data/professors/cherilyn-ruane</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/cherise-douglas</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/cheryl-arruda</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/cheryl-dempsey</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/cheryl-mitteness</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chesley-leslin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chetna-kuanr</loc><changefreq>monthly</changefreq></url>
@@ -10650,7 +10659,6 @@
   <url><loc>https://numap.app/data/professors/chiara-bellini</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chieh-li</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chieh-wu</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/chiew-jones</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chinbo-chong</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chinekwu-owoh</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/chinmaya-kumar</loc><changefreq>monthly</changefreq></url>
@@ -10671,7 +10679,6 @@
   <url><loc>https://numap.app/data/professors/christina-karunaratne</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/christina-roberts</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/christina-williams</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/christine-beluk</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/christine-briggs</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/christine-clark</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/christine-cook</loc><changefreq>monthly</changefreq></url>
@@ -10722,7 +10729,6 @@
   <url><loc>https://numap.app/data/professors/clayton-trutor</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/clifford-coffey</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/clifford-lee</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/cliften-bonner-desravines</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/cody-dunne</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/colin-brown</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/colin-connors</loc><changefreq>monthly</changefreq></url>
@@ -10739,7 +10745,9 @@
   <url><loc>https://numap.app/data/professors/corrine-stocking</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/cortney-alexander-doyle</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/costas-panagopoulos</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/courtney-martinez</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/courtney-pfluger</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/craig-bennett</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/craig-cuyar</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/craig-eastland</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/craig-ferris</loc><changefreq>monthly</changefreq></url>
@@ -10778,6 +10786,7 @@
   <url><loc>https://numap.app/data/professors/damian-isla</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/damon-hall</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/dan-danielsen</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/dan-graziano</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/dana-mueller-robinson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/dana-wright</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/danae-bucci</loc><changefreq>monthly</changefreq></url>
@@ -10822,7 +10831,6 @@
   <url><loc>https://numap.app/data/professors/daniel-wichs</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/daniel-wilson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/daniel-zedek</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/daniela-ottaiano</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/daniele-mathras-fay</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/danielle-crookes</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/danielle-johnson</loc><changefreq>monthly</changefreq></url>
@@ -10838,6 +10846,7 @@
   <url><loc>https://numap.app/data/professors/david-brady</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/david-budil</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/david-choffnes</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/david-cleveland</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/david-dawson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/david-dehilster</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/david-desteno</loc><changefreq>monthly</changefreq></url>
@@ -10864,6 +10873,7 @@
   <url><loc>https://numap.app/data/professors/david-myers</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/david-nace</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/david-nolan</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/david-o-brien</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/david-ober</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/david-richters</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/david-rosen</loc><changefreq>monthly</changefreq></url>
@@ -10889,6 +10899,7 @@
   <url><loc>https://numap.app/data/professors/dean-morier</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/deana-lacy-mcquitty</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/debashish-ghose</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/deborah-bedard</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/deborah-evans</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/deborah-knowlton</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/deborah-milbauer</loc><changefreq>monthly</changefreq></url>
@@ -10901,6 +10912,7 @@
   <url><loc>https://numap.app/data/professors/debra-mahfouz</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/debra-reid</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/debra-steiner-hayes</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/decoya-blue</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/deirdre-visser</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/demetra-paparounas</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/demi-fang</loc><changefreq>monthly</changefreq></url>
@@ -10935,6 +10947,7 @@
   <url><loc>https://numap.app/data/professors/diane-francis</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/didem-kurt</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/diego-alzate-sanchez</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/diego-rivera</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/dierdre-jordan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/dietmar-offenhuber</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/diletta-masiello</loc><changefreq>monthly</changefreq></url>
@@ -10966,7 +10979,6 @@
   <url><loc>https://numap.app/data/professors/doreen-lee</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/dori-robinson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/dori-woods</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/doria-charlson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/dorin-thibault</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/doris-long</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/doug-bielmeier</loc><changefreq>monthly</changefreq></url>
@@ -10993,6 +11005,7 @@
   <url><loc>https://numap.app/data/professors/edward-hirsch</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/edward-kammerer</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/edward-lisoski</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/edward-mercer</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/edward-miller</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/edward-moss</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/edward-noonan</loc><changefreq>monthly</changefreq></url>
@@ -11159,6 +11172,7 @@
   <url><loc>https://numap.app/data/professors/fabrizio-lombardi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/fan-li</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/fang-fang</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/fanuel-muindi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/faraz-hoodbhoy</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/fareena-sultan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/fariborz-forghan</loc><changefreq>monthly</changefreq></url>
@@ -11172,12 +11186,12 @@
   <url><loc>https://numap.app/data/professors/felicia-lassk</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/felicia-waldron</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/felipe-cortes</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/felipe-flores-herrera</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/felipe-pait</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/felix-muzny</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ferdinand-vesely</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/fernando-huergo</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/fernando-suarez</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/fiona-shyne</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/fiona-stewart-taylor</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/fleury-augustin-nsole-biteghe</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/florin-bidian</loc><changefreq>monthly</changefreq></url>
@@ -11244,12 +11258,10 @@
   <url><loc>https://numap.app/data/professors/gerardine-marshall</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/gerson-goldberg</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/getty-lustila</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/ghazal-barari</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ghita-amor-tijani</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/gilbert-nyaga</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/gillian-galotti</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/giovanni-troiano</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/giuliano-espino</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/giuliano-porciuncula-guedes</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/gladys-mckie</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/glenn-hazelton</loc><changefreq>monthly</changefreq></url>
@@ -11265,6 +11277,7 @@
   <url><loc>https://numap.app/data/professors/gordana-todorov</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/gordon-henry</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/gorka-basterretxea-santiso</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/grace-buttriss</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/grace-ferris</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/grace-poudrier</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/grayson-kimball</loc><changefreq>monthly</changefreq></url>
@@ -11278,6 +11291,7 @@
   <url><loc>https://numap.app/data/professors/gregory-fiete</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/gregory-jabaut</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/gregory-kowalski</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/gregory-valcourt</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/gregory-zimmerman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/gregory-zuch</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/gretchen-forsley</loc><changefreq>monthly</changefreq></url>
@@ -11297,6 +11311,7 @@
   <url><loc>https://numap.app/data/professors/H</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/h-sherman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hai-ping-cheng</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/haitham-al-khateeb</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/haitham-tayyar</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/haley-medeiros</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hamid-nayeb-hashemi</loc><changefreq>monthly</changefreq></url>
@@ -11304,7 +11319,6 @@
   <url><loc>https://numap.app/data/professors/handan-liu</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hande-musdal-ondemir</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hang-jiang</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/hanna-hoover</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hanna-kim</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hanna-rue</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hannah-rowe</loc><changefreq>monthly</changefreq></url>
@@ -11316,6 +11330,7 @@
   <url><loc>https://numap.app/data/professors/haridas-kumarakuru</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/harikrishnan-parameswaran</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/harilaos-koutsopoulos</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/haroula-tzamaras</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/harrison-adler</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/harry-hobbs</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hayes-botnick</loc><changefreq>monthly</changefreq></url>
@@ -11323,10 +11338,12 @@
   <url><loc>https://numap.app/data/professors/hayley-eaves</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hayley-spencer</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/haymanti-bhanot</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/hazra-imran</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/he-wang</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/heather-brenhouse</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/heather-brown</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/heather-devincent-cook</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/heather-govern</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/heather-hanson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/heather-hume</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/heather-littlefield</loc><changefreq>monthly</changefreq></url>
@@ -11358,6 +11375,7 @@
   <url><loc>https://numap.app/data/professors/hilmar-von-strunck</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/himlona-palikhe</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hlanganiso-mokwete</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/holly-houser</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/holly-jimison</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/homa-sarabi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hong-pan</loc><changefreq>monthly</changefreq></url>
@@ -11373,7 +11391,6 @@
   <url><loc>https://numap.app/data/professors/hubert-ho</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hugh-mcmanus</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hugh-taylor</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/hui-fang</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/huihui-wang</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/humbi-song</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/hung-yi-ly</loc><changefreq>monthly</changefreq></url>
@@ -11389,7 +11406,6 @@
   <url><loc>https://numap.app/data/professors/iain-martin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ian-berry</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ian-gorton</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/ibrahim-alazza</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ibrahim-almetwale</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ibrahim-zeid</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/idia-thurston</loc><changefreq>monthly</changefreq></url>
@@ -11478,6 +11494,7 @@
   <url><loc>https://numap.app/data/professors/james-monaghan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/james-regan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/james-rowan</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/james-sheldon</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/james-slusser</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/james-thelusma</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/james-tull</loc><changefreq>monthly</changefreq></url>
@@ -11492,6 +11509,7 @@
   <url><loc>https://numap.app/data/professors/jane-brown</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jane-carlson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jane-kokernak</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/jane-lopez</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jane-saczynski</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/janelle-orsi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/janet-dewan</loc><changefreq>monthly</changefreq></url>
@@ -11521,6 +11539,7 @@
   <url><loc>https://numap.app/data/professors/jathan-martin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/javed-aslam</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/javier-apfeld</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/jay-blitzman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jay-gupta</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jay-mulki</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jay-ruparel</loc><changefreq>monthly</changefreq></url>
@@ -11529,13 +11548,13 @@
   <url><loc>https://numap.app/data/professors/jd-foster</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jean-mcguire</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jean-francois-hamel</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/jeanine-perrone</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jeanne-madden</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jeannette-guillemin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jeannette-jones</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jeffrey-agar</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jeffrey-bears</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jeffrey-blank</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/jeffrey-burds</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jeffrey-gaines</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jeffrey-howe</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jeffrey-lamson</loc><changefreq>monthly</changefreq></url>
@@ -11546,6 +11565,7 @@
   <url><loc>https://numap.app/data/professors/jenna-campagna</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jenna-capuzzo</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jenna-king</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/jenna-sirkin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jennelle-kariotis</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jennie-stephens</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jennifer-bowen</loc><changefreq>monthly</changefreq></url>
@@ -11672,7 +11692,6 @@
   <url><loc>https://numap.app/data/professors/john-kohler</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/john-kwoka</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/john-leman</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/john-lesko</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/john-lindhe</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/john-lowrey</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/john-matthew-nisbet</loc><changefreq>monthly</changefreq></url>
@@ -11729,6 +11748,7 @@
   <url><loc>https://numap.app/data/professors/jose-garcia-del-castillo</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jose-gustavo-bravo-flores</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jose-menendez</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/jose-perea</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jose-sierra</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jose-zamora-orellana</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/josep-miquel-jornet</loc><changefreq>monthly</changefreq></url>
@@ -11795,6 +11815,7 @@
   <url><loc>https://numap.app/data/professors/junauro-landgrebe</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/juner-zhu</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/jung-lee</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/junho-kang</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/junior-senat</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/junrong-yan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/junwei-huang</loc><changefreq>monthly</changefreq></url>
@@ -11809,6 +11830,7 @@
   <url><loc>https://numap.app/data/professors/kaan-onarlioglu</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kabria-baumgartner</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kade-krichko</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/kade-reticker</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kadin-prideaux</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kai-bernardini</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kai-gu</loc><changefreq>monthly</changefreq></url>
@@ -11818,6 +11840,7 @@
   <url><loc>https://numap.app/data/professors/kaitlyn-flynn</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kalaina-thorne</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kaleigh-sieczkowski</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/kaley-jones</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kali-woodruff-carr</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kallie-sandell</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kalten-toone</loc><changefreq>monthly</changefreq></url>
@@ -11833,9 +11856,11 @@
   <url><loc>https://numap.app/data/professors/karen-desrosiers</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/karen-fotino</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/karen-garneau</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/karen-johnson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/karen-quigley</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/karen-spikes</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/karen-stein</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/kari-jensen</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/karim-azer</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/karin-lifter</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/karl-klare</loc><changefreq>monthly</changefreq></url>
@@ -11881,10 +11906,14 @@
   <url><loc>https://numap.app/data/professors/katie-bruner</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/katie-minnick</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/katrin-kish</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/katrina-cook</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/katy-shorey</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kaushik-chowdhury</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/kayalvizhi-chandrasekaran</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kaye-bemis</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/kayla-alvares</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kayla-bates</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/kayla-cetrone</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kayla-daly</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kayla-mclaughlin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kayla-wolf</loc><changefreq>monthly</changefreq></url>
@@ -11952,6 +11981,7 @@
   <url><loc>https://numap.app/data/professors/kimberly-maroon</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kimberly-moreno</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kimberly-wright</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/kin-chung-fong</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kinan-alhallak</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kinde-wubneh</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kiran-vanaja</loc><changefreq>monthly</changefreq></url>
@@ -11988,16 +12018,13 @@
   <url><loc>https://numap.app/data/professors/kristian-kloeckl</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristiana-ramos</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristilyn-waite</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/kristin-horton</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristin-kostka</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/kristin-lacey</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristin-madison</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristin-maloney</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristin-mccambridge</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristin-samko</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristin-simon</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristin-stankard</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/kristina-dunlea</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristina-faul</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristina-hals</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/kristina-hubbard</loc><changefreq>monthly</changefreq></url>
@@ -12079,6 +12106,7 @@
   <url><loc>https://numap.app/data/professors/lawrence-overlan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/lawrence-tinsley</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/layla-brown</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/leah-greene</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/leah-horgan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/leah-koretz</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/leah-prasse</loc><changefreq>monthly</changefreq></url>
@@ -12152,6 +12180,7 @@
   <url><loc>https://numap.app/data/professors/lori-gardinier</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/lori-kornblum</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/lori-lefkovitz</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/lori-rassas</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/lori-solo</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/lori-whynot</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/lorna-hayward</loc><changefreq>monthly</changefreq></url>
@@ -12249,7 +12278,6 @@
   <url><loc>https://numap.app/data/professors/margaret-loscuito</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/margaret-lyman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/margaret-purdy</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/margaret-wald</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/margaret-williams</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/margaret-woo</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/margarita-barrios-ponce</loc><changefreq>monthly</changefreq></url>
@@ -12273,7 +12301,7 @@
   <url><loc>https://numap.app/data/professors/marie-corkery</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/marie-ganim</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/marie-maloney</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/marie-odile-hobeika</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/mariel-garcia-montes</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/marigo-farr</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mariia-mykhailova</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/marilyn-minus</loc><changefreq>monthly</changefreq></url>
@@ -12308,6 +12336,7 @@
   <url><loc>https://numap.app/data/professors/mark-sivak</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mark-snyder</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mark-wells</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/mark-williams</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mark-yorra</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/marketa-rejtar</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/marko-krstulovic</loc><changefreq>monthly</changefreq></url>
@@ -12333,6 +12362,7 @@
   <url><loc>https://numap.app/data/professors/mary-bondy</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mary-bronski</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mary-carney</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/mary-donhoffner</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mary-ellen-cushman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mary-ellen-killion</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mary-foley</loc><changefreq>monthly</changefreq></url>
@@ -12413,6 +12443,7 @@
   <url><loc>https://numap.app/data/professors/md-nazmus-sakib-miazi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/md-noor-e-alam</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/meagan-gilday</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/meagan-hecht</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/megan-ball</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/megan-butler</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/megan-denver</loc><changefreq>monthly</changefreq></url>
@@ -12430,7 +12461,6 @@
   <url><loc>https://numap.app/data/professors/mehrdad-sasani</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mehul-madhukar</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/meica-magnani</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/meishan-ai</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/meka-harris</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/melanie-brooks</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/melanie-mance</loc><changefreq>monthly</changefreq></url>
@@ -12439,6 +12469,7 @@
   <url><loc>https://numap.app/data/professors/melinda-fowler</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/melinda-lopez</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/melissa-bastos</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/melissa-duclos</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/melissa-ferrick</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/melissa-jasset</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/melissa-liriano-ng</loc><changefreq>monthly</changefreq></url>
@@ -12467,6 +12498,7 @@
   <url><loc>https://numap.app/data/professors/michael-conte</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/michael-cote</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/michael-curry</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/michael-dedek</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/michael-diantonio</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/michael-dorsey</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/michael-enright</loc><changefreq>monthly</changefreq></url>
@@ -12492,6 +12524,7 @@
   <url><loc>https://numap.app/data/professors/michael-picard</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/michael-pollastri</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/michael-power</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/michael-prokle</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/michael-quill</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/michael-rezuke</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/michael-ruff</loc><changefreq>monthly</changefreq></url>
@@ -12529,7 +12562,6 @@
   <url><loc>https://numap.app/data/professors/michelle-taylor</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/michelle-zaff</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/miguel-fuentes-cabrera</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/mikaela-laine</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/milad-siami</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/milen-yakimov</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/milena-dasilva-braga</loc><changefreq>monthly</changefreq></url>
@@ -12537,6 +12569,7 @@
   <url><loc>https://numap.app/data/professors/milivoje-davidovic</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/milo-trujillo</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mimoza-dimodugno</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/mina-ghashami</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mindy-marks</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ming-su</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ming-wang</loc><changefreq>monthly</changefreq></url>
@@ -12585,7 +12618,6 @@
   <url><loc>https://numap.app/data/professors/morgan-dicesare</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/mousa-moradi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/muhammad-abdullah-mutahar</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/muhammad-ali</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/muhammad-anadil-saeed-rao</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/muhammad-fahad-ehsan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/muhammadhussian-shabanpour</loc><changefreq>monthly</changefreq></url>
@@ -12623,10 +12655,12 @@
   <url><loc>https://numap.app/data/professors/natalia-schiller</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/natalia-zukerman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/natalie-bormann</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/natalie-bowers</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/natalie-hill</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/natalie-shibley</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/natalie-spangler</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/natasha-frost</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/natasha-odama</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/nathalie-mathe</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/nathan-blake</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/nathan-felde</loc><changefreq>monthly</changefreq></url>
@@ -12690,9 +12724,9 @@
   <url><loc>https://numap.app/data/professors/nicole-scheman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/nicole-snyder</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/nicole-viquez</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/nicole-voce</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/nicole-yurchak</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/nicole-zizzi</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/nikita-nesmith</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/nikki-weickum</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/nikolai-slavov</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/nikolaos-passas</loc><changefreq>monthly</changefreq></url>
@@ -12718,10 +12752,10 @@
   <url><loc>https://numap.app/data/professors/noah-smith</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/noel-healy</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/noelle-burke</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/noor-toraif</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/nora-suren</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/norair-khachatryan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/norman-jacknis</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/nurul-aman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/O</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/oana-veliche</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/octavia-camps</loc><changefreq>monthly</changefreq></url>
@@ -12771,6 +12805,7 @@
   <url><loc>https://numap.app/data/professors/patricia-corrigan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/patricia-davidson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/patricia-davis</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/patricia-garin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/patricia-goff</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/patricia-hampf</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/patricia-illingworth</loc><changefreq>monthly</changefreq></url>
@@ -12789,7 +12824,6 @@
   <url><loc>https://numap.app/data/professors/paul-bolster</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/paul-bryce</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/paul-cattaneo</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/paul-cerrato</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/paul-champion</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/paul-fombelle</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/paul-hand</loc><changefreq>monthly</changefreq></url>
@@ -12800,6 +12834,7 @@
   <url><loc>https://numap.app/data/professors/paula-caligiuri</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/paulette-mccarty</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/paulette-thabault</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/pavel-wonsowicz</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/paxton-sheldahl</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/pedram-heydari</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/pedro-miguel-cruz</loc><changefreq>monthly</changefreq></url>
@@ -12826,6 +12861,7 @@
   <url><loc>https://numap.app/data/professors/peter-ruggiero</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/peter-schindler</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/peter-simon</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/peter-stogios</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/peter-tarasewich</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/peter-wiederspahn</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/petit-pierre</loc><changefreq>monthly</changefreq></url>
@@ -12834,7 +12870,6 @@
   <url><loc>https://numap.app/data/professors/philip-bogden</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/philip-brown</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/philip-gasper</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/philip-gilreath</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/philip-hanser</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/philip-larese-casanova</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/philip-thai</loc><changefreq>monthly</changefreq></url>
@@ -12879,7 +12914,9 @@
   <url><loc>https://numap.app/data/professors/R</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rabah-ahmed</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rachael-mcintosh</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/rachael-salguero</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rachel-berman-kobylarz</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/rachel-freed</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rachel-macphail</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rachel-matthews</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rachel-meyer</loc><changefreq>monthly</changefreq></url>
@@ -12912,7 +12949,6 @@
   <url><loc>https://numap.app/data/professors/ramin-mohammadi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ramiro-martinez</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ramkumar-hariharan</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/ran-keren</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rana-azghandi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rana-jahani</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/randall-burton</loc><changefreq>monthly</changefreq></url>
@@ -12922,17 +12958,18 @@
   <url><loc>https://numap.app/data/professors/rangoli-goyal</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rania-hassan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rashad-ahmed</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/rashmi-dyal-chand</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rasika-bhalerao</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ravi-chamarti</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ravi-ramamurti</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ravi-sarathy</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ravi-sundaram</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/ravinder-dahiya</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ravinder-singh</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ravit-heskiau</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rawan-alsaffar</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/raymond-booth</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/raymond-weaver</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/razan-salem</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/razvan-lungeanu</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rebeca-rosengaus-nurko</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rebecca-berkey</loc><changefreq>monthly</changefreq></url>
@@ -12988,6 +13025,7 @@
   <url><loc>https://numap.app/data/professors/rifat-sipahi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rima-farah</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/risa-kitagawa</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/rishi-reddi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/rita-allen</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/ritesh-mukherjee</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/robert-antonelli</loc><changefreq>monthly</changefreq></url>
@@ -12999,6 +13037,7 @@
   <url><loc>https://numap.app/data/professors/robert-duncan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/robert-durant</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/robert-eidson</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/robert-foster</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/robert-lee</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/robert-leeman</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/robert-lindsey</loc><changefreq>monthly</changefreq></url>
@@ -13085,6 +13124,7 @@
   <url><loc>https://numap.app/data/professors/S</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sabrina-barbaro</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sabrina-mohan</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/sacha-shaw</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sachin-patel</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sade-prithwie</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sadie-piatt</loc><changefreq>monthly</changefreq></url>
@@ -13153,6 +13193,7 @@
   <url><loc>https://numap.app/data/professors/sara-lopez-pintado</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sara-moezzi</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sara-mohamed</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/sara-morrell</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sara-mosadegh</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sara-rouhanifard</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sara-salahi</loc><changefreq>monthly</changefreq></url>
@@ -13206,6 +13247,7 @@
   <url><loc>https://numap.app/data/professors/sean-larmore</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sebastian-ebarb</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sebastian-stockman</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/sensemillah-peters</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/seoeun-yang</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/serdar-aldatmaz</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/serena-alexander</loc><changefreq>monthly</changefreq></url>
@@ -13321,6 +13363,7 @@
   <url><loc>https://numap.app/data/professors/sofie-hodara</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/soheil-behnezhad</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/solomon-jekel</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/sonal-jhaveri-schneider</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/soner-sonmezoglu</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sonia-ralston</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/sonia-rolland</loc><changefreq>monthly</changefreq></url>
@@ -13331,6 +13374,7 @@
   <url><loc>https://numap.app/data/professors/srikanth-krishnamurthy</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/srinivas-sridhar</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/srinivasan-radhakrishnan</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/sriramasundararajan-rajagopalan</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/srirupa-chakraborty</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stacey-agretelis</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stacey-bourns</loc><changefreq>monthly</changefreq></url>
@@ -13338,6 +13382,7 @@
   <url><loc>https://numap.app/data/professors/staci-rubin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stacy-boss</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stacy-marsella</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/stacy-penacho</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stanley-eigen</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stavros-trypakis</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stefan-kaluziak</loc><changefreq>monthly</changefreq></url>
@@ -13363,6 +13408,7 @@
   <url><loc>https://numap.app/data/professors/stephen-hiltz</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stephen-intille</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stephen-kafka</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/stephen-kohn</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stephen-maloney</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stephen-mcjohn</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stephen-morewitz</loc><changefreq>monthly</changefreq></url>
@@ -13392,6 +13438,7 @@
   <url><loc>https://numap.app/data/professors/steven-shafer</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/steven-soares</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/steven-untersee</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/steven-vallas</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/steven-vollmer</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stine-grodal</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/stuart-brorson</loc><changefreq>monthly</changefreq></url>
@@ -13414,11 +13461,13 @@
   <url><loc>https://numap.app/data/professors/suprasanna-jagadeeswari-meda</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/susan-alessandri</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/susan-avallone</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/susan-bartos</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/susan-bradley</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/susan-fine</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/susan-hall</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/susan-ito</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/susan-mello</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/susan-orsillo</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/susan-pandy</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/susan-patterson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/susan-picillo</loc><changefreq>monthly</changefreq></url>
@@ -13568,6 +13617,7 @@
   <url><loc>https://numap.app/data/professors/trenton-honda</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/tristan-johnson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/troy-luster</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/tru-byrnes</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/truong-tran</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/tsana-dimanin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/tsegay-tekleselassie</loc><changefreq>monthly</changefreq></url>
@@ -13618,7 +13668,6 @@
   <url><loc>https://numap.app/data/professors/victoria-cain</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/victoria-d-agostino</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/victoria-grubbs</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/professors/victoria-lee</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/victoria-mccoy-dunkley</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/victoria-nielsen</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/vidoje-mihajlovikj</loc><changefreq>monthly</changefreq></url>
@@ -13640,9 +13689,11 @@
   <url><loc>https://numap.app/data/professors/vivian-hatziyannis</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/vladimir-shapiro</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/vladimir-torchilin</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/volha-bialiauskaya</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/W</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/w-andrew-mackie</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/w-gavin-robb</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/wael-altali</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/wallace-lages</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/walter-schnyder</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/wan-jiun-chiou</loc><changefreq>monthly</changefreq></url>
@@ -13670,6 +13721,7 @@
   <url><loc>https://numap.app/data/professors/william-lovely-iii</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/william-mayer</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/william-miles</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/william-mostyn</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/william-robertson</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/william-sanchez</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/william-sharp</loc><changefreq>monthly</changefreq></url>
@@ -13699,6 +13751,7 @@
   <url><loc>https://numap.app/data/professors/xiaolin-xu</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/xiaoning-jin</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/xiaoping-liu</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/professors/xiaotao-liu</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/xiaoxiao-shen</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/xiaoyi-yang</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/professors/xiaoying-meng</loc><changefreq>monthly</changefreq></url>
