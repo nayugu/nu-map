@@ -192,10 +192,11 @@
   "FSEM": "PR",
   "HONR": "PR",
   "INPR": "PR",
+  "NAVY": "PR",
   "PHDL": "PR",
+  "ABRD": "PR",
   "ABRC": "PR",
   "ABRU": "PR",
-  "TELR": "PR",
   "LAW": "LW",
   "LW": "LW",
   "LS": "LW"

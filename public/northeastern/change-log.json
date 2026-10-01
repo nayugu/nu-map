@@ -1,6 +1,70 @@
 {
   "runs": [
     {
+      "type": "nupath-auto-update",
+      "subject": "🤖 NUpath Auto-Update",
+      "timestamp": "2026-10-01T13:31:05.580Z",
+      "source": "Tableau CSV (direct)",
+      "triggeredBy": "nayugu",
+      "runId": "36861374568",
+      "stats": {
+        "scanned": 1384,
+        "changed": 0,
+        "cleared": 0,
+        "unchanged": 1279,
+        "notInMap": 6600,
+        "gained": 0,
+        "lost": 0,
+        "gainedOnly": 0,
+        "lostOnly": 0,
+        "mixed": 0
+      },
+      "discrepancies": []
+    },
+    {
+      "type": "availability",
+      "subject": "📅 Term Availability",
+      "timestamp": "2026-10-01T13:26:14.537Z",
+      "terms": [
+        "202410",
+        "202430",
+        "202440",
+        "202460",
+        "202510",
+        "202530",
+        "202540",
+        "202560",
+        "202610",
+        "202630",
+        "202710",
+        "202640",
+        "202660"
+      ],
+      "covered": 4913,
+      "total": 7879,
+      "detailTerms": [
+        "202410",
+        "202430",
+        "202440",
+        "202460",
+        "202510",
+        "202530",
+        "202540",
+        "202560",
+        "202610",
+        "202630",
+        "202640",
+        "202660"
+      ],
+      "detailCovered": 4713,
+      "profTerms": [
+        "202640"
+      ],
+      "restrictionTerms": [
+        "202640"
+      ]
+    },
+    {
       "type": "grad-majors",
       "subject": "🎓 Graduate Program Requirements",
       "timestamp": "2026-09-17T00:46:05.649Z",

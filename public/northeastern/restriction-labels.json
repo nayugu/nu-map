@@ -1377,5 +1377,6 @@
  "must:Programs|MS-PPPC-C": "MS Ped Prim Care PNP CNP Compl",
  "must:Programs|PHD-MEDC-A": "PhD Medicinal Chem Adv Entry",
  "must:Programs|PHD-PHSC-A": "PhD Pharmaceutical Sci Adv Ent",
- "must:Programs|MS-SLPT-C": "MS Speech-Lang Path - Connect"
+ "must:Programs|MS-SLPT-C": "MS Speech-Lang Path - Connect",
+ "not:Majors|CEBA": "Civil Eng/Business Admin"
 }

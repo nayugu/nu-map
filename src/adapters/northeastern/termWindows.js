@@ -15,11 +15,11 @@
 // carries no margin, because it is not an estimate: `startRule` names it and
 // `lengthDays` gives the window length measured from it.
 //
-// Generated 2026-09-16.
+// Generated 2026-10-01.
 // ═══════════════════════════════════════════════════════════════════
 
 export default {
-  "generatedAt": "2026-09-16",
+  "generatedAt": "2026-10-01",
   "yearsBack": 5,
   "sampledAY": [
     2023,
@@ -33,13 +33,13 @@ export default {
         2025
       ],
       "startScale": 2.22,
-      "endScale": 0,
+      "endScale": 0.74,
       "startSd": 1.83,
-      "endSd": 1.5,
+      "endSd": 1.41,
       "startRule": "laborDayPlus2",
-      "lengthDays": 101,
+      "lengthDays": 99,
       "startBuffer": 0,
-      "lengthScale": 0.74
+      "lengthScale": 0
     },
     "spring": {
       "n": 4,
