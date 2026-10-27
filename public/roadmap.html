@@ -14,11 +14,21 @@
   <meta property="og:image" content="https://numap.app/social-card.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <!--
-    The page is a renderer; the CONTENT is /roadmap.json, which carries its own
-    how-to. Adding, moving or retiring an item never touches this file. Items
-    are built with DOM calls, never innerHTML, so nothing typed into the JSON
-    can become markup. test/unit/roadmap.test.js holds the two files together.
+    The page is a renderer. The CONTENT is roadmap/*.md, one file per item,
+    compiled to /roadmap.json by build/roadmap.js (see roadmap/README.md).
+    Adding, moving or retiring an item never touches this file. Items are
+    built with DOM calls, never innerHTML, so nothing written in an item can
+    become markup.
   -->
+  <script>
+    // Same theme resolution as the app (index.html's pre-paint script): the
+    // theme saved in NU Map wins, the OS preference is only the fallback.
+    // Runs before paint so a dark-mode visitor never sees a light flash.
+    try {
+      var t = localStorage.getItem("ncp-theme") || localStorage.getItem("map-theme");
+      if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+    } catch (e) { /* storage blocked: follow the OS */ }
+  </script>
   <style>
     :root {
       color-scheme: light dark;
@@ -40,8 +50,11 @@
       --declined: #a78bfa;
       --ink-mix: 55%;
     }
+    /* Dark tokens, twice: once for the OS preference (unless the app's saved
+       theme says light), once for the app's saved dark theme. */
     @media (prefers-color-scheme: dark) {
-      :root {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
         --bg: #14161a;
         --surface: #1a1d22;
         --text: #d5d9de;
@@ -54,6 +67,20 @@
         --ink-mix: 100%;
       }
     }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #14161a;
+      --surface: #1a1d22;
+      --text: #d5d9de;
+      --strong: #eceff2;
+      --muted: #8d949c;
+      --faint: #636a73;
+      --line: #262a31;
+      --link: #7aa5f7;
+      --flash: #2a2a1e;
+      --ink-mix: 100%;
+    }
+    :root[data-theme="light"] { color-scheme: light; }
 
     * { box-sizing: border-box; }
     html { scroll-padding-top: 132px; }
@@ -237,11 +264,10 @@
   <script>
   (function () {
     "use strict";
-    // Status ORDER is a page decision (what a visitor should see first);
-    // labels and blurbs come from the JSON. Shipped is LAST because it only
-    // grows: "Not planned" items are answers to someone's request and must
-    // not sink under an ever-longer changelog.
-    var ORDER = ["known", "planned", "maybe", "declined", "shipped"];
+    // Section order, labels and blurbs come from the data (build/roadmap.js
+    // SECTIONS), and items arrive already sorted within each section, so the
+    // page has no opinion about either.
+    var ORDER = [], SECT = {};
     // Shipped grows forever; past this many, the rest folds behind a button
     // unless the visitor is searching or has asked for Shipped specifically.
     var SHIPPED_PREVIEW = 8;
@@ -295,7 +321,7 @@
     function matches(item) {
       if (!query) return true;
       var hay = (item.title + " " + item.body + " " + (item.kind || "") + " " +
-        data.statuses[item.status].label).toLowerCase();
+        SECT[item.status].label).toLowerCase();
       return query.split(/\s+/).every(function (w) { return hay.indexOf(w) !== -1; });
     }
 
@@ -308,7 +334,9 @@
       if (item.kind) meta.push(el("span", { class: "kind", text: item.kind }));
       if (item.asks) meta.push(el("span", { class: "pill", text: item.asks === 1 ? "From feedback" : "Asked for by " + item.asks + " people" }));
       if (item.status === "shipped" && item.shipped) meta.push(el("span", { text: "Shipped " + fmt(item.shipped, true) }));
-      else if (item.heard) meta.push(el("span", { text: "Reported " + fmt(item.heard) }));
+      // `date` is when it was reported OR when we wrote it down, so it only
+      // reads as "Reported" when somebody actually reported it.
+      else if (item.asks && item.date) meta.push(el("span", { text: "Reported " + fmt(item.date) }));
 
       var copy = el("button", { class: "copy", type: "button", title: "Copy a link to this", "aria-label": "Copy a link to " + item.title });
       copy.innerHTML = COPY_ICON; // static icon markup, never item data
@@ -328,9 +356,7 @@
     }
 
     function groupFor(status) {
-      var list = data.items.filter(function (i) { return i.status === status; });
-      if (status === "shipped") list.sort(function (a, b) { return a.shipped < b.shipped ? 1 : a.shipped > b.shipped ? -1 : 0; });
-      return list;
+      return data.items.filter(function (i) { return i.status === status; });
     }
 
     function render() {
@@ -345,7 +371,7 @@
         if (!shown.length) return;
         total += shown.length;
 
-        var meta = data.statuses[status];
+        var meta = SECT[status];
         var sec = el("section", { "aria-labelledby": "h-" + status }, [
           el("header", null, [
             el("h2", { id: "h-" + status }, [
@@ -366,7 +392,8 @@
             var m = String(item.shipped).slice(0, 7);
             if (m !== month) {
               month = m;
-              sec.append(el("h4", { class: "month", text: fmt(m) }));
+              // A label, not a heading: items are h3 under the section's h2.
+              sec.append(el("p", { class: "month", text: fmt(m) }));
               ol = el("ol", { class: "items" });
               sec.append(ol);
             }
@@ -398,7 +425,7 @@
       var chips = $("chips");
       chips.textContent = "";
       var opts = [["all", "All", data.items.length]].concat(ORDER.map(function (s) {
-        return [s, data.statuses[s].label, data.items.filter(function (i) { return i.status === s; }).length];
+        return [s, SECT[s].label, data.items.filter(function (i) { return i.status === s; }).length];
       }));
       opts.forEach(function (o) {
         if (o[0] !== "all" && !o[2]) return;
@@ -453,11 +480,12 @@
 
     function boot(json) {
       data = json;
+      data.sections.forEach(function (s) { ORDER.push(s.key); SECT[s.key] = s; });
       // An unknown status renders nowhere, which is how an item gets lost.
-      // The unit test refuses one; this keeps a bad edit visible regardless.
-      data.items.forEach(function (i) { if (!data.statuses[i.status]) console.warn("roadmap: unknown status", i.id, i.status); });
+      // The build refuses one; this keeps a bad edit visible regardless.
+      data.items.forEach(function (i) { if (!SECT[i.status]) console.warn("roadmap: unknown status", i.id, i.status); });
       var show = new URL(location.href).searchParams.get("show");
-      if (show && data.statuses[show]) filter = show;
+      if (show && SECT[show]) filter = show;
       $("toolbar").hidden = false;
       if (data.updated) $("updated").textContent = "Updated " + fmt(data.updated, true);
       renderChips(); render();

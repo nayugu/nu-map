@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 // `@vitejs/plugin-react`, neither of which the dependency-free invariant job installs.
 import aiDataDevPlugin from "./build/aiDataDevPlugin.js";
 import { programManualChunks } from "./build/programChunks.js";
+import { roadmapPlugin } from "./build/roadmap.js";
 
 /** The repo root, resolved from this file rather than from cwd. */
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
@@ -254,7 +255,7 @@ function catalogCheckPlugin() {
 }
 
 export default defineConfig({
-  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), maintenanceCorePlugin(), maintenanceDevPlugin(ROOT), buildManifestPlugin(), aiDataPlugin(), aiDataDevPlugin(ROOT)],
+  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), maintenanceCorePlugin(), maintenanceDevPlugin(ROOT), buildManifestPlugin(), aiDataPlugin(), aiDataDevPlugin(ROOT), roadmapPlugin(ROOT)],
   base: "./",
   build: {
     rollupOptions: {

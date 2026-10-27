@@ -1,97 +1,157 @@
-// UNIT · public/roadmap.json, the content of numap.app/roadmap.
+// UNIT · roadmap/*.md → /roadmap.json (build/roadmap.js), the content of
+// numap.app/roadmap.
 //
-// The page is a renderer and the JSON is edited by hand, by whoever is
-// answering feedback that week. Every check here is one way a hand edit makes
-// an item silently vanish or a link we already emailed someone stop working:
-//   - a status the page does not render (the item appears nowhere),
-//   - a misspelt field ("shiped") that the page just ignores,
-//   - a duplicate id (two items, one anchor; the second is unreachable),
-//   - a link the renderer will not turn into a link (printed as raw brackets).
-// And one that is about the repo rather than the page: it is public, so the
-// email of whoever sent the feedback must never land in it.
+// The items are written by hand, often from the GitHub web editor, by whoever
+// is answering feedback that week. The design promise is that every mistake
+// FAILS THE BUILD and names the file, rather than an item silently vanishing
+// or a link we already emailed someone going dead. So most of this file feeds
+// the parser broken items and checks it refuses each one; the corpus tests at
+// the bottom hold the real folder to the same rules.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { parseItem, loadRoadmap, SECTIONS, RESERVED_IDS } from "../../build/roadmap.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
-const RAW = readFileSync(join(ROOT, "public", "roadmap.json"), "utf8");
 const HTML = readFileSync(join(ROOT, "public", "roadmap.html"), "utf8");
-const data = JSON.parse(RAW);
 
-const FIELDS = new Set(["id", "title", "status", "kind", "body", "asks", "heard", "shipped"]);
-const KINDS = new Set(["bug", "feature", "data"]);
-const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/;
-const DAY = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
-// Same pattern the page uses; anything else shaped like a link is printed raw.
-const LINK = /\[([^\]]+)\]\(((?:https?:\/\/|\/)[^)\s]+)\)/g;
+const ok = (head, body = "# A title\n\nA paragraph.") => `---\n${head}\n---\n${body}\n`;
+const PLANNED = "status: planned\ndate: 2026-10";
+const errorsOf = (src, id = "an-item") => parseItem(id, src).errors.join(" | ");
 
-const realDay = s => DAY.test(s) && new Date(s + "T00:00:00Z").toISOString().slice(0, 10) === s;
+test("a well-formed item parses to exactly what the page renders", () => {
+  const { item, errors } = parseItem("summer-graduation", ok(
+    "status: planned\nkind: feature\ndate: 2026-10\nasks: 2\ntop: true",
+    "# Graduate after Summer A\n\nFirst line\nsame paragraph.\n\nSecond, with [a link](/story) and [one](https://x.y/z)."));
+  assert.deepEqual(errors, []);
+  assert.deepEqual(item, {
+    id: "summer-graduation", status: "planned", kind: "feature", date: "2026-10", asks: 2, top: true,
+    title: "Graduate after Summer A",
+    body: "First line same paragraph.\n\nSecond, with [a link](/story) and [one](https://x.y/z).",
+  });
+});
 
-test("every status the JSON defines is one the page renders, in both directions", () => {
-  const order = HTML.match(/var ORDER = \[([^\]]*)\]/);
-  assert.ok(order, "roadmap.html no longer declares ORDER; update this test with it");
-  const rendered = JSON.parse(`[${order[1]}]`);
-  assert.deepEqual([...rendered].sort(), Object.keys(data.statuses).sort());
-  for (const [key, s] of Object.entries(data.statuses)) {
-    assert.ok(s.label && s.blurb, `status ${key} needs a label and a blurb`);
-    assert.match(HTML, new RegExp(`--${key}:\\s*#`), `status ${key} has no colour in roadmap.html`);
+test("tolerates what a hand editor produces: CRLF, a BOM, quotes, spacing, header comments", () => {
+  const src = "﻿---\r\nstatus:   \"planned\"  \r\n# a note to ourselves\r\ndate: '2026-10'\r\n---\r\n\r\n#   Title   \r\n\r\nBody.\r\n";
+  const { item, errors } = parseItem("x", src);
+  assert.deepEqual(errors, []);
+  assert.equal(item.status, "planned");
+  assert.equal(item.date, "2026-10");
+  assert.equal(item.title, "Title");
+});
+
+test("refuses every mistake that would otherwise drop or garble an item", () => {
+  const cases = [
+    [ok("status: plannned\ndate: 2026-10"), /status must be one of/],
+    [ok("status: planned"), /needs a date/],
+    [ok("date: 2026-10"), /needs a status/],
+    [ok(PLANNED + "\nshiped: 2026-10-01"), /unknown field "shiped"/],
+    [ok(PLANNED + "\nstatus: known"), /appears twice/],
+    [ok(PLANNED + "\nkind: Bug"), /kind must be one of/],
+    [ok(PLANNED + "\nasks: 0"), /asks must be/],
+    [ok(PLANNED + "\nasks: two"), /asks must be/],
+    [ok(PLANNED + "\ntop: yes"), /top must be/],
+    [ok("status: planned\ndate: 2026-13"), /date must be/],
+    [ok("status: planned\ndate: Oct 2026"), /date must be/],
+    [ok("status: shipped"), /needs shipped/],
+    [ok("status: shipped\nshipped: 2026-02-30"), /shipped must be a real date/],
+    [ok("status: shipped\nshipped: 2026-09"), /shipped must be a real date/],
+    [ok(PLANNED + "\nshipped: 2026-09-01"), /only a shipped item/],
+    [ok(PLANNED + "\njust words"), /not "key: value"/],
+    ["# Title\n\nNo header at all.", /must start with a --- header/],
+    [ok(PLANNED, "Title without a hash\n\nBody."), /must be the title/],
+    [ok(PLANNED, "# Title only"), /at least one paragraph/],
+    [ok(PLANNED, "# T\n\n- a list item"), /only paragraphs and links/],
+    [ok(PLANNED, "# T\n\n## A subheading"), /only paragraphs and links/],
+    [ok(PLANNED, "# T\n\n1. numbered"), /only paragraphs and links/],
+    [ok(PLANNED, "# T\n\nWrite to [us](mailto:x)."), /link the page will not render/],
+    [ok(PLANNED, "# T\n\nSee [here](www.example.com)."), /link the page will not render/],
+    [ok(PLANNED, "# T\n\nThanks to someone@northeastern.edu for this."), /email address/],
+  ];
+  for (const [src, want] of cases) assert.match(errorsOf(src), want, `should refuse:\n${src}`);
+});
+
+test("one mistake is reported once, not also as a missing field", () => {
+  assert.deepEqual(parseItem("x", ok("status: plannned\ndate: 2026-10")).errors.length, 1);
+  assert.deepEqual(parseItem("x", ok("status: planned\ndate: 2026-13")).errors.length, 1);
+  assert.deepEqual(parseItem("x", ok("status: shipped\nshipped: 2026-02-30")).errors.length, 1);
+});
+
+test("the filename is the link, so it must be a usable, unclaimed anchor", () => {
+  assert.match(errorsOf(ok(PLANNED), "Summer Graduation"), /lowercase-with-dashes/);
+  assert.match(errorsOf(ok(PLANNED), "summer_graduation"), /lowercase-with-dashes/);
+  assert.match(errorsOf(ok(PLANNED), "-leading"), /lowercase-with-dashes/);
+  for (const id of RESERVED_IDS) assert.match(errorsOf(ok(PLANNED), id), /used by the page/);
+  assert.equal(errorsOf(ok(PLANNED), "degree-audit-2"), "");
+});
+
+function withDir(files, fn) {
+  const dir = mkdtempSync(join(tmpdir(), "roadmap-"));
+  try {
+    for (const [name, src] of Object.entries(files)) writeFileSync(join(dir, name), src);
+    return fn(dir);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+}
+
+test("one bad file fails the WHOLE load, and every problem in every file is named at once", () => {
+  withDir({
+    "fine.md": ok(PLANNED),
+    "bad-one.md": ok("status: nope\ndate: 2026-10"),
+    "Bad Name.md": ok(PLANNED),
+  }, dir => {
+    assert.throws(() => loadRoadmap(dir, { updated: "2026-10-27" }), e =>
+      /2 file\(s\)/.test(e.message) && e.message.includes("roadmap/bad-one.md") && e.message.includes("roadmap/Bad Name.md"));
+  });
+});
+
+test("README.md and non-Markdown files are not items", () => {
+  withDir({ "README.md": "# Guide, no header", "notes.txt": "x", "a.md": ok(PLANNED) }, dir => {
+    assert.deepEqual(loadRoadmap(dir, { updated: "2026-10-27" }).items.map(i => i.id), ["a"]);
+  });
+});
+
+test("ordering: section order, then top, then newest date, then title; shipped newest first", () => {
+  withDir({
+    "old.md": ok("status: planned\ndate: 2026-01"),
+    "new.md": ok("status: planned\ndate: 2026-10"),
+    "pinned-old.md": ok("status: planned\ndate: 2025-01\ntop: true"),
+    "tie-b.md": ok("status: planned\ndate: 2026-05", "# B\n\nx"),
+    "tie-a.md": ok("status: planned\ndate: 2026-05", "# A\n\nx"),
+    "s-old.md": ok("status: shipped\nshipped: 2026-07-01"),
+    "s-new.md": ok("status: shipped\nshipped: 2026-09-01"),
+    "bug.md": ok("status: known\ndate: 2020-01"),
+    "no.md": ok("status: declined\ndate: 2026-10"),
+  }, dir => {
+    const ids = loadRoadmap(dir, { updated: "2026-10-27" }).items.map(i => i.id);
+    assert.deepEqual(ids, ["bug", "pinned-old", "new", "tie-a", "tie-b", "old", "no", "s-new", "s-old"]);
+  });
+});
+
+// ── The real folder ──────────────────────────────────────────────────
+
+const real = loadRoadmap(join(ROOT, "roadmap"), { updated: "2026-10-27" });
+
+test("the committed roadmap loads, and every section has a colour on the page", () => {
+  assert.ok(real.items.length > 0);
+  for (const { key } of SECTIONS) assert.match(HTML, new RegExp(`--${key}:\\s*#`), `section ${key} has no colour in roadmap.html`);
+});
+
+test("links we have already sent people keep working", () => {
+  // Each of these has been (or is about to be) emailed in a feedback reply.
+  // Renaming the file breaks the link; add to this list, never remove.
+  const sent = ["pols-ba-capstone-or-coop", "degree-audit-import", "summer-graduation", "term-off"];
+  const ids = new Set(real.items.map(i => i.id));
+  for (const id of sent) assert.ok(ids.has(id), `roadmap/${id}.md is gone or renamed, and its link is in someone's inbox`);
+});
+
+test("the page reads the fields the build writes, and nothing the build no longer writes", () => {
+  // The page and the build are two files; this is what holds them together.
+  for (const gone of ["statuses", "heard"]) assert.ok(!HTML.includes(gone), `roadmap.html still reads "${gone}"`);
+  for (const used of ["data.sections", "item.date", "item.shipped", "item.asks", "item.kind", "item.body", "item.title"]) {
+    assert.ok(HTML.includes(used), `roadmap.html no longer reads ${used}; update this test with it`);
   }
-});
-
-test("every item is well-formed", () => {
-  for (const item of data.items) {
-    const where = `roadmap item ${item.id ?? JSON.stringify(item).slice(0, 60)}`;
-    for (const k of Object.keys(item)) assert.ok(FIELDS.has(k), `${where}: unknown field "${k}" (typo?)`);
-    assert.match(item.id ?? "", /^[a-z0-9]+(-[a-z0-9]+)*$/, `${where}: id must be lowercase-with-dashes`);
-    assert.ok(typeof item.title === "string" && item.title.trim(), `${where}: needs a title`);
-    assert.ok(typeof item.body === "string" && item.body.trim(), `${where}: needs a body`);
-    assert.ok(item.status in data.statuses, `${where}: unknown status "${item.status}"`);
-    if (item.kind !== undefined) assert.ok(KINDS.has(item.kind), `${where}: kind must be one of ${[...KINDS]}`);
-    if (item.asks !== undefined) assert.ok(Number.isInteger(item.asks) && item.asks > 0, `${where}: asks must be a positive integer`);
-    if (item.heard !== undefined) assert.match(item.heard, MONTH, `${where}: heard is YYYY-MM`);
-    if (item.status === "shipped") {
-      assert.ok(realDay(item.shipped ?? ""), `${where}: a shipped item needs shipped: YYYY-MM-DD`);
-      assert.ok(item.shipped <= data.updated, `${where}: shipped after the page's own updated date`);
-    } else {
-      assert.equal(item.shipped, undefined, `${where}: only a shipped item carries a shipped date`);
-    }
-  }
-});
-
-test("ids are unique, because each one is a link we have sent someone", () => {
-  const seen = new Set();
-  for (const { id } of data.items) {
-    assert.ok(!seen.has(id), `duplicate roadmap id ${id}`);
-    seen.add(id);
-  }
-  // An id that collides with an element the page itself owns would scroll there instead.
-  for (const id of ["list", "toolbar", "chips", "q", "status", "updated"]) assert.ok(!seen.has(id), `id ${id} is reserved by the page`);
-});
-
-test("every link in a body is one the page will render as a link", () => {
-  for (const { id, body } of data.items) {
-    const stripped = body.replace(LINK, "");
-    assert.doesNotMatch(stripped, /\]\(/, `roadmap item ${id}: a [text](url) the page will not link (only https:// or /path)`);
-  }
-});
-
-test("updated is a real date", () => {
-  assert.ok(realDay(data.updated), "updated must be YYYY-MM-DD");
-});
-
-test("no email address anywhere in the roadmap (the repo is public)", () => {
-  assert.doesNotMatch(RAW, /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/);
-});
-
-test("the validator is not vacuous", () => {
-  // Each guard above has to be able to fail. Feed the shapes they exist for.
-  assert.ok(!realDay("2026-02-30"));
-  assert.ok(!MONTH.test("2026-13"));
-  assert.match("see [x](mailto:a)".replace(LINK, ""), /\]\(/);
-  assert.doesNotMatch("see [x](/data) and [y](https://a.b)".replace(LINK, ""), /\]\(/);
-  assert.ok(!FIELDS.has("shiped"));
-  assert.ok(data.items.length > 0 && Object.keys(data.statuses).length > 0);
 });
