@@ -1,0 +1,33 @@
+name: roadmap
+
+# Checks the hand-written items in roadmap/ (numap.app/roadmap).
+#
+# Its own workflow, scoped to roadmap/ and its code, on purpose: a roadmap
+# mistake is deliberately NOT fatal to the build or to `npm test`, because the
+# monthly data workflows run both and a typo in an item must never stop a
+# month's catalog update. The build just leaves the broken item off the page.
+# This job is where the mistake is loud instead: a red X on the commit that
+# caused it (and GitHub's failed-run email to whoever pushed it), blocking
+# nothing else.
+#
+# No npm install: the check imports build/roadmap.js, Node builtins only.
+
+on:
+  push:
+    branches: [main]
+    paths: ["roadmap/**", "build/roadmap.js", "scripts/check-roadmap.js", "public/roadmap.html"]
+  pull_request:
+    paths: ["roadmap/**", "build/roadmap.js", "scripts/check-roadmap.js", "public/roadmap.html"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with: { node-version: "24" }
+      - run: node scripts/check-roadmap.js

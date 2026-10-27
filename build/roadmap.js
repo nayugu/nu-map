@@ -3,8 +3,11 @@
 // numap.app/roadmap (public/roadmap.html renders it).
 //
 // One Markdown file per item, written by hand (often from the GitHub web
-// editor), so the format is small and every mistake is a build FAILURE that
-// names the file, never an item that silently drops off the page:
+// editor), so the format is small and every mistake is REPORTED by file and
+// line, never an item that silently drops off the page. Reported, not fatal:
+// a mistake fails the roadmap check (scripts/check-roadmap.js, its own CI
+// job) and leaves that one item off the page, but it can never fail the
+// build or `npm test`, which the monthly data workflows depend on.
 //
 //   ---
 //   status: planned
@@ -156,20 +159,31 @@ export function newestItemDate(items) {
   return best?.d ?? null;
 }
 
+/** Every problem in every file, as one message a writer can fix in one go. */
+export function describeProblems(problems) {
+  return `The roadmap has ${problems.length} file(s) to fix:\n` +
+    problems.map(p => `roadmap/${p.file}:\n  - ${p.errors.join("\n  - ")}`).join("\n");
+}
+
 /**
- * Read a roadmap directory. Throws ONE error listing every problem in every
- * file, so a writer fixes them all in one go rather than one per build.
+ * Read a roadmap directory. A file with a mistake is LEFT OUT and reported in
+ * `problems`; it never takes the other items down with it.
+ *
+ * `strict: true` throws instead, listing every problem at once. Only the
+ * roadmap's own check (scripts/check-roadmap.js) is strict. The BUILD is not,
+ * on purpose: the monthly data workflows run `npm run build`, so a typo in a
+ * roadmap file must not be able to stop a month's catalog update, or a deploy.
  */
-export function loadRoadmap(dir, { updated } = {}) {
+export function loadRoadmap(dir, { updated, strict = false } = {}) {
   const problems = [];
   const items = [];
   for (const name of readdirSync(dir).sort()) {
     if (name === "README.md" || !name.endsWith(".md")) continue;
     const { item, errors } = parseItem(name.slice(0, -3), readFileSync(join(dir, name), "utf8"));
-    if (errors.length) problems.push(`roadmap/${name}:\n  - ${errors.join("\n  - ")}`);
+    if (errors.length) problems.push({ file: name, errors });
     else items.push(item);
   }
-  if (problems.length) throw new Error(`The roadmap has ${problems.length} file(s) to fix:\n${problems.join("\n")}`);
+  if (strict && problems.length) throw new Error(describeProblems(problems));
 
   const ordered = SECTIONS.flatMap(s =>
     items.filter(i => i.status === s.key).sort(s.key === "shipped" ? sortKey.shipped : sortKey.rest));
@@ -177,36 +191,55 @@ export function loadRoadmap(dir, { updated } = {}) {
     updated: updated ?? lastCommitDay(dir) ?? newestItemDate(items),
     sections: SECTIONS,
     items: ordered,
+    problems,
   };
 }
 
-/** Vite plugin: serve /roadmap.json live in dev, write it into the build. */
+/**
+ * Vite plugin: serve /roadmap.json live in dev, write it into the build.
+ *
+ * Nothing written in roadmap/ can fail either one. A file with a mistake is
+ * left off the page and reported: in dev, as a banner on the page itself
+ * (`problems` is sent only there); in a build, as a warning in the log. The
+ * loud, blocking signal is the roadmap check, a CI job of its own that runs
+ * only when roadmap/ changes. Even a crash in this code (not a content
+ * mistake) only costs the roadmap page, never the build.
+ */
 export function roadmapPlugin(root) {
   const dir = resolve(root, "roadmap");
-  let outDir, command;
+  let outDir, command, logger;
+  const publish = r => ({ updated: r.updated, sections: r.sections, items: r.items });
   return {
     name: "roadmap",
-    configResolved(c) { outDir = resolve(c.root, c.build.outDir); command = c.command; },
+    configResolved(c) { outDir = resolve(c.root, c.build.outDir); command = c.command; logger = c.logger; },
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         if (req.url?.split("?")[0] !== "/roadmap.json") return next();
         try {
-          const body = JSON.stringify(loadRoadmap(dir));
+          const r = loadRoadmap(dir);
+          if (r.problems.length) logger.warn(describeProblems(r.problems));
           res.setHeader("Content-Type", "application/json; charset=utf-8");
           res.setHeader("Cache-Control", "no-cache");
-          res.end(body);
+          res.end(JSON.stringify({ ...publish(r), problems: r.problems }));
         } catch (e) {
-          // Shown on the page as "could not load"; the reason is in the terminal.
-          server.config.logger.error(e.message);
+          logger.error(`roadmap: ${e.message}`);
           res.statusCode = 500; res.end(e.message);
         }
       });
     },
-    // A bad file fails the build, loudly and by name — never a missing item.
     closeBundle() {
       if (command !== "build") return;
-      mkdirSync(outDir, { recursive: true });
-      writeFileSync(join(outDir, "roadmap.json"), JSON.stringify(loadRoadmap(dir)));
+      try {
+        const r = loadRoadmap(dir);
+        if (r.problems.length) logger.warn(`\n⚠ ${describeProblems(r.problems)}\nThose items are left off numap.app/roadmap until fixed. The rest of the site is unaffected.\n`);
+        mkdirSync(outDir, { recursive: true });
+        writeFileSync(join(outDir, "roadmap.json"), JSON.stringify(publish(r)));
+      } catch (e) {
+        // Not a content mistake (those are handled above) but a bug here. It
+        // costs the roadmap page its data, which then shows "could not load";
+        // it must not cost the deploy or a month's catalog data.
+        logger.error(`\n⚠ roadmap: could not build /roadmap.json (${e.message}). The rest of the build continues.\n`);
+      }
     },
   };
 }

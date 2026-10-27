@@ -2,11 +2,12 @@
 // numap.app/roadmap.
 //
 // The items are written by hand, often from the GitHub web editor, by whoever
-// is answering feedback that week. The design promise is that every mistake
-// FAILS THE BUILD and names the file, rather than an item silently vanishing
-// or a link we already emailed someone going dead. So most of this file feeds
-// the parser broken items and checks it refuses each one; the corpus tests at
-// the bottom hold the real folder to the same rules.
+// is answering feedback that week. Every mistake is REPORTED by file, never an
+// item silently vanishing, but it is fatal only in the roadmap check
+// (scripts/check-roadmap.js, its own CI job), never in the build or in this
+// suite, which the monthly data workflows run. So this file feeds the parser
+// broken items and checks it refuses each one, and proves the isolation;
+// it never reads the real roadmap/ folder.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -15,10 +16,11 @@ import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { parseItem, loadRoadmap, newestItemDate, LINK, SECTIONS, RESERVED_IDS } from "../../build/roadmap.js";
+import { parseItem, loadRoadmap, newestItemDate, roadmapPlugin, LINK, SECTIONS, RESERVED_IDS } from "../../build/roadmap.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const HTML = readFileSync(join(ROOT, "public", "roadmap.html"), "utf8");
+const CHECK = join(ROOT, "scripts", "check-roadmap.js");
 
 const ok = (head, body = "# A title\n\nA paragraph.") => `---\n${head}\n---\n${body}\n`;
 const PLANNED = "status: planned\ndate: 2026-10";
@@ -128,13 +130,21 @@ function withDir(files, fn) {
   } finally { rmSync(dir, { recursive: true, force: true }); }
 }
 
-test("one bad file fails the WHOLE load, and every problem in every file is named at once", () => {
+test("a bad file is left out and reported; the good ones still load", () => {
   withDir({
     "fine.md": ok(PLANNED),
     "bad-one.md": ok("status: nope\ndate: 2026-10"),
     "Bad Name.md": ok(PLANNED),
   }, dir => {
-    assert.throws(() => loadRoadmap(dir, { updated: "2026-10-27" }), e =>
+    const r = loadRoadmap(dir, { updated: "2026-10-27" });
+    assert.deepEqual(r.items.map(i => i.id), ["fine"]);
+    assert.deepEqual(r.problems.map(p => p.file).sort(), ["Bad Name.md", "bad-one.md"]);
+  });
+});
+
+test("strict mode names every problem in every file at once", () => {
+  withDir({ "fine.md": ok(PLANNED), "bad-one.md": ok("status: nope\ndate: 2026-10"), "Bad Name.md": ok(PLANNED) }, dir => {
+    assert.throws(() => loadRoadmap(dir, { updated: "2026-10-27", strict: true }), e =>
       /2 file\(s\)/.test(e.message) && e.message.includes("roadmap/bad-one.md") && e.message.includes("roadmap/Bad Name.md"));
   });
 });
@@ -203,21 +213,68 @@ test("updated is the folder's last commit, and a shallow clone falls back instea
   } finally { rmSync(base, { recursive: true, force: true }); }
 });
 
-// ── The real folder ──────────────────────────────────────────────────
+// ── Isolation: roadmap CONTENT never fails the build or this suite ────
+//
+// The monthly data workflows run `npm run build` and `npm test`, so nothing
+// here may depend on what is written in roadmap/. Content is checked by
+// scripts/check-roadmap.js, its own CI job. These tests prove the split.
 
-const real = loadRoadmap(join(ROOT, "roadmap"), { updated: "2026-10-27" });
-
-test("the committed roadmap loads, and every section has a colour on the page", () => {
-  assert.ok(real.items.length > 0);
+test("every section has a colour on the page", () => {
   for (const { key } of SECTIONS) assert.match(HTML, new RegExp(`--${key}:\\s*#`), `section ${key} has no colour in roadmap.html`);
 });
 
-test("links we have already sent people keep working", () => {
-  // Each of these has been (or is about to be) emailed in a feedback reply.
-  // Renaming the file breaks the link; add to this list, never remove.
-  const sent = ["pols-ba-capstone-or-coop", "degree-audit-import", "summer-graduation", "term-off"];
-  const ids = new Set(real.items.map(i => i.id));
-  for (const id of sent) assert.ok(ids.has(id), `roadmap/${id}.md is gone or renamed, and its link is in someone's inbox`);
+function runPluginBuild(files) {
+  const root = mkdtempSync(join(tmpdir(), "roadmap-build-"));
+  try {
+    mkdirSync(join(root, "roadmap"));
+    for (const [name, src] of Object.entries(files)) writeFileSync(join(root, "roadmap", name), src);
+    const logs = [];
+    const plugin = roadmapPlugin(root);
+    const log = level => msg => logs.push(level + ": " + msg);
+    plugin.configResolved({ root, command: "build", build: { outDir: "dist" }, logger: { warn: log("warn"), error: log("error") } });
+    plugin.closeBundle(); // must not throw, whatever is in roadmap/
+    let json = null;
+    try { json = JSON.parse(readFileSync(join(root, "dist", "roadmap.json"), "utf8")); } catch { /* not written */ }
+    return { json, logs };
+  } finally { rmSync(root, { recursive: true, force: true }); }
+}
+
+test("the build survives a broken file: the item is left off, the rest ship, and it says so", () => {
+  const { json, logs } = runPluginBuild({ "good.md": ok(PLANNED), "bad.md": ok("status: nope\ndate: 2026-10") });
+  assert.deepEqual(json.items.map(i => i.id), ["good"]);
+  assert.equal(json.problems, undefined, "problems are for the dev banner, never published");
+  assert.ok(logs.some(l => l.startsWith("warn") && l.includes("roadmap/bad.md")), logs.join("\n"));
+});
+
+test("the build survives even a crash in the roadmap code (no folder at all)", () => {
+  const root = mkdtempSync(join(tmpdir(), "roadmap-build-"));
+  try {
+    const logs = [];
+    const plugin = roadmapPlugin(root);
+    plugin.configResolved({ root, command: "build", build: { outDir: "dist" }, logger: { warn: m => logs.push(m), error: m => logs.push(m) } });
+    assert.doesNotThrow(() => plugin.closeBundle());
+    assert.ok(logs.some(l => l.includes("could not build /roadmap.json")), logs.join("\n"));
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
+test("the roadmap check is the strict one: it exits 1 and names the file, or 0 when clean", () => {
+  const run = dir => {
+    try { return { code: 0, out: execFileSync(process.execPath, [CHECK, dir], { stdio: "pipe" }).toString() }; }
+    catch (e) { return { code: e.status, out: e.stderr.toString() }; }
+  };
+  withDir({ "good.md": ok(PLANNED) }, dir => assert.equal(run(dir).code, 0));
+  withDir({ "good.md": ok(PLANNED), "bad.md": ok("status: nope\ndate: 2026-10") }, dir => {
+    const r = run(dir);
+    assert.equal(r.code, 1);
+    assert.match(r.out, /roadmap\/bad\.md/);
+  });
+});
+
+test("nothing in this suite reads the real roadmap/ folder", () => {
+  // The guarantee above is only as good as this: one content-dependent test
+  // here would let a typo in an item block the monthly data update again.
+  const src = readFileSync(fileURLToPath(import.meta.url), "utf8");
+  assert.doesNotMatch(src, new RegExp(`join\\(ROOT, ["']roadmap["']\\)`));
 });
 
 test("the page reads the fields the build writes, and nothing the build no longer writes", () => {

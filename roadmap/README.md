@@ -17,9 +17,6 @@ date: 2026-10
 
 Right now the planner only lets you finish in a Spring or a Fall. Some
 students walk in Spring and take one last set of courses in Summer A.
-
-A blank line starts a new paragraph. Links look like
-[the catalog](https://catalog.northeastern.edu) or [our story](/story).
 ```
 
 ### How a file is read
@@ -29,7 +26,8 @@ A blank line starts a new paragraph. Links look like
    is why GitHub shows it as a small table when you open the file.
 2. **The `# ` line:** the title. Exactly one, right after the settings.
 3. **Everything after the title:** the description. Plain paragraphs, with a
-   blank line between them, and `[links](...)`.
+   blank line between them. Links look like `[the catalog](https://catalog.northeastern.edu)`
+   or `[our story](/story)`.
 
 **The filename is the link.** `summer-graduation.md` becomes
 `numap.app/roadmap#summer-graduation`, which is what we send people when we
@@ -40,7 +38,7 @@ it's live. That would break every link we've sent.
 
 | field | required | meaning |
 |---|---|---|
-| `status` | always | `known` (confirmed problem), `planned`, `maybe`, `declined` (not planned), `shipped` |
+| `status` | always | `known` (confirmed problem: the description must say what to do instead), `planned`, `maybe`, `declined` (not planned: the description must say why), `shipped` |
 | `date` | unless shipped | `YYYY-MM` (or `YYYY-MM-DD`): when it was reported, or when we wrote it down |
 | `shipped` | when shipped | `YYYY-MM-DD` it went live |
 | `top` | no | `true` pins it to the top of its section |
@@ -48,7 +46,7 @@ it's live. That would break every link we've sent.
 
 On the page, a credited item ends with one faint line, the same in every
 section: "Thanks to John S.". The date fades in beside it on hover. An item
-with no `credit` shows no line at all, even if people asked for it.
+with no `credit` shows no line at all.
 
 ## Order
 
@@ -59,8 +57,9 @@ with no `credit` shows no line at all, even if people asked for it.
 ## Moving an item
 
 Change its `status`. When something ships, set `status: shipped` and add
-`shipped: YYYY-MM-DD`. Keep `date`. Don't delete shipped or not-planned items:
-they're the record, and someone may have the link.
+`shipped: YYYY-MM-DD`. Keep `date`. When we decide against something, set
+`status: declined` and say why in the description. Don't delete shipped or
+not-planned items: they're the record, and someone may have the link.
 
 ## Rules
 
@@ -71,7 +70,11 @@ they're the record, and someone may have the link.
   refuses any email address, so never credit someone by their email.
 - **Plain text only:** paragraphs and `[links](...)`. No lists or headings in
   the body. The build refuses anything it can't render, and names the file.
-- A mistake **fails the build**, so nothing silently drops off the page. Run
-  `npm run test:unit` (or open the page in `npm run dev`) to see the message
-  before you push.
+- **A mistake only affects its own item.** That item is left off the page
+  until it's fixed; everything else, including the rest of the site and the
+  monthly data update, carries on. You'll know because the **roadmap check**
+  on GitHub turns red on your commit (and GitHub emails you), naming the file
+  and the problem. To check before pushing, run
+  `node scripts/check-roadmap.js`, or open the page with `npm run dev`, which
+  shows a red box listing any file it left out.
 - Section names, descriptions and order live in `build/roadmap.js` (`SECTIONS`).
