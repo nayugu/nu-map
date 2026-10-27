@@ -109,7 +109,7 @@ import { generalElectiveSHOf } from "../../core/requirementBinding.js";
 import { baseId } from "../../core/repeatInstances.js";
 import { STANDING_NAMES } from "../../core/classStanding.js";
 import { buildCohortSemesters, deriveSemMaps } from "../../core/semGrid.js";
-import { getSemSH, getOrderedCourses, filterInTimeline } from "../../core/planModel.js";
+import { getSemSH, getOrderedCourses, filterInTimeline, withoutPlacedOut } from "../../core/planModel.js";
 import { isOverCap } from "../../core/creditLoad.js";
 import { computeGrantedAttrs, workTermGrants, resolveTermByDuration, termSpans } from "../../core/specialTermUtils.js";
 import { applyChangeset, completedCourseIds } from "./plannerActionAdapter.js";
@@ -550,7 +550,9 @@ export function createPlannerQuery(deps) {
     // Timeline-scoped: parked placements never satisfy requirements.
     const { SEM_INDEX: semIdx } = deriveSemMaps(cohortSemesters(plan));
     const placedSet     = buildPlacedKeySet(filterInTimeline(eff, semIdx), placedOutSet, courseMap);
-    const realPlacedSet = buildPlacedKeySet(filterInTimeline(placements, semIdx), placedOutSet, courseMap);
+    // Feeds General Electives only, so placed-out courses stay OUT: placing
+    // out earns no credit, and the panel's creditPlacedSet leaves them out too.
+    const realPlacedSet = buildPlacedKeySet(withoutPlacedOut(filterInTimeline(placements, semIdx), placedOutSet), new Set(), courseMap);
     const donePlacements = Object.fromEntries(
       Object.entries(eff).filter(([, semId]) => status(semId) === "completed")
     );

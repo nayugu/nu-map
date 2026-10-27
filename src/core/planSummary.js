@@ -121,7 +121,7 @@ export async function buildPlanSummary({
     (!isGrad && minor2Path) ? majorRequirements?.loadMinor(minor2Path).catch(() => null) : null,
   ]);
 
-  const { projected, placedSet, realPlacedSet, doneKeys } = derivePlanSets({
+  const { projected, placedSet, realPlacedSet, creditPlacedSet, doneKeys } = derivePlanSets({
     placements, grades, substitutions, placedOut, courseMap, dynSemIdx: semIndex,
     curIdx, specialTermPl, specialTermTypes: termTypes,
   });
@@ -241,7 +241,8 @@ export async function buildPlanSummary({
     if (!prog) return;
     const { sections, generalElectives } = allocateMajorWithElectives(
       prog, placedSet, courseMap,
-      { completedSet: doneKeys, realPlacedSet, geAllowance: generalElectiveSHOf(prog, courseMap) });
+      // creditPlacedSet, not realPlacedSet: a placed-out course earns no credit.
+      { completedSet: doneKeys, realPlacedSet: creditPlacedSet, geAllowance: generalElectiveSHOf(prog, courseMap) });
     // The same worth-showing rule the printed report uses. It matters here even
     // though the row itself never prints — General Electives carries `sat: true`
     // unconditionally, so an empty one with no stated allowance was silently

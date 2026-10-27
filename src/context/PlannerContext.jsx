@@ -2505,8 +2505,10 @@ const { locale, setLocale, locales, t } = useLanguage();
   };
 
   const onDropPlacedOut = (dragInfo) => {
-    // Placing out means "I already have credit for this course". There is no
-    // course yet, so the gesture has no meaning — ignored rather than half-done.
+    // Placing out means "this course is waived: it satisfies prerequisites but
+    // earns NO credit" (the bank's own hint; transfer/AP credit is the T grade
+    // instead). A reservation has no course yet, so the gesture has no
+    // meaning — ignored rather than half-done.
     if (isReservationId(dragInfo?.id)) { setDragInfo(null); return; }
     try {
       if (!dragInfo || dragInfo.type !== "course") return;

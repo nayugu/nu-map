@@ -46,7 +46,7 @@ import { isEligibleFor } from "../core/pathway/select.js";
 import { computeGrantedAttrs, workTermGrants } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { cohortCatalogYear, programIdFromPath } from "../data/programPaths.js";
-import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
+import { filterInTimeline, applySubstitutions, withoutPlacedOut } from "../core/planModel.js";
 import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, countsInGPA, dropVoidTakes, dropUnearnedTakes, COOP_GPA } from "../core/gradeSystem.js";
 import { baseId } from "../core/repeatInstances.js";
 import { reservedTotals } from "../core/reservations.js";
@@ -2608,6 +2608,17 @@ export default function GradPanel({ wideCatalog = false }) {
     [placements, placedOut, courseMap, SEM_INDEX, grades]
   );
 
+  // What General Electives draws from: realPlacedSet WITHOUT placed-out
+  // courses. Placing out earns no credit ("no credit, but satisfy
+  // prerequisites"), so a waived CHNS 1101 must not appear there as 4 SH, and
+  // the header's total already leaves it out. realPlacedSet keeps them
+  // because the minor cap counts placement as advanced standing on purpose.
+  // Same split as derivePlanSets' creditPlacedSet.
+  const creditPlacedSet = useMemo(
+    () => buildPlacedKeySet(withoutPlacedOut(filterInTimeline(dropVoidTakes(placements, grades), SEM_INDEX), placedOut), new Set(), courseMap),
+    [placements, placedOut, courseMap, SEM_INDEX, grades]
+  );
+
   const doneSet = useMemo(() => {
     // Earned view: F/U/W and I have earned nothing (registrar's grade
     // table) — a completed-semester course only counts as DONE when its
@@ -2719,15 +2730,15 @@ export default function GradPanel({ wideCatalog = false }) {
     // that runs would let it double-count that course as both a general elective
     // and concentration credit.
     const candidateKeys = collectCandidateKeys(
-      concAllocated ? [...majorResults, concAllocated] : majorResults, realPlacedSet ?? placedSet
+      concAllocated ? [...majorResults, concAllocated] : majorResults, creditPlacedSet
     );
     const generalElectives = calculateGeneralElectives(
-      placedSet, allocatedSet, courseMap, geAllowance, doneSet, candidateKeys, realPlacedSet
+      placedSet, allocatedSet, courseMap, geAllowance, doneSet, candidateKeys, creditPlacedSet
     );
     const majorWithElectives = [...majorResults, generalElectives];
 
     return { majorSections: majorWithElectives, concSection: concAllocated };
-  }, [allSections, placedSet, doneSet, realPlacedSet, courseMap, major, selConc, geAllowance]);
+  }, [allSections, placedSet, doneSet, creditPlacedSet, courseMap, major, selConc, geAllowance]);
 
   const allocatedSections = concSection ? [...majorSections, concSection] : majorSections;
   const majorSectionsCount = major?.requirementSections?.length ?? 0;
@@ -2779,12 +2790,12 @@ export default function GradPanel({ wideCatalog = false }) {
     // General Electives comes after the concentration is allocated (see the
     // matching comment on majorSections above) so a released XOM-pool course the
     // concentration then claims isn't also double-counted as a general elective.
-    const candidateKeys = collectCandidateKeys([...sections, ...concResults], realPlacedSet ?? placedSet);
+    const candidateKeys = collectCandidateKeys([...sections, ...concResults], creditPlacedSet);
     const generalElectives = calculateGeneralElectives(
-      placedSet, allocatedSet, courseMap, geAllowance2, doneSet, candidateKeys, realPlacedSet
+      placedSet, allocatedSet, courseMap, geAllowance2, doneSet, candidateKeys, creditPlacedSet
     );
     return [...sections, generalElectives, ...concResults];
-  }, [major2Data, placedSet, courseMap, doneSet, realPlacedSet, selConc2, geAllowance2]);
+  }, [major2Data, placedSet, courseMap, doneSet, creditPlacedSet, selConc2, geAllowance2]);
 
   /**
    * What the MAJORS claim, over any hypothetical placed set.

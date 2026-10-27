@@ -103,6 +103,17 @@ export function filterInTimeline(placements, semIndex) {
   );
 }
 
+/**
+ * Placements minus any course that is placed out. Placing out earns no
+ * credit, so this is the credit-bearing view General Electives draws from;
+ * placed-out wins by id, the same rule the header's credit total applies.
+ */
+export function withoutPlacedOut(placements, placedOut) {
+  const out = placedOut instanceof Set ? placedOut : new Set(placedOut ?? []);
+  if (!out.size) return placements ?? {};
+  return Object.fromEntries(Object.entries(placements ?? {}).filter(([id]) => !out.has(id)));
+}
+
 /** Total semester hours placed in a given semester. */
 export function getSemSH(semId, placements, courseMap) {
   return Object.entries(placements)
@@ -531,6 +542,12 @@ export function _minorShareNote(share, unitName = "SH") {
  *   placedSet     — satisfies requirements; includes substitution targets
  *   realPlacedSet — same minus virtual targets, so General Electives don't
  *                   list a substituted course twice at doubled SH
+ *   creditPlacedSet — realPlacedSet minus PLACED-OUT courses: what General
+ *                   Electives draws from. Placing out earns no credit (the
+ *                   bank says so: "no credit, but satisfy prerequisites"), so
+ *                   a waived CHNS 1101 must not appear there as 4 SH. Kept
+ *                   apart from realPlacedSet because the minor cap reads that
+ *                   one, and counts placement as advanced standing on purpose.
  *   doneKeys      — completed course keys, from the EARNED view
  *
  * ORDER MATTERS: voids drop BEFORE substitutions re-apply, so a failed
@@ -557,6 +574,10 @@ export function derivePlanSets({
     filterInTimeline(applySubstitutions(projected, substitutions), dynSemIdx), placedOut, courseMap);
   const realPlacedSet = buildPlacedKeySet(
     filterInTimeline(projected, dynSemIdx), placedOut, courseMap);
+  // Placed-out WINS, by id, exactly as the header's totalSHPlaced decides it:
+  // a course that is somehow both placed and placed out earns no credit.
+  const creditPlacedSet = buildPlacedKeySet(
+    withoutPlacedOut(filterInTimeline(projected, dynSemIdx), placedOut), new Set(), courseMap);
 
   // A work term registers a real course (COOP 3945). It satisfies
   // requirements but was never dragged onto the grid, so it joins placedSet
@@ -579,7 +600,7 @@ export function derivePlanSets({
   );
   for (const k of grants.completed) doneKeys.add(k);
 
-  return { projected, earned, placedSet, realPlacedSet, doneKeys };
+  return { projected, earned, placedSet, realPlacedSet, creditPlacedSet, doneKeys };
 }
 
 /**
@@ -646,7 +667,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     (!isGrad && minor2Path) ? majorRequirements?.loadMinor(minor2Path).catch(() => null) : null,
   ]);
 
-  const { projected, earned, placedSet, realPlacedSet, doneKeys } = derivePlanSets({
+  const { projected, earned, placedSet, realPlacedSet, creditPlacedSet, doneKeys } = derivePlanSets({
     placements, grades, substitutions, placedOut, courseMap, dynSemIdx, curIdx,
     specialTermPl, specialTermTypes: termTypes,
   });
@@ -737,7 +758,8 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     // a denominator of 0.
     const { sections: majorSections, generalElectives } = allocateMajorWithElectives(
       prog, placedSet, courseMap,
-      { completedSet: doneKeysSet, realPlacedSet,
+      // creditPlacedSet, not realPlacedSet: a placed-out course earns no credit.
+      { completedSet: doneKeysSet, realPlacedSet: creditPlacedSet,
         geAllowance: generalElectiveSHOf(prog, courseMap) });
     // A minor never shows one (the 50% cap is what occupies that room, and it
     // is printed as its own note); a degree shows one only when the row carries
