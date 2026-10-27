@@ -2,7 +2,7 @@
   "_howto": [
     "This file IS the roadmap page (numap.app/roadmap). Add an item by copying one below.",
     "id: lowercase-with-dashes, and PERMANENT. It is the link we send people (numap.app/roadmap#id), so never rename one.",
-    "status: one of the keys in `statuses`. Move an item by changing this field; never delete a shipped or declined item.",
+    "status: one of the keys in `statuses` (maybe = possible but not essential, or not sure it is worth it). Move an item by changing this field; never delete a shipped or declined item.",
     "body: plain text. Blank line = new paragraph. Links as [text](https://...) or [text](/path).",
     "asks: how many people asked for it through feedback. Leave it out for our own ideas.",
     "heard: YYYY-MM it was first reported. shipped: YYYY-MM-DD it went live (required when status is shipped).",
@@ -13,6 +13,7 @@
   "statuses": {
     "known":    { "label": "Known issues", "blurb": "Confirmed problems. Until they are fixed, the note on each one says what to do instead." },
     "planned":  { "label": "Planned",      "blurb": "Things we intend to build. No dates: we are students, and coursework comes first." },
+    "maybe":    { "label": "Maybe",        "blurb": "Possible, but nice to have rather than needed, or we are not yet sure they are worth it." },
     "shipped":  { "label": "Shipped",      "blurb": "Live on numap.app now." },
     "declined": { "label": "Not planned",  "blurb": "Ideas we have decided against, and why." }
   },
@@ -47,30 +48,30 @@
     {
       "id": "term-off",
       "title": "Mark a term as off",
-      "status": "planned",
+      "status": "maybe",
       "kind": "feature",
       "asks": 1,
       "heard": "2026-10",
-      "body": "Take a semester or a summer off, for any reason, and have the planner treat it as a break rather than an empty term it should fill."
+      "body": "Take a semester or a summer off, for any reason, and mark it as a break.\n\nYou can already do this by leaving the term empty: nothing in NU Map counts an empty term against you. A label might still make the plan read more clearly."
     },
     {
       "id": "course-workload-ratings",
       "title": "How much work a course really is, from students who took it",
-      "status": "planned",
+      "status": "maybe",
       "kind": "feature",
       "body": "Roughly how many hours a week a course took and how hard it felt, pooled from other students and shown only as anonymous totals. The [privacy policy](/privacy.html) already spells out how it will work, so you can read the terms before it exists."
     },
     {
       "id": "compare-courses",
       "title": "Compare courses side by side",
-      "status": "planned",
+      "status": "maybe",
       "kind": "feature",
       "body": "Put two or three courses next to each other: prerequisites, when they run, how full they get and who teaches them."
     },
     {
       "id": "pick-instructor",
       "title": "Choose the instructor you are planning to take",
-      "status": "planned",
+      "status": "maybe",
       "kind": "feature",
       "body": "Note which professor you intend to take a course with in a given term, using the instructor history NU Map already shows."
     },

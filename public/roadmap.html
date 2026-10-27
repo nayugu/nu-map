@@ -35,6 +35,7 @@
          same hue scaled toward black, never a grey, so it stays the colour. */
       --known: #f87171;
       --planned: #60a5fa;
+      --maybe: #2dd4bf;
       --shipped: #4ade80;
       --declined: #a78bfa;
       --ink-mix: 55%;
@@ -231,7 +232,7 @@
     "use strict";
     // Status ORDER is a page decision (what a visitor should see first);
     // labels and blurbs come from the JSON.
-    var ORDER = ["known", "planned", "shipped", "declined"];
+    var ORDER = ["known", "planned", "maybe", "shipped", "declined"];
     // Shipped grows forever; past this many, the rest folds behind a button
     // unless the visitor is searching or has asked for Shipped specifically.
     var SHIPPED_PREVIEW = 8;
