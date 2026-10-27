@@ -48,7 +48,8 @@ const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/;
 const DAY = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 const ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 // Same pattern the page renders; anything else shaped like a link would print raw.
-export const LINK = /\[([^\]]+)\]\(((?:https?:\/\/|\/)[^)\s]+)\)/g;
+// "/path" means THIS site: "//host" is another site in disguise, so it is refused.
+export const LINK = /\[([^\]]+)\]\(((?:https?:\/\/|\/(?!\/))[^)\s]+)\)/g;
 const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/;
 
 const realDay = s => DAY.test(s) && new Date(s + "T00:00:00Z").toISOString().slice(0, 10) === s;
@@ -103,7 +104,8 @@ export function parseItem(id, src) {
   // anything else is refused rather than shown as stray symbols.
   const lines = m[2].split("\n");
   while (lines.length && !lines[0].trim()) lines.shift();
-  const head = (lines.shift() || "").match(/^#\s+(.+?)\s*#*\s*$/);
+  // Closing #s count only after a space (Markdown's rule), so "# C#" keeps its #.
+  const head = (lines.shift() || "").match(/^#\s+(.+?)(?:\s+#+)?\s*$/);
   if (!head) errors.push('the first line after the header must be the title, as "# Title"');
   else item.title = head[1];
   const paras = lines.join("\n").split(/\n\s*\n/).map(p => p.trim()).filter(Boolean)

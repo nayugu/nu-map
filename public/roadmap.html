@@ -309,7 +309,7 @@
 
     // [text](url) → link; everything else stays text. Only http(s) and
     // site-relative targets are honoured.
-    var LINK = /\[([^\]]+)\]\(((?:https?:\/\/|\/)[^)\s]+)\)/g;
+    var LINK = /\[([^\]]+)\]\(((?:https?:\/\/|\/(?!\/))[^)\s]+)\)/g;
     function rich(text) {
       var out = [], last = 0, m;
       LINK.lastIndex = 0;

@@ -15,7 +15,7 @@ import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { parseItem, loadRoadmap, newestItemDate, SECTIONS, RESERVED_IDS } from "../../build/roadmap.js";
+import { parseItem, loadRoadmap, newestItemDate, LINK, SECTIONS, RESERVED_IDS } from "../../build/roadmap.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const HTML = readFileSync(join(ROOT, "public", "roadmap.html"), "utf8");
@@ -72,6 +72,8 @@ test("refuses every mistake that would otherwise drop or garble an item", () => 
     [ok(PLANNED, "# T\n\n1. numbered"), /only paragraphs and links/],
     [ok(PLANNED, "# T\n\nWrite to [us](mailto:x)."), /link the page will not render/],
     [ok(PLANNED, "# T\n\nSee [here](www.example.com)."), /link the page will not render/],
+    // "//host" looks like a path on this site and is another site.
+    [ok(PLANNED, "# T\n\nSee [here](//evil.example/x)."), /link the page will not render/],
     [ok(PLANNED, "# T\n\nThanks to someone@northeastern.edu for this."), /email address/],
     [ok(PLANNED + "\ncredit: dana@northeastern.edu"), /email address/],
     [ok(PLANNED + "\ncredit: [John](https://x.y)"), /credit must be/],
@@ -88,6 +90,20 @@ test("credit carries the name exactly as the person gave it", () => {
     assert.deepEqual(errors, [], name);
     assert.equal(item.credit, name);
   }
+});
+
+test("a title keeps a # that is part of it; only Markdown's spaced closing #s go", () => {
+  assert.equal(parseItem("x", ok(PLANNED, "# C# support\n\nx")).item.title, "C# support");
+  assert.equal(parseItem("x", ok(PLANNED, "# Learn C#\n\nx")).item.title, "Learn C#");
+  assert.equal(parseItem("x", ok(PLANNED, "# Closed title ##\n\nx")).item.title, "Closed title");
+});
+
+test("the page and the build use the SAME link pattern", () => {
+  // Two copies by necessity (the page is a static file); they must not drift,
+  // or the build accepts a link the page then prints as raw brackets.
+  const page = HTML.match(/var LINK = (\/.*\/g);/);
+  assert.ok(page, "roadmap.html no longer declares LINK; update this test with it");
+  assert.equal(page[1], LINK.toString());
 });
 
 test("one mistake is reported once, not also as a missing field", () => {
