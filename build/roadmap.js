@@ -37,7 +37,7 @@ import { execFileSync } from "node:child_process";
 // beneath an ever-longer changelog. Each key needs a `--<key>` colour in
 // public/roadmap.html (the unit test holds the two together).
 export const SECTIONS = [
-  { key: "known",    label: "Known issues", blurb: "Confirmed problems. Until they are fixed, the note on each one says what to do instead." },
+  { key: "known",    label: "Known issues", blurb: "Confirmed problems." },
   { key: "planned",  label: "Planned",      blurb: "Things we intend to build. It may take us a while to get to them." },
   { key: "maybe",    label: "Maybe",        blurb: "Ideas we haven't decided on yet. They may be hard to make happen, or we're not sure how much they'd add." },
   { key: "declined", label: "Not planned",  blurb: "Ideas we have decided against, and why." },
