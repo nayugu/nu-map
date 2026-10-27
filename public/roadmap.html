@@ -29,6 +29,12 @@
       document.documentElement.classList.add("deeplink");
       setTimeout(function () { document.documentElement.classList.remove("deeplink"); }, 3000);
     }
+    // Everything below the intro (filters, list, footer) waits for the data
+    // and then fades in ONCE, instead of popping in and shoving the footer.
+    // Only with JS on, so the no-JS message is never hidden; and the same 3s
+    // fallback, so it can never stay invisible.
+    document.documentElement.classList.add("js");
+    setTimeout(function () { document.documentElement.classList.add("ready"); }, 3000);
   </script>
   <!--
     DARK MODE IS OFF: the accessory pages (like /story) come in one light
@@ -111,6 +117,8 @@
     .wrap { max-width: 740px; margin: 0 auto; padding: 48px 24px 96px;
       transition: opacity 0.9s cubic-bezier(0.6, 0, 0.4, 1); }
     html.deeplink .wrap { opacity: 0; }
+    .toolbar, #list, footer.end { transition: opacity 0.6s cubic-bezier(0.6, 0, 0.4, 1); }
+    html.js:not(.ready) .toolbar, html.js:not(.ready) #list, html.js:not(.ready) footer.end { opacity: 0; }
     @media (max-width: 520px) { .wrap { padding: 28px 16px 72px; } }
 
     /* Site-wide home mark: the same affordance on every NU Map page. */
@@ -130,7 +138,7 @@
       background: var(--bg);
       margin: 36px -24px 0; padding: 14px 24px 12px;
       border-bottom: 1px solid transparent;
-      transition: border-color 0.15s ease;
+      transition: border-color 0.15s ease, opacity 0.6s cubic-bezier(0.6, 0, 0.4, 1);
     }
     .toolbar.stuck { border-bottom-color: var(--line); }
     @media (max-width: 520px) { .toolbar { margin-inline: -16px; padding-inline: 16px; } }
@@ -556,7 +564,10 @@
 
     // Ends the hidden-until-scrolled state the <head> script starts for a
     // link to one item. Safe to call when it never started.
-    function revealPage() { document.documentElement.classList.remove("deeplink"); }
+    function revealPage() {
+      document.documentElement.classList.remove("deeplink");
+      document.documentElement.classList.add("ready");
+    }
 
     var timer;
     $("q").addEventListener("input", function (e) {
