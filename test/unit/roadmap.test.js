@@ -71,8 +71,21 @@ test("refuses every mistake that would otherwise drop or garble an item", () => 
     [ok(PLANNED, "# T\n\nWrite to [us](mailto:x)."), /link the page will not render/],
     [ok(PLANNED, "# T\n\nSee [here](www.example.com)."), /link the page will not render/],
     [ok(PLANNED, "# T\n\nThanks to someone@northeastern.edu for this."), /email address/],
+    [ok(PLANNED + "\ncredit: dana@northeastern.edu"), /email address/],
+    [ok(PLANNED + "\ncredit: [Dana](https://x.y)"), /credit must be/],
+    [ok(PLANNED + "\ncredit: https://dana.dev"), /credit must be/],
+    [ok(PLANNED + "\ncredit: " + "x".repeat(61)), /credit must be/],
+    [ok(PLANNED + "\ncredit:"), /credit must be/],
   ];
   for (const [src, want] of cases) assert.match(errorsOf(src), want, `should refuse:\n${src}`);
+});
+
+test("credit carries the name exactly as the person gave it", () => {
+  for (const name of ["Dana H.", "Jean-Luc O'Brien", "李华", "a CS student"]) {
+    const { item, errors } = parseItem("x", ok(PLANNED + `\ncredit: "${name}"`));
+    assert.deepEqual(errors, [], name);
+    assert.equal(item.credit, name);
+  }
 });
 
 test("one mistake is reported once, not also as a missing field", () => {
@@ -151,7 +164,7 @@ test("links we have already sent people keep working", () => {
 test("the page reads the fields the build writes, and nothing the build no longer writes", () => {
   // The page and the build are two files; this is what holds them together.
   for (const gone of ["statuses", "heard"]) assert.ok(!HTML.includes(gone), `roadmap.html still reads "${gone}"`);
-  for (const used of ["data.sections", "item.date", "item.shipped", "item.asks", "item.kind", "item.body", "item.title"]) {
+  for (const used of ["data.sections", "item.date", "item.shipped", "item.asks", "item.credit", "item.kind", "item.body", "item.title"]) {
     assert.ok(HTML.includes(used), `roadmap.html no longer reads ${used}; update this test with it`);
   }
 });

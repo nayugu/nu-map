@@ -39,6 +39,12 @@ it's live. That would break every link we've sent.
 | `kind` | no | `bug`, `feature` or `data` |
 | `asks` | no | how many people asked for it through feedback. Leave it out for our own ideas |
 | `top` | no | `true` pins it to the top of its section |
+| `credit` | no | the name someone **asked** to be credited under, e.g. `credit: Dana H.` Shown as "Suggested by Dana H." ("Reported by" for a bug). With `asks: 3` it reads "Suggested by Dana H. and 2 others" |
+
+On the page, an item shows one quiet line only when someone asked for it
+("Suggested by Dana H.", "Suggested through feedback", "Asked for by 3
+people"). Its kind and date fade in beside that line on hover. Our own ideas
+show no line at all.
 
 ## Order
 
@@ -54,8 +60,11 @@ they're the record, and someone may have the link.
 
 ## Rules
 
-- **No names or emails.** The repo is public. Never record who sent feedback,
-  only how many (`asks`).
+- **Names only with permission, emails never.** The repo is public and keeps
+  history forever, so a name added by mistake can't truly be removed. Use
+  `credit:` only when the person said they want to be credited, and write it
+  exactly as they gave it. Otherwise record only how many asked (`asks`).
+  The build refuses any email address.
 - **Plain text only:** paragraphs and `[links](...)`. No lists or headings in
   the body. The build refuses anything it can't render, and names the file.
 - A mistake **fails the build**, so nothing silently drops off the page. Run

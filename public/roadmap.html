@@ -20,7 +20,13 @@
     built with DOM calls, never innerHTML, so nothing written in an item can
     become markup.
   -->
-  <script>
+  <!--
+    DARK MODE IS OFF: the accessory pages (like /story) come in one light
+    theme, so this one does too. It is disabled, not deleted — to turn
+    it back on, remove type="text/plain" from the script below and
+    media="not all" from the second <style>.
+  -->
+  <script type="text/plain">
     // Same theme resolution as the app (index.html's pre-paint script): the
     // theme saved in NU Map wins, the OS preference is only the fallback.
     // Runs before paint so a dark-mode visitor never sees a light flash.
@@ -31,7 +37,7 @@
   </script>
   <style>
     :root {
-      color-scheme: light dark;
+      color-scheme: light;
       --bg: #fdfcfa;
       --surface: #ffffff;
       --text: #1f2328;
@@ -50,6 +56,8 @@
       --declined: #a78bfa;
       --ink-mix: 55%;
     }
+  </style>
+  <style media="not all">
     /* Dark tokens, twice: once for the OS preference (unless the app's saved
        theme says light), once for the app's saved dark theme. */
     @media (prefers-color-scheme: dark) {
@@ -81,7 +89,8 @@
       --ink-mix: 100%;
     }
     :root[data-theme="light"] { color-scheme: light; }
-
+  </style>
+  <style>
     * { box-sizing: border-box; }
     html { scroll-padding-top: 132px; }
     body {
@@ -179,14 +188,11 @@
     .item h3 { margin: 0; font-size: 1rem; line-height: 1.4; color: var(--strong); font-weight: 600;
       padding-right: 34px; }
     .item p { margin: 6px 0 0; font-size: 0.94rem; }
-    .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
-      margin-top: 9px; font-size: 0.8rem; color: var(--muted); }
-    .pill {
-      font-size: 0.74rem; font-weight: 600; padding: 1px 8px; border-radius: 999px;
-      color: color-mix(in srgb, var(--hue) var(--ink-mix), #000);
-      background: color-mix(in srgb, var(--hue) 16%, transparent);
-    }
-    .kind { text-transform: capitalize; }
+    /* "Suggested by …": a byline, not a row of tags. */
+    .item p.by { margin-top: 8px; font-size: 0.82rem; color: var(--muted); }
+    .by .extra { color: var(--faint); opacity: 0; transition: opacity 0.15s ease; }
+    .item:hover .by .extra, .item:focus-within .by .extra { opacity: 1; }
+    @media (hover: none) { .by .extra { display: none; } }
 
     /* Copy-link: the id is the reply we send, so getting it is one click. */
     .copy {
@@ -320,7 +326,7 @@
 
     function matches(item) {
       if (!query) return true;
-      var hay = (item.title + " " + item.body + " " + (item.kind || "") + " " +
+      var hay = (item.title + " " + item.body + " " + (item.kind || "") + " " + (item.credit || "") + " " +
         SECT[item.status].label).toLowerCase();
       return query.split(/\s+/).every(function (w) { return hay.indexOf(w) !== -1; });
     }
@@ -329,14 +335,22 @@
     var DONE_ICON = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3.5 8.5 3 3 6-7"/></svg>';
 
     function renderItem(item) {
-      var meta = [];
-      // No status pill: the section heading above already says it.
-      if (item.kind) meta.push(el("span", { class: "kind", text: item.kind }));
-      if (item.asks) meta.push(el("span", { class: "pill", text: item.asks === 1 ? "From feedback" : "Asked for by " + item.asks + " people" }));
-      if (item.status === "shipped" && item.shipped) meta.push(el("span", { text: "Shipped " + fmt(item.shipped, true) }));
-      // `date` is when it was reported OR when we wrote it down, so it only
-      // reads as "Reported" when somebody actually reported it.
-      else if (item.asks && item.date) meta.push(el("span", { text: "Reported " + fmt(item.date) }));
+      // One quiet line, and only when a PERSON is behind the item: who asked,
+      // as a sentence rather than a row of tags. Kind and date are kept but
+      // fade in on hover, so the list reads as titles and paragraphs. Items
+      // that are our own ideas get no line at all; Shipped already sits under
+      // a month label.
+      var by = null;
+      var people = item.asks || (item.credit ? 1 : 0);
+      if (people) {
+        var verb = item.kind === "bug" ? "Reported" : "Suggested";
+        var who = item.credit
+          ? verb + " by " + item.credit + (people > 1 ? " and " + (people - 1) + (people === 2 ? " other" : " others") : "")
+          : people === 1 ? verb + " through feedback" : "Asked for by " + people + " people";
+        var extra = [item.kind, item.status === "shipped" && item.shipped ? "shipped " + fmt(item.shipped, true) : item.date && fmt(item.date)]
+          .filter(Boolean).join(" · ");
+        by = el("p", { class: "by" }, [who, extra ? el("span", { class: "extra", text: " · " + extra }) : null]);
+      }
 
       var copy = el("button", { class: "copy", type: "button", title: "Copy a link to this", "aria-label": "Copy a link to " + item.title });
       copy.innerHTML = COPY_ICON; // static icon markup, never item data
@@ -352,7 +366,7 @@
 
       var paras = String(item.body).split(/\n\s*\n/).map(function (p) { return el("p", null, rich(p.trim())); });
       return el("li", { class: "item", id: item.id, style: hue(item.status) },
-        [el("h3", { text: item.title }), copy].concat(paras, [el("div", { class: "meta" }, meta)]));
+        [el("h3", { text: item.title }), copy].concat(paras, [by]));
     }
 
     function groupFor(status) {

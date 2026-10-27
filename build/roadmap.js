@@ -64,6 +64,10 @@ const FIELDS = {
   shipped: v => realDay(v) ? [v] : "shipped must be a real date, YYYY-MM-DD",
   asks:    v => /^[1-9]\d*$/.test(v) ? [Number(v)] : "asks must be a whole number, 1 or more",
   top:     v => v === "true" ? [true] : v === "false" ? [false] : "top must be true or false",
+  // The name a person ASKED to be credited under, exactly as they gave it.
+  // Plain text only: no link, no email, nothing the page would render oddly.
+  credit:  v => v.length > 0 && v.length <= 60 && !/[[\]()<>@]|https?:/.test(v)
+    ? [v] : "credit must be a short name to show (60 characters at most), with no link or email",
 };
 
 /** Parse one item file. Returns { item, errors }. */
@@ -72,7 +76,7 @@ export function parseItem(id, src) {
   const text = src.replace(/\r\n?/g, "\n").replace(/^﻿/, "");
   if (!ID.test(id)) errors.push(`the filename must be lowercase-with-dashes (it becomes the link #${id})`);
   if (RESERVED_IDS.includes(id)) errors.push(`"${id}" is used by the page itself; pick another filename`);
-  if (EMAIL.test(text)) errors.push("contains an email address; the repo is public, so never name who sent feedback");
+  if (EMAIL.test(text)) errors.push("contains an email address; the repo is public (to credit someone who asked to be, use credit: with the name they gave)");
 
   const m = text.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
   if (!m) return { item: null, errors: [...errors, "must start with a --- header block (copy roadmap/README.md's example)"] };
