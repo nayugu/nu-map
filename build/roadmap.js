@@ -129,6 +129,9 @@ const sortKey = {
 // the roadmap" silently becomes "the latest deploy". That answer is shaped
 // exactly like the right one, so refuse it and let the caller fall back.
 function lastCommitDay(dir) {
+  // Absolute, because git runs INSIDE dir: a relative "roadmap" would be
+  // looked up as roadmap/roadmap and match no commit at all.
+  dir = resolve(dir);
   const git = args => execFileSync("git", args, { cwd: dir, stdio: ["ignore", "pipe", "ignore"] }).toString().trim();
   try {
     if (git(["rev-parse", "--is-shallow-repository"]) !== "false") return null;

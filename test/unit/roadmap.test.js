@@ -174,6 +174,10 @@ test("updated is the folder's last commit, and a shallow clone falls back instea
     sh(repo, ["add", "-A"]); sh(repo, ["commit", "-qm", "unrelated"], at("2021-01-01T12:00:00Z"));
 
     assert.equal(loadRoadmap(join(repo, "roadmap")).updated, "2020-01-01");
+    // A RELATIVE path must give the same answer (git runs inside the folder).
+    const here = process.cwd();
+    try { process.chdir(repo); assert.equal(loadRoadmap("roadmap").updated, "2020-01-01"); }
+    finally { process.chdir(here); }
 
     const shallow = join(base, "shallow");
     sh(base, ["clone", "-q", "--depth", "1", "file://" + repo, shallow]);
