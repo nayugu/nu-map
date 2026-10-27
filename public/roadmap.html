@@ -269,6 +269,8 @@
       font-size: 0.9rem; color: var(--muted); }
     footer.end .cta { font-size: 1rem; color: var(--text); margin: 0 0 10px; }
     footer.end .links { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.85rem; }
+    /* Information, not navigation: its own quiet line, so it isn't read as a fourth link. */
+    footer.end .updated { margin: 12px 0 0; font-size: 0.78rem; color: var(--faint); }
 
     @media (prefers-reduced-motion: reduce) {
       .item.flash { animation: none; }
@@ -306,11 +308,11 @@
       <p class="cta">Something missing, or wrong?
         <a href="https://forms.gle/CzXE25WRtJnXWE1U9" target="_blank" rel="noopener noreferrer">Tell us</a>.</p>
       <div class="links">
-        <span id="updated"></span>
         <a href="/">Open the planner</a>
         <a href="/story">The story</a>
         <a href="/privacy.html">Privacy</a>
       </div>
+      <p class="updated" id="updated"></p>
     </footer>
   </div>
 
