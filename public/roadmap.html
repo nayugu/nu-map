@@ -322,12 +322,16 @@
     // SECTIONS), and items arrive already sorted within each section, so the
     // page has no opinion about either.
     var ORDER = [], SECT = {};
-    // Shipped grows forever; past this many, the rest folds behind a button
-    // unless the visitor is searching or has asked for Shipped specifically.
-    var SHIPPED_PREVIEW = 8;
+    // Any long section folds to its first PREVIEW items, and the button then
+    // reveals STEP more per click, so a long Shipped never dumps everything
+    // at once. It folds only when that hides at least MIN_HIDDEN (a "Show 1
+    // more" button is sillier than the item), so a step that would leave a
+    // tiny remainder takes it too. Never folded while searching, when the
+    // visitor picked that section's filter, or for the section a link opens.
+    var PREVIEW = 5, STEP = 10, MIN_HIDDEN = 3;
     var FORM = "https://forms.gle/CzXE25WRtJnXWE1U9";
 
-    var data, filter = "all", query = "", showAllShipped = false;
+    var data, filter = "all", query = "", limits = {}; // section key → items shown (default PREVIEW)
     var $ = function (id) { return document.getElementById(id); };
 
     function el(tag, attrs, kids) {
@@ -443,8 +447,9 @@
           ])
         ]);
 
-        var fold = status === "shipped" && !query && filter !== "shipped" && !showAllShipped && shown.length > SHIPPED_PREVIEW;
-        var visible = fold ? shown.slice(0, SHIPPED_PREVIEW) : shown;
+        var limit = limits[status] || PREVIEW;
+        var fold = !query && filter !== status && shown.length - limit >= MIN_HIDDEN;
+        var visible = fold ? shown.slice(0, limit) : shown;
 
         if (status === "shipped") {
           var month = null, ol = null;
@@ -464,8 +469,14 @@
         }
 
         if (fold) {
-          var more = el("button", { class: "more", type: "button", text: "Show all " + shown.length + " shipped" });
-          more.addEventListener("click", function () { showAllShipped = true; render(); });
+          // "older" for Shipped, which is sorted by date: a month cut part-way
+          // then reads as a list that continues, not a month that is complete.
+          var hidden = shown.length - limit;
+          // A step that would leave a tiny remainder takes it too.
+          var next = hidden - STEP < MIN_HIDDEN ? hidden : STEP;
+          var more = el("button", { class: "more", type: "button",
+            text: "Show " + next + (status === "shipped" ? " older" : " more") });
+          more.addEventListener("click", function () { limits[status] = limit + next; render(); });
           sec.append(more);
         }
         root.append(sec);
@@ -530,7 +541,7 @@
         history.replaceState(null, "", url);
         renderChips();
       }
-      showAllShipped = true;
+      limits[item.status] = Infinity; // a linked item is never folded away
       render();
       var node = $(id);
       if (!node) return;
