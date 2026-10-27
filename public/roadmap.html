@@ -46,7 +46,6 @@
       --faint: #9aa0a7;
       --line: #ece7df;
       --link: #2f6fe0;
-      --flash: #fff4d6;
       /* Status hues, vivid pastel (the app's register). A pill's text is the
          same hue scaled toward black, never a grey, so it stays the colour. */
       --known: #f87171;
@@ -185,8 +184,24 @@
       content: ""; position: absolute; left: 1px; top: 25px;
       width: 6px; height: 6px; border-radius: 50%; background: var(--hue);
     }
-    .item.flash { animation: flash 2.4s ease-out; }
-    @keyframes flash { 0%, 35% { background: var(--flash); } 100% { background: transparent; } }
+    /* A linked item fades in, nothing more: it is already scrolled to just
+       under the toolbar, so the eye is in the right place. A coloured flash
+       was too loud for a page meant to read as calm. */
+    /* A soft left-to-right reveal, like a line being written: a gradient mask
+       three times the item's width slides across, so the edge is a wide fade
+       rather than a wipe. At rest the mask's opaque part covers the whole
+       item, so nothing stays hidden after it ends. */
+    .item.flash {
+      -webkit-mask-image: linear-gradient(to right, #000 40%, transparent 60%);
+              mask-image: linear-gradient(to right, #000 40%, transparent 60%);
+      -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+      -webkit-mask-position: 0 0; mask-position: 0 0;
+      animation: arrive 1.4s ease-in-out;
+    }
+    @keyframes arrive {
+      from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+      to   { -webkit-mask-position: 0 0;    mask-position: 0 0; }
+    }
     .item h3 { margin: 0; font-size: 1rem; line-height: 1.4; color: var(--strong); font-weight: 600;
       padding-right: 34px; }
     .item p { margin: 6px 0 0; font-size: 0.94rem; }
@@ -232,7 +247,7 @@
     footer.end .links { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.85rem; }
 
     @media (prefers-reduced-motion: reduce) {
-      .item.flash { animation: none; background: var(--flash); }
+      .item.flash { animation: none; }
       * { transition: none !important; }
     }
   </style>
