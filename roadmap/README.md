@@ -39,9 +39,9 @@ it's live. That would break every link we've sent.
 | `top` | no | `true` pins it to the top of its section |
 | `credit` | no | only for someone who answered **Yes** to the form's credit question. Always **first name + last initial**: `credit: John S.` (type their `lastname.f@northeastern.edu` into Northeastern Outlook; the directory shows the full name). |
 
-On the page, a credited item ends with one faint line: "Suggested by John S.",
-or "Reported by John S." under Known issues, and "Suggested by John S. and 2
-others" when `asks: 3`. The date fades in beside it on hover. An item with no
+On the page, a credited item ends with one faint line, the same in every
+section: "Thanks to John S.", or "Thanks to John S. and 2 others" when
+`asks: 3`. The date fades in beside it on hover. An item with no
 `credit` shows no line at all, even if people asked for it.
 
 ## Order
