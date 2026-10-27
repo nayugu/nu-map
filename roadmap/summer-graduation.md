@@ -2,6 +2,7 @@
 status: planned
 date: 2026-10
 asks: 1
+credit: Lily H.
 ---
 # Graduate after Summer A or Summer B
 
