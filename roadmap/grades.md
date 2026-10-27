@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: feature
 shipped: 2026-08-02
 ---
 # Optional grades and GPA

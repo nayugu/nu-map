@@ -1,6 +1,5 @@
 ---
 status: declined
-kind: feature
 date: 2026-10
 ---
 # Registering for classes from NU Map

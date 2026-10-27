@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: feature
 shipped: 2026-07-30
 ---
 # Plan stats

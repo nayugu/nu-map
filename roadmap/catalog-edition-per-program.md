@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: feature
 shipped: 2026-09-08
 ---
 # Choose your catalog year, per program

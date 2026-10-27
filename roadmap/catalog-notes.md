@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: data
 shipped: 2026-08-21
 ---
 # Requirements the catalog states in words, not tables

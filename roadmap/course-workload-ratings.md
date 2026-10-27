@@ -1,6 +1,5 @@
 ---
 status: maybe
-kind: feature
 date: 2026-08
 ---
 # How much work a course really is, from students who took it

@@ -1,6 +1,5 @@
 ---
 status: maybe
-kind: feature
 date: 2026-07
 ---
 # Choose the instructor you are planning to take

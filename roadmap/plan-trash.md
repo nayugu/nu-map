@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: feature
 shipped: 2026-08-12
 ---
 # Get back a plan you deleted

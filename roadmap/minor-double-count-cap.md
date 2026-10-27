@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: feature
 shipped: 2026-08-30
 ---
 # The 50% limit on sharing courses between a major and a minor

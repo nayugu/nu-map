@@ -1,6 +1,5 @@
 ---
 status: maybe
-kind: feature
 date: 2026-10
 asks: 1
 ---

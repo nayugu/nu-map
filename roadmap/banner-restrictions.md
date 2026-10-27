@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: data
 shipped: 2026-09-03
 ---
 # Registration restrictions on every course

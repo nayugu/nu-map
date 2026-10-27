@@ -25,11 +25,11 @@ const errorsOf = (src, id = "an-item") => parseItem(id, src).errors.join(" | ");
 
 test("a well-formed item parses to exactly what the page renders", () => {
   const { item, errors } = parseItem("summer-graduation", ok(
-    "status: planned\nkind: feature\ndate: 2026-10\nasks: 2\ntop: true",
+    "status: planned\ndate: 2026-10\nasks: 2\ntop: true",
     "# Graduate after Summer A\n\nFirst line\nsame paragraph.\n\nSecond, with [a link](/story) and [one](https://x.y/z)."));
   assert.deepEqual(errors, []);
   assert.deepEqual(item, {
-    id: "summer-graduation", status: "planned", kind: "feature", date: "2026-10", asks: 2, top: true,
+    id: "summer-graduation", status: "planned", date: "2026-10", asks: 2, top: true,
     title: "Graduate after Summer A",
     body: "First line same paragraph.\n\nSecond, with [a link](/story) and [one](https://x.y/z).",
   });
@@ -51,7 +51,8 @@ test("refuses every mistake that would otherwise drop or garble an item", () => 
     [ok("date: 2026-10"), /needs a status/],
     [ok(PLANNED + "\nshiped: 2026-10-01"), /unknown field "shiped"/],
     [ok(PLANNED + "\nstatus: known"), /appears twice/],
-    [ok(PLANNED + "\nkind: Bug"), /kind must be one of/],
+    // `kind` was retired; an old habit must fail loudly, not be ignored.
+    [ok(PLANNED + "\nkind: bug"), /unknown field "kind"/],
     [ok(PLANNED + "\nasks: 0"), /asks must be/],
     [ok(PLANNED + "\nasks: two"), /asks must be/],
     [ok(PLANNED + "\ntop: yes"), /top must be/],
@@ -72,7 +73,7 @@ test("refuses every mistake that would otherwise drop or garble an item", () => 
     [ok(PLANNED, "# T\n\nSee [here](www.example.com)."), /link the page will not render/],
     [ok(PLANNED, "# T\n\nThanks to someone@northeastern.edu for this."), /email address/],
     [ok(PLANNED + "\ncredit: dana@northeastern.edu"), /email address/],
-    [ok(PLANNED + "\ncredit: [Dana](https://x.y)"), /credit must be/],
+    [ok(PLANNED + "\ncredit: [John](https://x.y)"), /credit must be/],
     [ok(PLANNED + "\ncredit: https://dana.dev"), /credit must be/],
     [ok(PLANNED + "\ncredit: " + "x".repeat(61)), /credit must be/],
     [ok(PLANNED + "\ncredit:"), /credit must be/],
@@ -81,7 +82,7 @@ test("refuses every mistake that would otherwise drop or garble an item", () => 
 });
 
 test("credit carries the name exactly as the person gave it", () => {
-  for (const name of ["Dana H.", "Jean-Luc O'Brien", "李华", "a CS student"]) {
+  for (const name of ["John S.", "Jean-Luc O'Brien", "李华", "a CS student"]) {
     const { item, errors } = parseItem("x", ok(PLANNED + `\ncredit: "${name}"`));
     assert.deepEqual(errors, [], name);
     assert.equal(item.credit, name);
@@ -163,8 +164,8 @@ test("links we have already sent people keep working", () => {
 
 test("the page reads the fields the build writes, and nothing the build no longer writes", () => {
   // The page and the build are two files; this is what holds them together.
-  for (const gone of ["statuses", "heard"]) assert.ok(!HTML.includes(gone), `roadmap.html still reads "${gone}"`);
-  for (const used of ["data.sections", "item.date", "item.shipped", "item.asks", "item.credit", "item.kind", "item.body", "item.title"]) {
+  for (const gone of ["statuses", "heard", "item.kind"]) assert.ok(!HTML.includes(gone), `roadmap.html still reads "${gone}"`);
+  for (const used of ["data.sections", "item.date", "item.shipped", "item.asks", "item.credit", "item.body", "item.title"]) {
     assert.ok(HTML.includes(used), `roadmap.html no longer reads ${used}; update this test with it`);
   }
 });

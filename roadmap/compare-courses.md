@@ -1,6 +1,5 @@
 ---
 status: maybe
-kind: feature
 date: 2026-07
 ---
 # Compare courses side by side

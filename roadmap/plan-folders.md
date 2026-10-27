@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: feature
 shipped: 2026-08-08
 ---
 # Folders, export and import for your plans

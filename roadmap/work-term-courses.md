@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: feature
 shipped: 2026-08-15
 ---
 # Co-ops and internships register their course

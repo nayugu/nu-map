@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: data
 shipped: 2026-09-03
 ---
 # Courses that left the catalog stay in your plan

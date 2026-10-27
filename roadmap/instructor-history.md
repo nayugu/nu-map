@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: data
 shipped: 2026-07-25
 ---
 # Who taught a course, semester by semester

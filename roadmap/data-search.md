@@ -1,6 +1,5 @@
 ---
 status: shipped
-kind: feature
 shipped: 2026-08-22
 ---
 # Search every course, program and professor from one box

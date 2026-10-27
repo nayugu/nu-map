@@ -8,7 +8,6 @@
 //
 //   ---
 //   status: planned
-//   kind: feature
 //   date: 2026-10
 //   asks: 1
 //   ---
@@ -42,7 +41,6 @@ export const SECTIONS = [
   { key: "shipped",  label: "Shipped",      blurb: "Live on numap.app now." },
 ];
 
-export const KINDS = ["bug", "feature", "data"];
 // ids the page itself uses as element ids; an item named one would hijack the anchor.
 export const RESERVED_IDS = ["list", "toolbar", "chips", "q", "status", "updated"];
 
@@ -59,7 +57,6 @@ const isDate = s => MONTH.test(s) || realDay(s);
 // field → parser returning [value] or an error string.
 const FIELDS = {
   status:  v => SECTIONS.some(s => s.key === v) ? [v] : `status must be one of: ${SECTIONS.map(s => s.key).join(", ")}`,
-  kind:    v => KINDS.includes(v) ? [v] : `kind must be one of: ${KINDS.join(", ")}`,
   date:    v => isDate(v) ? [v] : "date must be YYYY-MM or YYYY-MM-DD",
   shipped: v => realDay(v) ? [v] : "shipped must be a real date, YYYY-MM-DD",
   asks:    v => /^[1-9]\d*$/.test(v) ? [Number(v)] : "asks must be a whole number, 1 or more",
