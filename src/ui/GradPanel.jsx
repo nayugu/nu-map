@@ -2637,6 +2637,16 @@ export default function GradPanel({ wideCatalog = false }) {
     return set;
   }, [placements, effectiveSubstitutions, placedOut, courseMap, getSemStatus, grades, specialTermPl, specialTerms, SEM_INDEX]);
 
+  // The COMPLETED half of creditPlacedSet: what the progress bars' "done"
+  // General Electives may draw from. doneSet includes placed-out courses
+  // (and substitution targets and work-term grants, which satisfy but are not
+  // electives), so passing doneSet alone counted a waived course as completed
+  // elective credit on the bar, the same defect the section itself had.
+  const creditDoneSet = useMemo(
+    () => new Set([...doneSet].filter(k => creditPlacedSet.has(k))),
+    [doneSet, creditPlacedSet]
+  );
+
   const concGroups = useMemo(() => {
     const opts = (major?.concentrations?.concentrationOptions ?? []).map(c => ({ path: c.title, label: c.title }));
     return new Map([["Concentrations", opts]]);
@@ -2747,9 +2757,9 @@ export default function GradPanel({ wideCatalog = false }) {
   const major1DoneSections = useMemo(() => {
     if (!major) return [];
     const { sections, generalElectives } = allocateMajorWithElectives(
-      major, doneSet, courseMap, { geAllowance });
+      major, doneSet, courseMap, { realPlacedSet: creditDoneSet, geAllowance });
     return [...sections, generalElectives].slice(0, majorSectionsCount + 1);
-  }, [major, doneSet, courseMap, majorSectionsCount, geAllowance]);
+  }, [major, doneSet, creditDoneSet, courseMap, majorSectionsCount, geAllowance]);
 
   const major1Progress = useMemo(() => {
     let totalSat = 0, totalReq = 0, doneSat = 0;
@@ -2873,9 +2883,9 @@ export default function GradPanel({ wideCatalog = false }) {
   const major2DoneSections = useMemo(() => {
     if (!major2Data) return [];
     const { sections, generalElectives } = allocateMajorWithElectives(
-      major2Data, doneSet, courseMap, { geAllowance: geAllowance2 });
+      major2Data, doneSet, courseMap, { realPlacedSet: creditDoneSet, geAllowance: geAllowance2 });
     return [...sections, generalElectives];
-  }, [major2Data, doneSet, courseMap, geAllowance2]);
+  }, [major2Data, doneSet, creditDoneSet, courseMap, geAllowance2]);
 
   const major2Progress = useMemo(() => {
     let totalSat = 0, totalReq = 0, doneSat = 0;
