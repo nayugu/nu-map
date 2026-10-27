@@ -109,7 +109,7 @@
     }
     a { color: var(--link); text-underline-offset: 2px; }
     .wrap { max-width: 740px; margin: 0 auto; padding: 48px 24px 96px;
-      transition: opacity 0.4s ease; }
+      transition: opacity 0.9s cubic-bezier(0.6, 0, 0.4, 1); }
     html.deeplink .wrap { opacity: 0; }
     @media (max-width: 520px) { .wrap { padding: 28px 16px 72px; } }
 
@@ -199,16 +199,20 @@
     /* A linked item fades in, nothing more: it is already scrolled to just
        under the toolbar, so the eye is in the right place. A coloured flash
        was too loud for a page meant to read as calm. */
-    /* A soft left-to-right reveal, like a line being written: a gradient mask
-       three times the item's width slides across, so the edge is a wide fade
-       rather than a wipe. At rest the mask's opaque part covers the whole
-       item, so nothing stays hidden after it ends. */
+    /* A slow, diffuse left-to-right reveal, like a line being written: a
+       gradient mask four times the item's width slides across, and its fade
+       band (30% to 70% of the mask) is 1.6 item-widths wide, so the item
+       brightens across rather than showing a moving edge. At rest the mask's
+       opaque part covers the whole item, so nothing stays hidden after it. */
     .item.flash {
-      -webkit-mask-image: linear-gradient(to right, #000 40%, transparent 60%);
-              mask-image: linear-gradient(to right, #000 40%, transparent 60%);
-      -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+      -webkit-mask-image: linear-gradient(to right, #000 30%, transparent 70%);
+              mask-image: linear-gradient(to right, #000 30%, transparent 70%);
+      -webkit-mask-size: 400% 100%; mask-size: 400% 100%;
       -webkit-mask-position: 0 0; mask-position: 0 0;
-      animation: arrive 1.4s ease-in-out;
+      /* Slow start, a gentle middle, slow end. The ends linger longer than
+         ease-in-out; the extra duration keeps the middle about as calm as
+         before. Speed: the duration. Shape: the curve. */
+      animation: arrive 2.8s cubic-bezier(0.6, 0, 0.4, 1);
     }
     @keyframes arrive {
       from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
