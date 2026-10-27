@@ -38,7 +38,7 @@ it's live. That would break every link we've sent.
 
 | field | required | meaning |
 |---|---|---|
-| `status` | always | `known` (confirmed problem: the description must say what to do instead), `planned`, `maybe`, `declined` (not planned: the description must say why), `shipped` |
+| `status` | always | `known` (confirmed problem: the description must say what to do instead), `planned`, `maybe` (undecided: the description must say why, and point to anything that already does part of it), `declined` (not planned: the description must say why), `shipped` |
 | `date` | unless shipped | `YYYY-MM` (or `YYYY-MM-DD`): when it was reported, or when we wrote it down |
 | `shipped` | when shipped | `YYYY-MM-DD` it went live |
 | `top` | no | `true` pins it to the top of its section |
