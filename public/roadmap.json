@@ -6,7 +6,7 @@
     "body: plain text. Blank line = new paragraph. Links as [text](https://...) or [text](/path).",
     "asks: how many people asked for it through feedback. Leave it out for our own ideas.",
     "heard: YYYY-MM it was first reported. shipped: YYYY-MM-DD it went live (required when status is shipped).",
-    "kind: bug | feature | data. Order inside known/planned/declined is the order here (put the most important first); shipped sorts itself by date.",
+    "kind: bug | feature | data. Order inside every section except shipped is the order here, so put the most important first; shipped sorts itself newest first. Section order is set in roadmap.html (ORDER).",
     "The repo is public: never put a name, email or anything else that identifies who sent feedback. test/unit/roadmap.test.js refuses an email address."
   ],
   "updated": "2026-10-27",
@@ -20,12 +20,12 @@
   "items": [
     {
       "id": "pols-ba-capstone-or-coop",
-      "title": "Political Science BA: the capstone and the co-op are one choice, not two",
+      "title": "Political Science BA: a co-op can replace the experiential course",
       "status": "known",
       "kind": "bug",
       "asks": 1,
       "heard": "2026-10",
-      "body": "The [catalog](https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-ba/#programrequirementstext) lets you meet this requirement with POLS 4910, 4915, 4918 or 4942, or with a co-op or study abroad. NU Map shows them as two separate requirements, so it asks you for both.\n\nUntil this is fixed, either one is enough. We will also check whether other programs have the same problem."
+      "body": "The [catalog's](https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-ba/#programrequirementstext) Experiential Learning Requirement is one course (POLS 4910, 4915, 4918 or 4942) or a co-op or study abroad. NU Map shows the course list as its own requirement, so if you do a co-op instead, that row stays unmet. You can ignore it."
     },
     {
       "id": "degree-audit-import",

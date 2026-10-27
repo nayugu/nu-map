@@ -238,8 +238,10 @@
   (function () {
     "use strict";
     // Status ORDER is a page decision (what a visitor should see first);
-    // labels and blurbs come from the JSON.
-    var ORDER = ["known", "planned", "maybe", "shipped", "declined"];
+    // labels and blurbs come from the JSON. Shipped is LAST because it only
+    // grows: "Not planned" items are answers to someone's request and must
+    // not sink under an ever-longer changelog.
+    var ORDER = ["known", "planned", "maybe", "declined", "shipped"];
     // Shipped grows forever; past this many, the rest folds behind a button
     // unless the visitor is searching or has asked for Shipped specifically.
     var SHIPPED_PREVIEW = 8;
