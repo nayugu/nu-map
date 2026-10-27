@@ -1520,23 +1520,39 @@ this protocol: **intake is not solving.** Writing up a problem and deciding
 where it goes on the roadmap is a separate job from fixing it, and it should
 be quick. Steps, in order:
 
-1. **Audit, read-only, and brief.** The audit exists only to answer which
-   category it belongs in, so stop as soon as you can: is it real, and
-   roughly why? Root-causing and measuring scope are part of solving, later.
+1. **Audit, read-only.** The goal is to choose the RIGHT outcome for the
+   report: investigate however it needs, but go no deeper than that choice
+   needs. Fixing it, and fully root-causing it, are part of solving, later.
    Change NOTHING: no code, no data, no tests. (On 2026-10-27 a report was
    "fixed" mid-audit without being asked; that is the failure this rule
-   exists for.)
+   exists for.) The outcomes to decide between:
+   - **Already exists, and they missed it** → no item; note where it is, for
+     our reply. If someone has missed the same thing before, the real
+     problem is that it is hard to find, and *that* is the item.
+   - **Already on the roadmap** → no new item; update that one (credit, or a
+     clearer description).
+   - **Not real** (checked against the code, the data and the catalog) →
+     not on the roadmap, with the one-line reason for our reply.
+   - **Something wrong** (the app tells a student something untrue) →
+     *known*, with what to do meanwhile.
+   - **A request** → *planned*, *maybe* or *declined*, by how much it
+     matters against what it costs; or not on the roadmap if it is too small
+     to list.
 2. **Report, short and plain.** Is it real? What is going on, in a sentence
    or two? Say what you verified and what you did not. Mention scope only if
    it is already obvious.
-3. **Ask for the category.** Offer the roadmap statuses (`known`, `planned`,
-   `maybe`, `declined`), or "not a problem", with your recommendation first
-   and one line of why. We choose.
+3. **Ask for the outcome.** Offer the options the audit left open, from:
+   `known`, `planned`, `maybe`, `declined`, *already exists*, *already on the
+   roadmap*, *not on the roadmap*. Recommendation first, with one line of
+   why. We choose. (`declined` means we decided against it, never "it
+   already exists": filing an existing feature there tells readers it
+   doesn't.)
 4. **Write it into the roadmap.** Read `roadmap/README.md` first, every
    time. Write like the items already there: for students, not developers;
    clear and to the point; what the problem is and, for a known issue, what
    to do meanwhile. No internals (no set names, no file paths). Credit only if
-   the person said Yes on the form. Run `node scripts/check-roadmap.js`.
+   the person said Yes on the form; if we give you the name to credit, we have
+   already checked, so use it as given. Run `node scripts/check-roadmap.js`.
    Commit; push only when asked.
 5. **Stop.** Solving comes later, and only when we ask for it.
 
