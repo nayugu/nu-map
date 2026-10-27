@@ -20,6 +20,16 @@
     built with DOM calls, never innerHTML, so nothing written in an item can
     become markup.
   -->
+  <script>
+    // Opened from a link to one item (#id): stay invisible until the page has
+    // scrolled to it, then fade in. Otherwise the top of the page draws first
+    // and then jumps, which reads as a flash. The 3s fallback means a slow or
+    // failed load can never leave the page blank.
+    if (location.hash.length > 1) {
+      document.documentElement.classList.add("deeplink");
+      setTimeout(function () { document.documentElement.classList.remove("deeplink"); }, 3000);
+    }
+  </script>
   <!--
     DARK MODE IS OFF: the accessory pages (like /story) come in one light
     theme, so this one does too. It is disabled, not deleted — to turn
@@ -46,7 +56,6 @@
       --faint: #9aa0a7;
       --line: #ece7df;
       --link: #2f6fe0;
-      --flash: #fff4d6;
       /* Status hues, vivid pastel (the app's register). A pill's text is the
          same hue scaled toward black, never a grey, so it stays the colour. */
       --known: #f87171;
@@ -99,7 +108,9 @@
       line-height: 1.6; -webkit-font-smoothing: antialiased;
     }
     a { color: var(--link); text-underline-offset: 2px; }
-    .wrap { max-width: 740px; margin: 0 auto; padding: 48px 24px 96px; }
+    .wrap { max-width: 740px; margin: 0 auto; padding: 48px 24px 96px;
+      transition: opacity 0.4s ease; }
+    html.deeplink .wrap { opacity: 0; }
     @media (max-width: 520px) { .wrap { padding: 28px 16px 72px; } }
 
     /* Site-wide home mark: the same affordance on every NU Map page. */
@@ -185,8 +196,24 @@
       content: ""; position: absolute; left: 1px; top: 25px;
       width: 6px; height: 6px; border-radius: 50%; background: var(--hue);
     }
-    .item.flash { animation: flash 2.4s ease-out; }
-    @keyframes flash { 0%, 35% { background: var(--flash); } 100% { background: transparent; } }
+    /* A linked item fades in, nothing more: it is already scrolled to just
+       under the toolbar, so the eye is in the right place. A coloured flash
+       was too loud for a page meant to read as calm. */
+    /* A soft left-to-right reveal, like a line being written: a gradient mask
+       three times the item's width slides across, so the edge is a wide fade
+       rather than a wipe. At rest the mask's opaque part covers the whole
+       item, so nothing stays hidden after it ends. */
+    .item.flash {
+      -webkit-mask-image: linear-gradient(to right, #000 40%, transparent 60%);
+              mask-image: linear-gradient(to right, #000 40%, transparent 60%);
+      -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+      -webkit-mask-position: 0 0; mask-position: 0 0;
+      animation: arrive 1.4s ease-in-out;
+    }
+    @keyframes arrive {
+      from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+      to   { -webkit-mask-position: 0 0;    mask-position: 0 0; }
+    }
     .item h3 { margin: 0; font-size: 1rem; line-height: 1.4; color: var(--strong); font-weight: 600;
       padding-right: 34px; }
     .item p { margin: 6px 0 0; font-size: 0.94rem; }
@@ -232,7 +259,7 @@
     footer.end .links { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.85rem; }
 
     @media (prefers-reduced-motion: reduce) {
-      .item.flash { animation: none; background: var(--flash); }
+      .item.flash { animation: none; }
       * { transition: none !important; }
     }
   </style>
@@ -520,7 +547,12 @@
       if (data.updated) $("updated").textContent = "Updated " + fmt(data.updated, true);
       renderChips(); render();
       if (location.hash) goToHash();
+      revealPage(); // only now, with the item already in place
     }
+
+    // Ends the hidden-until-scrolled state the <head> script starts for a
+    // link to one item. Safe to call when it never started.
+    function revealPage() { document.documentElement.classList.remove("deeplink"); }
 
     var timer;
     $("q").addEventListener("input", function (e) {
@@ -550,6 +582,7 @@
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(boot)
       .catch(function () {
+        revealPage();
         $("list").textContent = "";
         $("list").append(el("div", { class: "empty" }, [
           el("p", { text: "The roadmap could not load." }),
