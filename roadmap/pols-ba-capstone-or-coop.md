@@ -1,7 +1,6 @@
 ---
 status: known
 date: 2026-10
-asks: 1
 credit: Lily H.
 ---
 # Political Science BA: a co-op can replace the experiential course

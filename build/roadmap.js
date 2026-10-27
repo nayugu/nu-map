@@ -9,7 +9,7 @@
 //   ---
 //   status: planned
 //   date: 2026-10
-//   asks: 1
+//   credit: Lily H.
 //   ---
 //   # Graduate after Summer A or Summer B
 //
@@ -60,7 +60,6 @@ const FIELDS = {
   status:  v => SECTIONS.some(s => s.key === v) ? [v] : `status must be one of: ${SECTIONS.map(s => s.key).join(", ")}`,
   date:    v => isDate(v) ? [v] : "date must be YYYY-MM or YYYY-MM-DD",
   shipped: v => realDay(v) ? [v] : "shipped must be a real date, YYYY-MM-DD",
-  asks:    v => /^[1-9]\d*$/.test(v) ? [Number(v)] : "asks must be a whole number, 1 or more",
   top:     v => v === "true" ? [true] : v === "false" ? [false] : "top must be true or false",
   // The name a person ASKED to be credited under, exactly as they gave it.
   // Plain text only: no link, no email, nothing the page would render oddly.

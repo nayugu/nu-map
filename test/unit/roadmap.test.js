@@ -26,11 +26,11 @@ const errorsOf = (src, id = "an-item") => parseItem(id, src).errors.join(" | ");
 
 test("a well-formed item parses to exactly what the page renders", () => {
   const { item, errors } = parseItem("summer-graduation", ok(
-    "status: planned\ndate: 2026-10\nasks: 2\ntop: true",
+    "status: planned\ndate: 2026-10\ncredit: Lily H.\ntop: true",
     "# Graduate after Summer A\n\nFirst line\nsame paragraph.\n\nSecond, with [a link](/story) and [one](https://x.y/z)."));
   assert.deepEqual(errors, []);
   assert.deepEqual(item, {
-    id: "summer-graduation", status: "planned", date: "2026-10", asks: 2, top: true,
+    id: "summer-graduation", status: "planned", date: "2026-10", credit: "Lily H.", top: true,
     title: "Graduate after Summer A",
     body: "First line same paragraph.\n\nSecond, with [a link](/story) and [one](https://x.y/z).",
   });
@@ -54,8 +54,8 @@ test("refuses every mistake that would otherwise drop or garble an item", () => 
     [ok(PLANNED + "\nstatus: known"), /appears twice/],
     // `kind` was retired; an old habit must fail loudly, not be ignored.
     [ok(PLANNED + "\nkind: bug"), /unknown field "kind"/],
-    [ok(PLANNED + "\nasks: 0"), /asks must be/],
-    [ok(PLANNED + "\nasks: two"), /asks must be/],
+    // `asks` was retired; an old habit must fail loudly, not be ignored.
+    [ok(PLANNED + "\nasks: 2"), /unknown field "asks"/],
     [ok(PLANNED + "\ntop: yes"), /top must be/],
     [ok("status: planned\ndate: 2026-13"), /date must be/],
     [ok("status: planned\ndate: Oct 2026"), /date must be/],
@@ -85,7 +85,7 @@ test("refuses every mistake that would otherwise drop or garble an item", () => 
 });
 
 test("credit carries the name exactly as the person gave it", () => {
-  for (const name of ["John S.", "Jean-Luc O'Brien", "李华", "a CS student"]) {
+  for (const name of ["John S.", "Lily H. and John S.", "Jean-Luc O'Brien", "李华", "a CS student"]) {
     const { item, errors } = parseItem("x", ok(PLANNED + `\ncredit: "${name}"`));
     assert.deepEqual(errors, [], name);
     assert.equal(item.credit, name);
@@ -222,8 +222,8 @@ test("links we have already sent people keep working", () => {
 
 test("the page reads the fields the build writes, and nothing the build no longer writes", () => {
   // The page and the build are two files; this is what holds them together.
-  for (const gone of ["statuses", "heard", "item.kind"]) assert.ok(!HTML.includes(gone), `roadmap.html still reads "${gone}"`);
-  for (const used of ["data.sections", "item.date", "item.shipped", "item.asks", "item.credit", "item.body", "item.title"]) {
+  for (const gone of ["statuses", "heard", "item.kind", "item.asks"]) assert.ok(!HTML.includes(gone), `roadmap.html still reads "${gone}"`);
+  for (const used of ["data.sections", "item.date", "item.shipped", "item.credit", "item.body", "item.title"]) {
     assert.ok(HTML.includes(used), `roadmap.html no longer reads ${used}; update this test with it`);
   }
 });

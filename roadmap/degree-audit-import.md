@@ -1,7 +1,6 @@
 ---
 status: planned
 date: 2026-10
-asks: 1
 top: true
 ---
 # Import your courses from a degree audit PDF
