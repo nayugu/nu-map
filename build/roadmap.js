@@ -38,7 +38,7 @@ import { execFileSync } from "node:child_process";
 // public/roadmap.html (the unit test holds the two together).
 export const SECTIONS = [
   { key: "known",    label: "Known issues", blurb: "Confirmed problems. Until they are fixed, the note on each one says what to do instead." },
-  { key: "planned",  label: "Planned",      blurb: "Things we intend to build. No dates: we are students, and coursework comes first." },
+  { key: "planned",  label: "Planned",      blurb: "Things we intend to build. It may take us a while to get to them." },
   { key: "maybe",    label: "Maybe",        blurb: "Possible, but nice to have rather than needed, or we are not yet sure they are worth it." },
   { key: "declined", label: "Not planned",  blurb: "Ideas we have decided against, and why." },
   { key: "shipped",  label: "Shipped",      blurb: "Live on numap.app now." },
