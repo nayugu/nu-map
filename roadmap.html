@@ -128,9 +128,11 @@
     .home:hover img { opacity: 1; }
 
     h1 { font-size: 2rem; line-height: 1.15; letter-spacing: -0.02em;
-      color: var(--strong); margin: 0 0 12px; font-weight: 700; }
-    .lede { font-size: 1.05rem; margin: 0 0 6px; color: var(--text); }
-    .aside { font-size: 0.92rem; color: var(--muted); margin: 0; }
+      color: var(--strong); margin: 0 0 16px; font-weight: 700; }
+    .lede { font-size: 1.05rem; margin: 0 0 14px; color: var(--text); }
+    /* Same size as the section descriptions (.blurb), so the page has one
+       size for its quiet notes. */
+    .aside { font-size: 0.82rem; color: var(--muted); margin: 0; line-height: 1.7; }
 
     /* ── Toolbar: sticky, because the list is meant to get long ─────────── */
     .toolbar {
@@ -283,8 +285,7 @@
     <a class="home" href="/"><img src="/logo.png" alt="NU Map home" width="28" height="28" /></a>
     <h1>Roadmap</h1>
     <p class="lede">What we have built, what we are considering, and what we have decided not to build.</p>
-    <p class="aside">NU Map is made by two students, and right now we are mostly in class, so nothing
-      here has a date. We read every response, though not every one becomes an item here.</p>
+    <p class="aside">NU Map is made by two students, so we can't promise dates. We read every response; not all become items.</p>
 
     <div class="toolbar" id="toolbar" hidden>
       <div class="chips" id="chips" role="group" aria-label="Show"></div>
