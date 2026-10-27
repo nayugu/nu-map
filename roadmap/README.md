@@ -11,7 +11,6 @@ Create `roadmap/<name>.md`:
 ```md
 ---
 status: planned
-kind: feature
 date: 2026-10
 asks: 1
 ---
@@ -36,15 +35,14 @@ it's live. That would break every link we've sent.
 | `status` | always | `known` (confirmed problem), `planned`, `maybe`, `declined` (not planned), `shipped` |
 | `date` | unless shipped | `YYYY-MM` (or `YYYY-MM-DD`): when it was reported, or when we wrote it down |
 | `shipped` | when shipped | `YYYY-MM-DD` it went live |
-| `kind` | no | `bug`, `feature` or `data` |
 | `asks` | no | how many people asked for it through feedback. Leave it out for our own ideas |
 | `top` | no | `true` pins it to the top of its section |
-| `credit` | no | the name someone **asked** to be credited under, e.g. `credit: Dana H.` Shown as "Suggested by Dana H." ("Reported by" for a bug). With `asks: 3` it reads "Suggested by Dana H. and 2 others" |
+| `credit` | no | only for someone who answered **Yes** to the form's credit question. Always **first name + last initial**: `credit: John S.` (type their `lastname.f@northeastern.edu` into Northeastern Outlook; the directory shows the full name). |
 
-On the page, an item shows one quiet line only when someone asked for it
-("Suggested by Dana H.", "Suggested through feedback", "Asked for by 3
-people"). Its kind and date fade in beside that line on hover. Our own ideas
-show no line at all.
+On the page, a credited item ends with one faint line: "Suggested by John S.",
+or "Reported by John S." under Known issues, and "Suggested by John S. and 2
+others" when `asks: 3`. The date fades in beside it on hover. An item with no
+`credit` shows no line at all, even if people asked for it.
 
 ## Order
 
@@ -62,9 +60,10 @@ they're the record, and someone may have the link.
 
 - **Names only with permission, emails never.** The repo is public and keeps
   history forever, so a name added by mistake can't truly be removed. Use
-  `credit:` only when the person said they want to be credited, and write it
-  exactly as they gave it. Otherwise record only how many asked (`asks`).
-  The build refuses any email address.
+  `credit:` only when the person answered Yes, always as "First L.", and if
+  several did, credit the first and let `asks` count the rest. Otherwise
+  record only how many asked (`asks`). The build refuses any email address,
+  so never credit someone by their email.
 - **Plain text only:** paragraphs and `[links](...)`. No lists or headings in
   the body. The build refuses anything it can't render, and names the file.
 - A mistake **fails the build**, so nothing silently drops off the page. Run
