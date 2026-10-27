@@ -338,17 +338,14 @@
       // A faint signature under the description, and ONLY when someone is
       // credited by name ("Thanks to Lily H."). Anonymous feedback shows
       // nothing: a line that says "through feedback" competes with the
-      // description and tells the reader nothing they act on. `asks` stays in
-      // the data and only widens the credit ("… and 2 others"). The date
-      // fades in beside the signature on hover.
+      // description and tells the reader nothing they act on. The date fades
+      // in beside the signature on hover.
       var by = null;
       if (item.credit) {
-        var people = Math.max(item.asks || 1, 1);
         // One phrase for every section. A verb chosen by section ("Reported
         // by" for a known issue) would silently change when the fix ships
         // and the item moves to Shipped; a credit should never change.
-        var who = "Thanks to " + item.credit +
-          (people > 1 ? " and " + (people - 1) + (people === 2 ? " other" : " others") : "");
+        var who = "Thanks to " + item.credit;
         var extra = item.status === "shipped" && item.shipped ? "shipped " + fmt(item.shipped, true) : item.date ? fmt(item.date) : "";
         by = el("p", { class: "by" }, [who, extra ? el("span", { class: "extra", text: " · " + extra }) : null]);
       }
