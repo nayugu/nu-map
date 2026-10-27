@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/northeastern/dev_logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src/ - NU Map Docs</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="src">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">N</div>
+      <div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div>
+    </div>
+    <div id="nav-tree"></div>
+    <hr class="nav-divider">
+    <a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../">nu-map/documentation</a><span class="sep"> / </span><strong>src/</strong>
+    </div>
+
+    <h1>src/ <span class="badge gray">Application source</span></h1>
+    <p class="lead">All application source code. Six layers that depend only inward: UI consumes Context, Context drives Core and Data, institution-specific behavior is isolated behind the ports/adapters boundary. Everything except <code>src/config.js</code> is institution-agnostic.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Parent</div><div class="nb-value"><a href="../">nu-map root</a></div></div>
+      <div class="nb-group"><div class="nb-label">Entry</div><div class="nb-value"><code>main.jsx</code> → <code>App.jsx</code></div></div>
+      <div class="nb-group"><div class="nb-label">Provider order</div><div class="nb-value">ThemeProvider → InstitutionProvider → LanguageProvider → PlannerProvider</div></div>
+    </div>
+
+    <h2>Layer map</h2>
+    <div class="children-grid">
+      <a class="child-card" href="./ports/">
+        <div class="cc-type">contracts</div>
+        <div class="cc-name">ports/</div>
+        <div class="cc-desc">11 JSDoc-only files. No logic. Define exactly what each institution adapter must provide. The seam between institution-specific and institution-agnostic code.</div>
+      </a>
+      <a class="child-card" href="./adapters/">
+        <div class="cc-type">implementations</div>
+        <div class="cc-name">adapters/</div>
+        <div class="cc-desc">All institution-specific values and rules. northeastern/ is the reference implementation. generic/ provides safe fallbacks. wire() composes them.</div>
+      </a>
+      <a class="child-card" href="./context/">
+        <div class="cc-type">state bridge</div>
+        <div class="cc-name">context/</div>
+        <div class="cc-desc">Four React contexts: InstitutionContext (adapter injection), LanguageContext (i18n), PlannerContext (all planner state), ThemeContext (CSS vars).</div>
+      </a>
+      <a class="child-card" href="./core/">
+        <div class="cc-type">pure logic</div>
+        <div class="cc-name">core/</div>
+        <div class="cc-desc">Eight modules of pure domain logic. No React, no I/O, no adapter imports. Semester grid, prereq eval, graduation checking, plan helpers, themes.</div>
+      </a>
+      <a class="child-card" href="./data/">
+        <div class="cc-type">I/O layer</div>
+        <div class="cc-name">data/</div>
+        <div class="cc-desc">Three modules: majorLoader + minorLoader (Vite lazy-import from data/northeastern/programs/undergraduate/), persistence (localStorage read/write). Course loading belongs to the ICourseCatalog adapter.</div>
+      </a>
+      <a class="child-card" href="./ui/">
+        <div class="cc-type">UI layer</div>
+        <div class="cc-name">ui/</div>
+        <div class="cc-desc">13 React components. No prop drilling — all shared state comes from usePlanner(). All styles inline with var(--token) CSS variables.</div>
+      </a>
+    </div>
+
+    <h2>Layer dependency rules</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+graph LR
+    UI["ui/\n13 components"]
+    CTX["context/\nInstitutionContext\nLanguageContext\nPlannerContext\nThemeContext"]
+    CORE["core/\npure functions"]
+    DATA["data/\nI/O only"]
+    PORTS["ports/\nJSDoc contracts"]
+    ADAPT["adapters/\nnortheastern/\ngeneric/"]
+
+    UI -->|"usePlanner()\nusePort()\nuseLanguage()"| CTX
+    CTX -->|"pure fn calls"| CORE
+    CTX -->|"async I/O\n(ports as params)"| DATA
+    ADAPT -->|"implements"| PORTS
+    CTX -->|"wire()\nusePort()"| ADAPT
+
+    style UI fill:#ddf4ff,stroke:#0969da
+    style CTX fill:#fbefff,stroke:#8250df
+    style CORE fill:#dafbe1,stroke:#1a7f37
+    style DATA fill:#fff8c5,stroke:#9a6700
+    style PORTS fill:#fef3c7,stroke:#d97706
+    style ADAPT fill:#ffe4e6,stroke:#e11d48
+      </div>
+      <div class="caption">Imports go inward only. Core and Data never import from adapters or React. UI never imports from adapters directly — always via usePort().</div>
+    </div>
+
+    <h2>App.jsx — composition root</h2>
+    <p><code>src/main.jsx</code> is 4 lines — it mounts React in StrictMode. <code>App.jsx</code> wraps the entire app in four nested providers in this exact order:</p>
+
+    <pre><code><span class="cmt">// src/App.jsx — required nesting order</span>
+&lt;ThemeProvider storagePrefix={institutionAdapter.institution.storagePrefix}&gt;
+  &lt;InstitutionProvider adapter={institutionAdapter}&gt;
+    &lt;LanguageProvider&gt;
+      &lt;PlannerProvider&gt;
+        &lt;PlannerApp /&gt;
+      &lt;/PlannerProvider&gt;
+    &lt;/LanguageProvider&gt;
+  &lt;/InstitutionProvider&gt;
+&lt;/ThemeProvider&gt;</code></pre>
+
+    <p><strong>Why this order:</strong> ThemeProvider is outermost because it reads <code>storagePrefix</code> directly from the adapter object (a plain import, not via React context). InstitutionProvider is second because LanguageProvider and PlannerProvider both call <code>usePort()</code> internally — they need InstitutionContext in the tree above them. LanguageProvider wraps PlannerProvider because the planner may eventually need <code>t()</code> for localized messages.</p>
+
+    <p><code>PlannerApp</code> (defined in App.jsx) renders the actual layout. It uses a <code>ResizeObserver</code> to compute <code>uiScale</code> and applies <code>transform: scale(uiScale)</code> to the app container so all pixel values in components can be written at one canonical desktop width.</p>
+
+    <h2>config.js — the one file to change for a fork</h2>
+    <pre><code><span class="cmt">// src/config.js</span>
+import { wire }              from './adapters/wire.js';
+import northeasternOverrides from './adapters/northeastern/index.js';
+
+export const institutionAdapter = wire(northeasternOverrides);</code></pre>
+    <p>This is the only non-adapter file that knows which institution is active. Changing line 2 to point at a different adapter folder reconfigures the entire planner — semester structure, gen-ed framework, co-op rules, course catalog URL, disclaimers, and credit units — all from a single edit.</p>
+
+    <h2>File inventory</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>File / folder</th><th>Layer</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>main.jsx</code></td><td>—</td><td>React root mount (4 lines)</td></tr>
+        <tr><td><code>App.jsx</code></td><td>—</td><td>Provider wrapper + uiScale ResizeObserver</td></tr>
+        <tr><td><code>config.js</code></td><td>—</td><td>Single import selecting the active institution adapter</td></tr>
+        <tr><td><code>ports/</code></td><td>Ports</td><td>11 JSDoc interface files (9 driven + 2 driving)</td></tr>
+        <tr><td><code>adapters/northeastern/</code></td><td>Adapters</td><td>NU reference implementation — 9 files (8 ports + aiAssistant)</td></tr>
+        <tr><td><code>adapters/generic/</code></td><td>Adapters</td><td>Fallback defaults for every port</td></tr>
+        <tr><td><code>adapters/wire.js</code></td><td>Adapters</td><td>wire(overrides) — merges overrides onto generic defaults</td></tr>
+        <tr><td><code>context/InstitutionContext.jsx</code></td><td>Context</td><td>Adapter injection — InstitutionProvider + usePort(key)</td></tr>
+        <tr><td><code>context/LanguageContext.jsx</code></td><td>Context</td><td>i18n — LanguageProvider + useLanguage() + t(key, vars)</td></tr>
+        <tr><td><code>context/PlannerContext.jsx</code></td><td>Context</td><td>All planner state — ~1,600 lines, usePlanner() hook</td></tr>
+        <tr><td><code>context/ThemeContext.jsx</code></td><td>Context</td><td>CSS variable injection from themes.js, useTheme() hook</td></tr>
+        <tr><td><code>core/gradRequirements.js</code></td><td>Core</td><td>Major2 requirement tree allocation and satisfaction checking</td></tr>
+        <tr><td><code>core/prereqEval.js</code></td><td>Core</td><td>Recursive prerequisite tree evaluation</td></tr>
+        <tr><td><code>core/courseModel.js</code></td><td>Core</td><td>subjectColor(), extractEdges(), getOfferedFromTerms()</td></tr>
+        <tr><td><code>core/semGrid.js</code></td><td>Core</td><td>buildCohortSemesters(), deriveSemMaps() — semester grid generation</td></tr>
+        <tr><td><code>core/planModel.js</code></td><td>Core</td><td>Plan helpers (SH totals, ordering) + PDF/print export</td></tr>
+        <tr><td><code>core/specialTermUtils.js</code></td><td>Core</td><td>resolveTermByDuration(), termSpans(), computeGrantedAttrs()</td></tr>
+        <tr><td><code>core/themes.js</code></td><td>Core</td><td>THEMES map — CSS variable token sets for each theme</td></tr>
+        <tr><td><code>core/constants.js</code></td><td>Core</td><td>SUBJECT_PALETTE, TYPE_BG, REL_STYLE, NUM_YEARS</td></tr>
+        <tr><td><code>data/majorLoader.js</code></td><td>Data</td><td>getMajorOptions/Groups(), loadMajor() — loads scraped major JSONs</td></tr>
+        <tr><td><code>data/minorLoader.js</code></td><td>Data</td><td>Mirror of majorLoader for minors</td></tr>
+        <tr><td><code>data/persistence.js</code></td><td>Data</td><td>storageKey(), loadSaved(), saveState(), clearState() — localStorage I/O</td></tr>
+        <tr><td><code>data/majors/</code></td><td>Data</td><td>Scraped major requirement JSONs (src-local, sole source)</td></tr>
+        <tr><td><code>locales/</code></td><td>—</td><td>7 locale files (ar, en, es, fr, hi, ja, zh) — loaded by LanguageContext</td></tr>
+        <tr><td><code>ui/Header.jsx</code></td><td>UI</td><td>Top bar: title, SH counter, plan management, settings, PDF export</td></tr>
+        <tr><td><code>ui/SemRow.jsx</code></td><td>UI</td><td>Fall/spring semester rows — drop zones, course cards, co-op blocks</td></tr>
+        <tr><td><code>ui/SummerRow.jsx</code></td><td>UI</td><td>Paired summer semester columns (sumA + sumB side-by-side)</td></tr>
+        <tr><td><code>ui/CourseCard.jsx</code></td><td>UI</td><td>Draggable course tile — star, offered badge, violation icon, SH editor</td></tr>
+        <tr><td><code>ui/BankPanel.jsx</code></td><td>UI</td><td>Right sidebar: course bank (search/filter/sort) and special term drag sources</td></tr>
+        <tr><td><code>ui/InfoPanel.jsx</code></td><td>UI</td><td>Selected course detail drawer — desc, prereqs, offered-in history, SH override</td></tr>
+        <tr><td><code>ui/GradPanel.jsx</code></td><td>UI</td><td>Graduation panel: major/minor selector, requirement tree, NUPath grid</td></tr>
+        <tr><td><code>ui/RelationLines.jsx</code></td><td>UI</td><td>SVG overlay drawing prereq/coreq/substitution lines between course cards</td></tr>
+        <tr><td><code>ui/DisclaimerModal.jsx</code></td><td>UI</td><td>First-load modal with institution-specific disclaimers from ILocalization</td></tr>
+        <tr><td><code>ui/LoadingScreen.jsx</code></td><td>UI</td><td>Full-screen progress bar shown during course catalog fetch</td></tr>
+        <tr><td><code>ui/CompanySearch.jsx</code></td><td>UI</td><td>Employer autocomplete input for work experience (co-op/internship) blocks</td></tr>
+        <tr><td><code>ui/CompanyLogo.jsx</code></td><td>UI</td><td>Favicon + employer name badge rendered inside co-op/internship blocks</td></tr>
+        <tr><td><code>ui/ClaudePanel.jsx</code></td><td>UI</td><td>AI assistant UI placeholder — not active until MCP server is deployed</td></tr>
+      </tbody>
+    </table></div>
+
+  </main>
+</div>
+<script src="../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
