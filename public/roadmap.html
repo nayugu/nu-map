@@ -169,7 +169,9 @@
       font-size: 1.15rem; color: var(--strong); letter-spacing: -0.01em; }
     h2 .n { font-size: 0.85rem; font-weight: 500; color: var(--faint); font-variant-numeric: tabular-nums; }
     h2 .dot { width: 10px; height: 10px; }
-    .blurb { font-size: 0.88rem; color: var(--muted); margin: 3px 0 0 19px; }
+    /* 0.82rem: the longest description (Maybe) fits on one line at full
+       width from 0.83rem (measured); a hair under, for other browsers' fonts. */
+    .blurb { font-size: 0.82rem; color: var(--muted); margin: 3px 0 0 19px; }
     .month { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--faint); margin: 22px 0 0 19px; }
 
