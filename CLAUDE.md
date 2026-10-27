@@ -1534,7 +1534,7 @@ be quick. Steps, in order:
    - **Not real** (checked against the code, the data and the catalog) →
      not on the roadmap, with the one-line reason for our reply.
    - **Something wrong** (the app tells a student something untrue) →
-     *known*, with what to do meanwhile.
+     *known*, with what to do meanwhile if there is something.
    - **A request** → *planned*, *maybe* or *declined*, by how much it
      matters against what it costs; or not on the roadmap if it is too small
      to list.
@@ -1550,7 +1550,7 @@ be quick. Steps, in order:
 4. **Write it into the roadmap.** Read `roadmap/README.md` first, every
    time. Write like the items already there: for students, not developers;
    clear and to the point; what the problem is and, for a known issue, what
-   to do meanwhile. No internals (no set names, no file paths). Credit only if
+   to do meanwhile if there is something. No internals (no set names, no file paths). Credit only if
    the person said Yes on the form; if we give you the name to credit, we have
    already checked, so use it as given. Run `node scripts/check-roadmap.js`.
    Commit; push only when asked.
