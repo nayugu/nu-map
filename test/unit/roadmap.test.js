@@ -10,11 +10,12 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { readFileSync, mkdtempSync, writeFileSync, rmSync, mkdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { parseItem, loadRoadmap, SECTIONS, RESERVED_IDS } from "../../build/roadmap.js";
+import { parseItem, loadRoadmap, newestItemDate, SECTIONS, RESERVED_IDS } from "../../build/roadmap.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const HTML = readFileSync(join(ROOT, "public", "roadmap.html"), "utf8");
@@ -143,6 +144,43 @@ test("ordering: section order, then top, then newest date, then title; shipped n
     const ids = loadRoadmap(dir, { updated: "2026-10-27" }).items.map(i => i.id);
     assert.deepEqual(ids, ["bug", "pinned-old", "new", "tie-a", "tie-b", "old", "no", "s-new", "s-old"]);
   });
+});
+
+test("the fallback date keeps the precision it was written in", () => {
+  const at = (...ds) => newestItemDate(ds.map(d => d.length === 10 && d.startsWith("s") ? { shipped: d.slice(1) } : { date: d }));
+  assert.equal(at("2026-09", "2026-10"), "2026-10");
+  assert.equal(at("2026-10", "2026-10-05"), "2026-10");      // the month may be later than the 5th
+  assert.equal(at("2026-09-30", "2026-10-02"), "2026-10-02");
+  assert.equal(at("2026-09", "2026-10-02"), "2026-10-02");
+  assert.equal(newestItemDate([{ shipped: "2026-11-01", date: "2026-10" }]), "2026-11-01");
+  assert.equal(newestItemDate([]), null);
+});
+
+// "Updated" comes from the folder's last commit, but a shallow clone (a CI
+// or Pages checkout may be one) reports its oldest commit as having added
+// every file, so the date would silently become the latest DEPLOY. Built for
+// real: two commits, the roadmap touched only by the older one.
+test("updated is the folder's last commit, and a shallow clone falls back instead of lying", () => {
+  const sh = (cwd, args, env = {}) => execFileSync("git", args, { cwd, env: { ...process.env, ...env }, stdio: "pipe" }).toString().trim();
+  const base = mkdtempSync(join(tmpdir(), "roadmap-git-"));
+  try {
+    const repo = join(base, "repo");
+    mkdirSync(join(repo, "roadmap"), { recursive: true });
+    sh(repo, ["init", "-q"]);
+    writeFileSync(join(repo, "roadmap", "a.md"), ok("status: planned\ndate: 2019-06"));
+    const at = d => ({ GIT_AUTHOR_DATE: d, GIT_COMMITTER_DATE: d, GIT_AUTHOR_NAME: "t", GIT_AUTHOR_EMAIL: "t@t", GIT_COMMITTER_NAME: "t", GIT_COMMITTER_EMAIL: "t@t" });
+    sh(repo, ["add", "-A"]); sh(repo, ["commit", "-qm", "roadmap"], at("2020-01-01T12:00:00Z"));
+    writeFileSync(join(repo, "other.txt"), "x");
+    sh(repo, ["add", "-A"]); sh(repo, ["commit", "-qm", "unrelated"], at("2021-01-01T12:00:00Z"));
+
+    assert.equal(loadRoadmap(join(repo, "roadmap")).updated, "2020-01-01");
+
+    const shallow = join(base, "shallow");
+    sh(base, ["clone", "-q", "--depth", "1", "file://" + repo, shallow]);
+    assert.equal(sh(shallow, ["rev-parse", "--is-shallow-repository"]), "true");
+    // Without the guard this reads 2021-01-01, the unrelated commit.
+    assert.equal(loadRoadmap(join(shallow, "roadmap")).updated, "2019-06");
+  } finally { rmSync(base, { recursive: true, force: true }); }
 });
 
 // ── The real folder ──────────────────────────────────────────────────

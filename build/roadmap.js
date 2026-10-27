@@ -123,11 +123,33 @@ const sortKey = {
   rest: (a, b) => (b.top === true) - (a.top === true) || b.date.localeCompare(a.date) || a.title.localeCompare(b.title),
 };
 
+// The folder's last commit date — but ONLY from a full history. In a shallow
+// clone (which a CI or Pages checkout may be) the oldest commit present has
+// no parent, so git reports it as having ADDED every file, and "last touched
+// the roadmap" silently becomes "the latest deploy". That answer is shaped
+// exactly like the right one, so refuse it and let the caller fall back.
 function lastCommitDay(dir) {
+  const git = args => execFileSync("git", args, { cwd: dir, stdio: ["ignore", "pipe", "ignore"] }).toString().trim();
   try {
-    const out = execFileSync("git", ["log", "-1", "--format=%cs", "--", dir], { cwd: dir, stdio: ["ignore", "pipe", "ignore"] }).toString().trim();
+    if (git(["rev-parse", "--is-shallow-repository"]) !== "false") return null;
+    const out = git(["log", "-1", "--format=%cs", "--", dir]);
     return DAY.test(out) ? out : null;
   } catch { return null; }
+}
+
+// Fallback for "updated": the newest date any item states. It moves exactly
+// when an item is added or ships. Kept at the precision it was written in — a
+// month-only date stays "2026-10" (shown "Oct 2026"), never padded into a day
+// nobody stated.
+export function newestItemDate(items) {
+  let best = null;
+  for (const d of items.flatMap(i => [i.date, i.shipped]).filter(Boolean)) {
+    // Compare a month as its last possible day: "2026-10" may be later than
+    // "2026-10-05", so it wins, and the answer claims only the month.
+    const key = d.length === 7 ? d + "-32" : d;
+    if (!best || key > best.key || (key === best.key && d.length > best.d.length)) best = { key, d };
+  }
+  return best?.d ?? null;
 }
 
 /**
@@ -147,9 +169,8 @@ export function loadRoadmap(dir, { updated } = {}) {
 
   const ordered = SECTIONS.flatMap(s =>
     items.filter(i => i.status === s.key).sort(s.key === "shipped" ? sortKey.shipped : sortKey.rest));
-  const dates = items.flatMap(i => [i.date, i.shipped]).filter(Boolean).map(d => d.length === 7 ? d + "-01" : d).sort();
   return {
-    updated: updated ?? lastCommitDay(dir) ?? dates.at(-1) ?? null,
+    updated: updated ?? lastCommitDay(dir) ?? newestItemDate(items),
     sections: SECTIONS,
     items: ordered,
   };
