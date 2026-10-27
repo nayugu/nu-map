@@ -2154,7 +2154,7 @@ export default function Header() {
                 </SettingsSection>
               )}
 
-              {/* About — short links, two deliberate rows (2 up top, 3 below)
+              {/* About — short links, two deliberate rows of three
                   so every pill in a row shares the same width. No leading
                   slash: the terminal look read as a command to type rather than
                   a link to click (same call in DisclaimerModal). */}
@@ -2163,6 +2163,7 @@ export default function Header() {
                   [
                     { href: "https://github.com/nayugu/nu-map",                label: "github" },
                     { href: `${import.meta.env.BASE_URL}privacy.html`,          label: "privacy" },
+                    { href: `${import.meta.env.BASE_URL}roadmap.html`,          label: "roadmap" },
                   ],
                   [
                     { href: `${import.meta.env.BASE_URL}data.html`,             label: "data" },

@@ -14,6 +14,9 @@
     <loc>https://numap.app/story</loc>
   </url>
   <url>
+    <loc>https://numap.app/roadmap</loc>
+  </url>
+  <url>
     <loc>https://numap.app/data</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
