@@ -133,12 +133,6 @@
     /* Same size as the section descriptions (.blurb), so the page has one
        size for its quiet notes. */
     .aside { font-size: 0.82rem; color: var(--muted); margin: 0; line-height: 1.7; }
-    /* One sentence per line, so the wrap falls where the thought does. On a
-       phone they wrap anyway, and the break keeps them as two lines of thought. */
-    .aside span { display: block; }
-    /* On a phone both sentences wrap, so the break between them needs a gap
-       or it looks like any other line. */
-    @media (max-width: 520px) { .aside span + span { margin-top: 8px; } }
 
     /* ── Toolbar: sticky, because the list is meant to get long ─────────── */
     .toolbar {
@@ -291,8 +285,7 @@
     <a class="home" href="/"><img src="/logo.png" alt="NU Map home" width="28" height="28" /></a>
     <h1>Roadmap</h1>
     <p class="lede">What we have built, what we are considering, and what we have decided not to build.</p>
-    <p class="aside"><span>NU Map is made by two students, so nothing here has a date.</span>
-      <span>We read every response, though not every one becomes an item here.</span></p>
+    <p class="aside">NU Map is made by two students, so we can't promise dates. We read every response; not all become items.</p>
 
     <div class="toolbar" id="toolbar" hidden>
       <div class="chips" id="chips" role="group" aria-label="Show"></div>
