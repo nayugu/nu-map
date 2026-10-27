@@ -1513,6 +1513,33 @@ bundle.
   `ideas-matthew.md`) — only edit your own, so they never conflict. The repo
   is public: keep notes whiteboard-safe.
 
+## Feedback intake protocol
+
+When we bring you user feedback, or an idea of our own, and say to follow
+this protocol: **intake is not solving.** Writing up a problem and deciding
+where it goes on the roadmap is a separate job from fixing it, and it should
+be quick. Steps, in order:
+
+1. **Audit, read-only, and brief.** The audit exists only to answer which
+   category it belongs in, so stop as soon as you can: is it real, and
+   roughly why? Root-causing and measuring scope are part of solving, later.
+   Change NOTHING: no code, no data, no tests. (On 2026-10-27 a report was
+   "fixed" mid-audit without being asked; that is the failure this rule
+   exists for.)
+2. **Report, short and plain.** Is it real? What is going on, in a sentence
+   or two? Say what you verified and what you did not. Mention scope only if
+   it is already obvious.
+3. **Ask for the category.** Offer the roadmap statuses (`known`, `planned`,
+   `maybe`, `declined`), or "not a problem", with your recommendation first
+   and one line of why. We choose.
+4. **Write it into the roadmap.** Read `roadmap/README.md` first, every
+   time. Write like the items already there: for students, not developers;
+   clear and to the point; what the problem is and, for a known issue, what
+   to do meanwhile. No internals (no set names, no file paths). Credit only if
+   the person said Yes on the form. Run `node scripts/check-roadmap.js`.
+   Commit; push only when asked.
+5. **Stop.** Solving comes later, and only when we ask for it.
+
 ## Working method
 
 Every input here is scraped, the workflows push to main unattended, and a wrong
