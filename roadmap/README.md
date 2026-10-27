@@ -22,6 +22,15 @@ A blank line starts a new paragraph. Links look like
 [the catalog](https://catalog.northeastern.edu) or [our story](/story).
 ```
 
+### How a file is read
+
+1. **Between the two `---` lines:** the settings, one `key: value` per line
+   (see Fields below). This block is standard Markdown "frontmatter", which
+   is why GitHub shows it as a small table when you open the file.
+2. **The `# ` line:** the title. Exactly one, right after the settings.
+3. **Everything after the title:** the description. Plain paragraphs, with a
+   blank line between them, and `[links](...)`.
+
 **The filename is the link.** `summer-graduation.md` becomes
 `numap.app/roadmap#summer-graduation`, which is what we send people when we
 reply to feedback. Use lowercase-with-dashes, and **never rename a file** once
