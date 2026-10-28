@@ -268,7 +268,7 @@ export default function InfoPanel() {
 }
 
 function CourseInfo({ selCourse, navTo }) {
-  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX, specialTermPl, revealCourse, allEdges } = usePlanner();
+  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX, specialTermPl, revealCourse, allEdges, isPhone } = usePlanner();
   const specialTerms = usePort(ISpecialTerms);
   // Where the ↻ cycle is, when the panel's own `selCourse.id` cannot say.
   // A work-term take is not a course id, so cycling onto one leaves selCourse
@@ -692,7 +692,7 @@ function CourseInfo({ selCourse, navTo }) {
           because "3 of 21" (there is a way in) and "21 of 21" (there is not)
           are opposite advice. See scripts/derive-restrictions.js. */}
       {selCourse.restrictions && (
-        <RestrictionBlock restrictions={selCourse.restrictions} t={t}
+        <RestrictionBlock restrictions={selCourse.restrictions} t={t} isPhone={isPhone}
                           standingShown={!!STANDING_NAMES[selCourse.offering?.std]} />
       )}
       {Number.isFinite(selCourse.coopPrep?.observations) && (
@@ -844,7 +844,11 @@ function RestrictionValues({ values, t }) {
         // own first line, and as separate cells the glyph can never be left
         // alone at the end of a line.
         <div key={i} style={{ display: "grid", gridTemplateColumns: "8px minmax(0, 1fr)" }}>
-          <span style={{ opacity: 0.45 }}>{vals.length > 1 ? "·" : ""}</span>
+          {/* Never EMPTY: the block's grid aligns on baselines, an empty cell
+              has none, and the browser then synthesises one from its bottom
+              edge — which shifted a single-value rule's whole values cell off
+              the line of its own season and figure. */}
+          <span style={{ opacity: 0.45 }}>{vals.length > 1 ? "·" : " "}</span>
           <span><SlashBreaks text={v} /></span>
         </div>
       ))}
@@ -883,7 +887,38 @@ function RestrictionValues({ values, t }) {
  * precision than the fraction beside it, which is exactly the split the block
  * exists to draw: "nearly every section is closed" against "one section is".
  */
-function SeasonCoverage({ seasons, t, cell }) {
+/**
+ * The sentence "{n} of {total}" split at its numbers, in the reader's locale.
+ *
+ * Word order is the locale's: ko, hi, zh and ja put the total FIRST
+ * ("{total}개 중 {n}개"), so this finds the two placeholders by rendering the
+ * string with markers rather than assuming English order. Null when a
+ * translation lost a placeholder, and the caller prints the plain string.
+ */
+function fractionParts(t, n, total) {
+  const s = t("info.restrictions.sectionsFrac", { n: "\u0001", total: "\u0002" });
+  const iN = s.indexOf("\u0001"), iT = s.indexOf("\u0002");
+  if (iN < 0 || iT < 0) return null;
+  const nFirst = iN < iT;
+  const [a, b] = nFirst ? [iN, iT] : [iT, iN];
+  return {
+    before: s.slice(0, a), first: String(nFirst ? n : total),
+    mid: s.slice(a + 1, b), second: String(nFirst ? total : n), after: s.slice(b + 1),
+  };
+}
+
+/** Digits in the FIRST number of every fraction a block prints — the width
+ *  its figures are aligned to. */
+function fractionLead(t, sections) {
+  let lead = 1;
+  for (const s of sections) for (const r of s.rows) for (const x of r.seasons ?? []) {
+    const p = fractionParts(t, x.sections, x.of);
+    if (p) lead = Math.max(lead, p.first.length);
+  }
+  return lead;
+}
+
+function SeasonCoverage({ seasons, t, cell, fracLead = 1 }) {
   // ── THREE STACKS, ONE PER COLUMN — not one grid row per season ─────
   //
   // A rule's seasons describe the SAME values, so they have to read as a group
@@ -904,12 +939,19 @@ function SeasonCoverage({ seasons, t, cell }) {
   // the same inherited line-height in all three — including the bar, which is
   // an inline-block on a text line rather than a block of its own.
   const stack = { ...cell, display: "flex", flexDirection: "column", whiteSpace: "nowrap" };
+  // Season, bar and figure are ONE reading ("Summer A, 2 of 2"), so they sit
+  // close: 7px before the bar and 4px after it, against the 28px (12px on a phone) that
+  // separates the group from the values. At 10px each, plus a figure pushed right to the widest fraction
+  // in the block, "2 of 2" sat a hand's width from its own bar — and the
+  // width spent there is width the values do not get, so names wrapped.
+  const tight = { ...stack, paddingRight: 4 };
+  const beforeBar = { ...stack, paddingRight: 7 };
   const label = (s) => t(SEASON_KEY[s.season] ?? s.season ?? "");
   const title = (s) => `${label(s)} ${seasonYears(s)}`;
   return (
     <>
       {/* Right-aligned so each season butts against the bar it qualifies. */}
-      <span style={{ ...stack, alignItems: "flex-end", opacity: 0.8 }}>
+      <span style={{ ...beforeBar, alignItems: "flex-end", opacity: 0.8 }}>
         {seasons.map((s, i) => <span key={i} title={title(s)}>{label(s)}</span>)}
       </span>
       {/* A fixed track, so the fills of two seasons — or two rules — are read
@@ -922,7 +964,7 @@ function SeasonCoverage({ seasons, t, cell }) {
           `verticalAlign: middle` on an inline-block, so each bar sits at the
           x-height of the season beside it and the entry is exactly one text
           line tall — which is what keeps the three stacks in step. */}
-      <span style={stack}>
+      <span style={tight}>
         {seasons.map((s, i) => {
           const frac = Number.isFinite(s.of) && s.of > 0 ? Math.min(1, s.sections / s.of) : 1;
           return (
@@ -941,14 +983,31 @@ function SeasonCoverage({ seasons, t, cell }) {
           asset carries a section count (7,006 of 7,006), so the denominator is
           never missing.
 
-          Right-aligned so the digits end together, which is the ordinary
-          reading order for a column of figures. */}
-      <span style={{ ...stack, alignItems: "flex-end", opacity: 0.8, paddingRight: 0 }}>
-        {seasons.map((s, i) => (
+          Aligned on its connecting word ("of", "sur", "중"): the FIRST number
+          sits right-aligned in a box as wide as the block's longest first
+          number, in tabular figures so every digit is one `ch`. "6 of 6"
+          under "10 of 10" then puts its "of" under the other "of", and the
+          figure still starts against its bar rather than the width of the
+          longest fraction away from it. Inline boxes, so the text still
+          reads "6 of 6" when copied. */}
+      <span style={{ ...stack, alignItems: "flex-start", opacity: 0.8, paddingRight: 0,
+                     fontVariantNumeric: "tabular-nums" }}>
+        {seasons.map((s, i) => {
+          const p = fractionParts(t, s.sections, s.of);
+          return (
           <span key={i} title={title(s)}>
-            {t("info.restrictions.sectionsFrac", { n: s.sections, total: s.of })}
+            {p ? (
+              <>
+                {p.before}
+                <span style={{ display: "inline-block", minWidth: `${fracLead}ch`, textAlign: "right" }}>
+                  {p.first}
+                </span>
+                {p.mid}{p.second}{p.after}
+              </>
+            ) : t("info.restrictions.sectionsFrac", { n: s.sections, total: s.of })}
           </span>
-        ))}
+          );
+        })}
       </span>
     </>
   );
@@ -988,7 +1047,7 @@ const SECTION_HEADING = {
  * grid, so the block had one right edge above the divider and another below
  * it. A column the eye can run down is worth more than the words it repeats.
  */
-function RuleRow({ row, labels, t, showKind, orRaw, first, kindLead }) {
+function RuleRow({ row, labels, t, showKind, orRaw, first, kindLead, fracLead, groupGap = 28 }) {
   const values = displayValues(row.codes, labels, row.key);
 
   // A BAND per rule. `display: contents` means there is no row element to put
@@ -1033,7 +1092,16 @@ function RuleRow({ row, labels, t, showKind, orRaw, first, kindLead }) {
           disagree" — which is exactly what a row reading "1 of 2" says, with
           the numbers. Printed beside the fraction it was a weaker restatement
           repeated once per group, three times over on BINF 6250. */}
-      <span style={{ ...cell, minWidth: 0, ...(showKind ? { paddingLeft: 10 } : {}) }}>
+      {/* 28px before the season group (12px on a phone), against 7px and 4px
+          inside it, so the group reads as one unit set apart from the values.
+
+          `gridColumn: 1` pins every rule to the start of a fresh row. A rule
+          is four cells in a five-track grid (the fifth is the empty slack
+          track), so without it a rule with no label line above it was
+          auto-placed into the slack track of the row before, and its season,
+          bar and figure each landed one column and one row off. */}
+      <span style={{ ...cell, gridColumn: 1, minWidth: 0, paddingRight: groupGap,
+                     ...(showKind ? { paddingLeft: 10 } : {}) }}>
         <RestrictionValues values={values} t={t} />
       </span>
       {/* When this rule applies and how much of the term it touches — on the
@@ -1052,7 +1120,7 @@ function RuleRow({ row, labels, t, showKind, orRaw, first, kindLead }) {
           standing-gated, and Junior/Senior reaches 6 of the 9 Spring ones.
           Under a gate heading the fraction is how many sections would take
           YOU, and that is exactly the number to act on. */}
-      <SeasonCoverage seasons={row.seasons} t={t} cell={cell} />
+      <SeasonCoverage seasons={row.seasons} t={t} cell={cell} fracLead={fracLead} />
     </div>
   );
 }
@@ -1065,7 +1133,7 @@ function RuleRow({ row, labels, t, showKind, orRaw, first, kindLead }) {
  * `restrictionSections` for why those two properties are the axes and for the
  * corpus figures behind the compression.
  */
-function RestrictionSection({ section, labels, t, orRaw, hint, first }) {
+function RestrictionSection({ section, labels, t, orRaw, hint, first, fracLead, groupGap }) {
   // A heading spans every column, so it is a full-width row of the BLOCK's
   // grid rather than a box of its own. That is what keeps the columns aligned
   // across headings: given a grid per section, "Special Approvals" sized its
@@ -1152,7 +1220,7 @@ function RestrictionSection({ section, labels, t, orRaw, hint, first }) {
       )}
       {rows.map((row, i) => (
         <RuleRow key={i} row={row} labels={labels} t={t} first={i === 0}
-                 showKind={section.showKind} orRaw={orRaw}
+                 showKind={section.showKind} orRaw={orRaw} fracLead={fracLead} groupGap={groupGap}
                  kindLead={i === 0 || rows[i - 1].key !== row.key} />
       ))}
       {(hidden > 0 || open) && (
@@ -1205,7 +1273,7 @@ function RestrictionSection({ section, labels, t, orRaw, hint, first }) {
  * falls back to Banner's own English noun — worse than a translation, far
  * better than a raw key or a dropped restriction.
  */
-function RestrictionBlock({ restrictions, t, standingShown = false }) {
+function RestrictionBlock({ restrictions, t, standingShown = false, isPhone = false }) {
   const { labels = {}, terms } = restrictions ?? {};
   const view = groupRestrictions(terms);
 
@@ -1231,6 +1299,11 @@ function RestrictionBlock({ restrictions, t, standingShown = false }) {
   // three it turns out to be — keyed on the section rather than on "is this
   // index 3", because which headings exist varies course by course.
   const firstSome = sections.findIndex(s => s.tier === "some");
+  // Block-wide, so the connecting words line up across rules, not just within one.
+  const fracLead = fractionLead(t, sections);
+  // Space between the values and the season group. On a phone every pixel of
+  // it comes out of the values column, which is the one that wraps.
+  const groupGap = isPhone ? 12 : 28;
 
   return (
     // The FRAME is full width, like every other box in this panel — prereqs,
@@ -1254,7 +1327,8 @@ function RestrictionBlock({ restrictions, t, standingShown = false }) {
           "Summer A") and would have been wrong again in each of the eight
           locales, where "Classes" is "Clases", "履修区分" and "الصفوف".
 
-          `justifyContent: start` with no `1fr` track is the other half. The
+          Content-sized tracks are the other half (the one `1fr` track below
+          is EMPTY, so it holds the slack rather than any cell). The
           drawer runs to 1,900px on a wide screen and the block used to stretch
           with it, putting a rule's values at one end and its figure at the
           other with a hand's width of nothing between — which no amount of
@@ -1270,12 +1344,26 @@ function RestrictionBlock({ restrictions, t, standingShown = false }) {
       <div style={{
         display: "grid",
         gridTemplateColumns:
-          "minmax(0, max-content) max-content max-content max-content",
-        justifyContent: "start", alignItems: "baseline",
+          // The trailing `minmax(0, 1fr)` holds nothing and is load-bearing.
+          // Headings, the hint and the kind labels span every column, and a
+          // spanning row wider than the columns has its excess spread ACROSS
+          // them: the hint alone made the bar column 61px for a 26px bar and
+          // the figure column 67px for "11 of 45". An item spanning a
+          // flexible track gives its excess to that track instead, so every
+          // real column is its content's width and the slack sits at the
+          // right of the frame, where it was going to be anyway.
+          "minmax(0, max-content) max-content max-content max-content minmax(0, 1fr)",
+        // `start`, not `baseline`. Baseline alignment existed for the kind
+        // column's smaller type; that noun is a full-width row now, every cell
+        // shares one line height, and the BAR cell holds no text, so its
+        // baseline was synthesised and MEIE 4701's bars sat 56px below their
+        // own seasons.
+        justifyContent: "start", alignItems: "start",
       }}>
         {sections.map((s, i) => (
           <RestrictionSection key={`${s.tier}|${s.polarity}`} section={s} labels={labels}
-                              t={t} orRaw={orRaw} hint={i === firstSome} first={i === 0} />
+                              t={t} orRaw={orRaw} hint={i === firstSome} first={i === 0}
+                              fracLead={fracLead} groupGap={groupGap} />
         ))}
       </div>
 

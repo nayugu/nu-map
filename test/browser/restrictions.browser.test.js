@@ -283,7 +283,12 @@ describe("restrictions · the course card", () => {
       return {
         stacks,
         boxWidth: px(box.getBoundingClientRect().width),
-        gridWidth: px(Math.max(...[...grid.children].map(c => c.getBoundingClientRect().right))
+        // Over the CELLS only. Full-width rows (headings, the hint, kind
+        // labels) span an empty trailing `1fr` track on purpose, so they reach
+        // the frame's edge; what must not stretch is the table itself.
+        gridWidth: px(Math.max(...items
+                        .filter(c => getComputedStyle(c).gridColumnEnd !== "-1")
+                        .map(c => c.getBoundingClientRect().right))
                       - grid.getBoundingClientRect().left),
         panelWidth: px(document.documentElement.clientWidth),
         cells: items.map(c => ({
@@ -350,15 +355,18 @@ describe("restrictions · the course card", () => {
     assert.ok(cells.length >= 10, `too few cells to prove a column: ${cells.length}`);
     assert.ok(headings.length >= 1, "no full-width heading row");
 
-    // At most five distinct left edges — kind, values, season, bar, figure —
-    // across every rule of every heading. A per-section grid gives more.
+    // At most four distinct left edges — values, season, bar, figure — across
+    // every rule of every heading. A per-section grid gives more. (Five while
+    // the kind noun had a column; it heads its rules as a full-width row now.)
     const lefts = [...new Set(cells.map(c => c.left))];
-    assert.ok(lefts.length <= 5,
-      `cells sit on ${lefts.length} different columns, not 5: ${lefts.sort((a, b) => a - b).join(", ")}`);
+    assert.ok(lefts.length <= 4,
+      `cells sit on ${lefts.length} different columns, not 4: ${lefts.sort((a, b) => a - b).join(", ")}`);
 
-    // And ONE right edge for the figures: the rightmost column is where every
-    // fraction ends, which is what makes them a column of numbers rather than
-    // a ragged stack. Measured as "the widest cell right edge is shared".
+    // And ONE right edge for the figure CELLS: the rightmost column is shared,
+    // so the block has one right edge rather than a ragged one. The fractions
+    // inside it are left-aligned against their bars on purpose (a figure is
+    // read across with its bar, not down a column), so this is a property of
+    // the cells, not of where each fraction's last digit falls.
     const rightmost = Math.max(...cells.map(c => c.right));
     const atEdge = cells.filter(c => c.right === rightmost);
     assert.ok(atEdge.length >= 4,
