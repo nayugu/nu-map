@@ -28,7 +28,7 @@ import { applySamplePlan as mapSamplePlan } from "../core/applySamplePlan.js";
 import { baseId, isInstanceId, takesUsed, resolveAddId, resolveDropId, retakeUnlocked, buildTakesResolver } from "../core/repeatInstances.js";
 import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
          effectiveGradeOfTakes } from "../core/gradeSystem.js";
-import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
+import { resolveTermByDuration, termSpans, finalWorkTermWithNothingAfter } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { report } from "../data/healthReporter.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam, getHashCodeParam } from "../core/planShare.js";
@@ -1766,27 +1766,18 @@ const { locale, setLocale, locales, t } = useLanguage();
       isOccupied: (sid) => isSlotOccupied(sid, excludeId),
     });
 
+  // At most one entry: the final work term, when no course follows it before
+  // graduation (see finalWorkTermWithNothingAfter for the rule and its source).
   const coopGradConflicts = useMemo(() => {
     const types = specialTerms?.getTypes() ?? [];
-    return Object.entries(specialTermPl)
-      .filter(([, data]) => {
-        const semId = data?.semId;
-        if (!semId) return false;
-        if (semId === gradSemId) return true; // starts in grad sem — always a conflict
-        if (SEM_NEXT[semId] !== gradSemId) return false; // not adjacent
-        // Adjacent: only a conflict if the term actually spans into the grad semester.
-        const type = types.find(t => t.id === data.typeId);
-        if (!type) return false;
-        const durationDesc = resolveTermByDuration(type.durations, data.duration);
-        if (!durationDesc) return false;
-        const sem = SEMESTERS.find(s => s.id === semId);
-        return termSpans(durationDesc.weight, sem?.weight ?? 1);
-      })
-      .map(([id, data]) => {
-        const type = types.find(t => t.id === data.typeId);
-        return { id, label: type?.label ?? data.typeId, ...data };
-      });
-  }, [specialTermPl, gradSemId, SEM_NEXT, specialTerms, SEMESTERS]);
+    const hit = finalWorkTermWithNothingAfter({
+      specialTermPl, types, SEMESTERS, SEM_INDEX, SEM_NEXT, gradSemId, placements, reservations,
+    });
+    if (!hit) return [];
+    const data = specialTermPl[hit.id];
+    const type = types.find(t => t.id === data.typeId);
+    return [{ id: hit.id, label: type?.label ?? data.typeId, ...data }];
+  }, [specialTermPl, gradSemId, SEM_INDEX, SEM_NEXT, specialTerms, SEMESTERS, placements, reservations]);
 
   const prereqViolations = useMemo(() => {
     const v = new Map();

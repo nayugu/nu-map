@@ -95,7 +95,7 @@ a one-line flag count, the term-by-term schedule, `Flags (supplementary)`,
   corequisite same-term placement, class-standing gates (read from the
   registrar's own section restrictions, not guessed from the course level), term
   availability from each course's offering history, per-term credit load against
-  the registration cap, and work terms overlapping graduation. "None" means
+  the registration cap, and a course after the final work term. "None" means
   those ran and passed over every placed course. **Re-deriving the prerequisite
   order yourself from the course codes is wasted effort and is frequently
   wrong**, because the real prerequisite trees include concurrent-registration

@@ -192,3 +192,49 @@ function resolveGrants(specialTermPl, types, semIndex) {
 export function termSpans(termWeight, semSlotWeight) {
   return termWeight > semSlotWeight;
 }
+
+/**
+ * The FINAL work term when no course follows it before graduation, else null.
+ *
+ * Northeastern requires "a minimum of one academic requirement or course
+ * remaining in degree program following completion of final co-op experience"
+ * (careers.northeastern.edu → Co-op Information), and allows a Spring/Summer
+ * co-op ending in Summer A to finish in Summer B.
+ *
+ * This replaced "does a work term touch the graduation term". The two were the
+ * same question while every plan ended in a full term — the only way to have
+ * nothing after the final co-op was for it to sit in the last term — and a
+ * summer ending split them: Jan–Jun co-op, empty Summer B, graduate, which the
+ * old question could not see. A work term IN the graduation term has nothing
+ * after it, so this one rule covers both.
+ *
+ * Every slot-occupying work term, as the old check had it (an internship in the
+ * graduation term was already flagged). A course inside the work term's own
+ * terms does not count (NU permits one alongside a co-op). A placeholder card
+ * does, so a plan laid out from a sample plan is not flagged before its courses
+ * are chosen.
+ *
+ * @returns {?{ id: string, semId: string, endSemId: string }}
+ */
+export function finalWorkTermWithNothingAfter({
+  specialTermPl, types, SEMESTERS, SEM_INDEX, SEM_NEXT, gradSemId, placements, reservations,
+}) {
+  const gradIdx = SEM_INDEX[gradSemId];
+  if (gradIdx == null) return null;
+  let last = null;
+  for (const [id, data] of Object.entries(specialTermPl ?? {})) {
+    const type = types.find(t => t.id === data?.typeId);
+    if (!type?.occupiesSlot || SEM_INDEX[data.semId] == null) continue;
+    const dd   = type && resolveTermByDuration(type.durations, data.duration);
+    const sem  = SEMESTERS.find(s => s.id === data.semId);
+    const endSemId = dd && termSpans(dd.weight, sem?.weight ?? 1) && SEM_NEXT[data.semId]
+      ? SEM_NEXT[data.semId] : data.semId;
+    const endIdx = SEM_INDEX[endSemId];
+    if (!last || endIdx > last.endIdx) last = { id, semId: data.semId, endSemId, endIdx };
+  }
+  if (!last) return null;
+  const follows = semId => { const i = SEM_INDEX[semId]; return i != null && i > last.endIdx && i <= gradIdx; };
+  const hasCourse = Object.values(placements ?? {}).some(follows)
+    || Object.values(reservations ?? {}).some(r => follows(r?.semId));
+  return hasCourse ? null : { id: last.id, semId: last.semId, endSemId: last.endSemId };
+}

@@ -1053,9 +1053,8 @@ export const strings = {
   "header.cohort.sticky.off":     "तारीख",
   "header.cohort.duration":       "~{yrs} वर्ष",
   "header.cohort.duration.summer": "~{yrs} वर्ष + ग्रीष्म",
-  "header.coop.conflict.title":   "कार्यकाल स्नातक सेमेस्टर से ओवरलैप हो रहा है",
-  "header.coop.conflict.single":  "{label} आपके स्नातक सेमेस्टर ({sem} {year}) में ओवरलैप कर रहा है। आप कार्यकाल के दौरान स्नातक नहीं हो सकते। ब्लॉक को स्थानांतरित करें या स्नातक तिथि समायोजित करें।",
-  "header.coop.conflict.multi":   "{labels} आपके स्नातक सेमेस्टर ({sem} {year}) में ओवरलैप कर रहे हैं। आप कार्यकाल के दौरान स्नातक नहीं हो सकते। ब्लॉकों को स्थानांतरित करें या स्नातक तिथि समायोजित करें।",
+  "header.coop.conflict.title":   "अंतिम कार्यकाल के बाद कोई कोर्स नहीं",
+  "header.coop.conflict.single":  "स्नातक होने ({sem} {year}) से पहले {label} के बाद कुछ भी योजना में नहीं है। अंतिम co-op के बाद कम से कम एक कोर्स होना चाहिए। उसके बाद एक कोर्स जोड़ें, ब्लॉक को स्थानांतरित करें, या स्नातक तिथि समायोजित करें।",
 
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "पूर्व-आवश्यकता",

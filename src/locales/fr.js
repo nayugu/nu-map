@@ -1053,9 +1053,8 @@ export const strings = {
   "header.cohort.sticky.off":     "dates",
   "header.cohort.duration":       "~{yrs} ans",
   "header.cohort.duration.summer": "~{yrs} ans + été",
-  "header.coop.conflict.title":   "Période de travail chevauche le semestre de diplôme",
-  "header.coop.conflict.single":  "{label} chevauche votre semestre de diplôme ({sem} {year}). Vous ne pouvez pas obtenir votre diplôme pendant une période de travail. Déplacez le bloc ou ajustez votre date de diplôme.",
-  "header.coop.conflict.multi":   "{labels} chevauchent votre semestre de diplôme ({sem} {year}). Vous ne pouvez pas obtenir votre diplôme pendant une période de travail. Déplacez les blocs ou ajustez votre date de diplôme.",
+  "header.coop.conflict.title":   "Aucun cours après votre dernière période de travail",
+  "header.coop.conflict.single":  "Rien n'est prévu après {label} avant votre diplôme ({sem} {year}). Au moins un cours doit suivre votre dernier co-op. Ajoutez un cours après, déplacez le bloc ou ajustez votre date de diplôme.",
 
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "Prérequis",

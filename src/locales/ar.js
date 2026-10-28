@@ -1052,9 +1052,8 @@ export const strings = {
   "header.cohort.sticky.off":     "التواريخ",
   "header.cohort.duration":       "~{yrs} سنة",
   "header.cohort.duration.summer": "~{yrs} سنة + الصيف",
-  "header.coop.conflict.title":   "فترة العمل تتداخل مع فصل التخرج",
-  "header.coop.conflict.single":  "{label} يتداخل مع فصل تخرجك ({sem} {year}). لا يمكنك التخرج أثناء فترة العمل. انقل الكتلة أو عدل تاريخ التخرج.",
-  "header.coop.conflict.multi":   "{labels} تتداخل مع فصل تخرجك ({sem} {year}). لا يمكنك التخرج أثناء فترة العمل. انقل الكتل أو عدل تاريخ التخرج.",
+  "header.coop.conflict.title":   "لا توجد مادة بعد آخر فترة عمل",
+  "header.coop.conflict.single":  "لا يوجد شيء مخطط بعد {label} قبل تخرجك ({sem} {year}). يجب أن تأتي مادة واحدة على الأقل بعد آخر co-op. أضف مادة بعدها، أو انقل الكتلة، أو عدّل تاريخ التخرج.",
 
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "متطلب سابق",

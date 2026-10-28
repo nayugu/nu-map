@@ -1053,9 +1053,8 @@ export const strings = {
   "header.cohort.sticky.off":     "날짜",
   "header.cohort.duration":       "약 {yrs}년",
   "header.cohort.duration.summer": "약 {yrs}년 + 여름 학기",
-  "header.coop.conflict.title":   "실습 기간이 졸업 학기와 겹침",
-  "header.coop.conflict.single":  "{label}이(가) 졸업 학기({sem} {year})와 겹칩니다. 실습 중에는 졸업할 수 없습니다. 블록을 이동하거나 졸업일을 조정하세요.",
-  "header.coop.conflict.multi":   "{labels}이(가) 졸업 학기({sem} {year})와 겹칩니다. 실습 중에는 졸업할 수 없습니다. 블록을 이동하거나 졸업일을 조정하세요.",
+  "header.coop.conflict.title":   "마지막 실습 이후 수업 없음",
+  "header.coop.conflict.single":  "{label} 이후 졸업({sem} {year}) 전까지 계획된 수업이 없습니다. 마지막 co-op 이후에는 수업이 최소 하나 있어야 합니다. 그 뒤에 수업을 추가하거나, 블록을 이동하거나, 졸업일을 조정하세요.",
 
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "선수 과목",

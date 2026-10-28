@@ -1428,9 +1428,8 @@ export const strings = {
   "header.cohort.sticky.off":     "dates",
   "header.cohort.duration":       "~{yrs} yrs",
   "header.cohort.duration.summer": "~{yrs} yrs + summer",
-  "header.coop.conflict.title":   "Work term overlaps graduation term",
-  "header.coop.conflict.single":  "{label} spans your graduation term ({sem} {year}). You cannot graduate during a work term. Move the block or adjust your graduation date.",
-  "header.coop.conflict.multi":   "{labels} span your graduation term ({sem} {year}). You cannot graduate during a work term. Move the blocks or adjust your graduation date.",
+  "header.coop.conflict.title":   "No course after your last work term",
+  "header.coop.conflict.single":  "Nothing is planned after {label} before you graduate ({sem} {year}). At least one course has to follow your final co-op. Add a course after it, move the block, or adjust your graduation date.",
 
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "Prereq",

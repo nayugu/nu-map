@@ -2385,18 +2385,13 @@ export default function Header() {
               {t("header.coop.conflict.title")}
             </div>
             <div style={{ fontSize: 10, color: "var(--warn)", lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
-              {coopGradConflicts.length === 1
-                ? t("header.coop.conflict.single", {
-                    label: coopGradConflicts[0].label,
-                    sem: t(cohortTermKey(planGradSem)),
-                    year: planGradYear,
-                  })
-                : t("header.coop.conflict.multi", {
-                    labels: coopGradConflicts.map(w => w.label).join(", "),
-                    sem: t(cohortTermKey(planGradSem)),
-                    year: planGradYear,
-                  })
-              }
+              {/* Only the FINAL work term can be the one with nothing after it,
+                  so there is never more than one to name. */}
+              {t("header.coop.conflict.single", {
+                label: coopGradConflicts[0].label,
+                sem: t(cohortTermKey(planGradSem)),
+                year: planGradYear,
+              })}
             </div>
           </div>
         </div>

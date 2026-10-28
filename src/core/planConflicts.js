@@ -74,7 +74,7 @@ export const CHECKS = {
   standingViolations: "class-standing gates from Banner section restrictions",
   offered:            "term availability from offering history",
   semesterLoad:       "credit load against the registration cap",
-  coopGradConflicts:  "work terms overlapping graduation",
+  coopGradConflicts:  "a course after the final work term",
 };
 
 /**
@@ -373,7 +373,9 @@ export function collectConflicts(input = {}) {
     }
   }
 
-  // ── Work term overlapping graduation ────────────────────────────
+  // ── No course after the final work term ─────────────────────────
+  // Kind name kept from when this was "overlaps the graduation term", which is
+  // one case of the rule; see finalWorkTermWithNothingAfter.
   for (const c of coopGradConflicts) {
     items.push({ scope: SCOPE_PLAN, kind: "coop-graduation",
                  label: c?.label ?? "Work term", semId: c?.semId ?? null,
@@ -464,7 +466,7 @@ export function conflictClause(it) {
     case "over-cap":
       return `${it.sh} ${u}${it.combined ? " (both halves)" : ""} over the ${it.cap} ${u} cap; needs a petition`;
     case "coop-graduation":
-      return `${it.label}${it.semLabel ? ` (${it.semLabel})` : ""} runs into the graduation term`;
+      return `${it.label}${it.semLabel ? ` (${it.semLabel})` : ""} has no course after it before graduation; NU requires at least one after the final co-op`;
     default:
       return it.kind;
   }

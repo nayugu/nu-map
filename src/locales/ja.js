@@ -1054,9 +1054,8 @@ export const strings = {
   "header.cohort.sticky.off":     "日付",
   "header.cohort.duration":       "約{yrs}年",
   "header.cohort.duration.summer": "約{yrs}年＋夏学期",
-  "header.coop.conflict.title":   "就業期間が卒業学期と重複",
-  "header.coop.conflict.single":  "{label}は卒業学期（{sem} {year}）に重なっています。就業期間中は卒業できません。ブロックを移動するか卒業日を調整してください。",
-  "header.coop.conflict.multi":   "{labels}は卒業学期（{sem} {year}）に重なっています。就業期間中は卒業できません。ブロックを移動するか卒業日を調整してください。",
+  "header.coop.conflict.title":   "最後の就業期間の後に授業がありません",
+  "header.coop.conflict.single":  "{label}の後、卒業（{sem} {year}）までに授業が予定されていません。最後のco-opの後には少なくとも1つの授業が必要です。その後に授業を追加するか、ブロックを移動するか、卒業日を調整してください。",
 
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "履修条件",

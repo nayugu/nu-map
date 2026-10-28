@@ -1053,9 +1053,8 @@ export const strings = {
   "header.cohort.sticky.off":     "fechas",
   "header.cohort.duration":       "~{yrs} años",
   "header.cohort.duration.summer": "~{yrs} años + verano",
-  "header.coop.conflict.title":   "El periodo laboral se superpone con el semestre de graduación",
-  "header.coop.conflict.single":  "{label} se superpone con tu semestre de graduación ({sem} {year}). No puedes graduarte durante un periodo laboral. Mueve el bloque o ajusta tu fecha de graduación.",
-  "header.coop.conflict.multi":   "{labels} se superponen con tu semestre de graduación ({sem} {year}). No puedes graduarte durante un periodo laboral. Mueve los bloques o ajusta tu fecha de graduación.",
+  "header.coop.conflict.title":   "Ningún curso después de tu último periodo laboral",
+  "header.coop.conflict.single":  "No hay nada planificado después de {label} antes de graduarte ({sem} {year}). Al menos un curso debe seguir a tu último co-op. Añade un curso después, mueve el bloque o ajusta tu fecha de graduación.",
 
   // ── Relationship legend ────────────────────────────────────────
   "legend.prerequisite":              "Prerrequisito",
