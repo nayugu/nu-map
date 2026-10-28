@@ -347,10 +347,15 @@
     // showing, the button is smaller than the item it hides, so even
     // "Show 1 more" saves room and keeps every section at three. But a STEP
     // that would leave ABSORB or fewer behind takes them too, so the last
-    // click is never a lone "Show 1 older". Never folded while searching,
-    // when the visitor picked that section's filter, or for the section a
-    // link opens.
+    // click is never a lone "Show 1 older". Never folded while searching, or
+    // for the section a link opens; a picked filter folds by the FOCUS_
+    // numbers below instead.
     var PREVIEW = 3, STEP = 5, MIN_HIDDEN = 1, ABSORB = 2;
+    // With ONE section's filter picked, the visitor asked for that section, so
+    // it shows FOCUS_PREVIEW and grows by FOCUS_STEP: about two screens at a
+    // time (measured: a Shipped item averages ~100px on a laptop, ~140px on a
+    // phone), so a long Shipped never dumps everything.
+    var FOCUS_PREVIEW = 15, FOCUS_STEP = 15;
     var FORM = "https://forms.gle/CzXE25WRtJnXWE1U9";
 
     var data, filter = "all", query = "", limits = {}; // section key → items shown (default PREVIEW)
@@ -469,8 +474,13 @@
           ])
         ]);
 
-        var limit = limits[status] || PREVIEW;
-        var fold = !query && filter !== status && shown.length - limit >= MIN_HIDDEN;
+        // The focused view keeps its own count, so unfolding there and in
+        // "All" never fight over one number.
+        var focused = filter === status;
+        var key = focused ? status + ":focus" : status;
+        var step = focused ? FOCUS_STEP : STEP;
+        var limit = limits[key] || (focused ? FOCUS_PREVIEW : PREVIEW);
+        var fold = !query && shown.length - limit >= MIN_HIDDEN;
         var visible = fold ? shown.slice(0, limit) : shown;
 
         if (status === "shipped") {
@@ -495,10 +505,10 @@
           // then reads as a list that continues, not a month that is complete.
           var hidden = shown.length - limit;
           // A step that would leave a tiny remainder takes it too.
-          var next = hidden - STEP <= ABSORB ? hidden : STEP;
+          var next = hidden - step <= ABSORB ? hidden : step;
           var more = el("button", { class: "more", type: "button",
             text: "Show " + next + (status === "shipped" ? " older" : " more") });
-          more.addEventListener("click", function () { limits[status] = limit + next; render(); });
+          more.addEventListener("click", function () { limits[key] = limit + next; render(); });
           sec.append(more);
         }
         root.append(sec);
@@ -564,6 +574,7 @@
         renderChips();
       }
       limits[item.status] = Infinity; // a linked item is never folded away
+      limits[item.status + ":focus"] = Infinity;
       render();
       var node = $(id);
       if (!node) return;
