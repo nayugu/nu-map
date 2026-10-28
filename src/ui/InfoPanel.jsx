@@ -802,6 +802,25 @@ const ruleLines = (row) => Math.max(
   Math.min(row.codes.length, VALUE_CAP) + (row.codes.length > VALUE_CAP ? 1 : 0),
   row.seasons.length);
 
+/**
+ * A value that wraps at its SLASH before it wraps at a space.
+ *
+ * 520 of the 1,364 labels are combined majors ("Behav Neuroscience/Philosophy"),
+ * and the slash is the seam between the two programs. Left to ordinary line
+ * breaking, a narrow panel split "Behav" from "Neuroscience", i.e. through the
+ * middle of one of them. Each slash-ended piece is an inline-block, so the only
+ * break between pieces is after a slash; a piece longer than the line still
+ * wraps inside itself (`maxWidth`), so nothing can overflow. The longest piece
+ * in the corpus is 24 characters.
+ */
+function SlashBreaks({ text }) {
+  const parts = String(text ?? "").split(/(?<=\/)/);
+  if (parts.length < 2) return text;
+  return parts.map((p, i) => (
+    <span key={i} style={{ display: "inline-block", maxWidth: "100%" }}>{p}</span>
+  ));
+}
+
 function RestrictionValues({ values, t }) {
   const CAP = VALUE_CAP;
   const [open, setOpen] = useState(false);
@@ -817,11 +836,16 @@ function RestrictionValues({ values, t }) {
     // rule; the value is what a student checks themselves against.
     <div style={{ color: "var(--text-2)" }}>
       {shown.map((v, i) => (
-        // Hanging indent, unconditionally, so a wrapped value stays inside its
-        // own gutter and every value in the block starts at one depth whether
-        // or not it has a sibling to be marked against.
-        <div key={i} style={{ paddingLeft: 8, textIndent: -8 }}>
-          {vals.length > 1 && <span style={{ opacity: 0.45 }}>·{" "}</span>}{v}
+        // A fixed 8px gutter column, unconditionally, so a wrapped value stays
+        // inside its own gutter and every value in the block starts at one
+        // depth whether or not it has a sibling to be marked against. A grid
+        // rather than a hanging text-indent: the bullet "· " was narrower than
+        // the 8px indent, so a wrapped tail landed a few pixels right of its
+        // own first line, and as separate cells the glyph can never be left
+        // alone at the end of a line.
+        <div key={i} style={{ display: "grid", gridTemplateColumns: "8px minmax(0, 1fr)" }}>
+          <span style={{ opacity: 0.45 }}>{vals.length > 1 ? "·" : ""}</span>
+          <span><SlashBreaks text={v} /></span>
         </div>
       ))}
       {(hidden > 0 || open) && (
@@ -964,7 +988,7 @@ const SECTION_HEADING = {
  * grid, so the block had one right edge above the divider and another below
  * it. A column the eye can run down is worth more than the words it repeats.
  */
-function RuleRow({ row, labels, t, showKind, orRaw, first }) {
+function RuleRow({ row, labels, t, showKind, orRaw, first, kindLead }) {
   const values = displayValues(row.codes, labels, row.key);
 
   // A BAND per rule. `display: contents` means there is no row element to put
@@ -977,11 +1001,20 @@ function RuleRow({ row, labels, t, showKind, orRaw, first }) {
   // rule is a subdivision of a heading and two rules at one weight read as two
   // headings.
   const band = first ? {} : { borderTop: "1px solid var(--border-1)", paddingTop: 4 };
+  // The kind noun HEADS its run of rules rather than sitting in a column beside
+  // them. A column was as wide as the longest noun in the block ("Attributes",
+  // "Special Approvals", longer in other locales), and every value line paid
+  // that width — on a narrow panel it was what made long major names wrap. A
+  // label line costs one line per run of same-kind rules, and the indent under
+  // it is fixed, so values in every rule still start at one depth.
+  const label = showKind && kindLead;
+  // The band moves up onto the label, so a labelled rule's hairline sits above
+  // its noun rather than between the noun and its values.
   // `paddingRight` and NOT a `columnGap`: with a gap, a border drawn on cells
   // comes out as a row of disconnected dashes with holes between the columns,
   // which reads as broken rather than as a rule. Padding inside the cells puts
   // the same space between the columns and lets the borders meet.
-  const cell = { ...band, paddingBottom: 2, paddingRight: 10 };
+  const cell = { ...(label ? {} : band), paddingBottom: 2, paddingRight: 10 };
 
   return (
     // `display: contents` — the cells join the SECTION's grid rather than
@@ -990,17 +1023,17 @@ function RuleRow({ row, labels, t, showKind, orRaw, first }) {
     // this is what "Special Approvals" wrapping in an 84px box and "Summer A"
     // overrunning a 40px box both were.
     <div style={{ display: "contents" }}>
-      {showKind && (
-        <span style={{ ...cell, fontSize: 9, opacity: 0.65, whiteSpace: "nowrap",
-                       lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
+      {label && (
+        <div style={{ ...band, gridColumn: "1 / -1", fontSize: 9, opacity: 0.65,
+                      lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
           {orRaw(`info.restrictions.name.${row.kind}`, row.kind)}
-        </span>
+        </div>
       )}
       {/* No `variesBySection` note. It said "in one term, the sections
           disagree" — which is exactly what a row reading "1 of 2" says, with
           the numbers. Printed beside the fraction it was a weaker restatement
           repeated once per group, three times over on BINF 6250. */}
-      <span style={{ ...cell, minWidth: 0 }}>
+      <span style={{ ...cell, minWidth: 0, ...(showKind ? { paddingLeft: 10 } : {}) }}>
         <RestrictionValues values={values} t={t} />
       </span>
       {/* When this rule applies and how much of the term it touches — on the
@@ -1083,8 +1116,10 @@ function RestrictionSection({ section, labels, t, orRaw, hint, first }) {
     // values (RestrictionValues) rather than vanishing behind a fold that
     // would leave the heading standing over nothing.
     if (some && !open && used >= SOME_LINES) { hidden += 1; continue; }
+    // A rule that opens a run of its kind carries the kind's label line.
+    const lead = section.showKind && row.key !== rows.at(-1)?.key;
     rows.push(row);
-    used += ruleLines(row);
+    used += ruleLines(row) + (lead ? 1 : 0);
   }
   return (
     <>
@@ -1117,7 +1152,8 @@ function RestrictionSection({ section, labels, t, orRaw, hint, first }) {
       )}
       {rows.map((row, i) => (
         <RuleRow key={i} row={row} labels={labels} t={t} first={i === 0}
-                 showKind={section.showKind} orRaw={orRaw} />
+                 showKind={section.showKind} orRaw={orRaw}
+                 kindLead={i === 0 || rows[i - 1].key !== row.key} />
       ))}
       {(hidden > 0 || open) && (
         <div style={{ ...full, borderTop: "1px solid var(--border-1)", paddingTop: 3 }}>
@@ -1195,10 +1231,6 @@ function RestrictionBlock({ restrictions, t, standingShown = false }) {
   // three it turns out to be — keyed on the section rather than on "is this
   // index 3", because which headings exist varies course by course.
   const firstSome = sections.findIndex(s => s.tier === "some");
-  // Block-wide, so every section's rows sit on the same columns. `showKind` is
-  // already decided block-wide in core; this just reads it off the first
-  // section rather than threading it separately.
-  const showKind = !!sections[0]?.showKind;
 
   return (
     // The FRAME is full width, like every other box in this panel — prereqs,
@@ -1238,7 +1270,7 @@ function RestrictionBlock({ restrictions, t, standingShown = false }) {
       <div style={{
         display: "grid",
         gridTemplateColumns:
-          `${showKind ? "max-content " : ""}minmax(0, max-content) max-content max-content max-content`,
+          "minmax(0, max-content) max-content max-content max-content",
         justifyContent: "start", alignItems: "baseline",
       }}>
         {sections.map((s, i) => (

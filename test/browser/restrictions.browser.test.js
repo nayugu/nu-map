@@ -77,6 +77,10 @@ function restrictionLines(text) {
   // identically and hexdumped as \302\240. Normalising here beats loosening
   // every pattern to `\s`, which would also quietly accept a line break.
   const lines = text.replace(/ /g, " ")
+    // A lone `·` line is rejoined with the next. The bullet is its own grid
+    // cell now (an 8px gutter, so a wrapped value aligns under itself), and
+    // innerText puts a newline between two cells that render on one row.
+    .replace(/^[ \t]*·[ \t]*\n[ \t]*/gm, "· ")
     .split("\n").map(s => s.trim()).filter(Boolean);
   const start = lines.findIndex(l => l === "Restrictions");
   if (start === -1) return [];
