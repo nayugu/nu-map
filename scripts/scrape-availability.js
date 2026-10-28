@@ -1044,6 +1044,9 @@ async function main() {
         const prev = prevDetails[courseId]?.[termCode];
         if (prev?.std)    entry.std    = prev.std;
         if (prev?.stdNot) entry.stdNot = prev.stdNot;
+        // `restr` too. Left out, every monthly run kept the whole pane only for
+        // the term it fetched: seven terms on 2026-09-03, one by 09-17.
+        if (prev?.restr)  entry.restr  = prev.restr;
       }
       (termDetails[courseId] ??= {})[termCode] = entry;
     }
