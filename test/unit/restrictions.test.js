@@ -16,7 +16,24 @@ import {
   parseRestrictions, splitHeading, codeOf, labelOf,
   restrictionsOf, tallySection, foldKind,
   RESTR_AY_WINDOW, currentAYEnd, oldestAYEnd, withinRestrictionWindow,
+  restrictionReadTerms,
 } from "../../scripts/lib/restrictions.js";
+
+test("restrictionReadTerms: a term is read by COVERAGE, not by presence", () => {
+  // 9 of 10 courses carry `restr` → read; 1 of 10 is a partial re-parse and
+  // must not be, or its 9 unmarked courses would count as unrestricted
+  // sections in every denominator.
+  const details = {};
+  for (let i = 0; i < 10; i++) {
+    details[`C${i}`] = {
+      "202610": i < 9 ? { restr: { "must:Levels": { UG: 1 } } } : {},
+      "202630": i < 1 ? { restr: { "must:Levels": { UG: 1 } } } : {},
+      "202510": {},
+    };
+  }
+  assert.deepEqual([...restrictionReadTerms(details)], ["202610"]);
+  assert.equal(restrictionReadTerms(null).size, 0);
+});
 
 // MEIE 4701 §01, term 202710 — the Fall section of the shared ME/IE capstone.
 const MEIE_4701 = `

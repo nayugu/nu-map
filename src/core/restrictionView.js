@@ -112,11 +112,26 @@ const SEASON_SORT = ["fall", "spring", "sumA", "sumB"];
  * sign is false precision: "1 of 2 sections" is exactly what we know, and
  * "50%" invites the reader to treat it as a rate.
  *
+ * ── `base`: one denominator per season, for the whole course ──────
+ *
+ * Without it, the denominator was the sections of the terms THIS value
+ * appeared in, so two Fall rows of one block divided by different Falls
+ * ("2 of 8" over "1 of 5") and only the tooltip said so. With it, every row
+ * divides by every term of the season that was read, and a read term where
+ * the value is absent counts as zero. The season list stays the value's own.
+ *
+ * `everySection` is then decided on the season's LATEST read term, not the
+ * pool. Pooled, a gate a department added this year reads as "some sections"
+ * because last year was open; on the latest term, a gate since lifted stops
+ * being one. Both are what the most recent semester says.
+ *
  * @param {Array<{term: string, season: string|null, sections: number, of: number|null}>} where
+ * @param {Map<string|null, {of: number|null, termCodes: string[], latest: string,
+ *                           latestOf: number|null}>} [base]  from `seasonBase`
  * @returns {Array<{season: string|null, terms: number, sections: number, of: number|null,
  *                  everySection: boolean, latestTerm: string}>}
  */
-export function seasonCoverage(where) {
+export function seasonCoverage(where, base) {
   const bySeason = new Map();
   for (const w of where ?? []) {
     const s = w.season ?? null;
@@ -137,15 +152,33 @@ export function seasonCoverage(where) {
     slot.termCodes.push(String(w.term));
   }
   return [...bySeason.values()]
-    .map(({ ofKnown, ...s }) => ({
-      ...s,
-      of: ofKnown ? s.of : null,
-      // Newest first, matching the order the terms themselves are listed in.
-      termCodes: [...new Set(s.termCodes)].sort().reverse(),
-      // "Every section" is the gate case and needs no fraction. Anything less
-      // is the reserved case and must show one.
-      everySection: ofKnown && s.of > 0 && s.sections >= s.of,
-    }))
+    .map(({ ofKnown, ...s }) => {
+      const b = base?.get(s.season);
+      if (b) {
+        const inLatest = (where ?? []).filter(w => (w.season ?? null) === s.season
+                                                && String(w.term) === b.latest)
+                                      .reduce((n, w) => n + w.sections, 0);
+        return {
+          ...s,
+          of: b.of,
+          terms: b.termCodes.length,
+          latestTerm: b.latest,
+          termCodes: b.termCodes,
+          // The terms this value itself appeared in, for `coverageId`.
+          seenIn: [...new Set(s.termCodes)].sort().reverse(),
+          everySection: Number.isFinite(b.latestOf) && b.latestOf > 0 && inLatest >= b.latestOf,
+        };
+      }
+      return {
+        ...s,
+        of: ofKnown ? s.of : null,
+        // Newest first, matching the order the terms themselves are listed in.
+        termCodes: [...new Set(s.termCodes)].sort().reverse(),
+        // "Every section" is the gate case and needs no fraction. Anything less
+        // is the reserved case and must show one.
+        everySection: ofKnown && s.of > 0 && s.sections >= s.of,
+      };
+    })
     .sort((a, b) => {
       const ai = SEASON_SORT.indexOf(a.season), bi = SEASON_SORT.indexOf(b.season);
       return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
@@ -159,11 +192,39 @@ export function seasonCoverage(where) {
  *
  * The term codes are part of the key on purpose. They are shown (as the tooltip
  * naming a season's years), so a row whose codes were observed in different
- * years would print one set of years for all of them.
+ * years would print one set of years for all of them. Under a shared
+ * denominator `termCodes` is the same for every code, so `seenIn` and
+ * `everySection` carry that distinction instead: equal pooled totals can still
+ * differ in which year they came from, and so in tier.
  */
 const coverageId = (seasons) => seasons
-  .map(s => `${s.season} ${s.sections}/${s.of} ${s.termCodes.join(",")}`)
-  .join("");
+  .map(s => `${s.season}\0${s.sections}/${s.of}\0${s.termCodes.join(",")}` +
+            `\0${(s.seenIn ?? []).join(",")}\0${s.everySection}`)
+  .join("\x01");
+
+/**
+ * The course's sections per season, over every term in its entry — the shared
+ * denominator `seasonCoverage` divides by. A `kinds: {}` term was read and
+ * showed nothing, so it counts here and nowhere else. One term with an unknown
+ * section count makes its season's denominator unknown rather than smaller.
+ *
+ * @param {Array<{term: string, season: string|null, sections: number|null}>} list
+ */
+export function seasonBase(list) {
+  const out = new Map();
+  for (const t of list ?? []) {
+    const s = t.season ?? null, code = String(t.term);
+    const slot = out.get(s) ?? { of: 0, termCodes: [], latest: "", latestOf: null };
+    if (slot.termCodes.includes(code)) continue;
+    slot.termCodes.push(code);
+    const n = Number.isFinite(t.sections) ? t.sections : null;
+    slot.of = slot.of === null || n === null ? null : slot.of + n;
+    if (code > slot.latest) { slot.latest = code; slot.latestOf = n; }
+    out.set(s, slot);
+  }
+  for (const slot of out.values()) slot.termCodes.sort().reverse();
+  return out;
+}
 
 /**
  * Invert `terms → kinds → sections' code-sets` into `kinds → values → where`.
@@ -193,6 +254,7 @@ const coverageId = (seasons) => seasons
 export function groupRestrictions(terms) {
   const list = Array.isArray(terms) ? terms.filter(t => t && t.kinds) : [];
   if (!list.length) return { termCount: 0, kinds: [] };
+  const base = seasonBase(list);
 
   // key → { codeWhere: code → where[], kindWhere: where[], terms: Set, varies }
   const byKind = new Map();
@@ -269,7 +331,7 @@ export function groupRestrictions(terms) {
     // Codes sharing a coverage signature share a row.
     const bySig = new Map();
     for (const [code, where] of slot.codeWhere) {
-      const seasons = seasonCoverage(where);
+      const seasons = seasonCoverage(where, base);
       const id = coverageId(seasons);
       if (!bySig.has(id)) bySig.set(id, { codes: [], where, seasons });
       bySig.get(id).codes.push(code);
@@ -314,7 +376,7 @@ export function groupRestrictions(terms) {
       polarity: key.slice(0, key.indexOf(":")),
       kind:     key.slice(key.indexOf(":") + 1),
       variesBySection: slot.varies,
-      seasons: slot.overflow ? [] : seasonCoverage(slot.kindWhere),
+      seasons: slot.overflow ? [] : seasonCoverage(slot.kindWhere, base),
       groups,
     };
   }).sort((a, b) => kindRank(a.key) - kindRank(b.key) || a.key.localeCompare(b.key));

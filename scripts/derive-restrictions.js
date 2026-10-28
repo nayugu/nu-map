@@ -56,7 +56,8 @@ import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, dirname }                        from "node:path";
 import { fileURLToPath }                           from "node:url";
 
-import { foldKind, RESTR_AY_WINDOW, withinRestrictionWindow } from "./lib/restrictions.js";
+import { foldKind, RESTR_AY_WINDOW, withinRestrictionWindow,
+         restrictionReadTerms } from "./lib/restrictions.js";
 
 const ROOT    = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DETAILS = resolve(ROOT, "public/northeastern/term-details.json");
@@ -81,12 +82,18 @@ function main() {
 
   let splitKinds = 0;
 
+  // A read term where a course shows nothing still ships, as `kinds: {}`: its
+  // sections belong in the season's denominator. Dropping it let the card call
+  // a restriction lifted in the latest Spring a gate on "2 of 2" sections.
+  const readTerms = restrictionReadTerms(details);
+
   for (const [courseId, byTerm] of Object.entries(details)) {
     const terms = [];
+    let shown = false;
     // Newest term first — that is the order a student reads them in.
     for (const termCode of Object.keys(byTerm).sort().reverse()) {
       const d = byTerm[termCode];
-      if (!d?.restr) continue;
+      if (!readTerms.has(termCode)) continue;
       // The window is enforced HERE as well as in the scrape, and that is not
       // belt-and-braces. The page cache accumulates and is never pruned, so a
       // re-parse walks every term ever captured — including ones the scrape
@@ -96,7 +103,7 @@ function main() {
       const season = SUFFIX_TYPE[termCode.slice(4)];
 
       const kinds = {};
-      for (const [key, tally] of Object.entries(d.restr)) {
+      for (const [key, tally] of Object.entries(d?.restr ?? {})) {
         if (HIDDEN.has(key)) continue;
         // Every distinct section group, NOT a union. `[codes, sections]` pairs,
         // biggest group first: an object per group would repeat two key names
@@ -117,17 +124,18 @@ function main() {
         }
         kindTally[key] = (kindTally[key] ?? 0) + 1;
       }
-      if (!Object.keys(kinds).length) { hiddenOnly += 1; continue; }
+      if (!Object.keys(kinds).length) hiddenOnly += 1;
+      else shown = true;
       terms.push({ term: termCode, season: season ?? null, sections: d.sections ?? null, kinds });
     }
-    if (terms.length) { courses[courseId] = terms; entries += 1; }
+    if (shown) { courses[courseId] = terms; entries += 1; }
   }
 
   console.log(`courses with a shown restriction: ${entries}`);
   if (stale) {
     console.log(`  dropped ${stale} course-terms older than ${RESTR_AY_WINDOW} academic years`);
   }
-  console.log(`course-terms carrying ONLY hidden kinds (Levels): ${hiddenOnly}`);
+  console.log(`course-terms read with nothing shown (shipped as kinds: {}): ${hiddenOnly}`);
   console.log(`kinds whose SECTIONS DISAGREE (kept as separate groups): ${splitKinds}`);
   console.log(`labels referenced: ${Object.keys(usedLabels).length} of ${Object.keys(labels).length}`);
   console.log(`\nby kind:`);

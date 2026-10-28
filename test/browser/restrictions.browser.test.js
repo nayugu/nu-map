@@ -138,12 +138,18 @@ function longestRestricted() {
       terms.map(e => ({ ...e, kinds: e.kinds }))).kinds);
     const gates = sections.filter(s => s.tier === "gate");
     if (!gates.length) continue;
-    const lines = sections.reduce((n, s) => n + 1 + s.rows.reduce(
+    const linesOf = (s) => 1 + s.rows.reduce(
       (m, r) => m + Math.max(Math.min(r.codes.length, 8) + (r.codes.length > 8 ? 1 : 0),
-                             r.seasons.length), 0), 0);
-    if (lines > (best?.lines ?? 0)) {
+                             r.seasons.length), 0);
+    const lines = sections.reduce((n, s) => n + linesOf(s), 0);
+    // Ranked by the FOLDABLE lines, not the whole block: only "some sections"
+    // rows defer, so the longest block is the wrong pick once it is mostly gate.
+    // EESH 2000 became exactly that when gates were read off the latest term
+    // (its Majors rule covers every section of the last Fall and Spring).
+    const some = sections.filter(s => s.tier === "some").reduce((n, s) => n + linesOf(s), 0);
+    if (some > (best?.some ?? 0)) {
       const m = id.match(/^([A-Z]+)(\d.*)$/);
-      best = { id, lines, pattern: new RegExp(`${m[1]}\\s*${m[2]}`),
+      best = { id, lines, some, pattern: new RegExp(`${m[1]}\\s*${m[2]}`),
                gateHeadings: gates.map(s => HEAD[`${s.tier}|${s.polarity}`]) };
     }
   }

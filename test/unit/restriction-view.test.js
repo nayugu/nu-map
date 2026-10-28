@@ -587,3 +587,80 @@ test("an UNDATED group is never called a gate", () => {
   assert.equal(isGate({}), false);
   assert.equal(isGate(null), false);
 });
+
+// ── One denominator per season, and the tier read off the latest term ──
+//
+// Each row used to divide by the terms ITS value appeared in, so a campus seen
+// in two Falls printed "2 of 8" above one seen in one Fall printing "1 of 5".
+// And a read term where nothing was restricted was not in the file at all, so
+// a restriction lifted in the latest Spring still read as a gate on "2 of 2".
+
+test("every row of a season divides by the SAME sections", () => {
+  const view = groupRestrictions([
+    { term: "202610", season: "fall", sections: 5, kinds: {
+      "must:Campuses": [[["POR"], 1], [["SV"], 1]] } },
+    { term: "202510", season: "fall", sections: 3, kinds: {
+      "must:Campuses": [[["POR"], 1]] } },
+  ]);
+  const ofs = view.kinds[0].groups.map(g => g.seasons[0].of);
+  assert.deepEqual(ofs, [8, 8], "both rows over both Falls");
+  const sv = view.kinds[0].groups.find(g => g.codes.includes("SV"));
+  assert.equal(sv.seasons[0].sections, 1, "a read Fall without the value adds nothing on top");
+  assert.deepEqual(sv.seasons[0].termCodes, ["202610", "202510"],
+    "the tooltip names the years the denominator covers");
+});
+
+test("a read term with NOTHING restricted counts toward the denominator", () => {
+  const view = groupRestrictions([
+    { term: "202630", season: "spring", sections: 2, kinds: {} },
+    { term: "202530", season: "spring", sections: 2, kinds: {
+      "must:Majors": [[["BSAD"], 2]] } },
+  ]);
+  assert.equal(view.kinds[0].groups[0].seasons[0].of, 4);
+});
+
+test("a restriction LIFTED in the latest term is no longer a gate", () => {
+  // ACCT 3401: majors-only on both Spring 2025 sections, open in Spring 2026.
+  const sections = sectionsOf([
+    { term: "202630", season: "spring", sections: 2, kinds: {} },
+    { term: "202530", season: "spring", sections: 2, kinds: {
+      "must:Majors": [[["BSAD"], 2]] } },
+  ]);
+  assert.deepEqual(printed(sections), ["some|must|must:Majors|BSAD"]);
+});
+
+test("a restriction ADDED in the latest term is a gate, though the pool is partial", () => {
+  // ACCT 1209: INBU barred from all 8 Spring 2026 sections, none of 2025's 10.
+  // Pooled that is 8 of 18, and "some sections" would tell an INBU student to
+  // look for an open one when the last Spring had none.
+  const sections = sectionsOf([
+    { term: "202630", season: "spring", sections: 8, kinds: { "not:Majors": [[["INBU"], 8]] } },
+    { term: "202530", season: "spring", sections: 10, kinds: {} },
+  ]);
+  assert.deepEqual(printed(sections), ["gate|not|not:Majors|INBU"]);
+  assert.equal(sections[0].rows[0].seasons[0].of, 18, "the fraction stays pooled");
+});
+
+test("equal pooled totals from DIFFERENT years do not share a row", () => {
+  // Under a shared denominator `termCodes` is identical for every value, so the
+  // signature has to tell 2-this-year from 2-last-year some other way. Merged,
+  // one row would carry one tier for both.
+  const view = groupRestrictions([
+    { term: "202630", season: "spring", sections: 2, kinds: { "not:Majors": [[["A"], 2]] } },
+    { term: "202530", season: "spring", sections: 2, kinds: { "not:Majors": [[["B"], 2]] } },
+  ]);
+  assert.equal(view.kinds[0].groups.length, 2);
+  const tiers = Object.fromEntries(restrictionSections(view.kinds)
+    .flatMap(s => s.rows.map(r => [r.codes[0], s.tier])));
+  assert.deepEqual(tiers, { A: "gate", B: "some" });
+});
+
+test("an UNKNOWN section count leaves the season's denominator unknown, never smaller", () => {
+  const view = groupRestrictions([
+    { term: "202610", season: "fall", sections: null, kinds: { "not:Majors": [[["A"], 3]] } },
+    { term: "202510", season: "fall", sections: 3, kinds: { "not:Majors": [[["A"], 3]] } },
+  ]);
+  const [fall] = view.kinds[0].groups[0].seasons;
+  assert.equal(fall.of, null);
+  assert.equal(fall.everySection, false, "no gate off a count we do not have");
+});

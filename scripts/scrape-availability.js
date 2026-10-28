@@ -82,7 +82,7 @@ import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname }                         from "path";
 import { fileURLToPath }                            from "url";
 import { parseRestrictions, classesOf }             from "./lib/class-standing.js";
-import { restrictionsOf, tallySection,
+import { restrictionsOf, tallySection, RESTR_DONE_SHARE,
          RESTR_AY_WINDOW, withinRestrictionWindow } from "./lib/restrictions.js";
 import { knownTermCodes, buildTermHistory, mergePreviousHistory }
                                                     from "./lib/term-history.js";
@@ -932,8 +932,8 @@ async function main() {
   // 90% is safe because 99% of sections carry at least one restriction (almost
   // always `Levels`), so a fully captured term reaches essentially 100% —
   // 202460 measured 368 of 369 courses. A term below the threshold is read as
-  // partially captured and re-read in full.
-  const RESTR_DONE_SHARE = 0.9;
+  // partially captured and re-read in full. The threshold lives in
+  // lib/restrictions.js, which derive-restrictions.js reads too.
   const termsWithRestr = new Set();
   const restrSeen = {};   // termCode → { withRestr, courses }
   for (const byTerm of Object.values(prevDetails)) {

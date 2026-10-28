@@ -273,3 +273,32 @@ export function withinRestrictionWindow(termCode, ayCount = RESTR_AY_WINDOW, now
   const ay = Number(s.slice(0, 4));
   return ay >= oldestAYEnd(ayCount, now) && ay <= currentAYEnd(now);
 }
+
+/**
+ * The share of a term's courses that must carry `restr` before the term counts
+ * as read. 99% of sections carry some restriction (almost always `Levels`), so
+ * a fully captured term reaches essentially 100%; see scrape-availability.js.
+ */
+export const RESTR_DONE_SHARE = 0.9;
+
+/**
+ * The terms of term-details.json whose restrictions pane was read. Within one,
+ * a course with no `restr` was read and found unrestricted, which is a
+ * different fact from a term never read.
+ *
+ * @param {Record<string, Record<string, {restr?: object}>>} details
+ * @returns {Set<string>}
+ */
+export function restrictionReadTerms(details) {
+  const seen = {};
+  for (const byTerm of Object.values(details ?? {})) {
+    for (const [tc, d] of Object.entries(byTerm ?? {})) {
+      const slot = (seen[tc] ??= { withRestr: 0, courses: 0 });
+      slot.courses += 1;
+      if (d?.restr) slot.withRestr += 1;
+    }
+  }
+  return new Set(Object.entries(seen)
+    .filter(([, s]) => s.courses > 0 && s.withRestr / s.courses >= RESTR_DONE_SHARE)
+    .map(([tc]) => tc));
+}
