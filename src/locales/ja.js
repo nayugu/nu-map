@@ -620,6 +620,7 @@ export const strings = {
   "grad.row.button":       "卒業する！",
   "grad.row.done":         "卒業しました",
   "grad.row.undo":         "クリックで取り消し",
+  "grad.row.summer.ceremony": "夏に卒業する学生は、通常その前の春の卒業式に参加します。",
 
   // Grad requirement phrases
   "grad.allOf": "すべて ({count}/{total})",
@@ -1041,6 +1042,7 @@ export const strings = {
   "header.cohort.graduation":     "卒業",
   "header.cohort.fall":           "秋学期",
   "header.cohort.spring":         "春学期",
+  "header.cohort.summer":         "夏学期",
   "header.cohort.error":          "⚠ 卒業が入学より前です",
   "header.links.title":           "リンク集",
   "header.io.button":             "入出力",
@@ -1051,6 +1053,7 @@ export const strings = {
   "header.cohort.sticky.on":      "順序",
   "header.cohort.sticky.off":     "日付",
   "header.cohort.duration":       "約{yrs}年",
+  "header.cohort.duration.summer": "約{yrs}年＋夏学期",
   "header.coop.conflict.title":   "就業期間が卒業学期と重複",
   "header.coop.conflict.single":  "{label}は卒業学期（{sem} {year}）に重なっています。就業期間中は卒業できません。ブロックを移動するか卒業日を調整してください。",
   "header.coop.conflict.multi":   "{labels}は卒業学期（{sem} {year}）に重なっています。就業期間中は卒業できません。ブロックを移動するか卒業日を調整してください。",

@@ -619,6 +619,7 @@ export const strings = {
   "grad.row.button":       "स्नातक करें!",
   "grad.row.done":         "स्नातक हो गए",
   "grad.row.undo":         "पूर्ववत करें",
+  "grad.row.summer.ceremony": "ग्रीष्म में स्नातक होने वाले छात्र आमतौर पर उससे पहले के वसंत समारोह में शामिल होते हैं।",
 
   // Grad requirement phrases
   "grad.allOf": "सभी ({count}/{total})",
@@ -1040,6 +1041,7 @@ export const strings = {
   "header.cohort.graduation":     "स्नातक",
   "header.cohort.fall":           "शरद",
   "header.cohort.spring":         "वसंत",
+  "header.cohort.summer":         "ग्रीष्म",
   "header.cohort.error":          "⚠ स्नातक प्रवेश से पहले है",
   "header.links.title":           "लिंक",
   "header.io.button":             "इनपुट/आउटपुट",
@@ -1050,6 +1052,7 @@ export const strings = {
   "header.cohort.sticky.on":      "स्लॉट",
   "header.cohort.sticky.off":     "तारीख",
   "header.cohort.duration":       "~{yrs} वर्ष",
+  "header.cohort.duration.summer": "~{yrs} वर्ष + ग्रीष्म",
   "header.coop.conflict.title":   "कार्यकाल स्नातक सेमेस्टर से ओवरलैप हो रहा है",
   "header.coop.conflict.single":  "{label} आपके स्नातक सेमेस्टर ({sem} {year}) में ओवरलैप कर रहा है। आप कार्यकाल के दौरान स्नातक नहीं हो सकते। ब्लॉक को स्थानांतरित करें या स्नातक तिथि समायोजित करें।",
   "header.coop.conflict.multi":   "{labels} आपके स्नातक सेमेस्टर ({sem} {year}) में ओवरलैप कर रहे हैं। आप कार्यकाल के दौरान स्नातक नहीं हो सकते। ब्लॉकों को स्थानांतरित करें या स्नातक तिथि समायोजित करें।",

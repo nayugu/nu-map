@@ -1,17 +1,31 @@
 import { useRef, useEffect } from "react";
 import { usePlanner }   from "../context/PlannerContext.jsx";
 import { useLanguage }  from "../context/LanguageContext.jsx";
-import { TText }        from "../context/TranslationContext.jsx";
+import { useSemName }   from "./SemLabel.jsx";
+import { semName }      from "../core/semGrid.js";
 import { fireConfetti } from "./confetti.js";
 
 export default function GraduationRow() {
-  const { gradSemId, currentSemId, SEMESTERS, isGraduated, setIsGraduated, isPhone } = usePlanner();
+  const { gradSemId, currentSemId, SEMESTERS, isGraduated, setIsGraduated, isPhone, studentType } = usePlanner();
   const { t } = useLanguage();
   const rowRef = useRef(null);
   const prevGraduatedRef = useRef(isGraduated);
 
   const gradSem   = SEMESTERS.find(s => s.id === gradSemId);
-  const gradLabel = gradSem?.label ?? gradSemId;
+  // A summer graduation is the whole summer, stored as its last session (see
+  // cohortTermChoices), so it is named "Summer 2030" rather than after the
+  // session id it happens to be stored as.
+  const isSummer  = gradSem?.type === "summer";
+  const rowName   = useSemName(gradSem);
+  const gradLabel = isSummer
+    ? semName(t, "claude.sem.summer", gradSem.label.match(/\d{4}/)?.[0] ?? "")
+    : (rowName || gradSemId);
+  // Undergraduate and master's summer finishers walk in the Spring ceremony
+  // BEFORE (commencement.northeastern.edu → Apply to Graduate), and the
+  // application deadline is in February, so assuming a summer ceremony costs
+  // the walk. Doctoral programs differ, and a graduate plan cannot tell a
+  // master's from a PhD, so only undergraduate plans carry the sentence.
+  const showCeremonyNote = isSummer && studentType !== "graduate" && !isGraduated;
 
   const isReady = currentSemId === gradSemId && !isGraduated;
 
@@ -54,11 +68,11 @@ export default function GraduationRow() {
         {isPhone ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
             <span style={{ fontSize: 11, fontWeight: 700, color: "var(--success)" }}>{t("grad.row.done")}</span>
-            <span style={{ fontSize: 9, fontWeight: 500, color: "var(--success)" }}><TText>{gradLabel}</TText></span>
+            <span style={{ fontSize: 9, fontWeight: 500, color: "var(--success)" }}>{gradLabel}</span>
           </div>
         ) : (
           <span style={{ fontSize: 14, fontWeight: 700, color: "var(--success)" }}>
-            {t("grad.row.done")} · <TText>{gradLabel}</TText>
+            {t("grad.row.done")} · {gradLabel}
           </span>
         )}
         <span style={{ fontSize: isPhone ? 8 : 10, color: "var(--text-4)", marginLeft: 4 }}>{t("grad.row.undo")}</span>
@@ -85,12 +99,20 @@ export default function GraduationRow() {
         {isPhone ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
             <span style={{ fontSize: 10, fontWeight: 600, color: isReady ? "var(--success)" : "var(--text-3)" }}>{t("grad.row.title")}</span>
-            <span style={{ fontSize: 8, fontWeight: 500, color: isReady ? "var(--success)" : "var(--text-4)" }}><TText>{gradLabel}</TText></span>
+            <span style={{ fontSize: 8, fontWeight: 500, color: isReady ? "var(--success)" : "var(--text-4)" }}>{gradLabel}</span>
+            {showCeremonyNote && (
+              <span style={{ fontSize: 8, color: "var(--text-4)" }}>{t("grad.row.summer.ceremony")}</span>
+            )}
           </div>
         ) : (
-          <span style={{ fontSize: 12, fontWeight: 600, color: isReady ? "var(--success)" : "var(--text-3)" }}>
-            {t("grad.row.title")} · <TText>{gradLabel}</TText>
-          </span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <span style={{ fontSize: 12, fontWeight: 600, color: isReady ? "var(--success)" : "var(--text-3)" }}>
+              {t("grad.row.title")} · {gradLabel}
+            </span>
+            {showCeremonyNote && (
+              <span style={{ fontSize: 10, color: "var(--text-4)" }}>{t("grad.row.summer.ceremony")}</span>
+            )}
+          </div>
         )}
       </div>
       {isReady && (

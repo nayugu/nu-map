@@ -29,6 +29,7 @@ const STEPS = 2;
 export default function OnboardingModal() {
   const {
     planEntSem, planEntYear, planGradSem, planGradYear, semOrd,
+    cohortChoices, cohortTermKey, cohortDuration,
     studentType: savedStudentType,
     major: savedMajor, major2: savedMajor2, minor1: savedMinor1, minor2: savedMinor2,
     showCohortSetup, finishOnboarding,
@@ -70,8 +71,10 @@ export default function OnboardingModal() {
   const entOrd  = semOrd(entSem,  entYear);
   const gradOrd = semOrd(gradSem, gradYear);
   const cohortValid = gradOrd > entOrd;
-  const durationYrs = ((gradYear * 2 + (gradSem === "fall" ? 1 : 0)) -
-                       (entYear  * 2 + (entSem  === "fall" ? 1 : 0)) + 1) / 2;
+  // A summer finish leaves the year count alone, so sample-plan variants
+  // below still match on it.
+  const duration    = cohortDuration(entSem, entYear, gradSem, gradYear);
+  const durationYrs = duration.years;
 
   // ── The department's sample plan ────────────────────────────────
   const [samplePlans,   setSamplePlans]   = useState(null);   // variants, or null
@@ -173,9 +176,9 @@ export default function OnboardingModal() {
   const semBtn = (s, sel, blocked) => ({
     ...btnBase,
     cursor: blocked ? "not-allowed" : "pointer",
-    background: sel ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent",
-    border: `1px solid ${sel ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,
-    color: sel ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
+    background: sel ? (s === "spring" ? "var(--sel-spr-bg)" : "var(--sel-fall-bg)") : "transparent",
+    border: `1px solid ${sel ? (s === "spring" ? "var(--sel-spr-border)" : "var(--sel-fall-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,
+    color: sel ? (s === "spring" ? "var(--sel-spr-text)" : "var(--sel-fall-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
     fontWeight: sel ? 700 : 400, opacity: blocked ? 0.4 : 1,
   });
 
@@ -239,19 +242,19 @@ export default function OnboardingModal() {
             <div style={{ marginBottom: 16 }}>
               <div style={sectionLabel}>{t("header.cohort.entry").toUpperCase()}</div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                {["fall", "spring"].map(s => {
+                {cohortChoices.entry.map(s => {
                   const blocked = semOrd(s, entYear) >= gradOrd;
                   return (
                     <button key={s} onClick={() => { if (!blocked) setEntSem(s); }} style={semBtn(s, entSem === s, blocked)}>
-                      {s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}
+                      {t(cohortTermKey(s))}
                     </button>
                   );
                 })}
                 <YearStepper
                   year={entYear} min={2010} max={maxEntYear} size={15}
-                  canInc={entOrd + 2 < gradOrd && entYear < maxEntYear}
+                  canInc={semOrd(entSem, entYear + 1) < gradOrd && entYear < maxEntYear}
                   onDec={() => { if (entYear > 2010) setEntYear(entYear - 1); }}
-                  onInc={() => { if (entOrd + 2 < gradOrd && entYear < maxEntYear) setEntYear(entYear + 1); }}
+                  onInc={() => { if (semOrd(entSem, entYear + 1) < gradOrd && entYear < maxEntYear) setEntYear(entYear + 1); }}
                 />
               </div>
             </div>
@@ -259,18 +262,18 @@ export default function OnboardingModal() {
             <div style={{ marginBottom: 16 }}>
               <div style={sectionLabel}>{t("header.cohort.graduation").toUpperCase()}</div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                {["fall", "spring"].map(s => {
+                {cohortChoices.graduation.map(s => {
                   const blocked = semOrd(s, gradYear) <= entOrd;
                   return (
                     <button key={s} onClick={() => { if (!blocked) setGradSem(s); }} style={semBtn(s, gradSem === s, blocked)}>
-                      {s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}
+                      {t(cohortTermKey(s))}
                     </button>
                   );
                 })}
                 <YearStepper
                   year={gradYear} min={2010} max={MAX_GRAD_YEAR} size={15}
-                  canDec={gradOrd - 2 > entOrd}
-                  onDec={() => { if (gradOrd - 2 > entOrd && gradYear > 2010) setGradYear(gradYear - 1); }}
+                  canDec={semOrd(gradSem, gradYear - 1) > entOrd}
+                  onDec={() => { if (semOrd(gradSem, gradYear - 1) > entOrd && gradYear > 2010) setGradYear(gradYear - 1); }}
                   onInc={() => { if (gradYear < MAX_GRAD_YEAR) setGradYear(gradYear + 1); }}
                 />
               </div>
@@ -282,12 +285,12 @@ export default function OnboardingModal() {
               display: "flex", alignItems: "center", gap: 8,
             }}>
               <span>
-                {entSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")} {entYear}
+                {t(cohortTermKey(entSem))} {entYear}
                 {" → "}
-                {gradSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")} {gradYear}
+                {t(cohortTermKey(gradSem))} {gradYear}
               </span>
               {cohortValid
-                ? <span style={{ color: "var(--success)" }}>{t("header.cohort.duration", { yrs: durationYrs })}</span>
+                ? <span style={{ color: "var(--success)" }}>{t(duration.summer ? "header.cohort.duration.summer" : "header.cohort.duration", { yrs: durationYrs })}</span>
                 : <span style={{ color: "var(--error)" }}>{t("header.cohort.error")}</span>}
             </div>
           </>

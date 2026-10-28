@@ -408,7 +408,7 @@ export default function Header() {
     statsVisible, statsJustUnlocked, ackStatsUnlockFlash,
     showSettings, setShowSettings,
     planEntSem, planEntYear, planGradSem, planGradYear,
-    entOrd, gradOrd, semOrd,
+    entOrd, gradOrd, semOrd, cohortChoices, cohortTermKey, cohortDuration,
     setEntSem, setEntYear, setGradSem, setGradYear,
     coopGradConflicts, specialTermPl, specialTermStartMap, specialTermContMap,
     // ── Everything the clipboard summary's Conflicts block reports ──
@@ -971,6 +971,13 @@ export default function Header() {
     const st = (calendar.getSemesterTypes() ?? []).find(s => s.id === semTypeId);
     return st?.altLabel ?? st?.label ?? semTypeId;
   };
+  // A graduation bound in a summer means the WHOLE summer (see
+  // cohortTermChoices), so it is named by its theme: "Summer 2030", not the
+  // "Summer B 2030" of the session id it is stored as.
+  const gradSeasonLabel = (semTypeId) => {
+    const st = (calendar.getSemesterTypes() ?? []).find(s => s.id === semTypeId);
+    return st?.theme === "summer" ? "Summer" : seasonLabel(semTypeId);
+  };
 
   /** Everything the Flags block needs that only this component can reach. */
   const conflictInputs = () => ({
@@ -995,7 +1002,7 @@ export default function Header() {
         specialTermPl, specialTermStartMap, specialTermContMap,
         grades, placedOut, substitutions, studentType,
         entry: `${seasonLabel(planEntSem)} ${planEntYear}`,
-        graduation: `${seasonLabel(planGradSem)} ${planGradYear}`,
+        graduation: `${gradSeasonLabel(planGradSem)} ${planGradYear}`,
         majorPath: major || "", major2Path: major2 || "", concLabel: conc || "",
         minor1Path: minor1 || "", minor2Path: minor2 || "",
         totalSHPlaced, totalSHDone,
@@ -2221,7 +2228,7 @@ export default function Header() {
               <div>
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>{t("header.cohort.entry")}</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                  {["fall", "spring"].map(s => {
+                  {cohortChoices.entry.map(s => {
                     const wouldBe = semOrd(s, planEntYear);
                     const blocked = wouldBe >= gradOrd;
                     return (
@@ -2230,19 +2237,19 @@ export default function Header() {
                         style={{
                           flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4,
                           cursor: blocked ? "not-allowed" : "pointer",
-                          background: planEntSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent",
-                          border: `1px solid ${planEntSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,
-                          color: planEntSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
+                          background: planEntSem === s ? (s === "spring" ? "var(--sel-spr-bg)" : "var(--sel-fall-bg)") : "transparent",
+                          border: `1px solid ${planEntSem === s ? (s === "spring" ? "var(--sel-spr-border)" : "var(--sel-fall-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,
+                          color: planEntSem === s ? (s === "spring" ? "var(--sel-spr-text)" : "var(--sel-fall-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
                           fontWeight: planEntSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1,
                         }}
-                      >{s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}</button>
+                      >{t(cohortTermKey(s))}</button>
                     );
                   })}
                   <YearStepper
                     year={planEntYear} min={2010} max={maxEntYear}
-                    canInc={entOrd + 2 < gradOrd && planEntYear < maxEntYear}
+                    canInc={semOrd(planEntSem, planEntYear + 1) < gradOrd && planEntYear < maxEntYear}
                     onDec={() => { if (planEntYear > 2010) setEntYear(planEntYear - 1); }}
-                    onInc={() => { if (entOrd + 2 < gradOrd && planEntYear < maxEntYear) setEntYear(planEntYear + 1); }}
+                    onInc={() => { if (semOrd(planEntSem, planEntYear + 1) < gradOrd && planEntYear < maxEntYear) setEntYear(planEntYear + 1); }}
                   />
                 </div>
               </div>
@@ -2251,7 +2258,7 @@ export default function Header() {
               <div>
                 <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", marginBottom: 6 }}>{t("header.cohort.graduation")}</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                  {["fall", "spring"].map(s => {
+                  {cohortChoices.graduation.map(s => {
                     const wouldBe = semOrd(s, planGradYear);
                     const blocked = wouldBe <= entOrd;
                     return (
@@ -2260,18 +2267,18 @@ export default function Header() {
                         style={{
                           flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4,
                           cursor: blocked ? "not-allowed" : "pointer",
-                          background: planGradSem === s ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent",
-                          border: `1px solid ${planGradSem === s ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,
-                          color: planGradSem === s ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
+                          background: planGradSem === s ? (s === "spring" ? "var(--sel-spr-bg)" : "var(--sel-fall-bg)") : "transparent",
+                          border: `1px solid ${planGradSem === s ? (s === "spring" ? "var(--sel-spr-border)" : "var(--sel-fall-border)") : blocked ? "var(--blocked-border)" : "var(--border-2)"}`,
+                          color: planGradSem === s ? (s === "spring" ? "var(--sel-spr-text)" : "var(--sel-fall-text)") : blocked ? "var(--blocked-text)" : "var(--text-4)",
                           fontWeight: planGradSem === s ? 700 : 400, opacity: blocked ? 0.4 : 1,
                         }}
-                      >{s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}</button>
+                      >{t(cohortTermKey(s))}</button>
                     );
                   })}
                   <YearStepper
                     year={planGradYear} min={2010} max={2040}
-                    canDec={gradOrd - 2 > entOrd}
-                    onDec={() => { if (gradOrd - 2 > entOrd && planGradYear > 2010) setGradYear(planGradYear - 1); }}
+                    canDec={semOrd(planGradSem, planGradYear - 1) > entOrd}
+                    onDec={() => { if (semOrd(planGradSem, planGradYear - 1) > entOrd && planGradYear > 2010) setGradYear(planGradYear - 1); }}
                     onInc={() => { if (planGradYear < 2040) setGradYear(planGradYear + 1); }}
                   />
                 </div>
@@ -2279,12 +2286,17 @@ export default function Header() {
 
               {/* Summary */}
               <div style={{ fontSize: 9, color: "var(--text-6)", lineHeight: "calc(1.6 * var(--lh-scale, 1))", borderTop: "1px solid var(--border-1)", paddingTop: 8, display: "flex", alignItems: "center", gap: 6 }}>
-                <span>{planEntSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")} {planEntYear} → {planGradSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")} {planGradYear}</span>
-                {(planGradYear < planEntYear || (planGradYear === planEntYear && planGradSem === "fall" && planEntSem === "spring"))
+                <span>{t(cohortTermKey(planEntSem))} {planEntYear} → {t(cohortTermKey(planGradSem))} {planGradYear}</span>
+                {/* The displayed bounds, not entOrd/gradOrd: those are real
+                    state, and a Claude cohort preview swaps only the display. */}
+                {semOrd(planGradSem, planGradYear) <= semOrd(planEntSem, planEntYear)
                   ? <span style={{ color: "var(--error)" }}>{t("header.cohort.error")}</span>
-                  : <span style={{ color: "var(--success)" }}>
-                      {t("header.cohort.duration", { yrs: ((planGradYear * 2 + (planGradSem === "fall" ? 1 : 0)) - (planEntYear * 2 + (planEntSem === "fall" ? 1 : 0)) + 1) / 2 })}
-                    </span>
+                  : (() => {
+                      const d = cohortDuration(planEntSem, planEntYear, planGradSem, planGradYear);
+                      return <span style={{ color: "var(--success)" }}>
+                        {t(d.summer ? "header.cohort.duration.summer" : "header.cohort.duration", { yrs: d.years })}
+                      </span>;
+                    })()
                 }
               </div>
               {/* Sticky courses toggle */}
@@ -2376,12 +2388,12 @@ export default function Header() {
               {coopGradConflicts.length === 1
                 ? t("header.coop.conflict.single", {
                     label: coopGradConflicts[0].label,
-                    sem: planGradSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring"),
+                    sem: t(cohortTermKey(planGradSem)),
                     year: planGradYear,
                   })
                 : t("header.coop.conflict.multi", {
                     labels: coopGradConflicts.map(w => w.label).join(", "),
-                    sem: planGradSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring"),
+                    sem: t(cohortTermKey(planGradSem)),
                     year: planGradYear,
                   })
               }

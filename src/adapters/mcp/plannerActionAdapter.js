@@ -399,7 +399,12 @@ const APPLIERS = {
     plan.entSem = a.sem; plan.entYear = a.year;
   },
   SET_GRADUATION: (plan, a) => {
-    if (!["fall", "spring"].includes(a.sem) || typeof a.year !== "number") return "sem (fall|spring) and year (number) are required";
+    // A summer graduation is the whole summer and is stored as its last
+    // session (core/semGrid.js → cohortTermChoices), so "sumB" is the one
+    // summer value. "sumA" is refused rather than mapped: the registrar
+    // confers after Session B, so a plan ending in Session A is not a thing
+    // the app represents, and silently widening it would hide that.
+    if (!["fall", "spring", "sumB"].includes(a.sem) || typeof a.year !== "number") return "sem (fall|spring|sumB) and year (number) are required";
     plan.gradSem = a.sem; plan.gradYear = a.year;
   },
   SET_CURRENT_SEM: (plan, a) => {
@@ -466,7 +471,7 @@ export const ACTION_DOCS = {
   SET_SH_OVERRIDE:      { args: "{courseId, value|null}", use: "Set credits for a VARIABLE-credit course. MOST courses have fixed credits and are rejected — only valid when get_course shows shMin < shMax, and value must be inside that range. null resets to the catalog default." },
   SET_OFFERED_OVERRIDE: { args: "{courseId, semTypeId: fall|spring|sumA|sumB, status: true|false|null}", use: "Force a course to show as offered/not-offered in a semester type. status must be a real boolean (not the string 'false'); null returns to automatic (history-based)." },
   SET_ENTRY:            { args: "{sem: 'fall'|'spring', year}", use: "Set the cohort entry term." },
-  SET_GRADUATION:       { args: "{sem: 'fall'|'spring', year}", use: "Set the target graduation term." },
+  SET_GRADUATION:       { args: "{sem: 'fall'|'spring'|'sumB', year}", use: "Set the target graduation term. 'sumB' means graduating that summer: the timeline keeps the whole summer and the degree is conferred after Session B, whichever session the last courses are in." },
   SET_CURRENT_SEM:      { args: "{semId}", use: "Set which semester is 'now' (splits completed vs planned)." },
   STAR_COURSE:          { args: "{courseId}", use: "Star a course in the bank." },
   UNSTAR_COURSE:        { args: "{courseId}", use: "Remove a star." },

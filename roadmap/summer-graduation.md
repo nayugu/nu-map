@@ -1,8 +1,11 @@
 ---
-status: planned
+status: shipped
 date: 2026-10
+shipped: 2026-10-28
 credit: Lily H.
 ---
-# Graduate after Summer A or Summer B
+# Graduate in the summer
 
-Right now the planner only lets you finish in a Spring or a Fall. Some students walk in Spring and take one last set of courses in Summer A, and the plan should be able to end there.
+You can now pick Summer as your graduation term. Your last courses can go in Summer A, Summer B, or both.
+
+Summer graduates usually walk in the Spring ceremony before. Check [Apply to Graduate](https://commencement.northeastern.edu/prepare-to-graduate/apply/) for your dates.

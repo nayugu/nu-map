@@ -619,6 +619,7 @@ export const strings = {
   "grad.row.button":       "Diplômé·e !",
   "grad.row.done":         "Diplômé·e",
   "grad.row.undo":         "cliquer pour annuler",
+  "grad.row.summer.ceremony": "Les diplômé·e·s d'été participent généralement à la cérémonie du printemps précédent.",
 
   // Grad requirement phrases
   "grad.allOf": "Tous ({count}/{total})",
@@ -1040,6 +1041,7 @@ export const strings = {
   "header.cohort.graduation":     "DIPLÔME",
   "header.cohort.fall":           "Automne",
   "header.cohort.spring":         "Printemps",
+  "header.cohort.summer":         "Été",
   "header.cohort.error":          "⚠ diplôme avant l'entrée",
   "header.links.title":           "LIENS",
   "header.io.button":             "Entrée/Sortie",
@@ -1050,6 +1052,7 @@ export const strings = {
   "header.cohort.sticky.on":      "créneaux",
   "header.cohort.sticky.off":     "dates",
   "header.cohort.duration":       "~{yrs} ans",
+  "header.cohort.duration.summer": "~{yrs} ans + été",
   "header.coop.conflict.title":   "Période de travail chevauche le semestre de diplôme",
   "header.coop.conflict.single":  "{label} chevauche votre semestre de diplôme ({sem} {year}). Vous ne pouvez pas obtenir votre diplôme pendant une période de travail. Déplacez le bloc ou ajustez votre date de diplôme.",
   "header.coop.conflict.multi":   "{labels} chevauchent votre semestre de diplôme ({sem} {year}). Vous ne pouvez pas obtenir votre diplôme pendant une période de travail. Déplacez les blocs ou ajustez votre date de diplôme.",

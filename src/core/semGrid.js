@@ -161,3 +161,65 @@ export function semName(t, seasonKey, year, fallback = "") {
   if (!year) return season;
   return t("sem.name.format", { season, year });
 }
+
+/**
+ * ── Cohort bounds: which terms a plan can start and end in ───────────
+ *
+ * A plan ends in a full term or in a whole SUMMER, never in one summer session,
+ * because that is how the registrar confers: once per summer, after Session B
+ * (Aug 19, 2026 in the 2025–26 calendar), whichever session the last courses
+ * were in. The June date is "by exception", exactly like the fall and spring
+ * mid-semester ones, and the picker never offered those either. So "Summer" is
+ * stored as the LAST summer session's id: the timeline keeps the whole summer
+ * row (both halves draw as one), and the plan turns graduated when the degree
+ * is actually conferred rather than halfway through the summer.
+ *
+ * Entry stays the full terms only; starting in a summer is a different request.
+ *
+ * @param {import('../ports/ICalendar.js').ICalendar} calendar
+ * @returns {{ entry: string[], graduation: string[] }} semester type ids
+ */
+export function cohortTermChoices(calendar) {
+  const types = calendar.getSemesterTypes();
+  const entry = types.filter(t => !t.optional).map(t => t.id);
+  const lastOfTheme = new Map();
+  for (const t of types) if (t.optional) lastOfTheme.set(t.theme, t.id);
+  return { entry, graduation: [...entry, ...lastOfTheme.values()] };
+}
+
+/**
+ * Chronological ordinal of a cohort bound: calendar year, then the month the
+ * term starts in. A plan's years are CALENDAR years (Fall 2026, Spring 2027),
+ * so ordering by the calendar's list position — Fall first — ranked Spring 2030
+ * after Fall 2030, and a summer would have landed after the fall that follows it.
+ *
+ * @param {string} typeId  semester type id
+ * @param {number} year
+ * @param {import('../ports/ICalendar.js').ICalendar} calendar
+ */
+export function cohortOrd(typeId, year, calendar) {
+  const type  = calendar.getSemesterTypes().find(t => t.id === typeId);
+  const month = type ? parseInt(type.months[0], 10) : 0;
+  return year * 100 + month;
+}
+
+/** The locale key naming a cohort bound: `header.cohort.<theme>`. */
+export function cohortTermKey(typeId, calendar) {
+  const theme = calendar.getSemesterTypes().find(t => t.id === typeId)?.theme ?? typeId;
+  return `header.cohort.${theme}`;
+}
+
+/**
+ * A plan's length in years of full terms, both bounds included, and whether it
+ * ends in a summer. The summer is reported beside the count rather than folded
+ * into it: "4 yrs + summer" is what a student would say, where "4.25 yrs" is a
+ * number nobody plans by.
+ */
+export function cohortDuration(entSem, entYear, gradSem, gradYear, calendar) {
+  const theme = id => calendar.getSemesterTypes().find(t => t.id === id)?.theme;
+  const half  = (id, y) => y * 2 + (theme(id) === "fall" ? 1 : 0);
+  return {
+    years:  (half(gradSem, gradYear) - half(entSem, entYear) + 1) / 2,
+    summer: theme(gradSem) === "summer",
+  };
+}

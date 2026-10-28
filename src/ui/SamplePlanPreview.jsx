@@ -202,7 +202,7 @@ export default function SamplePlanPreview({
                 lineHeight: "calc(1.5 * var(--lh-scale, 1))",
               }}>
                 {[
-                  `${cohortName(planEntSem,  planEntYear,  t)} → ${cohortName(planGradSem, planGradYear, t)}`,
+                  `${cohortName(planEntSem,  planEntYear,  t)} → ${cohortName(planGradSem, planGradYear, t, { graduation: true })}`,
                   t("onboard.sampleplan.counts", {
                     courses: laid.placed.length, placeholders: laid.reserved.length }),
                   laid.coops.length ? t("grad.plan.preview.coops", { n: laid.coops.length }) : null,
@@ -261,8 +261,10 @@ export default function SamplePlanPreview({
  * labels, and the two reading differently in the same dialog would be worse
  * than either reading oddly.
  */
-function cohortName(sem, year, t) {
-  const key = SEM_NAME_KEY[sem];
+function cohortName(sem, year, t, { graduation = false } = {}) {
+  // A graduation bound in a summer is the whole summer, stored as its last
+  // session (see cohortTermChoices) — so it reads "Summer", never "Summer B".
+  const key = graduation && (sem === "sumA" || sem === "sumB") ? "claude.sem.summer" : SEM_NAME_KEY[sem];
   return `${key ? t(key) : sem}${year ? ` ${year}` : ""}`;
 }
 

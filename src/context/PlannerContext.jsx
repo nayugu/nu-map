@@ -11,7 +11,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { createContext, useContext, useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { NUM_YEARS } from "../core/constants.js";
-import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
+import { buildCohortSemesters, deriveSemMaps, cohortOrd, cohortTermChoices, cohortTermKey, cohortDuration } from "../core/semGrid.js";
 import { extractEdges, coreqPartnersOf } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { pruneSemOrders } from "../core/planSchema.js";
@@ -794,11 +794,13 @@ const { locale, setLocale, locales, t } = useLanguage();
     return out;
   }, [courseMap, pvShOverrides, grades]);
 
-  // Ordinal helpers to enforce grad > entry (institution-agnostic)
-  const _semTypes = calendar.getSemesterTypes();
-  const _semOrd   = (typeId, year) => year * 100 + Math.max(0, _semTypes.findIndex(t => t.id === typeId));
+  // Ordinal helpers to enforce grad > entry (institution-agnostic, chronological)
+  const _semOrd   = (typeId, year) => cohortOrd(typeId, year, calendar);
   const entOrd  = _semOrd(planEntSem,  planEntYear);
   const gradOrd = _semOrd(planGradSem, planGradYear);
+  const _cohortChoices  = cohortTermChoices(calendar);
+  const _cohortTermKey  = typeId => cohortTermKey(typeId, calendar);
+  const _cohortDuration = (es, ey, gs, gy) => cohortDuration(es, ey, gs, gy, calendar);
 
   // ── Refs ─────────────────────────────────────────────────────
   const panelResizing = useRef(null);
@@ -4988,6 +4990,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     planGradSem: pv?.gradSem  ?? planGradSem,
     planGradYear: pv?.gradYear ?? planGradYear,
     entOrd, gradOrd, semOrd: _semOrd,
+    cohortChoices: _cohortChoices, cohortTermKey: _cohortTermKey, cohortDuration: _cohortDuration,
     panelHeight, panelHeightManual,
     isPhone, isMobile, uiScale, manualZoom, setManualZoom,
     // Derived

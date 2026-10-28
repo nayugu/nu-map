@@ -12,7 +12,7 @@ const GRAD_YEARS    = 2;
 export default function NewPlanModal({ open, onClose }) {
   const {
     planEntSem, planEntYear, planGradSem, planGradYear,
-    semOrd, createPlan, studentType: activeStudentType,
+    semOrd, cohortChoices, cohortTermKey, cohortDuration, createPlan, studentType: activeStudentType,
     newPlanInitialType, setNewPlanInitialType,
     newPlanFolderId, setNewPlanFolderId, planTree,
   } = usePlanner();
@@ -63,9 +63,8 @@ export default function NewPlanModal({ open, onClose }) {
   const gradOrd = semOrd(gradSem, gradYear);
   const canCreate = name.trim().length > 0 && gradOrd > entOrd;
 
-  // Duration in years, same formula as the cohort picker in the header.
-  const durationYrs = ((gradYear * 2 + (gradSem === "fall" ? 1 : 0)) -
-                       (entYear  * 2 + (entSem  === "fall" ? 1 : 0)) + 1) / 2;
+  // Duration in years, same helper as the cohort picker in the header.
+  const duration = cohortDuration(entSem, entYear, gradSem, gradYear);
 
   const switchStudentType = (type) => {
     setStudentType(type);
@@ -87,9 +86,9 @@ export default function NewPlanModal({ open, onClose }) {
   const semBtnStyle = (s, isSel, isBlocked) => ({
     flex: 1, fontSize: 9, padding: "4px 0", borderRadius: 4,
     cursor: isBlocked ? "not-allowed" : "pointer",
-    background: isSel ? (s === "fall" ? "var(--sel-fall-bg)" : "var(--sel-spr-bg)") : "transparent",
-    border: `1px solid ${isSel ? (s === "fall" ? "var(--sel-fall-border)" : "var(--sel-spr-border)") : isBlocked ? "var(--blocked-border)" : "var(--border-2)"}`,
-    color: isSel ? (s === "fall" ? "var(--sel-fall-text)" : "var(--sel-spr-text)") : isBlocked ? "var(--blocked-text)" : "var(--text-4)",
+    background: isSel ? (s === "spring" ? "var(--sel-spr-bg)" : "var(--sel-fall-bg)") : "transparent",
+    border: `1px solid ${isSel ? (s === "spring" ? "var(--sel-spr-border)" : "var(--sel-fall-border)") : isBlocked ? "var(--blocked-border)" : "var(--border-2)"}`,
+    color: isSel ? (s === "spring" ? "var(--sel-spr-text)" : "var(--sel-fall-text)") : isBlocked ? "var(--blocked-text)" : "var(--text-4)",
     fontWeight: isSel ? 700 : 400, opacity: isBlocked ? 0.4 : 1,
   });
 
@@ -174,21 +173,21 @@ export default function NewPlanModal({ open, onClose }) {
             {t("header.cohort.entry").toUpperCase()}
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-            {["fall", "spring"].map(s => {
+            {cohortChoices.entry.map(s => {
               const wouldBe = semOrd(s, entYear);
               const blocked = wouldBe >= gradOrd;
               return (
                 <button key={s} onClick={() => { if (!blocked) setLocalEntSem(s); }}
                   style={semBtnStyle(s, entSem === s, blocked)}>
-                  {s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}
+                  {t(cohortTermKey(s))}
                 </button>
               );
             })}
             <YearStepper
               year={entYear} min={2010} max={maxEntYear}
-              canInc={entOrd + 2 < gradOrd && entYear < maxEntYear}
+              canInc={semOrd(entSem, entYear + 1) < gradOrd && entYear < maxEntYear}
               onDec={() => { if (entYear > 2010) setLocalEntYear(entYear - 1); }}
-              onInc={() => { if (entOrd + 2 < gradOrd && entYear < maxEntYear) setLocalEntYear(entYear + 1); }}
+              onInc={() => { if (semOrd(entSem, entYear + 1) < gradOrd && entYear < maxEntYear) setLocalEntYear(entYear + 1); }}
             />
           </div>
         </div>
@@ -199,20 +198,20 @@ export default function NewPlanModal({ open, onClose }) {
             {t("header.cohort.graduation").toUpperCase()}
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-            {["fall", "spring"].map(s => {
+            {cohortChoices.graduation.map(s => {
               const wouldBe = semOrd(s, gradYear);
               const blocked = wouldBe <= entOrd;
               return (
                 <button key={s} onClick={() => { if (!blocked) setLocalGradSem(s); }}
                   style={semBtnStyle(s, gradSem === s, blocked)}>
-                  {s === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")}
+                  {t(cohortTermKey(s))}
                 </button>
               );
             })}
             <YearStepper
               year={gradYear} min={2010} max={MAX_GRAD_YEAR}
-              canDec={gradOrd - 2 > entOrd}
-              onDec={() => { if (gradOrd - 2 > entOrd && gradYear > 2010) setLocalGradYear(gradYear - 1); }}
+              canDec={semOrd(gradSem, gradYear - 1) > entOrd}
+              onDec={() => { if (semOrd(gradSem, gradYear - 1) > entOrd && gradYear > 2010) setLocalGradYear(gradYear - 1); }}
               onInc={() => { if (gradYear < MAX_GRAD_YEAR) setLocalGradYear(gradYear + 1); }}
             />
           </div>
@@ -225,13 +224,13 @@ export default function NewPlanModal({ open, onClose }) {
           display: "flex", alignItems: "center", gap: 6,
         }}>
           <span>
-            {entSem  === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")} {entYear}
+            {t(cohortTermKey(entSem))} {entYear}
             {" → "}
-            {gradSem === "fall" ? t("header.cohort.fall") : t("header.cohort.spring")} {gradYear}
+            {t(cohortTermKey(gradSem))} {gradYear}
           </span>
           {gradOrd <= entOrd
             ? <span style={{ color: "var(--error)" }}>{t("header.cohort.error")}</span>
-            : <span style={{ color: "var(--success)" }}>{t("header.cohort.duration", { yrs: durationYrs })}</span>
+            : <span style={{ color: "var(--success)" }}>{t(duration.summer ? "header.cohort.duration.summer" : "header.cohort.duration", { yrs: duration.years })}</span>
           }
         </div>
 

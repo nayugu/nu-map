@@ -619,6 +619,7 @@ export const strings = {
   "grad.row.button":       "تخرجت!",
   "grad.row.done":         "تخرجت",
   "grad.row.undo":         "انقر للتراجع",
+  "grad.row.summer.ceremony": "عادةً ما يشارك خريجو الصيف في حفل التخرج الربيعي الذي يسبقه.",
   // Grad requirement phrases
   "grad.allOf": "جميعها ({count}/{total})",
   "grad.fromPool": "{sat}/{req} SH من مجموعة اختيارية",
@@ -1039,6 +1040,7 @@ export const strings = {
   "header.cohort.graduation":     "التخرج",
   "header.cohort.fall":           "الخريف",
   "header.cohort.spring":         "الربيع",
+  "header.cohort.summer":         "الصيف",
   "header.cohort.error":          "⚠ التخرج قبل الدخول",
   "header.links.title":           "روابط",
   "header.io.button":             "إدخال/إخراج",
@@ -1049,6 +1051,7 @@ export const strings = {
   "header.cohort.sticky.on":      "المواقع",
   "header.cohort.sticky.off":     "التواريخ",
   "header.cohort.duration":       "~{yrs} سنة",
+  "header.cohort.duration.summer": "~{yrs} سنة + الصيف",
   "header.coop.conflict.title":   "فترة العمل تتداخل مع فصل التخرج",
   "header.coop.conflict.single":  "{label} يتداخل مع فصل تخرجك ({sem} {year}). لا يمكنك التخرج أثناء فترة العمل. انقل الكتلة أو عدل تاريخ التخرج.",
   "header.coop.conflict.multi":   "{labels} تتداخل مع فصل تخرجك ({sem} {year}). لا يمكنك التخرج أثناء فترة العمل. انقل الكتل أو عدل تاريخ التخرج.",

@@ -837,6 +837,7 @@ export const strings = {
   "grad.row.button":       "Graduate!",
   "grad.row.done":         "Graduated",
   "grad.row.undo":         "click to undo",
+  "grad.row.summer.ceremony": "Summer graduates usually walk in the Spring ceremony before.",
 
   // Grad requirement phrases
   "grad.allOf": "All of ({count}/{total})",
@@ -1415,6 +1416,7 @@ export const strings = {
   "header.cohort.graduation":     "GRADUATION",
   "header.cohort.fall":           "Fall",
   "header.cohort.spring":         "Spring",
+  "header.cohort.summer":         "Summer",
   "header.cohort.error":          "\u26a0 grad before entry",
   "header.links.title":           "LINKS",
   "header.io.button":             "Input/Output",
@@ -1425,6 +1427,7 @@ export const strings = {
   "header.cohort.sticky.on":      "slots",
   "header.cohort.sticky.off":     "dates",
   "header.cohort.duration":       "~{yrs} yrs",
+  "header.cohort.duration.summer": "~{yrs} yrs + summer",
   "header.coop.conflict.title":   "Work term overlaps graduation term",
   "header.coop.conflict.single":  "{label} spans your graduation term ({sem} {year}). You cannot graduate during a work term. Move the block or adjust your graduation date.",
   "header.coop.conflict.multi":   "{labels} span your graduation term ({sem} {year}). You cannot graduate during a work term. Move the blocks or adjust your graduation date.",

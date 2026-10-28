@@ -619,6 +619,7 @@ export const strings = {
   "grad.row.button":        "졸업하기!",
   "grad.row.done":          "졸업함",
   "grad.row.undo":          "클릭하여 실행 취소",
+  "grad.row.summer.ceremony": "여름 졸업생은 보통 그 전 봄 졸업식에 참석합니다.",
 
   // Grad requirement phrases
   "grad.allOf":             "모두 ({count}/{total})",
@@ -1040,6 +1041,7 @@ export const strings = {
   "header.cohort.graduation":     "졸업",
   "header.cohort.fall":           "가을 학기",
   "header.cohort.spring":         "봄 학기",
+  "header.cohort.summer":         "여름 학기",
   "header.cohort.error":          "⚠ 졸업이 입학보다 앞섭니다",
   "header.links.title":           "링크 모음",
   "header.io.button":             "입출력",
@@ -1050,6 +1052,7 @@ export const strings = {
   "header.cohort.sticky.on":      "순서",
   "header.cohort.sticky.off":     "날짜",
   "header.cohort.duration":       "약 {yrs}년",
+  "header.cohort.duration.summer": "약 {yrs}년 + 여름 학기",
   "header.coop.conflict.title":   "실습 기간이 졸업 학기와 겹침",
   "header.coop.conflict.single":  "{label}이(가) 졸업 학기({sem} {year})와 겹칩니다. 실습 중에는 졸업할 수 없습니다. 블록을 이동하거나 졸업일을 조정하세요.",
   "header.coop.conflict.multi":   "{labels}이(가) 졸업 학기({sem} {year})와 겹칩니다. 실습 중에는 졸업할 수 없습니다. 블록을 이동하거나 졸업일을 조정하세요.",

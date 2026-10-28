@@ -619,6 +619,7 @@ export const strings = {
   "grad.row.button":       "¡Graduarme!",
   "grad.row.done":         "Graduado/a",
   "grad.row.undo":         "clic para deshacer",
+  "grad.row.summer.ceremony": "Quienes se gradúan en verano suelen desfilar en la ceremonia de primavera anterior.",
 
   // Grad requirement phrases
   "grad.allOf": "Todos ({count}/{total})",
@@ -1040,6 +1041,7 @@ export const strings = {
   "header.cohort.graduation":     "GRADUACIÓN",
   "header.cohort.fall":           "Otoño",
   "header.cohort.spring":         "Primavera",
+  "header.cohort.summer":         "Verano",
   "header.cohort.error":          "⚠ graduación antes del ingreso",
   "header.links.title":           "ENLACES",
   "header.io.button":             "Entrada/Salida",
@@ -1050,6 +1052,7 @@ export const strings = {
   "header.cohort.sticky.on":      "posición",
   "header.cohort.sticky.off":     "fechas",
   "header.cohort.duration":       "~{yrs} años",
+  "header.cohort.duration.summer": "~{yrs} años + verano",
   "header.coop.conflict.title":   "El periodo laboral se superpone con el semestre de graduación",
   "header.coop.conflict.single":  "{label} se superpone con tu semestre de graduación ({sem} {year}). No puedes graduarte durante un periodo laboral. Mueve el bloque o ajusta tu fecha de graduación.",
   "header.coop.conflict.multi":   "{labels} se superponen con tu semestre de graduación ({sem} {year}). No puedes graduarte durante un periodo laboral. Mueve los bloques o ajusta tu fecha de graduación.",
