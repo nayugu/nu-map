@@ -42,15 +42,29 @@
     details.terms > summary:hover { opacity: 1; }
     details.terms[open] > summary { margin-bottom: 0.4em; }
     li { margin: 0.35em 0; }
-    /* Site-wide home mark: the same affordance on every NU Map page. */
-    .home { display: inline-block; line-height: 0; margin-bottom: 18px; }
-    .home img { width: 28px; height: 28px; object-fit: contain;
-      opacity: 0.9; transition: opacity 0.15s ease; }
-    .home:hover img { opacity: 1; }
+    /* Site-wide home mark, labelled "← [mark] NU Map": the same affordance on
+       every NU Map page (roadmap.html, story.html carry the same block). */
+    .home { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 18px -2px;
+      padding: 4px 8px 4px 2px; border-radius: 8px; text-decoration: none;
+      color: #6a7078; font-size: 0.9rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1;
+      transition: color 0.15s ease, background 0.15s ease; }
+    .home:hover, .home:focus-visible { color: #0f1216; background: #ffffff; }
+    .home .arrow { width: 14px; height: 14px; flex: none; transition: transform 0.2s ease; }
+    .home:hover .arrow, .home:focus-visible .arrow { transform: translateX(-2px); }
+    .home img { width: 24px; height: 24px; object-fit: contain; }
+    @media (prefers-color-scheme: dark) {
+      .home { color: #8d949c; }
+      .home:hover, .home:focus-visible { color: #eceff2; background: #1a1d22; }
+    }
   </style>
 </head>
 <body>
-  <a class="home" href="/"><img src="/logo.png" alt="NU Map home" /></a>
+  <a class="home" href="/" aria-label="Back to the NU Map planner">
+    <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8H3M7 4 3 8l4 4"/></svg>
+    <img src="/logo.png" alt="" width="24" height="24" />
+    <span>NU Map</span>
+  </a>
   <h1>NU Map Privacy Policy</h1>
   <p class="updated">Last updated: August 9, 2026</p>
 
