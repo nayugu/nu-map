@@ -2,6 +2,7 @@ import { useState } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useCourseInkFn } from "./useSubjectInk.js";
+import { glowRgb } from "./selectionGlow.js";
 
 export default function PalettePanel() {
   const {
@@ -86,6 +87,11 @@ export default function PalettePanel() {
           const course = effectiveCourseMap[courseId];
           if (!course) return null;
           const col = courseInk(course);
+          const isSel = selectedId === courseId;
+          // The board's selection glow, scaled down: the list's 4px gutter
+          // clips a full bloom, so a subject-tinted ring carries the
+          // selection and a short halo keeps the glow's feel.
+          const rgb = isSel ? glowRgb(col) : null;
           return (
             <div
               key={courseId}
@@ -103,7 +109,9 @@ export default function PalettePanel() {
               style={{
                 position: "relative",
                 background: "var(--card-bg)",
-                border: `1px solid ${selectedId === courseId ? "var(--active)" : "var(--border-card)"}`,
+                border: "1px solid var(--border-card)",
+                boxShadow: isSel ? `0 0 0 1px rgba(${rgb},0.85), 0 0 4px 1px rgba(${rgb},0.5)` : "none",
+                transition: "box-shadow 0.15s",
                 borderRadius: 4,
                 padding: "3px 18px 3px 8px",
                 cursor: "grab", userSelect: "none",
