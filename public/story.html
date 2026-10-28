@@ -23,6 +23,7 @@
     .home .label { max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; margin-left: 0;
       transition: max-width 0.3s ease, opacity 0.2s ease, margin-left 0.3s ease; }
     .home:hover .label, .home:focus-visible .label { max-width: 12em; opacity: 1; margin-left: 4px; }
+    @media (hover: none) { .home .label { display: none; } }
   </style>
 </head>
 <body style="font-family: system-ui, sans-serif; max-width: 620px; margin: 3rem auto; padding: 0 1.5rem; line-height: 1.65; color: #1e293b;">

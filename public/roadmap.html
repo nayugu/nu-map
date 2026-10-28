@@ -142,6 +142,9 @@
     .home .label { max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; margin-left: 0;
       transition: max-width 0.3s ease, opacity 0.2s ease, margin-left 0.3s ease; }
     .home:hover .label, .home:focus-visible .label { max-width: 12em; opacity: 1; margin-left: 4px; }
+    /* A tap counts as hover, so the label began sliding out while the planner
+       loaded and was caught half open, clipped. */
+    @media (hover: none) { .home .label { display: none; } }
 
     h1 { font-size: 2rem; line-height: 1.15; letter-spacing: -0.02em;
       color: var(--strong); margin: 0 0 16px; font-weight: 700; }

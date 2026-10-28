@@ -56,6 +56,7 @@
     .home .label { max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; margin-left: 0;
       transition: max-width 0.3s ease, opacity 0.2s ease, margin-left 0.3s ease; }
     .home:hover .label, .home:focus-visible .label { max-width: 12em; opacity: 1; margin-left: 4px; }
+    @media (hover: none) { .home .label { display: none; } }
     @media (prefers-color-scheme: dark) {
       .home { color: #636a73; }
       .home:hover, .home:focus-visible { color: #eceff2; background: #1a1d22; }
