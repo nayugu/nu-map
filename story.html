@@ -8,25 +8,29 @@
   <link rel="icon" type="image/png" href="https://numap.app/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    /* Site-wide home mark, labelled "← [mark] NU Map": the same affordance on
-       every NU Map page (roadmap.html, privacy.html carry the same block).
+    /* Site-wide home mark "← [mark]", with "Back to the planner" sliding out
+       on hover or focus: the same affordance on every NU Map page
+       (roadmap.html, privacy.html carry the same block; keep them in step).
        Colours tuned to this page's white background and slate text. */
-    .home { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 18px -2px;
-      padding: 4px 8px 4px 2px; border-radius: 8px; text-decoration: none;
-      color: #64748b; font-size: 0.9rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1;
+    .home { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 18px -2px;
+      padding: 4px 10px 4px 2px; border-radius: 8px; text-decoration: none;
+      color: #94a3b8; font-size: 0.85rem; font-weight: 500; line-height: 1;
       transition: color 0.15s ease, background 0.15s ease; }
     .home:hover, .home:focus-visible { color: #0f172a; background: #f1f5f9; }
     .home .arrow { width: 14px; height: 14px; flex: none; transition: transform 0.2s ease; }
     .home:hover .arrow, .home:focus-visible .arrow { transform: translateX(-2px); }
-    .home img { width: 24px; height: 24px; object-fit: contain; }
+    .home img { width: 28px; height: 28px; object-fit: contain; }
+    .home .label { max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; margin-left: 0;
+      transition: max-width 0.3s ease, opacity 0.2s ease, margin-left 0.3s ease; }
+    .home:hover .label, .home:focus-visible .label { max-width: 12em; opacity: 1; margin-left: 4px; }
   </style>
 </head>
 <body style="font-family: system-ui, sans-serif; max-width: 620px; margin: 3rem auto; padding: 0 1.5rem; line-height: 1.65; color: #1e293b;">
   <a class="home" href="/" aria-label="Back to the NU Map planner">
     <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"
       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8H3M7 4 3 8l4 4"/></svg>
-    <img src="/logo.png" alt="" width="24" height="24" />
-    <span>NU Map</span>
+    <img src="/logo.png" alt="" width="28" height="28" />
+    <span class="label">Back to the planner</span>
   </a>
   <h1 style="font-size: 1.5rem;">The story</h1>
   <p><strong>NU Map is an independent, student-built course planner. It is not
