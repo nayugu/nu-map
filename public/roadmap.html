@@ -341,14 +341,16 @@
     // page has no opinion about either.
     var ORDER = [], SECT = {};
     // Every section shows its top PREVIEW items (pin with `top: true` to
-    // choose them), and the button reveals STEP more per click, so a long
-    // Shipped never dumps everything at once. MIN_HIDDEN is 1: with only
-    // three showing, the button is smaller than the item it hides, so even
-    // "Show 1 more" saves room and keeps every section at three. A step that
-    // would leave fewer than MIN_HIDDEN takes them too. Never folded while
-    // searching, when the visitor picked that section's filter, or for the
-    // section a link opens.
-    var PREVIEW = 3, STEP = 10, MIN_HIDDEN = 1;
+    // choose them), and the button reveals STEP more per click: about a
+    // screen at a time, in proportion to the three showing (10 more than
+    // quadrupled a section in one click). MIN_HIDDEN is 1: with only three
+    // showing, the button is smaller than the item it hides, so even
+    // "Show 1 more" saves room and keeps every section at three. But a STEP
+    // that would leave ABSORB or fewer behind takes them too, so the last
+    // click is never a lone "Show 1 older". Never folded while searching,
+    // when the visitor picked that section's filter, or for the section a
+    // link opens.
+    var PREVIEW = 3, STEP = 5, MIN_HIDDEN = 1, ABSORB = 2;
     var FORM = "https://forms.gle/CzXE25WRtJnXWE1U9";
 
     var data, filter = "all", query = "", limits = {}; // section key → items shown (default PREVIEW)
@@ -493,7 +495,7 @@
           // then reads as a list that continues, not a month that is complete.
           var hidden = shown.length - limit;
           // A step that would leave a tiny remainder takes it too.
-          var next = hidden - STEP < MIN_HIDDEN ? hidden : STEP;
+          var next = hidden - STEP <= ABSORB ? hidden : STEP;
           var more = el("button", { class: "more", type: "button",
             text: "Show " + next + (status === "shipped" ? " older" : " more") });
           more.addEventListener("click", function () { limits[status] = limit + next; render(); });
