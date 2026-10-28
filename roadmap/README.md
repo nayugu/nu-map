@@ -61,6 +61,23 @@ Change its `status`. When something ships, set `status: shipped` and add
 `status: declined` and say why in the description. Don't delete shipped or
 not-planned items: they're the record, and someone may have the link.
 
+## What goes on Shipped
+
+Add it if **any** of these is true:
+
+- **It was already on the roadmap.** It always moves to Shipped when it goes
+  live, so whoever has the link gets their answer.
+- **It is a significant feature:** something new a student would notice, or
+  a change that would change how they plan.
+- **It fixes something that told students something untrue** (a wrong
+  credit count, a missing requirement, a course refused that shouldn't have
+  been). Even a small fix counts: someone may have planned around the wrong
+  answer.
+
+Leave it off if it is a small fix or polish nobody would miss, the monthly
+data update, or behind-the-scenes work (tests, speed, tidying code). When
+unsure, ask: would a student want to know, or did someone ask about it?
+
 ## Rules
 
 - **Names only with permission, emails never.** The repo is public and keeps
