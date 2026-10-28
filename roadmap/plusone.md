@@ -1,6 +1,7 @@
 ---
 status: declined
 date: 2026-08
+top: true
 ---
 # Planning a PlusOne (accelerated master's)
 
