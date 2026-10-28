@@ -121,11 +121,19 @@
     html.js:not(.ready) .toolbar, html.js:not(.ready) #list, html.js:not(.ready) footer.end { opacity: 0; }
     @media (max-width: 520px) { .wrap { padding: 28px 16px 72px; } }
 
-    /* Site-wide home mark: the same affordance on every NU Map page. */
-    .home { display: inline-block; line-height: 0; margin-bottom: 22px; }
-    .home img { width: 28px; height: 28px; object-fit: contain;
-      opacity: 0.9; transition: opacity 0.15s ease; }
-    .home:hover img { opacity: 1; }
+    /* Site-wide home mark, labelled: "← [mark] NU Map". The bare mark was the
+       same link but said nothing, and a visitor who arrived from an emailed
+       link has no browser history to go back through. The arrow says "out of
+       this page", the mark and name say where to. Quiet until hovered.
+       story.html and privacy.html carry the same block; keep the three in step. */
+    .home { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 22px -2px;
+      padding: 4px 8px 4px 2px; border-radius: 8px; text-decoration: none;
+      color: var(--muted); font-size: 0.9rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1;
+      transition: color 0.15s ease, background 0.15s ease; }
+    .home:hover, .home:focus-visible { color: var(--strong); background: var(--surface); }
+    .home .arrow { width: 14px; height: 14px; flex: none; transition: transform 0.2s ease; }
+    .home:hover .arrow, .home:focus-visible .arrow { transform: translateX(-2px); }
+    .home img { width: 24px; height: 24px; object-fit: contain; }
 
     h1 { font-size: 2rem; line-height: 1.15; letter-spacing: -0.02em;
       color: var(--strong); margin: 0 0 16px; font-weight: 700; }
@@ -282,7 +290,12 @@
 </head>
 <body>
   <div class="wrap">
-    <a class="home" href="/"><img src="/logo.png" alt="NU Map home" width="28" height="28" /></a>
+    <a class="home" href="/" aria-label="Back to the NU Map planner">
+      <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8H3M7 4 3 8l4 4"/></svg>
+      <img src="/logo.png" alt="" width="24" height="24" />
+      <span>NU Map</span>
+    </a>
     <h1>Roadmap</h1>
     <p class="lede">What we have built, what we are considering, and what we have decided not to build.</p>
     <p class="aside">NU Map is made by two students, so we can't promise dates. We read every response; not all become items.</p>
