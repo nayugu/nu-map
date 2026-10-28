@@ -131,8 +131,8 @@
        hover or focus "Back to the planner" slides out beside it; on a touch
        screen the arrow alone carries it. story.html and privacy.html carry the
        same block; keep the three in step. */
-    .home { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 22px -2px;
-      padding: 4px 10px 4px 2px; border-radius: 8px; text-decoration: none;
+    .home { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 22px -8px;
+      padding: 4px 8px; border-radius: 8px; text-decoration: none;
       color: var(--faint); font-size: 0.85rem; font-weight: 500; line-height: 1;
       transition: color 0.15s ease, background 0.15s ease; }
     .home:hover, .home:focus-visible { color: var(--strong); background: var(--surface); }
@@ -142,6 +142,9 @@
     .home .label { max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; margin-left: 0;
       transition: max-width 0.3s ease, opacity 0.2s ease, margin-left 0.3s ease; }
     .home:hover .label, .home:focus-visible .label { max-width: 12em; opacity: 1; margin-left: 4px; }
+    /* A tap counts as hover, so the label began sliding out while the planner
+       loaded and was caught half open, clipped. */
+    @media (hover: none) { .home .label { display: none; } }
 
     h1 { font-size: 2rem; line-height: 1.15; letter-spacing: -0.02em;
       color: var(--strong); margin: 0 0 16px; font-weight: 700; }
