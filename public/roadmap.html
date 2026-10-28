@@ -26,6 +26,10 @@
     // and then jumps, which reads as a flash. The 3s fallback means a slow or
     // failed load can never leave the page blank.
     if (location.hash.length > 1) {
+      // The page places a linked item itself; the browser restoring an old
+      // scroll position on a reload would fight that (and read as the visitor
+      // scrolling).
+      try { history.scrollRestoration = "manual"; } catch (e) { /* old browser */ }
       document.documentElement.classList.add("deeplink");
       setTimeout(function () { document.documentElement.classList.remove("deeplink"); }, 3000);
     }
@@ -218,28 +222,14 @@
       content: ""; position: absolute; left: 1px; top: 25px;
       width: 6px; height: 6px; border-radius: 50%; background: var(--hue);
     }
-    /* A linked item fades in, nothing more: it is already scrolled to just
-       under the toolbar, so the eye is in the right place. A coloured flash
-       was too loud for a page meant to read as calm. */
-    /* A slow, diffuse left-to-right reveal, like a line being written: a
-       gradient mask four times the item's width slides across, and its fade
-       band (30% to 70% of the mask) is 1.6 item-widths wide, so the item
-       brightens across rather than showing a moving edge. At rest the mask's
-       opaque part covers the whole item, so nothing stays hidden after it. */
-    .item.flash {
-      -webkit-mask-image: linear-gradient(to right, #000 30%, transparent 70%);
-              mask-image: linear-gradient(to right, #000 30%, transparent 70%);
-      -webkit-mask-size: 400% 100%; mask-size: 400% 100%;
-      -webkit-mask-position: 0 0; mask-position: 0 0;
-      /* Slow start, a gentle middle, slow end. The ends linger longer than
-         ease-in-out; the extra duration keeps the middle about as calm as
-         before. Speed: the duration. Shape: the curve. */
-      animation: arrive 2.8s cubic-bezier(0.6, 0, 0.4, 1);
-    }
-    @keyframes arrive {
-      from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
-      to   { -webkit-mask-position: 0 0;    mask-position: 0 0; }
-    }
+    /* A link to one item (the roadmap's main use: a reply to feedback) opens
+       on that item alone, centred, solid, with "See full roadmap" under it
+       (.see-all); see spotlight(). Tried and dropped along the way, so not to
+       be re-tried blind: a left-to-right text reveal (the linked item was the
+       FAINT one while its neighbour was already solid, so a hurried reader
+       read the wrong item), a bar beside it, an outline traced round it, and a
+       colour wave through its text. Each still asked the eye to find the item
+       among others; showing it alone does not. */
     .item h3 { margin: 0; font-size: 1rem; line-height: 1.4; color: var(--strong); font-weight: 600;
       padding-right: 34px; }
     .item p { margin: 6px 0 0; font-size: 0.94rem; }
@@ -269,6 +259,38 @@
     }
     .more:hover { color: var(--text); border-color: var(--faint); }
 
+    /* "See full roadmap", under a linked item shown on its own. Absolute,
+       so adding and removing it never moves anything (the item least of all). */
+    .see-all {
+      /* Centred under the item: the view is a centred composition, and the
+         button is its one next step, not part of the item's text. Labelled,
+         not an arrow that explains itself on hover: phones have no hover. */
+      position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap;
+      top: calc(100% + 18px); z-index: 2;
+      display: inline-flex; align-items: center; gap: 6px;
+      font: inherit; font-size: 0.88rem; font-weight: 500; color: var(--muted);
+      background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+      padding: 7px 14px; cursor: pointer;
+      transition: color 0.15s ease, border-color 0.15s ease, opacity 0.4s ease;
+    }
+    .see-all:hover, .see-all:focus-visible { color: var(--strong); border-color: var(--faint); }
+    .see-all.gone, .spot-head.gone { opacity: 0; pointer-events: none; }
+    /* The item's section heading, copied above it while it is shown alone:
+       for a reply, the section IS the answer. Same spacing as in the list, so
+       for a section's first item the copy sits exactly on the real heading
+       and the swap on reveal is seamless. Absolute, so it never moves the item. */
+    .spot-head { position: absolute; left: 0; right: 12px; bottom: 100%;
+      transition: opacity 0.4s ease; }
+    .spot-head header { margin-bottom: 6px; } /* = section > header; measured to match the real heading to the pixel */
+    /* The one deliberate difference: no count next to a lone item. Invisible
+       rather than removed, so everything else stays pixel-identical. */
+    .spot-head .n { visibility: hidden; }
+    /* The copy lives INSIDE the item, so ".item p" (0.94rem, no indent) would
+       restyle its description and month line; restate the page's own styles
+       at a specificity that wins. */
+    .item .spot-head p.blurb { font-size: 0.82rem; color: var(--muted); margin: 3px 0 0 19px; }
+    .item .spot-head p.month { font-size: 0.72rem; color: var(--faint); margin: 18px 0 0 19px; }
+
     /* Dev only: files with a mistake, which the page has left out. */
     .problems { margin-top: 24px; padding: 12px 16px; border-radius: 10px; font-size: 0.88rem;
       background: color-mix(in srgb, var(--known) 12%, transparent);
@@ -287,7 +309,6 @@
     footer.end .updated { margin: 12px 0 0; font-size: 0.78rem; color: var(--faint); }
 
     @media (prefers-reduced-motion: reduce) {
-      .item.flash { animation: none; }
       * { transition: none !important; }
     }
   </style>
@@ -359,6 +380,9 @@
     var FORM = "https://forms.gle/CzXE25WRtJnXWE1U9";
 
     var data, filter = "all", query = "", limits = {}; // section key → items shown (default PREVIEW)
+    var pinned = null; // the item a visitor arrived for by link, shown past the fold; cleared once they filter or search
+    var tails = {};    // section key → items shown AFTER the pinned item ("Show N older" below it)
+    var fresh = null;  // {key, from, to}: the items the last click revealed, opened smoothly by render()
     var $ = function (id) { return document.getElementById(id); };
 
     function el(tag, attrs, kids) {
@@ -480,36 +504,76 @@
         var key = focused ? status + ":focus" : status;
         var step = focused ? FOCUS_STEP : STEP;
         var limit = limits[key] || (focused ? FOCUS_PREVIEW : PREVIEW);
-        var fold = !query && shown.length - limit >= MIN_HIDDEN;
-        var visible = fold ? shown.slice(0, limit) : shown;
+        // "older" for Shipped, which is sorted by date: a month cut part-way
+        // then reads as a list that continues, not a month that is complete.
+        var below = status === "shipped" ? " older" : " more";
+        // A step that would leave a tiny remainder takes it too.
+        var nextOf = function (h) { return h - step <= ABSORB ? h : step; };
+        var moreBtn = function (n, word, act) {
+          var b = el("button", { class: "more", type: "button", text: "Show " + n + word });
+          b.addEventListener("click", function () { act(); render(); });
+          return b;
+        };
 
-        if (status === "shipped") {
-          var month = null, ol = null;
-          visible.forEach(function (item) {
+        // Items grouped as the page shows them: Shipped under month labels
+        // (a label, not a heading: items are h3 under the section's h2).
+        // `st` carries the current month across calls, so a run continues its
+        // month instead of repeating the label.
+        var groupInto = function (parent, items, st) {
+          if (!items.length) return;
+          if (status !== "shipped") { parent.append(el("ol", { class: "items" }, items.map(renderItem))); return; }
+          var ol = null;
+          items.forEach(function (item) {
             var m = String(item.shipped).slice(0, 7);
-            if (m !== month) {
-              month = m;
-              // A label, not a heading: items are h3 under the section's h2.
-              sec.append(el("p", { class: "month", text: fmt(m) }));
-              ol = el("ol", { class: "items" });
-              sec.append(ol);
-            }
+            if (m !== st.month) { st.month = m; parent.append(el("p", { class: "month", text: fmt(m) })); ol = null; }
+            if (!ol) { ol = el("ol", { class: "items" }); parent.append(ol); }
             ol.append(renderItem(item));
           });
-        } else {
-          sec.append(el("ol", { class: "items" }, visible.map(renderItem)));
-        }
+        };
+        // shown[from..to), with the items the last click revealed wrapped in a
+        // .fresh box that opens smoothly (see the end of render()).
+        var appendRange = function (from, to, st) {
+          if (to <= from) return;
+          var f = fresh && fresh.key === key ? fresh : null;
+          var a = f ? Math.max(from, Math.min(to, f.from)) : to;
+          var c = f ? Math.max(a, Math.min(to, f.to)) : to;
+          groupInto(sec, shown.slice(from, a), st);
+          if (c > a) { var box = el("div", { class: "fresh" }); groupInto(box, shown.slice(a, c), st); sec.append(box); }
+          groupInto(sec, shown.slice(c, to), st);
+        };
 
-        if (fold) {
-          // "older" for Shipped, which is sorted by date: a month cut part-way
-          // then reads as a list that continues, not a month that is complete.
-          var hidden = shown.length - limit;
-          // A step that would leave a tiny remainder takes it too.
-          var next = hidden - step <= ABSORB ? hidden : step;
-          var more = el("button", { class: "more", type: "button",
-            text: "Show " + next + (status === "shipped" ? " older" : " more") });
-          more.addEventListener("click", function () { limits[key] = limit + next; render(); });
-          sec.append(more);
+        var st = { month: null };
+        var at = !query && pinned && pinned.status === status ? shown.indexOf(pinned) : -1;
+        var tail = tails[key] || 0;
+        if (at >= limit) {
+          // The item a visitor arrived for sits past the fold. Rather than
+          // unfold everything above it, show it right after the visible ones,
+          // with each button WHERE its items will appear: "Show N more" in the
+          // gap above it (those are newer, so not "older"), and "Show N older"
+          // below it only for what is older still. In Shipped the item keeps
+          // its own month label, so the skipped time shows.
+          appendRange(0, limit, st);
+          var gap = at - limit;
+          if (gap > 0) {
+            var g = nextOf(gap);
+            sec.append(moreBtn(g, " more", function () { fresh = { key: key, from: limit, to: limit + g }; limits[key] = limit + g; }));
+            st.month = null; // the item's month label always shows after the gap
+          }
+          appendRange(at, at + 1 + tail, st);
+          var rest = shown.length - (at + 1 + tail);
+          if (rest > 0) {
+            var r = nextOf(rest);
+            sec.append(moreBtn(r, below, function () { fresh = { key: key, from: at + 1 + tail, to: at + 1 + tail + r }; tails[key] = tail + r; }));
+          }
+        } else {
+          // Gap closed (or no linked item here): keep everything already shown.
+          if (at >= 0) limit = Math.max(limit, at + 1 + tail);
+          var fold = !query && shown.length - limit >= MIN_HIDDEN;
+          appendRange(0, fold ? limit : shown.length, st);
+          if (fold) {
+            var n = nextOf(shown.length - limit);
+            sec.append(moreBtn(n, below, function () { fresh = { key: key, from: limit, to: limit + n }; limits[key] = limit + n; }));
+          }
         }
         root.append(sec);
       });
@@ -522,6 +586,22 @@
         ]));
       }
       $("status").textContent = query ? total + (total === 1 ? " result" : " results") : "";
+
+      // Items a click just revealed open smoothly where the button was, so
+      // whatever sits below (the linked item, in the gap case) glides down
+      // instead of jumping. Height is released afterwards so nothing is ever
+      // left clipped; under reduced motion the transition is simply skipped.
+      fresh = null;
+      // Clipping is ONLY for the opening itself: the copy-link button sits
+      // just outside each item's right edge, so a box left clipping cut it off.
+      [].forEach.call(root.querySelectorAll(".fresh"), function (box) {
+        var h = box.scrollHeight;
+        box.style.overflow = "hidden"; box.style.height = "0px"; box.style.opacity = "0";
+        void box.offsetHeight;
+        box.style.transition = "height 0.6s cubic-bezier(0.6, 0, 0.4, 1), opacity 0.6s ease";
+        box.style.height = h + "px"; box.style.opacity = "1";
+        setTimeout(function () { box.style.height = ""; box.style.overflow = ""; box.style.transition = ""; }, 700);
+      });
     }
 
     function renderChips() {
@@ -553,6 +633,7 @@
 
     function setFilter(f, quiet) {
       filter = f;
+      pinned = null;
       var url = new URL(location.href);
       if (f === "all") url.searchParams.delete("show"); else url.searchParams.set("show", f);
       if (!quiet) url.hash = "";
@@ -560,9 +641,72 @@
       renderChips(); render();
     }
 
+    // Arriving by a link to one item: show THAT item alone, centred and solid,
+    // with "See full roadmap" under it. The rest of the page fades in
+    // around it, nearest first, when they press that button or SCROLL (they
+    // want more, and blank space would look broken; keyboard scrolling counts,
+    // so keys need no rule of their own). No timer, no mouse movement, no other
+    // key: those would be premature. It waits for them. Nothing moves: the item is already in its final place,
+    // so it never jumps while being read. Only on arrival (a hash change
+    // inside the page just scrolls), and never under reduced motion.
+    function spotlight(node, placedY, item) {
+      if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      var others = [].slice.call(document.querySelectorAll(
+        ".wrap > .home, .wrap > h1, .wrap > .lede, .wrap > .aside, .wrap > .problems, " +
+        "#toolbar, footer.end, #list section > header, #list .month, #list .item, #list .more"))
+        .filter(function (e) { return e !== node; });
+      // Hidden means hidden to the pointer too: an invisible item's link or
+      // copy button must not catch a click in what looks like empty space.
+      others.forEach(function (e) { e.style.transition = "none"; e.style.opacity = "0"; e.style.pointerEvents = "none"; e.setAttribute("aria-hidden", "true"); });
+      // The real heading, copied exactly (description included: it is what
+      // explains "Planned" or "Maybe", and the copy must look identical to
+      // the heading it becomes; only the count is hidden, in CSS), minus ids
+      // (the page keeps one of each) and the hiding the spotlight has already
+      // put on the original. Plus the month label for a Shipped item.
+      var realHead = node.closest("section").querySelector("header").cloneNode(true);
+      realHead.removeAttribute("style"); realHead.removeAttribute("aria-hidden");
+      [].forEach.call(realHead.querySelectorAll("[id]"), function (e) { e.removeAttribute("id"); });
+      var label = el("div", { class: "spot-head", "aria-hidden": "true" }, [realHead,
+        item.status === "shipped" && item.shipped ? el("p", { class: "month", text: fmt(String(item.shipped).slice(0, 7)) }) : null]);
+      node.append(label);
+      var btn = el("button", { class: "see-all", type: "button" }, ["See full roadmap"]);
+      btn.addEventListener("click", reveal);
+      node.append(btn);
+      var done = false;
+      // A scroll counts only if the page actually moved away from where we put
+      // the item: our own centring, the browser settling, or anything else that
+      // happened before or during load can never reveal the page. A wheel or a
+      // touch drag only ever comes from a person, so those count directly.
+      function onScroll() { if (Math.abs(window.scrollY - placedY) > 8) reveal(); }
+      function listen(on) {
+        var f = on ? "addEventListener" : "removeEventListener", o = { passive: true };
+        window[f]("wheel", reveal, o); window[f]("touchmove", reveal, o); window[f]("scroll", onScroll, o);
+      }
+      function reveal() {
+        if (done) return; done = true;
+        listen(false);
+        btn.classList.add("gone"); label.classList.add("gone");
+        setTimeout(function () { btn.remove(); label.remove(); }, 450);
+        var r0 = node.getBoundingClientRect(), mid = r0.top + r0.height / 2;
+        others.forEach(function (e) {
+          var r = e.getBoundingClientRect();
+          var delay = Math.min(Math.abs(r.top + r.height / 2 - mid) / innerHeight, 1) * 0.5;
+          e.style.transition = "opacity 0.8s cubic-bezier(0.6, 0, 0.4, 1) " + delay.toFixed(2) + "s";
+          e.style.opacity = "";
+          e.style.pointerEvents = "";
+          e.removeAttribute("aria-hidden");
+        });
+        setTimeout(function () { others.forEach(function (e) { e.style.transition = ""; }); }, 1600);
+      }
+      listen(true);
+    }
+
     // A link to one item (#id) must land on it whatever the page was doing:
-    // clear whatever would hide it, unfold Shipped, then point at it.
-    function goToHash() {
+    // clear whatever would hide it, then point at it. Arriving by link (a
+    // reply to feedback) the page keeps its normal short form and the item is
+    // PINNED just past its section's fold; a link followed inside the page
+    // unfolds the section to it, in order, as before.
+    function goToHash(arriving) {
       var id = decodeURIComponent(location.hash.slice(1));
       if (!id) return;
       var item = data.items.filter(function (i) { return i.id === id; })[0];
@@ -573,13 +717,39 @@
         history.replaceState(null, "", url);
         renderChips();
       }
-      limits[item.status] = Infinity; // a linked item is never folded away
-      limits[item.status + ":focus"] = Infinity;
+      if (arriving === true) {
+        pinned = item;
+      } else {
+        limits[item.status] = Infinity; // a linked item is never folded away
+        limits[item.status + ":focus"] = Infinity;
+      }
       render();
       var node = $(id);
       if (!node) return;
-      node.scrollIntoView({ block: "start" });
-      node.classList.remove("flash"); void node.offsetWidth; node.classList.add("flash");
+      // Arriving by link the toolbar is hidden (spotlight), so the item goes in
+      // the exact middle of the screen. Inside the page the toolbar is there,
+      // and scrollIntoView centres it in the space below it (scroll-padding).
+      var placedY = null;
+      if (arriving === true) {
+        // Exact centre even for an item near the page's start or end: add just
+        // the empty space the page lacks, above or below. It stays for this
+        // visit, because removing it would move the item, the one thing this
+        // view promises not to do.
+        var r = node.getBoundingClientRect();
+        var want = r.top + window.scrollY - (window.innerHeight - r.height) / 2;
+        if (want < 0) {
+          var wrap = document.querySelector(".wrap");
+          wrap.style.paddingTop = (parseFloat(getComputedStyle(wrap).paddingTop) - want) + "px";
+          want = 0;
+        }
+        var maxY = document.documentElement.scrollHeight - window.innerHeight;
+        if (want > maxY) document.body.style.paddingBottom = (want - maxY) + "px";
+        window.scrollTo(0, want);
+        placedY = window.scrollY;
+      } else {
+        node.scrollIntoView({ block: "center" });
+      }
+      if (arriving === true) spotlight(node, placedY, item);
     }
 
     function boot(json) {
@@ -603,7 +773,7 @@
       $("toolbar").hidden = false;
       if (data.updated) $("updated").textContent = "Updated " + fmt(data.updated, true);
       renderChips(); render();
-      if (location.hash) goToHash();
+      if (location.hash) goToHash(true);
       revealPage(); // only now, with the item already in place
     }
 
@@ -617,7 +787,7 @@
     var timer;
     $("q").addEventListener("input", function (e) {
       clearTimeout(timer);
-      timer = setTimeout(function () { query = e.target.value.trim().toLowerCase(); render(); }, 80);
+      timer = setTimeout(function () { query = e.target.value.trim().toLowerCase(); pinned = null; render(); }, 80);
     });
     $("q").addEventListener("keydown", function (e) {
       if (e.key === "Escape") { e.target.value = ""; query = ""; render(); e.target.blur(); }
