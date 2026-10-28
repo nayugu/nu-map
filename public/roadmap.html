@@ -340,13 +340,15 @@
     // SECTIONS), and items arrive already sorted within each section, so the
     // page has no opinion about either.
     var ORDER = [], SECT = {};
-    // Any long section folds to its first PREVIEW items, and the button then
-    // reveals STEP more per click, so a long Shipped never dumps everything
-    // at once. It folds only when that hides at least MIN_HIDDEN (a "Show 1
-    // more" button is sillier than the item), so a step that would leave a
-    // tiny remainder takes it too. Never folded while searching, when the
-    // visitor picked that section's filter, or for the section a link opens.
-    var PREVIEW = 5, STEP = 10, MIN_HIDDEN = 3;
+    // Every section shows its top PREVIEW items (pin with `top: true` to
+    // choose them), and the button reveals STEP more per click, so a long
+    // Shipped never dumps everything at once. MIN_HIDDEN is 1: with only
+    // three showing, the button is smaller than the item it hides, so even
+    // "Show 1 more" saves room and keeps every section at three. A step that
+    // would leave fewer than MIN_HIDDEN takes them too. Never folded while
+    // searching, when the visitor picked that section's filter, or for the
+    // section a link opens.
+    var PREVIEW = 3, STEP = 10, MIN_HIDDEN = 1;
     var FORM = "https://forms.gle/CzXE25WRtJnXWE1U9";
 
     var data, filter = "all", query = "", limits = {}; // section key → items shown (default PREVIEW)
