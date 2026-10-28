@@ -199,6 +199,18 @@ jobs:
       - name: Scrape term availability
         run: node scripts/scrape-availability.js --write --prof --restrictions 2>&1 | tee /tmp/availability-log.txt
 
+      # ── Step 2a: Derive the restrictions the course card shows ────────────────
+      #   restrictions.json is built from term-details.json's `restr` and was
+      #   never part of this job, so the card stayed frozen at whatever was last
+      #   derived by hand (2026-09-03) while the scrape went on capturing terms.
+      #
+      #   Non-fatal: the script refuses to write when a run would drop more than
+      #   20% of the restricted courses, and a refusal leaves the committed file
+      #   in place, which is stale but not wrong. Blocking the whole catalog
+      #   update on it would trade a dated card for a dated catalog.
+      - name: Derive restrictions
+        run: node scripts/derive-restrictions.js --write 2>&1 | tee /tmp/restrictions-log.txt || echo "::warning::Restrictions derive refused — the card keeps last month's restrictions. See the step log."
+
       # ── Step 2b: Derive the slim offering summary the app loads ───────────────
       - name: Derive offering summary
         run: node scripts/derive-offering-summary.js --write 2>&1 | tee /tmp/offering-log.txt
@@ -523,6 +535,7 @@ jobs:
           logs: |
             /tmp/catalog-log.txt
             /tmp/availability-log.txt
+            /tmp/restrictions-log.txt
             /tmp/offering-log.txt
             /tmp/retired-union-log.txt
             /tmp/term-windows-log.txt
@@ -579,7 +592,7 @@ jobs:
             echo "## Course Data Update Summary"
             echo ""
             for log in /tmp/catalog-log.txt /tmp/availability-log.txt /tmp/offering-log.txt \
-                       /tmp/retired-union-log.txt \
+                       /tmp/restrictions-log.txt /tmp/retired-union-log.txt \
                        /tmp/term-windows-log.txt /tmp/ratemyhusky-log.txt /tmp/nupath-log.txt \
                        /tmp/nupath-merge-log.txt /tmp/patches-log.txt /tmp/equivalences-log.txt \
                        /tmp/chart-verify-log.txt /tmp/build-log.txt /tmp/suites-log.txt; do
