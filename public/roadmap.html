@@ -274,7 +274,17 @@
       transition: color 0.15s ease, border-color 0.15s ease, opacity 0.4s ease;
     }
     .see-all:hover, .see-all:focus-visible { color: var(--strong); border-color: var(--faint); }
-    .see-all.gone, .spot-head.gone { opacity: 0; pointer-events: none; }
+    .see-all.gone, .spot-head.gone, .home.spot-home.gone { opacity: 0; pointer-events: none; }
+    /* The home link while an item is shown alone: the page is scrolled to
+       centre the item, so the real link is usually off-screen. This copy sits
+       in the corner exactly where the real one sits on a normal visit, so a
+       visitor from an email sees whose page this is and has a way to the
+       planner. It fades out on reveal, when the real one is back. */
+    .home.spot-home { position: fixed; z-index: 3; margin: 0;
+      transition: color 0.15s ease, background 0.15s ease, opacity 0.9s cubic-bezier(0.6, 0, 0.4, 1); }
+    /* It lives outside .wrap, so it would skip the page's fade-in and pop in
+       ahead of the item; this ties it to the same fade. */
+    html.deeplink .home.spot-home { opacity: 0; }
     /* The item's section heading, copied above it while it is shown alone:
        for a reply, the section IS the answer. Same spacing as in the list, so
        for a section's first item the copy sits exactly on the real heading
@@ -381,6 +391,7 @@
 
     var data, filter = "all", query = "", limits = {}; // section key → items shown (default PREVIEW)
     var pinned = null; // the item a visitor arrived for by link, shown past the fold; cleared once they filter or search
+    var topSpacer = 0; // px added above the page so a first item could be centred
     var tails = {};    // section key → items shown AFTER the pinned item ("Show N older" below it)
     var fresh = null;  // {key, from, to}: the items the last click revealed, opened smoothly by render()
     var $ = function (id) { return document.getElementById(id); };
@@ -669,6 +680,22 @@
       var label = el("div", { class: "spot-head", "aria-hidden": "true" }, [realHead,
         item.status === "shipped" && item.shipped ? el("p", { class: "month", text: fmt(String(item.shipped).slice(0, 7)) }) : null]);
       node.append(label);
+      // The home link, copied into the corner where it sits on a normal visit
+      // (its place at scroll 0, minus any space added above to centre a
+      // first item), so it shows whatever the page's scroll.
+      var realHome = document.querySelector(".wrap > .home"), home = null;
+      if (realHome) {
+        var hr = realHome.getBoundingClientRect();
+        home = realHome.cloneNode(true);
+        home.removeAttribute("style"); home.removeAttribute("aria-hidden");
+        home.classList.add("spot-home");
+        home.style.left = hr.left + "px";
+        home.style.top = (hr.top + window.scrollY - topSpacer) + "px";
+        document.body.append(home);
+        // Register its hidden starting state before the page's fade begins
+        // (same tick), or there is nothing for the fade to start from.
+        void home.offsetWidth;
+      }
       var btn = el("button", { class: "see-all", type: "button" }, ["See full roadmap"]);
       btn.addEventListener("click", reveal);
       node.append(btn);
@@ -685,8 +712,8 @@
       function reveal() {
         if (done) return; done = true;
         listen(false);
-        btn.classList.add("gone"); label.classList.add("gone");
-        setTimeout(function () { btn.remove(); label.remove(); }, 450);
+        btn.classList.add("gone"); label.classList.add("gone"); if (home) home.classList.add("gone");
+        setTimeout(function () { btn.remove(); label.remove(); if (home) home.remove(); }, 450);
         var r0 = node.getBoundingClientRect(), mid = r0.top + r0.height / 2;
         others.forEach(function (e) {
           var r = e.getBoundingClientRect();
@@ -740,6 +767,7 @@
         if (want < 0) {
           var wrap = document.querySelector(".wrap");
           wrap.style.paddingTop = (parseFloat(getComputedStyle(wrap).paddingTop) - want) + "px";
+          topSpacer = -want;
           want = 0;
         }
         var maxY = document.documentElement.scrollHeight - window.innerHeight;
