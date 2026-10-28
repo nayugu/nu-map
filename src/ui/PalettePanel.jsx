@@ -9,6 +9,7 @@ export default function PalettePanel() {
     showPalette, setShowPalette,
     dragInfo, onDragStart,
     effectiveCourseMap,
+    selectedId, setSelectedId, setShowPanel,
   } = usePlanner();
   const { t } = useLanguage();
   const courseInk = useCourseInkFn();
@@ -93,10 +94,16 @@ export default function PalettePanel() {
               data-drag-type="course"
               data-drag-from="palette"
               onDragStart={e => onDragStart(e, courseId, "course", "palette")}
+              // Same toggle as a board card, so a chip opens the info panel.
+              onClick={e => {
+                e.stopPropagation();
+                if (selectedId === courseId) { setSelectedId(null); setShowPanel(false); }
+                else { setSelectedId(courseId); setShowPanel(true); }
+              }}
               style={{
                 position: "relative",
                 background: "var(--card-bg)",
-                border: "1px solid var(--border-card)",
+                border: `1px solid ${selectedId === courseId ? "var(--active)" : "var(--border-card)"}`,
                 borderRadius: 4,
                 padding: "3px 18px 3px 8px",
                 cursor: "grab", userSelect: "none",
