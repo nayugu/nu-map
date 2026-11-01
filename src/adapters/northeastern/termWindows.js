@@ -15,11 +15,11 @@
 // carries no margin, because it is not an estimate: `startRule` names it and
 // `lengthDays` gives the window length measured from it.
 //
-// Generated 2026-10-01.
+// Generated 2026-11-01.
 // ═══════════════════════════════════════════════════════════════════
 
 export default {
-  "generatedAt": "2026-10-01",
+  "generatedAt": "2026-11-01",
   "yearsBack": 5,
   "sampledAY": [
     2023,
@@ -107,6 +107,10 @@ export default {
     "fall2026": {
       "start": "2026-09-09",
       "end": "2026-12-20"
+    },
+    "spr2027": {
+      "start": "2027-01-13",
+      "end": "2027-05-02"
     }
   }
 };
