@@ -1,6 +1,6 @@
 # Major verification report
 
-Generated 2026-09-17 by `npm run data:verify`.
+Generated 2026-11-01 by `npm run data:verify`.
 
 > **What this can and cannot tell you.** There is no second authoritative
 > source for Northeastern degree requirements — Degree Works and the
@@ -15,7 +15,7 @@ Generated 2026-09-17 by `npm run data:verify`.
 Grouped by check rather than by program: one parser bug usually wears many
 names, and a list of every affected program is not a work order.
 
-### `unenumerated-sections` · 767 program(s) · info
+### `unenumerated-sections` · 771 program(s) · info
 
 4 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically
 
@@ -29,7 +29,7 @@ names, and a list of every affected program is not a work order.
 - Communication Studies and Speech-Language Pathology and Audiology, BS (Boston) — `undergraduate/2026/arts-media-design/communication_studies_and_speech-language_pathology_and_audiology_bs_(boston)`
 - Communication Studies and Theatre, BA (Boston) — `undergraduate/2026/arts-media-design/communication_studies_and_theatre_ba_(boston)`
 - Communication Studies, BA (Boston) — `undergraduate/2026/arts-media-design/communication_studies_ba_(boston)`
-- …and 757 more
+- …and 761 more
 
 ### `missing-total-credits` · 452 program(s) · medium
 

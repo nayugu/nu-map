@@ -2,7 +2,7 @@
   "name": "Project Management, BS (Online)",
   "metadata": {
     "verified": false,
-    "lastEdited": "9/17/2026",
+    "lastEdited": "11/1/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
@@ -24,7 +24,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-17",
+      "checkedAt": "2026-11-01",
       "sourceUrl": "https://catalog.northeastern.edu/professional-studies/bachelors-postbaccalaureate/lowell-institute-school/project-management-bs-vtl/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -57,8 +57,8 @@
       ]
     }
   },
-  "totalCreditsRequired": 66,
-  "totalCreditsSource": "stated-required",
+  "totalCreditsRequired": 120,
+  "totalCreditsSource": "stated-total",
   "yearVersion": 2027,
   "requirementSections": [
     {
@@ -579,6 +579,16 @@
       "notes": [
         "Suggested Electives"
       ]
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Universitywide Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "Minimum 2.000 GPA required"
     }
   ],
   "footnotes": [

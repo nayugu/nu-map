@@ -2,7 +2,7 @@
   "name": "Spanish and Linguistics, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "9/17/2026",
+    "lastEdited": "11/1/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
@@ -35,8 +35,8 @@
     "verification": {
       "level": "partial",
       "kind": "major",
-      "score": 0.85,
-      "checkedAt": "2026-09-17",
+      "score": 0.83,
+      "checkedAt": "2026-11-01",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/spanish-linguistics-ba-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -46,7 +46,7 @@
       "counters": {
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
-        "unenumeratedSections": 0,
+        "unenumeratedSections": 1,
         "duplicateSectionTitles": 0,
         "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
@@ -65,6 +65,21 @@
             }
           ],
           "overflow": 0
+        },
+        {
+          "check": "unenumerated-sections",
+          "severity": "info",
+          "message": "1 section(s) state a credit requirement whose courses the catalog does not list, so completion of those cannot be checked automatically",
+          "detail": [
+            {
+              "key": "unenumeratedSection",
+              "params": {
+                "title": "BA Language Requirements",
+                "sh": 12
+              }
+            }
+          ],
+          "overflow": 0
         }
       ]
     }
@@ -73,6 +88,16 @@
   "totalCreditsSource": "stated-total",
   "yearVersion": 2027,
   "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "BA Language Requirements",
+      "creditsRequired": 12,
+      "minRequirementCount": 1,
+      "requirements": [],
+      "notes": [
+        "All BA students are required to complete the BA degree language requirements, for a total of 12 semester hours of language study or demonstrated equivalent proficiency, as described in Additional Requirements for BA students. Successful demonstration of proficiency does not reduce total minimum semester hours of study required to earn the BA degree."
+      ]
+    },
     {
       "type": "SECTION",
       "title": "Introduction to College",

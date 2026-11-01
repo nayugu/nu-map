@@ -2,7 +2,7 @@
   "name": "Business Administration and Law, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "9/17/2026",
+    "lastEdited": "11/1/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
@@ -44,7 +44,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-09-17",
+      "checkedAt": "2026-11-01",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/business-administration-law-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -132,6 +132,26 @@
           "courses": [
             {
               "type": "COURSE",
+              "subject": "ORGB",
+              "classId": 3201
+            },
+            {
+              "type": "COURSE",
+              "subject": "ORGB",
+              "classId": 3203
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "STRT",
+          "classId": 4501
+        },
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
               "subject": "MGSC",
               "classId": 2301
             },
@@ -144,34 +164,15 @@
               "type": "COURSE",
               "subject": "MATH",
               "classId": 3081
-            },
-            {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ORGB",
-                  "classId": 3201
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ORGB",
-                  "classId": 3203
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "STRT",
-              "classId": 4501
             }
           ],
           "notes": [
+            "Statistics Requirement",
             "Choose one of the following. MGSC 2301 is the recommended statistics course for this combined major:"
           ]
         }
       ],
-      "minRequirementCount": 5
+      "minRequirementCount": 7
     },
     {
       "type": "SECTION",
