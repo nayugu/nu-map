@@ -1364,8 +1364,6 @@
   <url><loc>https://numap.app/data/courses/ABRD/5117</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ABRD/5118</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ABRD/5119</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/courses/ABRD/5125</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://numap.app/data/courses/ABRD/5126</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ABRD/5140</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ABRD/5141</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ABRD/5142</loc><changefreq>monthly</changefreq></url>
@@ -1780,6 +1778,8 @@
   <url><loc>https://numap.app/data/courses/ARCH/3211</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ARCH/3351</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ARCH/3352</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/courses/ARCH/3361</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://numap.app/data/courses/ARCH/3362</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ARCH/3363</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ARCH/3370</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://numap.app/data/courses/ARCH/3430</loc><changefreq>monthly</changefreq></url>

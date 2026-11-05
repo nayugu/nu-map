@@ -1,6 +1,116 @@
 {
   "runs": [
     {
+      "type": "grad-majors",
+      "subject": "🎓 Graduate Program Requirements",
+      "timestamp": "2026-11-01T19:27:21.354Z",
+      "done": 578,
+      "written": 615,
+      "skipped": 225,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-11-01T17:48:20.400Z",
+      "done": 619,
+      "written": 620,
+      "skipped": 129,
+      "failed": 0
+    },
+    {
+      "type": "nupath-auto-update",
+      "subject": "🤖 NUpath Auto-Update",
+      "timestamp": "2026-11-01T13:28:37.955Z",
+      "source": "Tableau CSV (direct)",
+      "triggeredBy": "nayugu",
+      "runId": "41307414054",
+      "stats": {
+        "scanned": 1392,
+        "changed": 2,
+        "cleared": 0,
+        "unchanged": 1272,
+        "notInMap": 6605,
+        "gained": 3,
+        "lost": 0,
+        "gainedOnly": 2,
+        "lostOnly": 0,
+        "mixed": 0
+      },
+      "discrepancies": [
+        {
+          "subject": "BIOL",
+          "number": "2299",
+          "oldNuPath": [
+            "ND"
+          ],
+          "newNuPath": [
+            "ND",
+            "WI"
+          ],
+          "added": [
+            "WI"
+          ],
+          "removed": []
+        },
+        {
+          "subject": "MUSC",
+          "number": "1137",
+          "oldNuPath": [],
+          "newNuPath": [
+            "DD",
+            "IC"
+          ],
+          "added": [
+            "DD",
+            "IC"
+          ],
+          "removed": []
+        }
+      ]
+    },
+    {
+      "type": "availability",
+      "subject": "📅 Term Availability",
+      "timestamp": "2026-11-01T13:21:38.653Z",
+      "terms": [
+        "202410",
+        "202430",
+        "202440",
+        "202460",
+        "202510",
+        "202530",
+        "202540",
+        "202560",
+        "202610",
+        "202630",
+        "202710",
+        "202730",
+        "202640",
+        "202660"
+      ],
+      "covered": 4989,
+      "total": 7879,
+      "detailTerms": [
+        "202410",
+        "202430",
+        "202440",
+        "202460",
+        "202510",
+        "202530",
+        "202540",
+        "202560",
+        "202610",
+        "202630",
+        "202640",
+        "202660"
+      ],
+      "detailCovered": 4713,
+      "restrictionTerms": [
+        "202660"
+      ]
+    },
+    {
       "type": "nupath-auto-update",
       "subject": "🤖 NUpath Auto-Update",
       "timestamp": "2026-10-01T13:31:05.580Z",
