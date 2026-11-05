@@ -121,8 +121,8 @@
     .wrap { max-width: 740px; margin: 0 auto; padding: 48px 24px 96px;
       transition: opacity 0.9s cubic-bezier(0.6, 0, 0.4, 1); }
     html.deeplink .wrap { opacity: 0; }
-    .toolbar, #list, footer.end { transition: opacity 0.6s cubic-bezier(0.6, 0, 0.4, 1); }
-    html.js:not(.ready) .toolbar, html.js:not(.ready) #list, html.js:not(.ready) footer.end { opacity: 0; }
+    .toolbar, #list, section.thanks, footer.end { transition: opacity 0.6s cubic-bezier(0.6, 0, 0.4, 1); }
+    html.js:not(.ready) .toolbar, html.js:not(.ready) #list, html.js:not(.ready) section.thanks, html.js:not(.ready) footer.end { opacity: 0; }
     @media (max-width: 520px) { .wrap { padding: 28px 16px 72px; } }
 
     /* Site-wide home mark: "← [mark]", the mark at full size so it stays the
@@ -320,6 +320,18 @@
     footer.end .links { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.85rem; }
     /* Information, not navigation: its own quiet line, so it isn't read as a fourth link. */
     footer.end .updated { margin: 12px 0 0; font-size: 0.78rem; color: var(--faint); }
+    /* Its own part of the page, between the list and the footer, ruled off
+       like the footer is so it is read as content rather than fine print.
+       Tried and dropped: a "Thanks" h2 (it doubled the sentence's own thanks
+       and read as a sixth status section) and bold names (louder than every
+       item's faint "Thanks to …", which ranked these people above them). */
+    /* One band: a single big break from the list, the same space above and
+       below the sentence inside its two rules, and the footer's own rule as
+       the lower one — so the page ends in one break, not two 56px ones. */
+    section.thanks { margin-top: 56px; padding: 24px 0; border-top: 1px solid var(--line); }
+    section.thanks + footer.end { margin-top: 0; }
+    section.thanks p { margin: 0; font-size: 0.94rem; color: var(--text); line-height: 1.7;
+      max-width: 62ch; }
 
     @media (prefers-reduced-motion: reduce) {
       * { transition: none !important; }
@@ -354,6 +366,14 @@
       <noscript><p class="empty">This page needs JavaScript. The full list is also at
         <a href="/roadmap.json">roadmap.json</a>.</p></noscript>
     </main>
+
+    <!-- People who shaped NU Map before there were items to credit them on.
+         Its own section, not items: inventing shipped items to hang a name on
+         would bend the record the items are. Same consent and First L. rule. -->
+    <section class="thanks" aria-label="Thanks">
+      <p>We would also like to thank Willa A., Ming G., Hunter H. and Eve Y., who shaped NU Map with
+        their ideas and feedback before this roadmap existed. It has truly been an epic journey.</p>
+    </section>
 
     <footer class="end">
       <p class="cta">Something missing, or wrong?
@@ -667,7 +687,7 @@
       if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       var others = [].slice.call(document.querySelectorAll(
         ".wrap > .home, .wrap > h1, .wrap > .lede, .wrap > .aside, .wrap > .problems, " +
-        "#toolbar, footer.end, #list section > header, #list .month, #list .item, #list .more"))
+        "#toolbar, section.thanks, footer.end, #list section > header, #list .month, #list .item, #list .more"))
         .filter(function (e) { return e !== node; });
       // Hidden means hidden to the pointer too: an invisible item's link or
       // copy button must not catch a click in what looks like empty space.
